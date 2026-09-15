@@ -1,0 +1,516 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../lib/generated/prisma"
+  moduleFormat  = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ====================================================================
+// ENUMS
+// ====================================================================
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum ExamCode {
+  IELTS
+  TOEFL
+  PTE
+  YDS
+  YOKDIL_SOSYAL
+  YOKDIL_SAGLIK
+  YOKDIL_FEN
+}
+
+enum ProductCategory {
+  PREP_GROUP
+  MOCK_CAMP
+  STUDY_PACKAGE
+  TRANSLATION_SUPPORT
+  BOOK
+}
+
+enum ProductLevel {
+  BEGINNER_TO_ADVANCED
+  INTERMEDIATE_ADVANCED
+  JUNIOR
+  SENIOR
+}
+
+enum CourseDeliveryFormat {
+  HYBRID
+  RECORDED_ONLY
+  LIVE_ONLY
+}
+
+enum BookFormat {
+  PDF
+  PRINT
+  PRINT_AND_PDF
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum OrderStatus {
+  PENDING
+  AWAITING_PAYMENT
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum CallbackRequestStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+// ====================================================================
+// REFERENCE DATA
+// ====================================================================
+
+model ExamType {
+  id               String   @id @default(cuid())
+  code             ExamCode @unique
+  slug             String   @unique
+  name             String
+  shortDescription String?
+  iconKey          String?
+  displayOrder     Int      @default(0)
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  products           Product[]
+  testimonials       Testimonial[]
+  dictionaryTerms    DictionaryTerm[]
+  scoreConversionRows ScoreConversionEntry[]
+  calendarEntries    ExamCalendarEntry[]
+  freeResources      FreeResource[]
+  callbackRequests   CallbackRequest[]
+
+  @@map("exam_types")
+}
+
+// ====================================================================
+// IDENTITY & ACCESS
+// ====================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?
+  name      String
+  phone     String?
+  role      UserRole @default(STUDENT)
+  image     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders      Order[]
+  cart        Cart?
+  enrollments Enrollment[]
+  blogPosts   BlogPost[]
+
+  @@map("users")
+}
+
+// ====================================================================
+// CATALOG
+// ====================================================================
+
+model Product {
+  id               String          @id @default(cuid())
+  slug             String          @unique
+  title            String
+  subtitle         String?
+  category         ProductCategory
+  examTypeId       String?
+  level            ProductLevel?
+  posterImageUrl   String?
+  badgeLabel       String?
+  basePrice        Decimal         @db.Decimal(12, 2)
+  salePrice        Decimal         @db.Decimal(12, 2)
+  currency         String          @default("TRY")
+  isPublished      Boolean         @default(true)
+  isFeatured       Boolean         @default(false)
+  displayOrder     Int             @default(0)
+  shortDescription String?
+  description      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  examType   ExamType? @relation(fields: [examTypeId], references: [id])
+  course     Course?
+  book       Book?
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@index([category])
+  @@index([examTypeId])
+  @@map("products")
+}
+
+model Course {
+  id               String                @id @default(cuid())
+  productId        String                @unique
+  deliveryFormat   CourseDeliveryFormat  @default(HYBRID)
+  syllabusSummary  String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  product      Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  modules      CourseModule[]
+  liveSessions LiveSession[]
+  enrollments  Enrollment[]
+
+  @@map("courses")
+}
+
+model CourseModule {
+  id        String   @id @default(cuid())
+  courseId  String
+  title     String
+  position  Int
+  createdAt DateTime @default(now())
+
+  course  Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons RecordedLesson[]
+
+  @@unique([courseId, position])
+  @@map("course_modules")
+}
+
+model RecordedLesson {
+  id              String   @id @default(cuid())
+  moduleId        String
+  title           String
+  position        Int
+  videoUrl        String?
+  durationMinutes Int?
+  isPreviewable   Boolean  @default(false)
+  description     String?
+
+  module           CourseModule       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessonProgresses LessonProgress[]
+
+  @@unique([moduleId, position])
+  @@map("recorded_lessons")
+}
+
+model LiveSession {
+  id            String   @id @default(cuid())
+  courseId      String
+  title         String
+  cohortLabel   String?
+  startsAt      DateTime
+  endsAt        DateTime
+  timezone      String   @default("Europe/Istanbul")
+  meetingUrl    String?
+  recordingUrl  String?
+  capacity      Int?
+  createdAt     DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("live_sessions")
+}
+
+model Book {
+  id             String     @id @default(cuid())
+  productId      String     @unique
+  author         String
+  format         BookFormat @default(PDF)
+  pageCount      Int?
+  isbn           String?
+  digitalFileUrl String?
+  createdAt      DateTime   @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("books")
+}
+
+// ====================================================================
+// ENROLLMENT & PROGRESS
+// ====================================================================
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  userId      String
+  courseId    String
+  orderItemId String?          @unique
+  status      EnrollmentStatus @default(ACTIVE)
+  grantedAt   DateTime         @default(now())
+  expiresAt   DateTime?
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  orderItem        OrderItem?        @relation(fields: [orderItemId], references: [id])
+  lessonProgresses LessonProgress[]
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id               String    @id @default(cuid())
+  enrollmentId     String
+  recordedLessonId String
+  completedAt      DateTime?
+
+  enrollment     Enrollment     @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  recordedLesson RecordedLesson @relation(fields: [recordedLessonId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, recordedLessonId])
+  @@map("lesson_progress")
+}
+
+// ====================================================================
+// COMMERCE
+// ====================================================================
+
+model Cart {
+  id           String   @id @default(cuid())
+  userId       String?  @unique
+  sessionToken String?  @unique
+  currency     String   @default("TRY")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id                String   @id @default(cuid())
+  cartId            String
+  productId         String
+  quantity          Int      @default(1)
+  unitPriceSnapshot Decimal  @db.Decimal(12, 2)
+  createdAt         DateTime @default(now())
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  userId         String?
+  guestName      String?
+  guestEmail     String?
+  guestPhone     String?
+  status         OrderStatus @default(PENDING)
+  subtotal       Decimal     @db.Decimal(12, 2)
+  discountTotal  Decimal     @default(0) @db.Decimal(12, 2)
+  total          Decimal     @db.Decimal(12, 2)
+  currency       String      @default("TRY")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user    User?       @relation(fields: [userId], references: [id])
+  items   OrderItem[]
+  payment Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String   @id @default(cuid())
+  orderId       String
+  productId     String
+  titleSnapshot String
+  unitPrice     Decimal  @db.Decimal(12, 2)
+  quantity      Int      @default(1)
+  lineTotal     Decimal  @db.Decimal(12, 2)
+
+  order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product    Product     @relation(fields: [productId], references: [id])
+  enrollment Enrollment?
+
+  @@map("order_items")
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  orderId    String        @unique
+  provider   String        @default("MANUAL")
+  providerRef String?
+  amount     Decimal       @db.Decimal(12, 2)
+  currency   String        @default("TRY")
+  status     PaymentStatus @default(PENDING)
+  paidAt     DateTime?
+  createdAt  DateTime      @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// ====================================================================
+// CONTENT & MARKETING
+// ====================================================================
+
+model Testimonial {
+  id             String   @id @default(cuid())
+  studentName    String
+  studentPhotoUrl String?
+  examTypeId     String?
+  resultSummary  String?
+  quote          String
+  rating         Int      @default(5)
+  isPublished    Boolean  @default(true)
+  isFeatured     Boolean  @default(false)
+  displayOrder   Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  examType ExamType? @relation(fields: [examTypeId], references: [id])
+
+  @@map("testimonials")
+}
+
+model BlogCategory {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+
+  posts BlogPost[]
+
+  @@map("blog_categories")
+}
+
+model BlogPost {
+  id             String         @id @default(cuid())
+  title          String
+  slug           String         @unique
+  excerpt        String
+  content        String
+  coverImageUrl  String?
+  authorId       String
+  categoryId     String?
+  tags           String[]       @default([])
+  status         BlogPostStatus @default(DRAFT)
+  publishedAt    DateTime?
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  author   User          @relation(fields: [authorId], references: [id])
+  category BlogCategory? @relation(fields: [categoryId], references: [id])
+
+  @@map("blog_posts")
+}
+
+// ====================================================================
+// FREE TOOLS & RESOURCES
+// ====================================================================
+
+model DictionaryTerm {
+  id              String  @id @default(cuid())
+  term            String
+  definition      String
+  exampleSentence String?
+  examTypeId      String?
+
+  examType ExamType? @relation(fields: [examTypeId], references: [id])
+
+  @@index([term])
+  @@map("dictionary_terms")
+}
+
+model ScoreConversionEntry {
+  id           String @id @default(cuid())
+  examTypeId   String
+  inputLabel   String
+  resultLabel  String
+  notes        String?
+  minCorrect   Int
+  maxCorrect   Int
+  displayOrder Int    @default(0)
+
+  examType ExamType @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
+
+  @@map("score_conversion_entries")
+}
+
+model ExamCalendarEntry {
+  id                  String    @id @default(cuid())
+  examTypeId          String
+  title               String?
+  examDate            DateTime
+  applicationDeadline DateTime?
+  resultDate          DateTime?
+  year                Int
+
+  examType ExamType @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
+
+  @@map("exam_calendar_entries")
+}
+
+model FreeResource {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  description   String?
+  fileUrl       String
+  examTypeId    String?
+  category      String?
+  downloadCount Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  examType ExamType? @relation(fields: [examTypeId], references: [id])
+
+  @@map("free_resources")
+}
+
+// ====================================================================
+// LEAD GENERATION
+// ====================================================================
+
+model CallbackRequest {
+  id          String                @id @default(cuid())
+  name        String
+  phone       String
+  note        String?
+  examTypeId  String?
+  status      CallbackRequestStatus @default(NEW)
+  contactedAt DateTime?
+  createdAt   DateTime              @default(now())
+
+  examType ExamType? @relation(fields: [examTypeId], references: [id])
+
+  @@map("callback_requests")
+}
