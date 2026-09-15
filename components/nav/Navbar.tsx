@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/auth";
+import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 
 const NAV_LINKS = [
   { href: "/packages", label: "Online Dersler" },
@@ -28,7 +29,7 @@ export async function Navbar() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 lg:flex">
           <Link href="/cart" className="ghost-button" aria-label="Sepet">
             Sepet
           </Link>
@@ -36,11 +37,12 @@ export async function Navbar() {
             <Link href="/dashboard" className="secondary-button">Hesabım</Link>
           ) : (
             <>
-              <Link href="/sign-in" className="ghost-button hidden sm:inline-flex">Üye Girişi</Link>
+              <Link href="/sign-in" className="ghost-button">Üye Girişi</Link>
               <Link href="/register" className="primary-button">Ücretsiz Dene</Link>
             </>
           )}
         </div>
+        <MobileNavToggle links={NAV_LINKS} isSignedIn={Boolean(session?.user)} />
       </div>
     </header>
   );
