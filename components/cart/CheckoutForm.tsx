@@ -26,6 +26,10 @@ export function CheckoutForm({ isGuest }: { isGuest: boolean }) {
           </div>
         </>
       ) : null}
+      <div>
+        <label className="label" htmlFor="couponCode">Kupon Kodu (opsiyonel)</label>
+        <input id="couponCode" name="couponCode" placeholder="PASS25" className="auth-input uppercase" />
+      </div>
       <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--brand-soft)] p-4 text-sm text-[color:var(--brand)]">
         Ödeme altyapımız şu anda kurulum aşamasındadır. Siparişiniz &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz sizinle iletişime geçecektir.
       </p>

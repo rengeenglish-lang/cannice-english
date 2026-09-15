@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { db } from "@/server/db";
 import { getOrCreateCart } from "@/server/services/cart.service";
 import { guestCheckoutSchema } from "@/lib/validation/checkout";
+import { validateCouponForOrder, redeemCoupon } from "@/server/services/coupons.service";
 
 export type CheckoutFormState = { status: "idle" | "error"; message?: string };
 
@@ -26,6 +27,21 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
 
   const subtotal = cart.items.reduce((sum, item) => sum + Number(item.unitPriceSnapshot) * item.quantity, 0);
 
+  const rawCouponCode = String(formData.get("couponCode") ?? "").trim();
+  let discountTotal = 0;
+  let appliedCouponId: string | null = null;
+  let couponCode: string | null = null;
+
+  if (rawCouponCode) {
+    const result = await validateCouponForOrder(rawCouponCode, subtotal);
+    if (!result.ok) return { status: "error" as const, message: result.message };
+    discountTotal = result.discount;
+    appliedCouponId = result.coupon.id;
+    couponCode = result.coupon.code;
+  }
+
+  const total = Math.max(0, subtotal - discountTotal);
+
   const order = await db.order.create({
     data: {
       userId: session?.user?.id,
@@ -34,7 +50,9 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
       guestPhone: guest?.guestPhone,
       status: "AWAITING_PAYMENT",
       subtotal,
-      total: subtotal,
+      discountTotal,
+      total,
+      couponCode,
       items: {
         create: cart.items.map((item) => ({
           productId: item.productId,
@@ -44,10 +62,11 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
           lineTotal: Number(item.unitPriceSnapshot) * item.quantity,
         })),
       },
-      payment: { create: { provider: "MANUAL", amount: subtotal, status: "PENDING" } },
+      payment: { create: { provider: "MANUAL", amount: total, status: "PENDING" } },
     },
   });
 
+  if (appliedCouponId) await redeemCoupon(appliedCouponId);
   await db.cartItem.deleteMany({ where: { cartId: cart.id } });
 
   redirect(`/checkout/received?order=${order.id}`);

@@ -316,6 +316,49 @@ async function main() {
     });
   }
 
+  // ---- İngilizce Gramer ----
+  const grammarCategory = await db.blogCategory.upsert({
+    where: { slug: "ingilizce-gramer" },
+    update: {},
+    create: { name: "İngilizce Gramer", slug: "ingilizce-gramer", displayOrder: 2 },
+  });
+
+  const grammarDefs = [
+    {
+      slug: "present-perfect-tense-kullanimi",
+      title: "Present Perfect Tense Ne Zaman Kullanılır?",
+      excerpt: "YDS ve YÖKDİL'de sıkça çıkan present perfect tense'in kullanım alanlarını örneklerle inceliyoruz.",
+      content: "Present perfect tense, geçmişte başlayıp etkisi hâlâ devam eden veya net bir zamanı belirtilmeyen eylemler için kullanılır.\n\nÖrnek: 'She has lived in London for five years.' cümlesinde eylem geçmişte başlamış ve hâlâ devam etmektedir.\n\nYDS ve YÖKDİL'de bu yapı genellikle 'since', 'for', 'already', 'yet' gibi zaman belirteçleriyle birlikte sorulur.",
+    },
+    {
+      slug: "conditional-clauses-kosul-cumleleri",
+      title: "Conditional Clauses (Koşul Cümleleri) Rehberi",
+      excerpt: "Zero, first, second ve third conditional yapılarının farklarını ve sınavda nasıl karşımıza çıktığını anlatıyoruz.",
+      content: "Koşul cümleleri, bir durumun gerçekleşmesi için gereken şartı ifade eder.\n\nZero conditional genel gerçekler için, first conditional gerçekleşmesi muhtemel durumlar için, second ve third conditional ise gerçek dışı veya geçmişte gerçekleşmemiş durumlar için kullanılır.\n\nSınavlarda genellikle cümlenin anlamına uygun doğru yapıyı seçmeniz istenir.",
+    },
+  ];
+
+  for (const def of grammarDefs) {
+    await db.blogPost.upsert({
+      where: { slug: def.slug },
+      update: { title: def.title, excerpt: def.excerpt, content: def.content, categoryId: grammarCategory.id, authorId: teacher.id, status: "PUBLISHED", publishedAt: new Date() },
+      create: { slug: def.slug, title: def.title, excerpt: def.excerpt, content: def.content, categoryId: grammarCategory.id, authorId: teacher.id, status: "PUBLISHED", publishedAt: new Date() },
+    });
+  }
+
+  // ---- Coupons ----
+  const couponDefs = [
+    { code: "HOSGELDIN10", type: "PERCENT", value: "10", description: "Yeni üyelere özel hoş geldin indirimi.", isPublic: true },
+    { code: "PASS25", type: "PERCENT", value: "25", description: "Seçili paketlerde geçerli özel indirim kodu.", isPublic: true },
+  ];
+  for (const def of couponDefs) {
+    await db.coupon.upsert({
+      where: { code: def.code },
+      update: { type: def.type, value: def.value, description: def.description, isPublic: def.isPublic, isActive: true },
+      create: { code: def.code, type: def.type, value: def.value, description: def.description, isPublic: def.isPublic },
+    });
+  }
+
   // ---- Dictionary, score conversion, exam calendar, free resources ----
   const dictionaryDefs = [
     { term: "Coherence", definition: "Bir metindeki fikirlerin mantıklı ve akıcı biçimde birbirine bağlanması.", exampleSentence: "The essay lacked coherence between paragraphs.", examCode: "IELTS" },

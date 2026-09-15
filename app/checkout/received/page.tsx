@@ -27,9 +27,21 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex justify-between border-t border-[color:var(--border)] pt-4 font-black text-[color:var(--brand)]">
-            <span>Toplam</span>
-            <span>{formatTRY(String(order.total))}</span>
+          <div className="mt-4 space-y-1 border-t border-[color:var(--border)] pt-4">
+            <div className="flex justify-between text-sm text-[color:var(--muted)]">
+              <span>Ara Toplam</span>
+              <span>{formatTRY(String(order.subtotal))}</span>
+            </div>
+            {Number(order.discountTotal) > 0 ? (
+              <div className="flex justify-between text-sm font-semibold text-[color:var(--success)]">
+                <span>İndirim{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+                <span>-{formatTRY(String(order.discountTotal))}</span>
+              </div>
+            ) : null}
+            <div className="flex justify-between pt-1 font-black text-[color:var(--brand)]">
+              <span>Toplam</span>
+              <span>{formatTRY(String(order.total))}</span>
+            </div>
           </div>
         </div>
       ) : null}

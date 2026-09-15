@@ -16,6 +16,7 @@ export function DashboardSidebar({ role }: { role: "STUDENT" | "TEACHER" | "ADMI
             <p className="mb-1 mt-6 px-3 text-[10px] font-black uppercase tracking-[.2em] text-slate-400">Yönetim</p>
             <Link href="/admin" className="dashboard-nav-item">Genel Bakış</Link>
             <Link href="/admin/orders" className="dashboard-nav-item">Siparişler</Link>
+            <Link href="/admin/coupons" className="dashboard-nav-item">Kuponlar</Link>
             <Link href="/admin/products" className="dashboard-nav-item">Ürünler</Link>
             <Link href="/admin/testimonials" className="dashboard-nav-item">Katılımcı Görüşleri</Link>
             <Link href="/admin/blog" className="dashboard-nav-item">Blog</Link>

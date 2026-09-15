@@ -1,0 +1,65 @@
+import type { Metadata } from "next";
+import { listExamTypes } from "@/server/services/catalog.service";
+import { db } from "@/server/db";
+import { ProductGrid } from "@/components/catalog/ProductGrid";
+import type { ProductLevel } from "@/lib/generated/prisma/enums";
+
+export const metadata: Metadata = { title: "Rehberlik Aracı" };
+
+const GOAL_LEVELS: Record<string, ProductLevel[]> = {
+  BEGINNER: ["BEGINNER_TO_ADVANCED", "JUNIOR"],
+  ADVANCED: ["INTERMEDIATE_ADVANCED", "SENIOR"],
+};
+
+function fetchRecommended(examTypeId: string, levels: ProductLevel[]) {
+  return db.product.findMany({
+    where: { examTypeId, isPublished: true, level: { in: levels } },
+    include: { examType: true },
+    orderBy: [{ isFeatured: "desc" }, { displayOrder: "asc" }],
+    take: 3,
+  });
+}
+
+type Props = { searchParams: Promise<{ exam?: string; goal?: string }> };
+
+export default async function GuidancePage({ searchParams }: Props) {
+  const { exam: examId, goal } = await searchParams;
+  const exams = await listExamTypes();
+
+  let recommended: Awaited<ReturnType<typeof fetchRecommended>> = [];
+  if (examId && goal) recommended = await fetchRecommended(examId, GOAL_LEVELS[goal] ?? []);
+
+  return (
+    <main className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
+      <p className="eyebrow">Faydalı Araçlar</p>
+      <h1 className="page-title">YDS ve YÖKDİL&apos;e Hazırlananlar İçin Öneriler</h1>
+      <p className="page-copy">Sınavınızı ve hedefinizi seçin, size en uygun paketi önerelim.</p>
+
+      <form method="GET" className="panel mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:items-end">
+        <div>
+          <label className="label" htmlFor="exam">Sınavınız</label>
+          <select id="exam" name="exam" defaultValue={examId ?? ""} required className="auth-input">
+            <option value="" disabled>Seçiniz</option>
+            {exams.map((exam) => <option key={exam.id} value={exam.id}>{exam.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="label" htmlFor="goal">Hedefiniz</label>
+          <select id="goal" name="goal" defaultValue={goal ?? ""} required className="auth-input">
+            <option value="" disabled>Seçiniz</option>
+            <option value="BEGINNER">Sıfırdan başlıyorum</option>
+            <option value="ADVANCED">Puanımı artırmak istiyorum</option>
+          </select>
+        </div>
+        <button type="submit" className="primary-button">Önerileri Göster</button>
+      </form>
+
+      {examId && goal ? (
+        <div className="mt-10">
+          <p className="eyebrow mb-4">Size Önerilen Paketler</p>
+          <ProductGrid products={recommended} emptyLabel="Bu kriterlere uygun bir paket bulunamadı. Tüm paketlere göz atabilirsiniz." />
+        </div>
+      ) : null}
+    </main>
+  );
+}

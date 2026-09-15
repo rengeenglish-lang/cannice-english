@@ -6,6 +6,7 @@ export const metadata: Metadata = { title: "Faydalı Araçlar" };
 const TOOLS = [
   { href: "/tools/dictionary", title: "Sözlük", description: "Sınavlara özel kelime ve terimler." },
   { href: "/tools/score-calculator", title: "Puan Hesaplama", description: "Doğru sayınıza göre tahmini bant/puan aralığınızı görün." },
+  { href: "/tools/guidance", title: "Rehberlik Aracı", description: "Sınavınızı ve hedefinizi seçin, size uygun paketi görün." },
   { href: "/tools/exam-calendar", title: "ÖSYM Sınav Takvimi", description: "Tüm sınav tarihlerini tek takvimde bulun." },
   { href: "/tools/free-resources", title: "Ücretsiz Kaynaklar", description: "İndirilebilir kelime listeleri ve çalışma kağıtları." },
 ];

@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/books", label: "Kitaplar ve Kaynaklar" },
   { href: "/#testimonials", label: "Katılımcı Görüşleri" },
   { href: "/tools", label: "Faydalı Araçlar" },
+  { href: "/campaigns", label: "Kampanyalar" },
 ];
 
 export async function Navbar() {

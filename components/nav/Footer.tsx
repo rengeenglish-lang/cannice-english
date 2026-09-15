@@ -32,6 +32,10 @@ export function Footer() {
             <p><span className="font-semibold text-white">Müşteri Hizmetleri:</span> 0 (850) 000 00 00</p>
             <p><span className="font-semibold text-white">WhatsApp:</span> 0 (5XX) XXX XX XX</p>
           </div>
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/70">
+            <li><Link href="/about" className="transition hover:text-white">Hakkımızda</Link></li>
+            <li><Link href="/faq" className="transition hover:text-white">Soru & Cevap</Link></li>
+          </ul>
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/35">İngilizce Sınavlar</p>
@@ -46,9 +50,11 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-white/70">
             <li><Link href="/tools/dictionary" className="transition hover:text-white">Sözlük</Link></li>
             <li><Link href="/tools/score-calculator" className="transition hover:text-white">Puan Hesaplama</Link></li>
+            <li><Link href="/tools/guidance" className="transition hover:text-white">Rehberlik Aracı</Link></li>
             <li><Link href="/tools/exam-calendar" className="transition hover:text-white">ÖSYM Sınav Takvimi</Link></li>
             <li><Link href="/tools/free-resources" className="transition hover:text-white">Ücretsiz Kaynaklar</Link></li>
             <li><Link href="/blog" className="transition hover:text-white">Blog</Link></li>
+            <li><Link href="/grammar" className="transition hover:text-white">İngilizce Gramer</Link></li>
           </ul>
         </div>
         <div className="col-span-2 sm:col-span-3 lg:col-span-2">
