@@ -17,7 +17,10 @@ export default async function CheckoutPage() {
       <h1 className="page-title">Siparişinizi Tamamlayın</h1>
       <div className="panel mt-8 flex items-center justify-between">
         <span className="font-bold text-slate-600">{cart.items.length} ürün</span>
-        <span className="text-xl font-black text-[color:var(--brand)]">{formatTRY(total)}</span>
+        <div className="text-right">
+          <span className="text-xl font-black text-[color:var(--brand)]">{formatTRY(total)}</span>
+          <p className="text-xs text-[color:var(--muted)]">KDV Dahildir</p>
+        </div>
       </div>
       <div className="mt-6">
         <CheckoutForm isGuest={!session?.user} />

@@ -273,9 +273,31 @@ model Enrollment {
   course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
   orderItem        OrderItem?        @relation(fields: [orderItemId], references: [id])
   lessonProgresses LessonProgress[]
+  submissions      PracticeSubmission[]
 
   @@unique([userId, courseId])
   @@map("enrollments")
+}
+
+enum SubmissionStatus {
+  PENDING
+  REVIEWED
+}
+
+model PracticeSubmission {
+  id              String           @id @default(cuid())
+  enrollmentId    String
+  title           String
+  studentAnswer   String
+  status          SubmissionStatus @default(PENDING)
+  teacherFeedback String?
+  score           Decimal?         @db.Decimal(5, 2)
+  submittedAt     DateTime         @default(now())
+  reviewedAt      DateTime?
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@map("practice_submissions")
 }
 
 model LessonProgress {

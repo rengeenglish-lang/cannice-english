@@ -104,3 +104,7 @@ button, a { touch-action: manipulation; }
     transition-duration: 0.01ms !important;
   }
 }
+
+@media print {
+  header, footer { display: none !important; }
+}

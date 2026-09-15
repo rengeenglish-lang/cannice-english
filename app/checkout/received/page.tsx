@@ -39,13 +39,16 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
               </div>
             ) : null}
             <div className="flex justify-between pt-1 font-black text-[color:var(--brand)]">
-              <span>Toplam</span>
+              <span>Toplam (KDV Dahil)</span>
               <span>{formatTRY(String(order.total))}</span>
             </div>
           </div>
         </div>
       ) : null}
-      <Link href="/" className="primary-button mt-8 inline-flex">Ana Sayfaya Dön</Link>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Link href="/" className="primary-button inline-flex">Ana Sayfaya Dön</Link>
+        {order ? <Link href={`/orders/${order.id}/receipt`} className="secondary-button inline-flex">Makbuzu Görüntüle</Link> : null}
+      </div>
     </main>
   );
 }

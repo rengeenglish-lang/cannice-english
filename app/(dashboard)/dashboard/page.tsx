@@ -81,7 +81,10 @@ export default async function StudentDashboardPage() {
                       <span className="font-semibold text-[color:var(--foreground)]">{order.items.map((item) => item.titleSnapshot).join(", ")}</span>
                       <span className="font-extrabold text-[color:var(--foreground)]">{formatTRY(String(order.total))}</span>
                     </div>
-                    <span className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${status.className}`}>{status.label}</span>
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${status.className}`}>{status.label}</span>
+                      <Link href={`/orders/${order.id}/receipt`} className="text-xs font-bold text-[color:var(--accent-strong)]">Makbuz →</Link>
+                    </div>
                   </li>
                 );
               })}

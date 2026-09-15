@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getAuthContext } from "@/server/auth/context";
 import { getEnrollmentForCourse } from "@/server/services/learning.service";
+import { listSubmissionsForEnrollment } from "@/server/services/submissions.service";
 import { LearnModuleAccordion } from "@/components/course/LearnModuleAccordion";
 import { LiveSessionSchedule } from "@/components/course/LiveSessionSchedule";
+import { PracticeSubmissionPanel } from "@/components/course/PracticeSubmissionPanel";
 
 type Props = { params: Promise<{ courseId: string }> };
 
@@ -20,6 +22,7 @@ export default async function CourseLearningPage({ params }: Props) {
   const totalLessons = enrollment.course.modules.reduce((sum, module) => sum + module.lessons.length, 0);
   const completedLessonIds = new Set(enrollment.lessonProgresses.filter((progress) => progress.completedAt).map((progress) => progress.recordedLessonId));
   const percent = totalLessons > 0 ? Math.round((completedLessonIds.size / totalLessons) * 100) : 0;
+  const submissions = await listSubmissionsForEnrollment(enrollment.id);
 
   return (
     <div>
@@ -47,6 +50,7 @@ export default async function CourseLearningPage({ params }: Props) {
             completedLessonIds={completedLessonIds}
           />
         </div>
+        <PracticeSubmissionPanel courseId={courseId} enrollmentId={enrollment.id} submissions={submissions} />
       </div>
     </div>
   );

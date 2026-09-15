@@ -20,6 +20,7 @@ export function DashboardSidebar({ role }: { role: "STUDENT" | "TEACHER" | "ADMI
             <Link href="/admin/products" className="dashboard-nav-item">Ürünler</Link>
             <Link href="/admin/testimonials" className="dashboard-nav-item">Katılımcı Görüşleri</Link>
             <Link href="/admin/blog" className="dashboard-nav-item">Blog</Link>
+            <Link href="/admin/submissions" className="dashboard-nav-item">Değerlendirmeler</Link>
             <Link href="/admin/leads" className="dashboard-nav-item">Gelen Talepler</Link>
           </>
         ) : null}

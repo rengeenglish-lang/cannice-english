@@ -53,6 +53,7 @@ export default async function PackageDetailPage({ params }: Props) {
             <DiscountBadge basePrice={String(product.basePrice)} salePrice={String(product.salePrice)} />
           </div>
           <p className="text-3xl font-extrabold text-[color:var(--foreground)]">{formatTRY(String(product.salePrice))}</p>
+          <p className="text-xs text-[color:var(--muted)]">KDV Dahildir</p>
           <div className="mt-5">
             <AddToCartButton productId={product.id} />
           </div>
