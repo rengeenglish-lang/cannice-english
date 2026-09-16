@@ -8,7 +8,7 @@ export function MobileNavToggle({ links, isSignedIn }: { links: { href: string; 
   const close = () => setOpen(false);
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <button type="button" onClick={() => setOpen((value) => !value)} aria-label={open ? "Menüyü Kapat" : "Menüyü Aç"} className="ghost-button px-2.5">
         <span className="text-xl leading-none">{open ? "✕" : "☰"}</span>
       </button>
