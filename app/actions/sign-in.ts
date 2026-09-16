@@ -2,15 +2,19 @@
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
+import { db } from "@/server/db";
 
 export type SignInFormState = { status: "idle" | "error"; message?: string };
 
 export async function signInAction(_prev: SignInFormState, formData: FormData): Promise<SignInFormState> {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
   try {
+    const user = email ? await db.user.findUnique({ where: { email }, select: { role: true } }) : null;
+    const isStaff = user?.role === "TEACHER" || user?.role === "ADMIN";
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: "/dashboard",
+      redirectTo: isStaff ? "/admin" : "/dashboard",
     });
     return { status: "idle" };
   } catch (error) {
