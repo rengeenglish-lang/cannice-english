@@ -16,6 +16,7 @@ type Lesson = {
 type Topic = {
   id: string;
   name: string;
+  description: string | null;
   questionCount: number | null;
   lessons: Lesson[];
 };
@@ -124,7 +125,12 @@ export function KonuAnlatimDashboard({
           {selected ? (
             <>
               <p className="eyebrow">{selectedTopic?.name}</p>
-              <h2 className="section-title mt-1 text-xl">{selected.title}</h2>
+              {selectedTopic?.description ? (
+                <p className="mt-2 whitespace-pre-line rounded-2xl bg-[color:var(--canvas)] p-4 text-sm leading-6 text-[color:var(--muted)]">
+                  {selectedTopic.description}
+                </p>
+              ) : null}
+              <h2 className="section-title mt-4 text-xl">{selected.title}</h2>
               {selected.videoUrl ? (
                 <div className="mt-4 aspect-video overflow-hidden rounded-2xl bg-black">
                   <video src={selected.videoUrl} controls className="size-full" />

@@ -452,6 +452,104 @@ async function main() {
     }
   }
 
+  const yokdilAltTestDefs = [
+    {
+      slug: "paragraf-okuma-anlama",
+      name: "Paragraf Okuma Anlama (Reading Comprehension)",
+      questionCount: 15,
+      description:
+        "Paragraf Okuma Anlama, YÖKDİL'de en yüksek soru payına sahip alandır (%18,75). Adayların akademik metinleri anlama, ana fikri bulma, çıkarım yapma ve detay soruları cevaplayabilme becerilerini ölçer.\n\nHazırlık İpucu: Her gün en az 2-3 akademik paragraf okuyun. Ana fikir, destekleyici detay ve çıkarım sorularına odaklanın. Kendi alanınızdaki İngilizce makaleleri düzenli okumak büyük avantaj sağlar.",
+      subtopics: ["Main Idea (Ana Fikir)", "Supporting Details (Destekleyici Detaylar)", "Inference (Çıkarım Yapma)", "Vocabulary in Context (Bağlamda Kelime)", "Author's Purpose (Yazarın Amacı)"],
+    },
+    {
+      slug: "dilbilgisi",
+      name: "Dilbilgisi (Grammar)",
+      questionCount: 14,
+      description:
+        "Dilbilgisi bölümü, İngilizce gramer kurallarının akademik bağlamda uygulanmasını test eder. Zamanlar, kiplik fiiller, koşul cümleleri ve bağlaçlar en sık sorulan konulardır.\n\nHazırlık İpucu: Tenses, modals, conditionals ve passive voice konularını sağlam öğrenin. Her konudan en az 50 soru çözün. Relative clauses ve bağlaçlar sıklıkla çıkmaktadır.",
+      subtopics: [
+        "Tenses (Zamanlar)",
+        "Modals (Kiplik Fiiller)",
+        "Conditionals (Koşul Cümleleri)",
+        "Passive Voice (Edilgen Çatı)",
+        "Reported Speech (Dolaylı Anlatım)",
+        "Relative Clauses (Sıfat Cümlecikleri)",
+        "Conjunctions & Connectors (Bağlaçlar)",
+        "Gerunds & Infinitives",
+        "Subject-Verb Agreement (Özne-Yüklem Uyumu)",
+        "Comparatives & Superlatives",
+      ],
+    },
+    {
+      slug: "ceviri",
+      name: "Çeviri (İngilizce↔Türkçe Translation)",
+      questionCount: 12,
+      description:
+        "Çeviri bölümü, İngilizce-Türkçe ve Türkçe-İngilizce çeviri becerilerini ölçer. Akademik metin çevirisi ve teknik terim bilgisi önemlidir.\n\nHazırlık İpucu: Her gün bir paragraf İngilizce-Türkçe çeviri pratiği yapın. Akademik terminolojiyi kendi alanınızda geliştirin. Anlam odaklı çeviri yapın, sözcüğü sözcüğüne çeviriden kaçının.",
+      subtopics: ["İngilizceden Türkçeye Çeviri", "Türkçeden İngilizceye Çeviri", "Akademik Metin Çevirisi", "Teknik Terim Çevirisi", "Paragraf Düzeyinde Anlam Aktarımı"],
+    },
+    {
+      slug: "cumle-tamamlama",
+      name: "Cümle Tamamlama (Sentence Completion)",
+      questionCount: 11,
+      description:
+        "Cümle Tamamlama bölümü, yarım bırakılmış cümlelerin anlam ve yapı uyumuna göre tamamlanmasını gerektirir.\n\nHazırlık İpucu: Cümlenin başındaki veya sonundaki ipuçlarına dikkat edin. Bağlaçları ve geçiş ifadelerini öğrenmek bu bölümde çok faydalıdır.",
+      subtopics: ["Cümle Başı Tamamlama", "Cümle Sonu Tamamlama", "Yakın Anlamlı Cümle Seçimi", "Akademik Bağlam Tamamlama"],
+    },
+    {
+      slug: "cloze-test",
+      name: "Cloze Test (Boşluk Doldurma)",
+      questionCount: 10,
+      description:
+        "Cloze Test, bir akademik metnin içindeki boşluklara uygun kelime veya yapıyı seçmeyi gerektiren soru tipidir.\n\nHazırlık İpucu: Önce metnin tamamını okuyarak genel konuyu kavrayın. Boşluğun çevresindeki cümlelere dikkat edin. Mantıksal bağlaçları (however, moreover, therefore) öğrenin.",
+      subtopics: ["Grammar-based Cloze (Dilbilgisi Odaklı)", "Vocabulary-based Cloze (Kelime Odaklı)", "Context Clues (Bağlamsal İpuçları)", "Logical Connectors (Mantıksal Bağlaçlar)", "Academic Text Completion (Akademik Metin)"],
+    },
+    {
+      slug: "kelime-bilgisi",
+      name: "Kelime Bilgisi (Vocabulary)",
+      questionCount: 6,
+      description:
+        "Kelime Bilgisi bölümü, adayların akademik kelime hazinesini, eş-zıt anlamlıları ve sözcük türetme becerilerini ölçer.\n\nHazırlık İpucu: Academic Word List (AWL) çalışın. Her gün 30-40 yeni kelime öğrenin. Collocations ve word formation kalıplarını tablolarla öğrenin.",
+      subtopics: ["Academic Word List (AWL)", "Synonyms & Antonyms (Eş ve Zıt Anlam)", "Word Formation (Sözcük Türetme)", "Collocations (Eşdizimlilik)", "Field-Specific Terminology (Alana Özgü Terimler)"],
+    },
+    {
+      slug: "paragraf-tamamlama",
+      name: "Paragraf Tamamlama",
+      questionCount: 6,
+      description:
+        "Paragraf Tamamlama bölümü, bir paragraftaki eksik cümlenin bulunmasını veya paragrafı tamamlayacak en uygun cümlenin seçilmesini gerektirir.\n\nHazırlık İpucu: Paragrafın genel akışını kavrayın. Konu cümlesi ve sonuç cümlesi arasındaki mantıksal bağı arayın.",
+      subtopics: ["Paragraf İçi Boşluk Tamamlama", "Paragraf Sonuç Cümlesi Seçimi", "Metin Akışına Uygun Cümle"],
+    },
+    {
+      slug: "anlam-butunlugunu-bozan-cumle",
+      name: "Anlam Bütünlüğünü Bozan Cümle",
+      questionCount: 6,
+      description:
+        "Bu bölümde bir paragraftaki anlam bütünlüğünü bozan (konu dışı) cümlenin tespit edilmesi istenmektedir.\n\nHazırlık İpucu: Paragraftaki her cümleyi konu cümlesiyle karşılaştırın. Konudan sapan, farklı bir yöne giden cümleyi belirleyin.",
+      subtopics: ["Paragrafta Konu Dışı Cümle Tespiti", "Anlam Tutarlılığı Analizi", "Bağlam ve Akış Kontrolü"],
+    },
+  ];
+  const yokdilExamCodes = ["YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN"];
+  for (const examCode of yokdilExamCodes) {
+    for (const [index, def] of yokdilAltTestDefs.entries()) {
+      const topic = await db.examTopic.upsert({
+        where: { examTypeId_slug: { examTypeId: examTypes[examCode].id, slug: def.slug } },
+        update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+        create: { examTypeId: examTypes[examCode].id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+      });
+
+      for (const [lessonIndex, subtopic] of def.subtopics.entries()) {
+        const contentBody = `Bu derste "${subtopic}" konusunu YÖKDİL "${def.name}" bölümü kapsamında örneklerle inceleyeceğiz.`;
+        const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
+        if (existingLesson) {
+          await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: subtopic, durationMinutes: 7, contentBody } });
+        } else {
+          await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: subtopic, durationMinutes: 7, contentBody } });
+        }
+      }
+    }
+  }
+
   console.log("Seed complete.");
   console.log(`Teacher login: hoca@canniceenglish.com / ${process.env.CANNICE_TEACHER_PASSWORD || "CanniceTeacher2026!"}`);
   console.log(`Student login: ogrenci@canniceenglish.com / ${process.env.CANNICE_STUDENT_PASSWORD || "CanniceStudent2026!"}`);

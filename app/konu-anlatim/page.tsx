@@ -7,6 +7,13 @@ import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
 
 export const metadata: Metadata = { title: "Konu Anlatım" };
 
+function formatWeightPercent(questionCount: number, totalQuestions: number) {
+  if (totalQuestions === 0) return "—";
+  const percent = (questionCount / totalQuestions) * 100;
+  const rounded = Math.round(percent * 100) / 100;
+  return `%${rounded.toString().replace(".", ",")}`;
+}
+
 type Props = { searchParams: Promise<{ exam?: string }> };
 
 export default async function TopicsIndexPage({ searchParams }: Props) {
@@ -42,7 +49,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       {topics.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-[color:var(--border-strong)] px-5 py-10 text-center">
           <p className="font-bold text-[color:var(--foreground)]">{activeExam?.name ?? "Bu sınav"} için konu anlatımları yakında burada olacak</p>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">Şu an için YDS konu anlatımlarını inceleyebilirsiniz.</p>
+          <p className="mt-2 text-sm text-[color:var(--muted)]">Şu an için YDS ve YÖKDİL konu anlatımlarını inceleyebilirsiniz.</p>
         </div>
       ) : (
         <>
@@ -51,11 +58,14 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
               <span className="section-title text-lg">{activeExam?.name} Soru Dağılımı</span>
               <span className="ml-2 text-sm font-semibold text-[color:var(--muted)]">(görmek için tıklayın)</span>
             </summary>
+            <p className="mt-3 text-xs font-semibold text-[color:var(--muted)] sm:hidden">← Tüm sütunları görmek için tabloyu yana kaydırın →</p>
             <table className="dashboard-table mt-4">
               <thead>
                 <tr>
                   <th>Konu Adı</th>
                   <th className="text-right">Soru Sayısı</th>
+                  <th className="text-right">Ağırlık (%)</th>
+                  <th className="text-right">Konu Sayısı</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,11 +73,17 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
                   <tr key={topic.id}>
                     <td className="font-semibold text-[color:var(--foreground)]">{topic.name}</td>
                     <td className="text-right font-bold">{topic.questionCount ?? "—"}</td>
+                    <td className="text-right">{formatWeightPercent(topic.questionCount ?? 0, totalQuestions)}</td>
+                    <td className="text-right">{topic.lessons.length}</td>
                   </tr>
                 ))}
                 <tr>
                   <td className="font-extrabold text-[color:var(--foreground)]">Toplam</td>
                   <td className="text-right font-extrabold text-[color:var(--accent-strong)]">{totalQuestions}</td>
+                  <td className="text-right font-extrabold text-[color:var(--accent-strong)]">%100</td>
+                  <td className="text-right font-extrabold text-[color:var(--accent-strong)]">
+                    {topics.reduce((sum, topic) => sum + topic.lessons.length, 0)}
+                  </td>
                 </tr>
               </tbody>
             </table>

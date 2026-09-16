@@ -125,6 +125,7 @@ model ExamTopic {
   examTypeId    String
   name          String
   slug          String
+  description   String?
   questionCount Int?
   displayOrder  Int      @default(0)
   createdAt     DateTime @default(now())
