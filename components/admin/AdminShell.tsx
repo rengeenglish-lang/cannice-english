@@ -22,6 +22,7 @@ export function DashboardShell({ role, children }: { role: Role; children: React
         </Link>
         <nav className="space-y-1">
           <Link href="/dashboard" className="dashboard-nav-item" onClick={close}>Panelim</Link>
+          <Link href="/dashboard/profile" className="dashboard-nav-item" onClick={close}>Hesap Bilgilerim</Link>
           <Link href="/packages" className="dashboard-nav-item" onClick={close}>Paketlere Göz At</Link>
           {isStaff ? (
             <>

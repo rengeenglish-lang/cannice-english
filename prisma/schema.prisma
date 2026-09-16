@@ -120,16 +120,20 @@ model ExamType {
 // ====================================================================
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String?
-  name      String
-  phone     String?
-  role      UserRole @default(STUDENT)
-  image     String?
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String    @id @default(cuid())
+  email          String    @unique
+  password       String?
+  name           String
+  phone          String?
+  nationalId     String?
+  birthDate      DateTime?
+  occupation     String?
+  educationLevel String?
+  role           UserRole  @default(STUDENT)
+  image          String?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   orders      Order[]
   cart        Cart?

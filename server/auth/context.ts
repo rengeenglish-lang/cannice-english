@@ -9,7 +9,18 @@ export const getAuthContext = cache(async () => {
   if (!session?.user?.id) return null;
   const user = await db.user.findUnique({
     where: { id: session.user.id },
-    select: { id: true, email: true, name: true, role: true, isActive: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isActive: true,
+      phone: true,
+      nationalId: true,
+      birthDate: true,
+      occupation: true,
+      educationLevel: true,
+    },
   });
   if (!user || !user.isActive) return null;
   return user;
