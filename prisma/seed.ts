@@ -644,9 +644,10 @@ async function main() {
       name: "Multiple-choice (Tek Cevap)",
       questionCount: 3,
       description:
-        "Bu soru tipinde kısa bir akademik metin okur ve metinle ilgili çoktan seçmeli bir soruyu, verilen seçeneklerden YALNIZCA birini işaretleyerek cevaplarsınız. Metni anlama ve çıkarım yapma becerinizi ölçer.\n\nHazırlık İpucu: Önce soruyu okuyup ne arandığını belirleyin, sonra metni o soruya odaklanarak tarayın. Bu soru tipinde yanlış cevap için puan kırılmaz, bu yüzden emin olmasanız bile mutlaka bir seçenek işaretleyin.",
+        "Bu soru tipinde kısa bir akademik metin (110 kelimeye kadar) okur ve metinle ilgili çoktan seçmeli bir soruyu, verilen seçeneklerden YALNIZCA birini işaretleyerek cevaplarsınız. Metni anlama ve çıkarım yapma becerinizi ölçer.\n\nHazırlık İpucu: Önce soruyu okuyup ne arandığını belirleyin, sonra metni o soruya odaklanarak tarayın. Bu soru tipinde yanlış cevap için puan kırılmaz, bu yüzden emin olmasanız bile mutlaka bir seçenek işaretleyin.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kısa bir paragraf ve altında 3-5 seçenekli bir soru bulunur; doğru seçeneği tek bir radyo düğmesiyle işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden boş bırakmak yerine her zaman bir tahminde bulunun." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda kısa bir paragraf (110 kelimeye kadar) ve altında 3-5 seçenekli bir soru bulunur; doğru seçeneği tek bir radyo düğmesiyle işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden boş bırakmak yerine her zaman bir tahminde bulunun." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Önce metni hızlıca tarayarak ana fikri kavrayın, ardından soruyu ve seçenekleri okuyun; sonra metne dönüp cevabı arayın. Emin değilseniz her seçeneği metinle 'evet/hayır' mantığıyla karşılaştırarak eleyin — yanlış olduğunu düşündüklerinizi sırayla çıkarın, geriye kalan doğru cevabınızdır. Bilmediğiniz kelimelerle çok fazla vakit kaybetmeyin; metnin genel akışından anlamını tahmin etmeye çalışın." },
       ],
     },
     {
@@ -654,9 +655,10 @@ async function main() {
       name: "Multiple-choice (Çoklu Cevap)",
       questionCount: 3,
       description:
-        "Bu soru tipinde bir metinle ilgili sorunun BİRDEN FAZLA doğru cevabı olabilir; doğru gördüğünüz TÜM seçenekleri işaretlemeniz gerekir. Reading bölümünde negatif puanlamanın uygulandığı tek soru tipidir.\n\nHazırlık İpucu: Her seçeneği metinle tek tek karşılaştırın ve yalnızca metinde açıkça desteklenen seçenekleri işaretleyin. Emin olmadığınız seçenekleri işaretlememek, yanlış tahminle puan kaybetmekten daha güvenlidir.",
+        "Bu soru tipinde bir metinle (300 kelimeye kadar) ilgili sorunun BİRDEN FAZLA doğru cevabı olabilir; doğru gördüğünüz TÜM seçenekleri işaretlemeniz gerekir. Reading bölümünde negatif puanlamanın uygulandığı tek soru tipidir.\n\nHazırlık İpucu: Her seçeneği metinle tek tek karşılaştırın ve yalnızca metinde açıkça desteklenen seçenekleri işaretleyin. Emin olmadığınız seçenekleri işaretlememek, yanlış tahminle puan kaybetmekten daha güvenlidir.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda bir metin ve altında birden fazla doğru cevabı olabilecek, kutucuklu (checkbox) bir soru bulunur. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir (toplam puan en az sıfırdır); bu yüzden metinde açıkça geçmeyen veya metinle çelişen seçenekleri asla işaretlemeyin." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda bir metin (300 kelimeye kadar) ve altında birden fazla doğru cevabı olabilecek, kutucuklu (checkbox) bir soru bulunur. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir (bir soru için toplam puanınız en az sıfırdır); bu yüzden metinde açıkça geçmeyen veya metinle çelişen seçenekleri asla işaretlemeyin." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Bir soru için toplam puanınız asla sıfırın altına düşmez, bu yüzden emin olduğunuz seçenekleri cesurca işaretleyin. Genellikle 5 seçenekten en fazla ikisi ya da üçü doğrudur; metinde açıkça desteklenmeyen, 'eksik' bilgi içeren veya kayıttaki/metindeki bağlamı değiştiren çeldiricileri eleyin. Şüpheli seçenekleri boş bırakmak, yanlış işaretleyip puan kaybetmekten daha güvenlidir." },
       ],
     },
     {
@@ -664,9 +666,10 @@ async function main() {
       name: "Re-order Paragraphs",
       questionCount: 3,
       description:
-        "Bu soru tipinde birbirine karışmış halde verilen metin parçalarını (genellikle 4-6 cümle/paragraf), sürükle-bırak yöntemiyle mantıklı ve akıcı bir sıraya koymanız istenir. Metin bütünlüğü ve bağlaç kullanımını anlama becerinizi ölçer.\n\nHazırlık İpucu: Önce 'konu cümlesini' (genel bir ifade içeren, başka bir cümleye referans vermeyen paragrafı) bulun — bu genellikle ilk sıradadır. Ardından 'this', 'these', 'however', 'therefore' gibi bağlaç ve zamirleri takip ederek hangi cümlenin hangisinden sonra geldiğini belirleyin.",
+        "Bu soru tipinde birbirine karışmış halde verilen metin parçalarını (150 kelimeye kadar), sürükle-bırak yöntemiyle mantıklı ve akıcı bir sıraya koymanız istenir. Metin bütünlüğü ve bağlaç kullanımını anlama becerinizi ölçer.\n\nHazırlık İpucu: Önce 'konu cümlesini' (genel bir ifade içeren, başka bir cümleye referans vermeyen paragrafı) bulun — bu genellikle ilk sıradadır. Ardından 'this', 'these', 'however', 'therefore' gibi bağlaç ve zamirleri takip ederek hangi cümlenin hangisinden sonra geldiğini belirleyin.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranın solunda karışık sırada paragraflar, sağında ise boş bir sıralama alanı bulunur; paragrafları doğru sıraya göre sağ tarafa sürüklersiniz. Puanlama, doğru sıralanan her 'ardışık çift' için verilir — tamamını mükemmel sıralayamasanız bile bazı çiftleri doğru yaparsanız kısmi puan alırsınız, bu yüzden emin olduğunuz çiftleri önce yerleştirin." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranın solunda karışık sırada metin kutuları, sağında ise boş bir sıralama alanı bulunur; kutuları doğru sıraya göre sağ tarafa sürüklersiniz. Puanlama, doğru sıralanan her 'ardışık çift' için verilir — tamamını mükemmel sıralayamasanız bile bazı çiftleri doğru yaparsanız kısmi puan alırsınız, bu yüzden emin olduğunuz çiftleri önce yerleştirin." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Önce hangi cümlenin diğerinden SONRA geldiğini gösteren ikili eşleşmeler kurmaya çalışın; zamirler (this, these, it), bağlaçlar (however, therefore, moreover) ve artikeller (the) genellikle önceki cümleye referans verir. Genel kural: A cümlesi B'den sonra geliyorsa sıra BA, BCA veya BDA olabilir — yani aralarına başka cümleler girebilir, bitişik olmaları şart değildir. Sıralamayı bitirdikten sonra mutlaka baştan sona okuyup anlam bütünlüğünü kontrol edin." },
       ],
     },
     {
@@ -674,9 +677,10 @@ async function main() {
       name: "Fill in the Blanks",
       questionCount: 5,
       description:
-        "Bu soru tipinde bir metin içindeki birkaç boşluğa, ekranın üst kısmında verilen kelime havuzundan sürükle-bırak yöntemiyle uygun kelimeyi yerleştirmeniz istenir. Dilbilgisi ve kelime bilgisini bağlam içinde ölçer.\n\nHazırlık İpucu: Önce metnin tamamını hızlıca okuyarak genel anlamı kavrayın, sonra her boşluğu tek tek doldurun. Boşluğun etrafındaki kelimelere (edatlar, fiil çekimleri, eş dizim kalıpları) dikkat edin; çoğu zaman doğru cevap dilbilgisel uyuma bakılarak bulunabilir.",
+        "Bu soru tipinde bir metin (80 kelimeye kadar) içindeki birkaç boşluğa, ekranın üst kısmında verilen kelime havuzundan sürükle-bırak yöntemiyle uygun kelimeyi yerleştirmeniz istenir. Dilbilgisi ve kelime bilgisini bağlam içinde ölçer.\n\nHazırlık İpucu: Önce metnin tamamını hızlıca okuyarak genel anlamı kavrayın, sonra her boşluğu tek tek doldurun. Boşluğun etrafındaki kelimelere (edatlar, fiil çekimleri, eş dizim kalıpları) dikkat edin; çoğu zaman doğru cevap dilbilgisel uyuma bakılarak bulunabilir.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Metindeki her boşluk için ekranın üst kısmında sürüklenebilir kelime seçenekleri bulunur; her kelime yalnızca bir kez kullanılabilir. Doğru yerleştirilen her kelime için 1 puan, yanlış yerleştirilen için 0 puan alırsınız (negatif puanlama yoktur); emin olmadığınız boşluklarda bile en mantıklı seçeneği yerleştirin." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Metindeki her boşluk için ekranın üst kısmında sürüklenebilir kelime seçenekleri bulunur; her kelime yalnızca bir kez kullanılabilir. Doğru yerleştirilen her kelime için 1 puan, yanlış yerleştirilen için 0 puan alırsınız (negatif puanlama yoktur); emin olmadığınız boşluklarda bile en mantıklı seçeneği yerleştirin." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Önce emin olduğunuz boşlukları doldurun; her doldurduğunuz kelime havuzdan çıkacağı için kalan boşluklar giderek kolaylaşır. Eş dizim (collocation) bilginizi kullanın — İngilizce'de bazı kelimeler belirli kelimelerle birlikte kullanılır (örn. 'make a decision', 'heavy rain'); boşluğun gerektirdiği kelime türünü (isim, fiil, sıfat) belirlemek de doğru seçeneği hızlıca bulmanızı sağlar." },
       ],
     },
     {
@@ -684,9 +688,10 @@ async function main() {
       name: "Fill in the Blanks (Okuma-Yazma)",
       questionCount: 6,
       description:
-        "Bu soru tipi, Reading: Fill in the Blanks'e benzer ancak kelime havuzu yerine her boşluk için ayrı bir AÇILIR MENÜ (dropdown) sunulur ve seçenekler genellikle birbirine anlamca veya biçimce çok yakın kelimelerden oluşur. Hem okuma hem yazma/dilbilgisi becerisini ölçer.\n\nHazırlık İpucu: Her açılır menüdeki seçenekleri dikkatle karşılaştırın — genellikle aynı kelimenin farklı biçimleri veya birbirine yakın anlamlı kelimeler arasından seçim yaparsınız. Cümlenin gramer yapısına (zaman, özne-yüklem uyumu) odaklanmak doğru seçeneği bulmanın en hızlı yoludur.",
+        "Bu soru tipi, Reading: Fill in the Blanks'e benzer ancak kelime havuzu yerine her boşluk için ayrı bir AÇILIR MENÜ (dropdown) sunulur; metin 300 kelimeye kadar uzayabilir ve seçenekler genellikle birbirine anlamca veya biçimce çok yakın kelimelerden oluşur. Hem okuma hem yazma/dilbilgisi becerisini ölçer.\n\nHazırlık İpucu: Her açılır menüdeki seçenekleri dikkatle karşılaştırın — genellikle aynı kelimenin farklı biçimleri veya birbirine yakın anlamlı kelimeler arasından seçim yaparsınız. Cümlenin gramer yapısına (zaman, özne-yüklem uyumu) odaklanmak doğru seçeneği bulmanın en hızlı yoludur.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Metindeki her boşluğun yanında küçük bir açılır menü ikonu bulunur; tıkladığınızda 3-4 seçenek arasından birini seçersiniz. Bu soru tipi sınavda genellikle en fazla boşluk içeren (5-6) sorulardan biridir ve her doğru seçim ayrı ayrı puanlanır." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Metindeki her boşluğun yanında küçük bir açılır menü ikonu bulunur; tıkladığınızda 3-4 seçenek arasından birini seçersiniz. Bu soru tipi sınavda genellikle en fazla boşluk içeren (5-6) sorulardan biridir ve her doğru seçim ayrı ayrı puanlanır (negatif puanlama yoktur)." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Açılır menüdeki seçenekler genellikle aynı kelimenin farklı biçimleri (fiil zamanı, tekil/çoğul) veya birbirine anlamca çok yakın kelimelerdir; cümlenin öznesine, zamanına ve önceki/sonraki kelimelere dikkat ederek dilbilgisel olarak en uygun seçeneği bulun. Metnin genel akışını bozan veya mantıksal olarak uymayan seçenekleri kolayca eleyebilirsiniz." },
       ],
     },
     {
@@ -705,9 +710,10 @@ async function main() {
       name: "Multiple-choice (Çoklu Cevap)",
       questionCount: 3,
       description:
-        "Kısa bir ses kaydı dinletildikten sonra, birden fazla doğru cevabı olabilecek bir soru sorulur; doğru gördüğünüz tüm seçenekleri işaretlemeniz gerekir. Listening bölümünde negatif puanlamanın uygulandığı iki soru tipinden biridir.\n\nHazırlık İpucu: Kaydı dinlerken seçeneklerle örtüşen bilgileri not alın. Sadece kayıtta açıkça belirtilen seçenekleri işaretleyin; kayıtta geçmeyen veya çelişen seçenekleri işaretlemek -1 puan getirir.",
+        "Kısa bir ses kaydı (40-90 saniye) dinletildikten sonra, birden fazla doğru cevabı olabilecek bir soru sorulur; doğru gördüğünüz tüm seçenekleri işaretlemeniz gerekir. Listening bölümünde negatif puanlamanın uygulandığı iki soru tipinden biridir.\n\nHazırlık İpucu: Kaydı dinlerken seçeneklerle örtüşen bilgileri not alın. Sadece kayıtta açıkça belirtilen seçenekleri işaretleyin; kayıtta geçmeyen veya çelişen seçenekleri işaretlemek -1 puan getirir.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir ses kaydı dinletilir, ardından ekranda birden fazla doğru cevabı olabilecek kutucuklu bir soru belirir. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir; bu yüzden yalnızca kayıtta net şekilde desteklenen seçenekleri işaretlemek en güvenli stratejidir." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Kısa bir ses kaydı (40-90 saniye) dinletilir, ardından ekranda birden fazla doğru cevabı olabilecek kutucuklu bir soru belirir. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir; bu yüzden yalnızca kayıtta net şekilde desteklenen seçenekleri işaretlemek en güvenli stratejidir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce soru ve seçenekleri hızlıca gözden geçirin; bu neye odaklanmanız gerektiği konusunda güçlü bir ipucu verir. Dinlerken Erasable Note Pad'e tam cümle değil, sadece anahtar kelimeler yazın. Bir soru için toplam puanınız en az sıfırdır, bu yüzden sadece kayıtta net biçimde belirtilen seçenekleri işaretleyin; eksik bilgi içeren veya bağlamı değiştirilmiş çeldiricilere dikkat edin." },
       ],
     },
     {
@@ -715,9 +721,10 @@ async function main() {
       name: "Fill in the Blanks",
       questionCount: 3,
       description:
-        "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali (transkript) belirir ve bu transkriptteki bazı kelimeler eksiktir. Dinlediğiniz kelimeleri doğru yazarak boşlukları doldurmanız gerekir.\n\nHazırlık İpucu: Kaydı dinlerken transkripti takip edin ve duyduğunuz kelimeyi anında yazın — kaydı durdurma veya geri sarma imkanınız yoktur. Kelimeleri doğru yazmak (imla) önemlidir, bu yüzden düzenli dikte pratiği yapmak bu bölüm için çok faydalıdır.",
+        "Bir ses kaydı (30-60 saniye) dinlerken, ekranda kaydın yazıya dökülmüş hali (transkript) belirir ve bu transkriptteki bazı kelimeler eksiktir. Dinlediğiniz kelimeleri doğru yazarak boşlukları doldurmanız gerekir.\n\nHazırlık İpucu: Kaydı dinlerken transkripti takip edin ve duyduğunuz kelimeyi anında yazın — kaydı durdurma veya geri sarma imkanınız yoktur. Kelimeleri doğru yazmak (imla) önemlidir, bu yüzden düzenli dikte pratiği yapmak bu bölüm için çok faydalıdır.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir, bazı kelimeler boş bırakılmıştır; kayıt çalarken bu boşluklara doğru kelimeyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız (negatif puanlama yoktur); imla hatası olan cevaplar yanlış sayılır, bu yüzden yaygın akademik kelimelerin yazımını tekrar etmek önemlidir." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir, bazı kelimeler boş bırakılmıştır; kayıt (30-60 saniye) çalarken bu boşluklara doğru kelimeyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız (negatif puanlama yoktur); imla hatası olan cevaplar yanlış sayılır, bu yüzden yaygın akademik kelimelerin yazımını tekrar etmek önemlidir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce transkripti inceleyip bağlam ipuçlarını not edin — eksik kelime metnin başka bir yerinde tekrar geçmiş olabilir. İmleci ilk boşlukta tutup Tab tuşuyla bir sonrakine geçin ve okumanızın kayıtla aynı hızda ilerlemesine dikkat edin. Bir kelimeyi kaçırsanız bile metnin akışından tahmin ederek geri dönüp doldurabilirsiniz — göndermeden önce mutlaka kontrol edin." },
       ],
     },
     {
@@ -725,9 +732,10 @@ async function main() {
       name: "Highlight Correct Summary",
       questionCount: 3,
       description:
-        "Bir ses kaydı dinlettikten sonra, ekranda kaydı özetleyen birkaç paragraf seçeneği sunulur; bunlardan kaydı EN DOĞRU şekilde özetleyen paragrafı seçmeniz istenir. Genel anlama ve özetleme becerinizi ölçer.\n\nHazırlık İpucu: Kaydı dinlerken ana fikri not alın, ardından her seçenek paragrafı bu ana fikirle karşılaştırın. Yanıltıcı seçenekler genellikle doğru ayrıntıları yanlış bir sonuçla birleştirir; her paragrafı kaydın gerçek mesajıyla karşılaştırarak okuyun.",
+        "Bir ses kaydı (30-90 saniye) dinlettikten sonra, ekranda kaydı özetleyen birkaç paragraf seçeneği sunulur; bunlardan kaydı EN DOĞRU şekilde özetleyen paragrafı seçmeniz istenir. Genel anlama ve özetleme becerinizi ölçer.\n\nHazırlık İpucu: Kaydı dinlerken ana fikri not alın, ardından her seçenek paragrafı bu ana fikirle karşılaştırın. Yanıltıcı seçenekler genellikle doğru ayrıntıları yanlış bir sonuçla birleştirir; her paragrafı kaydın gerçek mesajıyla karşılaştırarak okuyun.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kayıt dinletildikten sonra ekranda 3-5 paragraf seçeneği belirir; kaydı en iyi özetleyen TEK paragrafı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden emin olmasanız bile en olası seçeneği işaretleyin." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Kayıt (30-90 saniye) dinletildikten sonra ekranda 3-5 paragraf seçeneği belirir; kaydı en iyi özetleyen TEK paragrafı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden emin olmasanız bile en olası seçeneği işaretleyin." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce seçenekleri gözden geçirin ama dinlerken okumayın, sadece dinlemeye odaklanın. Yanlış seçenekler genellikle ya önemli bir unsuru atlar, ya bir unsuru farklı bir bağlamda sunar ya da kayıtta olmayan fazladan bir detay ekler. Dinledikten sonra kendi özetinizi zihninizde oluşturup bu üç hata türüne dikkat ederek seçenekleri eleyin." },
       ],
     },
     {
@@ -735,9 +743,10 @@ async function main() {
       name: "Multiple-choice (Tek Cevap)",
       questionCount: 3,
       description:
-        "Bir ses kaydı dinlettikten sonra, kayıtla ilgili bir soru sorulur ve verilen seçeneklerden yalnızca BİRİNİ işaretlemeniz istenir. Kaydı genel olarak anlama ve detay yakalama becerinizi ölçer.\n\nHazırlık İpucu: Soruyu dinlemeden önce ekranda görünen seçeneklere göz atarak neye odaklanmanız gerektiğini tahmin edin. Genellikle doğru cevap kayıtta geçen ifadenin eş anlamlısı şeklinde sunulur, birebir aynı kelimeler aranmaz.",
+        "Bir ses kaydı (30-60 saniye) dinlettikten sonra, kayıtla ilgili bir soru sorulur ve verilen seçeneklerden yalnızca BİRİNİ işaretlemeniz istenir. Kaydı genel olarak anlama ve detay yakalama becerinizi ölçer.\n\nHazırlık İpucu: Soruyu dinlemeden önce ekranda görünen seçeneklere göz atarak neye odaklanmanız gerektiğini tahmin edin. Genellikle doğru cevap kayıtta geçen ifadenin eş anlamlısı şeklinde sunulur, birebir aynı kelimeler aranmaz.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir ses kaydı dinletilir, ardından 3-5 seçenekli bir soru belirir ve yalnızca bir seçeneği işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama olmadığı için her zaman bir seçenek işaretlemelisiniz." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Kısa bir ses kaydı (30-60 saniye) dinletilir, ardından 3-5 seçenekli bir soru belirir ve yalnızca bir seçeneği işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama olmadığı için her zaman bir seçenek işaretlemelisiniz." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce soru ve seçenekleri okuyun; bu neyi dinlemeniz gerektiğine dair güçlü bir ipucu verir. Dinlerken anahtar kelimeleri not alın ve eksik veya ilgisiz bilgi içeren seçenekleri eleyin. Doğru cevabı seçerken kayıtta geçen KELİMELERE değil ANLAMA odaklanın — doğru seçenek çoğu zaman kayıttaki ifadenin farklı kelimelerle yeniden yazılmış halidir." },
       ],
     },
     {
@@ -745,9 +754,10 @@ async function main() {
       name: "Select Missing Word",
       questionCount: 3,
       description:
-        "Bu soru tipinde bir ses kaydı dinletilir, ancak kaydın SON kelimesi veya son birkaç kelimesi bir 'bip' sesiyle değiştirilmiştir. Kaydın bağlamına göre, o son kısımda ne söylenmiş olabileceğini seçenekler arasından bulmanız istenir.\n\nHazırlık İpucu: Kaydın son cümlesine ve genel bağlamına özellikle dikkat edin; cevabı bulmak için kaydın tamamının anlamını kavramış olmanız gerekir. Seçenekler genellikle dilbilgisel olarak doğru ama anlamca yanlış olacak şekilde tasarlanır.",
+        "Bu soru tipinde bir ses kaydı (20-70 saniye) dinletilir, ancak kaydın SON kelimesi veya son birkaç kelimesi bir 'bip' sesiyle değiştirilmiştir. Kaydın bağlamına göre, o son kısımda ne söylenmiş olabileceğini seçenekler arasından bulmanız istenir.\n\nHazırlık İpucu: Kaydın son cümlesine ve genel bağlamına özellikle dikkat edin; cevabı bulmak için kaydın tamamının anlamını kavramış olmanız gerekir. Seçenekler genellikle dilbilgisel olarak doğru ama anlamca yanlış olacak şekilde tasarlanır.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kayıt normal şekilde başlar ancak son kelime(ler) bir bip sesiyle kapatılır; ardından 3-4 seçenek arasından kaydın bağlamına en uygun tamamlayıcıyı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama yoktur." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Kayıt (20-70 saniye) normal şekilde başlar ancak son kelime(ler) bir bip sesiyle kapatılır; ardından 3-4 seçenek arasından kaydın bağlamına en uygun tamamlayıcıyı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama yoktur." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce seçenekleri okuyarak konunun ne olabileceğini tahmin edin. Dinlerken genel argümanın akışını takip edin ve özellikle kaydın SON KISMINA dikkat kesilin — bip sesinden hemen önceki cümleler eksik kelime için en güçlü ipucunu verir. Ses göstergesini takip ederek kaydın ne zaman biteceğini önceden kestirebilirsiniz." },
       ],
     },
     {
@@ -755,9 +765,10 @@ async function main() {
       name: "Highlight Incorrect Words",
       questionCount: 3,
       description:
-        "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali belirir; ancak bu transkriptte kayıtta söylenenle UYUŞMAYAN bazı kelimeler bulunur. Bu farklı kelimeleri tıklayarak işaretlemeniz istenir. Listening bölümünde negatif puanlamanın uygulandığı ikinci soru tipidir.\n\nHazırlık İpucu: Transkripti kayıtla eş zamanlı, kelime kelime takip edin; duyduğunuz kelime ile ekrandaki kelime uyuşmadığı anda tıklayın. Emin olmadığınız kelimeleri işaretlememek daha güvenlidir, çünkü yanlış işaretlenen her doğru kelime -1 puan getirir.",
+        "Bir ses kaydı (15-50 saniye) dinlerken, ekranda kaydın yazıya dökülmüş hali belirir; ancak bu transkriptte kayıtta söylenenle UYUŞMAYAN bazı kelimeler bulunur. Bu farklı kelimeleri tıklayarak işaretlemeniz istenir. Listening bölümünde negatif puanlamanın uygulandığı ikinci soru tipidir.\n\nHazırlık İpucu: Transkripti kayıtla eş zamanlı, kelime kelime takip edin; duyduğunuz kelime ile ekrandaki kelime uyuşmadığı anda tıklayın. Emin olmadığınız kelimeleri işaretlememek daha güvenlidir, çünkü yanlış işaretlenen her doğru kelime -1 puan getirir.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir; kayıt çalarken metindeki bazı kelimeler aslında kayıtta söylenenden farklıdır ve bu kelimeleri fare ile tıklayarak seçmeniz gerekir. Doğru işaretlenen her farklı kelime +1, yanlış işaretlenen (aslında doğru olan) her kelime -1 puan getirir." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir; kayıt (15-50 saniye) çalarken metindeki bazı kelimeler aslında kayıtta söylenenden farklıdır ve bu kelimeleri fare ile tıklayarak seçmeniz gerekir. Doğru işaretlenen her farklı kelime +1, yanlış işaretlenen (aslında doğru olan) her kelime -1 puan getirir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Kayıt başlamadan önce metni gözden geçirin; bazı uyumsuz kelimeler ilk bakışta fark edilebilir. Kayıt başladığında imleci metinle birlikte kelime kelime takip edin — uyumsuz kelimeler genellikle söylenen kelimeyle kulağa benzer gelir (örn. 'stationery' yerine 'stationary'). Bu soruda da negatif puanlama vardır, bu yüzden yalnızca emin olduğunuz kelimeleri işaretleyin." },
       ],
     },
     {
@@ -765,9 +776,10 @@ async function main() {
       name: "Write from Dictation",
       questionCount: 4,
       description:
-        "Listening bölümünün son ve en kısa soru tipidir. Kısa bir cümle bir kez dinletilir; duyduğunuz cümleyi harfi harfine, doğru yazımla yazmanız istenir.\n\nHazırlık İpucu: Cümleyi dinlerken zihninizde tekrar edin ve hemen ardından yazmaya başlayın — kaydı tekrar dinleme imkanınız yoktur. Büyük harf, noktalama ve yaygın kelimelerin doğru yazımına dikkat edin; bu soru tipi aynı zamanda dilbilgisi ve yazım puanınıza da katkı sağlar.",
+        "Listening bölümünün son ve en kısa soru tipidir. Kısa bir cümle (3-5 saniye, yaklaşık 10 kelime) bir kez dinletilir; duyduğunuz cümleyi harfi harfine, doğru yazımla yazmanız istenir.\n\nHazırlık İpucu: Cümleyi dinlerken zihninizde tekrar edin ve hemen ardından yazmaya başlayın — kaydı tekrar dinleme imkanınız yoktur. Büyük harf, noktalama ve yaygın kelimelerin doğru yazımına dikkat edin; bu soru tipi aynı zamanda dilbilgisi ve yazım puanınıza da katkı sağlar.",
       lessons: [
-        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir cümle (genellikle 5-10 kelime) bir kez dinletilir, ardından boş bir metin kutusuna duyduğunuz cümleyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız; kelime sırası ve imla önemlidir, bu yüzden düzenli dikte alıştırması yapmak bu soru tipi için en etkili hazırlık yöntemidir." },
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Kısa bir cümle (3-5 saniye, yaklaşık 10 kelime) bir kez dinletilir, ardından boş bir metin kutusuna duyduğunuz cümleyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız; kelime sırası ve imla önemlidir, bu yüzden düzenli dikte alıştırması yapmak bu soru tipi için en etkili hazırlık yöntemidir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Duyar duymaz yazmaya başlayın; bir kelimeyi hatırlayamasanız bile cümlenin akışını bozmadan devam edin, dilbilgisi bilginizi kullanarak boşluğu daha sonra mantıklı bir kelimeyle tamamlayabilirsiniz. Kaçırdığınız veya yanlış yazdığınız her kelime bir puan kaybettirir, ancak fazladan eklediğiniz bir kelime (örneğin bir artikel) puan kırmaz. Cümleyi yazdıktan sonra kalan sürede mutlaka yazım hatalarını kontrol edin — akıcılığı bozmadan, cümlenin sonunda düzeltme yapmak en güvenlisidir." },
       ],
     },
   ];
