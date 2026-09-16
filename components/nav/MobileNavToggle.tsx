@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { signOutAction } from "@/app/actions/sign-out";
 
 export function MobileNavToggle({ links, isSignedIn }: { links: { href: string; label: string }[]; isSignedIn: boolean }) {
   const [open, setOpen] = useState(false);
@@ -26,9 +27,16 @@ export function MobileNavToggle({ links, isSignedIn }: { links: { href: string; 
               Sepetim
             </Link>
             {isSignedIn ? (
-              <Link href="/dashboard" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
-                Hesabım
-              </Link>
+              <>
+                <Link href="/dashboard" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+                  Hesabım
+                </Link>
+                <form action={signOutAction}>
+                  <button type="submit" onClick={close} className="w-full rounded-xl px-3 py-3 text-left text-sm font-bold text-red-600 transition hover:bg-red-50">
+                    Çıkış Yap
+                  </button>
+                </form>
+              </>
             ) : (
               <>
                 <Link href="/sign-in" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">

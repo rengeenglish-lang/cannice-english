@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
+import { signOutAction } from "@/app/actions/sign-out";
 
 const NAV_LINKS = [
   { href: "/packages", label: "Online Dersler" },
@@ -34,7 +35,12 @@ export async function Navbar() {
             Sepet
           </Link>
           {session?.user ? (
-            <Link href="/dashboard" className="secondary-button whitespace-nowrap">Hesabım</Link>
+            <>
+              <Link href="/dashboard" className="secondary-button whitespace-nowrap">Hesabım</Link>
+              <form action={signOutAction}>
+                <button type="submit" className="ghost-button whitespace-nowrap">Çıkış Yap</button>
+              </form>
+            </>
           ) : (
             <>
               <Link href="/sign-in" className="ghost-button whitespace-nowrap">Üye Girişi</Link>

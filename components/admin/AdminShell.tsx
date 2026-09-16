@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { signOutAction } from "@/app/actions/sign-out";
 
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
 
@@ -36,6 +37,11 @@ export function DashboardShell({ role, children }: { role: Role; children: React
             </>
           ) : null}
         </nav>
+        <form action={signOutAction} className="mt-auto pt-4">
+          <button type="submit" className="dashboard-nav-item w-full text-red-600 hover:bg-red-50 hover:text-red-700">
+            Çıkış Yap
+          </button>
+        </form>
       </aside>
 
       <div className="flex min-w-0 flex-col">
