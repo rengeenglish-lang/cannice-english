@@ -11,13 +11,13 @@ export function Hero() {
       <div className="relative mx-auto grid w-full max-w-[1320px] grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.15fr_auto] lg:px-8 lg:py-28">
         <div>
           <span className="eyebrow inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white">
-            2.800.000+ öğrenci tarafından tercih edilen yöntemle hazırlanın
+            Online Sınav İngilizcesi Hazırlık
           </span>
           <h1 className="mt-6 max-w-2xl text-4xl font-extrabold leading-[1.08] tracking-[-.02em] text-balance sm:text-5xl lg:text-6xl">
-            IELTS, TOEFL, PTE, YDS ve YÖKDİL&apos;e tek öğretmenle hazırlanın
+            Sınav Engelini Güvenle Aşın
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-white/75">
-            Kayıtlı ders modülleri, canlı dersler ve gerçek sınav formatında denemelerle hedef puanınıza ulaşın. 14 gün ücretsiz deneyin, kredi kartı gerekmez.
+            Kayıtlı dersler, birebir ve grup dersleriyle; uzman Sınav İngilizcesi Öğretmenleri eşliğinde, gerçek sınav simülasyonları ve isabetli tahminlerle sınava tam hazır olun.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/register" className="primary-button">Ücretsiz Denemeye Başla</Link>
