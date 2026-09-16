@@ -823,6 +823,496 @@ async function main() {
     }
   }
 
+  const toeflTopicDefs = [
+    {
+      slug: "toefl-vocabulary",
+      name: "Kelime (Vocabulary)",
+      questionCount: 3,
+      description:
+        "Bu soru tipinde metinde koyu renkle vurgulanmış bir kelime veya ifadenin metindeki anlamına en yakın seçeneği bulmanız istenir. Her okuma parçasında birkaç kez karşınıza çıkar. (Not: TOEFL, PTE/YDS gibi sabit bir soru dağılımı yayınlamaz; buradaki sayılar tipik bir okuma parçasındaki ortalama sıklığı gösterir.)\n\nHazırlık İpucu: Kelimeyi bulunduğu cümle ve bir önceki/sonraki cümledeki bağlamla birlikte okuyun; çoğu zaman kelimenin tam anlamını bilmeseniz bile bağlamdan doğru seçeneği çıkarabilirsiniz.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Ekranda metindeki koyu renkli bir kelime/ifade ile 4 seçenek belirir; anlamca en yakın olanı seçersiniz. Kelimeyi doğrudan tercüme etmeye çalışmak yerine, cümledeki rolüne (isim mi, fiil mi, olumlu mu olumsuz mu) bakın ve bu rolü koruyan seçeneği bulun. Düzenli okuma yapmak ve kök/ek (prefix/suffix) bilginizi geliştirmek bu soru tipi için en kalıcı hazırlık yöntemidir." },
+      ],
+    },
+    {
+      slug: "toefl-reference",
+      name: "Referans / Bağlaşıklık (Reference)",
+      questionCount: 1,
+      description:
+        "Bu soru tipinde metindeki bir zamirin (it, they, this, these vb.) veya işaret sözcüğünün metindeki hangi isme/ifadeye atıfta bulunduğunu bulmanız istenir.\n\nHazırlık İpucu: Zamirden geriye doğru okuyarak, cümle yapısı ve sayı (tekil/çoğul) uyumuna dikkat ederek en yakın uygun adayı bulun.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Referans kelimesi genellikle koyu renkle vurgulanır; seçenekler metindeki farklı isim öbekleridir. Doğru cevap, zamirle sayı (tekil/çoğul) ve anlam bakımından tam uyumlu olan isimdir — çoğunlukla zamirden hemen önceki cümlelerde yer alır. Bu soru tipini çözerken adayları tek tek zamirin yerine koyarak cümlenin anlamlı olup olmadığını kontrol edin." },
+      ],
+    },
+    {
+      slug: "toefl-sentence-simplification",
+      name: "Cümle Sadeleştirme (Sentence Simplification)",
+      questionCount: 1,
+      description:
+        "Metindeki karmaşık ve koyu renkle vurgulanmış bir cümlenin, aynı temel anlamı taşıyan ama daha sade bir şekilde yeniden ifade edilmiş halini 4 seçenek arasından bulmanız istenir.\n\nHazırlık İpucu: Doğru cevap orijinal cümledeki TÜM önemli bilgiyi korumalıdır; yanlış seçenekler genellikle bir detayı atlar, çarpıtır veya orijinalde olmayan yeni bir bilgi ekler.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi her okuma parçasında yalnızca 1 kez sorulur ve doğrudan metinden bağımsız olarak, verilen karmaşık cümleyi anlama becerinizi ölçer. Seçenekleri tek tek orijinal cümleyle karşılaştırın: anlamı değiştiren, önemli bir bilgiyi çıkaran veya metinde olmayan bir iddia ekleyen seçenekleri eleyin. Doğru cevap, orijinal cümleyle aynı mantıksal ilişkiyi (neden-sonuç, karşıtlık vb.) farklı kelimelerle koruyandır." },
+      ],
+    },
+    {
+      slug: "toefl-insert-text",
+      name: "Cümle Yerleştirme (Insert Text)",
+      questionCount: 1,
+      description:
+        "Metinde dört yere yerleştirilmiş kare işaretleri (■) bulunur; verilen yeni bir cümlenin bu dört konumdan hangisine en uygun şekilde yerleştirileceğini bulmanız istenir.\n\nHazırlık İpucu: Verilen cümledeki bağlaç ve zamirlere (however, this, therefore, such) dikkat edin — bu kelimeler cümlenin hangi fikirden sonra geleceğine dair güçlü ipucu verir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Ekranda metnin dört farklı noktasında kare işaretleri belirir; fareyle tıklayarak verilen cümleyi seçtiğiniz konuma yerleştirirsiniz. Her aday konumu sırayla deneyin: cümleyi oraya yerleştirdiğinizde paragrafın akışı bozulmadan, mantıklı bir geçiş oluşuyor mu diye kontrol edin. Verilen cümlenin başındaki bağlaç veya zamir, genellikle bir önceki cümlede bahsedilen bir fikre referans verir." },
+      ],
+    },
+    {
+      slug: "toefl-factual-information",
+      name: "Gerçek Bilgi (Factual Information)",
+      questionCount: 2,
+      description:
+        "Metinde açıkça belirtilen bir bilgiyle ilgili soru sorulur; doğru cevap metinde birebir veya yakın eş anlamlı ifadeyle geçer.\n\nHazırlık İpucu: Soru kökündeki anahtar kelimeleri metinde tarayarak ilgili bölümü hızlıca bulun, ardından o bölümü dikkatle okuyarak cevabı seçin.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu en sık karşılaşılan soru tipidir; metnin belirli bir bölümünde açıkça yer alan bir bilgiyi doğru şekilde tanımanızı ister. Yanlış seçenekler genellikle metinde geçen kelimeleri kullanır ama anlamı çarpıtır veya metinde bahsedilmeyen bir detay ekler. Soru kökündeki anahtar kelime veya kavramı metinde arayarak ilgili paragrafı hızlıca bulun, cevabı orada arayın." },
+      ],
+    },
+    {
+      slug: "toefl-negative-factual",
+      name: "Olumsuz Gerçek Bilgi (Negative Factual Information)",
+      questionCount: 1,
+      description:
+        "'NOT true' veya 'EXCEPT' gibi ifadeler içeren bu soru tipinde, metinde belirtilmeyen veya yanlış olan TEK seçeneği bulmanız istenir; diğer üç seçenek metinde doğru olarak geçer.\n\nHazırlık İpucu: Her seçeneği tek tek metinle karşılaştırın ve metinde doğrulanan üç seçeneği eleyin — geriye kalan cevabınızdır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Soru kökünde 'NOT' veya 'EXCEPT' kelimesi büyük harflerle vurgulanır. Dört seçenekten üçü metinde doğrudan doğrulanabilir, biri ise ya metinde hiç geçmez ya da metinle çelişir. En sistematik yöntem, ilgili paragrafı okurken her seçeneğin metinde geçip geçmediğini işaretlemek ve doğrulanamayan seçeneği işaretlemektir." },
+      ],
+    },
+    {
+      slug: "toefl-inference",
+      name: "Çıkarım (Inference)",
+      questionCount: 2,
+      description:
+        "Metinde doğrudan söylenmeyen ama verilen bilgilerden mantıksal olarak çıkarılabilecek bir sonucu bulmanız istenir. Genellikle 'infer', 'imply' veya 'suggest' kelimeleri sorulda geçer.\n\nHazırlık İpucu: Doğru cevap metindeki bilgilerle desteklenen, ancak birebir metinde yazılı olmayan bir sonuç olmalıdır; metinde açıkça yazılan bir bilgiyi tekrar eden seçenekler bu soru tipinde genellikle yanlıştır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi metnin ötesine geçerek, verilen ipuçlarından mantıklı bir sonuç çıkarmanızı gerektirir. İlgili paragrafı dikkatle okuyun ve 'Bu bilgilerden ne sonucuna varabilirim?' sorusunu kendinize sorun. Doğru cevap her zaman metindeki bilgilerle tutarlı olmalı, ama metinde birebir yazılı olmamalıdır; aşırı yorum içeren veya metinle çelişen seçenekleri eleyin." },
+      ],
+    },
+    {
+      slug: "toefl-rhetorical-purpose",
+      name: "Retorik Amaç (Rhetorical Purpose)",
+      questionCount: 2,
+      description:
+        "Yazarın metinde belirli bir bilgiyi, örneği veya cümleyi NEDEN kullandığını sorar (örn. karşılaştırma yapmak için, bir iddiayı desteklemek için). 'Why does the author mention...' kalıbıyla sorulur.\n\nHazırlık İpucu: Sorulan bölümün metindeki işlevine odaklanın — bu bölümün ne dediğine değil, o bölümün paragraftaki ROLÜNE bakın (örnek verme, karşıtlık kurma, neden açıklama vb.).",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi metnin İÇERİĞİNİ değil, yazarın o bilgiyi neden verdiğini (metindeki işlevini/amacını) sorar. Sorulan cümle veya örneğin bir öncesi ve sonrasını okuyarak o bölümün paragraf içindeki rolünü belirleyin: bir genellemeyi somutlaştırmak için mi, bir karşı görüşü çürütmek için mi, yoksa bir neden-sonuç ilişkisini açıklamak için mi kullanılmış? Doğru cevap bu işlevi doğru tanımlayandır." },
+      ],
+    },
+    {
+      slug: "toefl-prose-summary",
+      name: "Metin Özeti (Prose Summary)",
+      questionCount: 1,
+      description:
+        "Her okuma parçasının sonunda bulunan bu soru tipinde, 6 cümle seçeneğinden metnin ana fikrini en iyi yansıtan 3 tanesini seçip özet tablosuna sürüklemeniz istenir. Doğru her cümle için 1 puan, en fazla 2 puan alınabilir (toplamda 3-4 puanlık bir sorudur).\n\nHazırlık İpucu: Önemsiz detaylara odaklanan veya metnin sadece küçük bir bölümüyle ilgili cümleleri eleyin; doğru cevaplar metnin GENEL ana fikrini yansıtan, birbirinden bağımsız üç büyük fikri kapsar.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Ekranda kısa bir giriş cümlesi ve altında 6 seçenek cümle bulunur; bunlardan doğru 3 tanesini sürükleyerek özet kutusuna yerleştirirsiniz. Yanlış seçenekler genellikle metinde geçmeyen bir bilgi içerir, önemsiz bir detayı ana fikirmiş gibi sunar veya metinle çelişir. Metnin her paragrafının ana fikrini kısaca not alarak bu 3 büyük fikri daha kolay ayırt edebilirsiniz." },
+      ],
+    },
+    {
+      slug: "toefl-fill-table",
+      name: "Tabloyu Doldurma (Fill in a Table)",
+      questionCount: 1,
+      description:
+        "Prose Summary sorusuna alternatif olarak bazı okuma parçalarının sonunda karşınıza çıkabilen bu soru tipinde, verilen cümleleri metinde anlatılan 2-3 kategoriye göre bir tabloya sürükleyerek sınıflandırmanız istenir.\n\nHazırlık İpucu: Metindeki her kategoriyi tanımlayan anahtar özellikleri not alın, ardından her seçenek cümleyi bu özelliklerle karşılaştırarak doğru kategoriye yerleştirin.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi genellikle karşılaştırma veya sınıflandırma içeren metinlerde (örn. iki teori, iki tarihsel dönem) kullanılır. Ekranda 2-3 sütunlu boş bir tablo ve 5-7 seçenek cümle bulunur; her cümleyi doğru sütuna sürüklersiniz. Metni okurken her kategoriye ait özellikleri ayrı ayrı not almak, seçenekleri hızlıca doğru sütuna yerleştirmenizi kolaylaştırır." },
+      ],
+    },
+    {
+      slug: "toefl-gist-content",
+      name: "Ana İçerik (Gist-Content)",
+      questionCount: 1,
+      description:
+        "Dinlenen konuşma veya dersin GENEL olarak ne hakkında olduğunu sorar. Genellikle her konuşma/dersin ilk sorusudur.\n\nHazırlık İpucu: Konuşmanın başındaki tanıtım cümlesini (kim, nerede, ne hakkında konuşuyor) dikkatle dinleyin — bu genellikle ana konuyu doğrudan verir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "'What is the conversation mainly about?' veya 'What aspect of X does the professor mainly discuss?' şeklinde sorulur. Dinlerken tekrar eden kelimeleri ve konuşmanın başında verilen genel çerçeveyi not alın; doğru cevap genellikle bu genel çerçeveyle örtüşür, tek bir küçük detayla değil." },
+      ],
+    },
+    {
+      slug: "toefl-gist-purpose",
+      name: "Amaç (Gist-Purpose)",
+      questionCount: 1,
+      description:
+        "Bir öğrencinin neden bir ofise gittiğini veya bir konuşmanın amacının ne olduğunu sorar; genellikle kampüs konuşmalarında karşınıza çıkar.\n\nHazırlık İpucu: Konuşmanın en başındaki ilk birkaç cümleye odaklanın — konuşmayı başlatan kişi genellikle amacını açıkça belirtir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "'Why does the student visit the professor?' gibi sorularla, konuşmanın gerçekleşme NEDENİNİ sorar. Konuşmayı başlatan kişinin ilk cümlelerini dikkatle dinleyin; amaç genellikle dolaylı biçimde ('I was wondering if...', 'I'm having trouble with...') ifade edilir, bu kalıpları tanımak faydalıdır." },
+      ],
+    },
+    {
+      slug: "toefl-listening-detail",
+      name: "Detay (Detail)",
+      questionCount: 2,
+      description:
+        "Konuşma veya derste açıkça belirtilen belirli bir bilgiyi (bir tanım, bir örnek, bir sayı) sorar.\n\nHazırlık İpucu: Not alırken sayıları, isimleri ve tanımları özellikle kaydedin; bu tür detaylar sorularda sıkça karşınıza çıkar.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi, konuşmada geçen spesifik bir bilgiyi hatırlamanızı ister. Erasable not defterine (gerçek sınavda verilir) anahtar kelimeleri ve sayıları kısaltmalarla not almak, tekrar dinleme imkanınız olmadığı için hayati önem taşır. Yanlış seçenekler genellikle konuşmada geçen başka bir detayı karıştırarak sunar." },
+      ],
+    },
+    {
+      slug: "toefl-function",
+      name: "İfadenin İşlevi (Function of What is Said)",
+      questionCount: 1,
+      description:
+        "Konuşmacının belirli bir cümleyi NEDEN söylediğini sorar (örneğin alay etmek, şaşkınlığını belirtmek, bir öneride bulunmak için); genellikle konuşmanın bir kısmı tekrar çalınarak sorulur.\n\nHazırlık İpucu: Cümlenin kelime anlamına değil, konuşmacının TONUNA ve konuşmanın genel bağlamına odaklanın.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipinde konuşmanın bir bölümü tekrar dinletilir ve 'Why does the speaker say this?' diye sorulur. Cümlenin literal anlamı çoğu zaman cevap değildir — konuşmacının bu cümleyle neyi KASTETTİĞİNE (ironi, uyarı, öneri, hayal kırıklığı) odaklanmalısınız. Konuşmacının ses tonu (yükselen/alçalan, tereddütlü) bu soruları çözmede önemli bir ipucudur." },
+      ],
+    },
+    {
+      slug: "toefl-attitude",
+      name: "Tutum (Attitude)",
+      questionCount: 1,
+      description:
+        "Konuşmacının bir konu hakkındaki duygusunu veya görüşünü (kesinlik, şüphe, hayal kırıklığı, heyecan) sorar.\n\nHazırlık İpucu: Konuşmacının kullandığı sıfatlara ve ses tonundaki değişikliklere (vurgu, duraklama) dikkat edin; bunlar tutumun en güçlü göstergeleridir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "'What is the professor's attitude toward X?' şeklinde sorulur ve konuşmacının duygusal tutumunu doğru tanımlamanızı gerektirir. Kelimelerin sözlük anlamından çok, SÖYLENİŞ biçimine (sarkastik, hevesli, temkinli) odaklanın; bir konuşmacı olumlu kelimeler kullanırken bile ses tonuyla şüphe belirtebilir." },
+      ],
+    },
+    {
+      slug: "toefl-organization",
+      name: "Organizasyon (Organization)",
+      questionCount: 1,
+      description:
+        "Bir dersin nasıl yapılandırıldığını (örneğin, karşılaştırma yaparak, kronolojik sırayla, neden-sonuç ilişkisiyle) sorar.\n\nHazırlık İpucu: Dinlerken konuşmacının kullandığı geçiş ifadelerine (first, in contrast, as a result, for example) dikkat edin; bunlar dersin yapısını ortaya koyar.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi, akademik bir dersin BÜTÜN olarak nasıl organize edildiğini sorar (örn. 'How does the professor organize the information about X?'). Notlarınızı alırken dersin ana bölümlerini (giriş, örnek 1, örnek 2, sonuç gibi) ayrı ayrı işaretlemek, dersin genel yapısını görmenizi kolaylaştırır." },
+      ],
+    },
+    {
+      slug: "toefl-connecting-content",
+      name: "İçeriği Bağlama (Connecting Content)",
+      questionCount: 1,
+      description:
+        "Derste bahsedilen iki veya daha fazla fikir/kavram arasındaki ilişkiyi (benzerlik, karşıtlık, neden-sonuç) anlamanızı ister; bazen bir tablo doldurarak veya sınıflandırma yaparak cevaplanır.\n\nHazırlık İpucu: Ders sırasında karşılaştırılan iki kavramı not alırken aralarındaki farkı ve benzerliği ayrı sütunlar halinde yazmak faydalıdır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi genellikle bir tabloyu doldurma veya sıralama formatında karşınıza çıkar ve dersteki iki veya daha fazla unsur arasındaki ilişkiyi anlamanızı gerektirir. Notlarınızda karşılaştırılan kavramları yan yana yazıp aralarındaki bağlantıyı (X, Y'ye neden olur; A, B'nin bir alt türüdür gibi) özetlemek, bu soruları çözmenizi kolaylaştırır." },
+      ],
+    },
+    {
+      slug: "toefl-independent-speaking",
+      name: "Bağımsız Konuşma Görevleri (Independent Tasks)",
+      questionCount: 2,
+      description:
+        "TOEFL Konuşma bölümünün ilk iki görevidir. Size tanıdık bir konu hakkında kişisel görüşünüz veya tercihiniz sorulur; herhangi bir okuma veya dinleme materyaline dayanmadan, tamamen kendi deneyim ve fikirlerinizden yararlanarak cevap verirsiniz.\n\nHazırlık İpucu: Cevabınızı kısa bir açılış cümlesi (görüşünüz), 2 gerekçe ve kısa bir kapanışla yapılandırın; 15 saniyelik hazırlık süresinde sadece bu iskeleti not alın, cümleleri ezberlemeye çalışmayın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda bir soru belirir (örneğin, 'Bazı insanlar X'i tercih eder, bazıları Y'yi. Siz hangisini tercih edersiniz ve neden?'). 15-20 saniye hazırlık süresinin ardından 45-60 saniye içinde cevap vermeniz istenir. Bu görevler yalnızca konuşma becerinizi, herhangi bir okuma/dinleme materyaline dayanmadan ölçer." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Değerlendirme; genel akıcılık ve doğruluk (dilbilgisi, kelime bilgisi, telaffuz) ile fikirlerinizin ne kadar iyi geliştirilip desteklendiğine göre yapılır. Net bir görüş belirtip bunu somut, kişisel örneklerle desteklemek soyut/genel ifadelerden daha etkilidir. Konuşurken duraksamamaya, doğal bir tempoda akıcı konuşmaya odaklanın — küçük dilbilgisi hataları akıcı bir cevabı düşük puanlamaz." },
+      ],
+    },
+    {
+      slug: "toefl-integrated-speaking",
+      name: "Bütünleşik Konuşma Görevleri (Integrated Tasks)",
+      questionCount: 4,
+      description:
+        "TOEFL Konuşma bölümünün 4 görevidir; bir metin okuma ve/veya bir konuşma dinleme sonrasında duyduklarınızı/okuduklarınızı özetleyerek veya bir görüşü savunarak konuşmanız istenir.\n\nHazırlık İpucu: Okurken ve dinlerken mutlaka not alın — ana fikir ve 2-3 destekleyici nokta yeterlidir; cevabınızı bu notları kullanarak, duyduğunuz/okuduğunuz orijinal cümleleri birebir tekrarlamadan kendi kelimelerinizle oluşturun.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Bu 4 görevde farklı kombinasyonlar bulunur: kısa bir kampüs duyurusu okuma + ilgili bir konuşma dinleme (kampüs durumu hakkında), akademik bir metin okuma + ilgili bir ders dinleme (akademik kavram hakkında), veya sadece bir ders/konuşma dinleyip özetleme. Her görev için 20-30 saniye hazırlık ve 60 saniye cevap süresi verilir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama, okuduğunuz/dinlediğiniz materyaldeki ana noktaları ne kadar doğru ve eksiksiz aktardığınıza (içerik) ve ne kadar akıcı/doğru konuştuğunuza (dil kullanımı) göre yapılır. Notlarınızda okuma parçasının ana iddiasını ve dinlediğiniz konuşmanın bu iddiaya nasıl tepki verdiğini (destekliyor mu, karşı mı çıkıyor mu) ayrı ayrı işaretlemek, cevabınızı organize etmenizi kolaylaştırır." },
+      ],
+    },
+    {
+      slug: "toefl-integrated-writing",
+      name: "Bütünleşik Yazma Görevi (Integrated Writing)",
+      questionCount: 1,
+      description:
+        "Kısa bir akademik metni (yaklaşık 230-300 kelime) okur, ardından aynı konuda bir ders dinlersiniz. Dinlediğiniz derste okuduğunuz metne nasıl bir tepki verildiğini (destekleme, çürütme) özetleyen 150-225 kelimelik bir yazı yazmanız istenir; bunun için 20 dakikanız vardır.\n\nHazırlık İpucu: Yazınızı, metindeki her ana noktayı ve dersin bu noktaya verdiği tepkiyi eşleştiren bir yapıda organize edin (örneğin 3 paragraf, her biri bir nokta çiftini ele alsın).",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Önce 3 dakika boyunca akademik bir metin okursunuz (metin daha sonra tekrar ekranda görünür). Ardından aynı konuda bir profesörün metne katılmadığı ya da katıldığı bir dersini dinlersiniz (dinleme sırasında metin ekrandan kalkar). Son olarak, dersin metindeki noktalara nasıl karşılık verdiğini özetleyen bir yazı yazmak için 20 dakikanız vardır." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama; dersteki bilgileri metinle doğru şekilde ilişkilendirmenize (içerik), yazınızın organizasyonuna ve dil kullanımınıza (dilbilgisi, kelime bilgisi) göre yapılır. Kendi görüşünüzü eklemeyin — bu görev yalnızca duyduğunuz/okuduğunuz bilgiyi doğru aktarmanızı ölçer. Metindeki her ana iddia için dersteki karşılık gelen tepkiyi ayrı bir paragrafta ele almak en güvenli yapıdır." },
+      ],
+    },
+    {
+      slug: "toefl-independent-writing",
+      name: "Bağımsız Yazma Görevi (Independent Writing)",
+      questionCount: 1,
+      description:
+        "Tanıdık bir konu hakkında kendi görüşünüzü savunan bir deneme yazmanız istenir. En az 300 kelime yazmanız önerilir; bunun için 30 dakikanız vardır.\n\nHazırlık İpucu: Klasik giriş-gelişme-sonuç yapısını kullanın: girişte net bir tez cümlesi belirtin, gelişme paragraflarında her biri ayrı bir gerekçe ve somut örnekle görüşünüzü destekleyin, sonuçta görüşünüzü kısaca tekrarlayın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda güncel veya genel bir tartışma konusu belirir (örneğin teknolojinin günlük hayata etkisi). Kendi görüşünüzü net bir şekilde belirtip gerekçelerle desteklediğiniz bir deneme yazmak için 30 dakikanız vardır. En az 300 kelime yazmanız önerilir, ancak kaliteli içerik miktar kadar önemlidir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama; fikirlerinizin gelişimi ve organizasyonu, dil kullanımınızın çeşitliliği ve doğruluğu (dilbilgisi, kelime bilgisi) kriterlerine göre yapılır. Somut, kişisel örnekler kullanmak soyut genellemelerden daha ikna edicidir. Yazdıktan sonra kalan birkaç dakikayı gramer ve yazım hatalarını kontrol etmeye ayırın." },
+      ],
+    },
+  ];
+  const toeflTopicMeta = {
+    "toefl-vocabulary": { category: "READING", skillsTested: "Kelime Bilgisi", difficulty: "Kolay" },
+    "toefl-reference": { category: "READING", skillsTested: "Bağlaşıklık, Referans Takibi", difficulty: "Orta" },
+    "toefl-sentence-simplification": { category: "READING", skillsTested: "Cümle Yapısı, Anlam Koruma", difficulty: "Orta" },
+    "toefl-insert-text": { category: "READING", skillsTested: "Metin Akışı, Bağlaçlar", difficulty: "Zor" },
+    "toefl-factual-information": { category: "READING", skillsTested: "Detay Tarama", difficulty: "Kolay" },
+    "toefl-negative-factual": { category: "READING", skillsTested: "Detay Tarama, Eleme", difficulty: "Orta" },
+    "toefl-inference": { category: "READING", skillsTested: "Çıkarım Yapma", difficulty: "Zor" },
+    "toefl-rhetorical-purpose": { category: "READING", skillsTested: "Yazarın Amacını Anlama", difficulty: "Zor" },
+    "toefl-prose-summary": { category: "READING", skillsTested: "Ana Fikir, Özetleme", difficulty: "Zor" },
+    "toefl-fill-table": { category: "READING", skillsTested: "Sınıflandırma, Kategorileme", difficulty: "Zor" },
+    "toefl-gist-content": { category: "LISTENING", skillsTested: "Ana Konu Anlama", difficulty: "Kolay" },
+    "toefl-gist-purpose": { category: "LISTENING", skillsTested: "Amaç Anlama", difficulty: "Orta" },
+    "toefl-listening-detail": { category: "LISTENING", skillsTested: "Detay Dinleme", difficulty: "Orta" },
+    "toefl-function": { category: "LISTENING", skillsTested: "Pragmatik Anlama, Ton", difficulty: "Zor" },
+    "toefl-attitude": { category: "LISTENING", skillsTested: "Tutum ve Ton Analizi", difficulty: "Zor" },
+    "toefl-organization": { category: "LISTENING", skillsTested: "Yapı Analizi", difficulty: "Orta" },
+    "toefl-connecting-content": { category: "LISTENING", skillsTested: "İlişkilendirme, Karşılaştırma", difficulty: "Zor" },
+    "toefl-independent-speaking": { category: "SPEAKING", skillsTested: "Akıcılık, Fikir Geliştirme", difficulty: "Orta" },
+    "toefl-integrated-speaking": { category: "SPEAKING", skillsTested: "Not Alma, Özetleme, Akıcılık", difficulty: "Zor" },
+    "toefl-integrated-writing": { category: "WRITING", skillsTested: "Okuma, Dinleme, Yazma, Karşılaştırma", difficulty: "Zor" },
+    "toefl-independent-writing": { category: "WRITING", skillsTested: "Yazma, Fikir Geliştirme, Dilbilgisi", difficulty: "Orta" },
+  };
+  for (const [index, def] of toeflTopicDefs.entries()) {
+    const meta = toeflTopicMeta[def.slug];
+    const topic = await db.examTopic.upsert({
+      where: { examTypeId_slug: { examTypeId: examTypes.TOEFL.id, slug: def.slug } },
+      update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
+      create: { examTypeId: examTypes.TOEFL.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
+    });
+
+    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+      const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
+      if (existingLesson) {
+        await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      } else {
+        await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      }
+    }
+  }
+
+  const ieltsTopicDefs = [
+    {
+      slug: "ielts-listening-multiple-choice",
+      name: "Çoktan Seçmeli (Multiple Choice)",
+      questionCount: 4,
+      description:
+        "Dinlediğiniz kayıtla ilgili bir soru veya eksik cümleye, verilen 3-4 seçenekten doğru olanı (bazen birden fazlasını) seçmeniz istenir.\n\nHazırlık İpucu: Kayıt başlamadan önce soru ve seçenekleri mutlaka okuyun; bu, hangi bilgiye odaklanmanız gerektiğini önceden gösterir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle kaydın sırasını takip eder; ilk soru kaydın başında, son soru sonunda cevaplanır. Seçenekler genellikle birbirine benzer bilgiler içerir ve dikkatinizi dağıtmak üzere tasarlanır; kayıtta geçen kelimeleri birebir arayan değil, ANLAMI doğru yakalayan seçeneği işaretleyin." },
+      ],
+    },
+    {
+      slug: "ielts-listening-matching",
+      name: "Eşleştirme (Matching)",
+      questionCount: 4,
+      description:
+        "Bir liste halinde verilen öğeleri (örneğin isimler, yerler, tarihler), kayıtta belirtilen bilgilerle eşleştirmeniz istenir.\n\nHazırlık İpucu: Seçenek listesini önceden okuyun ve benzer görünen seçenekler arasındaki farkları not edin; kayıt genellikle bu seçenekleri sırayla değil karışık sırayla verir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Ekranda bir soru listesi ve bunlarla eşleştirilecek bir seçenek listesi (genellikle sorulardan fazla sayıda) bulunur. Kayıt dinlerken bahsedilen her öğeyi ilgili seçenekle anında eşleştirmeye çalışın; kayıttaki konuşmacı bazen fikrini değiştirebilir (örn. 'Aslında hayır, B değil C'), bu yüzden son söyleneni doğru cevap olarak alın." },
+      ],
+    },
+    {
+      slug: "ielts-listening-plan-map-diagram",
+      name: "Plan, Harita ve Diyagram Etiketleme",
+      questionCount: 5,
+      description:
+        "Bir harita, kat planı veya diyagram üzerinde belirtilen konumları, kayıtta anlatılan yönlendirmelere göre doğru harfle etiketlemeniz istenir.\n\nHazırlık İpucu: Kayıt başlamadan önce planı inceleyip başlangıç noktasını (genellikle 'you are here' ile işaretli) ve yön kelimelerini (sağda, karşıda, köşede) önceden tanıyın.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi mekansal yönlendirme kelimelerini (next to, opposite, along, past) doğru takip etmenizi gerektirir. Kayıt dinlerken parmağınızla (veya zihninizde) planın üzerinde konuşmacının tarif ettiği yolu takip edin; yönlendirmeler genellikle sabit bir başlangıç noktasından itibaren sırayla verilir, bu yüzden bir adımı kaçırmak sonraki cevapları da etkileyebilir." },
+      ],
+    },
+    {
+      slug: "ielts-listening-form-note-table",
+      name: "Form, Not ve Tablo Tamamlama",
+      questionCount: 10,
+      description:
+        "Kayıtta verilen bilgilerle bir formu, not listesini veya tabloyu doldurmanız istenir. IELTS Listening'de en sık karşılaşılan soru tipidir. Genellikle 'NO MORE THAN [X] WORDS AND/OR A NUMBER' gibi kesin bir kelime sınırı belirtilir.\n\nHazırlık İpucu: Kelime sınırına kesinlikle uyun — sınırı aşan cevaplar, doğru bilgiyi içerse bile yanlış sayılır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Boşlukların etrafındaki kelimeleri önceden okuyarak ne tür bir bilgi (isim, tarih, sayı, meslek) arandığını tahmin edin. Kayıt genellikle formun/tablonun sırasını takip eder, bu yüzden bir boşluğu kaçırırsanız bir sonraki başlığa geçerek akışı yakalamaya çalışın. Cevaplarınızı yazarken doğru yazım (imla) şarttır; büyük/küçük harf önemli değildir ama kelimeler doğru yazılmalıdır." },
+      ],
+    },
+    {
+      slug: "ielts-listening-flowchart-summary-sentence",
+      name: "Akış Şeması, Özet ve Cümle Tamamlama",
+      questionCount: 8,
+      description:
+        "Bir sürecin adımlarını (flow-chart), bir metnin özetini veya bağımsız cümleleri, kayıtta duyduğunuz kelimelerle tamamlamanız istenir.\n\nHazırlık İpucu: Boşluktan önceki ve sonraki kelimeleri dilbilgisel olarak inceleyin (örn. boşluktan sonra 'to' varsa muhtemelen bir fiil aranıyordur) — bu, doğru kelime türünü tahmin etmenizi sağlar.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi, form/tablo tamamlamaya çok benzer ancak bilgi bir süreç akışı veya düzyazı özet şeklinde sunulur. Kayıttaki sıralama genellikle akış şemasındaki veya özetteki sırayla birebir örtüşür; bu yüzden bir adımı bulduğunuzda bir sonraki boşluğun kayıtta yakında geleceğini bilirsiniz. Kelime sınırına (genellikle 1-3 kelime) kesinlikle uyun." },
+      ],
+    },
+    {
+      slug: "ielts-listening-short-answer",
+      name: "Kısa Cevaplı Sorular (Short-Answer Questions)",
+      questionCount: 4,
+      description:
+        "Kayıtla ilgili doğrudan bir soruya, belirtilen kelime sınırını aşmadan kısa bir cevap yazmanız istenir.\n\nHazırlık İpucu: Soruları önceden okuyup her birinin ne tür bir cevap (bir isim, bir sayı, bir neden) beklediğini belirleyin; bu, kayıtta doğru bilgiyi yakalamanızı hızlandırır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle kaydın belirli bir bölümüyle ilgili spesifik bir bilgiyi (bir sebep, bir özellik, bir sayı) sorar. Cevabınızı kelime sınırı içinde, kayıtta geçen kelimeleri kullanarak (parafraz etmeden) yazmanız genellikle en güvenlisidir. Yazım hataları cevabınızı yanlış sayabileceğinden, kaydı dinlerken duyduğunuz kelimeyi olabildiğince doğru yazmaya çalışın." },
+      ],
+    },
+    {
+      slug: "ielts-reading-multiple-choice",
+      name: "Çoktan Seçmeli (Multiple Choice)",
+      questionCount: 4,
+      description:
+        "Metinle ilgili bir soruya veya eksik cümleye, verilen 3-4 seçenekten doğru olanı seçmeniz istenir.\n\nHazırlık İpucu: Önce soruyu okuyup metinde hangi bölüme bakmanız gerektiğini belirleyin, ardından o bölümü dikkatle okuyarak seçenekleri eleyin.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle metindeki sırayı takip eder. Seçenekler sıklıkla metinde geçen kelimeleri kullanır ama anlamı hafifçe çarpıtır (örneğin 'always' yerine 'sometimes' gerektiren bir durumu abartır) — metni dikkatle okuyup her seçeneği metinle birebir doğrulayın." },
+      ],
+    },
+    {
+      slug: "ielts-reading-true-false-not-given",
+      name: "Doğru / Yanlış / Verilmemiş (True/False/Not Given)",
+      questionCount: 6,
+      description:
+        "Verilen bir ifadenin metindeki bilgiyle uyup uymadığını (TRUE), çeliştiğini (FALSE) veya metinde bu konuda hiç bilgi olmadığını (NOT GIVEN) belirlemeniz istenir. IELTS Reading'in en çok karıştırılan soru tipidir.\n\nHazırlık İpucu: 'NOT GIVEN', ifadenin YANLIŞ olduğu anlamına gelmez — metinde o konuda hiçbir şey söylenmediği anlamına gelir; bu ayrımı doğru yapmak bu soru tipinin anahtarıdır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Her ifadeyi metindeki ilgili cümleyle dikkatle karşılaştırın. İfade metindeki bilgiyle birebir veya eş anlamlı şekilde örtüşüyorsa TRUE, doğrudan çelişiyorsa FALSE, metinde bu konuda hiç bahsedilmiyorsa NOT GIVEN işaretleyin. En sık yapılan hata, kendi genel bilginize dayanarak (metinde yazmasa da) bir ifadeyi doğru/yanlış varsaymaktır — yalnızca metindeki bilgiye dayanın." },
+      ],
+    },
+    {
+      slug: "ielts-reading-yes-no-not-given",
+      name: "Evet / Hayır / Verilmemiş (Yes/No/Not Given)",
+      questionCount: 6,
+      description:
+        "True/False/Not Given'a benzer, ancak bu soru tipi metindeki OLGULARI değil, YAZARIN GÖRÜŞLERİNİ veya iddialarını sorar. Verilen bir ifadenin yazarın görüşüyle uyup uymadığını (YES), çeliştiğini (NO) veya yazarın bu konuda görüş belirtmediğini (NOT GIVEN) belirlemeniz istenir.\n\nHazırlık İpucu: Bu soru tipi genellikle görüş/argüman içeren metinlerde (makaleler, denemeler) kullanılır; metindeki olgusal detaylara değil, yazarın açık veya örtük GÖRÜŞÜNE odaklanın.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "İfadeyi yazarın metindeki görüşüyle karşılaştırın: yazar bu görüşü destekliyorsa YES, karşı çıkıyorsa NO, bu konuda bir görüş belirtmemişse NOT GIVEN işaretleyin. Yazarın görüşünü genellikle 'however', 'in fact', 'surprisingly' gibi ifadeler ve öznel sıfatlarla anlarsınız; salt olgusal bir cümle (herkesin kabul ettiği bir gerçek) genellikle yazarın kişisel görüşü değildir." },
+      ],
+    },
+    {
+      slug: "ielts-reading-matching-headings",
+      name: "Başlık Eşleştirme (Matching Headings)",
+      questionCount: 6,
+      description:
+        "Metnin her paragrafına, verilen bir başlık listesinden en uygun olanı eşleştirmeniz istenir. Genellikle başlık sayısı paragraf sayısından fazladır.\n\nHazırlık İpucu: Her paragrafın konusunu değil, ANA FİKRİNİ özetlemeye çalışın — başlıklar genellikle paragrafın tek bir detayını değil, genel amacını yansıtır.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Her paragrafı okuduktan sonra, o paragrafın tek cümlelik bir özetini kendi kelimelerinizle zihninizde oluşturun, ardından bu özete en yakın başlığı seçin. Başlıklar genellikle paragrafın ilk cümlesindeki kelimeleri birebir kullanmaz, bunun yerine aynı fikri farklı kelimelerle ifade eder. Kullanılmayacak fazladan başlıklar dikkatinizi dağıtmak için eklenmiştir; emin olduğunuz eşleştirmeleri önce yapın." },
+      ],
+    },
+    {
+      slug: "ielts-reading-matching-info-features-endings",
+      name: "Bilgi, Özellik ve Cümle Sonu Eşleştirme",
+      questionCount: 6,
+      description:
+        "Bu grup, üç benzer soru tipini kapsar: Matching Information (belirli bir bilginin metnin hangi paragrafında geçtiğini bulma), Matching Features (bir dizi özelliği/görüşü doğru kişi veya kategoriyle eşleştirme) ve Matching Sentence Endings (yarım bırakılmış bir cümleyi doğru şekilde tamamlayan ifadeyi bulma).\n\nHazırlık İpucu: Her üç soru tipinde de önce sorulan bilgiyi/özelliği net bir şekilde anlayın, ardından metni o bilgiye özgü anahtar kelimeleri arayarak tarayın (skim/scan).",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Matching Information'da her soru için metindeki HANGİ paragrafta o bilginin geçtiğini bulursunuz (bir paragraf birden fazla soruda cevap olabilir). Matching Features'da isim/tarih gibi kategorileri, metinde onlarla ilişkilendirilen görüş veya özelliklerle eşleştirirsiniz. Matching Sentence Endings'de ise cümlenin ilk yarısındaki anahtar kelimeyi bulup metinde o kısımla ilgili doğru tamamlayıcı yarıyı ararsınız — dilbilgisel uyum (özne-yüklem, zaman) doğru seçeneği belirlemede önemli bir ipucudur." },
+      ],
+    },
+    {
+      slug: "ielts-reading-sentence-summary-table-completion",
+      name: "Cümle, Özet, Not ve Tablo Tamamlama",
+      questionCount: 6,
+      description:
+        "Bir cümleyi, metnin özetini, notları veya bir tabloyu, metinden alınan kelimelerle (genellikle 'NO MORE THAN [X] WORDS' sınırıyla) tamamlamanız istenir.\n\nHazırlık İpucu: Cevabı metinden BİREBİR alın, kendi kelimelerinizle yeniden yazmayın — bu soru tipinde doğru cevap her zaman metinde birebir geçen kelime(ler)dir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Boşluğun etrafındaki cümle yapısını inceleyerek ne tür bir kelime (isim, sıfat, sayı) arandığını belirleyin, ardından metinde bu anlamı taşıyan bölümü tarayarak bulun. Özet/not tamamlama sorularında metnin genel akışı genellikle özetin akışıyla örtüşür, bu yüzden bir boşluğu bulduğunuzda bir sonrakini metnin hemen devamında arayabilirsiniz. Kelime sınırını aşan cevaplar, doğru bilgiyi içerse bile yanlış sayılır." },
+      ],
+    },
+    {
+      slug: "ielts-reading-diagram-label",
+      name: "Diyagram Etiketleme (Diagram Label Completion)",
+      questionCount: 4,
+      description:
+        "Bir sürecin, makinenin veya yapının bir diyagramındaki boşlukları, metinde açıklanan parça/aşama isimleriyle doldurmanız istenir.\n\nHazırlık İpucu: Diyagramı önceden inceleyip hangi parçaların/aşamaların zaten etiketlendiğini, hangilerinin boş olduğunu belirleyin — bu, metinde nereye odaklanmanız gerektiğine dair ipucu verir.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Bu soru tipi genellikle bir süreç açıklaması içeren metinlerde (örn. bir cihazın çalışma prensibi) kullanılır. Metindeki açıklamayı diyagramla eşleştirerek okuyun; metinde geçen sıra genellikle diyagramdaki fiziksel/mantıksal sırayla örtüşür. Cevaplar metinden birebir alınan kelime veya kısa ifadelerdir." },
+      ],
+    },
+    {
+      slug: "ielts-reading-short-answer",
+      name: "Kısa Cevaplı Sorular (Short-Answer Questions)",
+      questionCount: 4,
+      description:
+        "Metinle ilgili doğrudan bir soruya, belirtilen kelime sınırını aşmadan (genellikle 'NO MORE THAN [X] WORDS') kısa bir cevap yazmanız istenir.\n\nHazırlık İpucu: Sorudaki anahtar kelimeyi metinde tarayarak ilgili cümleyi bulun; cevap genellikle o cümlede birebir geçer.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle metinde listelenen öğeleri (örnekler, nedenler, özellikler) sorar. Cevabınızı metinden birebir alın ve kelime sınırına kesinlikle uyun; sınırı aşan bir cevap, doğru bilgiyi içerse bile yanlış sayılır. Sorular metindeki sırayı takip eder, bu yüzden bir cevabı bulduktan sonra bir sonrakini metnin hemen devamında arayın." },
+      ],
+    },
+    {
+      slug: "ielts-writing-task1",
+      name: "Writing Task 1",
+      questionCount: 1,
+      description:
+        "Bir grafik, tablo, harita veya sürecin görsel bir sunumunu incelemeniz ve bu bilgiyi kendi kelimelerinizle betimleyen en az 150 kelimelik bir yazı yazmanız istenir. Bu görev için 20 dakika ayırmanız önerilir ve toplam Yazma puanının 1/3'ünü oluşturur.\n\nHazırlık İpucu: Görseldeki EN BELİRGİN eğilimleri veya karşılaştırmaları seçip bunlara odaklanın; her veriyi tek tek anlatmaya çalışmak hem zaman kaybettirir hem de yazınızı dağınıklaştırır.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Görsel türüne göre görev değişir: çizgi/çubuk/pasta grafiklerde veri karşılaştırması ve eğilimler betimlenir; haritalarda değişim (önce/sonra) anlatılır; süreç diyagramlarında adımlar sırayla açıklanır. Giriş cümlesinde görseli genel hatlarıyla tanıtın (paraphrase), ardından 2 paragrafta en önemli eğilimleri/karşılaştırmaları detaylandırın, kişisel görüş belirtmeyin." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Değerlendirme dört kritere göre yapılır: Görev Başarımı (verilerin doğru ve dengeli özetlenmesi), Tutarlılık ve Bütünlük (mantıklı paragraflama), Sözcük Dağarcığı (sayısal değişim ifadeleri: rose, declined, fluctuated, remained stable) ve Dilbilgisi. En belirgin 2-3 eğilimi vurgulamak, tüm verileri tek tek sıralamaktan çok daha yüksek puan getirir; kişisel yorum veya sebep-sonuç tahmini eklememeye dikkat edin." },
+      ],
+    },
+    {
+      slug: "ielts-writing-task2",
+      name: "Writing Task 2",
+      questionCount: 1,
+      description:
+        "Bir görüş, argüman veya problem hakkında en az 250 kelimelik bir deneme yazmanız istenir. Bu görev için 40 dakika ayrılır ve Yazma puanının 2/3'ünü oluşturur (Task 1'in iki katı ağırlığındadır).\n\nHazırlık İpucu: Yazmaya başlamadan önce 5 dakika ayırıp sorunun tam olarak ne istediğini (görüş mü, çözüm mü, karşılaştırma mı) belirleyin ve kısa bir taslak (giriş-2 gövde paragrafı-sonuç) hazırlayın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Soru tipleri değişkenlik gösterir: Opinion (Agree/Disagree), Discussion (iki görüşü tartışıp kendi fikrinizi belirtme), Problem/Solution, veya Advantages/Disadvantages. Girişte konuyu tanıtıp net bir tez cümlesi verin; 2 gövde paragrafında her biri ayrı bir gerekçe ve somut örnekle görüşünüzü destekleyin; sonuçta görüşünüzü kısaca tekrarlayın." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Değerlendirme; Görev Başarımı (sorunun TÜM kısımlarını ele alma ve net bir pozisyon savunma), Tutarlılık ve Bütünlük (paragraflama, bağlaçlar), Sözcük Dağarcığı ve Dilbilgisi kriterlerine göre yapılır. Soru birden fazla kısım içeriyorsa (örn. 'nedenlerini tartışın VE çözüm önerin') her iki kısmı da ele almazsanız Görev Başarımı puanınız ciddi şekilde düşer. Basit ama doğru cümleler, karmaşık ama hatalı cümlelerden daha yüksek puan getirir." },
+      ],
+    },
+    {
+      slug: "ielts-speaking-part1",
+      name: "Speaking Part 1",
+      questionCount: 1,
+      description:
+        "Sınavın giriş bölümüdür. Sınav görevlisiyle tanışma sonrası kendiniz, eviniz/aileniz, işiniz/eğitiminiz ve ilgi alanlarınız gibi tanıdık konularda genel sorulara cevap verirsiniz. Bu bölüm 4-5 dakika sürer.\n\nHazırlık İpucu: Cevaplarınızı tek kelimeyle değil, kısa bir gerekçe veya örnekle genişletin (örn. 'Evet, severim çünkü...'); ancak Part 2 kadar uzun, hazırlanmış cevaplar vermeyin.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle 3-4 tanıdık konu (ev, iş/okul, hobiler, günlük rutin) etrafında döner ve her biri hakkında 3-4 soru sorulur. Doğal, günlük bir sohbet tonunda cevap verin; ezberlenmiş cevaplar sınav görevlisi tarafından kolayca fark edilir ve doğallık puanınızı düşürür. Bu bölümün amacı sizi rahatlatmak ve temel akıcılığınızı ölçmektir, karmaşık dilbilgisi göstermeye çalışmayın." },
+      ],
+    },
+    {
+      slug: "ielts-speaking-part2",
+      name: "Speaking Part 2",
+      questionCount: 1,
+      description:
+        "Size bir konu kartı (cue card) verilir ve bu konuda 1-2 dakika konuşmanız istenir. Kartta konuya ek olarak değinmeniz gereken 3-4 alt madde bulunur. Konuşmadan önce 1 dakika hazırlanma ve not alma süreniz vardır.\n\nHazırlık İpucu: 1 dakikalık hazırlık süresinde tam cümleler değil, sadece anahtar kelimeler ve fikirler not alın; bu notları konuşurken bir iskelet olarak kullanın.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Kart genellikle 'Describe a...' ile başlar ve altında 'You should say:' başlığıyla 3-4 yönlendirici soru bulunur (ne, ne zaman, kiminle, neden). Bu alt maddelerin HEPSİNE değinmek, konuşmanızı doğal olarak 1-2 dakikaya yayar ve Görev Başarımı puanınızı yükseltir. Konuşmanız bittiğinde sınav görevlisi konuyla ilgili 1-2 kısa takip sorusu sorabilir; bunlara kısaca cevap vermeniz yeterlidir." },
+      ],
+    },
+    {
+      slug: "ielts-speaking-part3",
+      name: "Speaking Part 3",
+      questionCount: 1,
+      description:
+        "Part 2'deki konuyla tematik olarak bağlantılı, daha soyut ve genel konular üzerine sınav görevlisiyle karşılıklı bir tartışma yaparsınız. Bu bölüm 4-5 dakika sürer ve dilinizin en karmaşık kullanıldığı bölümdür.\n\nHazırlık İpucu: Sorulara tek cümlelik cevaplar vermek yerine görüşünüzü açıklayın, karşılaştırma yapın veya bir örnekle destekleyin — bu bölüm analitik ve soyut düşünme becerinizi ölçer.",
+      lessons: [
+        { title: "Görev Tanımı ve Strateji", durationMinutes: 6, contentBody: "Sorular genellikle Part 2'deki kişisel/somut konudan topluma, geleceğe veya genel eğilimlere doğru genişler (örn. Part 2'de 'bir hediyeyi' anlattıysanız, Part 3'te 'hediye verme geleneklerinin toplumdaki rolü' sorulabilir). Farklı bakış açılarını değerlendirmek, karşılaştırma yapmak ve fikrinizi gerekçelerle desteklemek bu bölümde yüksek puan almanın anahtarıdır. Emin olmadığınız bir konuda bile akıcı ve tutarlı bir şekilde fikir üretebilmek, doğru cevabı bilmekten daha önemlidir." },
+      ],
+    },
+  ];
+  const ieltsTopicMeta = {
+    "ielts-listening-multiple-choice": { category: "LISTENING", skillsTested: "Dinleme, Detay Analizi", difficulty: "Orta" },
+    "ielts-listening-matching": { category: "LISTENING", skillsTested: "Dinleme, Eşleştirme", difficulty: "Zor" },
+    "ielts-listening-plan-map-diagram": { category: "LISTENING", skillsTested: "Dinleme, Yönlendirme, Mekansal Anlama", difficulty: "Zor" },
+    "ielts-listening-form-note-table": { category: "LISTENING", skillsTested: "Dinleme, Not Alma", difficulty: "Kolay" },
+    "ielts-listening-flowchart-summary-sentence": { category: "LISTENING", skillsTested: "Dinleme, Özetleme", difficulty: "Orta" },
+    "ielts-listening-short-answer": { category: "LISTENING", skillsTested: "Dinleme, Kısa Cevap Üretme", difficulty: "Orta" },
+    "ielts-reading-multiple-choice": { category: "READING", skillsTested: "Okuduğunu Anlama", difficulty: "Kolay" },
+    "ielts-reading-true-false-not-given": { category: "READING", skillsTested: "Bilgi Doğrulama, Dikkatli Okuma", difficulty: "Zor" },
+    "ielts-reading-yes-no-not-given": { category: "READING", skillsTested: "Yazarın Görüşünü Anlama", difficulty: "Zor" },
+    "ielts-reading-matching-headings": { category: "READING", skillsTested: "Ana Fikir, Paragraf Özetleme", difficulty: "Zor" },
+    "ielts-reading-matching-info-features-endings": { category: "READING", skillsTested: "Detay Eşleştirme", difficulty: "Orta" },
+    "ielts-reading-sentence-summary-table-completion": { category: "READING", skillsTested: "Tarama, Kelime Bilgisi", difficulty: "Orta" },
+    "ielts-reading-diagram-label": { category: "READING", skillsTested: "Görsel-Metin Eşleştirme", difficulty: "Orta" },
+    "ielts-reading-short-answer": { category: "READING", skillsTested: "Tarama, Kısa Cevap", difficulty: "Kolay" },
+    "ielts-writing-task1": { category: "WRITING", skillsTested: "Veri Yorumlama, Betimleme", difficulty: "Orta" },
+    "ielts-writing-task2": { category: "WRITING", skillsTested: "Argüman Geliştirme, Yazma", difficulty: "Zor" },
+    "ielts-speaking-part1": { category: "SPEAKING", skillsTested: "Akıcılık, Kişisel İfade", difficulty: "Kolay" },
+    "ielts-speaking-part2": { category: "SPEAKING", skillsTested: "Akıcılık, Organizasyon", difficulty: "Orta" },
+    "ielts-speaking-part3": { category: "SPEAKING", skillsTested: "Soyut Tartışma, Fikir Geliştirme", difficulty: "Zor" },
+  };
+  for (const [index, def] of ieltsTopicDefs.entries()) {
+    const meta = ieltsTopicMeta[def.slug];
+    const topic = await db.examTopic.upsert({
+      where: { examTypeId_slug: { examTypeId: examTypes.IELTS.id, slug: def.slug } },
+      update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
+      create: { examTypeId: examTypes.IELTS.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
+    });
+
+    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+      const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
+      if (existingLesson) {
+        await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      } else {
+        await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      }
+    }
+  }
+
   console.log("Seed complete.");
   console.log(`Teacher login: hoca@canniceenglish.com / ${process.env.CANNICE_TEACHER_PASSWORD || "CanniceTeacher2026!"}`);
   console.log(`Student login: ogrenci@canniceenglish.com / ${process.env.CANNICE_STUDENT_PASSWORD || "CanniceStudent2026!"}`);
