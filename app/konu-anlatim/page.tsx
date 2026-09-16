@@ -28,7 +28,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   const totalQuestions = topics.reduce((sum, topic) => sum + (topic.questionCount ?? 0), 0);
 
   return (
-    <main className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
+    <main className="mx-auto w-full max-w-[1680px] px-4 py-14 sm:px-6 lg:px-8">
       <p className="text-xs font-extrabold uppercase tracking-[.16em] text-blue-600">Konu Anlatım</p>
       <h1 className="mt-2 text-3xl font-extrabold leading-[1.08] tracking-[-.02em] text-slate-900 sm:text-4xl">
         Sınavınıza konu konu, sıfırdan hazırlanın

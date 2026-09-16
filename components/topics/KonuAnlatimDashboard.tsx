@@ -118,7 +118,7 @@ export function KonuAnlatimDashboard({
   const difficultyStyle = selectedTopic.difficulty ? DIFFICULTY_STYLE[selectedTopic.difficulty] : undefined;
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr_300px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr_340px] xl:gap-8">
       {/* Left sidebar: topic navigation */}
       <aside className="h-fit lg:sticky lg:top-24">
         <div className={CARD}>
@@ -156,7 +156,7 @@ export function KonuAnlatimDashboard({
                         >
                           ✓
                         </span>
-                        <span className="min-w-0 flex-1 truncate font-semibold">{globalIndex + 1}. {topic.name}</span>
+                        <span className="min-w-0 flex-1 font-semibold leading-snug">{globalIndex + 1}. {topic.name}</span>
                       </button>
                     </li>
                   );
