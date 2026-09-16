@@ -6,6 +6,7 @@ import { signOutAction } from "@/app/actions/sign-out";
 const NAV_LINKS = [
   { href: "/packages", label: "Online Dersler" },
   { href: "/packages?category=STUDY_PACKAGE", label: "Çalışma Paketleri" },
+  { href: "/konu-anlatim", label: "Konu Anlatım" },
   { href: "/books", label: "Kitaplar ve Kaynaklar" },
   { href: "/#testimonials", label: "Katılımcı Görüşleri" },
   { href: "/tools", label: "Faydalı Araçlar" },

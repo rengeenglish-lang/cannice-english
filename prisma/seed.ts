@@ -411,6 +411,47 @@ async function main() {
     });
   }
 
+  const ydsTopicDefs = [
+    { slug: "kelime-phrasal-verb", name: "Kelime – Phrasal Verb Soruları", questionCount: 6 },
+    { slug: "tense-preposition-dilbilgisi", name: "Tense – Preposition – Dilbilgisi Soruları", questionCount: 10 },
+    { slug: "cloze-test", name: "Cloze Test Soruları", questionCount: 10 },
+    { slug: "cumle-tamamlama", name: "Cümle Tamamlama Soruları", questionCount: 10 },
+    { slug: "ceviri", name: "Çeviri Soruları", questionCount: 6 },
+    { slug: "paragraf", name: "Paragraf Soruları", questionCount: 20 },
+    { slug: "diyalog-tamamlama", name: "Diyalog Tamamlama Soruları", questionCount: 5 },
+    { slug: "yakin-anlamli-cumle", name: "Yakın Anlamlı Cümle Soruları", questionCount: 4 },
+    { slug: "paragraf-tamamlama", name: "Paragraf Tamamlama Soruları", questionCount: 4 },
+    { slug: "anlatim-butunlugunu-bozan-cumle", name: "Anlatım Bütünlüğünü Bozan Cümle Soruları", questionCount: 5 },
+  ];
+  for (const [index, def] of ydsTopicDefs.entries()) {
+    const topic = await db.examTopic.upsert({
+      where: { examTypeId_slug: { examTypeId: examTypes.YDS.id, slug: def.slug } },
+      update: { name: def.name, questionCount: def.questionCount, displayOrder: index },
+      create: { examTypeId: examTypes.YDS.id, slug: def.slug, name: def.name, questionCount: def.questionCount, displayOrder: index },
+    });
+
+    const lessonDefs = [
+      {
+        title: `${def.name} – Konuya Giriş`,
+        durationMinutes: 8,
+        contentBody: `Bu bölümde "${def.name}" kategorisinde YDS'de karşınıza çıkabilecek soru tiplerini ve temel çözüm stratejilerini öğreneceksiniz. Sınavda bu konudan ortalama ${def.questionCount} soru gelmektedir.`,
+      },
+      {
+        title: `${def.name} – Örnek Sorular ve Çözümler`,
+        durationMinutes: 12,
+        contentBody: `Bu derste "${def.name}" ile ilgili örnek sorular üzerinden adım adım çözüm tekniklerini uygulamalı olarak inceleyeceğiz.`,
+      },
+    ];
+    for (const [lessonIndex, lessonDef] of lessonDefs.entries()) {
+      const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
+      if (existingLesson) {
+        await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      } else {
+        await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      }
+    }
+  }
+
   console.log("Seed complete.");
   console.log(`Teacher login: hoca@canniceenglish.com / ${process.env.CANNICE_TEACHER_PASSWORD || "CanniceTeacher2026!"}`);
   console.log(`Student login: ogrenci@canniceenglish.com / ${process.env.CANNICE_STUDENT_PASSWORD || "CanniceStudent2026!"}`);

@@ -111,8 +111,63 @@ model ExamType {
   calendarEntries    ExamCalendarEntry[]
   freeResources      FreeResource[]
   callbackRequests   CallbackRequest[]
+  topics             ExamTopic[]
 
   @@map("exam_types")
+}
+
+// ====================================================================
+// KONU ANLATIM (FREE TOPIC LEARNING DASHBOARD)
+// ====================================================================
+
+model ExamTopic {
+  id            String   @id @default(cuid())
+  examTypeId    String
+  name          String
+  slug          String
+  questionCount Int?
+  displayOrder  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  examType ExamType      @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
+  lessons  TopicLesson[]
+
+  @@unique([examTypeId, slug])
+  @@index([examTypeId])
+  @@map("exam_topics")
+}
+
+model TopicLesson {
+  id              String   @id @default(cuid())
+  topicId         String
+  title           String
+  position        Int      @default(0)
+  videoUrl        String?
+  durationMinutes Int?
+  contentBody     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  topic      ExamTopic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  progresses TopicLessonProgress[]
+
+  @@index([topicId])
+  @@map("topic_lessons")
+}
+
+model TopicLessonProgress {
+  id            String    @id @default(cuid())
+  userId        String
+  topicLessonId String
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicLesson TopicLesson @relation(fields: [topicLessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicLessonId])
+  @@map("topic_lesson_progresses")
 }
 
 // ====================================================================
@@ -135,10 +190,11 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  orders      Order[]
-  cart        Cart?
-  enrollments Enrollment[]
-  blogPosts   BlogPost[]
+  orders               Order[]
+  cart                 Cart?
+  enrollments          Enrollment[]
+  blogPosts            BlogPost[]
+  topicLessonProgresses TopicLessonProgress[]
 
   @@map("users")
 }
