@@ -29,3 +29,19 @@ export async function toggleTopicLessonProgress(userId: string, topicLessonId: s
   }
   return db.topicLessonProgress.create({ data: { userId, topicLessonId, completedAt: new Date() } });
 }
+
+export async function getTopicNotesForUser(userId: string, examTypeId: string) {
+  const notes = await db.topicNote.findMany({
+    where: { userId, topic: { examTypeId } },
+    select: { examTopicId: true, content: true },
+  });
+  return Object.fromEntries(notes.map((note) => [note.examTopicId, note.content]));
+}
+
+export function saveTopicNote(userId: string, examTopicId: string, content: string) {
+  return db.topicNote.upsert({
+    where: { userId_examTopicId: { userId, examTopicId } },
+    update: { content },
+    create: { userId, examTopicId, content },
+  });
+}

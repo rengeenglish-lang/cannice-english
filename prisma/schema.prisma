@@ -127,16 +127,35 @@ model ExamTopic {
   slug          String
   description   String?
   questionCount Int?
+  category      String?
+  skillsTested  String?
+  difficulty    String?
   displayOrder  Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   examType ExamType      @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
   lessons  TopicLesson[]
+  notes    TopicNote[]
 
   @@unique([examTypeId, slug])
   @@index([examTypeId])
   @@map("exam_topics")
+}
+
+model TopicNote {
+  id          String   @id @default(cuid())
+  userId      String
+  examTopicId String
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic ExamTopic @relation(fields: [examTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examTopicId])
+  @@map("topic_notes")
 }
 
 model TopicLesson {
@@ -196,6 +215,7 @@ model User {
   enrollments          Enrollment[]
   blogPosts            BlogPost[]
   topicLessonProgresses TopicLessonProgress[]
+  topicNotes            TopicNote[]
 
   @@map("users")
 }

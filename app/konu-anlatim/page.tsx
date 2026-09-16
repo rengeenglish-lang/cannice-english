@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { listExamTypes, getExamTypeBySlug } from "@/server/services/catalog.service";
-import { listExamTopicsWithLessons, getCompletedTopicLessonIdsForUser } from "@/server/services/topics.service";
+import { listExamTopicsWithLessons, getCompletedTopicLessonIdsForUser, getTopicNotesForUser } from "@/server/services/topics.service";
 import { getAuthContext } from "@/server/auth/context";
 import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
 
@@ -21,7 +21,10 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   const examSlug = exam ?? "yds";
   const [exams, activeExam, user] = await Promise.all([listExamTypes(), getExamTypeBySlug(examSlug), getAuthContext()]);
   const topics = activeExam ? await listExamTopicsWithLessons(activeExam.id) : [];
-  const completedLessonIds = user ? await getCompletedTopicLessonIdsForUser(user.id) : new Set<string>();
+  const [completedLessonIds, notes] = await Promise.all([
+    user ? getCompletedTopicLessonIdsForUser(user.id) : Promise.resolve(new Set<string>()),
+    user && activeExam ? getTopicNotesForUser(user.id, activeExam.id) : Promise.resolve({}),
+  ]);
   const totalQuestions = topics.reduce((sum, topic) => sum + (topic.questionCount ?? 0), 0);
 
   return (
@@ -91,8 +94,10 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
 
           <div className="mt-8">
             <KonuAnlatimDashboard
+              examName={activeExam?.name ?? ""}
               topics={topics}
               initialCompletedLessonIds={[...completedLessonIds]}
+              initialNotes={notes}
               isSignedIn={Boolean(user)}
             />
           </div>

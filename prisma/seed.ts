@@ -412,22 +412,22 @@ async function main() {
   }
 
   const ydsTopicDefs = [
-    { slug: "kelime-phrasal-verb", name: "Kelime – Phrasal Verb Soruları", questionCount: 6 },
-    { slug: "tense-preposition-dilbilgisi", name: "Tense – Preposition – Dilbilgisi Soruları", questionCount: 10 },
-    { slug: "cloze-test", name: "Cloze Test Soruları", questionCount: 10 },
-    { slug: "cumle-tamamlama", name: "Cümle Tamamlama Soruları", questionCount: 10 },
-    { slug: "ceviri", name: "Çeviri Soruları", questionCount: 6 },
-    { slug: "paragraf", name: "Paragraf Soruları", questionCount: 20 },
-    { slug: "diyalog-tamamlama", name: "Diyalog Tamamlama Soruları", questionCount: 5 },
-    { slug: "yakin-anlamli-cumle", name: "Yakın Anlamlı Cümle Soruları", questionCount: 4 },
-    { slug: "paragraf-tamamlama", name: "Paragraf Tamamlama Soruları", questionCount: 4 },
-    { slug: "anlatim-butunlugunu-bozan-cumle", name: "Anlatım Bütünlüğünü Bozan Cümle Soruları", questionCount: 5 },
+    { slug: "kelime-phrasal-verb", name: "Kelime – Phrasal Verb Soruları", questionCount: 6, difficulty: "Orta" },
+    { slug: "tense-preposition-dilbilgisi", name: "Tense – Preposition – Dilbilgisi Soruları", questionCount: 10, difficulty: "Zor" },
+    { slug: "cloze-test", name: "Cloze Test Soruları", questionCount: 10, difficulty: "Zor" },
+    { slug: "cumle-tamamlama", name: "Cümle Tamamlama Soruları", questionCount: 10, difficulty: "Orta" },
+    { slug: "ceviri", name: "Çeviri Soruları", questionCount: 6, difficulty: "Zor" },
+    { slug: "paragraf", name: "Paragraf Soruları", questionCount: 20, difficulty: "Orta" },
+    { slug: "diyalog-tamamlama", name: "Diyalog Tamamlama Soruları", questionCount: 5, difficulty: "Kolay" },
+    { slug: "yakin-anlamli-cumle", name: "Yakın Anlamlı Cümle Soruları", questionCount: 4, difficulty: "Orta" },
+    { slug: "paragraf-tamamlama", name: "Paragraf Tamamlama Soruları", questionCount: 4, difficulty: "Orta" },
+    { slug: "anlatim-butunlugunu-bozan-cumle", name: "Anlatım Bütünlüğünü Bozan Cümle Soruları", questionCount: 5, difficulty: "Zor" },
   ];
   for (const [index, def] of ydsTopicDefs.entries()) {
     const topic = await db.examTopic.upsert({
       where: { examTypeId_slug: { examTypeId: examTypes.YDS.id, slug: def.slug } },
-      update: { name: def.name, questionCount: def.questionCount, displayOrder: index },
-      create: { examTypeId: examTypes.YDS.id, slug: def.slug, name: def.name, questionCount: def.questionCount, displayOrder: index },
+      update: { name: def.name, questionCount: def.questionCount, difficulty: def.difficulty, displayOrder: index },
+      create: { examTypeId: examTypes.YDS.id, slug: def.slug, name: def.name, questionCount: def.questionCount, difficulty: def.difficulty, displayOrder: index },
     });
 
     const lessonDefs = [
@@ -529,13 +529,24 @@ async function main() {
       subtopics: ["Paragrafta Konu Dışı Cümle Tespiti", "Anlam Tutarlılığı Analizi", "Bağlam ve Akış Kontrolü"],
     },
   ];
+  const yokdilDifficulty = {
+    "paragraf-okuma-anlama": "Zor",
+    dilbilgisi: "Orta",
+    ceviri: "Zor",
+    "cumle-tamamlama": "Orta",
+    "cloze-test": "Zor",
+    "kelime-bilgisi": "Kolay",
+    "paragraf-tamamlama": "Orta",
+    "anlam-butunlugunu-bozan-cumle": "Zor",
+  };
   const yokdilExamCodes = ["YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN"];
   for (const examCode of yokdilExamCodes) {
     for (const [index, def] of yokdilAltTestDefs.entries()) {
+      const difficulty = yokdilDifficulty[def.slug];
       const topic = await db.examTopic.upsert({
         where: { examTypeId_slug: { examTypeId: examTypes[examCode].id, slug: def.slug } },
-        update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
-        create: { examTypeId: examTypes[examCode].id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+        update: { name: def.name, description: def.description, questionCount: def.questionCount, difficulty, displayOrder: index },
+        create: { examTypeId: examTypes[examCode].id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, difficulty, displayOrder: index },
       });
 
       for (const [lessonIndex, subtopic] of def.subtopics.entries()) {
@@ -553,7 +564,7 @@ async function main() {
   const pteTopicDefs = [
     {
       slug: "read-aloud",
-      name: "Konuşma: Read Aloud",
+      name: "Read Aloud",
       questionCount: 7,
       description:
         "Read Aloud, PTE Konuşma bölümünün ilk soru tipidir. Ekranda 60 kelimeye kadar bir metin belirir; bu metni 40 saniye içinde doğal ve akıcı bir şekilde sesli okumanız beklenir. Hem okuma hem konuşma becerinizi ölçer.\n\nHazırlık İpucu: Metni okumaya başlamadan önce hızlıca göz gezdirin, vurgulanması gereken anahtar kelimeleri belirleyin. Doğal tonlama ve uygun duraklamalarla, sabit bir hızda okuyun; çok hızlı okumak telaffuz hatalarına yol açar.",
@@ -564,7 +575,7 @@ async function main() {
     },
     {
       slug: "repeat-sentence",
-      name: "Konuşma: Repeat Sentence",
+      name: "Repeat Sentence",
       questionCount: 12,
       description:
         "Repeat Sentence sorusunda 3-9 saniye uzunluğunda bir cümle dinletilir; cümleyi duyduğunuz gibi, kelimesi kelimesine tekrar etmeniz beklenir. Dinleme ve konuşma becerinizi birlikte ölçer, cümle uzadıkça zorluk artar.\n\nHazırlık İpucu: Cümleyi ezberlemeye değil, anlamına odaklanarak dinleyin — anlamı kavradığınızda kelimeleri hatırlamak çok daha kolaylaşır. Cümlenin tamamını hatırlayamasanız bile duyduğunuz kadarını, doğru tonlamayla tekrar edin; kısmi puan almak, hiç cevap vermemekten çok daha iyidir.",
@@ -575,7 +586,7 @@ async function main() {
     },
     {
       slug: "describe-image",
-      name: "Konuşma: Describe Image",
+      name: "Describe Image",
       questionCount: 7,
       description:
         "Describe Image sorusunda ekranda bir grafik, tablo, harita veya diyagram belirir; bu görseli 40 saniye boyunca detaylı şekilde sözlü olarak anlatmanız beklenir. Yalnızca konuşma becerinizi ölçen, içerik odaklı bir soru tipidir.\n\nHazırlık İpucu: Görseli betimlerken önce genel başlığı/konusunu belirtin, ardından en dikkat çekici eğilimi veya en yüksek/en düşük değeri vurgulayın, son olarak kısa bir genel değerlendirme ile bitirin. Sayıları tek tek okumak yerine 'kabaca', 'yaklaşık', 'en belirgin şekilde' gibi ifadelerle genel eğilimlere odaklanın.",
@@ -586,7 +597,7 @@ async function main() {
     },
     {
       slug: "retell-lecture",
-      name: "Konuşma: Re-tell Lecture",
+      name: "Re-tell Lecture",
       questionCount: 4,
       description:
         "Re-tell Lecture sorusunda akademik bir konuşma veya ders kaydı dinletilir; dinlediğiniz dersi kendi cümlelerinizle özetleyerek 40 saniye içinde yeniden anlatmanız beklenir. Dinleme ve konuşma becerisini birlikte ölçen, en uzun soru tipidir.\n\nHazırlık İpucu: Dinlerken not alın — ana konu, 2-3 önemli alt başlık ve varsa örnek/sayısal veriler yeterlidir, her kelimeyi yazmaya çalışmayın. Yeniden anlatırken dersin orijinal cümlelerini birebir tekrarlamak yerine kendi kelimelerinizle, mantıklı bir sırayla aktarın.",
@@ -597,7 +608,7 @@ async function main() {
     },
     {
       slug: "answer-short-question",
-      name: "Konuşma: Answer Short Question",
+      name: "Answer Short Question",
       questionCount: 12,
       description:
         "Answer Short Question, PTE'nin en kısa soru tipidir: kısa bir soru dinletilir ve cevabınızı tek bir kelime veya çok kısa bir ifadeyle vermeniz beklenir. Genel kültür ve temel kelime bilginizi hızlıca ölçer.\n\nHazırlık İpucu: Soruyu dikkatle dinleyin ve olabildiğince kısa, net cevap verin — uzun cümleler kurmaya çalışmak zaman kaybettirir ve gereksizdir. Emin olmasanız bile en olası cevabı hemen söyleyin; boş bırakmak yerine tahmin etmek her zaman daha avantajlıdır.",
@@ -608,7 +619,7 @@ async function main() {
     },
     {
       slug: "summarize-written-text",
-      name: "Yazma: Summarize Written Text",
+      name: "Summarize Written Text",
       questionCount: 3,
       description:
         "Summarize Written Text, Konuşma bölümünden Yazma bölümüne geçişte ilk soru tipidir. Ekranda 300 kelimelik bir akademik metin belirir; bu metni 10 dakika içinde TEK bir cümlede, 5-75 kelime arasında özetlemeniz beklenir.\n\nHazırlık İpucu: Özet cümlenizi mutlaka bağlaçlarla (although, because, which, and) birleştirilmiş TEK bir cümle olarak yazın — iki cümle yazarsanız puan alamazsınız. Metnin ana fikrini ve en önemli 2-3 destekleyici noktayı yakalamaya odaklanın, küçük detayları atlayın.",
@@ -619,7 +630,7 @@ async function main() {
     },
     {
       slug: "write-essay",
-      name: "Yazma: Write Essay",
+      name: "Write Essay",
       questionCount: 2,
       description:
         "Write Essay, PTE'nin en uzun süreli görevlerinden biridir. Verilen bir konu hakkında 200-300 kelimelik, tartışmacı (argumentative) bir kompozisyon yazmanız için 20 dakikanız vardır.\n\nHazırlık İpucu: Klasik giriş-gelişme-sonuç yapısını kullanın: girişte konuya ve kendi görüşünüze yer verin, gelişme paragraflarında 2-3 gerekçe ve örnekle görüşünüzü destekleyin, sonuçta görüşünüzü kısaca tekrarlayın. Kelime sayınızı 200-300 aralığında tutmaya özellikle dikkat edin.",
@@ -630,7 +641,7 @@ async function main() {
     },
     {
       slug: "reading-mcq-single",
-      name: "Okuma: Multiple-choice (Tek Cevap)",
+      name: "Multiple-choice (Tek Cevap)",
       questionCount: 3,
       description:
         "Bu soru tipinde kısa bir akademik metin okur ve metinle ilgili çoktan seçmeli bir soruyu, verilen seçeneklerden YALNIZCA birini işaretleyerek cevaplarsınız. Metni anlama ve çıkarım yapma becerinizi ölçer.\n\nHazırlık İpucu: Önce soruyu okuyup ne arandığını belirleyin, sonra metni o soruya odaklanarak tarayın. Bu soru tipinde yanlış cevap için puan kırılmaz, bu yüzden emin olmasanız bile mutlaka bir seçenek işaretleyin.",
@@ -640,7 +651,7 @@ async function main() {
     },
     {
       slug: "reading-mcq-multiple",
-      name: "Okuma: Multiple-choice (Çoklu Cevap)",
+      name: "Multiple-choice (Çoklu Cevap)",
       questionCount: 3,
       description:
         "Bu soru tipinde bir metinle ilgili sorunun BİRDEN FAZLA doğru cevabı olabilir; doğru gördüğünüz TÜM seçenekleri işaretlemeniz gerekir. Reading bölümünde negatif puanlamanın uygulandığı tek soru tipidir.\n\nHazırlık İpucu: Her seçeneği metinle tek tek karşılaştırın ve yalnızca metinde açıkça desteklenen seçenekleri işaretleyin. Emin olmadığınız seçenekleri işaretlememek, yanlış tahminle puan kaybetmekten daha güvenlidir.",
@@ -650,7 +661,7 @@ async function main() {
     },
     {
       slug: "reading-reorder-paragraphs",
-      name: "Okuma: Re-order Paragraphs",
+      name: "Re-order Paragraphs",
       questionCount: 3,
       description:
         "Bu soru tipinde birbirine karışmış halde verilen metin parçalarını (genellikle 4-6 cümle/paragraf), sürükle-bırak yöntemiyle mantıklı ve akıcı bir sıraya koymanız istenir. Metin bütünlüğü ve bağlaç kullanımını anlama becerinizi ölçer.\n\nHazırlık İpucu: Önce 'konu cümlesini' (genel bir ifade içeren, başka bir cümleye referans vermeyen paragrafı) bulun — bu genellikle ilk sıradadır. Ardından 'this', 'these', 'however', 'therefore' gibi bağlaç ve zamirleri takip ederek hangi cümlenin hangisinden sonra geldiğini belirleyin.",
@@ -660,7 +671,7 @@ async function main() {
     },
     {
       slug: "reading-fill-in-blanks",
-      name: "Okuma: Fill in the Blanks",
+      name: "Fill in the Blanks",
       questionCount: 5,
       description:
         "Bu soru tipinde bir metin içindeki birkaç boşluğa, ekranın üst kısmında verilen kelime havuzundan sürükle-bırak yöntemiyle uygun kelimeyi yerleştirmeniz istenir. Dilbilgisi ve kelime bilgisini bağlam içinde ölçer.\n\nHazırlık İpucu: Önce metnin tamamını hızlıca okuyarak genel anlamı kavrayın, sonra her boşluğu tek tek doldurun. Boşluğun etrafındaki kelimelere (edatlar, fiil çekimleri, eş dizim kalıpları) dikkat edin; çoğu zaman doğru cevap dilbilgisel uyuma bakılarak bulunabilir.",
@@ -670,7 +681,7 @@ async function main() {
     },
     {
       slug: "reading-writing-fill-in-blanks",
-      name: "Okuma-Yazma: Fill in the Blanks",
+      name: "Fill in the Blanks (Okuma-Yazma)",
       questionCount: 6,
       description:
         "Bu soru tipi, Reading: Fill in the Blanks'e benzer ancak kelime havuzu yerine her boşluk için ayrı bir AÇILIR MENÜ (dropdown) sunulur ve seçenekler genellikle birbirine anlamca veya biçimce çok yakın kelimelerden oluşur. Hem okuma hem yazma/dilbilgisi becerisini ölçer.\n\nHazırlık İpucu: Her açılır menüdeki seçenekleri dikkatle karşılaştırın — genellikle aynı kelimenin farklı biçimleri veya birbirine yakın anlamlı kelimeler arasından seçim yaparsınız. Cümlenin gramer yapısına (zaman, özne-yüklem uyumu) odaklanmak doğru seçeneği bulmanın en hızlı yoludur.",
@@ -680,7 +691,7 @@ async function main() {
     },
     {
       slug: "listening-summarize-spoken-text",
-      name: "Dinleme: Summarize Spoken Text",
+      name: "Summarize Spoken Text",
       questionCount: 3,
       description:
         "Listening bölümünün ilk ve en uzun süreli soru tipidir. 60-90 saniyelik akademik bir konuşma dinletilir; dinlediğinizi 50-70 kelimelik bir paragrafla özetlemeniz için 10 dakikanız vardır.\n\nHazırlık İpucu: Dinlerken ana fikri ve 3-4 önemli destekleyici noktayı not alın. Özetinizi yazarken notlarınızı tam cümlelere dönüştürün ve kelime sayısını (50-70) mutlaka kontrol edin; hem çok kısa hem çok uzun özetler form puanınızı düşürür.",
@@ -691,7 +702,7 @@ async function main() {
     },
     {
       slug: "listening-mcq-multiple",
-      name: "Dinleme: Multiple-choice (Çoklu Cevap)",
+      name: "Multiple-choice (Çoklu Cevap)",
       questionCount: 3,
       description:
         "Kısa bir ses kaydı dinletildikten sonra, birden fazla doğru cevabı olabilecek bir soru sorulur; doğru gördüğünüz tüm seçenekleri işaretlemeniz gerekir. Listening bölümünde negatif puanlamanın uygulandığı iki soru tipinden biridir.\n\nHazırlık İpucu: Kaydı dinlerken seçeneklerle örtüşen bilgileri not alın. Sadece kayıtta açıkça belirtilen seçenekleri işaretleyin; kayıtta geçmeyen veya çelişen seçenekleri işaretlemek -1 puan getirir.",
@@ -701,7 +712,7 @@ async function main() {
     },
     {
       slug: "listening-fill-in-blanks",
-      name: "Dinleme: Fill in the Blanks",
+      name: "Fill in the Blanks",
       questionCount: 3,
       description:
         "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali (transkript) belirir ve bu transkriptteki bazı kelimeler eksiktir. Dinlediğiniz kelimeleri doğru yazarak boşlukları doldurmanız gerekir.\n\nHazırlık İpucu: Kaydı dinlerken transkripti takip edin ve duyduğunuz kelimeyi anında yazın — kaydı durdurma veya geri sarma imkanınız yoktur. Kelimeleri doğru yazmak (imla) önemlidir, bu yüzden düzenli dikte pratiği yapmak bu bölüm için çok faydalıdır.",
@@ -711,7 +722,7 @@ async function main() {
     },
     {
       slug: "listening-highlight-correct-summary",
-      name: "Dinleme: Highlight Correct Summary",
+      name: "Highlight Correct Summary",
       questionCount: 3,
       description:
         "Bir ses kaydı dinlettikten sonra, ekranda kaydı özetleyen birkaç paragraf seçeneği sunulur; bunlardan kaydı EN DOĞRU şekilde özetleyen paragrafı seçmeniz istenir. Genel anlama ve özetleme becerinizi ölçer.\n\nHazırlık İpucu: Kaydı dinlerken ana fikri not alın, ardından her seçenek paragrafı bu ana fikirle karşılaştırın. Yanıltıcı seçenekler genellikle doğru ayrıntıları yanlış bir sonuçla birleştirir; her paragrafı kaydın gerçek mesajıyla karşılaştırarak okuyun.",
@@ -721,7 +732,7 @@ async function main() {
     },
     {
       slug: "listening-mcq-single",
-      name: "Dinleme: Multiple-choice (Tek Cevap)",
+      name: "Multiple-choice (Tek Cevap)",
       questionCount: 3,
       description:
         "Bir ses kaydı dinlettikten sonra, kayıtla ilgili bir soru sorulur ve verilen seçeneklerden yalnızca BİRİNİ işaretlemeniz istenir. Kaydı genel olarak anlama ve detay yakalama becerinizi ölçer.\n\nHazırlık İpucu: Soruyu dinlemeden önce ekranda görünen seçeneklere göz atarak neye odaklanmanız gerektiğini tahmin edin. Genellikle doğru cevap kayıtta geçen ifadenin eş anlamlısı şeklinde sunulur, birebir aynı kelimeler aranmaz.",
@@ -731,7 +742,7 @@ async function main() {
     },
     {
       slug: "listening-select-missing-word",
-      name: "Dinleme: Select Missing Word",
+      name: "Select Missing Word",
       questionCount: 3,
       description:
         "Bu soru tipinde bir ses kaydı dinletilir, ancak kaydın SON kelimesi veya son birkaç kelimesi bir 'bip' sesiyle değiştirilmiştir. Kaydın bağlamına göre, o son kısımda ne söylenmiş olabileceğini seçenekler arasından bulmanız istenir.\n\nHazırlık İpucu: Kaydın son cümlesine ve genel bağlamına özellikle dikkat edin; cevabı bulmak için kaydın tamamının anlamını kavramış olmanız gerekir. Seçenekler genellikle dilbilgisel olarak doğru ama anlamca yanlış olacak şekilde tasarlanır.",
@@ -741,7 +752,7 @@ async function main() {
     },
     {
       slug: "listening-highlight-incorrect-words",
-      name: "Dinleme: Highlight Incorrect Words",
+      name: "Highlight Incorrect Words",
       questionCount: 3,
       description:
         "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali belirir; ancak bu transkriptte kayıtta söylenenle UYUŞMAYAN bazı kelimeler bulunur. Bu farklı kelimeleri tıklayarak işaretlemeniz istenir. Listening bölümünde negatif puanlamanın uygulandığı ikinci soru tipidir.\n\nHazırlık İpucu: Transkripti kayıtla eş zamanlı, kelime kelime takip edin; duyduğunuz kelime ile ekrandaki kelime uyuşmadığı anda tıklayın. Emin olmadığınız kelimeleri işaretlememek daha güvenlidir, çünkü yanlış işaretlenen her doğru kelime -1 puan getirir.",
@@ -751,7 +762,7 @@ async function main() {
     },
     {
       slug: "listening-write-from-dictation",
-      name: "Dinleme: Write from Dictation",
+      name: "Write from Dictation",
       questionCount: 4,
       description:
         "Listening bölümünün son ve en kısa soru tipidir. Kısa bir cümle bir kez dinletilir; duyduğunuz cümleyi harfi harfine, doğru yazımla yazmanız istenir.\n\nHazırlık İpucu: Cümleyi dinlerken zihninizde tekrar edin ve hemen ardından yazmaya başlayın — kaydı tekrar dinleme imkanınız yoktur. Büyük harf, noktalama ve yaygın kelimelerin doğru yazımına dikkat edin; bu soru tipi aynı zamanda dilbilgisi ve yazım puanınıza da katkı sağlar.",
@@ -760,11 +771,34 @@ async function main() {
       ],
     },
   ];
+  const pteTopicMeta = {
+    "read-aloud": { category: "SPEAKING", skillsTested: "Telaffuz, Akıcılık, Okuma", difficulty: "Orta" },
+    "repeat-sentence": { category: "SPEAKING", skillsTested: "Dinleme, Hafıza, Telaffuz", difficulty: "Zor" },
+    "describe-image": { category: "SPEAKING", skillsTested: "Akıcılık, Kelime Bilgisi", difficulty: "Orta" },
+    "retell-lecture": { category: "SPEAKING", skillsTested: "Dinleme, Özetleme, Akıcılık", difficulty: "Zor" },
+    "answer-short-question": { category: "SPEAKING", skillsTested: "Genel Kültür, Kelime Bilgisi", difficulty: "Kolay" },
+    "summarize-written-text": { category: "WRITING", skillsTested: "Okuduğunu Anlama, Yazma, Dilbilgisi", difficulty: "Orta" },
+    "write-essay": { category: "WRITING", skillsTested: "Yazma, Dilbilgisi, Fikir Geliştirme", difficulty: "Zor" },
+    "reading-mcq-single": { category: "READING", skillsTested: "Okuduğunu Anlama, Çıkarım", difficulty: "Kolay" },
+    "reading-mcq-multiple": { category: "READING", skillsTested: "Okuduğunu Anlama, Detay Analizi", difficulty: "Zor" },
+    "reading-reorder-paragraphs": { category: "READING", skillsTested: "Metin Bütünlüğü, Bağlaçlar", difficulty: "Zor" },
+    "reading-fill-in-blanks": { category: "READING", skillsTested: "Dilbilgisi, Kelime Bilgisi", difficulty: "Orta" },
+    "reading-writing-fill-in-blanks": { category: "READING", skillsTested: "Dilbilgisi, Eş Dizim", difficulty: "Orta" },
+    "listening-summarize-spoken-text": { category: "LISTENING", skillsTested: "Dinleme, Not Alma, Yazma", difficulty: "Zor" },
+    "listening-mcq-multiple": { category: "LISTENING", skillsTested: "Dinleme, Detay Analizi", difficulty: "Zor" },
+    "listening-fill-in-blanks": { category: "LISTENING", skillsTested: "Dinleme, Yazım", difficulty: "Orta" },
+    "listening-highlight-correct-summary": { category: "LISTENING", skillsTested: "Dinleme, Özetleme", difficulty: "Orta" },
+    "listening-mcq-single": { category: "LISTENING", skillsTested: "Dinleme, Anlama", difficulty: "Kolay" },
+    "listening-select-missing-word": { category: "LISTENING", skillsTested: "Dinleme, Bağlam Analizi", difficulty: "Orta" },
+    "listening-highlight-incorrect-words": { category: "LISTENING", skillsTested: "Dinleme, Dikkat", difficulty: "Zor" },
+    "listening-write-from-dictation": { category: "LISTENING", skillsTested: "Dinleme, Yazım, Dilbilgisi", difficulty: "Orta" },
+  };
   for (const [index, def] of pteTopicDefs.entries()) {
+    const meta = pteTopicMeta[def.slug];
     const topic = await db.examTopic.upsert({
       where: { examTypeId_slug: { examTypeId: examTypes.PTE.id, slug: def.slug } },
-      update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
-      create: { examTypeId: examTypes.PTE.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+      update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
+      create: { examTypeId: examTypes.PTE.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
     });
 
     for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
