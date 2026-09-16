@@ -49,7 +49,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       {topics.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-[color:var(--border-strong)] px-5 py-10 text-center">
           <p className="font-bold text-[color:var(--foreground)]">{activeExam?.name ?? "Bu sınav"} için konu anlatımları yakında burada olacak</p>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">Şu an için YDS ve YÖKDİL konu anlatımlarını inceleyebilirsiniz.</p>
+          <p className="mt-2 text-sm text-[color:var(--muted)]">Şu an için YDS, YÖKDİL ve PTE konu anlatımlarını inceleyebilirsiniz.</p>
         </div>
       ) : (
         <>

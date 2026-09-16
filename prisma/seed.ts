@@ -550,6 +550,233 @@ async function main() {
     }
   }
 
+  const pteTopicDefs = [
+    {
+      slug: "read-aloud",
+      name: "Konuşma: Read Aloud",
+      questionCount: 7,
+      description:
+        "Read Aloud, PTE Konuşma bölümünün ilk soru tipidir. Ekranda 60 kelimeye kadar bir metin belirir; bu metni 40 saniye içinde doğal ve akıcı bir şekilde sesli okumanız beklenir. Hem okuma hem konuşma becerinizi ölçer.\n\nHazırlık İpucu: Metni okumaya başlamadan önce hızlıca göz gezdirin, vurgulanması gereken anahtar kelimeleri belirleyin. Doğal tonlama ve uygun duraklamalarla, sabit bir hızda okuyun; çok hızlı okumak telaffuz hatalarına yol açar.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 5, contentBody: "Read Aloud sorusunda ekranda kısa bir akademik metin (genellikle 30-60 kelime) belirir. Metni sessizce okumanız için birkaç saniyeniz olur, ardından mikrofon otomatik olarak açılır ve 40 saniye içinde metni sesli okumanız istenir. Bu soru tipi hem 'Reading' hem 'Speaking' puanına katkı sağlar; ayrıca telaffuz ve akıcılık (oral fluency) gibi yetkinlik puanlarını da besler." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama, okuduğunuz kelimelerin ekrandaki metinle birebir örtüşmesine dayanır: atladığınız, eklediğiniz veya yanlış telaffuz ettiğiniz her kelime içerik puanınızı düşürür. Doğal bir tempoda, kelimeleri anlam gruplarına ayırarak (chunking) okuyun; virgül ve noktalarda kısa duraklamalar yapın. Bilmediğiniz bir kelimeyle karşılaşırsanız bile durmayın, en yakın tahmini telaffuzla devam edin — durmak akıcılık puanınızı ciddi şekilde düşürür." },
+      ],
+    },
+    {
+      slug: "repeat-sentence",
+      name: "Konuşma: Repeat Sentence",
+      questionCount: 12,
+      description:
+        "Repeat Sentence sorusunda 3-9 saniye uzunluğunda bir cümle dinletilir; cümleyi duyduğunuz gibi, kelimesi kelimesine tekrar etmeniz beklenir. Dinleme ve konuşma becerinizi birlikte ölçer, cümle uzadıkça zorluk artar.\n\nHazırlık İpucu: Cümleyi ezberlemeye değil, anlamına odaklanarak dinleyin — anlamı kavradığınızda kelimeleri hatırlamak çok daha kolaylaşır. Cümlenin tamamını hatırlayamasanız bile duyduğunuz kadarını, doğru tonlamayla tekrar edin; kısmi puan almak, hiç cevap vermemekten çok daha iyidir.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 5, contentBody: "Kulaklıktan tek seferlik olarak kısa bir cümle çalınır (3-9 saniye). Kayıt bittikten hemen sonra mikrofon açılır ve 15 saniye içinde cümleyi aynen tekrar etmeniz istenir. Bu soru tipinde toplam 10-12 soru sorulur ve sınavın en çok soru içeren bölümlerinden biridir." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama, orijinal cümledeki kelimelerle söylediğiniz kelimelerin örtüşme oranına göre yapılır; doğru sırayla söylenen her kelime puan kazandırır. Uzun cümlelerde cümleyi anlam bloklarına (örneğin özne-fiil grubu, zaman/yer ifadesi) ayırarak hafızada tutmayı deneyin. Kelime kelime ezberlemek yerine cümlenin genel akışını ve vurgusunu yakalamak, özellikle uzun cümlelerde çok daha etkilidir." },
+      ],
+    },
+    {
+      slug: "describe-image",
+      name: "Konuşma: Describe Image",
+      questionCount: 7,
+      description:
+        "Describe Image sorusunda ekranda bir grafik, tablo, harita veya diyagram belirir; bu görseli 40 saniye boyunca detaylı şekilde sözlü olarak anlatmanız beklenir. Yalnızca konuşma becerinizi ölçen, içerik odaklı bir soru tipidir.\n\nHazırlık İpucu: Görseli betimlerken önce genel başlığı/konusunu belirtin, ardından en dikkat çekici eğilimi veya en yüksek/en düşük değeri vurgulayın, son olarak kısa bir genel değerlendirme ile bitirin. Sayıları tek tek okumak yerine 'kabaca', 'yaklaşık', 'en belirgin şekilde' gibi ifadelerle genel eğilimlere odaklanın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 5, contentBody: "Ekranda bir çizgi/çubuk/pasta grafik, tablo, harita veya süreç diyagramı belirir. Görseli inceleme süresinin ardından 40 saniye içinde detaylı bir sözlü açıklama yapmanız istenir. Bu soru tipinden sınavda genellikle 6-7 soru sorulur ve yalnızca Speaking puanına katkı sağlar." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama, görseldeki anahtar unsurların (başlık, eksenler, en yüksek/en düşük noktalar, genel eğilim) cevabınızda ne kadar yer aldığına bakılarak yapılır. 40 saniyenin tamamını konuşarak doldurun; sessiz kalmak akıcılık puanınızı düşürür. Grafik türüne göre standart bir şablon kullanmak (çizgi grafikte 'artış/azalış/dalgalanma', pasta grafikte 'en büyük/en küçük dilim' kalıpları) hazırlığınızı hızlandırır." },
+      ],
+    },
+    {
+      slug: "retell-lecture",
+      name: "Konuşma: Re-tell Lecture",
+      questionCount: 4,
+      description:
+        "Re-tell Lecture sorusunda akademik bir konuşma veya ders kaydı dinletilir; dinlediğiniz dersi kendi cümlelerinizle özetleyerek 40 saniye içinde yeniden anlatmanız beklenir. Dinleme ve konuşma becerisini birlikte ölçen, en uzun soru tipidir.\n\nHazırlık İpucu: Dinlerken not alın — ana konu, 2-3 önemli alt başlık ve varsa örnek/sayısal veriler yeterlidir, her kelimeyi yazmaya çalışmayın. Yeniden anlatırken dersin orijinal cümlelerini birebir tekrarlamak yerine kendi kelimelerinizle, mantıklı bir sırayla aktarın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 5, contentBody: "60-90 saniye uzunluğunda bir akademik ders/konuşma kaydı dinletilir (bazen ekranda ilgili bir görsel de gösterilir). Kayıt bittikten sonra kısa bir hazırlık süresi ve ardından cevap vermeniz için 40 saniye verilir. Bu soru tipinden sınavda genellikle 3-4 soru sorulur." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "İçerik puanı, dersin ana fikrini ve kilit noktalarını ne kadar kapsamlı aktardığınıza göre belirlenir; birebir kelime eşleşmesi aranmaz, anlam bütünlüğü önemlidir. Notlarınızdaki ana başlıkları sırayla kullanarak akıcı, tam cümlelerle konuşun; 'The lecture talks about...', 'It also mentions that...', 'In conclusion...' gibi bağlayıcı kalıplar cevabınızı daha organize gösterir." },
+      ],
+    },
+    {
+      slug: "answer-short-question",
+      name: "Konuşma: Answer Short Question",
+      questionCount: 12,
+      description:
+        "Answer Short Question, PTE'nin en kısa soru tipidir: kısa bir soru dinletilir ve cevabınızı tek bir kelime veya çok kısa bir ifadeyle vermeniz beklenir. Genel kültür ve temel kelime bilginizi hızlıca ölçer.\n\nHazırlık İpucu: Soruyu dikkatle dinleyin ve olabildiğince kısa, net cevap verin — uzun cümleler kurmaya çalışmak zaman kaybettirir ve gereksizdir. Emin olmasanız bile en olası cevabı hemen söyleyin; boş bırakmak yerine tahmin etmek her zaman daha avantajlıdır.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 5, contentBody: "Kulaklıktan kısa bir soru dinletilir (örneğin 'What do we call a doctor who treats children?'). Kayıt bittikten hemen sonra mikrofon açılır ve 10 saniye içinde tek kelime veya çok kısa bir ifadeyle cevap vermeniz beklenir. Bu soru tipi sınavda en çok soru içeren tiplerden biridir (10-12 soru)." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama tamamen doğru/yanlış esasına dayanır; doğru cevap tam puan, yanlış veya boş cevap sıfır puan getirir. Genel akademik kelime dağarcığınızı (meslekler, bilim terimleri, günlük kavramlar) düzenli tekrar ederek genişletmek bu bölümde en etkili hazırlık yöntemidir." },
+      ],
+    },
+    {
+      slug: "summarize-written-text",
+      name: "Yazma: Summarize Written Text",
+      questionCount: 3,
+      description:
+        "Summarize Written Text, Konuşma bölümünden Yazma bölümüne geçişte ilk soru tipidir. Ekranda 300 kelimelik bir akademik metin belirir; bu metni 10 dakika içinde TEK bir cümlede, 5-75 kelime arasında özetlemeniz beklenir.\n\nHazırlık İpucu: Özet cümlenizi mutlaka bağlaçlarla (although, because, which, and) birleştirilmiş TEK bir cümle olarak yazın — iki cümle yazarsanız puan alamazsınız. Metnin ana fikrini ve en önemli 2-3 destekleyici noktayı yakalamaya odaklanın, küçük detayları atlayın.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Yaklaşık 300 kelimelik akademik bir metin okursunuz ve bunu 5-75 kelime aralığında, gramer açısından doğru TEK bir cümleyle özetlemeniz istenir. Görev için 10 dakikanız vardır. Sınavda genellikle 2-3 soru bu formatta sorulur." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama üç ayrı kritere göre yapılır: içerik (ana fikri doğru yakalama), form (tek cümle, 5-75 kelime sınırına uyma) ve dilbilgisi/kelime/yazım gibi yetkinlik puanları. Kelime sınırının dışına çıkan veya birden fazla cümleden oluşan cevaplar form puanını sıfırlar, bu yüzden yazdıktan sonra mutlaka kelime sayınızı kontrol edin." },
+      ],
+    },
+    {
+      slug: "write-essay",
+      name: "Yazma: Write Essay",
+      questionCount: 2,
+      description:
+        "Write Essay, PTE'nin en uzun süreli görevlerinden biridir. Verilen bir konu hakkında 200-300 kelimelik, tartışmacı (argumentative) bir kompozisyon yazmanız için 20 dakikanız vardır.\n\nHazırlık İpucu: Klasik giriş-gelişme-sonuç yapısını kullanın: girişte konuya ve kendi görüşünüze yer verin, gelişme paragraflarında 2-3 gerekçe ve örnekle görüşünüzü destekleyin, sonuçta görüşünüzü kısaca tekrarlayın. Kelime sayınızı 200-300 aralığında tutmaya özellikle dikkat edin.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "Ekranda genellikle güncel veya akademik bir tartışma konusu belirir (örneğin teknolojinin eğitime etkisi). 200-300 kelime aralığında, açık bir tez cümlesi içeren bir deneme yazmanız için 20 dakikanız vardır. Sınavda bu formatta genellikle 1-2 soru sorulur." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama; içerik, form (200-300 kelime aralığı), gelişim/yapı/tutarlılık, dilbilgisi, kelime ve yazım olmak üzere birçok alt kritere göre yapılır. Paragraflar arasında açık geçiş ifadeleri (furthermore, on the other hand, in conclusion) kullanmak, yapı ve tutarlılık puanınızı doğrudan yükseltir." },
+      ],
+    },
+    {
+      slug: "reading-mcq-single",
+      name: "Okuma: Multiple-choice (Tek Cevap)",
+      questionCount: 3,
+      description:
+        "Bu soru tipinde kısa bir akademik metin okur ve metinle ilgili çoktan seçmeli bir soruyu, verilen seçeneklerden YALNIZCA birini işaretleyerek cevaplarsınız. Metni anlama ve çıkarım yapma becerinizi ölçer.\n\nHazırlık İpucu: Önce soruyu okuyup ne arandığını belirleyin, sonra metni o soruya odaklanarak tarayın. Bu soru tipinde yanlış cevap için puan kırılmaz, bu yüzden emin olmasanız bile mutlaka bir seçenek işaretleyin.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kısa bir paragraf ve altında 3-5 seçenekli bir soru bulunur; doğru seçeneği tek bir radyo düğmesiyle işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden boş bırakmak yerine her zaman bir tahminde bulunun." },
+      ],
+    },
+    {
+      slug: "reading-mcq-multiple",
+      name: "Okuma: Multiple-choice (Çoklu Cevap)",
+      questionCount: 3,
+      description:
+        "Bu soru tipinde bir metinle ilgili sorunun BİRDEN FAZLA doğru cevabı olabilir; doğru gördüğünüz TÜM seçenekleri işaretlemeniz gerekir. Reading bölümünde negatif puanlamanın uygulandığı tek soru tipidir.\n\nHazırlık İpucu: Her seçeneği metinle tek tek karşılaştırın ve yalnızca metinde açıkça desteklenen seçenekleri işaretleyin. Emin olmadığınız seçenekleri işaretlememek, yanlış tahminle puan kaybetmekten daha güvenlidir.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda bir metin ve altında birden fazla doğru cevabı olabilecek, kutucuklu (checkbox) bir soru bulunur. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir (toplam puan en az sıfırdır); bu yüzden metinde açıkça geçmeyen veya metinle çelişen seçenekleri asla işaretlemeyin." },
+      ],
+    },
+    {
+      slug: "reading-reorder-paragraphs",
+      name: "Okuma: Re-order Paragraphs",
+      questionCount: 3,
+      description:
+        "Bu soru tipinde birbirine karışmış halde verilen metin parçalarını (genellikle 4-6 cümle/paragraf), sürükle-bırak yöntemiyle mantıklı ve akıcı bir sıraya koymanız istenir. Metin bütünlüğü ve bağlaç kullanımını anlama becerinizi ölçer.\n\nHazırlık İpucu: Önce 'konu cümlesini' (genel bir ifade içeren, başka bir cümleye referans vermeyen paragrafı) bulun — bu genellikle ilk sıradadır. Ardından 'this', 'these', 'however', 'therefore' gibi bağlaç ve zamirleri takip ederek hangi cümlenin hangisinden sonra geldiğini belirleyin.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranın solunda karışık sırada paragraflar, sağında ise boş bir sıralama alanı bulunur; paragrafları doğru sıraya göre sağ tarafa sürüklersiniz. Puanlama, doğru sıralanan her 'ardışık çift' için verilir — tamamını mükemmel sıralayamasanız bile bazı çiftleri doğru yaparsanız kısmi puan alırsınız, bu yüzden emin olduğunuz çiftleri önce yerleştirin." },
+      ],
+    },
+    {
+      slug: "reading-fill-in-blanks",
+      name: "Okuma: Fill in the Blanks",
+      questionCount: 5,
+      description:
+        "Bu soru tipinde bir metin içindeki birkaç boşluğa, ekranın üst kısmında verilen kelime havuzundan sürükle-bırak yöntemiyle uygun kelimeyi yerleştirmeniz istenir. Dilbilgisi ve kelime bilgisini bağlam içinde ölçer.\n\nHazırlık İpucu: Önce metnin tamamını hızlıca okuyarak genel anlamı kavrayın, sonra her boşluğu tek tek doldurun. Boşluğun etrafındaki kelimelere (edatlar, fiil çekimleri, eş dizim kalıpları) dikkat edin; çoğu zaman doğru cevap dilbilgisel uyuma bakılarak bulunabilir.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Metindeki her boşluk için ekranın üst kısmında sürüklenebilir kelime seçenekleri bulunur; her kelime yalnızca bir kez kullanılabilir. Doğru yerleştirilen her kelime için 1 puan, yanlış yerleştirilen için 0 puan alırsınız (negatif puanlama yoktur); emin olmadığınız boşluklarda bile en mantıklı seçeneği yerleştirin." },
+      ],
+    },
+    {
+      slug: "reading-writing-fill-in-blanks",
+      name: "Okuma-Yazma: Fill in the Blanks",
+      questionCount: 6,
+      description:
+        "Bu soru tipi, Reading: Fill in the Blanks'e benzer ancak kelime havuzu yerine her boşluk için ayrı bir AÇILIR MENÜ (dropdown) sunulur ve seçenekler genellikle birbirine anlamca veya biçimce çok yakın kelimelerden oluşur. Hem okuma hem yazma/dilbilgisi becerisini ölçer.\n\nHazırlık İpucu: Her açılır menüdeki seçenekleri dikkatle karşılaştırın — genellikle aynı kelimenin farklı biçimleri veya birbirine yakın anlamlı kelimeler arasından seçim yaparsınız. Cümlenin gramer yapısına (zaman, özne-yüklem uyumu) odaklanmak doğru seçeneği bulmanın en hızlı yoludur.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Metindeki her boşluğun yanında küçük bir açılır menü ikonu bulunur; tıkladığınızda 3-4 seçenek arasından birini seçersiniz. Bu soru tipi sınavda genellikle en fazla boşluk içeren (5-6) sorulardan biridir ve her doğru seçim ayrı ayrı puanlanır." },
+      ],
+    },
+    {
+      slug: "listening-summarize-spoken-text",
+      name: "Dinleme: Summarize Spoken Text",
+      questionCount: 3,
+      description:
+        "Listening bölümünün ilk ve en uzun süreli soru tipidir. 60-90 saniyelik akademik bir konuşma dinletilir; dinlediğinizi 50-70 kelimelik bir paragrafla özetlemeniz için 10 dakikanız vardır.\n\nHazırlık İpucu: Dinlerken ana fikri ve 3-4 önemli destekleyici noktayı not alın. Özetinizi yazarken notlarınızı tam cümlelere dönüştürün ve kelime sayısını (50-70) mutlaka kontrol edin; hem çok kısa hem çok uzun özetler form puanınızı düşürür.",
+      lessons: [
+        { title: "Görev Tanımı ve Format", durationMinutes: 6, contentBody: "60-90 saniyelik bir ders/konuşma kaydı bir kez dinletilir. Dinledikten sonra 50-70 kelimelik bir paragrafla konuşmayı özetlemeniz için 10 dakikanız vardır. Bu soru tipi hem Listening hem Writing puanına katkı sağlar." },
+        { title: "Puanlama Stratejileri", durationMinutes: 6, contentBody: "Puanlama; içerik (konuşmanın ana noktalarını kapsama), form (kelime sayısı ve paragraf yapısı) ve dilbilgisi/kelime/yazım gibi yetkinlik kriterlerine göre yapılır. Not alırken kısaltmalar ve semboller kullanmak (örn. 'w/' = with, '→' = leads to), dinlerken hem anlamaya hem yazmaya zaman ayırmanızı kolaylaştırır." },
+      ],
+    },
+    {
+      slug: "listening-mcq-multiple",
+      name: "Dinleme: Multiple-choice (Çoklu Cevap)",
+      questionCount: 3,
+      description:
+        "Kısa bir ses kaydı dinletildikten sonra, birden fazla doğru cevabı olabilecek bir soru sorulur; doğru gördüğünüz tüm seçenekleri işaretlemeniz gerekir. Listening bölümünde negatif puanlamanın uygulandığı iki soru tipinden biridir.\n\nHazırlık İpucu: Kaydı dinlerken seçeneklerle örtüşen bilgileri not alın. Sadece kayıtta açıkça belirtilen seçenekleri işaretleyin; kayıtta geçmeyen veya çelişen seçenekleri işaretlemek -1 puan getirir.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir ses kaydı dinletilir, ardından ekranda birden fazla doğru cevabı olabilecek kutucuklu bir soru belirir. Doğru işaretlenen her seçenek +1, yanlış işaretlenen her seçenek -1 puan getirir; bu yüzden yalnızca kayıtta net şekilde desteklenen seçenekleri işaretlemek en güvenli stratejidir." },
+      ],
+    },
+    {
+      slug: "listening-fill-in-blanks",
+      name: "Dinleme: Fill in the Blanks",
+      questionCount: 3,
+      description:
+        "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali (transkript) belirir ve bu transkriptteki bazı kelimeler eksiktir. Dinlediğiniz kelimeleri doğru yazarak boşlukları doldurmanız gerekir.\n\nHazırlık İpucu: Kaydı dinlerken transkripti takip edin ve duyduğunuz kelimeyi anında yazın — kaydı durdurma veya geri sarma imkanınız yoktur. Kelimeleri doğru yazmak (imla) önemlidir, bu yüzden düzenli dikte pratiği yapmak bu bölüm için çok faydalıdır.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir, bazı kelimeler boş bırakılmıştır; kayıt çalarken bu boşluklara doğru kelimeyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız (negatif puanlama yoktur); imla hatası olan cevaplar yanlış sayılır, bu yüzden yaygın akademik kelimelerin yazımını tekrar etmek önemlidir." },
+      ],
+    },
+    {
+      slug: "listening-highlight-correct-summary",
+      name: "Dinleme: Highlight Correct Summary",
+      questionCount: 3,
+      description:
+        "Bir ses kaydı dinlettikten sonra, ekranda kaydı özetleyen birkaç paragraf seçeneği sunulur; bunlardan kaydı EN DOĞRU şekilde özetleyen paragrafı seçmeniz istenir. Genel anlama ve özetleme becerinizi ölçer.\n\nHazırlık İpucu: Kaydı dinlerken ana fikri not alın, ardından her seçenek paragrafı bu ana fikirle karşılaştırın. Yanıltıcı seçenekler genellikle doğru ayrıntıları yanlış bir sonuçla birleştirir; her paragrafı kaydın gerçek mesajıyla karşılaştırarak okuyun.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kayıt dinletildikten sonra ekranda 3-5 paragraf seçeneği belirir; kaydı en iyi özetleyen TEK paragrafı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir — negatif puanlama yoktur, bu yüzden emin olmasanız bile en olası seçeneği işaretleyin." },
+      ],
+    },
+    {
+      slug: "listening-mcq-single",
+      name: "Dinleme: Multiple-choice (Tek Cevap)",
+      questionCount: 3,
+      description:
+        "Bir ses kaydı dinlettikten sonra, kayıtla ilgili bir soru sorulur ve verilen seçeneklerden yalnızca BİRİNİ işaretlemeniz istenir. Kaydı genel olarak anlama ve detay yakalama becerinizi ölçer.\n\nHazırlık İpucu: Soruyu dinlemeden önce ekranda görünen seçeneklere göz atarak neye odaklanmanız gerektiğini tahmin edin. Genellikle doğru cevap kayıtta geçen ifadenin eş anlamlısı şeklinde sunulur, birebir aynı kelimeler aranmaz.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir ses kaydı dinletilir, ardından 3-5 seçenekli bir soru belirir ve yalnızca bir seçeneği işaretlersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama olmadığı için her zaman bir seçenek işaretlemelisiniz." },
+      ],
+    },
+    {
+      slug: "listening-select-missing-word",
+      name: "Dinleme: Select Missing Word",
+      questionCount: 3,
+      description:
+        "Bu soru tipinde bir ses kaydı dinletilir, ancak kaydın SON kelimesi veya son birkaç kelimesi bir 'bip' sesiyle değiştirilmiştir. Kaydın bağlamına göre, o son kısımda ne söylenmiş olabileceğini seçenekler arasından bulmanız istenir.\n\nHazırlık İpucu: Kaydın son cümlesine ve genel bağlamına özellikle dikkat edin; cevabı bulmak için kaydın tamamının anlamını kavramış olmanız gerekir. Seçenekler genellikle dilbilgisel olarak doğru ama anlamca yanlış olacak şekilde tasarlanır.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kayıt normal şekilde başlar ancak son kelime(ler) bir bip sesiyle kapatılır; ardından 3-4 seçenek arasından kaydın bağlamına en uygun tamamlayıcıyı seçersiniz. Doğru cevap tam puan, yanlış cevap sıfır puan getirir; negatif puanlama yoktur." },
+      ],
+    },
+    {
+      slug: "listening-highlight-incorrect-words",
+      name: "Dinleme: Highlight Incorrect Words",
+      questionCount: 3,
+      description:
+        "Bir ses kaydı dinlerken, ekranda kaydın yazıya dökülmüş hali belirir; ancak bu transkriptte kayıtta söylenenle UYUŞMAYAN bazı kelimeler bulunur. Bu farklı kelimeleri tıklayarak işaretlemeniz istenir. Listening bölümünde negatif puanlamanın uygulandığı ikinci soru tipidir.\n\nHazırlık İpucu: Transkripti kayıtla eş zamanlı, kelime kelime takip edin; duyduğunuz kelime ile ekrandaki kelime uyuşmadığı anda tıklayın. Emin olmadığınız kelimeleri işaretlememek daha güvenlidir, çünkü yanlış işaretlenen her doğru kelime -1 puan getirir.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Ekranda kaydın metni belirir; kayıt çalarken metindeki bazı kelimeler aslında kayıtta söylenenden farklıdır ve bu kelimeleri fare ile tıklayarak seçmeniz gerekir. Doğru işaretlenen her farklı kelime +1, yanlış işaretlenen (aslında doğru olan) her kelime -1 puan getirir." },
+      ],
+    },
+    {
+      slug: "listening-write-from-dictation",
+      name: "Dinleme: Write from Dictation",
+      questionCount: 4,
+      description:
+        "Listening bölümünün son ve en kısa soru tipidir. Kısa bir cümle bir kez dinletilir; duyduğunuz cümleyi harfi harfine, doğru yazımla yazmanız istenir.\n\nHazırlık İpucu: Cümleyi dinlerken zihninizde tekrar edin ve hemen ardından yazmaya başlayın — kaydı tekrar dinleme imkanınız yoktur. Büyük harf, noktalama ve yaygın kelimelerin doğru yazımına dikkat edin; bu soru tipi aynı zamanda dilbilgisi ve yazım puanınıza da katkı sağlar.",
+      lessons: [
+        { title: "Görev Tanımı ve Puanlama", durationMinutes: 6, contentBody: "Kısa bir cümle (genellikle 5-10 kelime) bir kez dinletilir, ardından boş bir metin kutusuna duyduğunuz cümleyi yazarsınız. Doğru yazılan her kelime için 1 puan alırsınız; kelime sırası ve imla önemlidir, bu yüzden düzenli dikte alıştırması yapmak bu soru tipi için en etkili hazırlık yöntemidir." },
+      ],
+    },
+  ];
+  for (const [index, def] of pteTopicDefs.entries()) {
+    const topic = await db.examTopic.upsert({
+      where: { examTypeId_slug: { examTypeId: examTypes.PTE.id, slug: def.slug } },
+      update: { name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+      create: { examTypeId: examTypes.PTE.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index },
+    });
+
+    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+      const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
+      if (existingLesson) {
+        await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      } else {
+        await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
+      }
+    }
+  }
+
   console.log("Seed complete.");
   console.log(`Teacher login: hoca@canniceenglish.com / ${process.env.CANNICE_TEACHER_PASSWORD || "CanniceTeacher2026!"}`);
   console.log(`Student login: ogrenci@canniceenglish.com / ${process.env.CANNICE_STUDENT_PASSWORD || "CanniceStudent2026!"}`);
