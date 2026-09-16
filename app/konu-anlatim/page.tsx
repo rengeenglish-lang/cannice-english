@@ -29,9 +29,11 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
-      <p className="eyebrow">Konu Anlatım</p>
-      <h1 className="page-title">Sınavınıza konu konu, sıfırdan hazırlanın</h1>
-      <p className="page-copy">Her konunun sınavda kaç soru olarak karşınıza çıktığını görün, dersleri sırayla tamamlayın.</p>
+      <p className="text-xs font-extrabold uppercase tracking-[.16em] text-blue-600">Konu Anlatım</p>
+      <h1 className="mt-2 text-3xl font-extrabold leading-[1.08] tracking-[-.02em] text-slate-900 sm:text-4xl">
+        Sınavınıza konu konu, sıfırdan hazırlanın
+      </h1>
+      <p className="mt-3 max-w-2xl text-slate-500">Her konunun sınavda kaç soru olarak karşınıza çıktığını görün, dersleri sırayla tamamlayın.</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         {exams.map((item) => (
@@ -40,8 +42,8 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
             href={`/konu-anlatim?exam=${item.slug}`}
             className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
               examSlug === item.slug
-                ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white"
-                : "border-[color:var(--border-strong)] bg-white text-slate-600 hover:border-[color:var(--brand)]"
+                ? "border-blue-900 bg-blue-900 text-white"
+                : "border-slate-200 bg-white text-slate-600 hover:border-blue-300"
             }`}
           >
             {item.name}
@@ -50,18 +52,18 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       </div>
 
       {topics.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-dashed border-[color:var(--border-strong)] px-5 py-10 text-center">
-          <p className="font-bold text-[color:var(--foreground)]">{activeExam?.name ?? "Bu sınav"} için konu anlatımları yakında burada olacak</p>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">Şu an için YDS, YÖKDİL ve PTE konu anlatımlarını inceleyebilirsiniz.</p>
+        <div className="mt-10 rounded-2xl border border-dashed border-slate-200 px-5 py-10 text-center">
+          <p className="font-bold text-slate-900">{activeExam?.name ?? "Bu sınav"} için konu anlatımları yakında burada olacak</p>
+          <p className="mt-2 text-sm text-slate-500">Şu an için YDS, YÖKDİL ve PTE konu anlatımlarını inceleyebilirsiniz.</p>
         </div>
       ) : (
         <>
-          <details className="panel mt-10 overflow-x-auto">
+          <details className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)] sm:p-6">
             <summary className="cursor-pointer list-none">
-              <span className="section-title text-lg">{activeExam?.name} Soru Dağılımı</span>
-              <span className="ml-2 text-sm font-semibold text-[color:var(--muted)]">(görmek için tıklayın)</span>
+              <span className="text-lg font-extrabold tracking-[-.01em] text-slate-900">{activeExam?.name} Soru Dağılımı</span>
+              <span className="ml-2 text-sm font-semibold text-slate-500">(görmek için tıklayın)</span>
             </summary>
-            <p className="mt-3 text-xs font-semibold text-[color:var(--muted)] sm:hidden">← Tüm sütunları görmek için tabloyu yana kaydırın →</p>
+            <p className="mt-3 text-xs font-semibold text-slate-500 sm:hidden">← Tüm sütunları görmek için tabloyu yana kaydırın →</p>
             <table className="dashboard-table mt-4">
               <thead>
                 <tr>
@@ -74,17 +76,17 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
               <tbody>
                 {topics.map((topic) => (
                   <tr key={topic.id}>
-                    <td className="font-semibold text-[color:var(--foreground)]">{topic.name}</td>
+                    <td className="font-semibold text-slate-900">{topic.name}</td>
                     <td className="text-right font-bold">{topic.questionCount ?? "—"}</td>
                     <td className="text-right">{formatWeightPercent(topic.questionCount ?? 0, totalQuestions)}</td>
                     <td className="text-right">{topic.lessons.length}</td>
                   </tr>
                 ))}
                 <tr>
-                  <td className="font-extrabold text-[color:var(--foreground)]">Toplam</td>
-                  <td className="text-right font-extrabold text-[color:var(--accent-strong)]">{totalQuestions}</td>
-                  <td className="text-right font-extrabold text-[color:var(--accent-strong)]">%100</td>
-                  <td className="text-right font-extrabold text-[color:var(--accent-strong)]">
+                  <td className="font-extrabold text-slate-900">Toplam</td>
+                  <td className="text-right font-extrabold text-blue-700">{totalQuestions}</td>
+                  <td className="text-right font-extrabold text-blue-700">%100</td>
+                  <td className="text-right font-extrabold text-blue-700">
                     {topics.reduce((sum, topic) => sum + topic.lessons.length, 0)}
                   </td>
                 </tr>
