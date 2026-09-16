@@ -80,7 +80,7 @@ button, a { touch-action: manipulation; }
   .exam-pill { @apply inline-flex items-center rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-sm; }
 
   .dashboard-frame { @apply min-h-screen bg-[color:var(--canvas)] transition-[grid-template-columns] duration-200 lg:grid; }
-  .dashboard-sidebar { @apply fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col border-r border-[color:var(--border)] bg-white text-slate-700 shadow-2xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:w-auto lg:shadow-none; }
+  .dashboard-sidebar { @apply fixed inset-y-0 left-0 z-40 flex w-[280px] flex-col overflow-y-auto border-r border-[color:var(--border)] bg-white text-slate-700 shadow-2xl transition-transform duration-200 lg:sticky lg:top-[76px] lg:h-[calc(100vh-76px)] lg:w-auto lg:shadow-none; }
   .dashboard-nav-item { @apply flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-slate-600 transition duration-200 hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--brand)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--brand)]; }
   .dashboard-nav-item-active { @apply bg-[color:var(--brand-soft)] text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)]; }
   .dashboard-main { @apply mx-auto w-full max-w-[1320px] p-4 sm:p-6 lg:p-8; }
