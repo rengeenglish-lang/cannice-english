@@ -1,27 +1,17 @@
 import "server-only";
 import { db } from "@/server/db";
 
-export function listExamTopics(examTypeId: string) {
+export function listExamTopicsWithLessons(examTypeId: string) {
   return db.examTopic.findMany({
     where: { examTypeId },
     orderBy: { displayOrder: "asc" },
-    include: { lessons: { select: { id: true } } },
+    include: { lessons: { orderBy: { position: "asc" } } },
   });
 }
 
-export function getTopicBySlug(examSlug: string, topicSlug: string) {
-  return db.examTopic.findFirst({
-    where: { slug: topicSlug, examType: { slug: examSlug } },
-    include: {
-      examType: true,
-      lessons: { orderBy: { position: "asc" } },
-    },
-  });
-}
-
-export async function getCompletedLessonIdsForUser(userId: string, topicId: string) {
+export async function getCompletedTopicLessonIdsForUser(userId: string) {
   const progresses = await db.topicLessonProgress.findMany({
-    where: { userId, completedAt: { not: null }, topicLesson: { topicId } },
+    where: { userId, completedAt: { not: null } },
     select: { topicLessonId: true },
   });
   return new Set(progresses.map((progress) => progress.topicLessonId));

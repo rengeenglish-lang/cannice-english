@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { listExamTypes, getExamTypeBySlug } from "@/server/services/catalog.service";
-import { listExamTopics } from "@/server/services/topics.service";
+import { listExamTopicsWithLessons, getCompletedTopicLessonIdsForUser } from "@/server/services/topics.service";
+import { getAuthContext } from "@/server/auth/context";
+import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
 
 export const metadata: Metadata = { title: "Konu Anlatım" };
 
@@ -10,12 +12,13 @@ type Props = { searchParams: Promise<{ exam?: string }> };
 export default async function TopicsIndexPage({ searchParams }: Props) {
   const { exam } = await searchParams;
   const examSlug = exam ?? "yds";
-  const [exams, activeExam] = await Promise.all([listExamTypes(), getExamTypeBySlug(examSlug)]);
-  const topics = activeExam ? await listExamTopics(activeExam.id) : [];
+  const [exams, activeExam, user] = await Promise.all([listExamTypes(), getExamTypeBySlug(examSlug), getAuthContext()]);
+  const topics = activeExam ? await listExamTopicsWithLessons(activeExam.id) : [];
+  const completedLessonIds = user ? await getCompletedTopicLessonIdsForUser(user.id) : new Set<string>();
   const totalQuestions = topics.reduce((sum, topic) => sum + (topic.questionCount ?? 0), 0);
 
   return (
-    <main className="mx-auto w-full max-w-[1100px] px-4 py-14 sm:px-6 lg:px-8">
+    <main className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <p className="eyebrow">Konu Anlatım</p>
       <h1 className="page-title">Sınavınıza konu konu, sıfırdan hazırlanın</h1>
       <p className="page-copy">Her konunun sınavda kaç soru olarak karşınıza çıktığını görün, dersleri sırayla tamamlayın.</p>
@@ -43,8 +46,11 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
         </div>
       ) : (
         <>
-          <div className="panel mt-10 overflow-x-auto">
-            <h2 className="section-title text-lg">{activeExam?.name} Soru Dağılımı</h2>
+          <details className="panel mt-10 overflow-x-auto">
+            <summary className="cursor-pointer list-none">
+              <span className="section-title text-lg">{activeExam?.name} Soru Dağılımı</span>
+              <span className="ml-2 text-sm font-semibold text-[color:var(--muted)]">(görmek için tıklayın)</span>
+            </summary>
             <table className="dashboard-table mt-4">
               <thead>
                 <tr>
@@ -65,23 +71,14 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </details>
 
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {topics.map((topic, index) => (
-              <Link
-                key={topic.id}
-                href={`/konu-anlatim/${topic.slug}?exam=${examSlug}`}
-                className="panel flex items-center justify-between gap-4 transition hover:-translate-y-0.5 hover:border-[color:var(--accent)]"
-              >
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[.1em] text-[color:var(--muted)]">Konu {index + 1}</p>
-                  <p className="mt-1 font-bold text-[color:var(--foreground)]">{topic.name}</p>
-                  <p className="mt-1 text-xs text-[color:var(--muted)]">{topic.lessons.length} ders {topic.questionCount ? `· Sınavda ${topic.questionCount} soru` : ""}</p>
-                </div>
-                <span className="shrink-0 text-[color:var(--accent-strong)]">→</span>
-              </Link>
-            ))}
+          <div className="mt-8">
+            <KonuAnlatimDashboard
+              topics={topics}
+              initialCompletedLessonIds={[...completedLessonIds]}
+              isSignedIn={Boolean(user)}
+            />
           </div>
         </>
       )}
