@@ -1,11 +1,18 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Source_Sans_3 } from "next/font/google";
 import { listExamTypes, getExamTypeBySlug } from "@/server/services/catalog.service";
 import { listExamTopicsWithLessons, getCompletedTopicLessonIdsForUser, getTopicNotesForUser } from "@/server/services/topics.service";
 import { getAuthContext } from "@/server/auth/context";
 import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
 
 export const metadata: Metadata = { title: "Konu Anlatım" };
+
+const topicsFont = Source_Sans_3({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-topics",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 function formatWeightPercent(questionCount: number, totalQuestions: number) {
   if (totalQuestions === 0) return "—";
@@ -28,7 +35,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   const totalQuestions = topics.reduce((sum, topic) => sum + (topic.questionCount ?? 0), 0);
 
   return (
-    <main className="mx-auto w-full max-w-[1680px] px-4 py-14 sm:px-6 lg:px-8">
+    <main className={`${topicsFont.variable} mx-auto w-full max-w-[1680px] px-4 py-14 [font-family:var(--font-topics)] sm:px-6 lg:px-8`}>
       <p className="text-xs font-extrabold uppercase tracking-[.16em] text-blue-600">Konu Anlatım</p>
       <h1 className="mt-2 text-3xl font-extrabold leading-[1.08] tracking-[-.02em] text-slate-900 sm:text-4xl">
         Sınavınıza konu konu, sıfırdan hazırlanın
