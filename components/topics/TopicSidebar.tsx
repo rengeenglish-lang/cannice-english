@@ -37,11 +37,11 @@ export function TopicSidebar<T extends Topic>({
     <aside className="order-2 h-fit lg:order-1 lg:sticky lg:top-24">
       <div className={CARD}>
         <div className="flex items-center justify-between gap-3">
-          <p className="flex items-center gap-2 text-base font-extrabold text-slate-900">
-            <Target className="size-5 text-blue-600" />
+          <p className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
+            <Target className="size-6 text-blue-600" />
             {examName} Konuları
           </p>
-          <p className="text-sm font-extrabold text-slate-500">
+          <p className="text-base font-extrabold text-blue-700">
             {completedTopicCount} / {topics.length}
           </p>
         </div>
@@ -67,12 +67,12 @@ export function TopicSidebar<T extends Topic>({
                     <button
                       type="button"
                       onClick={() => onSelect(topic)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-base transition ${
-                        active ? "bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,.25)]" : "text-slate-700 hover:bg-slate-50"
+                      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-lg transition ${
+                        active ? "bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]" : "text-slate-800 hover:bg-blue-50"
                       }`}
                     >
                       <span
-                        className={`grid size-6 shrink-0 place-items-center rounded-full border-2 text-xs font-black ${
+                        className={`grid size-7 shrink-0 place-items-center rounded-full border-2 text-sm font-black ${
                           done
                             ? "border-emerald-400 bg-emerald-400 text-white"
                             : active
@@ -95,8 +95,8 @@ export function TopicSidebar<T extends Topic>({
           const { label, Icon } = meta;
           return (
             <details key={group.category} className={`${CARD} group`} open>
-              <summary className="flex cursor-pointer list-none items-center gap-2 text-base font-extrabold text-slate-900">
-                <Icon className="size-4 text-blue-600" />
+              <summary className="flex cursor-pointer list-none items-center gap-2 text-lg font-extrabold text-slate-900">
+                <Icon className="size-5 text-blue-600" />
                 <span>
                   {label} ({group.topics.length})
                 </span>
@@ -107,9 +107,9 @@ export function TopicSidebar<T extends Topic>({
         })}
       </div>
 
-      <div className="mt-4 rounded-2xl border border-dashed border-blue-200 bg-blue-50 p-4 text-center">
-        <Sprout className="mx-auto size-7 text-emerald-600" />
-        <p className="mt-2 text-sm font-extrabold leading-snug text-slate-800">Küçük adımlar, büyük sonuçlar</p>
+      <div className="mt-4 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50 p-4 text-center">
+        <Sprout className="mx-auto size-8 text-emerald-600" />
+        <p className="mt-2 text-base font-extrabold leading-snug text-emerald-900">Küçük adımlar, büyük sonuçlar</p>
       </div>
     </aside>
   );

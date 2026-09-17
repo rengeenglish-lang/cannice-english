@@ -20,7 +20,7 @@ export function ProgressRing({ percent, size = 88 }: { percent: number; size?: n
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
         style={{ transition: "stroke-dashoffset 0.3s ease" }}
       />
-      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" className="fill-slate-900 text-lg font-extrabold">
+      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" className="fill-slate-900 text-xl font-extrabold">
         %{percent}
       </text>
     </svg>

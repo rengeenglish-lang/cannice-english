@@ -24,7 +24,7 @@ export function SubtopicTabs({
   if (lessons.length <= 1) return null;
 
   return (
-    <div className="mt-5 flex flex-wrap gap-1.5 rounded-2xl border border-slate-200 bg-white p-1.5">
+    <div className="mt-5 flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2">
       {lessons.map((lesson) => {
         const active = lesson.id === selectedLessonId;
         const isExample = /Örnek Sorular/i.test(lesson.title);
@@ -33,11 +33,11 @@ export function SubtopicTabs({
             key={lesson.id}
             type="button"
             onClick={() => onSelect(lesson.id)}
-            className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-bold transition ${
-              active ? "bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,.25)]" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-3 text-base font-bold transition ${
+              active ? "bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]" : "text-slate-700 hover:bg-blue-50 hover:text-blue-700"
             }`}
           >
-            {isExample ? <Star className={`size-3.5 ${active ? "fill-white" : "fill-amber-400 text-amber-400"}`} /> : null}
+            {isExample ? <Star className={`size-4 ${active ? "fill-white" : "fill-amber-400 text-amber-400"}`} /> : null}
             {shortLabel(lesson.title, topicName)}
           </button>
         );

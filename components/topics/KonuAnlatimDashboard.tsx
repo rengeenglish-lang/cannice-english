@@ -157,7 +157,7 @@ export function KonuAnlatimDashboard({
           {selectedLesson ? (
             <>
               {selectedTopic.lessons.length === 1 ? (
-                <h2 className="mb-3 text-xl font-extrabold text-slate-900">{selectedLesson.title}</h2>
+                <h2 className="mb-3 text-2xl font-extrabold text-slate-900">{selectedLesson.title}</h2>
               ) : null}
               {selectedLesson.videoUrl ? (
                 <div className="mb-5 aspect-video overflow-hidden rounded-2xl bg-black">
@@ -179,15 +179,15 @@ export function KonuAnlatimDashboard({
                 </>
               ) : selectedLesson.contentBody ? (
                 <div className={CARD}>
-                  <p className="whitespace-pre-line text-lg leading-8 text-slate-800">{selectedLesson.contentBody}</p>
+                  <p className="whitespace-pre-line text-xl leading-9 text-slate-800">{selectedLesson.contentBody}</p>
                 </div>
               ) : (
                 <div className={CARD}>
-                  <p className="text-base text-slate-500">Bu ders için içerik yakında eklenecek.</p>
+                  <p className="text-lg text-slate-600">Bu ders için içerik yakında eklenecek.</p>
                 </div>
               )}
 
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-4">
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
                 {isSignedIn ? (
                   <button
                     type="button"
@@ -195,8 +195,8 @@ export function KonuAnlatimDashboard({
                     onClick={() => handleToggle(selectedLesson.id)}
                     className={
                       completedIds.has(selectedLesson.id)
-                        ? "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-emerald-500 bg-emerald-50 px-6 py-2.5 text-sm font-bold text-emerald-700 transition hover:bg-emerald-100"
-                        : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:translate-y-0 disabled:opacity-60"
+                        ? "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-emerald-500 bg-emerald-50 px-6 py-2.5 text-base font-bold text-emerald-700 transition hover:bg-emerald-100"
+                        : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:translate-y-0 disabled:opacity-60"
                     }
                   >
                     {completedIds.has(selectedLesson.id) ? "Tamamlandı ✓" : "Tamamlandı Olarak İşaretle"}
@@ -204,7 +204,7 @@ export function KonuAnlatimDashboard({
                 ) : (
                   <Link
                     href="/sign-in"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-blue-700"
                   >
                     Giriş yapıp ilerlemeyi kaydet
                   </Link>
@@ -213,7 +213,7 @@ export function KonuAnlatimDashboard({
             </>
           ) : (
             <div className={CARD}>
-              <p className="text-base text-slate-500">Bu konu için ders içeriği yakında eklenecek.</p>
+              <p className="text-lg text-slate-600">Bu konu için ders içeriği yakında eklenecek.</p>
             </div>
           )}
         </div>
@@ -223,7 +223,7 @@ export function KonuAnlatimDashboard({
             type="button"
             onClick={() => goToTopic(-1)}
             disabled={topicIndex <= 0}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 transition hover:border-blue-300 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-2.5 text-base font-bold text-slate-700 transition hover:border-blue-400 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             ← Önceki Konu
           </button>
@@ -231,7 +231,7 @@ export function KonuAnlatimDashboard({
             type="button"
             onClick={() => goToTopic(1)}
             disabled={topicIndex >= topics.length - 1}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 transition hover:border-blue-300 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-2.5 text-base font-bold text-slate-700 transition hover:border-blue-400 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Sonraki Konu →
           </button>

@@ -23,22 +23,22 @@ export function TopicInfoCard({
   const difficultyStyle = difficulty ? DIFFICULTY_STYLE[difficulty] : undefined;
   return (
     <div className={CARD}>
-      <p className="flex items-center gap-2 text-base font-extrabold text-slate-900">
-        <BookOpen className="size-5 text-blue-600" />
+      <p className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
+        <BookOpen className="size-6 text-blue-600" />
         Bu Konu Hakkında
       </p>
-      <dl className="mt-4 space-y-3 text-base">
+      <dl className="mt-4 space-y-4 text-lg">
         <div className="flex items-center justify-between gap-3">
-          <dt className="flex items-center gap-2 text-slate-500">
-            <Clock className="size-4" />
+          <dt className="flex items-center gap-2 text-slate-600">
+            <Clock className="size-5 text-blue-500" />
             Tahmini çalışma süresi
           </dt>
           <dd className="font-extrabold text-slate-900">{durationMinutes} dk</dd>
         </div>
         {questionCount ? (
           <div className="flex items-center justify-between gap-3">
-            <dt className="flex items-center gap-2 text-slate-500">
-              <HelpCircle className="size-4" />
+            <dt className="flex items-center gap-2 text-slate-600">
+              <HelpCircle className="size-5 text-indigo-500" />
               Sınavda soru sayısı
             </dt>
             <dd className="font-extrabold text-slate-900">{questionCount}</dd>
@@ -46,8 +46,8 @@ export function TopicInfoCard({
         ) : null}
         {skillsTested ? (
           <div className="flex items-center justify-between gap-3">
-            <dt className="flex shrink-0 items-center gap-2 text-slate-500">
-              <Target className="size-4" />
+            <dt className="flex shrink-0 items-center gap-2 text-slate-600">
+              <Target className="size-5 text-emerald-500" />
               Ölçülen beceriler
             </dt>
             <dd className="text-right font-extrabold text-slate-900">{skillsTested}</dd>
@@ -56,13 +56,13 @@ export function TopicInfoCard({
         {difficulty && difficultyStyle ? (
           <div>
             <div className="flex items-center justify-between gap-3">
-              <dt className="flex items-center gap-2 text-slate-500">
-                <Gauge className="size-4" />
+              <dt className="flex items-center gap-2 text-slate-600">
+                <Gauge className="size-5 text-amber-500" />
                 Zorluk seviyesi
               </dt>
               <dd className="font-extrabold text-slate-900">{difficulty}</dd>
             </div>
-            <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-slate-100">
+            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-100">
               <div className={`h-full rounded-full ${difficultyStyle.className}`} style={{ width: difficultyStyle.width }} />
             </div>
           </div>
