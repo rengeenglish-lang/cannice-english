@@ -90,7 +90,7 @@ export const topicLessonSchema = z.object({
   title: z.string().trim().min(2).max(200),
   durationMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
   videoUrl: z.string().trim().url().optional().or(z.literal("")),
-  contentBody: z.string().trim().max(16000).optional().or(z.literal("")),
+  contentBody: z.string().trim().max(60000).optional().or(z.literal("")),
 });
 
 export const liveSessionSchema = z.object({

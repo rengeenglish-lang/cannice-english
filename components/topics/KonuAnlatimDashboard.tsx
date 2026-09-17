@@ -6,6 +6,7 @@ import { toggleTopicLessonProgressAction, saveTopicNoteAction } from "@/app/acti
 import { pickStudyQuote } from "@/lib/study-quotes";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
 import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
+import { parseGlossaryEntries, groupGlossaryIntoAccordion } from "@/components/topics/parseGlossaryEntries";
 import { ContentAccordion } from "@/components/topics/ContentAccordion";
 import { TopicSidebar } from "@/components/topics/TopicSidebar";
 import { TopicHero } from "@/components/topics/TopicHero";
@@ -91,8 +92,14 @@ export function KonuAnlatimDashboard({
     isExampleLesson && selectedLesson?.contentBody ? parseExampleBlocks(selectedLesson.contentBody) : [];
 
   const isGirisLesson = selectedLesson ? /Konuya Giriş/i.test(selectedLesson.title) : false;
-  const accordionSections =
-    isGirisLesson && selectedLesson?.contentBody ? parseAccordionSections(selectedLesson.contentBody) : null;
+  const isGlossaryLesson = selectedLesson ? /Sözlüğü/i.test(selectedLesson.title) : false;
+  const accordionSections = (() => {
+    if (isGirisLesson && selectedLesson?.contentBody) return parseAccordionSections(selectedLesson.contentBody);
+    if (isGlossaryLesson && selectedLesson?.contentBody) {
+      return groupGlossaryIntoAccordion(parseGlossaryEntries(selectedLesson.contentBody));
+    }
+    return null;
+  })();
 
   const topicCompleted = (topic: Topic) => topic.lessons.length > 0 && topic.lessons.every((lesson) => completedIds.has(lesson.id));
   const completedTopicCount = topics.filter(topicCompleted).length;
@@ -184,7 +191,14 @@ export function KonuAnlatimDashboard({
                   ) : null}
                 </>
               ) : accordionSections ? (
-                <ContentAccordion sections={accordionSections} />
+                <>
+                  {isGlossaryLesson ? (
+                    <p className="mb-4 text-lg font-semibold text-slate-700">
+                      {"Aşağıdaki liste, her biri bir örnek cümleyle birlikte, onluk gruplar halinde düzenlenmiştir. Particle'ların genel mantığı için Giriş dersine bakabilirsiniz."}
+                    </p>
+                  ) : null}
+                  <ContentAccordion sections={accordionSections} />
+                </>
               ) : selectedLesson.contentBody ? (
                 <div className={CARD}>
                   <p className="whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">{selectedLesson.contentBody}</p>
