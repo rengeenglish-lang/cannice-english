@@ -549,6 +549,37 @@ async function main() {
       "Örnek paragraf: (1) Museums around the world have begun digitizing their collections to improve accessibility. (2) This process allows researchers and the public to view rare artifacts without physically visiting the museum. (3) Some museums also offer virtual reality tours of their galleries. (4) Ticket prices for major museums have risen considerably over the past decade.\nCümle (4), paragrafın odağı olan 'müzelerin koleksiyonlarını dijitalleştirerek erişilebilirliği artırması' ile ilgisiz, bilet fiyatlarındaki artış gibi FARKLI bir konuya (finansal erişilebilirlik) değindiği için anlatım bütünlüğünü bozar; cümle (3) ise dijitalleşme temasıyla hâlâ ilişkili olduğundan yanıltıcı bir seçenek olarak düşünülebilir ama doğru cevap değildir."
     ]
   };
+
+  const phrasalVerbIntro =
+    'Phrasal verb (deyimsel fiil), bir fiil ile "up, on, in, out, down, through, over" gibi bir veya birden fazla particle\'ın (edat/zarf) birleşmesiyle oluşur ve çoğu zaman kendisini oluşturan fiilden tamamen farklı bir anlam kazanır. Örneğin "look" (bakmak) fiili tek başınayken, "look after" (ilgilenmek), "look into" (araştırmak) ve "look down on" (küçümsemek) particle\'larla tamamen farklı anlamlara bürünür. YDS\'de bu konudan ortalama 6 soru gelir ve genellikle bir cümledeki boşluğa anlamca uygun phrasal verb\'ün seçilmesi istenir.\n\n' +
+    "Geçişli mi, geçişsiz mi?\nPhrasal verb'ler nesne alıp almamasına göre ikiye ayrılır. \"Grow up\" (büyümek) fiiline \"onu büyümek\" diyemediğimiz için bu geçişsiz (intransitive) bir phrasal verb'dür ve nesne almaz. \"Look for\" (aramak) fiiline ise \"onu ararız\" diyebildiğimiz için bu geçişli (transitive) bir phrasal verb'dür ve mutlaka bir nesne ister. Geçişli phrasal verb'lerin bir kısmı ayrılabilir (separable): nesne fiil ile particle arasına girebilir (\"turn off the radio\" / \"turn the radio off\"). Bir kısmı ise ayrılamaz (inseparable): nesne her zaman particle'dan sonra gelir (\"look after my dog\" doğrudur, \"look my dog after\" denemez).\n\n" +
+    "Particle'ın anlamı tamamen rastgele değildir\nYDS'de karşınıza çıkan bir phrasal verb'ün tam anlamını bilmeseniz bile, particle'ın kattığı genel anlam yönünü bilmek doğru seçeneğe ulaşmanızı kolaylaştırabilir:\n" +
+    "• ON: temas, destek veya ilerleme/devam bildirir (hold on: tutunmak, count on: güvenmek, go on: devam etmek).\n" +
+    "• IN: bir sınırın içine girmeyi, dahil olmayı veya anlamayı bildirir (join in: katılmak, fill in: doldurmak, take in: özümsemek).\n" +
+    "• OUT: dışarı çıkmayı, eksikliği veya bir şeyi çözüp ortaya çıkarmayı bildirir (run out: tükenmek, find out: öğrenmek, figure out: çözmek).\n" +
+    "• UP: bir noktaya ulaşmayı, tamamlamayı veya artışı bildirir; bazen parçalanma/durma anlamı da taşır (finish up: bitirmek, break up: ayrılmak, give up: vazgeçmek).\n" +
+    "• DOWN: azalmayı, durmayı/hastalanmayı veya küçümsemeyi bildirir (calm down: sakinleşmek, break down: bozulmak, look down on: küçümsemek).\n" +
+    "• THROUGH: bir engelden geçmeyi veya zorlu bir süreci atlatmayı bildirir (get through: atlatmak, go through: yaşamak/geçirmek).\n" +
+    "• OVER: bir şeyin üzerinden (temas olmadan) geçmeyi, engelleri aşıp bir noktaya varmayı veya bir konuyu yeniden gözden geçirmeyi bildirir (go over: gözden geçirmek, get over: atlatmak).\n\n" +
+    "Bu particle mantığı bir formül değildir; her phrasal verb'ü tek tek öğrenmeniz gerekir. Ancak bilmediğiniz bir phrasal verb'le karşılaştığınızda particle'ın genel yönünü hatırlamak, YDS'nin çoktan seçmeli formatında yanlış seçenekleri elemenize yardımcı olabilir.";
+
+  const phrasalVerbGlossary =
+    "Aşağıdaki liste, YDS'de sıkça karşılaşılan phrasal verb'leri particle'larına göre gruplandırır. Her grubu yukarıdaki particle mantığıyla birlikte çalışırsanız kalıcılığı artar.\n\n" +
+    "ON (temas, destek, ilerleme)\n" +
+    "hold on – tutunmak, beklemek\ncount on – güvenmek\nrely on – güvenmek, bağlı olmak\ngo on – devam etmek\ncarry on – sürdürmek\nput on – giymek, takmak\nturn on – açmak (cihaz)\ntake on – üstlenmek, işe almak\n\n" +
+    "IN (içine girme, dahil olma, anlama)\n" +
+    "fill in – doldurmak\njoin in – katılmak\ntake in – özümsemek, içine almak\nmove in – taşınmak\ncheck in – giriş yapmak\nbring in – dahil etmek, içeri getirmek\nhand in – teslim etmek\ngive in – boyun eğmek, pes etmek\n\n" +
+    "OUT (dışarı çıkma, eksiklik, çözme/keşfetme)\n" +
+    "find out – öğrenmek\nfigure out – çözmek, anlamak\nwork out – çözmek, halletmek\nrun out (of) – tükenmek\npoint out – belirtmek, dikkat çekmek\ncarry out – yürütmek, gerçekleştirmek\nturn out – ortaya çıkmak, sonuçlanmak\nleave out – dışarıda bırakmak, atlamak\n\n" +
+    "UP (hedefe ulaşma, tamamlama, artış)\n" +
+    "give up – vazgeçmek\nset up – kurmak\ncome up with – bulmak, ortaya çıkarmak\nbring up – gündeme getirmek, yetiştirmek\nbreak up – ayrılmak, dağılmak\nend up – sonunda bir durumda bulunmak\ncatch up (with) – yetişmek, yakalamak\nspeak up – yüksek sesle konuşmak\n\n" +
+    "DOWN (azalma, durma/hastalanma, küçümseme)\n" +
+    "calm down – sakinleşmek\nbreak down – bozulmak, sinir krizi geçirmek\nturn down – reddetmek, sesini kısmak\nlet down – hayal kırıklığına uğratmak\ncut down (on) – azaltmak\ncome down with – bir hastalığa yakalanmak\nlook down on – küçümsemek\nwrite down – not almak, yazmak\n\n" +
+    "THROUGH (bir engelden geçme, zorlu süreci atlatma)\n" +
+    "get through – atlatmak, tamamlamak\ngo through – yaşamak, bir süreçten geçmek\nsee through – sonuna kadar götürmek\nthink through – enine boyuna düşünmek\nbreak through – bir engeli aşmak, çığır açmak\nfollow through – sonunu getirmek\nget through to – birine ulaşmak, anlatabilmek\n\n" +
+    "OVER (üzerinden geçme, engelleri aşma, tekrar gözden geçirme)\n" +
+    "go over – gözden geçirmek\nget over – atlatmak, üstesinden gelmek\ntake over – devralmak, yönetimi ele geçirmek\nhand over – devretmek\nthink over – iyice düşünmek\nmove over – kenara çekilmek\nlook over – gözden geçirmek";
+
   for (const [index, def] of ydsTopicDefs.entries()) {
     const topic = await db.examTopic.upsert({
       where: { examTypeId_slug: { examTypeId: examTypes.YDS.id, slug: def.slug } },
@@ -556,18 +587,37 @@ async function main() {
       create: { examTypeId: examTypes.YDS.id, slug: def.slug, name: def.name, questionCount: def.questionCount, difficulty: def.difficulty, displayOrder: index },
     });
 
-    const lessonDefs = [
-      {
-        title: `${def.name} – Konuya Giriş`,
-        durationMinutes: 8,
-        contentBody: `Bu bölümde "${def.name}" kategorisinde YDS'de karşınıza çıkabilecek soru tiplerini ve temel çözüm stratejilerini öğreneceksiniz. Sınavda bu konudan ortalama ${def.questionCount} soru gelmektedir.`,
-      },
-      {
-        title: `${def.name} – Örnek Sorular ve Çözümler`,
-        durationMinutes: 12,
-        contentBody: formatExamples(ydsExamples[def.slug]),
-      },
-    ];
+    const lessonDefs =
+      def.slug === "kelime-phrasal-verb"
+        ? [
+            {
+              title: `${def.name} – Konuya Giriş`,
+              durationMinutes: 12,
+              contentBody: phrasalVerbIntro,
+            },
+            {
+              title: `${def.name} – Sık Kullanılan Phrasal Verb'ler Sözlüğü`,
+              durationMinutes: 15,
+              contentBody: phrasalVerbGlossary,
+            },
+            {
+              title: `${def.name} – Örnek Sorular ve Çözümler`,
+              durationMinutes: 12,
+              contentBody: formatExamples(ydsExamples[def.slug]),
+            },
+          ]
+        : [
+            {
+              title: `${def.name} – Konuya Giriş`,
+              durationMinutes: 8,
+              contentBody: `Bu bölümde "${def.name}" kategorisinde YDS'de karşınıza çıkabilecek soru tiplerini ve temel çözüm stratejilerini öğreneceksiniz. Sınavda bu konudan ortalama ${def.questionCount} soru gelmektedir.`,
+            },
+            {
+              title: `${def.name} – Örnek Sorular ve Çözümler`,
+              durationMinutes: 12,
+              contentBody: formatExamples(ydsExamples[def.slug]),
+            },
+          ];
     for (const [lessonIndex, lessonDef] of lessonDefs.entries()) {
       const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
       if (existingLesson) {
