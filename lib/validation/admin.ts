@@ -72,6 +72,27 @@ export const lessonSchema = z.object({
   description: z.string().trim().max(500).optional().or(z.literal("")),
 });
 
+export const topicCategoryEnum = z.enum(["SPEAKING", "WRITING", "READING", "LISTENING"]);
+export const topicDifficultyEnum = z.enum(["Kolay", "Orta", "Zor"]);
+
+export const examTopicSchema = z.object({
+  name: z.string().trim().min(2).max(160),
+  slug: z.string().trim().min(2).max(160).regex(/^[a-z0-9-]+$/, "Sadece küçük harf, rakam ve tire kullanın"),
+  description: z.string().trim().max(2000).optional().or(z.literal("")),
+  questionCount: z.coerce.number().int().min(0).optional().or(z.literal("")),
+  category: z.union([topicCategoryEnum, z.literal("")]).optional(),
+  skillsTested: z.string().trim().max(200).optional().or(z.literal("")),
+  difficulty: z.union([topicDifficultyEnum, z.literal("")]).optional(),
+  displayOrder: z.coerce.number().int().default(0),
+});
+
+export const topicLessonSchema = z.object({
+  title: z.string().trim().min(2).max(200),
+  durationMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
+  videoUrl: z.string().trim().url().optional().or(z.literal("")),
+  contentBody: z.string().trim().max(4000).optional().or(z.literal("")),
+});
+
 export const liveSessionSchema = z.object({
   title: z.string().trim().min(2).max(160),
   cohortLabel: z.string().trim().max(80).optional().or(z.literal("")),

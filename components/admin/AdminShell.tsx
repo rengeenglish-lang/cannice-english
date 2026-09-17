@@ -31,6 +31,7 @@ export function DashboardShell({ role, children }: { role: Role; children: React
               <Link href="/admin/orders" className="dashboard-nav-item" onClick={close}>Siparişler</Link>
               <Link href="/admin/coupons" className="dashboard-nav-item" onClick={close}>Kuponlar</Link>
               <Link href="/admin/products" className="dashboard-nav-item" onClick={close}>Ürünler</Link>
+              <Link href="/admin/konu-anlatim" className="dashboard-nav-item" onClick={close}>Konu Anlatım</Link>
               <Link href="/admin/testimonials" className="dashboard-nav-item" onClick={close}>Katılımcı Görüşleri</Link>
               <Link href="/admin/blog" className="dashboard-nav-item" onClick={close}>Blog</Link>
               <Link href="/admin/submissions" className="dashboard-nav-item" onClick={close}>Değerlendirmeler</Link>

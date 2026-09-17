@@ -423,6 +423,28 @@ async function main() {
     { slug: "paragraf-tamamlama", name: "Paragraf Tamamlama Soruları", questionCount: 4, difficulty: "Orta" },
     { slug: "anlatim-butunlugunu-bozan-cumle", name: "Anlatım Bütünlüğünü Bozan Cümle Soruları", questionCount: 5, difficulty: "Zor" },
   ];
+  const ydsExamples = {
+    "kelime-phrasal-verb":
+      "Örnek soru: \"The company had to ---- its plans due to unexpected budget cuts.\"\n(A) carry out (B) scale back (C) look into (D) come across\nDoğru cevap (B) 'scale back' (küçültmek/azaltmak) — cümledeki 'budget cuts' (bütçe kesintileri) ifadesi, planların küçültülmesi gerektiğini işaret eder; diğer phrasal verb'ler bağlamla uyuşmaz.",
+    "tense-preposition-dilbilgisi":
+      "Örnek soru: \"By the time the ambulance arrived, the patient ---- already ---- consciousness.\"\n(A) has / lost (B) had / lost (C) was / losing (D) will / lose\nDoğru cevap (B) 'had lost' — 'by the time' ile geçmişte bir olaydan ÖNCE tamamlanmış başka bir eylemi anlatan Past Perfect zamanı kullanılır.",
+    "cloze-test":
+      "Örnek metin: \"Climate change is one of the most pressing issues of our time. ---- its causes are complex, the solutions require immediate global cooperation.\"\n(A) Although (B) Because (C) Unless (D) Since\nDoğru cevap (A) 'Although' — cümle bir ZITLIK ilişkisi kuruyor (nedenlerin karmaşık olmasına RAĞMEN çözüm gerekiyor); 'because' nedensellik, 'unless' koşul anlamı verir ve bağlama uymaz.",
+    "cumle-tamamlama":
+      "Örnek soru: \"Although the negotiations lasted for several hours, ----.\"\n(A) the two sides reached an agreement (B) no progress was made (C) it was a sunny day (D) the meeting room was small\nDoğru cevap, cümledeki 'although' (rağmen) bağlacıyla uyumlu bir ZITLIK içeren (B) 'no progress was made' olur.",
+    ceviri:
+      "Örnek çeviri sorusu: \"Bilim insanları, yeni keşfedilen bu türün nesli tükenmekte olan hayvanlar listesine alınması gerektiğini savunuyor.\"\n→ \"Scientists argue that this newly discovered species should be added to the list of endangered animals.\"\nBu örnekte 'nesli tükenmekte olan' (endangered), 'savunmak' (argue) gibi akademik terimlerin doğru İngilizce karşılıklarını bilmek kilit önemdedir.",
+    paragraf:
+      "Örnek soru tipi: Kısa bir paragraf okunur (örn. bir bilimsel keşfin tarihçesi) ve ardından 'Paragrafa göre aşağıdakilerden hangisi doğrudur/çıkarılabilir?' şeklinde bir soru sorulur. Paragrafta 'the discovery was initially met with skepticism but later confirmed by independent researchers' cümlesi geçiyorsa, doğru cevap keşfin ÖNCE şüpheyle karşılandığını ama SONRA doğrulandığını yansıtan seçenek olmalıdır.",
+    "diyalog-tamamlama":
+      "Örnek soru: \"A: I heard you're moving to a new city for your job. B: Yes, ----. A: That must be exciting but also a bit stressful.\"\n(A) I can't wait to get started (B) I don't have a job (C) the weather is nice there (D) I already live there\nDoğru cevap (A) — B'nin cevabı, A'nın taşınma haberine ve sonraki 'exciting but stressful' yorumuna mantıklı bir şekilde bağlanmalıdır.",
+    "yakin-anlamli-cumle":
+      "Örnek soru: \"Despite his lack of experience, he managed to complete the project successfully.\" ifadesine en yakın anlamlı cümleyi seçin.\nDoğru cevap: \"Although he was not experienced, he still completed the project successfully.\" — 'despite' ve 'although' aynı zıtlık ilişkisini farklı yapılarla ifade eder, cümlenin temel anlamı korunur.",
+    "paragraf-tamamlama":
+      "Örnek: Bir paragrafın ortasında bir cümle eksik bırakılmıştır; paragrafın öncesi teknolojinin eğitimdeki olumlu etkilerinden, sonrası ise bunun getirdiği zorluklardan bahsediyorsa, doğru tamamlayıcı cümle bu iki fikir arasında bir GEÇİŞ sağlamalıdır (örn. \"However, this rapid adoption of technology has not been without its challenges.\").",
+    "anlatim-butunlugunu-bozan-cumle":
+      "Örnek paragraf: (1) Bees play a crucial role in pollinating crops worldwide. (2) Their population has been declining due to pesticide use and habitat loss. (3) Many people keep bees as a hobby in their backyards. (4) Scientists warn that this decline could have severe consequences for global food security.\nCümle (3), paragrafın ana konusu olan 'arı popülasyonundaki azalma ve sonuçları' ile ilgisiz, konu dışı bir bilgi içerdiği için anlatım bütünlüğünü bozar ve çıkarılmalıdır.",
+  };
   for (const [index, def] of ydsTopicDefs.entries()) {
     const topic = await db.examTopic.upsert({
       where: { examTypeId_slug: { examTypeId: examTypes.YDS.id, slug: def.slug } },
@@ -439,7 +461,7 @@ async function main() {
       {
         title: `${def.name} – Örnek Sorular ve Çözümler`,
         durationMinutes: 12,
-        contentBody: `Bu derste "${def.name}" ile ilgili örnek sorular üzerinden adım adım çözüm tekniklerini uygulamalı olarak inceleyeceğiz.`,
+        contentBody: ydsExamples[def.slug],
       },
     ];
     for (const [lessonIndex, lessonDef] of lessonDefs.entries()) {
@@ -539,6 +561,24 @@ async function main() {
     "paragraf-tamamlama": "Orta",
     "anlam-butunlugunu-bozan-cumle": "Zor",
   };
+  const yokdilExamples = {
+    "paragraf-okuma-anlama":
+      "Örnek: Akademik bir paragraf, bir tıbbi tedavinin tarihçesini ve etkinliğini tartışıyor.\nSoru: \"What is the main purpose of the passage?\"\nDoğru cevap, paragrafın GENEL amacını yansıtmalıdır (örn. 'to describe the development and effectiveness of a treatment'), tek bir detayı değil.",
+    dilbilgisi:
+      "Örnek soru: \"If the researchers ---- more time, they ---- the experiment differently.\"\n(A) had / would have designed (B) have / will design (C) had had / would have designed (D) have had / design\nDoğru cevap (C) — bu bir Type 3 (geçmişe yönelik gerçek dışı) koşul cümlesidir: 'had had' + 'would have designed' yapısı gerekir.",
+    ceviri:
+      "Örnek: \"Yapılan araştırmalar, düzenli egzersizin bilişsel işlevleri iyileştirdiğini göstermektedir.\"\n→ \"Studies conducted show that regular exercise improves cognitive functions.\"\nAkademik çeviride 'bilişsel işlevler' (cognitive functions), 'göstermektedir' (show/demonstrate) gibi terimlerin doğru akademik karşılıklarını kullanmak önemlidir.",
+    "cumle-tamamlama":
+      "Örnek soru: \"Since the new policy was implemented, ----.\"\n(A) productivity has increased significantly (B) the policy will be implemented next year (C) employees were unaware of any changes (D) the company had no policies before\nDoğru cevap (A) — 'since' (-dığından beri) bir zaman ilişkisi kurar ve cümlenin geri kalanı bu politikanın SONUCUNU (present perfect ile) yansıtmalıdır.",
+    "cloze-test":
+      "Örnek metin: \"The findings of this study, ---- limited by a small sample size, provide valuable insights into the phenomenon.\"\n(A) despite being (B) because of being (C) in spite (D) although\nDoğru cevap (A) 'despite being' — bir isim öbeği önce edat gerektirir; 'despite' + gerund yapısı burada dilbilgisel olarak doğru işler.",
+    "kelime-bilgisi":
+      "Örnek soru: \"The professor's argument was so ---- that even his critics found it difficult to disagree.\"\n(A) compelling (B) trivial (C) redundant (D) ambiguous\nDoğru cevap (A) 'compelling' (ikna edici) — cümledeki 'even his critics found it difficult to disagree' ifadesi, argümanın güçlü olduğunu işaret eder.",
+    "paragraf-tamamlama":
+      "Örnek: Bir paragrafın sonunda eksik bırakılan sonuç cümlesi için, paragraf boyunca bir teorinin hem güçlü hem zayıf yönlerinden bahsedilmişse, doğru tamamlayıcı cümle bu DENGELİ değerlendirmeyi yansıtmalıdır (örn. \"Therefore, while the theory offers valuable insights, further research is needed to address its limitations.\").",
+    "anlam-butunlugunu-bozan-cumle":
+      "Örnek paragraf: (1) Renewable energy sources are gaining popularity worldwide. (2) Solar panels have become significantly cheaper over the past decade. (3) Many countries offer tax incentives for renewable energy adoption. (4) Fossil fuels have been used for centuries as the primary energy source.\nCümle (4), paragrafın ana odağı olan 'yenilenebilir enerjinin yükselişi' ile ilgisiz, tamamen KONUDIŞI bir geçmiş bilgisi sunduğu için anlatım bütünlüğünü bozar.",
+  };
   const yokdilExamCodes = ["YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN"];
   for (const examCode of yokdilExamCodes) {
     for (const [index, def] of yokdilAltTestDefs.entries()) {
@@ -557,6 +597,19 @@ async function main() {
         } else {
           await db.topicLesson.create({ data: { topicId: topic.id, position: lessonIndex, title: subtopic, durationMinutes: 7, contentBody } });
         }
+      }
+
+      const exampleLessonPosition = def.subtopics.length;
+      const exampleLesson = {
+        title: "Örnek Sorular ve Çözümler",
+        durationMinutes: 8,
+        contentBody: yokdilExamples[def.slug],
+      };
+      const existingExampleLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: exampleLessonPosition } });
+      if (existingExampleLesson) {
+        await db.topicLesson.update({ where: { id: existingExampleLesson.id }, data: exampleLesson });
+      } else {
+        await db.topicLesson.create({ data: { topicId: topic.id, position: exampleLessonPosition, ...exampleLesson } });
       }
     }
   }
@@ -805,6 +858,48 @@ async function main() {
     "listening-highlight-incorrect-words": { category: "LISTENING", skillsTested: "Dinleme, Dikkat", difficulty: "Zor" },
     "listening-write-from-dictation": { category: "LISTENING", skillsTested: "Dinleme, Yazım, Dilbilgisi", difficulty: "Orta" },
   };
+  const pteExamples = {
+    "read-aloud":
+      "Örnek metin: \"Renewable energy sources, such as solar and wind power, are becoming increasingly important as the world seeks to reduce its reliance on fossil fuels.\"\nBu cümleyi okurken 'renewable energy sources', 'solar and wind power' ve 'fossil fuels' gibi öbekleri tek bir nefeste, doğal bir vurguyla okuyun; virgülden sonra kısa bir duraklama yapın.",
+    "repeat-sentence":
+      "Örnek cümle (dinletilen): \"The committee will announce its final decision next Monday.\"\nBu cümleyi tekrar ederken önce anlamına odaklanın (kim, ne zaman, ne yapacak), ardından kelimeleri bu çerçevede hatırlayın. Cümlenin tamamını hatırlayamasanız bile 'committee', 'decision', 'next Monday' gibi anahtar kelimeleri doğru sırayla söylemek kısmi puan kazandırır.",
+    "describe-image":
+      "Örnek görsel: Bir ülkenin 2015-2023 yılları arası internet kullanıcı sayısını gösteren çizgi grafik.\nÖrnek cevap yapısı: \"This line graph illustrates the number of internet users between 2015 and 2023. Overall, there was a steady upward trend, rising from approximately 10 million to 45 million users. The most significant increase occurred between 2019 and 2021...\"\nBaşlık, genel eğilim ve en belirgin değişiklikle cevabınızı bu şekilde yapılandırın.",
+    "retell-lecture":
+      "Örnek: Bir profesör, şehirlerdeki 'ada etkisi' (urban heat island effect) konusunda kısa bir ders veriyor; nedenlerini (beton/asfalt yüzeyler) ve çözümlerini (yeşil çatılar) anlatıyor.\nÖrnek cevap: \"The lecture discusses the urban heat island effect, which occurs when cities become significantly warmer than surrounding areas due to concrete and asphalt surfaces. Possible solutions include...\"\nNotlarınızdaki ana başlıkları bu şekilde tam cümlelere dönüştürün.",
+    "answer-short-question":
+      "Örnek soru (dinletilen): \"What do we call the study of celestial objects such as stars and planets?\"\nBeklenen cevap: \"Astronomy\" (tek kelime, kısa ve net). Uzun bir cümle kurmaya çalışmadan, sorunun gerektirdiği tek terimi doğrudan söyleyin.",
+    "summarize-written-text":
+      "Örnek metin (kısaltılmış): 'Diversity and pluralism in a nation's media are obvious virtues... The degree of diversity is a function of two variables: the distribution of circulation across outlets, and the distribution of ownership.'\nÖrnek özet cümlesi: \"Media diversity, which depends on the distribution of both circulation and ownership across outlets, is essential for preventing the manipulation of news and opinion.\" (Tek cümle, 5-75 kelime aralığında.)",
+    "write-essay":
+      "Örnek konu: \"Some people believe technology has made our lives more complicated, while others believe it has simplified our lives. Discuss both views and give your opinion.\"\nÖrnek giriş cümlesi: \"While some argue that technology has introduced unnecessary complexity into daily life, I believe that, on balance, it has significantly simplified how we work, communicate, and access information.\"",
+    "reading-mcq-single":
+      "Örnek metin: 'A recent study found that bamboo grows faster than any other plant on Earth, with some species growing up to 91 cm in a single day.'\nSoru: \"According to the passage, bamboo is notable for its...\" (A) height (B) growth rate (C) flexibility (D) color\nDoğru cevap (B) 'growth rate' — metinde açıkça 'grows faster' vurgulanıyor, diğer seçenekler metinde geçmiyor.",
+    "reading-mcq-multiple":
+      "Örnek metin bir ahtapotun zeka özelliklerini anlatıyor: alet kullanımı, problem çözme, kısa yaşam süresi.\nSoru: \"Which TWO of the following are mentioned as evidence of octopus intelligence?\"\nDoğru seçenekler metinde AÇIKÇA geçen 'alet kullanımı' ve 'problem çözme' olur; metinle çelişen veya metinde geçmeyen bir seçenek asla işaretlenmemelidir.",
+    "reading-reorder-paragraphs":
+      "Örnek 4 cümle (karışık sırada): (1) 'However, this theory was later challenged by new evidence.' (2) 'For decades, scientists believed early humans migrated in a single wave.' (3) 'These findings suggested multiple migration waves.' (4) 'As a result, our understanding has become more complex.'\nDoğru sıra: 2-1-3-4 — cümle 2 konuyu tanıtır, 1 'however' ile karşıt gelişme sunar, 3 'these findings' ile 1'e referans verir, 4 sonucu özetler.",
+    "reading-fill-in-blanks":
+      "Örnek cümle: \"Despite the __________ evidence, some scientists remained skeptical of the new theory.\" Kelime havuzu: [overwhelming, overwhelmed, overwhelm, overwhelmingly].\nBoşluktan sonra bir isim ('evidence') geldiği için sıfat formu gerekir: doğru cevap 'overwhelming'.",
+    "reading-writing-fill-in-blanks":
+      "Örnek cümle: \"The research team __________ (conclude/concluded/concluding/conclusion) that the results were statistically significant.\"\nCümlenin geçmiş zamanda anlatılan bir araştırma sonucunu ifade ettiği bağlamdan anlaşılıyor, bu yüzden doğru seçenek 'concluded' (basit geçmiş zaman).",
+    "listening-summarize-spoken-text":
+      "Örnek: 70 saniyelik bir ders, 'plasebo etkisinin' tıp araştırmalarındaki rolünü anlatıyor.\nÖrnek özet (60 kelime): \"The lecture explains the placebo effect, a phenomenon where patients experience real improvements after receiving treatments with no active ingredients. The professor notes that this effect is linked to patient expectations and is why researchers use control groups in clinical trials.\"",
+    "listening-mcq-multiple":
+      "Örnek kayıt: Bir profesör, 'destansı şiirin' üç özelliğini (uzun anlatı, kahramanlık teması, sözlü gelenek) anlatıyor.\nSoru: \"Which TWO features of epic poetry does the professor mention?\"\nDoğru cevaplar kayıtta AÇIKÇA belirtilen iki özellik olur; kayıtta hiç geçmeyen bir seçenek asla işaretlenmemelidir.",
+    "listening-fill-in-blanks":
+      "Örnek transkript: \"The Industrial Revolution began in Britain in the late __________ century and gradually spread to other parts of Europe.\"\nDinlenen kayıtta 'eighteenth' kelimesi duyulur. İmla önemlidir: kelimeyi doğru yazmak, doğru duymak kadar önemlidir.",
+    "listening-highlight-correct-summary":
+      "Örnek kayıt: Bir konuşmacı, balinaların göç davranışlarını ve bunun beslenme/üreme alanları arasındaki mevsimsel geçişle ilişkisini anlatıyor.\nDoğru özet seçeneği HEM beslenme HEM üreme nedenini kapsayan seçenek olur; yalnızca birini içeren veya kayıtta geçmeyen bir üçüncü neden ekleyen seçenekler yanıltıcıdır.",
+    "listening-mcq-single":
+      "Örnek kayıt: Bir öğrenci kütüphanedeki bir kitabı bulamadığını söylüyor, görevli kitabın rezerve bölümünde olabileceğini belirtiyor.\nSoru: \"What does the librarian suggest the student do?\"\nDoğru cevap, görevlinin ÖNERDİĞİ eylemi yansıtan seçenek olur, öğrencinin sorununu tekrar eden bir seçenek değil.",
+    "listening-select-missing-word":
+      "Örnek kayıt: \"...and so, despite the initial setbacks, the expedition ultimately proved to be a resounding [BIP].\" Seçenekler: success, failure, mystery, disappointment.\n'Despite the initial setbacks... ultimately' ifadesi olumlu bir sonucu işaret eder, doğru cevap 'success'tir.",
+    "listening-highlight-incorrect-words":
+      "Örnek: Ekrandaki metinde 'The bridge was constructed using traditional methods' yazarken, kayıtta aslında 'innovative methods' söyleniyor.\n'Traditional' kelimesi tıklanarak işaretlenmelidir — kelimeler kulağa benzer gelmese de anlamca zıt olabilir, bu yüzden dikkatli dinlemek şarttır.",
+    "listening-write-from-dictation":
+      "Örnek dinletilen cümle: \"The museum will remain closed for renovations until further notice.\"\nBu cümleyi dinledikten hemen sonra kelime kelime yazmaya başlayın; uzun bir kelimeyi hatırlamakta zorlanırsanız cümlenin geri kalanını yazıp en son o kelimeye dönebilirsiniz.",
+  };
   for (const [index, def] of pteTopicDefs.entries()) {
     const meta = pteTopicMeta[def.slug];
     const topic = await db.examTopic.upsert({
@@ -813,7 +908,8 @@ async function main() {
       create: { examTypeId: examTypes.PTE.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
     });
 
-    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+    const pteLessons = [...def.lessons, { title: "Örnek Sorular", durationMinutes: 6, contentBody: pteExamples[def.slug] }];
+    for (const [lessonIndex, lessonDef] of pteLessons.entries()) {
       const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
       if (existingLesson) {
         await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
@@ -1062,6 +1158,50 @@ async function main() {
     "toefl-integrated-writing": { category: "WRITING", skillsTested: "Okuma, Dinleme, Yazma, Karşılaştırma", difficulty: "Zor" },
     "toefl-independent-writing": { category: "WRITING", skillsTested: "Yazma, Fikir Geliştirme, Dilbilgisi", difficulty: "Orta" },
   };
+  const toeflExamples = {
+    "toefl-vocabulary":
+      "Örnek cümle: \"The company's profits **plummeted** after the scandal became public.\"\nSoru: \"plummeted\" kelimesine en yakın anlam nedir? (A) increased (B) dropped sharply (C) remained stable (D) slowly declined\nDoğru cevap (B) — 'plummeted' ani ve sert bir düşüşü ifade eder; 'scandal' bağlamı da hızlı bir düşüşü destekler.",
+    "toefl-reference":
+      "Örnek cümle: \"Researchers studied the migration patterns of arctic terns, which travel nearly 70,000 kilometers annually. **This** makes them the longest-migrating animals on Earth.\"\n'This' neye atıfta bulunur? Doğru cevap: 'traveling nearly 70,000 kilometers annually' — zamir bir önceki cümledeki bu spesifik gerçeğe işaret eder, sadece 'arctic terns'e değil.",
+    "toefl-sentence-simplification":
+      "Orijinal cümle: \"Although coral reefs cover less than one percent of the ocean floor, they support approximately twenty-five percent of all marine species.\"\nDoğru sadeleştirme: \"Coral reefs occupy a tiny fraction of the ocean floor yet host a quarter of all marine species.\" Bu seçenek her iki bilgiyi de korur; yanlış seçenekler genellikle bunlardan birini atlar.",
+    "toefl-insert-text":
+      "Metin: \"...Many species have adapted to urban environments. [■A] Pigeons, for example, now nest on buildings. [■B] Raccoons have learned to open garbage cans. [■C] This adaptability, however, does not apply to all species. [■D]\"\nVerilen cümle: \"Similarly, some birds have altered their migration patterns.\" Bu cümle [■B] konumuna yerleşir çünkü 'similarly' bir önceki örnekle paralel yeni bir örnek sunar.",
+    "toefl-factual-information":
+      "Örnek metin: \"The Great Barrier Reef, located off the coast of Australia, is the world's largest coral reef system, stretching over 2,300 kilometers.\"\nSoru: \"According to the passage, the Great Barrier Reef is notable for its...\" Doğru cevap metinde birebir geçen 'length' (2,300 km) bilgisini yansıtan seçenektir.",
+    "toefl-negative-factual":
+      "Örnek metin, bir bitkinin üç özelliğinden bahsediyor: kuraklığa dayanıklılık, hızlı büyüme, düşük bakım ihtiyacı.\nSoru: \"All of the following are mentioned EXCEPT:\" (A) drought resistance (B) rapid growth (C) low maintenance (D) colorful flowers\nDoğru cevap (D) — metinde 'colorful flowers' hiç geçmez.",
+    "toefl-inference":
+      "Örnek metin: \"Despite repeated warnings from scientists, coastal development continued at an unprecedented rate throughout the decade.\"\nSoru: \"It can be inferred that...\" Doğru cevap, metinde DOĞRUDAN yazmayan ama mantıken çıkarılabilecek bir sonuç olmalı (örn. 'economic interests were prioritized over environmental concerns').",
+    "toefl-rhetorical-purpose":
+      "Örnek metin: \"Consider the case of the passenger pigeon, once so numerous that flocks darkened the sky for hours. By 1914, the species was extinct.\"\nSoru: \"Why does the author mention the passenger pigeon?\" Doğru cevap bu örneğin İŞLEVİNİ açıklar (örn. 'to illustrate how quickly an abundant species can become extinct').",
+    "toefl-prose-summary":
+      "Örnek: Bir metin fotosentez sürecini üç açıdan anlatıyor: ışık enerjisinin emilimi, kimyasal reaksiyonlar, oksijen üretimi.\nDoğru özet cümleleri bu ÜÇ ana fikri kapsar; metindeki küçük bir detayı ana fikirmiş gibi sunan seçenekler yanlıştır.",
+    "toefl-fill-table":
+      "Örnek: Metin Rönesans ve Aydınlanma Çağı'nı karşılaştırıyor. 'Sanat ve dine odaklanma' cümlesi Rönesans sütununa, 'bilim ve akla odaklanma' cümlesi Aydınlanma sütununa yerleştirilir — her cümlenin hangi dönemin karakteristik özelliğini yansıttığını metinden takip edin.",
+    "toefl-gist-content":
+      "Örnek: Bir öğrenci ile kütüphane görevlisi arasındaki konuşma, bir kitabın nasıl rezerve edileceğini konu alıyor.\nSoru: \"What is the conversation mainly about?\" Doğru cevap konuşmanın GENEL amacını yansıtır ('how to reserve a library book'), tek bir küçük detayı değil.",
+    "toefl-gist-purpose":
+      "Örnek: Bir öğrenci profesörün ofis saatine gelip \"I'm having trouble understanding the reading assignment\" diyor.\nSoru: \"Why does the student visit the professor?\" Doğru cevap: 'to get help understanding a reading assignment'.",
+    "toefl-listening-detail":
+      "Örnek ders: Profesör, DNA'nın çift sarmal yapısının 1953'te Watson ve Crick tarafından keşfedildiğini anlatıyor.\nSoru: \"When was the structure of DNA discovered?\" Doğru cevap: '1953' — açıkça belirtilen bir detay.",
+    "toefl-function":
+      "Örnek: Bir öğrenci alaycı bir tonda \"Oh, great, ANOTHER group project\" diyor.\nSoru: \"What does the student mean?\" Doğru cevap cümlenin gerçek anlamının TERSİni yansıtır (örn. 'She is not looking forward to the project') — sarkastik ton, kelimenin literal anlamını geçersiz kılar.",
+    "toefl-attitude":
+      "Örnek: Bir profesör tereddütlü bir tonla \"Well, some researchers claim this, though the evidence is far from conclusive\" diyor.\nSoru: \"What is the professor's attitude?\" Doğru cevap: 'skeptical' (şüpheci) — 'though the evidence is far from conclusive' ifadesi tam bir kabul değil şüphe belirtir.",
+    "toefl-organization":
+      "Örnek: Bir ders önce bir sorunu (deniz kirliliği) tanımlıyor, sonra nedenlerini sıralıyor, son olarak çözüm önerileri sunuyor.\nSoru: \"How does the professor organize the information?\" Doğru cevap dersin BÜTÜNSEL yapısını yansıtır: 'by presenting a problem, then its causes, then solutions'.",
+    "toefl-connecting-content":
+      "Örnek: Bir ders iki yıldız türünü (kırmızı dev ve beyaz cüce) karşılaştırıyor; kırmızı devler büyük ve soğuk, beyaz cüceler küçük ve sıcak.\nBir tabloyu doldurma sorusunda 'büyük boyut' kırmızı dev sütununa, 'yüksek sıcaklık' beyaz cüce sütununa yerleştirilir.",
+    "toefl-independent-speaking":
+      "Örnek soru: \"Some people prefer to study alone, while others prefer to study in groups. Which do you prefer and why?\"\nÖrnek cevap iskeleti: \"I personally prefer studying in groups because it allows me to learn from different perspectives. For example, when I struggled with a concept in economics, a classmate explained it in a way that finally made sense.\"",
+    "toefl-integrated-speaking":
+      "Örnek: Bir kampüs duyurusu kütüphane saatlerinin uzatılacağını duyuruyor. Dinlenen konuşmada bir öğrenci buna sevinir çünkü sınav döneminde daha uzun çalışabilecektir.\nÖrnek cevap: \"The announcement states that the library will extend its hours. The student supports this because it will allow him to study longer during exams.\"",
+    "toefl-integrated-writing":
+      "Örnek: Okunan metin, bir şirketin yeni ürün stratejisinin üç avantajını savunuyor (maliyet, hız, memnuniyet). Dinlenen ders, profesörün bu üç avantaja karşı üç karşı argüman sunması (gizli maliyetler, kalite sorunları, şikayetler).\nYazınız bu üç nokta çiftini ayrı ayrı ele almalıdır.",
+    "toefl-independent-writing":
+      "Örnek konu: \"Do you agree or disagree: Working from home is more productive than working in a traditional office.\"\nÖrnek tez cümlesi: \"While remote work offers fewer distractions, I believe traditional offices ultimately foster greater productivity through structured routines and immediate collaboration.\"",
+  };
   for (const [index, def] of toeflTopicDefs.entries()) {
     const meta = toeflTopicMeta[def.slug];
     const topic = await db.examTopic.upsert({
@@ -1070,7 +1210,8 @@ async function main() {
       create: { examTypeId: examTypes.TOEFL.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
     });
 
-    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+    const toeflLessons = [...def.lessons, { title: "Örnek Sorular", durationMinutes: 6, contentBody: toeflExamples[def.slug] }];
+    for (const [lessonIndex, lessonDef] of toeflLessons.entries()) {
       const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
       if (existingLesson) {
         await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
@@ -1295,6 +1436,46 @@ async function main() {
     "ielts-speaking-part2": { category: "SPEAKING", skillsTested: "Akıcılık, Organizasyon", difficulty: "Orta" },
     "ielts-speaking-part3": { category: "SPEAKING", skillsTested: "Soyut Tartışma, Fikir Geliştirme", difficulty: "Zor" },
   };
+  const ieltsExamples = {
+    "ielts-listening-multiple-choice":
+      "Örnek: Bir üniversite tanıtım turunda rehber kütüphaneden bahsediyor.\nSoru: \"What does the guide say about the library's opening hours?\" (A) It's open 24 hours. (B) It closes at midnight during exams. (C) It's closed on weekends.\nKayıtta 'during exam period, the library stays open until midnight' deniyorsa doğru cevap (B) — kayıttaki KOŞULU da doğru yakalamak önemlidir.",
+    "ielts-listening-matching":
+      "Örnek: Beş kulübün (satranç, fotoğrafçılık, tiyatro...) toplantı günleri eşleştirilecek.\nKayıtta 'the chess club meets every Tuesday, while the photography club has moved to Thursdays this term' deniyorsa, konuşmacının SON söylediği bilgiyi (Thursdays) doğru cevap olarak alın.",
+    "ielts-listening-plan-map-diagram":
+      "Örnek: Bir kampüs haritasında rehber şöyle diyor: \"From the main entrance, walk straight past the cafeteria, then turn left at the fountain — the student center is the second building on your right.\"\nBu yönergeleri takip ederek doğru harfi haritada işaretlersiniz.",
+    "ielts-listening-form-note-table":
+      "Örnek form: \"Name: John ______ (1) | Membership type: ______ (2) | Annual fee: £ ______ (3)\"\nKayıtta \"My surname is Whitfield, W-H-I-T-F-I-E-L-D. I'd like the family membership, eighty-five pounds a year\" deniyorsa cevaplar: (1) Whitfield (2) family (3) 85.",
+    "ielts-listening-flowchart-summary-sentence":
+      "Örnek akış şeması: \"Step 1: Submit application → Step 2: ______ → Step 3: Receive confirmation email\"\nKayıtta \"it will be reviewed by our admissions team, which usually takes 3-5 business days\" deniyorsa boşluğa 'reviewed by admissions team' yazılır.",
+    "ielts-listening-short-answer":
+      "Örnek soru: \"What piece of equipment does the speaker say is essential for the hiking trip?\"\nKayıtta \"Don't forget to bring a good pair of waterproof boots — that's the one thing you really can't do without\" deniyorsa cevap: 'waterproof boots'.",
+    "ielts-reading-multiple-choice":
+      "Örnek metin: \"While early critics dismissed the artist's work as unconventional, later generations came to regard it as revolutionary.\"\nSoru: \"How did later generations view the artist's work?\" Doğru cevap (B) 'revolutionary' — metinde birebir bu kelime geçiyor.",
+    "ielts-reading-true-false-not-given":
+      "Örnek metin: \"The bridge, completed in 1932, was the longest suspension bridge in the world at the time.\"\nİfade: \"The bridge is currently the longest suspension bridge in the world.\" Doğru cevap: FALSE — metin 'at the time' diyor, bu şu an için geçerli bir iddia değil, bilgiyle çelişiyor.",
+    "ielts-reading-yes-no-not-given":
+      "Örnek metin: \"In my view, current urban planning policies fail to adequately address the needs of low-income residents.\"\nİfade: \"The author believes urban planning policies are inadequate.\" Doğru cevap: YES — yazar bunu açıkça kendi görüşü olarak belirtmiştir.",
+    "ielts-reading-matching-headings":
+      "Örnek paragraf: 'While the initial cost of solar panel installation can be significant, the long-term savings on energy bills, combined with government incentives, often make it a financially sound investment.'\nBu paragrafın ana fikri MALİYET/YATIRIM olduğu için en uygun başlık \"The financial benefits of solar energy\" olur.",
+    "ielts-reading-matching-info-features-endings":
+      "Örnek (Matching Features): Üç araştırmacının farklı teorileri anlatılıyor. Metinde 'Chen argued that climatic conditions were the dominant influence' cümlesi varsa, \"proposed that climate was the primary factor\" ifadesi Chen ile eşleştirilir.",
+    "ielts-reading-sentence-summary-table-completion":
+      "Örnek cümle: \"The experiment showed that plants grown in ______ conditions produced significantly more fruit.\"\nMetinde 'plants exposed to controlled greenhouse conditions yielded 40% more fruit' cümlesi varsa, boşluğa metinden birebir 'controlled greenhouse' yazılır.",
+    "ielts-reading-diagram-label":
+      "Örnek: Bir su arıtma sistemi diyagramında Boşluk A filtreleme aşamasını gösteriyor. Metinde \"the water then passes through a sand filter, which removes larger particles\" varsa, Boşluk A'ya 'sand filter' yazılır.",
+    "ielts-reading-short-answer":
+      "Örnek soru: \"What material was traditionally used to make the roofs mentioned in the passage?\"\nMetinde \"Roofs were traditionally thatched with local reeds before corrugated iron became available\" varsa, cevap: 'reeds' veya 'local reeds'.",
+    "ielts-writing-task1":
+      "Örnek görev: 2000-2020 arası üç ülkenin yenilenebilir enerji kullanım oranını gösteren çizgi grafik.\nÖrnek giriş cümlesi: \"The line graph illustrates the percentage of renewable energy consumption in three countries from 2000 to 2020.\" Ardından en belirgin eğilim (örn. 'Country X showed the steepest increase, rising from 5% to 35%') detaylandırılır.",
+    "ielts-writing-task2":
+      "Örnek konu: \"Some people think unpaid community service should be compulsory in high schools. To what extent do you agree?\"\nÖrnek tez cümlesi: \"While I acknowledge the potential benefits of community service, I believe making it compulsory could undermine its educational value and place undue burden on students.\"",
+    "ielts-speaking-part1":
+      "Örnek soru: \"Do you prefer to spend your free time indoors or outdoors?\"\nÖrnek cevap: \"I'd say I prefer outdoor activities, especially hiking. There's something refreshing about being in nature after a long week of studying.\" (Kısa gerekçe + kişisel örnek.)",
+    "ielts-speaking-part2":
+      "Örnek kart: \"Describe a skill you would like to learn. You should say: what it is, why you want to learn it, how you would learn it, and how it would benefit you.\"\nÖrnek yapı: konuyu tanıtın, sırayla her alt maddeye değinin, kişisel bir gözlemle bitirin.",
+    "ielts-speaking-part3":
+      "Örnek soru (Part 2'de 'bir hediye'den bahsedildiyse): \"Why do you think people give gifts on special occasions?\"\nÖrnek cevap: \"I think gift-giving serves several social functions — it strengthens relationships and, in many cultures, is tied to notions of reciprocity and social obligation.\" (Genelleme + gerekçe.)",
+  };
   for (const [index, def] of ieltsTopicDefs.entries()) {
     const meta = ieltsTopicMeta[def.slug];
     const topic = await db.examTopic.upsert({
@@ -1303,7 +1484,8 @@ async function main() {
       create: { examTypeId: examTypes.IELTS.id, slug: def.slug, name: def.name, description: def.description, questionCount: def.questionCount, displayOrder: index, ...meta },
     });
 
-    for (const [lessonIndex, lessonDef] of def.lessons.entries()) {
+    const ieltsLessons = [...def.lessons, { title: "Örnek Sorular", durationMinutes: 6, contentBody: ieltsExamples[def.slug] }];
+    for (const [lessonIndex, lessonDef] of ieltsLessons.entries()) {
       const existingLesson = await db.topicLesson.findFirst({ where: { topicId: topic.id, position: lessonIndex } });
       if (existingLesson) {
         await db.topicLesson.update({ where: { id: existingLesson.id }, data: { title: lessonDef.title, durationMinutes: lessonDef.durationMinutes, contentBody: lessonDef.contentBody } });
