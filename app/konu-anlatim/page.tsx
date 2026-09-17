@@ -40,7 +40,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       <h1 className="mt-2 text-3xl font-extrabold leading-[1.08] tracking-[-.02em] text-slate-900 sm:text-4xl">
         Sınavınıza konu konu, sıfırdan hazırlanın
       </h1>
-      <p className="mt-3 max-w-2xl text-slate-500">Her konunun sınavda kaç soru olarak karşınıza çıktığını görün, dersleri sırayla tamamlayın.</p>
+      <p className="mt-3 max-w-2xl text-lg font-semibold text-slate-700">Her konunun sınavda kaç soru olarak karşınıza çıktığını görün, dersleri sırayla tamamlayın.</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         {exams.map((item) => (

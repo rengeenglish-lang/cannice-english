@@ -5,6 +5,8 @@ import Link from "next/link";
 import { toggleTopicLessonProgressAction, saveTopicNoteAction } from "@/app/actions/topics";
 import { pickStudyQuote } from "@/lib/study-quotes";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
+import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
+import { ContentAccordion } from "@/components/topics/ContentAccordion";
 import { TopicSidebar } from "@/components/topics/TopicSidebar";
 import { TopicHero } from "@/components/topics/TopicHero";
 import { SubtopicTabs } from "@/components/topics/SubtopicTabs";
@@ -87,6 +89,10 @@ export function KonuAnlatimDashboard({
   const isExampleLesson = selectedLesson ? /Örnek Sorular/i.test(selectedLesson.title) : false;
   const parsedExamples =
     isExampleLesson && selectedLesson?.contentBody ? parseExampleBlocks(selectedLesson.contentBody) : [];
+
+  const isGirisLesson = selectedLesson ? /Konuya Giriş/i.test(selectedLesson.title) : false;
+  const accordionSections =
+    isGirisLesson && selectedLesson?.contentBody ? parseAccordionSections(selectedLesson.contentBody) : null;
 
   const topicCompleted = (topic: Topic) => topic.lessons.length > 0 && topic.lessons.every((lesson) => completedIds.has(lesson.id));
   const completedTopicCount = topics.filter(topicCompleted).length;
@@ -177,9 +183,11 @@ export function KonuAnlatimDashboard({
                     />
                   ) : null}
                 </>
+              ) : accordionSections ? (
+                <ContentAccordion sections={accordionSections} />
               ) : selectedLesson.contentBody ? (
                 <div className={CARD}>
-                  <p className="whitespace-pre-line text-xl leading-9 text-slate-800">{selectedLesson.contentBody}</p>
+                  <p className="whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">{selectedLesson.contentBody}</p>
                 </div>
               ) : (
                 <div className={CARD}>

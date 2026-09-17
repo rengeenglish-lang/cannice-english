@@ -40,7 +40,7 @@ export function TopicHero({
             {name}
           </h1>
           {description ? (
-            <p className="mt-4 max-w-2xl whitespace-pre-line text-lg leading-8 text-slate-700 sm:text-xl">{description}</p>
+            <p className="mt-4 max-w-2xl whitespace-pre-line text-lg font-semibold leading-8 text-slate-900 sm:text-xl">{description}</p>
           ) : null}
         </div>
         <HeroIllustration />

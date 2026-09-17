@@ -36,7 +36,7 @@ export function QuestionCard({ example, total, typeLabel }: { example: ParsedExa
           {example.distractorNotes ? <DistractorExplanation notes={example.distractorNotes} /> : null}
         </>
       ) : (
-        <p className="mt-5 whitespace-pre-line text-xl leading-9 text-slate-800">{example.text}</p>
+        <p className="mt-5 whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">{example.text}</p>
       )}
     </div>
   );

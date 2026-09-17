@@ -12,7 +12,7 @@ export function AnswerExplanation({ correctOption, explanation }: { correctOptio
         <BookOpen className="mt-0.5 size-5 shrink-0" />
         Açıklama
       </p>
-      <p className="mt-1 whitespace-pre-line text-lg leading-8 text-emerald-950">{explanation}</p>
+      <p className="mt-1 whitespace-pre-line text-lg font-semibold leading-8 text-emerald-950">{explanation}</p>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export function DistractorExplanation({ notes }: { notes: ParsedOption[] }) {
       </p>
       <ul className="mt-3 space-y-2">
         {notes.map((note) => (
-          <li key={note.letter} className="text-base text-orange-950">
+          <li key={note.letter} className="text-base font-semibold text-orange-950">
             <span className="font-extrabold">{note.letter})</span> {note.text}
           </li>
         ))}
