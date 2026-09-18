@@ -64,7 +64,7 @@
 .approachSection,
 .faqSection,
 .finalSection {
-  width: min(1216px, calc(100% - 64px));
+  width: min(1536px, calc(100% - 64px));
   margin-inline: auto;
 }
 .heroInner {
@@ -527,7 +527,7 @@
   color: #fffdf4;
 }
 .sampleInner {
-  width: min(1216px, calc(100% - 64px));
+  width: min(1536px, calc(100% - 64px));
   margin-inline: auto;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -1028,7 +1028,7 @@
 }
 
 .offerPaths {
-  width: min(1216px, calc(100% - 64px));
+  width: min(1536px, calc(100% - 64px));
   margin: 32px auto 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1070,7 +1070,7 @@
   color: var(--soft-ink);
 }
 .liveGroupsSection {
-  width: min(1216px, calc(100% - 64px));
+  width: min(1536px, calc(100% - 64px));
   margin-inline: auto;
   padding: 0 0 80px;
 }
@@ -1105,7 +1105,7 @@
 }
 .hero {
   margin: 24px auto 0;
-  width: min(1320px, calc(100% - 40px));
+  width: min(1600px, calc(100% - 40px));
   border-radius: 24px;
   background: #eef2fa;
   border: 1px solid var(--line);
