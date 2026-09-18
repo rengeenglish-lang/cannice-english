@@ -1,27 +1,22 @@
-import { Hero } from "@/components/marketing/Hero";
-import { ExamPicker } from "@/components/marketing/ExamPicker";
-import { PackageHighlights } from "@/components/marketing/PackageHighlights";
-import { TestimonialsSection } from "@/components/marketing/TestimonialsSection";
-import { BlogTeaser } from "@/components/marketing/BlogTeaser";
-import { CallMeBackForm } from "@/components/marketing/CallMeBackForm";
-import { listExamTypes, listProducts, listTestimonials, listPublishedBlogPosts } from "@/server/services/catalog.service";
+import type { Metadata } from "next";
+import { MaterialsHome } from "@/components/marketing/MaterialsHome";
+import {
+  listExamTypes,
+  listHomepageProducts,
+} from "@/server/services/catalog.service";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Cannice English — İngilizce Sınav Hazırlık Materyalleri",
+  },
+  description:
+    "İngilizce sınav hazırlığı için konu anlatımlarını keşfedin, çalışma paketleri ve kitapları karşılaştırın. Önce örnek alıştırmayı deneyin, sonra kaynağınızı seçin.",
+};
 
 export default async function HomePage() {
-  const [exams, featuredProducts, testimonials, posts] = await Promise.all([
+  const [exams, products] = await Promise.all([
     listExamTypes(),
-    listProducts({ featuredOnly: true }),
-    listTestimonials(true),
-    listPublishedBlogPosts(3),
+    listHomepageProducts(),
   ]);
-
-  return (
-    <main className="pb-24">
-      <Hero />
-      <ExamPicker exams={exams} />
-      <PackageHighlights products={featuredProducts} />
-      <TestimonialsSection testimonials={testimonials} />
-      <BlogTeaser posts={posts} />
-      <CallMeBackForm />
-    </main>
-  );
+  return <MaterialsHome exams={exams} products={products} />;
 }

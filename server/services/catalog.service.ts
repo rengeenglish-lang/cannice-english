@@ -59,3 +59,27 @@ export function listPublishedBlogPosts(take = 3) {
 export function getBlogPostBySlug(slug: string) {
   return db.blogPost.findUnique({ where: { slug }, include: { category: true, author: true } });
 }
+
+/** Lead with materials; fill spare slots with featured published services. */
+export async function listHomepageProducts() {
+  const include = {
+    examType: true,
+    book: { select: { format: true, pageCount: true } },
+    course: { select: { deliveryFormat: true } },
+  } as const;
+  const [materials, featured] = await Promise.all([
+    db.product.findMany({
+      where: { isPublished: true, category: { in: ["STUDY_PACKAGE", "BOOK"] } },
+      include,
+      orderBy: [{ isFeatured: "desc" }, { displayOrder: "asc" }, { createdAt: "asc" }],
+      take: 3,
+    }),
+    db.product.findMany({
+      where: { isPublished: true, isFeatured: true, category: { notIn: ["STUDY_PACKAGE", "BOOK"] } },
+      include,
+      orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
+      take: 3,
+    }),
+  ]);
+  return [...materials, ...featured].slice(0, 3);
+}

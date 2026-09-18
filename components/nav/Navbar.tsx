@@ -4,7 +4,7 @@ import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
 
 const NAV_LINKS = [
-  { href: "/packages", label: "Online Dersler" },
+  { href: "/packages", label: "Materyaller" },
   { href: "/konu-anlatim", label: "Konu Anlatım" },
   { href: "/books", label: "Kitaplar ve Kaynaklar" },
   { href: "/tools", label: "Faydalı Araçlar" },
@@ -43,7 +43,7 @@ export async function Navbar() {
           ) : (
             <>
               <Link href="/sign-in" className="ghost-button whitespace-nowrap">Üye Girişi</Link>
-              <Link href="/register" className="primary-button whitespace-nowrap">Ücretsiz Dene</Link>
+              <Link href="/#sample" className="primary-button whitespace-nowrap">Örnek İçerik</Link>
             </>
           )}
         </div>

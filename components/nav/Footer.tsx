@@ -21,17 +21,14 @@ const LEGAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-[color:var(--border)] bg-[color:var(--brand-strong)] text-white/80">
+    <footer className="border-t border-[color:var(--border)] bg-[color:var(--brand-strong)] text-white/80">
       <div className="mx-auto grid w-full max-w-[1320px] grid-cols-2 gap-8 px-4 py-14 sm:grid-cols-3 sm:px-6 lg:grid-cols-5 lg:px-8">
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
           <span className="text-lg font-extrabold text-white">Cannice English</span>
           <p className="mt-3 max-w-xs text-sm leading-6 text-white/55">
-            IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına tek bir öğretmenle, kayıtlı ve canlı derslerle hazırlanın.
+            İngilizce sınav hazırlığınız için konu anlatımları, çalışma paketleri ve kitaplar. Doğru kaynağı kendi temponuzda keşfedin.
           </p>
-          <div className="mt-4 space-y-1 text-sm text-white/70">
-            <p><span className="font-semibold text-white">Müşteri Hizmetleri:</span> 0 (850) 000 00 00</p>
-            <p><span className="font-semibold text-white">WhatsApp:</span> 0 (5XX) XXX XX XX</p>
-          </div>
+
           <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/70">
             <li><Link href="/about" className="transition hover:text-white">Hakkımızda</Link></li>
             <li><Link href="/faq" className="transition hover:text-white">Soru & Cevap</Link></li>
