@@ -54,7 +54,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
           </div>
           <DiscountBadge basePrice={String(product.basePrice)} salePrice={String(product.salePrice)} />
         </div>
-        <span className="primary-button mt-1 w-full justify-center">Hızlı Ekle</span>
+        <span className="primary-button mt-1 w-full justify-center">İçeriği İncele</span>
       </div>
     </Link>
   );
