@@ -1,17 +1,17 @@
 import Link from "next/link";
+import { ArrowUpRight, BookOpen } from "lucide-react";
+import type { CSSProperties } from "react";
 import { DiscountBadge } from "@/components/catalog/DiscountBadge";
-import { ScoreRing } from "@/components/catalog/ScoreRing";
 import { formatTRY } from "@/lib/pricing";
 import { EXAM_META } from "@/lib/exam-types";
 import type { ExamCode } from "@/lib/generated/prisma/enums";
 
 const LEVEL_LABEL: Record<string, string> = {
-  BEGINNER_TO_ADVANCED: "Sıfırdan İleriye",
-  INTERMEDIATE_ADVANCED: "Orta ve İleri Düzeyi",
+  BEGINNER_TO_ADVANCED: "Başlangıçtan ileri seviyeye",
+  INTERMEDIATE_ADVANCED: "Orta ve ileri seviye",
   JUNIOR: "Başlangıç",
-  SENIOR: "İleri Seviye",
+  SENIOR: "İleri seviye",
 };
-
 type ProductCardData = {
   slug: string;
   title: string;
@@ -20,41 +20,67 @@ type ProductCardData = {
   level: string | null;
   basePrice: unknown;
   salePrice: unknown;
+  category?: string;
   examType: { name: string; code: ExamCode } | null;
 };
 
 export function ProductCard({ product }: { product: ProductCardData }) {
-  const palette = product.examType ? EXAM_META[product.examType.code] : undefined;
-  const from = palette?.from ?? "#182449";
-  const to = palette?.to ?? "#0e1730";
-
+  const palette = product.examType
+    ? EXAM_META[product.examType.code]
+    : undefined;
   return (
-    <Link href={`/packages/${product.slug}`} className="poster-card group">
-      <div className="poster-art" style={{ backgroundImage: `linear-gradient(155deg, ${from}, ${to})` }}>
-        <ScoreRing percent={72} className="pointer-events-none absolute -right-3 -top-3 size-32 opacity-90 transition duration-300 group-hover:scale-110 group-hover:opacity-100" />
-        <div className="relative z-10 flex w-full flex-col gap-3">
-          <div className="flex items-center justify-between">
-            {product.badgeLabel ? <span className="discount-badge" style={{ color: to }}>{product.badgeLabel}</span> : <span />}
-          </div>
-          {product.level ? <span className="level-tag w-fit">{LEVEL_LABEL[product.level] ?? product.level}</span> : null}
-          <h3 className="text-2xl font-extrabold leading-tight tracking-[-.01em] text-balance">{product.title}</h3>
-          {product.subtitle ? <p className="text-sm font-medium text-white/80">{product.subtitle}</p> : null}
+    <Link
+      href={
+        (product.category === "BOOK" ? "/books/" : "/packages/") + product.slug
+      }
+      className="poster-card group"
+      style={
+        {
+          "--catalog-color": palette?.solid ?? "var(--accent)",
+        } as CSSProperties
+      }
+    >
+      <div className="catalog-cover">
+        <div className="catalog-cover-label">
+          <span>CANNICE / ENGLISH</span>
+          <BookOpen size={22} aria-hidden="true" />
         </div>
+        <h3 className="font-extrabold">{product.title}</h3>
+        <p className="mt-auto text-sm font-bold text-[color:var(--accent-strong)]">
+          {product.examType?.name ?? "İngilizce"}
+        </p>
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        {product.examType ? (
-          <span className="exam-pill w-fit" style={{ backgroundColor: palette?.solid }}>{product.examType.name}</span>
+      <div className="flex flex-1 flex-col gap-4 p-6">
+        {product.level ? (
+          <p className="text-xs font-semibold text-[color:var(--muted)]">
+            {LEVEL_LABEL[product.level] ?? product.level}
+          </p>
         ) : null}
-        <div className="mt-auto flex items-end justify-between gap-3">
+        {product.subtitle ? (
+          <p className="text-sm leading-6 text-[color:var(--muted)]">
+            {product.subtitle}
+          </p>
+        ) : null}
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-3">
           <div>
             {Number(product.basePrice) > Number(product.salePrice) ? (
-              <p className="text-sm text-[color:var(--muted)] line-through">{formatTRY(String(product.basePrice))}</p>
+              <del className="text-sm text-[color:var(--muted)]">
+                {formatTRY(String(product.basePrice))}
+              </del>
             ) : null}
-            <p className="text-xl font-extrabold text-[color:var(--foreground)]">{formatTRY(String(product.salePrice))}</p>
+            <p className="text-2xl font-extrabold text-[color:var(--brand)]">
+              {formatTRY(String(product.salePrice))}
+            </p>
+            <p className="text-xs text-[color:var(--muted)]">KDV dahil</p>
           </div>
-          <DiscountBadge basePrice={String(product.basePrice)} salePrice={String(product.salePrice)} />
+          <DiscountBadge
+            basePrice={String(product.basePrice)}
+            salePrice={String(product.salePrice)}
+          />
         </div>
-        <span className="primary-button mt-1 w-full justify-center">İçeriği İncele</span>
+        <span className="primary-button w-full">
+          İçeriği incele <ArrowUpRight size={18} aria-hidden="true" />
+        </span>
       </div>
     </Link>
   );

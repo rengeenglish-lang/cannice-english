@@ -4,17 +4,27 @@ import { AnswerOption } from "@/components/topics/AnswerOption";
 import { AnswerExplanation } from "@/components/topics/AnswerExplanation";
 import { DistractorExplanation } from "@/components/topics/DistractorExplanation";
 
-export function QuestionCard({ example, total, typeLabel }: { example: ParsedExample; total: number; typeLabel?: string }) {
+export function QuestionCard({
+  example,
+  total,
+  typeLabel,
+}: {
+  example: ParsedExample;
+  total: number;
+  typeLabel?: string;
+}) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)] sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-1.5 text-sm font-extrabold text-rose-700">
           <Sparkles className="size-4" />
           Örnek Soru {example.index + 1}
-          {total > 1 ? <span className="font-bold text-rose-500">/ {total}</span> : null}
+          {total > 1 ? (
+            <span className="font-bold text-rose-500">/ {total}</span>
+          ) : null}
         </span>
         {typeLabel ? (
-          <span className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1.5 text-sm font-extrabold text-blue-700">
+          <span className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1.5 text-sm font-extrabold text-[color:var(--accent-strong)]">
             <Tag className="size-4" />
             {typeLabel}
           </span>
@@ -23,20 +33,34 @@ export function QuestionCard({ example, total, typeLabel }: { example: ParsedExa
 
       {example.kind === "mcq" ? (
         <>
-          <p className="mt-5 whitespace-pre-line text-2xl font-bold leading-9 text-slate-900 sm:text-3xl">{example.question}</p>
+          <p className="mt-5 whitespace-pre-line text-2xl font-bold leading-9 text-slate-900 sm:text-3xl">
+            {example.question}
+          </p>
           <ul className="mt-6 space-y-3">
             {example.options.map((option) => (
-              <AnswerOption key={option.letter} option={option} isCorrect={option.letter === example.correctLetter} />
+              <AnswerOption
+                key={option.letter}
+                option={option}
+                isCorrect={option.letter === example.correctLetter}
+              />
             ))}
           </ul>
           <AnswerExplanation
-            correctOption={example.options.find((option) => option.letter === example.correctLetter)!}
+            correctOption={
+              example.options.find(
+                (option) => option.letter === example.correctLetter,
+              )!
+            }
             explanation={example.explanation}
           />
-          {example.distractorNotes ? <DistractorExplanation notes={example.distractorNotes} /> : null}
+          {example.distractorNotes ? (
+            <DistractorExplanation notes={example.distractorNotes} />
+          ) : null}
         </>
       ) : (
-        <p className="mt-5 whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">{example.text}</p>
+        <p className="mt-5 whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">
+          {example.text}
+        </p>
       )}
     </div>
   );

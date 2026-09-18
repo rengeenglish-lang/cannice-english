@@ -1,49 +1,75 @@
 import type { Metadata } from "next";
-
+import Link from "next/link";
+import { PageHero } from "@/components/ui/PageHero";
 export const metadata: Metadata = { title: "Soru & Cevap" };
-
-const FAQ_ITEMS = [
+const ITEMS = [
   {
-    question: "Hangi sınavlara hazırlık desteği veriyorsunuz?",
-    answer: "IELTS, TOEFL, PTE, YDS ve YÖKDİL'in üç alanı (Sosyal, Sağlık, Fen Bilimleri) için hazırlık paketlerimiz mevcut.",
+    q: "Materyalleri ayrı ayrı satın alabilir miyim?",
+    a: "Kitaplar ve çalışma paketleri ayrı ürünler olarak sunulur. Ürün sayfasında formatı, içeriği ve fiyatı inceleyerek seçim yapabilirsiniz.",
   },
   {
-    question: "Derslere nasıl kayıt olabilirim?",
-    answer: "İlgilendiğiniz paketi seçip sepete ekleyin, ödeme adımını tamamlayın. Ekibimiz onay sonrası size dönüş yaparak dersinize erişim sağlar.",
+    q: "Canlı grup derslerine nasıl katılırım?",
+    a: "İlgilendiğiniz grubun içeriğini ve programını inceleyip sipariş oluşturabilirsiniz. Ödeme ve kayıt onayından sonra dersiniz öğrenci panelinizde görünür.",
   },
   {
-    question: "14 günlük ücretsiz deneme nasıl çalışıyor?",
-    answer: "Ücretsiz hesap oluşturarak platformu ve örnek dersleri 14 gün boyunca inceleyebilirsiniz. Kredi kartı bilgisi gerekmez.",
+    q: "Satın almadan önce deneyebilir miyim?",
+    a: "Ana sayfadaki tanıtım alıştırmalarını ve konu anlatımlarını üye olmadan inceleyebilirsiniz. Örnek içerikler her ücretli ürünün kapsamını temsil etmez.",
   },
   {
-    question: "Canlı dersleri kaçırırsam ne olur?",
-    answer: "Canlı dersler kayıt altına alınır ve daha sonra kendi hızınızda izleyebilirsiniz.",
+    q: "Sipariş ve ödeme nasıl işliyor?",
+    a: "Online ödeme altyapısı kurulum aşamasındadır. Siparişiniz ödeme bekleniyor durumunda kaydedilir; ekip ödeme ve erişim adımları için sizinle iletişime geçer.",
   },
   {
-    question: "İade politikanız nedir?",
-    answer: "Kurs içeriğine erişim sağlanmadan önce talep edilen iadeler değerlendirilir. Detaylar için Mesafeli Satış Sözleşmesi'ni inceleyebilir veya bizimle iletişime geçebilirsiniz.",
+    q: "Canlı derslerin kaydı paylaşılır mı?",
+    a: "Kayıt ve tekrar izleme imkânı seçtiğiniz paketin kapsamına bağlıdır. Satın almadan önce ilgili ürünün açıklamasını inceleyin.",
   },
   {
-    question: "Bir öğretmenle mi çalışacağım?",
-    answer: "Evet — Cannice English tek öğretmen modeliyle çalışır. Tüm dersler ve geri bildirimler aynı öğretmen tarafından hazırlanır.",
+    q: "Ders ilerlememi nereden takip edebilirim?",
+    a: "Giriş yaptıktan sonra Çalışma Alanım bölümünden kayıtlı kurslarınızı, tamamladığınız dersleri ve canlı ders programını görebilirsiniz.",
   },
 ];
-
 export default function FaqPage() {
   return (
-    <main className="mx-auto w-full max-w-[760px] px-4 py-14 sm:px-6 lg:px-8">
-      <p className="eyebrow">Soru & Cevap</p>
-      <h1 className="page-title">Sıkça Sorulan Sorular</h1>
-      <div className="mt-8 space-y-3">
-        {FAQ_ITEMS.map((item) => (
-          <details key={item.question} className="panel group">
-            <summary className="cursor-pointer list-none font-bold text-[color:var(--foreground)]">
-              {item.question}
+    <main className="inner-page mx-auto w-full max-w-[900px] px-4 sm:px-6 lg:px-8">
+      <PageHero>
+        <p className="eyebrow">YANINIZDAYIZ</p>
+        <h1 className="page-title">
+          Başlamadan önce,
+          <br />
+          aklınızda soru kalmasın.
+        </h1>
+        <p className="page-copy">
+          Kaynak seçimi, derslere erişim ve sipariş süreci hakkında.
+        </p>
+      </PageHero>
+      <div className="space-y-3">
+        {ITEMS.map((item) => (
+          <details key={item.q} className="panel group">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-5 font-bold">
+              {item.q}
+              <span
+                className="text-xl text-[color:var(--accent)] group-open:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
             </summary>
-            <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{item.answer}</p>
+            <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
+              {item.a}
+            </p>
           </details>
         ))}
       </div>
+      <p className="mt-7 text-sm leading-7 text-[color:var(--muted)]">
+        Teslim ve iade koşulları için{" "}
+        <Link
+          href="/legal/mesafeli-satis-sozlesmesi"
+          className="font-bold underline"
+        >
+          Mesafeli Satış Sözleşmesi
+        </Link>{" "}
+        sayfasını inceleyin.
+      </p>
     </main>
   );
 }
