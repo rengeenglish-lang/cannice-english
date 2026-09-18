@@ -1,4 +1,11 @@
-import { Mic, PenLine, BookOpen, Headphones, Target, Sprout } from "lucide-react";
+import {
+  Mic,
+  PenLine,
+  BookOpen,
+  Headphones,
+  Target,
+  Sprout,
+} from "lucide-react";
 
 type Topic = {
   id: string;
@@ -38,17 +45,19 @@ export function TopicSidebar<T extends Topic>({
       <div className={CARD}>
         <div className="flex items-center justify-between gap-3">
           <p className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
-            <Target className="size-6 text-blue-600" />
+            <Target className="size-6 text-[color:var(--accent)]" />
             {examName} Konuları
           </p>
-          <p className="text-base font-extrabold text-blue-700">
+          <p className="text-base font-extrabold text-[color:var(--accent-strong)]">
             {completedTopicCount} / {topics.length}
           </p>
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
           <div
             className="h-full rounded-full bg-emerald-500 transition-all"
-            style={{ width: `${topics.length > 0 ? Math.round((completedTopicCount / topics.length) * 100) : 0}%` }}
+            style={{
+              width: `${topics.length > 0 ? Math.round((completedTopicCount / topics.length) * 100) : 0}%`,
+            }}
           />
         </div>
       </div>
@@ -59,7 +68,9 @@ export function TopicSidebar<T extends Topic>({
           const body = (
             <ul className="space-y-1.5">
               {group.topics.map((topic) => {
-                const globalIndex = topics.findIndex((item) => item.id === topic.id);
+                const globalIndex = topics.findIndex(
+                  (item) => item.id === topic.id,
+                );
                 const active = topic.id === selectedTopicId;
                 const done = topicCompleted(topic);
                 return (
@@ -68,7 +79,9 @@ export function TopicSidebar<T extends Topic>({
                       type="button"
                       onClick={() => onSelect(topic)}
                       className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-lg transition ${
-                        active ? "bg-blue-600 text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]" : "text-slate-800 hover:bg-blue-50"
+                        active
+                          ? "bg-[color:var(--accent)] text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]"
+                          : "text-slate-800 hover:bg-blue-50"
                       }`}
                     >
                       <span
@@ -91,12 +104,17 @@ export function TopicSidebar<T extends Topic>({
               })}
             </ul>
           );
-          if (!meta) return <div key="flat" className={CARD}>{body}</div>;
+          if (!meta)
+            return (
+              <div key="flat" className={CARD}>
+                {body}
+              </div>
+            );
           const { label, Icon } = meta;
           return (
             <details key={group.category} className={`${CARD} group`} open>
               <summary className="flex cursor-pointer list-none items-center gap-2 text-lg font-extrabold text-slate-900">
-                <Icon className="size-5 text-blue-600" />
+                <Icon className="size-5 text-[color:var(--accent)]" />
                 <span>
                   {label} ({group.topics.length})
                 </span>
@@ -109,7 +127,9 @@ export function TopicSidebar<T extends Topic>({
 
       <div className="mt-4 rounded-2xl border border-dashed border-emerald-300 bg-emerald-50 p-4 text-center">
         <Sprout className="mx-auto size-8 text-emerald-600" />
-        <p className="mt-2 text-base font-extrabold leading-snug text-emerald-900">Küçük adımlar, büyük sonuçlar</p>
+        <p className="mt-2 text-base font-extrabold leading-snug text-emerald-900">
+          Küçük adımlar, büyük sonuçlar
+        </p>
       </div>
     </aside>
   );

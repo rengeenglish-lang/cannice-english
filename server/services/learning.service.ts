@@ -8,7 +8,10 @@ export function getEnrollmentForCourse(userId: string, courseId: string) {
       course: {
         include: {
           product: true,
-          modules: { orderBy: { position: "asc" }, include: { lessons: { orderBy: { position: "asc" } } } },
+          modules: {
+            orderBy: { position: "asc" },
+            include: { lessons: { orderBy: { position: "asc" } } },
+          },
           liveSessions: { orderBy: { startsAt: "asc" } },
         },
       },
@@ -21,16 +24,33 @@ export function listEnrollmentsForUser(userId: string) {
   return db.enrollment.findMany({
     where: { userId, status: "ACTIVE" },
     include: {
-      course: { include: { product: true, modules: { include: { lessons: true } } } },
+      course: {
+        include: {
+          product: true,
+          modules: {
+            orderBy: { position: "asc" },
+            include: { lessons: { orderBy: { position: "asc" } } },
+          },
+          liveSessions: {
+            where: { endsAt: { gte: new Date() } },
+            orderBy: { startsAt: "asc" },
+          },
+        },
+      },
       lessonProgresses: true,
     },
     orderBy: { grantedAt: "desc" },
   });
 }
 
-export async function toggleLessonProgress(enrollmentId: string, recordedLessonId: string) {
+export async function toggleLessonProgress(
+  enrollmentId: string,
+  recordedLessonId: string,
+) {
   const existing = await db.lessonProgress.findUnique({
-    where: { enrollmentId_recordedLessonId: { enrollmentId, recordedLessonId } },
+    where: {
+      enrollmentId_recordedLessonId: { enrollmentId, recordedLessonId },
+    },
   });
   if (existing) {
     return db.lessonProgress.update({
@@ -38,5 +58,7 @@ export async function toggleLessonProgress(enrollmentId: string, recordedLessonI
       data: { completedAt: existing.completedAt ? null : new Date() },
     });
   }
-  return db.lessonProgress.create({ data: { enrollmentId, recordedLessonId, completedAt: new Date() } });
+  return db.lessonProgress.create({
+    data: { enrollmentId, recordedLessonId, completedAt: new Date() },
+  });
 }

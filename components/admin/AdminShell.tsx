@@ -1,57 +1,202 @@
 "use client";
-
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+import {
+  BookOpen,
+  CalendarDays,
+  Home,
+  UserRound,
+  ShoppingBag,
+  Calculator,
+  HelpCircle,
+  LogOut,
+  Menu,
+  X,
+  Settings,
+} from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
+const LEARNING = [
+  { href: "/dashboard", label: "Çalışma alanım", icon: Home },
+  { href: "/dashboard#courses", label: "Derslerim", icon: BookOpen },
+  {
+    href: "/dashboard#live-sessions",
+    label: "Canlı ders takvimi",
+    icon: CalendarDays,
+  },
+  { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen },
+  {
+    href: "/tools/score-calculator",
+    label: "Puan hesaplama",
+    icon: Calculator,
+  },
+  { href: "/packages", label: "Kaynakları keşfet", icon: ShoppingBag },
+];
+const ACCOUNT = [
+  { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
+  { href: "/dashboard#orders", label: "Siparişlerim", icon: ShoppingBag },
+  { href: "/faq", label: "Yardım ve sorular", icon: HelpCircle },
+];
+const STAFF = [
+  ["/admin", "Genel bakış"],
+  ["/admin/orders", "Siparişler"],
+  ["/admin/coupons", "Kuponlar"],
+  ["/admin/products", "Ürünler"],
+  ["/admin/konu-anlatim", "Konu anlatımı"],
+  ["/admin/testimonials", "Katılımcı görüşleri"],
+  ["/admin/blog", "Blog"],
+  ["/admin/submissions", "Değerlendirmeler"],
+  ["/admin/leads", "Gelen talepler"],
+];
 
-export function DashboardShell({ role, children }: { role: Role; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const isStaff = role === "TEACHER" || role === "ADMIN";
-  const close = () => setOpen(false);
-
+function SidebarContent({
+  role,
+  onNavigate,
+}: {
+  role: Role;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+  const active = (href: string) =>
+    !href.includes("#") &&
+    (pathname === href ||
+      (href !== "/dashboard" &&
+        href !== "/admin" &&
+        pathname.startsWith(href + "/")));
   return (
-    <div className="dashboard-frame lg:grid-cols-[280px_1fr]">
-      {open ? <div className="fixed inset-0 z-30 bg-black/40 lg:hidden" onClick={close} aria-hidden /> : null}
-
-      <aside className={`dashboard-sidebar p-4 transition-transform duration-200 ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
-        <Link href="/" className="mb-6 flex items-center gap-2 px-2" onClick={close}>
-          <span className="grid size-9 place-items-center rounded-2xl bg-gradient-to-br from-[color:var(--accent)] to-[#0f9b8e] text-sm font-extrabold text-white">C</span>
-          <span className="font-extrabold text-[color:var(--foreground)]">Cannice English</span>
-        </Link>
-        <nav className="space-y-1">
-          <Link href="/dashboard" className="dashboard-nav-item" onClick={close}>Panelim</Link>
-          <Link href="/dashboard/profile" className="dashboard-nav-item" onClick={close}>Hesap Bilgilerim</Link>
-          <Link href="/packages" className="dashboard-nav-item" onClick={close}>Paketlere Göz At</Link>
-          {isStaff ? (
-            <>
-              <p className="mb-1 mt-6 px-3 text-[10px] font-black uppercase tracking-[.2em] text-slate-400">Yönetim</p>
-              <Link href="/admin" className="dashboard-nav-item" onClick={close}>Genel Bakış</Link>
-              <Link href="/admin/orders" className="dashboard-nav-item" onClick={close}>Siparişler</Link>
-              <Link href="/admin/coupons" className="dashboard-nav-item" onClick={close}>Kuponlar</Link>
-              <Link href="/admin/products" className="dashboard-nav-item" onClick={close}>Ürünler</Link>
-              <Link href="/admin/konu-anlatim" className="dashboard-nav-item" onClick={close}>Konu Anlatım</Link>
-              <Link href="/admin/testimonials" className="dashboard-nav-item" onClick={close}>Katılımcı Görüşleri</Link>
-              <Link href="/admin/blog" className="dashboard-nav-item" onClick={close}>Blog</Link>
-              <Link href="/admin/submissions" className="dashboard-nav-item" onClick={close}>Değerlendirmeler</Link>
-              <Link href="/admin/leads" className="dashboard-nav-item" onClick={close}>Gelen Talepler</Link>
-            </>
-          ) : null}
-        </nav>
-        <form action={signOutAction} className="mt-auto pt-4">
-          <button type="submit" className="dashboard-nav-item w-full text-red-600 hover:bg-red-50 hover:text-red-700">
-            Çıkış Yap
-          </button>
-        </form>
+    <>
+      <Link
+        href="/dashboard"
+        onClick={onNavigate}
+        className="mb-7 flex items-center gap-3 px-3 py-2 text-white"
+      >
+        <span className="grid size-10 place-items-center rounded-xl bg-white/15 font-extrabold">
+          C
+        </span>
+        <span className="text-sm font-extrabold">
+          Cannice English
+          <span className="mt-1 block text-[10px] font-medium uppercase tracking-widest text-blue-200">
+            Öğrenme alanınız
+          </span>
+        </span>
+      </Link>
+      <nav aria-label="Öğrenci menüsü" className="space-y-6">
+        {[
+          { label: "ÖĞRENME", items: LEARNING },
+          { label: "HESABINIZ", items: ACCOUNT },
+        ].map((group) => (
+          <div key={group.label}>
+            <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
+              {group.label}
+            </p>
+            <div className="space-y-1">
+              {group.items.map(({ href, label, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={onNavigate}
+                  aria-current={active(href) ? "page" : undefined}
+                  className={
+                    "dashboard-nav-item " +
+                    (active(href) ? "dashboard-nav-item-active" : "")
+                  }
+                >
+                  <Icon size={18} aria-hidden="true" />
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+        {role !== "STUDENT" ? (
+          <div>
+            <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
+              YÖNETİM
+            </p>
+            {STAFF.map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={onNavigate}
+                aria-current={active(href) ? "page" : undefined}
+                className={
+                  "dashboard-nav-item " +
+                  (active(href) ? "dashboard-nav-item-active" : "")
+                }
+              >
+                <Settings size={17} aria-hidden="true" />
+                {label}
+              </Link>
+            ))}
+          </div>
+        ) : null}
+      </nav>
+      <form
+        action={signOutAction}
+        className="mt-auto border-t border-white/15 pt-5 mt-8"
+      >
+        <button type="submit" className="dashboard-nav-item w-full">
+          <LogOut size={18} aria-hidden="true" />
+          Çıkış yap
+        </button>
+      </form>
+    </>
+  );
+}
+export function DashboardShell({
+  role,
+  children,
+}: {
+  role: Role;
+  children: React.ReactNode;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
+  const close = () => dialog.current?.close();
+  return (
+    <div className="dashboard-frame lg:grid-cols-[260px_minmax(0,1fr)]">
+      <aside className="dashboard-sidebar hidden p-4 lg:flex">
+        <SidebarContent role={role} />
       </aside>
-
+      <dialog
+        ref={dialog}
+        id="learning-menu"
+        aria-label="Öğrenci menüsü"
+        onClose={() => setOpen(false)}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) close();
+        }}
+        className="fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[min(320px,90vw)] max-w-none border-0 bg-[color:var(--brand)] p-0 text-white backdrop:bg-black/40 lg:hidden"
+      >
+        <div className="dashboard-sidebar relative h-full w-full p-4">
+          <button
+            onClick={close}
+            aria-label="Menüyü kapat"
+            className="mb-3 ml-auto rounded-lg p-2 text-white focus-ring"
+          >
+            <X size={22} />
+          </button>
+          <SidebarContent role={role} onNavigate={close} />
+        </div>
+      </dialog>
       <div className="flex min-w-0 flex-col">
         <div className="flex h-14 items-center gap-3 border-b border-[color:var(--border)] bg-white px-4 lg:hidden">
-          <button type="button" onClick={() => setOpen(true)} aria-label="Menüyü Aç" className="ghost-button px-2.5">
-            <span className="text-xl leading-none">☰</span>
+          <button
+            type="button"
+            aria-label="Öğrenci menüsünü aç"
+            aria-expanded={open}
+            aria-controls="learning-menu"
+            onClick={() => {
+              dialog.current?.showModal();
+              setOpen(true);
+            }}
+            className="ghost-button"
+          >
+            <Menu size={21} />
           </button>
-          <span className="font-extrabold text-[color:var(--foreground)]">Cannice English</span>
+          <span className="text-sm font-bold">Çalışma alanım</span>
         </div>
         <main className="dashboard-main">{children}</main>
       </div>

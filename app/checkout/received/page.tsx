@@ -1,3 +1,4 @@
+import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
@@ -9,21 +10,37 @@ type Props = { searchParams: Promise<{ order?: string }> };
 
 export default async function OrderReceivedPage({ searchParams }: Props) {
   const { order: orderId } = await searchParams;
-  const order = orderId ? await db.order.findUnique({ where: { id: orderId }, include: { items: true } }) : null;
+  const order = orderId
+    ? await db.order.findUnique({
+        where: { id: orderId },
+        include: { items: true },
+      })
+    : null;
 
   return (
-    <main className="mx-auto w-full max-w-[700px] px-4 py-14 text-center sm:px-6 lg:px-8">
-      <p className="eyebrow">Talebiniz başarıyla gönderildi!</p>
-      <h1 className="page-title">Siparişiniz Alındı</h1>
-      <p className="page-copy mx-auto">Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek.</p>
+    <main className="inner-page mx-auto w-full max-w-[700px] px-4 py-14 text-center sm:px-6 lg:px-8">
+      <PageHero>
+        <p className="eyebrow">Talebiniz başarıyla gönderildi!</p>
+        <h1 className="page-title">Siparişiniz Alındı</h1>
+        <p className="page-copy mx-auto">
+          Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede
+          iletişime geçecek.
+        </p>
+      </PageHero>
       {order ? (
         <div className="panel mt-8 text-left">
-          <p className="text-sm font-bold text-slate-500">Sipariş No: {order.id}</p>
+          <p className="text-sm font-bold text-slate-500">
+            Sipariş No: {order.id}
+          </p>
           <ul className="mt-4 space-y-2">
             {order.items.map((item) => (
               <li key={item.id} className="flex justify-between text-sm">
-                <span>{item.titleSnapshot} × {item.quantity}</span>
-                <span className="font-bold">{formatTRY(String(item.lineTotal))}</span>
+                <span>
+                  {item.titleSnapshot} × {item.quantity}
+                </span>
+                <span className="font-bold">
+                  {formatTRY(String(item.lineTotal))}
+                </span>
               </li>
             ))}
           </ul>
@@ -34,7 +51,9 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
             </div>
             {Number(order.discountTotal) > 0 ? (
               <div className="flex justify-between text-sm font-semibold text-[color:var(--success)]">
-                <span>İndirim{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+                <span>
+                  İndirim{order.couponCode ? ` (${order.couponCode})` : ""}
+                </span>
                 <span>-{formatTRY(String(order.discountTotal))}</span>
               </div>
             ) : null}
@@ -46,8 +65,17 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
         </div>
       ) : null}
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link href="/" className="primary-button inline-flex">Ana Sayfaya Dön</Link>
-        {order ? <Link href={`/orders/${order.id}/receipt`} className="secondary-button inline-flex">Makbuzu Görüntüle</Link> : null}
+        <Link href="/" className="primary-button inline-flex">
+          Ana Sayfaya Dön
+        </Link>
+        {order ? (
+          <Link
+            href={`/orders/${order.id}/receipt`}
+            className="secondary-button inline-flex"
+          >
+            Makbuzu Görüntüle
+          </Link>
+        ) : null}
       </div>
     </main>
   );

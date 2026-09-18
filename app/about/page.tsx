@@ -1,35 +1,67 @@
 import type { Metadata } from "next";
-
+import Link from "next/link";
+import { BookOpen, Users, Compass } from "lucide-react";
+import { PageHero } from "@/components/ui/PageHero";
 export const metadata: Metadata = { title: "Hakkımızda" };
-
 export default function AboutPage() {
   return (
-    <main className="mx-auto w-full max-w-[760px] px-4 py-14 sm:px-6 lg:px-8">
-      <p className="eyebrow">Hakkımızda</p>
-      <h1 className="page-title">Cannice English</h1>
-      <p className="page-copy">
-        Cannice English, IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanan öğrencilere tek bir öğretmenle,
-        kişiselleştirilmiş bir hazırlık deneyimi sunmak için kuruldu.
-      </p>
-      <div className="panel mt-8 space-y-4 text-base leading-7 text-[color:var(--muted)]">
-        <p>
-          Yıllardır İngilizce sınav hazırlığı alanında çalışan kurucu öğretmenimiz, binlerce öğrencinin hedef
-          puanına ulaşmasına yardımcı oldu. Cannice English, bu deneyimi kayıtlı ders modülleri, canlı dersler ve
-          gerçek sınav formatında denemelerle birleştiren bir platform olarak tasarlandı.
+    <main className="inner-page mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+      <PageHero>
+        <p className="eyebrow">CANNICE ENGLISH</p>
+        <h1 className="page-title">
+          Büyük hedeflere,
+          <br />
+          düzenli küçük adımlarla.
+        </h1>
+        <p className="page-copy">
+          İngilizce sınav hazırlığında kendi yolunuzu oluşturun. Konu
+          anlatımları, kitaplar, çalışma paketleri ve canlı grup dersleriyle
+          ihtiyacınız olan desteği seçin.
         </p>
-        <p>
-          Büyük bir öğretmen kadrosu yerine, her öğrenciyi yakından tanıyan ve ilerlemesini takip eden tek bir
-          öğretmen yaklaşımını benimsiyoruz. Bu sayede her öğrenci, kendi seviyesine ve hedefine uygun bir çalışma
-          planıyla ilerleyebiliyor.
-        </p>
-        <p>
-          Misyonumuz, İngilizce sınav hazırlığını karmaşık olmaktan çıkarıp; net, ulaşılabilir ve sonuç odaklı bir
-          sürece dönüştürmek.
-        </p>
+      </PageHero>
+      <div className="grid gap-5 md:grid-cols-3">
+        {[
+          {
+            icon: Compass,
+            title: "Hedefinizden başlayın",
+            copy: "IELTS, TOEFL, PTE, YDS ve YÖKDİL için kaynakları sınavınıza göre keşfedin.",
+          },
+          {
+            icon: BookOpen,
+            title: "Size uygun kaynağı seçin",
+            copy: "İçeriği, formatı ve kapsamı inceleyin; ihtiyacınız olan materyali ayrı olarak alın.",
+          },
+          {
+            icon: Users,
+            title: "Birlikte ilerleyin",
+            copy: "Canlı grup derslerinin programını inceleyerek çalışma düzeninize uygun grubu seçin.",
+          },
+        ].map(({ icon: Icon, title, copy }) => (
+          <section key={title} className="panel">
+            <div className="learning-icon mb-5">
+              <Icon aria-hidden="true" />
+            </div>
+            <h2 className="text-xl font-bold">{title}</h2>
+            <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
+              {copy}
+            </p>
+          </section>
+        ))}
       </div>
-      <p className="mt-6 text-sm text-[color:var(--muted)]">
-        Bu sayfa taslak içerik barındırmaktadır ve yakında gerçek ekip bilgileriyle güncellenecektir.
-      </p>
+      <section className="learning-welcome mt-8">
+        <div>
+          <h2 className="text-2xl font-extrabold">
+            Önce deneyin, sonra seçin.
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-blue-100">
+            Konu anlatımlarını ve tanıtım alıştırmalarını keşfederek
+            başlayabilirsiniz.
+          </p>
+        </div>
+        <Link href="/#sample" className="primary-button shrink-0">
+          Örnek içeriği dene
+        </Link>
+      </section>
     </main>
   );
 }

@@ -4,11 +4,19 @@ import { ProgressRing } from "@/components/topics/ProgressRing";
 const CARD =
   "relative isolate overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-gradient-to-br before:from-white/80 before:via-white/0 before:content-['']";
 
-export function TopicProgressCard({ percent, completedTopicCount, totalTopics }: { percent: number; completedTopicCount: number; totalTopics: number }) {
+export function TopicProgressCard({
+  percent,
+  completedTopicCount,
+  totalTopics,
+}: {
+  percent: number;
+  completedTopicCount: number;
+  totalTopics: number;
+}) {
   return (
     <div className={`${CARD} flex flex-col items-center text-center`}>
       <p className="mb-4 flex items-center gap-2 text-lg font-extrabold text-slate-900">
-        <BarChart3 className="size-6 text-blue-600" />
+        <BarChart3 className="size-6 text-[color:var(--accent)]" />
         İlerleme Durumum
       </p>
       <ProgressRing percent={percent} size={112} />
@@ -18,7 +26,9 @@ export function TopicProgressCard({ percent, completedTopicCount, totalTopics }:
         </span>{" "}
         konu tamamlandı
       </p>
-      <p className="mt-1 text-base font-bold text-blue-600">Her soru seni hedefine bir adım daha yaklaştırıyor!</p>
+      <p className="mt-1 text-base font-bold text-[color:var(--accent)]">
+        Her soru seni hedefine bir adım daha yaklaştırıyor!
+      </p>
     </div>
   );
 }

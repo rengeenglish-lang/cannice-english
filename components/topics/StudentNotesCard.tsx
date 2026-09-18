@@ -38,13 +38,20 @@ export function StudentNotesCard({
             >
               {status === "saving" ? "Kaydediliyor…" : "Notu Kaydet"}
             </button>
-            {status === "saved" ? <span className="text-base font-bold text-emerald-600">Kaydedildi ✓</span> : null}
+            {status === "saved" ? (
+              <span className="text-base font-bold text-emerald-600">
+                Kaydedildi ✓
+              </span>
+            ) : null}
           </div>
         </>
       ) : (
         <p className="mt-3 text-lg text-slate-700">
           Not alabilmek için{" "}
-          <Link href="/sign-in" className="font-bold text-blue-600">
+          <Link
+            href="/sign-in"
+            className="font-bold text-[color:var(--accent)]"
+          >
             giriş yapın
           </Link>
           .

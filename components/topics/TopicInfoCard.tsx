@@ -24,7 +24,7 @@ export function TopicInfoCard({
   return (
     <div className={CARD}>
       <p className="flex items-center gap-2 text-lg font-extrabold text-slate-900">
-        <BookOpen className="size-6 text-blue-600" />
+        <BookOpen className="size-6 text-[color:var(--accent)]" />
         Bu Konu Hakkında
       </p>
       <dl className="mt-4 space-y-4 text-lg">
@@ -33,7 +33,9 @@ export function TopicInfoCard({
             <Clock className="size-5 text-blue-500" />
             Tahmini çalışma süresi
           </dt>
-          <dd className="font-extrabold text-slate-900">{durationMinutes} dk</dd>
+          <dd className="font-extrabold text-slate-900">
+            {durationMinutes} dk
+          </dd>
         </div>
         {questionCount ? (
           <div className="flex items-center justify-between gap-3">
@@ -50,7 +52,9 @@ export function TopicInfoCard({
               <Target className="size-5 text-emerald-500" />
               Ölçülen beceriler
             </dt>
-            <dd className="text-right font-extrabold text-slate-900">{skillsTested}</dd>
+            <dd className="text-right font-extrabold text-slate-900">
+              {skillsTested}
+            </dd>
           </div>
         ) : null}
         {difficulty && difficultyStyle ? (
@@ -63,7 +67,10 @@ export function TopicInfoCard({
               <dd className="font-extrabold text-slate-900">{difficulty}</dd>
             </div>
             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-100">
-              <div className={`h-full rounded-full ${difficultyStyle.className}`} style={{ width: difficultyStyle.width }} />
+              <div
+                className={`h-full rounded-full ${difficultyStyle.className}`}
+                style={{ width: difficultyStyle.width }}
+              />
             </div>
           </div>
         ) : null}
