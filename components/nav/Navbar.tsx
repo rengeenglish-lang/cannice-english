@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { href: "/konu-anlatim", label: "Konu Anlatım" },
   { href: "/books", label: "Kitaplar ve Kaynaklar" },
   { href: "/tools", label: "Faydalı Araçlar" },
-  { href: "/campaigns", label: "Kampanyalar" },
+  { href: "/#live-groups", label: "Canlı Gruplar" },
 ];
 
 export async function Navbar() {

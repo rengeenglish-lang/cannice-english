@@ -3,6 +3,7 @@ import { MaterialsHome } from "@/components/marketing/MaterialsHome";
 import {
   listExamTypes,
   listHomepageProducts,
+  listHomepageGroups,
 } from "@/server/services/catalog.service";
 
 export const metadata: Metadata = {
@@ -14,9 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [exams, products] = await Promise.all([
+  const [exams, products, groups] = await Promise.all([
     listExamTypes(),
     listHomepageProducts(),
+    listHomepageGroups(),
   ]);
-  return <MaterialsHome exams={exams} products={products} />;
+  return <MaterialsHome exams={exams} products={products} groups={groups} />;
 }

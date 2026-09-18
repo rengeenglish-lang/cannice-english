@@ -8,6 +8,7 @@ import {
   FileText,
   Layers,
   Sparkles,
+  Users,
 } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { ExamType } from "@/lib/generated/prisma/client";
@@ -126,9 +127,11 @@ function ResourceCard({
 export function MaterialsHome({
   exams,
   products,
+  groups = [],
 }: {
   exams: ExamType[];
   products: HomeProduct[];
+  groups?: HomeProduct[];
 }) {
   return (
     <main id="main-content" className={styles.home}>
@@ -150,9 +153,9 @@ export function MaterialsHome({
               Sizin temponuz.
             </h1>
             <p className={styles.heroDescription}>
-              İngilizce sınav hazırlığınız için konu anlatımları, çalışma
-              paketleri ve kitaplar. Önce keşfedin, sonra ihtiyacınıza uygun
-              kaynağı seçin.
+              İngilizce sınav hazırlığınız için tek tek seçebileceğiniz
+              materyaller ve canlı grup dersleri. Kendi başınıza çalışın ya da
+              bir grupla ilerleyin; size uygun yolu seçin.
             </p>
             <div className={styles.heroButtons}>
               <Link href="#materials" className={styles.buttonDark}>
@@ -223,6 +226,32 @@ export function MaterialsHome({
             Kendi yolunuzu bulun <ArrowDown size={16} aria-hidden="true" />
           </Link>
         </div>
+      </section>
+
+      <section
+        className={styles.offerPaths}
+        aria-label="Çalışma yolunuzu seçin"
+      >
+        <Link href="#materials">
+          <BookOpen size={26} aria-hidden="true" />
+          <div>
+            <span>KENDİ TEMPONUZDA</span>
+            <h2>Materyalinizi seçin.</h2>
+            <p>İhtiyacınız olan kitap veya çalışma paketini ayrı ayrı alın.</p>
+          </div>
+          <ArrowUpRight size={22} aria-hidden="true" />
+        </Link>
+        <Link href="#live-groups">
+          <Users size={26} aria-hidden="true" />
+          <div>
+            <span>BİRLİKTE İLERLEYİN</span>
+            <h2>Canlı gruba katılın.</h2>
+            <p>
+              Hedefinize uygun grubun içeriğini ve ders programını inceleyin.
+            </p>
+          </div>
+          <ArrowUpRight size={22} aria-hidden="true" />
+        </Link>
       </section>
       <section
         id="exam-path"
@@ -314,6 +343,47 @@ export function MaterialsHome({
             <ArrowRight size={17} aria-hidden="true" />
           </Link>
         </div>
+      </section>
+
+      <section
+        id="live-groups"
+        className={styles.liveGroupsSection}
+        aria-labelledby="groups-title"
+      >
+        <div className={styles.sectionIntro}>
+          <div>
+            <p className={styles.overline}>Birlikte öğrenmek isteyenlere</p>
+            <h2 id="groups-title">
+              Kendi hedefiniz.
+              <br />
+              <em>Birlikte attığınız adımlar.</em>
+            </h2>
+          </div>
+          <p>
+            Canlı grup derslerini karşılaştırın.
+            <br />
+            İçerik ve programı inceleyerek grubunuzu seçin.
+          </p>
+        </div>
+        <div className={styles.productGrid}>
+          {groups.map((product, index) => (
+            <ResourceCard key={product.id} product={product} index={index} />
+          ))}
+        </div>
+        {groups.length === 0 ? (
+          <div className={styles.emptyShelf}>
+            <Users size={28} aria-hidden="true" />
+            <h3>Yeni gruplar burada duyurulacak.</h3>
+            <p>
+              Yayımlanmış bir canlı grup olduğunda içeriğini ve programını
+              burada görebileceksiniz.
+            </p>
+            <Link href="#sample" className={styles.textLink}>
+              Bu sırada bir alıştırma deneyin{" "}
+              <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+          </div>
+        ) : null}
       </section>
       <section
         id="sample"
