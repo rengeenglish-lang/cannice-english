@@ -1,8 +1,8 @@
 .home {
-  --ink: #183e35;
-  --paper: #fbf8f1;
-  --line: #dedfd3;
-  --soft-ink: #56675e;
+  --ink: #132f59;
+  --paper: #f7f9ff;
+  --line: #dce3f0;
+  --soft-ink: #53637b;
   background: var(--paper);
   color: var(--ink);
 }
@@ -14,8 +14,8 @@
 }
 .home h1,
 .home h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
+  font-family: inherit;
+  font-weight: 750;
   letter-spacing: -0.045em;
 }
 .home h2 {
@@ -84,7 +84,7 @@
   line-height: 1.06;
 }
 .heroCopy h1 em {
-  color: #aa4a30;
+  color: #4162da;
 }
 .heroDescription {
   margin-top: 26px !important;
@@ -119,7 +119,7 @@
     transform 0.2s;
 }
 .buttonDark:hover:not(:disabled) {
-  background: #2b5948;
+  background: #2447ae;
   transform: translateY(-2px);
 }
 .buttonDark:disabled {
@@ -419,7 +419,7 @@
 .coverBottom {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #183e352f;
+  border-top: 1px solid #132f592f;
   padding-top: 13px;
   margin-top: auto;
   font-size: 9px;
@@ -523,7 +523,7 @@
   color: var(--soft-ink);
 }
 .sampleSection {
-  background: #183e35;
+  background: #132f59;
   color: #fffdf4;
 }
 .sampleInner {
@@ -663,7 +663,7 @@
 .answers input {
   width: 16px;
   height: 16px;
-  accent-color: #183e35;
+  accent-color: #132f59;
   flex-shrink: 0;
 }
 .answerLetter {
@@ -1095,5 +1095,278 @@
   }
   .liveGroupsSection {
     padding-bottom: 48px;
+  }
+}
+
+/* Exam-first landing page, inspired by the supplied reference. */
+.home em {
+  font-style: normal;
+  font-weight: inherit;
+}
+.hero {
+  margin: 24px auto 0;
+  width: min(1320px, calc(100% - 40px));
+  border-radius: 24px;
+  background: #eef2fa;
+  border: 1px solid var(--line);
+}
+.heroInner {
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  align-items: stretch;
+}
+.heroCopy {
+  padding: 64px 48px;
+  background:
+    radial-gradient(ellipse at 10% 90%, #d7edf1, transparent 65%), #eef2fa;
+}
+.heroCopy h1 {
+  font-size: clamp(2.6rem, 4.3vw, 4.3rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.05em;
+}
+.heroCopy .overline {
+  color: #3454c0;
+  letter-spacing: 0.08em;
+}
+.heroDescription {
+  line-height: 1.7;
+}
+.buttonDark {
+  background: #4162da;
+  border-color: #4162da;
+  border-radius: 9px;
+}
+.heroButtons {
+  gap: 12px;
+}
+.heroButtons .textLink {
+  background: white;
+  border: 1px solid #dce3f0;
+  padding: 12px 16px;
+  border-radius: 9px;
+}
+.heroFoot {
+  width: 100%;
+  padding: 18px 36px;
+  background: white;
+}
+.learningVisual {
+  background: #132f59;
+  color: white;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  overflow: hidden;
+}
+.visualTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #c5d3f3;
+}
+.visualBrand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 160px;
+  font-weight: 850;
+  letter-spacing: -0.1em;
+  line-height: 1.2;
+  padding: 16px 0 0;
+}
+.visualBrand span {
+  color: #89a5ff;
+}
+.visualBrand svg {
+  align-self: flex-start;
+  color: #89a5ff;
+}
+.learningVisual > p {
+  font-size: 24px;
+  line-height: 1.35;
+  text-align: center;
+  color: #d5e1ff;
+}
+.learningVisual > p strong {
+  color: white;
+}
+.visualCards {
+  display: grid;
+  gap: 10px;
+}
+.visualCards a {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  background: #ffffff10;
+  border: 1px solid #ffffff30;
+  border-radius: 12px;
+}
+.visualCards a:hover {
+  background: #ffffff20;
+}
+.visualCards span {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 700;
+}
+.visualCards strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #c5d3f3;
+  font-weight: 400;
+}
+.examSection {
+  padding-top: 64px;
+  padding-bottom: 48px;
+}
+.examSection .sectionIntro {
+  display: block;
+  text-align: center;
+}
+.examSection .overline {
+  justify-content: center;
+}
+.examSection .sectionIntro > p {
+  margin: 18px auto 0;
+}
+.examLinks {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+.examLinks > a {
+  min-height: 106px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  border-top: 4px solid var(--exam-color, #4162da);
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  font-size: 17px;
+  box-shadow: 0 8px 25px #132f5906;
+}
+.examLinks > a > svg:first-child {
+  color: var(--exam-color, #4162da);
+}
+.examLinks > a > span {
+  flex: 1;
+}
+.examLinks > a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px #132f5912;
+}
+.offerPaths {
+  margin-top: 0;
+  margin-bottom: 48px;
+}
+.offerPaths > a {
+  background: #edf2ff;
+  border-radius: 16px;
+  border-color: #dce3f0;
+}
+.offerPaths > a:last-child {
+  background: #eaf5fb;
+}
+.productCard {
+  border-radius: 16px;
+  overflow: hidden;
+}
+.productCover {
+  background: #eaf0fc;
+}
+.sampleSection {
+  background: #132f59;
+}
+.finalSection {
+  border-radius: 20px;
+  background: #eaf0ff;
+  padding: 40px;
+  margin-bottom: 48px;
+}
+.finalMark {
+  color: #4162da;
+}
+@media (max-width: 900px) {
+  .heroCopy {
+    padding: 40px 28px;
+  }
+  .visualBrand {
+    font-size: 120px;
+  }
+  .learningVisual {
+    padding: 28px 24px;
+  }
+  .examLinks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .hero {
+    width: calc(100% - 24px);
+    margin-top: 12px;
+    border-radius: 18px;
+  }
+  .heroInner {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .heroCopy {
+    padding: 36px 24px;
+  }
+  .heroCopy h1 {
+    font-size: 2.6rem;
+  }
+  .heroFoot {
+    padding: 18px 24px;
+  }
+  .learningVisual {
+    padding: 24px;
+    gap: 20px;
+  }
+  .visualBrand {
+    font-size: 110px;
+    padding: 0;
+  }
+  .learningVisual > p {
+    font-size: 21px;
+  }
+  .visualTop {
+    font-size: 8px;
+  }
+  .examLinks {
+    gap: 10px;
+  }
+  .examLinks > a {
+    padding: 14px 10px;
+    font-size: 14px;
+    gap: 6px;
+    min-height: 90px;
+  }
+  .examLinks > a > svg:first-child {
+    display: none;
+  }
+  .finalSection {
+    padding: 28px 22px;
+  }
+  .heroButtons {
+    align-items: stretch;
+  }
+  .heroButtons > a {
+    width: 100%;
+    justify-content: center;
   }
 }

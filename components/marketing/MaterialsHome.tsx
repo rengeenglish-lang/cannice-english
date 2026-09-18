@@ -142,15 +142,14 @@ export function MaterialsHome({
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <p className={styles.overline}>
-              <span className={styles.statusDot} /> Çalışma masanıza hoş
-              geldiniz
+              <span className={styles.statusDot} /> HEDEFİNİZE GİDEN YOL BURADA
             </p>
             <h1 id="home-title">
-              Büyük hedefler.
+              İngilizce sınavlarına
               <br />
-              <em>Doğru kaynaklar.</em>
+              <em>bir adım önde</em>
               <br />
-              Sizin temponuz.
+              hazırlanın.
             </h1>
             <p className={styles.heroDescription}>
               İngilizce sınav hazırlığınız için tek tek seçebileceğiniz
@@ -172,51 +171,38 @@ export function MaterialsHome({
               olmadan deneyebilirsiniz.
             </p>
           </div>
-          <div className={styles.studyDesk} aria-label="Örnek çalışma notları">
-            <div className={styles.deskOrbit} aria-hidden="true" />
-            <div className={styles.wordCard}>
-              <span>BUGÜNÜN KELİMESİ</span>
-              <strong lang="en">progress</strong>
-              <p>ilerleme · gelişim</p>
-              <span lang="en">One small step at a time.</span>
+          <div
+            className={styles.learningVisual}
+            aria-label="Cannice English çalışma yolları"
+          >
+            <div className={styles.visualTop}>
+              <span>CANNICE ENGLISH</span>
+              <span>LEARN · PRACTISE · PROGRESS</span>
             </div>
-            <div className={styles.worksheet}>
-              <div className={styles.sheetTop}>
-                <span>C / E</span>
-                <span>ÇALIŞMA NOTLARI — 01</span>
-                <BookOpen size={18} aria-hidden="true" />
-              </div>
-              <p className={styles.sheetLabel}>DİL BİLGİSİ / ZAMANLAR</p>
-              <h2>
-                Bir ipucu,
-                <br />
-                bir adım ileri.
-              </h2>
-              <p className={styles.sheetSentence} lang="en">
-                She <mark>has worked</mark> here
-                <br />
-                since 2020.
-              </p>
-              <div className={styles.sheetAnnotation}>
-                <span aria-hidden="true">↳</span>
-                <p>
-                  <strong>“Since” bize ne söyler?</strong>
-                  <br />
-                  Geçmişte başlayan ve bugüne uzanan bir süre.
-                </p>
-              </div>
-              <div className={styles.sheetFooter}>
-                <span>Oku. Anla. Uygula.</span>
-                <span aria-hidden="true">01</span>
-              </div>
+            <div className={styles.visualBrand} aria-hidden="true">
+              C<span>e.</span>
+              <Sparkles size={64} />
             </div>
-            <div className={styles.deskNote}>
-              <Sparkles size={17} aria-hidden="true" />
-              <span>
-                Bugün küçük bir adım.
-                <br />
-                <strong>Yarın daha sağlam bir temel.</strong>
-              </span>
+            <p>
+              Bugünün çalışması.
+              <br />
+              <strong>Yarının fırsatları.</strong>
+            </p>
+            <div className={styles.visualCards}>
+              <Link href="#materials">
+                <BookOpen size={25} />
+                <span>
+                  Size ait kaynaklar<strong>Kendi temponuzda çalışın</strong>
+                </span>
+                <ArrowUpRight size={20} />
+              </Link>
+              <Link href="#live-groups">
+                <Users size={25} />
+                <span>
+                  Canlı grup dersleri<strong>Birlikte ilerleyin</strong>
+                </span>
+                <ArrowUpRight size={20} />
+              </Link>
             </div>
           </div>
         </div>
@@ -228,31 +214,6 @@ export function MaterialsHome({
         </div>
       </section>
 
-      <section
-        className={styles.offerPaths}
-        aria-label="Çalışma yolunuzu seçin"
-      >
-        <Link href="#materials">
-          <BookOpen size={26} aria-hidden="true" />
-          <div>
-            <span>KENDİ TEMPONUZDA</span>
-            <h2>Materyalinizi seçin.</h2>
-            <p>İhtiyacınız olan kitap veya çalışma paketini ayrı ayrı alın.</p>
-          </div>
-          <ArrowUpRight size={22} aria-hidden="true" />
-        </Link>
-        <Link href="#live-groups">
-          <Users size={26} aria-hidden="true" />
-          <div>
-            <span>BİRLİKTE İLERLEYİN</span>
-            <h2>Canlı gruba katılın.</h2>
-            <p>
-              Hedefinize uygun grubun içeriğini ve ders programını inceleyin.
-            </p>
-          </div>
-          <ArrowUpRight size={22} aria-hidden="true" />
-        </Link>
-      </section>
       <section
         id="exam-path"
         className={styles.examSection}
@@ -278,7 +239,7 @@ export function MaterialsHome({
                 { "--exam-color": EXAM_META[exam.code].solid } as CSSProperties
               }
             >
-              <span className={styles.examDot} />
+              <BookOpen size={24} aria-hidden="true" />
               <span>{exam.name}</span>
               <ArrowUpRight size={18} aria-hidden="true" />
             </Link>
@@ -290,6 +251,31 @@ export function MaterialsHome({
             </Link>
           ) : null}
         </div>
+      </section>
+      <section
+        className={styles.offerPaths}
+        aria-label="Çalışma yolunuzu seçin"
+      >
+        <Link href="#materials">
+          <BookOpen size={26} aria-hidden="true" />
+          <div>
+            <span>KENDİ TEMPONUZDA</span>
+            <h2>Materyalinizi seçin.</h2>
+            <p>İhtiyacınız olan kitap veya çalışma paketini ayrı ayrı alın.</p>
+          </div>
+          <ArrowUpRight size={22} aria-hidden="true" />
+        </Link>
+        <Link href="#live-groups">
+          <Users size={26} aria-hidden="true" />
+          <div>
+            <span>BİRLİKTE İLERLEYİN</span>
+            <h2>Canlı gruba katılın.</h2>
+            <p>
+              Hedefinize uygun grubun içeriğini ve ders programını inceleyin.
+            </p>
+          </div>
+          <ArrowUpRight size={22} aria-hidden="true" />
+        </Link>
       </section>
       <section
         id="materials"
