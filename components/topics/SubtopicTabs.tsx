@@ -6,7 +6,7 @@ function shortLabel(title: string, topicName: string): string {
   const stripped = title.startsWith(`${topicName} – `) ? title.slice(topicName.length + 3) : title;
   return stripped
     .replace(/^Konuya Giriş$/i, "Giriş")
-    .replace(/^Phrasal Verb Sözlüğü \((\d)\/(\d)\):\s*/i, "")
+    .replace(/^.*(?:Sözlüğü|Referansı) \(\d\/\d\):\s*/i, "")
     .replace(/^Örnek Sorular( ve Çözümler)?$/i, "Örnek Sorular");
 }
 

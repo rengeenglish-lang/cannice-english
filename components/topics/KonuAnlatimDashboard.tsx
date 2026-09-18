@@ -92,7 +92,7 @@ export function KonuAnlatimDashboard({
     isExampleLesson && selectedLesson?.contentBody ? parseExampleBlocks(selectedLesson.contentBody) : [];
 
   const isGirisLesson = selectedLesson ? /Konuya Giriş/i.test(selectedLesson.title) : false;
-  const isGlossaryLesson = selectedLesson ? /Sözlüğü/i.test(selectedLesson.title) : false;
+  const isGlossaryLesson = selectedLesson ? /Sözlüğü|Referansı/i.test(selectedLesson.title) : false;
   const accordionSections = (() => {
     if (isGirisLesson && selectedLesson?.contentBody) return parseAccordionSections(selectedLesson.contentBody);
     if (isGlossaryLesson && selectedLesson?.contentBody) {
@@ -194,7 +194,7 @@ export function KonuAnlatimDashboard({
                 <>
                   {isGlossaryLesson ? (
                     <p className="mb-4 text-lg font-semibold text-slate-700">
-                      {"Aşağıdaki liste, her biri bir örnek cümleyle birlikte, onluk gruplar halinde düzenlenmiştir. Particle'ların genel mantığı için Giriş dersine bakabilirsiniz."}
+                      Aşağıdaki liste, her biri bir örnek cümleyle birlikte, onluk gruplar halinde düzenlenmiştir.
                     </p>
                   ) : null}
                   <ContentAccordion sections={accordionSections} />
