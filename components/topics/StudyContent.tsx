@@ -32,6 +32,24 @@ function EmphasizedText({ text }: { text: string }) {
   return nodes;
 }
 
+function GlossaryEntry({ text }: { text: string }) {
+  // Glossary headwords may contain parentheses and use a colon or a spaced dash.
+  // Match only the first line so examples keep their existing formatting.
+  const heading = /^([^\n]+?)(:|[ \t]+[–—-])(?=\s|$)/.exec(text);
+  if (!heading || !/\p{L}/u.test(heading[1])) {
+    return <EmphasizedText text={text} />;
+  }
+  return (
+    <>
+      <strong className="font-black text-slate-950" style={{ WebkitTextStroke: "0.3px currentColor" }}>
+        {heading[1]}
+      </strong>
+      {heading[2]}
+      <EmphasizedText text={text.slice(heading[0].length)} />
+    </>
+  );
+}
+
 export function StudyContent({ text, glossary = false }: { text: string; glossary?: boolean }) {
   // Keep glossary entries and their examples together; sentence bullets are for explanations.
   const blocks = text.split(/\n\s*\n/).filter((block) => block.trim());
@@ -39,7 +57,7 @@ export function StudyContent({ text, glossary = false }: { text: string; glossar
     <div className="space-y-5 text-lg font-medium leading-8 text-slate-800 sm:text-xl sm:leading-9">
       {blocks.map((block, blockIndex) => {
         if (glossary) {
-          return <p key={blockIndex} className="whitespace-pre-line"><EmphasizedText text={block} /></p>;
+          return <p key={blockIndex} className="whitespace-pre-line"><GlossaryEntry text={block} /></p>;
         }
         const points = block.split("\n").flatMap((line) => {
           const clean = line.trim().replace(/^[•●]\s*/, "");
