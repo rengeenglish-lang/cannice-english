@@ -1,13 +1,16 @@
 "use client";
 
+import { StudyContent } from "@/components/topics/StudyContent";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { AccordionSection } from "@/components/topics/parseAccordionSections";
 
 export function ContentAccordion({
   sections,
+  glossary = false,
 }: {
   sections: AccordionSection[];
+  glossary?: boolean;
 }) {
   const [openIndex, setOpenIndex] = useState(0);
 
@@ -23,6 +26,7 @@ export function ContentAccordion({
             <button
               type="button"
               onClick={() => setOpenIndex(open ? -1 : index)}
+              aria-expanded={open}
               className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left text-lg font-extrabold text-slate-900 transition hover:bg-blue-50/60 sm:text-xl"
             >
               {section.title}
@@ -32,9 +36,7 @@ export function ContentAccordion({
             </button>
             {open ? (
               <div className="border-t border-slate-100 px-5 py-5">
-                <p className="whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">
-                  {section.body}
-                </p>
+                <StudyContent text={section.body} glossary={glossary} />
               </div>
             ) : null}
           </div>

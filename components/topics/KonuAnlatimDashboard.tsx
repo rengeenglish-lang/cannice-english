@@ -13,6 +13,7 @@ import {
   parseGlossaryEntries,
   groupGlossaryIntoAccordion,
 } from "@/components/topics/parseGlossaryEntries";
+import { StudyContent } from "@/components/topics/StudyContent";
 import { ContentAccordion } from "@/components/topics/ContentAccordion";
 import { TopicSidebar } from "@/components/topics/TopicSidebar";
 import { TopicHero } from "@/components/topics/TopicHero";
@@ -266,13 +267,11 @@ export function KonuAnlatimDashboard({
                       onluk gruplar halinde düzenlenmiştir.
                     </p>
                   ) : null}
-                  <ContentAccordion sections={accordionSections} />
+                  <ContentAccordion sections={accordionSections} glossary={isGlossaryLesson} />
                 </>
               ) : selectedLesson.contentBody ? (
                 <div className={CARD}>
-                  <p className="whitespace-pre-line text-xl font-semibold leading-9 text-slate-900">
-                    {selectedLesson.contentBody}
-                  </p>
+                  <StudyContent text={selectedLesson.contentBody} />
                 </div>
               ) : (
                 <div className={CARD}>
