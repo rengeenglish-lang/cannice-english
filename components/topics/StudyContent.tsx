@@ -25,7 +25,7 @@ function EmphasizedText({ text }: { text: string }) {
     if (label.trim().split(/\s+/).length > 8 || !/\p{L}/u.test(label)) continue;
     const start = match.index + match[1].length;
     nodes.push(<HighlightedText key={`text-${cursor}`} text={text.slice(cursor, start)} />);
-    nodes.push(<strong key={`label-${start}`} className="font-extrabold text-slate-950">{label}:</strong>);
+    nodes.push(<strong key={`label-${start}`} className="font-black text-slate-950" style={{ WebkitTextStroke: "0.3px currentColor" }}>{label}:</strong>);
     cursor = start + label.length + 1;
   }
   nodes.push(<HighlightedText key={`text-${cursor}`} text={text.slice(cursor)} />);
