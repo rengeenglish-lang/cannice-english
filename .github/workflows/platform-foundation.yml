@@ -43,8 +43,8 @@ jobs:
       - name: Check generated client and types
         run: npm run typecheck
       - name: Access policies and progress regressions
-        run: node --import tsx --test tests/commercial.test.ts tests/learning-overview.test.mjs tests/curriculum.test.ts
+        run: node --import tsx --test tests/commercial.test.ts tests/learning-overview.test.mjs tests/curriculum.test.ts tests/cohorts.test.ts
       - name: Payment approval and concurrent final-seat booking
-        run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/commercial-database.test.ts tests/group-availability.test.ts tests/curriculum-database.test.ts
+        run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/commercial-database.test.ts tests/group-availability.test.ts tests/curriculum-database.test.ts tests/cohorts-database.test.ts
       - name: Production build against isolated database
         run: npm run build

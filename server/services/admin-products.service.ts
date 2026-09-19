@@ -187,6 +187,6 @@ export async function addLiveSession(courseId: string, raw: Record<string, unkno
 
 export async function deleteLiveSession(id: string) {
   const session = await db.liveSession.findUnique({ where: { id } });
-  if (session?.availabilityEnabled) throw new Error("Bu dersi grup dersleri takviminden yönetin.");
+  if (session?.cohortId || session?.availabilityEnabled) throw new Error("Bu dersi grup dersleri takviminden yönetin.");
   return db.liveSession.delete({ where: { id } });
 }

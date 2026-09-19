@@ -190,6 +190,7 @@ export async function verifyActivityCompletion(actorId: string, enrollmentId: st
       if (!input.liveSessionId) throw new Error("Canlı ders için yoklama kanıtı gerekli.");
       const session = await tx.liveSession.findUniqueOrThrow({ where: { id: input.liveSessionId }, include: { bookings: { where: { studentId: enrollment.userId, status: "ACTIVE" } } } });
       if (session.courseId !== enrollment.courseId || session.cancelled || session.endsAt > new Date() || session.startsAt < enrollment.grantedAt || (session.endsAt.getTime() - session.startsAt.getTime()) / 60000 < activity.durationMinutes || (session.availabilityEnabled && !session.bookings.length)) throw new Error("Geçerli tamamlanmış ders ve öğrenci kaydı gerekli.");
+      if (session.cohortId && !(await tx.cohortEnrollment.findFirst({ where: { cohortId: session.cohortId, studentId: enrollment.userId, status: "CONFIRMED", cohort: { status: { in: ["OPEN", "CLOSED"] } } } }))) throw new Error("Öğrenci bu canlı dersin grubuna kayıtlı değil.");
       // The admin's evidenceNote attests actual attendance; scheduled time alone never grants credit.
     } else {
       if (!input.submissionId) throw new Error("Değerlendirilmiş öğrenci çalışması gerekli.");

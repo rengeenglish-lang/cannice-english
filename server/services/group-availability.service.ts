@@ -17,6 +17,7 @@ export async function listGroupSlots(start: Date, end: Date, admin = false) {
   const slots = await db.liveSession.findMany({
     where: {
       availabilityEnabled: true,
+      cohortId: null,
       startsAt: { gte: start, lt: end },
       ...(!admin ? { course: { product: { isPublished: true } } } : {}),
     },
@@ -32,6 +33,7 @@ export async function getGroupSlot(id: string, admin = false) {
   const slot = await db.liveSession.findFirst({
     where: {
       id,
+      cohortId: null,
       availabilityEnabled: true,
       ...(!admin ? { course: { product: { isPublished: true } } } : {}),
     },
@@ -59,7 +61,7 @@ async function lockSlot(tx: TransactionClient, id: string) {
 export async function enrollGroupSlot(slotId: string, studentId: string) {
   return db.$transaction(async (tx) => {
     const slot = await lockSlot(tx, slotId);
-    if (!slot || !slot.availabilityEnabled || !slot.course.product.isPublished)
+    if (!slot || slot.cohortId || !slot.availabilityEnabled || !slot.course.product.isPublished)
       throw new Error("Ders bulunamadı.");
     const student = await tx.user.findUnique({ where: { id: studentId } });
     if (!student?.isActive) throw new Error("Aktif bir hesap gerekiyor.");
@@ -149,7 +151,7 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
         const original = await tx.liveSession.findUniqueOrThrow({
           where: { id },
         });
-        if (!original.availabilityEnabled)
+        if (original.cohortId || !original.availabilityEnabled)
           throw new Error("Bu ders uygunluk takviminde değil.");
         if (original.courseId !== input.courseId)
           throw new Error(
@@ -234,7 +236,7 @@ export async function manageGroupSlot(
 ) {
   return db.$transaction(async (tx) => {
     const slot = await lockSlot(tx, id);
-    if (!slot?.availabilityEnabled) throw new Error("Ders bulunamadı.");
+    if (slot?.cohortId || !slot?.availabilityEnabled) throw new Error("Ders bulunamadı.");
     if (operation === "delete") {
       if (await tx.groupLessonEnrollment.count({ where: { slotId: id } }))
         throw new Error("Öğrenci kaydı olan ders silinemez; dersi iptal edin.");

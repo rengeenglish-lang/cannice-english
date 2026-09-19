@@ -215,6 +215,9 @@ model User {
   accessGrants AccessGrant[]
   subscriptions MembershipSubscription[]
   auditEvents CommercialAudit[]
+  cohortMemberships CohortEnrollment[]
+  cohortWaitlists CohortWaitlist[]
+  teachingCohorts ProgrammeCohort[] @relation("CohortTeacher")
   verifiedActivities ActivityCompletion[] @relation("ActivityVerifier")
   orders               Order[]
   cart                 Cart?
@@ -277,6 +280,7 @@ model Course {
   updatedAt        DateTime              @updatedAt
 
   product      Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cohorts ProgrammeCohort[]
   modules      CourseModule[]
   liveSessions LiveSession[]
   enrollments  Enrollment[]
@@ -347,9 +351,12 @@ model LiveSession {
   instructor User? @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
   recurringSeries GroupLessonSeries? @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
   bookings GroupLessonEnrollment[]
+  cohortId String?
+  cohort ProgrammeCohort? @relation(fields: [cohortId], references: [id], onDelete: Restrict)
   activityCompletions ActivityCompletion[]
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  @@index([cohortId], map: "live_sessions_cohort_id_idx")
   @@index([startsAt, availabilityEnabled])
   @@index([recurringSeriesId])
   @@index([courseId])
@@ -519,6 +526,7 @@ model OrderItem {
   order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product    Product     @relation(fields: [productId], references: [id])
   accessGrants AccessGrant[]
+  cohortEnrollment CohortEnrollment?
   subscription MembershipSubscription?
   enrollment Enrollment?
 
@@ -884,4 +892,98 @@ model ActivityCompletion {
  @@index([activityId])
  @@index([verifiedById])
  @@map("activity_completions")
+}
+
+
+enum CohortStatus {
+ DRAFT
+ OPEN
+ CLOSED
+ CANCELLED
+ ARCHIVED
+}
+enum CohortEnrollmentStatus {
+ PENDING
+ CONFIRMED
+ CANCELLED
+}
+enum CohortWaitlistStatus {
+ WAITING
+ ENROLLED
+ CANCELLED
+}
+model ProgrammeCohort {
+ id String @id @default(cuid())
+ courseId String
+ teacherId String
+ title String
+ startsAt DateTime
+ expectedEndsAt DateTime
+ timezone String @default("Europe/Istanbul")
+ minimumCapacity Int @default(5)
+ maximumCapacity Int @default(10)
+ status CohortStatus @default(DRAFT)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ course Course @relation(fields: [courseId], references: [id], onDelete: Restrict)
+ teacher User @relation("CohortTeacher", fields: [teacherId], references: [id], onDelete: Restrict)
+ schedule CohortSchedule[]
+ enrollments CohortEnrollment[]
+ waitlist CohortWaitlist[]
+ sessions LiveSession[]
+ events CohortEvent[]
+ @@index([courseId, status, startsAt])
+ @@index([teacherId, status])
+ @@map("programme_cohorts")
+}
+model CohortSchedule {
+ id String @id @default(cuid())
+ cohortId String
+ weekday Int
+ startMinute Int
+ endMinute Int
+ cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+ @@unique([cohortId, weekday, startMinute])
+ @@map("cohort_schedules")
+}
+model CohortEnrollment {
+ id String @id @default(cuid())
+ cohortId String
+ studentId String
+ orderItemId String? @unique
+ status CohortEnrollmentStatus @default(PENDING)
+ requestedAt DateTime @default(now())
+ confirmedAt DateTime?
+ cancelledAt DateTime?
+ cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+ student User @relation(fields: [studentId], references: [id], onDelete: Restrict)
+ orderItem OrderItem? @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+ @@unique([cohortId, studentId])
+ @@index([cohortId, status])
+ @@index([studentId, status])
+ @@map("cohort_enrollments")
+}
+model CohortWaitlist {
+ id String @id @default(cuid())
+ cohortId String
+ studentId String
+ status CohortWaitlistStatus @default(WAITING)
+ joinedAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+ student User @relation(fields: [studentId], references: [id], onDelete: Restrict)
+ @@unique([cohortId, studentId])
+ @@index([cohortId, status, joinedAt])
+ @@map("cohort_waitlists")
+}
+// Durable event handoff for the notification phase; no message is sent or student charged here.
+model CohortEvent {
+ id String @id @default(cuid())
+ cohortId String
+ type String
+ createdAt DateTime @default(now())
+ processedAt DateTime?
+ cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+ @@index([processedAt, createdAt])
+ @@map("cohort_events")
 }

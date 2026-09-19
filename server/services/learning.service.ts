@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/server/db";
 
 const visibleSessions = (userId: string) => ({
+  AND: [{ OR: [{ cohortId: null }, { cohort: { status: { in: ["OPEN" as const, "CLOSED" as const] }, enrollments: { some: { studentId: userId, status: "CONFIRMED" as const } } } }] }],
   OR: [
     { availabilityEnabled: false },
     {

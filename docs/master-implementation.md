@@ -80,3 +80,13 @@ Completion is administrator verified and audited. Guided/independent/review acti
 
 ### Honest content readiness
 Approved plans total 250 hours each. They are not yet 250-hour activity inventories. Import intentionally creates zero activities rather than arbitrarily splitting budgets to manufacture hours. Actual resources, tasks, rubrics, authorized simulation mappings and academic verification remain publication requirements. Phase 2 implements the architecture and approved module import; it does not claim seven publishable programmes or a working full-exam engine.
+
+
+## Phase 3 — programme cohorts, enrollment and waitlists
+ProgrammeCohort references the existing Course, assigned teacher, dated programme span and weekly schedule. Minimum/maximum capacity defaults to 5/10 and is administrator configurable. Individual LiveSession bookings remain separate. Linking a session to a cohort checks course/date compatibility and refuses sessions with individual booking history. Course lesson visibility and activity credit now enforce cohort membership for linked sessions.
+
+Pending registrations do not reserve seats or grant access. Administrator confirmation requires a matching successful paid order item and its active academic enrollment. The order, cohort and enrollment are locked in that order; confirmed seat counts are authoritative. Database triggers independently protect the maximum and capacity reductions. Waitlists are idempotent, ordered by join time, separately cancellable and never auto-charge/auto-enroll. Seat release and group confirmation create durable internal events for the later notification delivery phase; no external notifications are sent now.
+
+Service boundaries enforce administrator mutations, owner enrollment requests and assigned-teacher roster access. Roster counts distinguish pending/confirmed/cancelled. Public discovery returns genuine counts with exam filtering and no student details; only open cohorts with published curricula are discoverable. Cancelled/archived cohorts cannot reopen, and paid members must be explicitly reconciled before archiving/cancelling a cohort. Academic records are preserved.
+
+The phase 3 backend is not yet a public checkout. Payment reservation/approval must be integrated transactionally in phase 4 before group sales open. This phase does not charge a student before discovering whether a seat exists: no new payment UI/provider calls are added. Current paid-confirmation service is for supported preexisting/manual payments only and rejects oversubscription; the second paid candidate must be handled through payment review/transfer, not silently enrolled. Full admin/student UI and notification dispatch remain their planned later phases.
