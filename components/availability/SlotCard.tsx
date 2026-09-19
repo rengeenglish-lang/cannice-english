@@ -32,7 +32,7 @@ export function SlotCard({
 }) {
   const a = slot.availability;
   return (
-    <article className="flex min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)]">
       <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
         {weekdayOnly ? lessonWeekday(slot.startsAt) : lessonDate(slot.startsAt)}
       </p>
@@ -55,7 +55,7 @@ export function SlotCard({
         {slot.instructor ? ` · ${slot.instructor.name}` : ""}
       </p>
       <span
-        className={`mt-4 self-start rounded-full px-3 py-1 text-sm font-bold ${tones[a.status]}`}
+        className={`mt-4 self-start rounded-full px-3 py-1 text-xs font-black uppercase tracking-wide ${tones[a.status]}`}
       >
         {STATUS_LABELS[a.status]}
       </span>
@@ -103,7 +103,7 @@ export function SlotCard({
             ? `/admin/group-availability/${slot.id}`
             : `/group-lessons/${slot.id}`
         }
-        className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-blue-700"
+        className="primary-button mt-5 w-full"
       >
         {admin
           ? "Dersi yönet"

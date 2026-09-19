@@ -11,22 +11,23 @@ export async function AvailabilityHome() {
   return (
     <section
       id="group-availability"
-      className="mx-auto my-12 w-[calc(100%-40px)] max-w-[1536px] rounded-3xl bg-blue-50/70 p-5 sm:p-8"
+      className="mx-auto my-16 w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-[2rem] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)] sm:w-[calc(100%-48px)] sm:p-10 lg:w-[calc(100%-64px)]"
       aria-labelledby="availability-title"
     >
       <AvailabilityRefresh />
-      <p className="text-xs font-extrabold uppercase tracking-widest text-blue-700">
-        Bu hafta · Canlı grup dersleri
-      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="rounded-full bg-blue-600 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white">GRUP DERSİ</span>
+        <p className="text-xs font-extrabold uppercase tracking-widest text-blue-700">Bu haftanın programı</p>
+      </div>
       <h2
         id="availability-title"
-        className="mt-3 text-3xl font-extrabold text-slate-900"
+        className="mt-4 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl"
       >
         Programına uygun bir grup dersi bul
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
         Bu haftanın uygun derslerini incele, grubun kontenjanı dolmadan yerini
-        ayır. Saatler Türkiye saatidir.
+        ayır. Gruplar en fazla 10 öğrencidir; saatler Türkiye saatidir.
       </p>
       <div className="mt-7 grid gap-4 md:grid-cols-3">
         {slots.map((slot) => (
@@ -40,7 +41,7 @@ export async function AvailabilityHome() {
         </p>
       )}
       <Link
-        className="mt-6 inline-flex min-h-11 items-center font-bold text-blue-700"
+        className="secondary-button mt-7"
         href="/group-lessons"
       >
         Tüm haftalık uygunluğu gör →
