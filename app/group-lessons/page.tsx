@@ -8,6 +8,7 @@ import {
 import { listGroupSlots } from "@/server/services/group-availability.service";
 import { WeekView } from "@/components/availability/WeekView";
 import { AvailabilityRefresh } from "@/components/availability/AvailabilityRefresh";
+import { PageHero } from "@/components/ui/PageHero";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Haftalık Grup Dersleri" };
 export default async function GroupLessonsPage({
@@ -28,16 +29,18 @@ export default async function GroupLessonsPage({
     ielts: "IELTS",
   };
   return (
-    <main className="mx-auto max-w-7xl px-5 py-12">
+    <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <AvailabilityRefresh />
-      <p className="eyebrow">Birlikte öğrenelim</p>
-      <h1 className="page-title">Haftalık grup dersleri</h1>
-      <p className="mt-3 text-slate-600">
-        Programına uygun saati seç, kontenjanı kontrol et ve yerini ayır.
-      </p>
+      <PageHero>
+        <p className="eyebrow">Birlikte öğrenelim</p>
+        <h1 className="page-title">Haftalık grup dersleri</h1>
+        <p className="page-copy">
+          Programına uygun saati seç, kontenjanı kontrol et ve yerini ayır.
+        </p>
+      </PageHero>
       <nav
         aria-label="Sınav türü"
-        className="mt-7 grid grid-cols-2 gap-2 rounded-2xl border border-slate-200 bg-white p-2 sm:grid-cols-4"
+        className="grid grid-cols-2 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgba(7,27,52,.07)] sm:grid-cols-4"
       >
         {GROUP_EXAM_FILTERS.map((value) => (
           <Link
