@@ -12,7 +12,7 @@ The existing `LiveSession` is reused with default capacity 10, configurable per 
 - `/group-lessons/[id]`: confirmation, real capacity, booking/cancellation and alternatives.
 - `/admin/group-availability`: admin calendar and demo creation.
 - `/admin/group-availability/new` and `/admin/group-availability/[id]`: creation/editing and actual student list.
-- Homepage section in `components/availability/AvailabilityHome.tsx`, directly below the hero.
+- Homepage section in `components/availability/AvailabilityHome.tsx`, directly after the existing live-groups section so the original homepage sequence stays intact.
 - UI in `components/availability/`; business rules in `lib/availability.ts`; transactions in `server/services/group-availability.service.ts`; authenticated mutations in `app/actions/group-availability.ts`.
 - Sign-in/register preserve a validated selected slot. Purchase continuation uses a seven-day HTTP-only cookie and dashboard link.
 - Dashboard and learning-service queries include managed lessons only for booked students and hide cancelled session join links.

@@ -215,7 +215,6 @@ export function MaterialsHome({
         </div>
       </section>
 
-      <AvailabilityHome />
       <section
         id="exam-path"
         className={styles.examSection}
@@ -373,6 +372,7 @@ export function MaterialsHome({
           </div>
         ) : null}
       </section>
+      <AvailabilityHome />
       <section
         id="sample"
         className={styles.sampleSection}
