@@ -1,4 +1,3 @@
-import { PageHero } from "@/components/ui/PageHero";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
@@ -6,7 +5,8 @@ import {
   listProducts,
 } from "@/server/services/catalog.service";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
-import { SpeakingPracticePromo } from "@/components/speaking/SpeakingPracticePromo";
+import { ExamShowcase } from "@/components/exams/ExamShowcase";
+import { EXAM_LANDING_CONTENT } from "@/lib/exam-landing";
 
 type Props = { params: Promise<{ examSlug: string }> };
 
@@ -22,18 +22,32 @@ export default async function ExamLandingPage({ params }: Props) {
   if (!exam) notFound();
 
   const products = await listProducts({ examTypeId: exam.id });
+  const content = EXAM_LANDING_CONTENT[exam.code];
+
+  if (content) {
+    return (
+      <ExamShowcase
+        name={exam.name}
+        slug={exam.slug}
+        content={content}
+        speakingHref={exam.code === "TOEFL" ? "/dashboard/speaking-practice/toefl" : undefined}
+      >
+        <section className="mx-auto w-full max-w-[1320px] px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mb-7"><p className="eyebrow">Hazırlık seçenekleri</p><h2 className="mt-2 text-3xl font-black tracking-tight">{exam.name} kaynakları</h2></div>
+          <ProductGrid products={products} emptyLabel={`${exam.name} için hazırlık paketleri yakında eklenecek.`} />
+        </section>
+      </ExamShowcase>
+    );
+  }
 
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
-      <PageHero>
+      <header className="inner-page-hero">
         <p className="eyebrow">{exam.name}</p>
         <h1 className="page-title">{exam.name} Online Hazırlık</h1>
-      </PageHero>
+      </header>
       {exam.shortDescription ? (
         <p className="page-copy">{exam.shortDescription}</p>
-      ) : null}
-      {exam.code === "IELTS" || exam.code === "TOEFL" ? (
-        <SpeakingPracticePromo exam={exam.code.toLowerCase() as "ielts" | "toefl"} />
       ) : null}
       <div className="mt-10">
         <ProductGrid
