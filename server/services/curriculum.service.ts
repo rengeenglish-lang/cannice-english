@@ -37,7 +37,7 @@ async function audit(tx: TransactionClient, actorId: string, targetId: string, a
 export async function importApprovedProgrammePlans(actorId: string) {
   return db.$transaction(async (tx) => {
     await administrator(tx, actorId);
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(25020260919::bigint)`;
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(25020260919::bigint)::text AS locked`;
     const price = await tx.commercialPrice.findUniqueOrThrow({ where: { kind_interval: { kind: "GROUP", interval: "MONTHLY" } } });
     const courseIds: string[] = [];
     for (const plan of approvedProgrammePlans) {
