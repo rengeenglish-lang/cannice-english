@@ -1,7 +1,8 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { db } from "../server/db";
-import { createCohort, changeCohortStatus, changeCohortCapacity, requestCohortEnrollment, confirmPaidCohortEnrollment, joinCohortWaitlist, leaveCohortWaitlist, cancelCohortEnrollment, getCohortRoster, getCohortWaitlist, listProgrammeCohorts } from "../server/services/cohorts.service";
+import { createCohort, changeCohortStatus, changeCohortCapacity, requestCohortEnrollment, confirmPaidCohortEnrollment, joinCohortWaitlist, leaveCohortWaitlist, cancelCohortEnrollment, getCohortRoster, getCohortWaitlist, listProgrammeCohorts, attachCohortSession } from "../server/services/cohorts.service";
+import { getEnrollmentForCourse } from "../server/services/learning.service";
 const url = new URL(process.env.DATABASE_URL!);
 if (!["127.0.0.1", "localhost"].includes(url.hostname) || !url.pathname.endsWith("_test")) throw new Error("Requires isolated local *_test database");
 after(async () => db.$disconnect());
@@ -58,7 +59,13 @@ test("cohort concurrency, paid confirmation, waitlist, capacity edits and role i
   assert.equal((await getCohortWaitlist(admin.id, cohort.id)).length, 1); // no automatic charge or enrollment
   await confirmPaidCohortEnrollment(admin.id, cohort.id, loser.id, loser.itemId);
   assert.equal((await getCohortWaitlist(admin.id, cohort.id)).length, 0);
+  const session = await db.liveSession.create({ data: { courseId, title: "Cohort-only lesson", startsAt: new Date(raw.startsAt.getTime()+3600000), endsAt: new Date(raw.startsAt.getTime()+7200000), meetingUrl: "https://example.test/lesson" } });
+  await attachCohortSession(admin.id, cohort.id, session.id);
+  assert.ok((await getEnrollmentForCourse(students[1].id, courseId))!.course.liveSessions.some((s) => s.id === session.id));
+  assert.ok(!(await getEnrollmentForCourse(students[0].id, courseId))!.course.liveSessions.some((s) => s.id === session.id));
   await changeCohortStatus(admin.id, cohort.id, "CLOSED");
+  await confirmPaidCohortEnrollment(admin.id, cohort.id, students[1].id, students[1].itemId); // paid retry stays idempotent after closure
+
   assert.ok(!(await listProgrammeCohorts()).some((c) => c.id === cohort.id));
   await assert.rejects(changeCohortStatus(admin.id, cohort.id, "CANCELLED"), /onaylı/);
   await leaveCohortWaitlist(loser.id, cohort.id);
