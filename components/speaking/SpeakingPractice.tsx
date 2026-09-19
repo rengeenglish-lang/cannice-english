@@ -1,254 +1,210 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Mic, Play, RotateCcw, Square, Volume2 } from "lucide-react";
-import { analyseSpeaking, SPEAKING_EXAMS, type SpeakingExam } from "@/lib/speaking-practice";
+import { BookOpen, CheckCircle2, Headphones, Mic, Play, RotateCcw, Square, Volume2 } from "lucide-react";
+import { analyseSpeaking, repeatAccuracy, SPEAKING_EXAMS, type SpeakingExam } from "@/lib/speaking-practice";
 
 type RecognitionResult = { 0: { transcript: string }; isFinal: boolean };
 type RecognitionEvent = { resultIndex: number; results: ArrayLike<RecognitionResult> };
-type SpeechRecognitionLike = {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start(): void;
-  stop(): void;
-  onresult: ((event: RecognitionEvent) => void) | null;
-  onend: (() => void) | null;
-  onerror: (() => void) | null;
-};
-type RecognitionConstructor = new () => SpeechRecognitionLike;
+type Recognition = { continuous: boolean; interimResults: boolean; lang: string; start(): void; stop(): void; onresult: ((event: RecognitionEvent) => void) | null; onerror: (() => void) | null };
+type RecognitionConstructor = new () => Recognition;
+type Phase = "intro" | "ready" | "reading" | "listening" | "preparing" | "recording" | "transition" | "complete";
+type Mode = "practice" | "mock";
+type SavedAttempt = { exam: SpeakingExam; task: string; date: string; words: number; wpm: number };
 
-type SavedAttempt = {
-  exam: SpeakingExam;
-  task: string;
-  date: string;
-  words: number;
-  wpm: number;
-};
-
-const HISTORY_KEY = "cannice-speaking-history";
+const HISTORY_KEY = "cannice-speaking-history-v2";
 
 export function SpeakingPractice({ exam }: { exam: SpeakingExam }) {
   const config = SPEAKING_EXAMS[exam];
+  const [mode, setMode] = useState<Mode>("practice");
   const [taskIndex, setTaskIndex] = useState(0);
-  const [phase, setPhase] = useState<"ready" | "preparing" | "recording" | "finished">("ready");
-  const [seconds, setSeconds] = useState(0);
+  const [phase, setPhase] = useState<Phase>("intro");
+  const [elapsed, setElapsed] = useState(0);
   const [transcript, setTranscript] = useState("");
   const [interim, setInterim] = useState("");
+  const [notes, setNotes] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
   const [message, setMessage] = useState("");
+  const [completedCount, setCompletedCount] = useState(0);
   const [history, setHistory] = useState<SavedAttempt[]>(() => {
     if (typeof window === "undefined") return [];
-    try {
-      return JSON.parse(localStorage.getItem(HISTORY_KEY) ?? "[]") as SavedAttempt[];
-    } catch {
-      return [];
-    }
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) ?? "[]") as SavedAttempt[]; } catch { return []; }
   });
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const recognitionRef = useRef<Recognition | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const transcriptRef = useRef("");
   const task = config.tasks[taskIndex];
 
   useEffect(() => {
-    if (phase !== "preparing" && phase !== "recording") return;
-    const timer = window.setInterval(() => setSeconds((value) => value + 1), 1000);
+    if (!["reading", "preparing", "recording", "transition"].includes(phase)) return;
+    const timer = window.setInterval(() => setElapsed((value) => value + 1), 1000);
     return () => window.clearInterval(timer);
   }, [phase]);
 
   useEffect(() => {
-    if (phase === "preparing" && seconds >= task.preparationSeconds) void beginRecording();
-    if (phase === "recording" && seconds >= task.responseSeconds) stopRecording();
-  // beginRecording and stopRecording intentionally respond to timer thresholds.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seconds, phase, task.preparationSeconds, task.responseSeconds]);
+    if (phase === "reading" && task.reading && elapsed >= task.reading.seconds) playListeningOrPrepare();
+    if (phase === "preparing" && elapsed >= task.preparationSeconds) void beginRecording();
+    if (phase === "recording" && elapsed >= task.responseSeconds) finishResponse();
+    if (phase === "transition" && elapsed >= 4) startTask(taskIndex + 1);
+    // Phase transitions are driven by the visible exam timer.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elapsed, phase]);
 
   useEffect(() => () => {
     recognitionRef.current?.stop();
     recorderRef.current?.stream.getTracks().forEach((track) => track.stop());
+    speechSynthesis.cancel();
     if (audioUrl) URL.revokeObjectURL(audioUrl);
   }, [audioUrl]);
 
-  function readPrompt() {
+  function resetResponse() {
+    setElapsed(0); setTranscript(""); transcriptRef.current = ""; setInterim(""); setNotes(""); setMessage("");
+  }
+
+  function speak(text: string, onEnd?: () => void) {
     speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(task.prompt);
-    utterance.lang = "en-US";
-    utterance.rate = 0.92;
+    const utterance = new SpeechSynthesisUtterance(text.replace(/\b(Man|Woman|Professor):/g, "$1 says,"));
+    utterance.lang = "en-US"; utterance.rate = 0.92;
+    if (onEnd) utterance.onend = onEnd;
     speechSynthesis.speak(utterance);
   }
 
-  async function beginRecording() {
-    const Recognition = (window as typeof window & {
-      SpeechRecognition?: RecognitionConstructor;
-      webkitSpeechRecognition?: RecognitionConstructor;
-    }).SpeechRecognition ?? (window as typeof window & { webkitSpeechRecognition?: RecognitionConstructor }).webkitSpeechRecognition;
+  function startTask(index: number) {
+    if (index >= config.tasks.length) { setPhase("complete"); return; }
+    setTaskIndex(index); resetResponse();
+    const next = config.tasks[index];
+    if (next.reading) setPhase("reading");
+    else if (next.listening) {
+      setPhase("listening");
+      window.setTimeout(() => speak(next.listening!.script, () => beginPreparation(next)), 250);
+    } else beginPreparation(next);
+  }
 
-    if (!Recognition || !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-      setMessage("Tarayıcınız canlı konuşma tanımayı desteklemiyor. Güncel Chrome, Edge veya Safari ile tekrar deneyin.");
-      setPhase("ready");
-      return;
+  function beginPreparation(current = task) {
+    setElapsed(0);
+    if (current.preparationSeconds > 0) setPhase("preparing");
+    else void beginRecording();
+  }
+
+  function playListeningOrPrepare() {
+    setElapsed(0);
+    if (!task.listening) { beginPreparation(); return; }
+    setPhase("listening");
+    speak(task.listening.script, () => beginPreparation());
+  }
+
+  async function beginRecording() {
+    const browserWindow = window as typeof window & { SpeechRecognition?: RecognitionConstructor; webkitSpeechRecognition?: RecognitionConstructor };
+    const RecognitionApi = browserWindow.SpeechRecognition ?? browserWindow.webkitSpeechRecognition;
+    if (!RecognitionApi || !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      setMessage("Canlı konuşma tanıma için güncel Chrome, Edge veya Safari kullanın."); setPhase("ready"); return;
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       chunksRef.current = [];
       const recorder = new MediaRecorder(stream);
-      recorder.ondataavailable = (event) => event.data.size && chunksRef.current.push(event.data);
+      recorder.ondataavailable = (event) => { if (event.data.size) chunksRef.current.push(event.data); };
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType });
-        setAudioUrl((old) => {
-          if (old) URL.revokeObjectURL(old);
-          return URL.createObjectURL(blob);
-        });
+        setAudioUrl((old) => { if (old) URL.revokeObjectURL(old); return URL.createObjectURL(blob); });
         stream.getTracks().forEach((track) => track.stop());
       };
-      recorder.start();
-      recorderRef.current = recorder;
-
-      const recognition = new Recognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = "en-US";
+      recorder.start(); recorderRef.current = recorder;
+      const recognition = new RecognitionApi();
+      recognition.continuous = true; recognition.interimResults = true; recognition.lang = "en-US";
       recognition.onresult = (event) => {
-        let finalText = "";
-        let interimText = "";
+        let finalText = "", interimText = "";
         for (let index = event.resultIndex; index < event.results.length; index += 1) {
           const result = event.results[index];
-          if (result.isFinal) finalText += `${result[0].transcript} `;
-          else interimText += result[0].transcript;
+          if (result.isFinal) finalText += `${result[0].transcript} `; else interimText += result[0].transcript;
         }
-        if (finalText) {
-          transcriptRef.current += finalText;
-          setTranscript(transcriptRef.current.trim());
-        }
+        if (finalText) { transcriptRef.current += finalText; setTranscript(transcriptRef.current.trim()); }
         setInterim(interimText);
       };
-      recognition.onerror = () => setMessage("Konuşma tanıma kesildi. Kaydı durdurup tekrar deneyebilirsiniz.");
-      recognition.start();
-      recognitionRef.current = recognition;
-      setMessage("");
-      setSeconds(0);
-      setPhase("recording");
-    } catch {
-      setMessage("Pratik yapabilmek için mikrofon iznine izin verin.");
-      setPhase("ready");
-    }
+      recognition.onerror = () => setMessage("Konuşma tanıma kesildi; ses kaydınız devam ediyor.");
+      recognition.start(); recognitionRef.current = recognition;
+      setElapsed(0); setPhase("recording"); setMessage("");
+    } catch { setMessage("Pratik yapabilmek için mikrofon iznine izin verin."); setPhase("ready"); }
   }
 
-  function startPreparation() {
-    setTranscript("");
-    transcriptRef.current = "";
-    setInterim("");
-    setMessage("");
-    setSeconds(0);
-    if (task.preparationSeconds === 0) void beginRecording();
-    else setPhase("preparing");
-  }
-
-  function stopRecording() {
-    recognitionRef.current?.stop();
-    recognitionRef.current = null;
+  function finishResponse() {
+    recognitionRef.current?.stop(); recognitionRef.current = null;
     if (recorderRef.current?.state === "recording") recorderRef.current.stop();
-    recorderRef.current = null;
-    setInterim("");
-    setPhase("finished");
-    const metrics = analyseSpeaking(transcriptRef.current, seconds);
-    const attempt: SavedAttempt = {
-      exam,
-      task: task.title,
-      date: new Date().toISOString(),
-      words: metrics.wordCount,
-      wpm: metrics.wordsPerMinute,
-    };
-    const next = [attempt, ...history].slice(0, 12);
-    setHistory(next);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+    recorderRef.current = null; setInterim("");
+    const metrics = analyseSpeaking(transcriptRef.current, Math.max(elapsed, 1));
+    const attempt = { exam, task: task.title, date: new Date().toISOString(), words: metrics.wordCount, wpm: metrics.wordsPerMinute };
+    setHistory((current) => {
+      const next = [attempt, ...current].slice(0, 20);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+      return next;
+    });
+    setCompletedCount((value) => value + 1);
+    setElapsed(0);
+    setPhase(mode === "mock" ? (taskIndex === config.tasks.length - 1 ? "complete" : "transition") : "complete");
   }
 
-  function reset(nextIndex = taskIndex) {
-    recognitionRef.current?.stop();
-    if (recorderRef.current?.state === "recording") recorderRef.current.stop();
-    setTaskIndex(nextIndex);
-    setPhase("ready");
-    setSeconds(0);
-    setTranscript("");
-    transcriptRef.current = "";
-    setInterim("");
-    setMessage("");
+  function changeMode(nextMode: Mode) {
+    recognitionRef.current?.stop(); speechSynthesis.cancel();
+    setMode(nextMode); setCompletedCount(0); setTaskIndex(0); resetResponse(); setPhase("intro");
   }
 
-  const metrics = analyseSpeaking(transcript, Math.max(seconds, 1));
-  const remaining = phase === "preparing" ? task.preparationSeconds - seconds : task.responseSeconds - seconds;
+  const metrics = analyseSpeaking(transcript, Math.max(elapsed, 1));
+  const accuracy = task.taskType === "repeat" ? repeatAccuracy(task.prompt, transcript) : null;
+  const limit = phase === "reading" ? task.reading?.seconds ?? 0 : phase === "preparing" ? task.preparationSeconds : phase === "recording" ? task.responseSeconds : phase === "transition" ? 4 : 0;
+  const remaining = Math.max(limit - elapsed, 0);
+  const examHistory = history.filter((item) => item.exam === exam).slice(0, 4);
+
+  if (phase === "intro") return (
+    <section className="dashboard-panel mx-auto max-w-4xl">
+      <div className="relative z-10">
+        <p className="eyebrow">{config.formatLabel}</p><h1 className="page-title">{config.name}</h1>
+        <p className="page-copy">{config.description}</p>
+        <div className="mt-6 rounded-2xl bg-[color:var(--brand-soft)] p-5"><p className="font-extrabold">Bölüm yönergeleri · {config.duration}</p><ul className="mt-3 space-y-2 text-sm leading-6 text-[color:var(--muted)]">{config.sectionInstructions.map((item) => <li key={item} className="flex gap-2"><CheckCircle2 size={17} className="mt-1 shrink-0 text-[color:var(--success)]" />{item}</li>)}</ul></div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <button type="button" onClick={() => { setMode("practice"); setPhase("ready"); }} className="rounded-2xl border-2 border-[color:var(--border)] p-5 text-left transition hover:border-[color:var(--accent)]"><Mic className="text-[color:var(--accent)]" /><span className="mt-3 block text-lg font-extrabold">Tek görev pratiği</span><span className="mt-1 block text-sm leading-6 text-[color:var(--muted)]">Bir görev seçin, istediğiniz kadar tekrar edin.</span></button>
+          <button type="button" onClick={() => { setMode("mock"); startTask(0); }} className="rounded-2xl bg-[color:var(--brand)] p-5 text-left text-white transition hover:bg-[color:var(--brand-strong)]"><Play /><span className="mt-3 block text-lg font-extrabold">Tam deneme modu</span><span className="mt-1 block text-sm leading-6 text-blue-100">Tüm görevleri yönergeler ve otomatik geçişlerle tamamlayın.</span></button>
+        </div>
+      </div>
+    </section>
+  );
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-      <section className="dashboard-panel">
-        <div className="relative z-10">
-          <div className="mb-6 flex flex-wrap gap-2" aria-label="Konuşma görevi seçin">
-            {config.tasks.map((item, index) => (
-              <button key={item.id} type="button" onClick={() => reset(index)} className={`pill-tab ${index === taskIndex ? "pill-tab-active" : ""}`}>
-                Görev {index + 1}
-              </button>
-            ))}
-          </div>
-          <p className="eyebrow">{task.label}</p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight">{task.title}</h1>
-          <div className="mt-5 rounded-2xl bg-[color:var(--brand-soft)] p-5">
-            <p className="text-base font-semibold leading-7 text-[color:var(--foreground)]">{task.prompt}</p>
-            <button type="button" onClick={readPrompt} className="ghost-button mt-3 -ml-4"><Volume2 size={18} /> Soruyu dinle</button>
-          </div>
-
-          <div className="mt-6 flex min-h-32 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[color:var(--border-strong)] p-6 text-center">
-            {phase === "ready" && <><Mic size={34} className="mb-3 text-[color:var(--accent)]" /><p className="font-bold">Hazır olduğunuzda başlayın</p><p className="mt-1 text-sm text-[color:var(--muted)]">{task.preparationSeconds} sn hazırlık · {task.responseSeconds} sn yanıt</p></>}
-            {phase === "preparing" && <><p className="text-sm font-bold uppercase tracking-widest text-[color:var(--accent)]">Hazırlık</p><p className="mt-2 text-5xl font-extrabold">{Math.max(remaining, 0)}</p></>}
-            {phase === "recording" && <><span className="mb-3 size-4 animate-pulse rounded-full bg-red-500" /><p className="text-sm font-bold uppercase tracking-widest text-red-600">Kayıt yapılıyor</p><p className="mt-2 text-5xl font-extrabold">{Math.max(remaining, 0)}</p></>}
-            {phase === "finished" && <><p className="text-sm font-bold uppercase tracking-widest text-[color:var(--success)]">Tamamlandı</p><p className="mt-2 text-2xl font-extrabold">Yanıtınızı inceleyin</p></>}
-          </div>
-
-          {message && <p role="alert" className="mt-4 rounded-xl bg-[color:var(--danger-soft)] p-4 text-sm font-semibold text-red-700">{message}</p>}
-          <div className="mt-5 flex flex-wrap gap-3">
-            {phase === "ready" && <button type="button" onClick={startPreparation} className="primary-button"><Mic size={18} /> Pratiğe başla</button>}
-            {phase === "recording" && <button type="button" onClick={stopRecording} className="primary-button bg-red-600 hover:bg-red-700"><Square size={17} /> Kaydı bitir</button>}
-            {phase === "finished" && <button type="button" onClick={() => reset()} className="secondary-button"><RotateCcw size={18} /> Yeniden dene</button>}
-          </div>
-
-          {(transcript || interim || phase === "finished") && (
-            <div className="mt-7 border-t border-[color:var(--border)] pt-6">
-              <h2 className="text-lg font-extrabold">Konuşma metniniz</h2>
-              <p className="mt-3 min-h-20 rounded-xl bg-slate-50 p-4 leading-7 text-slate-700">{transcript} <span className="text-slate-400">{interim}</span>{!transcript && !interim ? "Konuşma algılanamadı." : null}</p>
-              {audioUrl && <audio className="mt-4 w-full" controls src={audioUrl}><track kind="captions" /></audio>}
+    <div>
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex gap-2"><button type="button" onClick={() => changeMode("practice")} className={`pill-tab ${mode === "practice" ? "pill-tab-active" : ""}`}>Tek görev</button><button type="button" onClick={() => changeMode("mock")} className={`pill-tab ${mode === "mock" ? "pill-tab-active" : ""}`}>Tam deneme</button></div>
+        <p className="text-sm font-bold text-[color:var(--muted)]">{mode === "mock" ? `İlerleme: ${Math.min(completedCount + 1, config.tasks.length)} / ${config.tasks.length}` : config.formatLabel}</p>
+      </div>
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <section className="dashboard-panel"><div className="relative z-10">
+          {mode === "practice" && <div className="mb-6 flex flex-wrap gap-2" aria-label="Konuşma görevi seçin">{config.tasks.map((item, index) => <button key={item.id} type="button" onClick={() => { setTaskIndex(index); resetResponse(); setPhase("ready"); }} className={`pill-tab ${index === taskIndex ? "pill-tab-active" : ""}`}>{exam === "ielts" ? item.part.split(" · ")[0] : `Task ${index + 1}`}</button>)}</div>}
+          {phase === "complete" && mode === "mock" ? <MockComplete count={completedCount} onRestart={() => { setCompletedCount(0); startTask(0); }} /> : <>
+            <p className="eyebrow">{task.part}</p><h1 className="mt-2 text-3xl font-extrabold tracking-tight">{task.title}</h1><p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{task.instructions}</p>
+            {phase === "reading" && task.reading ? <SourcePanel icon={<BookOpen size={20} />} label={`Okuma · ${remaining} sn`} title={task.reading.title} text={task.reading.text} /> : null}
+            {phase === "listening" && task.listening ? <SourcePanel icon={<Headphones size={20} />} label="Dinleme" title={task.listening.title} text="Kayıt bir kez çalınır. Ana fikirleri ve örnekleri not alın." /> : null}
+            {(!task.reading || phase !== "reading") && phase !== "listening" && task.taskType !== "repeat" ? <div className="mt-5 rounded-2xl bg-[color:var(--brand-soft)] p-5"><p className="text-base font-semibold leading-7">{task.prompt}</p>{mode === "practice" && phase === "ready" ? <button type="button" onClick={() => speak(task.prompt)} className="ghost-button mt-3 -ml-4"><Volume2 size={18} /> Soruyu dinle</button> : null}</div> : null}
+            {task.taskType === "repeat" && phase === "complete" ? <div className="mt-5 rounded-2xl bg-[color:var(--brand-soft)] p-5"><p className="text-xs font-extrabold uppercase tracking-widest text-[color:var(--accent)]">Dinlediğiniz cümle</p><p className="mt-2 text-base font-semibold leading-7">{task.prompt}</p></div> : null}
+            {(phase === "preparing" || phase === "listening" || phase === "reading") && <textarea value={notes} onChange={(event) => setNotes(event.target.value)} className="auth-input mt-5 min-h-24" placeholder="Notlarınızı buraya yazabilirsiniz…" aria-label="Hazırlık notları" />}
+            <PhaseDisplay phase={phase} remaining={remaining} />
+            {message && <p role="alert" className="mt-4 rounded-xl bg-[color:var(--danger-soft)] p-4 text-sm font-semibold text-red-700">{message}</p>}
+            <div className="mt-5 flex flex-wrap gap-3">
+              {phase === "ready" && <button type="button" onClick={() => startTask(taskIndex)} className="primary-button"><Mic size={18} /> Görevi başlat</button>}
+              {phase === "recording" && <button type="button" onClick={finishResponse} className="primary-button bg-red-600 hover:bg-red-700"><Square size={17} /> Yanıtı bitir</button>}
+              {phase === "complete" && mode === "practice" && <button type="button" onClick={() => { resetResponse(); setPhase("ready"); }} className="secondary-button"><RotateCcw size={18} /> Yeniden dene</button>}
             </div>
-          )}
-        </div>
-      </section>
-
-      <aside className="space-y-5">
-        <div className="dashboard-panel">
-          <h2 className="relative z-10 text-lg font-extrabold">Anlık geri bildirim</h2>
-          <div className="relative z-10 mt-4 grid grid-cols-2 gap-3">
-            <Metric label="Kelime" value={metrics.wordCount} />
-            <Metric label="Kelime/dk" value={metrics.wordsPerMinute} />
-            <Metric label="Dolgu sözcük" value={metrics.fillerCount} />
-            <Metric label="Hedef" value={`${task.targetWords[0]}–${task.targetWords[1]}`} />
-          </div>
-          <p className="relative z-10 mt-4 text-sm leading-6 text-[color:var(--muted)]">Akıcı bir yanıt için açık bir görüş, iki destekleyici fikir ve kısa bir sonuç kullanın. Bu geri bildirim tahminidir; resmi sınav puanı değildir.</p>
-        </div>
-        {history.filter((item) => item.exam === exam).length > 0 && (
-          <div className="dashboard-panel">
-            <h2 className="relative z-10 text-lg font-extrabold">Son pratikler</h2>
-            <ul className="relative z-10 mt-3 space-y-3">
-              {history.filter((item) => item.exam === exam).slice(0, 4).map((item, index) => (
-                <li key={`${item.date}-${index}`} className="rounded-xl bg-slate-50 p-3 text-sm"><p className="font-bold">{item.task}</p><p className="mt-1 text-[color:var(--muted)]">{item.words} kelime · {item.wpm} kelime/dk</p></li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <div className="rounded-2xl bg-[color:var(--brand)] p-5 text-white"><Play size={22} /><p className="mt-3 font-extrabold">Ücretsiz tarayıcı pratiği</p><p className="mt-1 text-sm leading-6 text-blue-100">Sesiniz sunucuya gönderilmez. Kayıt ve geçmiş bu cihazda kalır.</p></div>
-      </aside>
+            {(transcript || interim || phase === "complete") && <div className="mt-7 border-t border-[color:var(--border)] pt-6"><h2 className="text-lg font-extrabold">Konuşma metniniz</h2><p className="mt-3 min-h-20 rounded-xl bg-slate-50 p-4 leading-7 text-slate-700">{transcript} <span className="text-slate-400">{interim}</span>{!transcript && !interim ? "Konuşma algılanamadı." : null}</p>{audioUrl && <audio className="mt-4 w-full" controls src={audioUrl}><track kind="captions" /></audio>}</div>}
+          </>}
+        </div></section>
+        <aside className="space-y-5">
+          <div className="dashboard-panel"><h2 className="relative z-10 text-lg font-extrabold">Anlık geri bildirim</h2><div className="relative z-10 mt-4 grid grid-cols-2 gap-3">{accuracy === null ? <><Metric label="Kelime" value={metrics.wordCount} /><Metric label="Kelime/dk" value={metrics.wordsPerMinute} /><Metric label="Dolgu sözcük" value={metrics.fillerCount} /><Metric label="Hedef" value={`${task.targetWords[0]}–${task.targetWords[1]}`} /></> : <><Metric label="Sıralı eşleşme" value={`%${accuracy}`} /><Metric label="Söylenen" value={metrics.wordCount} /><Metric label="Hedef" value={task.targetWords[0]} /><Metric label="Süre" value={`${task.responseSeconds} sn`} /></>}</div><p className="relative z-10 mt-4 text-sm leading-6 text-[color:var(--muted)]">Bu göstergeler çalışma amaçlıdır; resmi ETS veya IELTS puanı değildir.</p></div>
+          {examHistory.length > 0 && <div className="dashboard-panel"><h2 className="relative z-10 text-lg font-extrabold">Son pratikler</h2><ul className="relative z-10 mt-3 space-y-3">{examHistory.map((item, index) => <li key={`${item.date}-${index}`} className="rounded-xl bg-slate-50 p-3 text-sm"><p className="font-bold">{item.task}</p><p className="mt-1 text-[color:var(--muted)]">{item.words} kelime · {item.wpm} kelime/dk</p></li>)}</ul></div>}
+        </aside>
+      </div>
     </div>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string | number }) {
-  return <div className="rounded-xl bg-[color:var(--brand-soft)] p-3"><p className="text-2xl font-extrabold">{value}</p><p className="mt-1 text-xs font-bold text-[color:var(--muted)]">{label}</p></div>;
-}
+function SourcePanel({ icon, label, title, text }: { icon: React.ReactNode; label: string; title: string; text: string }) { return <div className="mt-5 rounded-2xl border-2 border-[color:var(--accent)] bg-white p-5"><div className="flex items-center gap-2 text-sm font-extrabold text-[color:var(--accent)]">{icon}{label}</div><h2 className="mt-3 text-xl font-extrabold">{title}</h2><p className="mt-3 leading-7 text-slate-700">{text}</p></div>; }
+function PhaseDisplay({ phase, remaining }: { phase: Phase; remaining: number }) { if (!["ready", "preparing", "recording", "transition"].includes(phase)) return null; const labels: Partial<Record<Phase, string>> = { ready: "Başlamaya hazır", preparing: "Hazırlık süresi", recording: "Yanıt kaydediliyor", transition: "Sonraki göreve geçiliyor" }; return <div className="mt-6 flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[color:var(--border-strong)] p-5 text-center">{phase === "recording" && <span className="mb-2 size-4 animate-pulse rounded-full bg-red-500" />}<p className="text-sm font-bold uppercase tracking-widest text-[color:var(--accent)]">{labels[phase]}</p>{phase !== "ready" && <p className="mt-2 text-5xl font-extrabold">{remaining}</p>}</div>; }
+function MockComplete({ count, onRestart }: { count: number; onRestart: () => void }) { return <div className="py-12 text-center"><CheckCircle2 size={54} className="mx-auto text-[color:var(--success)]" /><p className="eyebrow mt-5">Tam deneme tamamlandı</p><h1 className="mt-2 text-3xl font-extrabold">{count} yanıt kaydedildi</h1><p className="mx-auto mt-3 max-w-lg leading-7 text-[color:var(--muted)]">Kayıtlarınızı ve akıcılık göstergelerinizi inceleyin. Düzen, açıklık ve örnek kullanımınızı değerlendirerek tekrar deneyin.</p><button type="button" onClick={onRestart} className="primary-button mt-6"><RotateCcw size={18} /> Denemeyi yeniden başlat</button></div>; }
+function Metric({ label, value }: { label: string; value: string | number }) { return <div className="rounded-xl bg-[color:var(--brand-soft)] p-3"><p className="text-2xl font-extrabold">{value}</p><p className="mt-1 text-xs font-bold text-[color:var(--muted)]">{label}</p></div>; }
