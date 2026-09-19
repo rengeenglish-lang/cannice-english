@@ -6,6 +6,7 @@ import {
   listProducts,
 } from "@/server/services/catalog.service";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
+import { SpeakingPracticePromo } from "@/components/speaking/SpeakingPracticePromo";
 
 type Props = { params: Promise<{ examSlug: string }> };
 
@@ -30,6 +31,9 @@ export default async function ExamLandingPage({ params }: Props) {
       </PageHero>
       {exam.shortDescription ? (
         <p className="page-copy">{exam.shortDescription}</p>
+      ) : null}
+      {exam.code === "IELTS" || exam.code === "TOEFL" ? (
+        <SpeakingPracticePromo exam={exam.code.toLowerCase() as "ielts" | "toefl"} />
       ) : null}
       <div className="mt-10">
         <ProductGrid
