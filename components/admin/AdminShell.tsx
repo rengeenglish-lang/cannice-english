@@ -46,6 +46,7 @@ const STAFF = [
   ["/admin/orders", "Siparişler"],
   ["/admin/coupons", "Kuponlar"],
   ["/admin/products", "Ürünler"],
+  ["/admin/curricula", "250 saatlik programlar"],
   ["/admin/group-availability", "Grup uygunluğu"],
   ["/admin/konu-anlatim", "Konu anlatımı"],
   ["/admin/testimonials", "Katılımcı görüşleri"],
@@ -118,7 +119,7 @@ function SidebarContent({
             <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
               YÖNETİM
             </p>
-            {STAFF.filter(([href]) => role === "ADMIN" || href !== "/admin/group-availability").map(([href, label]) => (
+            {STAFF.filter(([href]) => (role === "ADMIN" || role === "SUPER_ADMIN") || !["/admin/group-availability", "/admin/curricula", "/admin/orders"].includes(href)).map(([href, label]) => (
               <Link
                 key={href}
                 href={href}

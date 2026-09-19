@@ -76,6 +76,8 @@ export async function createProduct(raw: Record<string, unknown>) {
 
 export async function updateProduct(id: string, raw: Record<string, unknown>) {
   const input = productSchema.parse(raw);
+  const course = await db.course.findUnique({ where: { productId: id } });
+  if (course?.curriculumKey) throw new Error("Yapılandırılmış program için müfredat yönetimini kullanın.");
   return db.$transaction(async (tx) => {
     const product = await tx.product.update({ where: { id }, data: productData(input) });
 
@@ -118,23 +120,35 @@ export async function updateProduct(id: string, raw: Record<string, unknown>) {
 }
 
 export async function togglePublish(id: string) {
+  const course = await db.course.findUnique({ where: { productId: id } });
+  if (course?.curriculumKey) throw new Error("Program satışı kohort ve ödeme entegrasyonu tamamlanmadan açılamaz.");
   const product = await db.product.findUniqueOrThrow({ where: { id } });
   return db.product.update({ where: { id }, data: { isPublished: !product.isPublished } });
 }
 
 // ---- Course content management ----
+async function requireLegacyCourse(courseId: string) {
+  const course = await db.course.findUniqueOrThrow({ where: { id: courseId } });
+  if (course.curriculumKey) throw new Error("Resmi müfredatı değiştirmek için yetkili müfredat yönetimini kullanın.");
+}
+
 
 export async function addModule(courseId: string, raw: Record<string, unknown>) {
+  await requireLegacyCourse(courseId);
   const input = moduleSchema.parse(raw);
   const last = await db.courseModule.findFirst({ where: { courseId }, orderBy: { position: "desc" } });
   return db.courseModule.create({ data: { courseId, title: input.title, position: (last?.position ?? 0) + 1 } });
 }
 
 export async function deleteModule(moduleId: string) {
+  const courseModule = await db.courseModule.findUniqueOrThrow({ where: { id: moduleId } });
+  await requireLegacyCourse(courseModule.courseId);
   return db.courseModule.delete({ where: { id: moduleId } });
 }
 
 export async function addLesson(moduleId: string, raw: Record<string, unknown>) {
+  const courseModule = await db.courseModule.findUniqueOrThrow({ where: { id: moduleId } });
+  await requireLegacyCourse(courseModule.courseId);
   const input = lessonSchema.parse(raw);
   const last = await db.recordedLesson.findFirst({ where: { moduleId }, orderBy: { position: "desc" } });
   return db.recordedLesson.create({
@@ -151,6 +165,8 @@ export async function addLesson(moduleId: string, raw: Record<string, unknown>) 
 }
 
 export async function deleteLesson(lessonId: string) {
+  const lesson = await db.recordedLesson.findUniqueOrThrow({ where: { id: lessonId }, include: { module: true } });
+  await requireLegacyCourse(lesson.module.courseId);
   return db.recordedLesson.delete({ where: { id: lessonId } });
 }
 

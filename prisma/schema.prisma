@@ -172,6 +172,7 @@ model TopicLesson {
 
   topic      ExamTopic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
   progresses TopicLessonProgress[]
+  curriculumActivities CurriculumActivity[]
 
   @@index([topicId])
   @@map("topic_lessons")
@@ -214,6 +215,7 @@ model User {
   accessGrants AccessGrant[]
   subscriptions MembershipSubscription[]
   auditEvents CommercialAudit[]
+  verifiedActivities ActivityCompletion[] @relation("ActivityVerifier")
   orders               Order[]
   cart                 Cart?
   enrollments          Enrollment[]
@@ -266,6 +268,10 @@ model Course {
   id               String                @id @default(cuid())
   productId        String                @unique
   deliveryFormat   CourseDeliveryFormat  @default(HYBRID)
+  curriculumKey String? @unique
+  curriculumTargetMinutes Int?
+  curriculumPublishedAt DateTime?
+  examFormatVerifiedAt DateTime?
   syllabusSummary  String?
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt
@@ -279,6 +285,7 @@ model Course {
 }
 
 model CourseModule {
+  description String?
   id        String   @id @default(cuid())
   courseId  String
   title     String
@@ -287,6 +294,8 @@ model CourseModule {
 
   course  Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons RecordedLesson[]
+  units CurriculumUnit[]
+  durationBudgets ModuleDurationBudget[]
 
   @@unique([courseId, position])
   @@map("course_modules")
@@ -295,6 +304,7 @@ model CourseModule {
 model RecordedLesson {
   id              String   @id @default(cuid())
   moduleId        String
+  unitId          String?
   title           String
   position        Int
   videoUrl        String?
@@ -304,7 +314,10 @@ model RecordedLesson {
 
   module           CourseModule       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   lessonProgresses LessonProgress[]
+  unit CurriculumUnit? @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  activities CurriculumActivity[]
 
+  @@index([unitId])
   @@unique([moduleId, position])
   @@map("recorded_lessons")
 }
@@ -334,6 +347,7 @@ model LiveSession {
   instructor User? @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
   recurringSeries GroupLessonSeries? @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
   bookings GroupLessonEnrollment[]
+  activityCompletions ActivityCompletion[]
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([startsAt, availabilityEnabled])
@@ -375,6 +389,7 @@ model Enrollment {
   orderItem        OrderItem?        @relation(fields: [orderItemId], references: [id])
   lessonProgresses LessonProgress[]
   submissions      PracticeSubmission[]
+  activityCompletions ActivityCompletion[]
 
   @@unique([userId, courseId])
   @@map("enrollments")
@@ -397,6 +412,7 @@ model PracticeSubmission {
   reviewedAt      DateTime?
 
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  activityCompletion ActivityCompletion?
 
   @@map("practice_submissions")
 }
@@ -641,6 +657,8 @@ model FreeResource {
 
   examType ExamType? @relation(fields: [examTypeId], references: [id])
 
+  curriculumActivities CurriculumActivity[]
+
   @@map("free_resources")
 }
 
@@ -772,4 +790,98 @@ model CommercialAudit {
  actor User @relation(fields: [actorId], references: [id], onDelete: Restrict)
  @@index([targetId, createdAt])
  @@map("commercial_audit")
+}
+
+// Structured programmes extend existing courses and lessons; billing is independent.
+enum CurriculumActivityType {
+ LIVE_INSTRUCTION
+ GUIDED_PRACTICE
+ EXAM_SIMULATION
+ INDEPENDENT_STUDY
+ REVIEW_ASSESSMENT
+}
+model ModuleDurationBudget {
+ id String @id @default(cuid())
+ moduleId String
+ type CurriculumActivityType
+ minutes Int
+ module CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+ @@unique([moduleId, type])
+ @@map("module_duration_budgets")
+}
+model CurriculumUnit {
+ id String @id @default(cuid())
+ moduleId String
+ title String
+ objective String
+ position Int
+ module CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+ lessons RecordedLesson[]
+ @@unique([moduleId, position])
+ @@map("curriculum_units")
+}
+model CurriculumActivity {
+ id String @id @default(cuid())
+ lessonId String
+ title String
+ position Int
+ type CurriculumActivityType
+ durationMinutes Int
+ instructions String
+ completionCriteria String
+ topicLessonId String?
+ freeResourceId String?
+ // Identifies a verified server-side simulation adapter; empty until one exists.
+ simulationKey String?
+ lesson RecordedLesson @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+ topicLesson TopicLesson? @relation(fields: [topicLessonId], references: [id], onDelete: Restrict)
+ freeResource FreeResource? @relation(fields: [freeResourceId], references: [id], onDelete: Restrict)
+ assessment ActivityAssessment?
+ prerequisites ActivityPrerequisite[] @relation("ActivityPrerequisites")
+ dependents ActivityPrerequisite[] @relation("ActivityDependents")
+ completions ActivityCompletion[]
+ @@unique([lessonId, position])
+ @@index([topicLessonId])
+ @@index([freeResourceId])
+ @@map("curriculum_activities")
+}
+model ActivityAssessment {
+ id String @id @default(cuid())
+ activityId String @unique
+ rubric String
+ minimumScore Int?
+ activity CurriculumActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+ @@map("activity_assessments")
+}
+model ActivityPrerequisite {
+ activityId String
+ prerequisiteId String
+ activity CurriculumActivity @relation("ActivityPrerequisites", fields: [activityId], references: [id], onDelete: Cascade)
+ prerequisite CurriculumActivity @relation("ActivityDependents", fields: [prerequisiteId], references: [id], onDelete: Restrict)
+ @@id([activityId, prerequisiteId])
+ @@index([prerequisiteId])
+ @@map("activity_prerequisites")
+}
+model ActivityCompletion {
+ id String @id @default(cuid())
+ enrollmentId String
+ activityId String
+ verifiedById String
+ completedAt DateTime @default(now())
+ // Immutable credit snapshot, never client-supplied or derived from calendar time.
+ creditedMinutes Int
+ evidenceNote String
+ submissionId String? @unique
+ liveSessionId String?
+ revokedAt DateTime?
+ enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+ activity CurriculumActivity @relation(fields: [activityId], references: [id], onDelete: Restrict)
+ verifiedBy User @relation("ActivityVerifier", fields: [verifiedById], references: [id], onDelete: Restrict)
+ submission PracticeSubmission? @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+ liveSession LiveSession? @relation(fields: [liveSessionId], references: [id], onDelete: Restrict)
+ @@unique([enrollmentId, activityId])
+ @@unique([enrollmentId, liveSessionId])
+ @@index([activityId])
+ @@index([verifiedById])
+ @@map("activity_completions")
 }

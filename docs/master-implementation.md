@@ -45,8 +45,8 @@ These primitives are not yet wired into subscription checkout or the existing si
 - Nine unit/regression tests: free access, default denial, Premium scope, group scope, separate purchase exclusion, expiry/revocation, approved billing/month-end dates, real occupancy, existing learning progress.
 - Migration generated as an additive schema diff, with price/interval/period CHECK constraints and launch-price inserts.
 
-### Required gate not passed
-The sandbox rejects PostgreSQL shared-memory creation during initdb (shmget: Operation not permitted). No test database could start; no migration or database integration test has been executed. No production database was accessed or modified. Do not proceed to paid cohort checkout or deploy this branch until the gate passes.
+### Database gate passed
+The isolated PostgreSQL 17 CI run passed all migrations, policy tests, payment/access and concurrent session booking integration tests, TypeScript and the production build on commit 37e8561fa4b083ac18fc1116983129eafe73d84d. Evidence: https://github.com/rengeenglish-lang/cannice-english/actions/runs/35465746429. No production database was accessed or modified. Production deployment remains deferred at the user’s request.
 
 ### Reproduction in a permitted local development environment
 Create a dedicated UTF-8 PostgreSQL database named cannice_platform_test. Set DATABASE_URL and DATABASE_URL_UNPOOLED to that localhost database only.
@@ -67,3 +67,16 @@ The user approved all seven drafted curriculum module plans and hour allocations
 
 ## Database gate recovery
 A pull-request GitHub Actions job now provisions an ephemeral PostgreSQL 17 service with localhost-only test credentials and no production secrets. It runs migrations, policy/progress tests, real payment/booking concurrency tests, and a production build. It has no deployment step. A passing run is required before proceeding.
+
+
+## Phase 2 — curriculum architecture
+Course remains the programme and CourseModule/RecordedLesson remain the module/lesson. Add units, typed activity minutes, rubric assessments, ordered prerequisites, module budgets and evidence-backed completion. All seven approved plans are checked into data/curricula/approved-plans.json with their original scope and allocations. An explicit administrator-only, idempotent import creates unpublished programme courses; migrations never import content or activate sales.
+
+/admin/curricula displays planned vs defined hours, module scope and exact publication blockers. Server services support unit/lesson/activity authoring and exam-format verification. Full interactive authoring, teacher assignment and student dashboard integration remain phases 5–7.
+
+Publication requires 15,000 defined minutes, matching category budgets per module, complete units/lessons/instructions/rubrics, earlier same-program prerequisites and format verification. A made-up simulation key cannot pass the gate: there is no authoritative simulation adapter yet. Published academic content is immutable in the database. Legacy product/course editors cannot modify or sell these programmes.
+
+Completion is administrator verified and audited. Guided/independent/review activities require reviewed submissions belonging to the enrollment, rubric thresholds where configured, and explicit verification. Live activities require an ended, valid course session and an administrator attendance attestation; elapsed time alone earns nothing. Simulation completion is denied until persisted server results exist. Concurrent approvals create one credit; the same submission or live session cannot count twice. Revocation removes credit but preserves history. Expired enrollment cannot gain new credit but its owner can read progress history. Assigned-teacher verification will extend this boundary in phase 6.
+
+### Honest content readiness
+Approved plans total 250 hours each. They are not yet 250-hour activity inventories. Import intentionally creates zero activities rather than arbitrarily splitting budgets to manufacture hours. Actual resources, tasks, rubrics, authorized simulation mappings and academic verification remain publication requirements. Phase 2 implements the architecture and approved module import; it does not claim seven publishable programmes or a working full-exam engine.
