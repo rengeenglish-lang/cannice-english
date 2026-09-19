@@ -4,9 +4,7 @@ import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
 
 const NAV_LINKS = [
-  { href: "/packages", label: "Materyaller" },
-  { href: "/konu-anlatim", label: "Konu Anlatım" },
-  { href: "/books", label: "Kitaplar ve Kaynaklar" },
+  { href: "/kaynaklar", label: "Kaynaklar" },
   { href: "/tools", label: "Faydalı Araçlar" },
   { href: "/#live-groups", label: "Canlı Gruplar" },
 ];
