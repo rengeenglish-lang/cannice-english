@@ -36,7 +36,7 @@ export function getEnrollmentForCourse(userId: string, courseId: string) {
 
 export function listEnrollmentsForUser(userId: string) {
   return db.enrollment.findMany({
-    where: { userId, status: "ACTIVE" },
+    where: { userId, status: "ACTIVE", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
     include: {
       course: {
         include: {

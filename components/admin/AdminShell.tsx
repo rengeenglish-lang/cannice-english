@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 
-type Role = "STUDENT" | "TEACHER" | "ADMIN";
+type Role = "STUDENT" | "TEACHER" | "ADMIN" | "SUPER_ADMIN";
 const LEARNING = [
   { href: "/dashboard", label: "Çalışma alanım", icon: Home },
   { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 },

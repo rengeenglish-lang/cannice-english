@@ -4,7 +4,6 @@ import {
   availability,
   addDays,
   dateAt,
-  localDate,
   DEFAULT_CAPACITY,
   LESSON_TIMEZONE,
 } from "@/lib/availability";
@@ -118,12 +117,6 @@ const schema = z.object({
 });
 export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
   const input = schema.parse(raw);
-  if (
-    input.useDisplayedOccupancy &&
-    (input.displayedOccupancy === undefined ||
-      input.displayedOccupancy > input.capacity)
-  )
-    throw new Error("Gösterim doluluğu kapasiteyi aşamaz.");
   const startsAt = dateAt(input.date, input.time);
   if (startsAt <= new Date())
     throw new Error("Gelecekte bir ders saati seçin.");
@@ -146,8 +139,8 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
     enrollmentOpen: input.enrollmentOpen,
     instructorId: input.instructorId || null,
     adminNotes: input.adminNotes || null,
-    displayedOccupancy: input.displayedOccupancy ?? null,
-    useDisplayedOccupancy: input.useDisplayedOccupancy,
+    displayedOccupancy: null,
+    useDisplayedOccupancy: false,
     timezone: LESSON_TIMEZONE,
   };
   return db.$transaction(
@@ -277,35 +270,7 @@ export async function manageGroupSlot(
     return id;
   });
 }
-export async function createDemoGroupSlots(courseId: string) {
-  const start = dateAt(localDate(addDays(new Date(), 1)), "18:00");
-  return db.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(72819534)::text`;
-    if (
-      await tx.groupLessonSeries.findUnique({
-        where: { id: "availability-demo" },
-      })
-    )
-      return;
-    await tx.groupLessonSeries.create({
-      data: { id: "availability-demo", repeatUntil: addDays(start, 6) },
-    });
-    for (const [n, count] of [0, 2, 4, 7, 8, 9, 10].entries()) {
-      const startsAt = addDays(start, n);
-      await tx.liveSession.create({
-        data: {
-          title: "Grup dersi · demo",
-          courseId,
-          startsAt,
-          endsAt: new Date(startsAt.getTime() + 3600000),
-          capacity: DEFAULT_CAPACITY,
-          availabilityEnabled: true,
-          displayedOccupancy: count,
-          useDisplayedOccupancy: true,
-          recurringSeriesId: "availability-demo",
-          adminNotes: "DEMO: yalnızca gösterim; gerçek öğrenci değildir.",
-        },
-      });
-    }
-  });
+export async function createDemoGroupSlots(_courseId: string) {
+  void _courseId;
+  throw new Error("Demo doluluk oluşturma devre dışı. Kontenjan yalnızca gerçek kayıtlardan hesaplanır.");
 }

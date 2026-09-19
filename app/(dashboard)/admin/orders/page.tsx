@@ -1,3 +1,4 @@
+import { requireAdministrator } from "@/server/auth/context";
 import type { Metadata } from "next";
 import { listOrders } from "@/server/services/orders.service";
 import { markOrderPaidAction } from "@/app/actions/admin-orders";
@@ -15,7 +16,8 @@ const STATUS_LABEL: Record<string, { label: string; className: string }> = {
 };
 
 export default async function AdminOrdersPage() {
-  const orders = await listOrders();
+  const actor = await requireAdministrator();
+  const orders = await listOrders(actor.id);
 
   return (
     <div>

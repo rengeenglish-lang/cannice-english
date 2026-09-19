@@ -16,6 +16,7 @@ enum UserRole {
   STUDENT
   TEACHER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum ExamCode {
@@ -210,6 +211,9 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  accessGrants AccessGrant[]
+  subscriptions MembershipSubscription[]
+  auditEvents CommercialAudit[]
   orders               Order[]
   cart                 Cart?
   enrollments          Enrollment[]
@@ -498,6 +502,8 @@ model OrderItem {
 
   order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product    Product     @relation(fields: [productId], references: [id])
+  accessGrants AccessGrant[]
+  subscription MembershipSubscription?
   enrollment Enrollment?
 
   @@map("order_items")
@@ -680,4 +686,90 @@ model GroupLessonEnrollment {
  @@unique([slotId, studentId])
  @@index([slotId, status])
  @@map("group_lesson_enrollments")
+}
+
+// Commercial foundation. Amounts are integer kuruş; payment periods never define curriculum length.
+enum BillingInterval {
+ MONTHLY
+ QUARTERLY
+ SIX_MONTH
+ ANNUAL
+}
+enum CommercialKind {
+ PREMIUM
+ GROUP
+}
+enum ToolAccessPolicy {
+ FREE
+ PREMIUM
+ GROUP_INCLUDED
+ SEPARATE_PURCHASE
+}
+enum Capability {
+ FREE_CONTENT
+ PREMIUM_SIMULATIONS
+ QUESTION_BANK
+ PERFORMANCE_ANALYTICS
+ STUDY_TOOLS
+ DIGITAL_RESOURCES
+ HOMEWORK
+ TEACHER_FEEDBACK
+ GROUP_LESSONS
+ GROUP_FULL_ACCESS
+}
+model CommercialPrice {
+ id String @id @default(cuid())
+ kind CommercialKind
+ interval BillingInterval
+ amountMinor Int
+ currency String @default("TRY")
+ active Boolean @default(true)
+ updatedAt DateTime @updatedAt
+ @@unique([kind, interval])
+ @@map("commercial_prices")
+}
+model LearningTool {
+ key String @id
+ name String
+ policy ToolAccessPolicy @default(SEPARATE_PURCHASE)
+ enabled Boolean @default(false)
+ @@map("learning_tools")
+}
+model MembershipSubscription {
+ id String @id @default(cuid())
+ userId String
+ orderItemId String @unique
+ interval BillingInterval
+ startsAt DateTime
+ expiresAt DateTime
+ revokedAt DateTime?
+ user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+ orderItem OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+ @@index([userId, expiresAt])
+ @@map("membership_subscriptions")
+}
+model AccessGrant {
+ id String @id @default(cuid())
+ userId String
+ orderItemId String
+ capability Capability
+ startsAt DateTime
+ expiresAt DateTime
+ revokedAt DateTime?
+ user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+ orderItem OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+ @@unique([orderItemId, capability])
+ @@index([userId, expiresAt])
+ @@map("access_grants")
+}
+model CommercialAudit {
+ id String @id @default(cuid())
+ actorId String
+ action String
+ targetId String
+ details Json
+ createdAt DateTime @default(now())
+ actor User @relation(fields: [actorId], references: [id], onDelete: Restrict)
+ @@index([targetId, createdAt])
+ @@map("commercial_audit")
 }

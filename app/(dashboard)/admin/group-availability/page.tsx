@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { db } from "@/server/db";
 import { listGroupSlots } from "@/server/services/group-availability.service";
 import { weekRange } from "@/lib/availability";
 import { WeekView } from "@/components/availability/WeekView";
-import { DemoSlotsForm } from "@/components/availability/AdminSlotActions";
 import { AvailabilityRefresh } from "@/components/availability/AvailabilityRefresh";
 export const dynamic = "force-dynamic";
 export default async function GroupAdminPage({
@@ -13,10 +11,7 @@ export default async function GroupAdminPage({
 }) {
   const { week } = await searchParams;
   const { start, end } = weekRange(week);
-  const [slots, courses] = await Promise.all([
-    listGroupSlots(start, end, true),
-    db.course.findMany({ include: { product: true } }),
-  ]);
+  const slots = await listGroupSlots(start, end, true);
   return (
     <>
       <AvailabilityRefresh />
@@ -29,9 +24,6 @@ export default async function GroupAdminPage({
           + Ders ekle
         </Link>
       </div>
-      <DemoSlotsForm
-        courses={courses.map((c) => ({ id: c.id, title: c.product.title }))}
-      />
       <WeekView week={week} slots={slots} admin />
     </>
   );

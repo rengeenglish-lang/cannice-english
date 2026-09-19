@@ -29,6 +29,13 @@ export const getAuthContext = cache(async () => {
 export async function requireStaff() {
   const user = await getAuthContext();
   if (!user) redirect("/sign-in");
-  if (user.role !== "TEACHER" && user.role !== "ADMIN") forbidden();
+  if (user.role !== "TEACHER" && user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") forbidden();
+  return user;
+}
+
+export async function requireAdministrator() {
+  const user = await getAuthContext();
+  if (!user) redirect("/sign-in");
+  if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") forbidden();
   return user;
 }
