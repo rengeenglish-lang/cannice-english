@@ -1,15 +1,5 @@
 import Link from "next/link";
-
-const EXAM_LINKS = [
-  { slug: "ielts", name: "IELTS" },
-  { slug: "toefl", name: "TOEFL" },
-  { slug: "pte", name: "PTE" },
-  { slug: "yds", name: "YDS" },
-  { slug: "yokdil", name: "YÖKDİL" },
-  { slug: "yokdil-sosyal-bilimler", name: "YÖKDİL Sosyal Bilimler" },
-  { slug: "yokdil-saglik-bilimleri", name: "YÖKDİL Sağlık Bilimleri" },
-  { slug: "yokdil-fen-bilimleri", name: "YÖKDİL Fen Bilimleri" },
-];
+import { PLATFORM_EXAMS } from "@/lib/platform";
 
 const LEGAL_LINKS = [
   { doc: "mesafeli-satis-sozlesmesi", name: "Mesafeli Satış Sözleşmesi" },
@@ -37,9 +27,18 @@ export function Footer() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/35">İngilizce Sınavlar</p>
           <ul className="mt-4 space-y-2 text-sm text-white/70">
-            {EXAM_LINKS.map((exam) => (
+            {PLATFORM_EXAMS.map((exam) => (
               <li key={exam.slug}><Link href={`/exams/${exam.slug}`} className="transition hover:text-white">{exam.name}</Link></li>
             ))}
+          </ul>
+        </div>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/35">Çalışma Alanları</p>
+          <ul className="mt-4 space-y-2 text-sm text-white/70">
+            <li><Link href="/konu-anlatim" className="transition hover:text-white">Ücretsiz Konu Anlatımları</Link></li>
+            <li><Link href="/dashboard/speaking-practice" className="transition hover:text-white">Deneme & Pratik</Link></li>
+            <li><Link href="/group-lessons" className="transition hover:text-white">Canlı Grup Dersleri</Link></li>
+            <li><Link href="/packages" className="transition hover:text-white">Çalışma Materyalleri</Link></li>
           </ul>
         </div>
         <div>
@@ -54,7 +53,7 @@ export function Footer() {
             <li><Link href="/grammar" className="transition hover:text-white">İngilizce Gramer</Link></li>
           </ul>
         </div>
-        <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+        <div className="col-span-2 sm:col-span-3 lg:col-span-1">
           <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/35">Yasal</p>
           <ul className="mt-4 grid grid-cols-1 gap-2 text-sm text-white/70 sm:grid-cols-2">
             {LEGAL_LINKS.map((legal) => (

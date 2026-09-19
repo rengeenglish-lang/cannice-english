@@ -8,10 +8,10 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Cannice English — İngilizce Sınav Hazırlık Kaynakları",
+    absolute: "Cannice English — IELTS, TOEFL, YDS ve YÖKDİL Hazırlık Platformu",
   },
   description:
-    "İngilizce sınav hazırlığı için konu anlatımlarını keşfedin, çalışma paketleri ve kitapları karşılaştırın. Önce örnek alıştırmayı deneyin, sonra kaynağınızı seçin.",
+    "IELTS, TOEFL, YDS ve YÖKDİL için ücretsiz konu anlatımları, sınav pratiği, canlı grup dersleri ve çalışma materyalleri tek platformda.",
 };
 
 export default async function HomePage() {

@@ -18,6 +18,20 @@ const sharedSteps = [
 ];
 
 export const EXAM_LANDING_CONTENT: Partial<Record<ExamCode, ExamLandingContent>> = {
+  IELTS: {
+    badge: "IELTS hazırlık merkezi",
+    headline: "IELTS hedefinize dört beceride ilerleyin.",
+    accent: "#0f9b8e",
+    description: "Reading, Listening, Writing ve Speaking bölümlerini tanıyın; ücretsiz konular, sınav pratiği ve canlı destekle planlı hazırlanın.",
+    stats: [{ value: "4", label: "Beceri alanı" }, { value: "0–9", label: "Band puanı" }, { value: "3", label: "Speaking bölümü" }, { value: "2", label: "Writing görevi" }],
+    sections: [
+      { title: "Reading", description: "Metin türleri, soru stratejileri ve süre yönetimi.", meta: "Okuma becerisi" },
+      { title: "Listening", description: "Dört bölümde farklı konuşma ve bağlamları anlama.", meta: "Dinleme becerisi" },
+      { title: "Writing", description: "Task 1 ve Task 2 için planlama, geliştirme ve kontrol.", meta: "Yazma becerisi" },
+      { title: "Speaking", description: "Part 1, cue card ve Part 3 tartışmasını gerçek sürelerle çalışın.", meta: "3 bölüm · 11–14 dk" },
+    ],
+    steps: sharedSteps,
+  },
   TOEFL: {
     badge: "2026 TOEFL iBT formatına uygun",
     headline: "TOEFL iBT’ye güvenle hazırlan.",
