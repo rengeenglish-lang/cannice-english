@@ -427,8 +427,10 @@ async function main() {
     { slug: "yakin-anlamli-cumle", name: "Yakın Anlamlı Cümle Soruları", questionCount: 4, difficulty: "Orta" },
     { slug: "paragraf-tamamlama", name: "Paragraf Tamamlama Soruları", questionCount: 4, difficulty: "Orta" },
     { slug: "anlatim-butunlugunu-bozan-cumle", name: "Anlatım Bütünlüğünü Bozan Cümle Soruları", questionCount: 5, difficulty: "Zor" },
+    { slug: "yds-stratejileri", name: "YDS Stratejileri", questionCount: null, difficulty: null },
   ];
   const ydsExamples = {
+    "yds-stratejileri": [],
     "kelime-phrasal-verb": [
       "Örnek soru: \"The company had to ---- its plans due to unexpected budget cuts.\"\n(A) carry out (B) scale back (C) look into (D) come across\nDoğru cevap (B) 'scale back' (küçültmek/azaltmak) — cümledeki 'budget cuts' (bütçe kesintileri) ifadesi, planların küçültülmesi gerektiğini işaret eder; diğer phrasal verb'ler bağlamla uyuşmaz.",
       "Örnek soru: \"After months of research, the scientists finally ---- a cure for the rare disease.\"\n(A) came up with (B) gave up on (C) put off (D) went along with\nDoğru cevap (A) 'came up with' (bulmak/geliştirmek) — 'after months of research... finally' ifadesi bir buluşun sonunda ortaya çıktığını gösterir; diğer seçenekler 'vazgeçmek', 'ertelemek', 'katılmak' gibi bağlamla çelişen anlamlar taşır.",
@@ -1949,6 +1951,852 @@ async function main() {
   }
   // --- END: diyalog-tamamlama ---
 
+  // --- BEGIN: yds-stratejileri (grounded in "Suat Gürcan & Rıdvan Gürbüz Yaklaşımı ile YDS
+  // Sınav Stratejileri" grammar book — one lesson per grammar chapter, following the book's
+  // structure exhaustively per the user's request. Each lesson's Giriş uses inline
+  // [STRATEJI]/[ORNEK_SORU] markers rendered as colored callout boxes by StrategyBox.tsx,
+  // mirroring the book's own "► STRATEJİ ◄" / "ÖRNEK SORU" boxes. All prose and examples
+  // below are original; only the underlying grammar rules and time-expression/structure
+  // pairings are drawn from the book's "Konu Özeti" (chapter-summary) sections.) ---
+  const stratejiTenseSystemIntro =
+    `YDS'nin dil bilgisi sorularının önemli bir kısmını oluşturan "Tense" (Zaman) sorularında asıl belirleyici olan, çoğu zaman cümlenin anlamını baştan sona çözmek değil, cümle içinde geçen "zaman ifadelerini" (time expressions) doğru tanımaktır. Bu bölümde, gramer kitabının "Tense System in English" ve "Tense Konu Özeti" başlıkları altında verilen zaman ifadesi–yapı eşleşmelerini, sınavda doğrudan işinize yarayacak stratejiler halinde bir araya getirdik.\n` +
+    `Aşağıdaki her strateji kutusu, karşınıza çıkan bir zaman ifadesini gördüğünüzde hangi fiil yapısına yönelmeniz gerektiğini gösterir. Amaç, seçenekleri teker teker cümleye yerleştirip uzun uzun düşünmek yerine, ipucu kelimeyi gördüğünüz anda doğru yapıya yönelebilmenizdir.\n\n` +
+    `Süreklilik Bildiren İfadeler: "Şu An" Sinyalleri\n` +
+    `"Now, right now, at the moment, currently, at present, presently, for the time being, nowadays, these days" gibi ifadeler bir cümlede geçtiğinde, seçenekler arasında önce "am/is/are Ving" yapısını arayın.\n` +
+    `[STRATEJI]\n` +
+    `"Now / Right now / At the moment / Currently / At present / Presently / For the time being" → am/is/are Ving.\n` +
+    `"Nowadays / These days" → öncelik am/is/are Ving yapısındadır; ancak cümle genel bir alışkanlıktan bahsediyorsa Present Simple ile de gelebilir.\n` +
+    `"Now" kelimesi ayrıca "artık, günümüzde" anlamıyla başka present yapılarla da (Present Simple dahil) kullanılabilir; cümlenin bir anı mı yoksa genel bir durumu mu anlattığını kontrol edin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Right now, the engineers ---- the bridge's cables for structural fatigue."\n` +
+    `Doğru yapı: are inspecting (am/is/are Ving)\n` +
+    `"Right now" ifadesi tam konuşma anında süren bir eylemi işaret eder; bu kalıba uyan tek yapı Present Continuous'tur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sıklık Zarfları ile Present Simple\n` +
+    `"Never, rarely, occasionally, usually, always" gibi sıklık zarfları genellikle Present Simple ile kullanılır; sürekli olmayan bir tekrarı anlatırlar.\n` +
+    `[STRATEJI]\n` +
+    `%0-%25 arası: never, not at all, not ever, almost never, rarely, barely, hardly (ever), seldom, scarcely.\n` +
+    `%25-%75 arası: occasionally, sometimes, at times, now and then, now and again, from time to time.\n` +
+    `%75-%100 arası: usually, generally, mostly, most of the time, often, frequently, always, all the time, every day/week.\n` +
+    `Bu zarflardan biri cümlede geçiyorsa ve cümlede başka bir zaman ipucu yoksa, seçeneklerde Present Simple yapısını önceliklendirin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Geçmişe Referans Veren İfadeler: V2 Tetikleyicileri\n` +
+    `"Yesterday, two days ago, last night, in 1960, during the 1960s, at that time, once (bir zamanlar), previously, initially, for the first time" gibi ifadeler net bir geçmiş zaman noktasına işaret eder ve Simple Past (V2) gerektirir.\n` +
+    `[STRATEJI]\n` +
+    `Kesin geçmiş noktası bildiren ifadeler (yesterday, ... ago, last..., in + yıl, during + dönem, at that time, once, previously, initially, for the first time) → V2.\n` +
+    `Dikkat: "now" ile başlayan ifadeler present yapı ister, "at that/the time" ve "at that moment" ise cümlenin bağlamına göre V2 veya was/were Ving isteyebilir; cümlede süreklilik vurgusu varsa was/were Ving'e yönelin.\n` +
+    `[/STRATEJI]\n\n` +
+    `"Now" Noktasına Bağlanan İfadeler: Present Perfect Sinyalleri\n` +
+    `Present Perfect'i tetikleyen zaman ifadeleri, geçmişte başlayıp "now" noktasına kadar uzanan ya da "now" ile dolaylı bir bağlantısı olan ifadelerdir. Bunlar YDS'de en sık karıştırılan grup olduğu için ayrı bir başlık altında topladık.\n` +
+    `[STRATEJI]\n` +
+    `"Since + geçmiş nokta / since + isim öbeği" → have/has V3 ya da have/has been Ving (bağlaç olarak kullanıldığında yan cümlecik V2 alır).\n` +
+    `"For + süre" ve "for ... now" → have/has V3 ya da have/has been Ving.\n` +
+    `"Lately, recently" → have/has V3 ya da have/has been Ving; "until recently" ise öncelikle V2, ardından have-has V3/been Ving de gelebilir.\n` +
+    `"So far, thus far, up to now, up till now, to date" → have/has V3 ya da have/has been Ving.\n` +
+    `"Over/During/Within/For/In the last/past + süre" → have/has V3 ya da have/has been Ving.\n` +
+    `"Three times / four times / many times" gibi sayısal tekrar ifadeleri → present bir cümlede have/has V3 (tekrar anlamı); cümle zaten past ise had V3, gelecek ise will have V3.\n` +
+    `Cümlede tekrar anlamı varsa (three times gibi) have/has V3 işaretleyin; eylem kesintisiz devam ediyorsa have/has been Ving işaretleyin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"The research team ---- this particular gene for three years now, but they still haven't found a definitive answer."\n` +
+    `Doğru yapı: has been studying (have/has been Ving)\n` +
+    `"For three years now" ifadesi geçmişte başlayıp hâlâ devam eden bir süreci işaret eder; "but they still haven't found" kısmı da eylemin bitmediğini, sürdüğünü doğrular; bu yüzden tekrar değil süreklilik yapısı (been Ving) doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Had V3'ün (Past Perfect) Kullanıldığı ve Kullanılmadığı Yerler\n` +
+    `Past Perfect'i doğru yerde işaretlemek, hangi zaman bağlacının hangi cümlecikte "had V3" gerektirdiğini bilmekten geçer.\n` +
+    `[STRATEJI]\n` +
+    `"By + geçmiş nokta" ve "by the time + V2" → had V3 (ana cümlecikte).\n` +
+    `"After" bağlacı yan cümlecikte had V3 alabilir; "before, when, until, as soon as, once" bağlaçları ise genellikle had V3'ü kendi yan cümleciklerinde DEĞİL, ana cümlecikte ister (yani "Before she had left" gibi bir kullanım YDS mantığında tercih edilmez; doğrusu "Before she left, she had finished..." şeklindedir).\n` +
+    `"Prior to + geçmiş nokta" ifadesi de "by" gibi davranır ve had V3 ister.\n` +
+    `Had V3 ile birlikte gelen 5 özel yapı: I wish/if only + had V3, as if/as though + had V3, would rather + had V3, If Clause Type 3, If Clause mixed type.\n` +
+    `[/STRATEJI]\n\n` +
+    `"If" ve Zaman Bağlaçlarında Gelecek Zaman Tuzağı\n` +
+    `Bu, YDS'nin en klasik tuzaklarından biridir: "if, when, before, unless, once, as soon as, until, by the time" gibi bağlaçların yan cümleciğinde "will/would/shall/be going to/might" gibi gelecek zaman yapıları KULLANILMAZ, çünkü bu bağlaçlar zaten kendi başlarına geleceğe göndermede bulunur.\n` +
+    `[STRATEJI]\n` +
+    `If / When / Before / Unless / Once / As soon as / Until / By the time + [present ya da V2, ASLA will/would/shall/be going to/might] , ---- [will/shall + V0, will be Ving, will have V3].\n` +
+    `Bu yapı bir zaman/koşul bağlacı gördüğünüzde, o bağlacın kendi cümleciğinde "will" içeren bir seçeneği doğrudan eleyebileceğiniz anlamına gelir; doğru seçenek genelde diğer cümlecikte aranır.\n` +
+    `[/STRATEJI]\n\n` +
+    `V2 Görünüp Past Anlamı Taşımayan 6 Özel Yapı\n` +
+    `Bir fiil V2 (Simple Past) formunda göründüğü halde, aşağıdaki 6 yapıdan biri cümlede varsa bu V2 gerçek bir geçmiş zamanı değil, kalıplaşmış bir "unreal" anlamı ifade eder.\n` +
+    `[STRATEJI]\n` +
+    `1. It's (high/about) time + Subject + V2\n` +
+    `2. I wish / If only + Subject + V2\n` +
+    `3. As if / As though + Subject + V2\n` +
+    `4. Would rather + Subject + V2\n` +
+    `5. If Clause Type 2\n` +
+    `6. Would you mind + Subject + V2\n` +
+    `Bu 6 yapıdan biri varsa, cümledeki V2'yi "geçmişte oldu" diye çevirmeyin; bunlar şimdiki zamana ait bir dilek, öneri ya da hayali durumu anlatır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Gelecek Zaman İfadeleri ve "By/By the Time" Formülleri\n` +
+    `"Tomorrow, next week/month/year, in 2050, shortly, soon, before long" gibi ifadeler future time gerektirir; ancak bu ifadeler geçmişi anlatan bir paragrafın içinde geçerse V2 ile de kullanılabileceğini unutmayın (o zaman "gelecekteki bir an" değil, "o dönem için gelecek olan bir an" anlatılır).\n` +
+    `[STRATEJI]\n` +
+    `"By + gelecek tarih" → will have V3 (Future Perfect); "by the time + present" → will have V3 (ana cümlecikte).\n` +
+    `"Be about to V0 / be due to V0 / be on the verge, edge, point, brink, threshold of Ving" kalıpları "-e üzere olmak" anlamı verir.\n` +
+    `"This time tomorrow / at this time next year" → will be Ving; "this time yesterday / at this time last year" → was/were Ving.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sonuç olarak, Tense sorularının büyük bölümü cümlenin anlamını değil, cümlede geçen zaman ifadesini doğru okumayı test eder. Bu bölümdeki strateji kutularını bir sözlük gibi kullanın: karşınıza çıkan zaman ifadesini bulun, hangi yapıyla eşleştiğini hatırlayın ve seçenekleri bu süzgeçten geçirin. "Tense (Zaman) Soruları" konusundaki kurallar referansı ve örnek sorularla birlikte tekrar ettiğinizde, sınavın dil bilgisi bölümünün büyük kısmını bu mantıkla çözebilirsiniz.`;
+
+  const stratejiModalityIntro =
+    `YDS dil bilgisi sorularında Tense'den sonra en sık karşınıza çıkan başlıklardan biri, kip yapıları olarak da bilinen "Modality"dir. Modallar bir eylemi zamana göre değil, konuşmacının o eyleme bakışına göre; yani yetenek, olasılık, zorunluluk, tavsiye, izin ya da rica gibi bir tutuma göre şekillendirir. Bu bölümde, gramer kitabının "Modality" ve "Modal Konu Özeti" başlıkları altında verdiği yapı-anlam eşleşmelerini, sınavda seçenekleri hızla eleyebileceğiniz strateji kutuları haline getirdik.\n` +
+    `Modal sorularının büyük kısmı, birbirine anlamca çok yakın görünen iki veya üç yapı arasındaki ince farkı bilip bilmediğinizi ölçer; örneğin "could" ile "was able to" arasındaki fark ya da "must have V3" ile "should have V3" arasındaki fark gibi. Aşağıdaki kutuları bu farkları netleştirmek için bir başvuru kaynağı gibi kullanın.\n\n` +
+    `Yetenek Bildiren Yapılar: Can / Could / Be Able To\n` +
+    `Bir kişinin genel ya da o an içinde bulunduğu şartlara bağlı yeteneğini anlatırken "can" ve "be able to" yapıları şimdiki zamanda birbirinin yerine geçer; aralarında anlam farkı yoktur.\n` +
+    `[STRATEJI]\n` +
+    `Şimdiki zamanda yetenek (Present Ability): can + V0 = am/is/are able to + V0.\n` +
+    `Gelecekte yetenek (Future Ability): will be able to + V0 = shall be able to + V0.\n` +
+    `Geçmişte genel yetenek (Past Ability): could + V0 = was/were able to + V0.\n` +
+    `Geçmişte belirli ve tek seferlik bir eylemde elde edilen başarıdan (particular action, actual performance) söz ederken "could" kullanılmaz; yalnızca "was/were able to" tercih edilir ve bu kullanım "managed to" (uğraş sonucu başarmak) anlamı taşır.\n` +
+    `İstisna: see, hear, understand, feel gibi algı fiilleriyle geçmişteki tek bir eyleme gönderme yapılırken "could" kullanımı da mümkündür.\n` +
+    `Olumsuz cümlede "couldn't" ile "wasn't/weren't able to" arasında herhangi bir anlam farkı yoktur; ikisi de tek seferlik geçmiş eylemler için serbestçe kullanılabilir.\n` +
+    `[/STRATEJI]\n\n` +
+    `Olasılık Bildiren Yapılar: May / Might / Could ve Genel-Kuramsal Ayrımı\n` +
+    `Olasılık bildiren yapılar, cümlenin olumlu ya da olumsuz olmasına ve anlatılan olasılığın türüne göre farklılaşır; bu yüzden bu grubu tek bir kalıp gibi değil, alt başlıklara ayırarak öğrenmek gerekir.\n` +
+    `[STRATEJI]\n` +
+    `Genel olasılık (general possibility, olumlu cümle): may V0 = might V0 = could V0, hepsi "-ebilir" anlamı verir.\n` +
+    `Genel olasılık (olumsuz cümle): may not V0 = might not V0, "-meyebilir" anlamı verir; "could not" bu grupta yer almaz çünkü "couldn't" geçmişe yönelik "-emedi" anlamı taşır.\n` +
+    `Kuramsal olasılık (theoretical possibility, herhangi bir zamanda gerçekleşebilecek genel bir durum): can V0, "-ebilir" anlamı verir; soru cümlelerinde olasılık bildiren modal olarak da "can" tercih edilir.\n` +
+    `May well V0 = might well V0 = could well V0, yine "olasılıkla -ebilir" anlamı verir; bunları anlamca farklı olan "may/might/could as well" (bari ... yapalım) yapısıyla karıştırmayın.\n` +
+    `Be likely to V0 → olasılıkla -ebilir; be unlikely to V0 → olasılıkla -meyebilir; be bound to V0 → kuvvetle muhtemel, kesinliğe yakın bir olasılık bildirir.\n` +
+    `"I have no idea / I don't know / perhaps, maybe / I'm not sure / ...or... / probably, possibly" gibi belirsizlik bildiren ifadeler cümlede geçiyorsa, seçeneklerde öncelikle olasılık bildiren modal yapıları arayın.\n` +
+    `[/STRATEJI]\n\n` +
+    `Zorunluluk ve Gereklilik: Must / Have to / Need to ve Olumsuzların Anlam Farkı\n` +
+    `Zorunluluk bildiren yapılar arasındaki en kritik ayrım olumlu değil, olumsuz hallerindedir: "must" ve "have to" olumlu cümlede birbirine yakın bir anlam verirken, olumsuz halleri tamamen farklı anlamlara gelir.\n` +
+    `[STRATEJI]\n` +
+    `Şimdiki zamanda zorunluluk: must V0 (içten gelen zorunluluk) = have to/has to V0 (dıştan gelen zorunluluk, kural/yasa) = have got to/has got to V0 (konuşma dilinde dıştan gelen zorunluluk) = need to V0.\n` +
+    `Zorunluluğun olmayışı: don't/doesn't have to V0 = don't/doesn't need to V0 = needn't V0, hepsi "-e gerek yok" anlamı verir; bunların hiçbiri "mustn't" ile aynı anlama gelmez.\n` +
+    `Mustn't V0, zorunluluğun yokluğunu değil, YASAK anlamını (sakın yapma) verir; bu yüzden "zorunda değilsin" anlamı aranan bir boşlukta "mustn't" asla doğru seçenek olamaz.\n` +
+    `Geçmişte zorunluluk: had to V0 (zorunda kaldım); geçmişte zorunluluğun ortadan kalkması: didn't have to V0 = didn't need to V0 (zorunda kalmadım, gerek kalmadı).\n` +
+    `"Needn't have V3" farklı bir zaman düzlemine aittir: eylem gerçekleşmiştir ama gereksizdir ("-e gerek yoktu ama yaptın"); "didn't need to/didn't have to" ise eylemin hiç gerçekleşmediği durumlarda kullanılır. Seçeneklerde bu ikisi birlikte verildiyse eylemin yapılıp yapılmadığına bakın: eylem gerçekleşmemişse didn't have to/didn't need to, gerçekleşmiş ama gereksizse needn't have V3 işaretleyin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"The company ---- extra staff for the holiday season, but they decided to hire five temporary workers anyway, and now half of them have nothing to do."\n` +
+    `Doğru yapı: needn't have hired (needn't have V3)\n` +
+    `Cümlenin devamında işe alımın gerçekten yapıldığı ("hire five temporary workers") ve şimdi bu kişilerin gereksiz kaldığı ("have nothing to do") belirtiliyor; eylem gerçekleştiği için "didn't need to" değil, "needn't have V3" yapısı doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Tavsiye Yapıları: Should / Ought to / Had Better\n` +
+    `Tavsiye bildiren yapılar birbirine yakın anlamlar taşısa da güç dereceleri ve zaman kullanımları bakımından ayrılır.\n` +
+    `[STRATEJI]\n` +
+    `Olumlu tavsiye gücü artan sırayla: should V0 = ought to V0 (yumuşak tavsiye, -meli/-malı) < had better V0 (daha keskin bir öneri, -sa iyi olur) < must V0 (en güçlü tavsiye, mutlaka yap).\n` +
+    `Olumsuz tavsiye gücü artan sırayla: shouldn't V0 = ought not to V0 (-mamalı) < had better not V0 (-yapmasa iyi olur) < mustn't V0 (en güçlü uyarı, sakın yapma).\n` +
+    `"Had better" yapısı yalnızca şimdiki ve gelecek zaman anlamı taşır; geçmişe yönelik bir tavsiye ya da eleştiri anlatılacaksa "had better" değil, "should have V3/ought to have V3" kullanılır.\n` +
+    `Akıl danışma kalıbı "Shall I/we...? / Should I/we...?" ile kurulur; "shall" yalnızca I ve we özneleriyle kullanılır ve olumsuz hali "shall not/shan't" yerine günümüzde genellikle "won't" tercih edilir.\n` +
+    `[/STRATEJI]\n\n` +
+    `İzin ve Rica Yapıları: Permission ve Polite Request\n` +
+    `İzin isteme/verme ile kibarca rica etme, sınavda birbirine karıştırılan iki ayrı işlevdir; kullanılan modallar kısmen örtüşse de amaçları farklıdır.\n` +
+    `[STRATEJI]\n` +
+    `İzin isteme (soru cümlesi) ya da izin verme (düz cümle): may I/might I/can I/could I ...? hepsi "-ebilir miyim" anlamına gelir; düz cümlede "you may/can" izin vermeyi ifade eder.\n` +
+    `Kibar rica: Can you...? / Could you...? / Will you...? / Would you...? yapılarının hepsi "(bana) ... yapar mısın" anlamı taşır; nezaket derecesi could/would ile artar.\n` +
+    `Would you mind + Ving...? yapısında eylemi gerçekleştirecek kişi karşı taraftır (örn. "Beni bekler misin" → Would you mind waiting for me?).\n` +
+    `Would you mind if + özne + V2...? yapısında ise eylemi başka bir kişi (genellikle konuşmacının kendisi) gerçekleştirecektir ve if cümleciğinde mutlaka Past Simple (V2) kullanılır, will/would değil.\n` +
+    `"May/might as well" yapısı izin ya da olasılık değil, "bari ...yapalım / ...yapsam da olur" anlamı verir; olasılık bildiren "may/might/could well" ile karıştırılmamalıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Perfect Modallerde Real Past - Unreal Past Ayrımı\n` +
+    `Modaller sadece V0 ile değil, "modal + have + V3" kalıbıyla da kullanılır ve bu yapılar geçmişe yönelik bir yorum katar. Bu yapıları anlamak için önce iki büyük gruba ayırmak gerekir: eylemin gerçekten olup olmadığından emin olunamayan "real past" yapıları ve eylemin kesinlikle gerçekleşmediğini bildiren "unreal past" yapıları.\n` +
+    `[STRATEJI]\n` +
+    `Real Past grubu (eylem gerçekten olmuş olabilir, konuşmacı sadece yorum yapıyor): may/might/could have V3 → "-mış olabilir"; must have V3 → "-mış olmalı"; can't/couldn't have V3 → "-mış olamaz".\n` +
+    `Unreal Past grubu (eylem kesinlikle gerçekleşmemiştir, sadece bir yorum/pişmanlık/beklenti anlatılır): should have V3/ought to have V3 → "-meliydi/malıydı ama yapmadı"; would have V3 → "-erdi/ardı ama yapmadı"; needn't have V3 → "-e gerek yoktu ama yaptı" (bu yapı istisnai biçimde eylemin gerçekleştiği tek unreal-past yapısıdır).\n` +
+    `"Might have V3" ve "could have V3" iki grupta da görünebilir: real past anlamında "-mış olabilir", unreal past anlamında ise (özellikle if clause type 3 bağlamında) "-ebilirdi ama olmadı" anlamı taşıyabilir; hangi anlamın kastedildiğini cümledeki bağlamdan çıkarın.\n` +
+    `Bir cümlede "ama gerçekleşmedi/olmadı" vurgusu varsa (bir pişmanlık, kaçırılan fırsat ya da yanlış beklenti anlatılıyorsa) unreal past grubuna, sadece geçmişe dair bir tahmin ya da yorum yapılıyorsa real past grubuna yönelin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Geçmişte Olasılık ve Sonuç Çıkarımı: Could Have V3, Couldn't Have V3, Must Have V3\n` +
+    `Perfect modaller içinde YDS'nin en sık çeldirici ürettiği yapı çifti "could have V3" ile "couldn't have V3"tür, çünkü bu ikisinin her biri tek başına iki farklı anlama gelebilir.\n` +
+    `[STRATEJI]\n` +
+    `Could have V3'ün iki anlamı: (1) "-ebilirdim ama yapmadım" (geçmişte kaçırılan bir fırsat, missed opportunity); (2) "-mış olabilir" (real past, olasılık bildiren yorum).\n` +
+    `Couldn't have V3'ün iki anlamı: (1) "-emezdim/-amazdım" (geçmişte imkânsız olan bir eylem); (2) "-mış olamaz" (can't have V3 ile eş anlamlı, kuvvetli olumsuz çıkarım).\n` +
+    `Şimdiki zamanda sonuç çıkarımı (deduction): must V0 → "-meli/malı" (olumlu çıkarım); can't V0 → "...olamaz" (olumsuz çıkarım).\n` +
+    `Geçmişte sonuç çıkarımı: must have V3 → "-mış olmalı" (olumlu çıkarım); can't have V3 = couldn't have V3 → "-mış olamaz" (olumsuz çıkarım); mustn't have V3 → "-mamış olmalı".\n` +
+    `Bir cümlede geçmişe dönük kesin bir kanıta dayanan güçlü bir tahmin varsa must have V3/can't have V3 grubuna, kaçırılan bir fırsat ya da imkânsızlık anlatılıyorsa could have V3/couldn't have V3'ün ilk anlamına yönelin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Look at the mud all over his shoes and the state of his jacket - he ---- through the forest trail instead of taking the paved road."\n` +
+    `Doğru yapı: must have walked (must have V3)\n` +
+    `Cümlede ayakkabılarındaki çamur ve ceketinin hali somut birer kanıt olarak sunulmuş; bu kanıtlara dayanan güçlü, olumlu bir geçmiş çıkarımı söz konusu olduğu için "must have V3" doğrudur, "could have V3" gibi daha zayıf bir olasılık ifadesi bu kesinliği karşılamaz.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, Modality soruları genellikle cümlenin tamamının anlamını değil, o cümlede geçen ipucunun (bir kanıt, bir pişmanlık, bir zorunluluk ya da bir olasılık ifadesi) hangi modal yapıyla eşleştiğini test eder. Sınavda karşınıza "must/have to", "should/had better" ya da "could have V3/couldn't have V3" gibi anlamca yakın seçenekler geldiğinde önce cümlenin zaman düzlemini (şimdiki zaman mı geçmiş zaman mı), sonra da anlatılmak istenen tutumu (zorunluluk mu tavsiye mi olasılık mı) belirleyin; bu iki adım seçenekleri büyük ölçüde eleyip doğru yapıya ulaşmanızı sağlar. Bu bölümdeki strateji kutularını "Modality" konusundaki kurallar referansı ve örnek sorularla birlikte tekrar ettiğinizde, sınavın dil bilgisi bölümünde modal sorularını hızlı ve güvenle çözebilirsiniz.`;
+  const stratejiPassiveVoiceIntro =
+    `YDS gramer sorularının klasik başlıklarından biri olan "Passive Voice & Causatives", aslında birbiriyle yakından ilişkili iki ayrı yapıyı bir araya getirir: cümlenin öznesini eylemi yapan değil eylemden etkilenen varlığa taşıyan pasif (edilgen) çatı ve bir eylemin özne tarafından değil özne aracılığıyla bir başkasına yaptırıldığını anlatan ettirgen (causative) yapılar. Bu bölümde, gramer kitabının "Passive Voice & Causatives Konu Özeti" başlığında özetlenen kuralları, sınavda karşınıza çıkan seçenek kalıplarına göre yeniden düzenleyerek pratik stratejiler haline getirdik.\n` +
+    `Her iki yapının da ortak noktası, doğru seçeneğe ulaşmak için önce cümledeki fiilin nesne alıp almadığını, nesne alıyorsa kaç nesne aldığını ve boşluğun devamında ne olduğunu tespit etmenin gerekliliğidir. Aşağıdaki strateji kutularını bu sırayla, yani önce "fiil nesne alır mı" sorusunu sorarak kullanmanız, seçenekleri hızla aktif-pasif ya da causative açısından elemenizi sağlayacaktır.\n\n` +
+    `Pasifin Kuruluşu: Her Zamanın Kendi "Be V3" Hali\n` +
+    `Pasif cümle, aktif cümledeki nesneyi özne konumuna taşıyıp ana fiili "be V3" kalıbına çevirerek kurulur; buradaki "be" fiili aktif cümlenin ana fiili hangi zamanda ya da hangi yapıdaysa (V1, V2, modal+V0, be+Ving, have+V3) tam olarak o zamanın ya da yapının şeklini alır, sadece "be" fiilinin kendisi değişir, zaman bilgisi kaybolmaz.\n` +
+    `[STRATEJI]\n` +
+    `V1 (am/is/are + V0) → am/is/are + V3\n` +
+    `V2 (was/were + V-ed) → was/were + V3\n` +
+    `modal + V0 (must/can/should/will vb.) → modal + be + V3\n` +
+    `am/is/are/was/were + Ving (progressive) → am/is/are/was/were + being + V3\n` +
+    `have/has/had + V3 (perfect) → have/has/had + been + V3\n` +
+    `Bir seçenekte "be" fiilinin hangi hale girdiğini gördüğünüzde, önce o kalıbın hangi aktif zamana karşılık geldiğini bulun; cümledeki zaman ifadesi bu zamanla uyuşmuyorsa seçeneği eleyin.\n` +
+    `Cümle sonunda "by + fail eden" öbeği varsa bu öbek eylemi gerçekleştiren kişiyi/şeyi gösterir ve çoğunlukla atlanabilir; ancak boşluk bu öbekten hemen önceyse cümlenin edilgen olduğu neredeyse kesindir.\n` +
+    `[/STRATEJI]\n\n` +
+    `Pasif Yapılamayan Fiiller: Geçişsiz Fiiller ve Durum Bildiren Fiiller\n` +
+    `Bir fiilin pasif yapılabilmesi için mutlaka bir nesne alması gerekir; nesnesi olmayan (geçişsiz) fiiller pasif kalıba hiçbir şekilde sokulamaz. Nesne alan bazı fiiller bile bir eylem değil bir durum ya da sahiplik bildirdiklerinde pasif yapılmaz; bu ayrımı gözden kaçırmak YDS'de sık yapılan bir hatadır.\n` +
+    `[STRATEJI]\n` +
+    `"Arrive, happen, occur, take place, disappear, exist, seem, appear, remain, belong to, consist of, rely on, depend on" gibi geçişsiz (intransitive) fiiller nesne almadıkları için pasif yapılamaz; bir seçenekte bu fiillerden biri pasif halde (be V3) verilmişse doğrudan eleyin.\n` +
+    `Nesne alan ancak "resemble, have (sahip olmak), lack, suit, fit, cost, weigh, contain, equal, matter" gibi fiiller bir eylemi değil bir durumu/özelliği anlattıklarında pasif yapılamaz: "This bag costs 40 dollars" cümlesi pasif hale getirilemez.\n` +
+    `Aynı fiil hem geçişli hem geçişsiz kullanılabiliyorsa (ergative verbs: open, close, grow, sell, develop, print, start, finish) cümlede nesne olup olmadığına bakarak karar verin; nesne yoksa fiil zaten aktif kalır, pasife çevrilmez.\n` +
+    `[/STRATEJI]\n\n` +
+    `Çift Geçişli Fiillerde İki Pasif Seçenek\n` +
+    `"Give, send, tell, ask, offer, buy, teach, show, promise" gibi iki nesne alabilen (ditransitive) fiillerin pasif yapılırken hangi nesnenin özne konumuna geleceğine karar vermek gerekir; bu fiiller genellikle iki farklı pasif cümle kurmaya izin verir ve YDS bu iki seçeneği birbirine karşı kullanmayı sever.\n` +
+    `[STRATEJI]\n` +
+    `Dolaylı nesne (kime/kimin için) özne yapılırsa fiilden sonra bir edata gerek kalmaz: "She was sent the report" gibi.\n` +
+    `Dolaysız nesne (neyi/ne) özne yapılırsa fiilden sonra genellikle "to" ya da bazı fiillerde "for" edatı gelir: "The report was sent to her" gibi.\n` +
+    `Boşluktan hemen sonra "to/for + kişi" öbeği varsa büyük olasılıkla dolaysız nesne özne yapılmıştır; boşluktan sonra edatsız bir isim öbeği geliyorsa dolaylı nesne özne yapılmış olabilir.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Every new intern ---- a detailed handbook and a mentor on their first day."\n` +
+    `Doğru yapı: is given (dolaylı nesne özne yapılmış, edata gerek yok)\n` +
+    `Cümlede "a detailed handbook and a mentor" neyin verildiğini gösterir; özne olan "every new intern" ise dolaylı nesnedir, bu yüzden bir edata gerek kalmadan doğrudan "is given" ile devam edilir.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Modal ve Perfect Modallerle Pasif Yapı\n` +
+    `Modal fiillerle kurulan pasif yapılarda "be" fiili her zaman yalın halde (V0) kalır ve modalden hemen sonra gelir; perfect modal (must have, should have gibi) yapılarda ise "be" fiili "been" halini alır.\n` +
+    `[STRATEJI]\n` +
+    `modal + V0 → modal + be + V3: "must be done, can be solved, should be checked".\n` +
+    `modal + have + V3 → modal + have + been + V3: "must have been done, should have been finished, can't have been stolen".\n` +
+    `"Should be done" bir gerekliliği şu an ya da gelecek için anlatırken, "should have been done" geçmişte yapılması gerektiği halde yapılmamış bir eylemi eleştirerek anlatır; bu iki yapıyı cümledeki zaman ifadesine göre ayırın.\n` +
+    `Modallerden sonra gelen "be" fiilinin ASLA "is/are/was/were" gibi çekimli bir hale girmediğini, her zaman yalın kaldığını unutmayın.\n` +
+    `[/STRATEJI]\n\n` +
+    `"Get" Passive ile "Be" Passive Arasındaki Fark\n` +
+    `Sıfat gibi davranan ve bir eylemi değil bir durumu anlatan "stative passive" yapılarında "be" fiili yerine "get" kullanmak, cümleye ansızın gerçekleşen bir değişim ya da olay anlamı katar; bu ince fark YDS'de anlam bütünlüğü sorularında karşımıza çıkabilir.\n` +
+    `[STRATEJI]\n` +
+    `"Be V3" durağan bir durumu anlatır: "The window is broken" (cam kırık; ne zaman kırıldığı önemli değildir).\n` +
+    `"Get V3" o durumun nasıl ortaya çıktığını, ansızın gerçekleştiğini vurgular: "The window got broken during the storm" (cam fırtına sırasında kırıldı).\n` +
+    `"Get passive" günlük dilde ve özellikle beklenmedik, olumsuz olaylarda ("got fired, got caught, got injured") sık kullanılır; resmi/akademik pasajlarda "be" passive tercih edilir.\n` +
+    `Boşluktan sonra ansızın gerçekleşen bir olayı işaret eden bir zaman zarfı (suddenly, yesterday, during the storm) varsa ve öncesinde durum bildiren bir sıfat-fiil varsa "get" seçeneğini de değerlendirin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Kişisiz Pasif Yapılar: Bildirim Fiilleriyle "It is said that..." / "He is said to..."\n` +
+    `"Say, think, believe, know, consider, report, claim, assume" gibi bildirim/düşünce fiilleri, bir "that" cümleciğini nesne olarak aldıklarında iki farklı şekilde pasif yapılabilir: boş özne "it" ile ya da "that" cümleciğinin öznesini ana cümlenin öznesi yaparak.\n` +
+    `[STRATEJI]\n` +
+    `"It is said/thought/believed/known/reported that + S + V": "that" cümleciği aktif yapıda kalır; boşluk "it" ile başlıyor ve pasif bir fiil devam ediyorsa öncelik bu yapıya verilir.\n` +
+    `"S + is said/thought/believed to + V0 / to be Ving / to have V3": "that" cümleciğinin öznesi ana cümlenin öznesi olur; "that" cümleciğindeki fiil ana fiile göre eş zamanlıysa "to V0", ana fiille aynı anda süren bir eylemse "to be Ving", ana fiilden önce gerçekleşmişse "to have (been) V3" halini alır.\n` +
+    `Zaman ilişkisini belirlerken "that" cümleciğindeki eylemin ana fiille aynı anda mı yoksa ondan önce mi gerçekleştiğine bakın: önce gerçekleşmişse mutlaka "to have (been) V3" yapısını seçin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"The missing manuscript ---- to have been sold to a private collector long before the museum began its investigation."\n` +
+    `Doğru yapı: is believed (is believed to have been sold)\n` +
+    `"Long before the museum began its investigation" ifadesi satış eyleminin, inanma eyleminden önce gerçekleştiğini gösterir; bu yüzden "that" cümleciğinin öznesi olan "manuscript" ana cümlenin öznesi yapılmış ve önceki zamanı işaret eden "to have been sold" yapısı tercih edilmiştir.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Ettirgen Yapılar: Have/Get ile "Yaptırma", Make/Let/Have ile "Zorlama-İzin"\n` +
+    `Causative (ettirgen) yapılar, öznenin eylemi kendisinin yapmadığını, bir başkasına yaptırdığını ya da bir başkasının yapmasına izin verdiğini/onu buna zorladığını anlatır. Hangi fiilin hangi yapıyla kullanıldığını bilmek bu başlıktaki soruların neredeyse tamamını çözer.\n` +
+    `[STRATEJI]\n` +
+    `Sadece "eylemin yaptırıldığı" vurgulanıyor, işi yapan kişi (agent) belirtilmiyorsa: have/get + [işten etkilenen nesne] + V3 → "I had my car repaired / I got my hair cut."\n` +
+    `"Eylemin kime yaptırıldığı" da belirtiliyorsa: have/let/make + [agent] + V0 (to almadan) → "I had the mechanic repair my car / She let him stay / They made him apologize."\n` +
+    `"Get" fiili agent belirtilen yapılarda "have/let/make"tan farklı davranır ve "to V0" ister: get + [agent] + to V0 → "I got him to fix my car."\n` +
+    `"Make" zorlama, "let" izin verme, "have" ise nötr bir talep/yönlendirme anlamı taşır; cümledeki anlam ipucuna (zorlandı mı, izin mi verildi, sadece talep mi edildi) göre bu üçünü birbirinden ayırın.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sonuç olarak, YDS'de Passive Voice & Causatives sorularının ortak çözüm anahtarı, seçeneklere geçmeden önce fiilin nesne alıp almadığını, kaç nesne aldığını ve cümlede kimin kime ne yaptığını netleştirmektir. Bu bölümdeki strateji kutularını önce "aktif mi pasif mi" sorusunu sorup ardından zaman/modal uyumuna, en son da ettirgen fiillerin kendine özgü kalıplarına bakarak sırayla uygulayın; bu sistematik yaklaşım "Tense" ve "Causatives" bilginizle birleştiğinde bu başlıktaki soruların büyük kısmını güvenle çözmenizi sağlayacaktır.`;
+  const stratejiGerundsInfinitivesIntro =
+    `YDS'nin dil bilgisi sorularında sıkça karşımıza çıkan "Gerunds & Infinitives" (İsim-Fiil ve Mastar Yapıları) konusu, aslında ezber değil sınıflandırma becerisi ister: boşluktan hemen önceki unsurun bir fiil mi, bir sıfat mı, bir edat mı yoksa "too, enough, question word" gibi özel bir yapı mı olduğunu tanıdığınız anda, devamında "Ving" mi yoksa "to V0" mı geleceğine kolayca karar verebilirsiniz. Bu bölümde, gramer kitabının "Gerunds & Infinitives Konu Özeti" başlığında özetlenen kuralları, sınavda karşınıza çıkan tuzaklara göre yeniden düzenleyerek pratik strateji kutuları haline getirdik.\n` +
+    `Aşağıdaki her strateji kutusu, hangi fiil grubunun, sıfatın ya da kalıbın hangi yapıyı zorunlu kıldığını gösterir; amaç, seçenekleri sırayla cümleye yerleştirip anlamı defalarca tartmak yerine, boşluktan önceki ipucunu görür görmez doğru yapıya yönelebilmenizdir.\n\n` +
+    `Sadece Gerund (Ving) İsteyen Fiiller\n` +
+    `Bazı fiillerin nesne pozisyonunda yalnızca "Ving" yapısı bulunur; bu fiillerden sonra asla çıplak bir "to V0" gelmez ve bu liste YDS'de en sık test edilen ezber gruplarından biridir.\n` +
+    `[STRATEJI]\n` +
+    `Sadece Ving alan başlıca fiiller: enjoy, avoid, mind, suggest, recommend, consider, finish, admit, deny, risk, practice, postpone, delay, quit, give up, resist, imagine, appreciate, involve, justify, resent, keep (on).\n` +
+    `Bu fiillerin ortak noktası ya zaten süregelen/alışılmış bir eylemi (enjoy, practice, keep on) ya da geçmişte gerçekleşmiş bir duruma göndermeyi (admit, deny, risk, resent) bildirmeleridir; her ikisinde de eylem henüz gerçekleşmemiş bir "niyet" değildir.\n` +
+    `Bu fiillerden hemen sonra seçeneklerde çıplak bir "to V0" görürseniz o seçeneği elemekten çekinmeyin; doğru yapı her zaman "Ving" ya da edilgen anlam varsa "being V3" olacaktır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sadece To-Infinitive İsteyen Fiiller\n` +
+    `Bu gruptaki fiiller, nesnelerinde her zaman henüz gerçekleşmemiş, ana fiilden sonra gerçekleşecek bir eylemi işaret eder; dolayısıyla devamlarında yalnızca "to V0" bulunur.\n` +
+    `[STRATEJI]\n` +
+    `Sadece to-infinitive alan başlıca fiiller: decide, plan, hope, promise, afford, manage, refuse, agree, offer, expect, arrange, intend, wish, choose, deserve, claim, threaten, tend, fail, seem, appear, aim.\n` +
+    `Bu fiillerin hepsinde mantık aynıdır: "karar verme, umut etme, planlama, söz verme" gibi bir zihinsel ya da sözel eylem, kendisinden sonra gerçekleşecek başka bir eylemi işaret eder; bu yüzden yapı geriye değil ileriye dönük bir anlam taşır.\n` +
+    `Seçeneklerde bu fiillerden hemen sonra "Ving" gördüğünüzde, cümlede başka bir gerekçe (edat, sıfat vb.) yoksa bu seçeneği eleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Hem Ving Hem To V0 Alan Ama Anlamı Değişen Fiiller\n` +
+    `Remember, forget, stop, try, regret ve need gibi fiiller hem "Ving" hem de "to V0" ile kullanılabilir; ancak seçilen yapıya göre cümlenin anlamı tamamen değişir, bu yüzden bu grup YDS'nin en klasik tuzaklarından biridir.\n` +
+    `[STRATEJI]\n` +
+    `Remember + Ving: geçmişte yapılmış bir eylemi hatırlamak / Remember + to V0: yapılması gereken bir eylemi unutmamak.\n` +
+    `Forget + Ving: geçmişte yaşanmış bir olayı unutmak / Forget + to V0: yapılması gereken bir eylemi unutmak (genelde olumsuz cümlelerde kullanılır).\n` +
+    `Stop + Ving: yapılmakta olan eylemi bırakmak / Stop + to V0: başka bir şey yapmak için durmak ("to V0" burada amaç bildirir, stop'un nesnesi değildir).\n` +
+    `Try + Ving: bir şeyi deneme amaçlı yapmak / Try + to V0: bir şeyi başarmak için çaba göstermek, uğraşmak.\n` +
+    `Regret + Ving: geçmişte yapılan bir şeyden pişmanlık duymak / Regret + to V0: genellikle kötü bir haber verirken kullanılan resmi bir kalıp (regret to inform you that...).\n` +
+    `Need + Ving / to be V3: nesnenin edilgen anlamda bir işleme ihtiyacı olduğunu belirtir / Need + to V0: öznenin kendisinin bir eylemi yapması gerektiğini belirtir.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"After the flood, the workers ---- the old bridge because the local council decided a new one had to be built instead."\n` +
+    `Doğru yapı: stopped repairing (stop + Ving)\n` +
+    `Cümlede köprünün onarımından tamamen vazgeçildiği anlatılıyor; "başka bir şey yapmak için durma" değil, "yapılmakta olan eylemi bırakma" anlamı olduğundan stop + Ving doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sıfatlardan Sonra To V0 ve Edat + Ving Ayrımı\n` +
+    `İngilizcede sıfatlardan sonra bir fiil gelecekse genel kural bu fiilin "to V0" şeklinde çekimlenmesidir; ancak bazı sıfatlar kendinden sonra bir edat alır ve bu edattan sonra fiil zorunlu olarak "Ving" olur.\n` +
+    `[STRATEJI]\n` +
+    `To V0 isteyen tipik sıfatlar: important, necessary, essential, willing, ready, eager, likely, difficult, hard, easy, glad, happy, able.\n` +
+    `Edat + Ving isteyen tipik sıfat kalıpları: interested in, good/bad at, afraid of, tired of, capable of, fond of, keen on, worried about, responsible for, famous for, opposed to, accustomed to, used to.\n` +
+    `"Busy" sıfatı bu iki gruba da uymayan bir istisnadır: busy kendinden sonra doğrudan "Ving" alır (busy + Ving), isimle devam edecekse "busy with" şeklinde kullanılır.\n` +
+    `Boşluktan hemen önce bir sıfat, boşluktan hemen sonra da bir edat görüyorsanız fiili doğrudan "Ving" olarak işaretleyin; aralarında edat yoksa önceliğiniz "to V0" olmalıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Too...To V0 ve Enough...To V0 Yapıları\n` +
+    `"Too" ve "enough" yapıları anlamca birbirinin neredeyse tam tersidir ve YDS'de sık sık aynı soru içinde karşılaştırılır; bu yüzden ikisinin dizilimini karıştırmamak gerekir.\n` +
+    `[STRATEJI]\n` +
+    `Too + sıfat/zarf + to V0: "-emeyecek kadar" anlamı verir ve olumsuz bir sonucu işaret eder (too tired to walk: yürüyemeyecek kadar yorgun).\n` +
+    `Too + many/few/much/little + isim + to V0 yapısında da aynı olumsuz mantık geçerlidir.\n` +
+    `Sıfat/zarf + enough + to V0: "yeterince ... ki yapabilsin" anlamı verir ve olumlu bir sonucu işaret eder (strong enough to lift: kaldırabilecek kadar güçlü).\n` +
+    `Enough + isim + to V0 yapısında "enough" isimden önce gelir (enough time to finish: bitirmeye yetecek kadar zaman).\n` +
+    `Bu iki yapıda da fiil daima "to V0" şeklindedir; "enough" ya da "too" gördüğünüzde seçeneklerdeki "Ving" ihtimallerini büyük ölçüde eleyebilirsiniz.\n` +
+    `[/STRATEJI]\n\n` +
+    `Gerund'un Özne, Edat Sonrası ve Kalıplaşmış Yapılarda Kullanımı\n` +
+    `"Ving" yapısı yalnızca fiillerin nesnesi olarak değil, cümlenin öznesi olarak, bir edattan sonra ve bazı kalıplaşmış ifadelerin devamında da kullanılır; bu üç durumda da seçeneklerde "to V0" değil "Ving" aranmalıdır.\n` +
+    `[STRATEJI]\n` +
+    `Cümle başında özne konumundaki fiil her zaman "Ving" şeklindedir (Working abroad requires adaptability: yurt dışında çalışmak uyum yeteneği gerektirir).\n` +
+    `Bir edattan (in, at, on, about, by, without, for vb.) hemen sonra gelen fiil zorunlu olarak "Ving" olur; "by Ving" "-erek/-arak", "without Ving" ise "-meksizin/-meden" anlamı verir.\n` +
+    `Possessive Adjective (my, your, his, her, its, our, their) ya da 's takısından sonra gelen fiil "Ving" şeklinde çekimlenir.\n` +
+    `Spend/waste + zaman veya para ifadesi + Ving; have difficulty/trouble (in) + Ving kalıplarında da fiil "Ving" olur.\n` +
+    `Look forward to, object to, be opposed to, be/get used to, be accustomed to, can't help, it's worth, it's no use/good, there is no point in gibi kalıplarda "to" ya da "in" birer edattır; devamına çıplak "to V0" değil "Ving" gelir.\n` +
+    `[/STRATEJI]\n\n` +
+    `Used to V0 / Be Used to Ving / Get Used to Ving Ayrımı\n` +
+    `Görünüşte birbirine çok benzeyen bu üç kalıp, YDS'de anlam farkına dikkat edilmediğinde kolayca karıştırılır; her biri farklı bir zaman ve alışkanlık ilişkisini anlatır.\n` +
+    `[STRATEJI]\n` +
+    `Used to + V0: geçmişte süregelen ama artık geçerli olmayan bir alışkanlığı ya da durumu anlatır (I used to live in İzmir: eskiden İzmir'de yaşardım, artık yaşamıyorum).\n` +
+    `Be used to + Ving: bir duruma zaten alışkın olmayı anlatır, alışma süreci tamamlanmıştır (She is used to working long hours: uzun saatler çalışmaya alışkındır).\n` +
+    `Get used to + Ving: bir duruma zamanla alışma sürecini, yani alışkanlık kazanmayı anlatır (He is getting used to the new system: yeni sisteme alışıyor).\n` +
+    `"Used to V0" bir Simple Past yapısı gibi davranır ve yalnızca geçmiş zamanda kullanılır; "be/get used to" kalıplarındaki "used to" ise bir sıfat işlevi görür ve her zamanda çekimlenebilir (was used to, will be used to gibi).\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Selin found the new accounting software confusing at first, but after a few months she ---- entering the data this way."\n` +
+    `Doğru yapı: got used to (get used to + Ving)\n` +
+    `"At first ... confusing" ve "after a few months" ifadeleri zamanla oluşan bir alışma sürecine işaret ettiğinden, sabit bir alışkanlık değil, alışma süreci anlatan "get used to" doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, "Gerunds & Infinitives" sorularının çözümü, cümlenin tamamını çözmekten çok, boşluktan hemen önceki unsuru (fiil, sıfat, edat ya da "too/enough" gibi özel bir yapı) doğru sınıflandırmaktan geçer. Bu bölümdeki strateji kutularını, karşınıza çıkan fiili ya da kalıbı hangi gruba ait olduğunu bulacağınız bir kontrol listesi gibi kullanın; özellikle remember, forget, stop, try, regret gibi anlam değiştiren fiiller ile used to/be used to/get used to ayrımını iyi pekiştirdiğinizde, bu konudan gelen soruların büyük bölümünü hızla ve güvenle çözebilirsiniz.`;
+  const stratejiAdjectivesAdverbsIntro =
+    `YDS dil bilgisi sorularında "Adjectives & Adverbs" başlığı, çoğu zaman uzun bir cümle çözümlemesi değil, boşluğun cümledeki görevini doğru saptamayı ister: boşluk bir ismi mi niteliyor (sıfat), yoksa bir fiili, sıfatı, başka bir zarfı ya da cümlenin tamamını mı niteliyor (zarf)? Bu bölümde, gramer kitabının "Adjectives & Adverbs" ve "Adjectives/Adverbs Konu Özeti" başlıkları altında verilen kuralları, seçenekleri hızla eleyebileceğiniz strateji kalıpları haline getirdik.\n` +
+    `Aşağıdaki kutuların ortak mantığı şudur: önce seçeneklerin sıfat mı zarf mı olduğuna bakın, sonra boşluğun bir isim mi yoksa isim-dışı bir öğe mi nitelediğini belirleyin; ardından her kalıba özgü küçük tuzakları (düzensiz biçimler, kelime sırası, anlam kayması taşıyan zarflar) eleyerek doğru seçeneğe ulaşın.\n\n` +
+    `Sıfat Sırası: Bir İsimden Önce Doğru Diziliş\n` +
+    `Türkçede sıfatların isimden önceki sırası oldukça esnekken, İngilizcede birden fazla sıfat yan yana geldiğinde belirli bir öncelik sırası vardır; bu sıra, "hangi seçenek doğal bir dizilim oluşturur" tarzı sorularda doğrudan işinize yarar.\n` +
+    `[STRATEJI]\n` +
+    `Bir isimden önce birden fazla sıfat sıralanacaksa şu öncelik izlenir: opinion/görüş (lovely, boring) - size/boyut (big, tiny) - age/yaş (old, new) - shape/şekil (round, square) - color/renk (red, dark) - origin/köken (Turkish, Italian) - material/malzeme (wooden, metal) - Noun.\n` +
+    `Kısaltma olarak sıra baş harflerini (Opinion-Size-Age-Shape-Color-Origin-Material) aklınızda tutun; seçeneklerdeki bir dizilim bu sırayı bozuyorsa o seçenek elenir.\n` +
+    `Sayı sıfatları (three, several, many gibi) bu sıralamanın en başında, opinion'dan bile önce yer alır: "three lovely old wooden chairs" örneğinde olduğu gibi.\n` +
+    `Aynı kategoriden gelen sıfatlar (iki renk ya da iki köken gibi) genelde virgül veya "and" ile bağlanırken, farklı kategorilerden sıfatlar arasına virgül konmaz.\n` +
+    `[/STRATEJI]\n\n` +
+    `Comparative ve Superlative Yapılar: Düzensiz Biçimler ve Vurgu Kelimeleri\n` +
+    `Kısa sıfat/zarflarda "-er/-est" takısı, uzun olanlarda ise "more/most" yapısı kullanılır; sınavı asıl zorlaştıran, bu kurala uymayan düzensiz biçimler ve kıyaslamayı güçlendiren vurgu kelimeleridir.\n` +
+    `[STRATEJI]\n` +
+    `Düzensiz biçimler: good/well - better - best; bad/badly - worse - worst; much/many - more - most; little - less - least.\n` +
+    `"Far" sıfatının iki ayrı comparative biçimi vardır: "farther" somut/fiziksel mesafe için, "further" ise soyut anlamda "ilave, ek" anlamı taşıyan bağlamlar için kullanılır.\n` +
+    `"Old" sıfatının "older" (yaş/eskilik bildiren genel biçim) ve "elder" (yalnızca aile bireyleri arasında büyüklük sırasını bildiren, isimden önce kullanılan biçim) olmak üzere iki ayrı hali vardır.\n` +
+    `"Late" sıfatının "later" (zaman olarak daha sonra) ve "latter" (ikiden ikincisi) biçimlerini birbirine karıştırmayın; "the former...the latter" kalıbı "birincisi...ikincisi" anlamı verir.\n` +
+    `Comparative yapıyı güçlendiren vurgu kelimeleri: much, far, a lot, rather, a little, a bit, even, no; bu kelimelerden biri boşluktan hemen önce geliyorsa seçeneklerde comparative (-er/more) yapıyı önceliklendirin.\n` +
+    `Superlative yapıyı güçlendiren vurgu kelimeleri ise by far, easily, quite, much, even'dir; bunlar "the -est/the most" yapısının hemen önüne yerleşir.\n` +
+    `"Very, so, as, quite, fairly, too" gibi zarflar comparative (-er/more) yapının önüne GELMEZ; bu kelimelerden biri boşluktan hemen önce geliyorsa comparative seçenekleri eleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `"As...As", "So...That", "Such...That" ve "The Same...As" Kalıpları\n` +
+    `Bu dört kalıp, sınavda birbirinin yerine seçenek olarak sunulup elenmesi istenen bir grup oluşturur; hangisinin hangi cümle kuruluşunu gerektirdiğini bilmek doğrudan doğru seçeneğe götürür.\n` +
+    `[STRATEJI]\n` +
+    `As + sıfat/zarf + as: iki taraf arasında eşitlik bildirir, "kadar" anlamı verir; olumsuz cümlelerde "as" yerine genellikle "so...as" tercih edilir.\n` +
+    `The same + isim + as / the same + isim + that + cümle: "...ile aynı..." anlamı verir, kıyaslanan iki unsur arasındaki ortaklığı ifade eder.\n` +
+    `So + sıfat/zarf + that + özne-fiil: "o kadar...ki" anlamı verir ve ardından mutlaka tam bir cümle (SVO) gelir; sadece bir isim tamlaması gelmez.\n` +
+    `Such + (a/an) + sıfat + isim + that + özne-fiil: aynı "o kadar...ki" anlamını verir, ancak "so"dan farklı olarak sıfat+isim öbeğinin önüne gelir; isim kullanmadan tek başına bir sıfat/zarfın önüne geçemez.\n` +
+    `Boşluktan hemen sonra doğrudan bir isim varsa "such", doğrudan bir sıfat/zarf varsa "so" seçeneğine yönelin; ikisinin arasına giren açıklayıcı ifadeleri (Ving öbeği, edat öbeği, sıfat cümleciği) parantez içine alıp yok sayarak kalıbı netleştirin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"The lecture was ---- confusing that most of the students left the hall without taking any notes."\n` +
+    `Doğru yapı: so (so + sıfat + that + cümle)\n` +
+    `Boşluktan hemen sonra bir isim değil doğrudan bir sıfat (confusing) geldiği ve ardından tam bir cümle (most of the students left...) bulunduğu için "such" değil "so" yapısı doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Zarf Türleri ve Cümledeki Yerleri\n` +
+    `Zarflar tek bir işlevle sınırlı değildir; fiili, sıfatı, başka bir zarfı ya da cümlenin tamamını niteleyebilirler ve bu farklı işlevler zarfın cümle içindeki konumunu da belirler.\n` +
+    `[STRATEJI]\n` +
+    `Sıklık zarfları (always, usually, often, sometimes, rarely, never) genellikle ana fiilden ÖNCE, "be" fiilinden ise SONRA yer alır.\n` +
+    `Derece zarfları (very, quite, rather, extremely, fairly, too) niteledikleri sıfat/zarftan hemen ÖNCE gelir ve o sıfat/zarfın derecesini artırıp azaltır.\n` +
+    `Cümle zarfları (fortunately, obviously, surprisingly, admittedly, evidently) konuşmacının tüm cümleye bakışını yansıtır; genelde cümle başında virgülle ayrılarak kullanılır ve çıkarılsa da cümlenin temel anlamı bozulmaz.\n` +
+    `Vurgu zarfları (even, only, also, just, especially, merely) niteledikleri öğenin hemen önüne yerleşerek o öğeyi vurgular; yerleri değiştiğinde cümlenin vurguladığı öğe de değişir, bu yüzden seçeneklerde zarfın konumuna dikkat edin.\n` +
+    `Tarz zarfları (-ly ile biten slowly, carefully, quietly gibi) genelde fiilden ya da nesneden sonra gelir; fiil ile nesnenin arasına girmez.\n` +
+    `[/STRATEJI]\n\n` +
+    `Karıştırılan Sıfat-Zarf İkilileri: Hard/Hardly, Late/Lately, Near/Nearly, High/Highly\n` +
+    `Bazı kelimelerin hem sıfat hem de düzensiz zarf (-ly'siz) biçimi bulunduğu için, bu kelimelere "-ly" eklenmiş hali beklenen zarf anlamını değil, tamamen farklı bir anlam taşır; bu çiftler YDS'nin klasik tuzaklarındandır.\n` +
+    `[STRATEJI]\n` +
+    `Hard (adj/adv: sert, zor / sıkı çalışan) ile Hardly (adv: neredeyse hiç) birbirinin yerine kullanılamaz; "hardly" anlamca olumsuzdur ama gramer olarak olumlu cümlelerde kullanılır.\n` +
+    `Late (adj/adv: geç) ile Lately (adv: son zamanlarda) farklı anlamlar taşır; "lately" genellikle Present Perfect zamanla birlikte görülür.\n` +
+    `Near (adj/adv: yakın) ile Nearly (adv: neredeyse, yaklaşık) farklıdır; "nearly" bir sayıyı ya da dereceyi yaklaşık olarak belirtirken "near" fiziksel yakınlık bildirir.\n` +
+    `High (adj/adv: yüksek) ile Highly (adv: son derece, çok) farklıdır; "highly" bir sıfatı ya da fiili güçlendiren bir derece zarfıdır (highly recommended, highly unlikely) ve fiziksel yükseklik anlatmaz.\n` +
+    `Bu dört çiftten birinin "-ly"li hali cümlede geçiyorsa cümleyi "sert/geç/yakın/yüksek" anlamıyla değil, kelimenin kendine özgü farklı anlamıyla okuyun; seçeneklerde bu ayrımı gözeterek anlam bütünlüğünü kontrol edin.\n` +
+    `[/STRATEJI]\n\n` +
+    `"Too" ve "Enough" Yapılarında Sıfat-Zarf Ayrımı\n` +
+    `"Too" ve "enough" kalıpları hem sıfatlarla hem zarflarla kullanılabilir; ikisi arasındaki temel fark, "enough"ın sıfat/zarftan SONRA, isimden ise ÖNCE gelmesidir.\n` +
+    `[STRATEJI]\n` +
+    `Too + sıfat/zarf + to V0: "...-emeyecek kadar..." anlamı verir ve genellikle olumsuz bir sonucu ima eder.\n` +
+    `Sıfat/Zarf + enough + to V0: "yeteri kadar..." anlamı verir; bu kullanımda "enough" niteleyeceği sıfat/zarftan SONRA yer alır.\n` +
+    `Enough + isim + to V0: "yeterli sayıda/miktarda..." anlamı verir; bu kullanımda "enough" niteleyeceği isimden ÖNCE gelir (enough time, enough money gibi).\n` +
+    `"Too"yu güçlendiren vurgu kelimeleri rather, far, much, a little, a bit'tir; bunlar "too"dan hemen önce gelir (far too difficult gibi).\n` +
+    `Boşluktan hemen sonra bir isim varsa "enough + isim", boşluktan hemen önce bir sıfat/zarf varsa "sıfat/zarf + enough" dizilimini arayın; bu ayrım doğru seçeneğe götürür.\n` +
+    `[/STRATEJI]\n\n` +
+    `Participial Adjectives: "-ing" ve "-ed" Ayrımı\n` +
+    `Fiillere eklenen "-ing" ve "-ed/-en" takıları bir ismi niteleyen sıfatlar oluşturur; ancak hangisinin kullanılacağı, niteleyeceğiniz ismin bir duyguyu YAŞAYAN mı yoksa o duyguya SEBEP OLAN mı olduğuna bağlıdır.\n` +
+    `[STRATEJI]\n` +
+    `Nitelediğimiz isim bir duyguyu ya da etkiyi YAŞIYORSA (etkileniyorsa) "-ed" biçimi kullanılır: a bored student, an interested audience, a confused driver.\n` +
+    `Nitelediğimiz isim bir duyguya ya da etkiye SEBEP OLUYORSA "-ing" biçimi kullanılır: a boring lecture, an interesting proposal, a confusing map.\n` +
+    `Cansız nesneler ve durumlar hakkında bilgi verilirken çoğunlukla "-ing" biçimi, insanın kendi iç tepkisi anlatılırken çoğunlukla "-ed" biçimi tercih edilir.\n` +
+    `Bir sürecin henüz TAMAMLANMADIĞINI vurgulamak için "-ing", TAMAMLANDIĞINI/sonuçlandığını vurgulamak için "-ed" ya da düzensiz V3 biçimi kullanılır (a developing country / a developed country gibi).\n` +
+    `Seçeneklerde aynı fiilin hem "-ing" hem "-ed" hali sunuluyorsa, önce cümledeki ismin "etkileyen mi, etkilenen mi" olduğuna, sonra sürecin bitip bitmediğine bakarak karar verin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"After sitting through a three-hour meeting about topics that had nothing to do with her department, Elif felt completely ---- and started doodling on her notepad."\n` +
+    `Doğru yapı: bored (etkilenen taraf insan olduğu için -ed)\n` +
+    `Cümlede duyguyu yaşayan (etkilenen) kişi Elif olduğu ve toplantının onda yarattığı sıkılma hissi anlatıldığı için "-ing" değil "-ed" biçimi (bored) doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, sıfat ve zarf soruları YDS'de genellikle uzun bir cümle çözümlemesinden çok, boşluğun cümledeki görevini (bir ismi mi niteliyor, bir fiili/sıfatı/zarfı mı niteliyor, yoksa cümlenin tamamını mı niteliyor) doğru saptamayı ve ardından kalıba özgü küçük ayrıntıları (düzensiz biçimler, "enough"ın konumu, "so" ile "such" arasındaki isim/sıfat farkı, "-ing/-ed" ayrımı) hatırlamayı test eder. Bu bölümdeki strateji kutularını tekrar ederken önce seçeneklerin sıfat mı zarf mı olduğuna, sonra boşluğun ne nitelediğine bakma alışkanlığı edinirseniz, "Adjectives & Adverbs" konusundan gelen soruların büyük kısmını hızlı ve güvenli biçimde çözebilirsiniz.`;
+  const stratejiAdjectiveClausesIntro =
+    `"Adjective Clause" (Sıfat Cümleciği / İlgi Cümleciği), bir ismi ayrı bir tam cümle yardımıyla nitelemeyi sağlayan yapılardır; YDS'de bu konu genellikle cümledeki boşluğun hangi ismi nitelediğini, bu ismin nitelenen cümlecik içinde özne mi nesne mi olduğunu ve cümlede virgül olup olmadığını fark etmeyi test eder.\n` +
+    `Bu bölümde gramer kitabının "Adjective Clauses" ve "Adjective Clause Konu Özeti" başlıklarında verilen who/which/that/whose/where/when/why seçimini, kısaltma (reduction) kurallarını ve "that" yasaklarını, boşluğa bakar bakmaz doğru yapıya yönelmenizi sağlayacak strateji kutuları hâline getirdik.\n\n` +
+    `İlgi Zamirlerine Giriş: Who, Whom, Which, That, Whose\n` +
+    `Sıfat cümleciği kurulurken önce nitelenen ismin insan mı yoksa insan dışı bir varlık mı olduğuna, sonra da bu ismin yan cümlecik içindeki görevine (özne, nesne, sahiplik) bakılır.\n` +
+    `İnsanları niteleyen özne konumundaki yapı who, nesne konumundaki yapı whom (günlük kullanımda who da kabul edilir), insan dışı varlıkları niteleyen yapı ise hem özne hem nesne konumunda which'tir.\n` +
+    `That, hem insanlar hem de insan dışı varlıklar için hem özne hem nesne konumunda kullanılabilen "yedek" bir yapıdır; ama sadece defining (virgülsüz) sıfat cümleciklerinde geçerlidir.\n` +
+    `[STRATEJI]\n` +
+    `Boşluktan önceki isim insansa ve boşluk özne konumundaysa: who / that.\n` +
+    `Boşluktan önceki isim insansa ve boşluk nesne konumundaysa: whom / who / that.\n` +
+    `Boşluktan önceki isim insan dışıysa (özne ya da nesne fark etmez): which / that.\n` +
+    `Seçeneklerde who/which gibi asıl yapılar varken that'i "ikinci tercih" olarak düşünün; cümlede virgül varsa that'i doğrudan eleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Özne mi Nesne mi? Boşluktan Sonraki Dizilime Bakın\n` +
+    `Bir sıfat cümleciği sorusunda asıl ipucu, nitelenen ismin ne olduğu değil, boşluktan hemen sonra gelen dizilimdir.\n` +
+    `Boşluktan hemen sonra bir yardımcı fiil, modal ya da doğrudan çekimli bir fiil geliyorsa cümlecikte özne eksiktir; bu durumda who/which/that gibi özne göreviyle kullanılan yapılar aranır.\n` +
+    `Boşluktan sonra bir özne ve onu takip eden bir fiil geliyor, fakat o fiilin nesnesi görünmüyorsa cümlecikte nesne eksiktir; bu durumda whom/which/that ya da hiçbir relative word kullanılmadan (Ø) boşluk bırakılabilir.\n` +
+    `[STRATEJI]\n` +
+    `____ + yardımcı fiil / modal / çekimli fiil (özne eksik) → who / which (insan dışı) / that.\n` +
+    `____ + özne + fiil ... (nesne eksik) → whom / which / that / Ø (relative word hiç kullanılmayabilir).\n` +
+    `Nesne konumundaki boşluklarda seçeneklerde relative word bulunmuyorsa ve cümle zaten anlamlı bir şekilde devam ediyorsa, doğru yanıtın "hiçbir kelime gelmemesi" olabileceğini unutmayın.\n` +
+    `[/STRATEJI]\n\n` +
+    `"That" Yasakları: Virgülden Sonra ve Edattan Sonra\n` +
+    `"That" pratik ve esnek bir yapı gibi görünse de iki yerde kesinlikle kullanılamaz: virgülle ayrılmış non-defining sıfat cümleciklerinde ve bir edattan (preposition) hemen sonra.\n` +
+    `Non-defining cümlecikler nitelenen ismi tanımlamaz, sadece hakkında ek bilgi verir ve mutlaka virgülle ayrılır; böyle bir cümlecikte "that" değil who/which kullanılmalıdır.\n` +
+    `Bir edat sıfat cümleciğinde relative word'ün hemen önüne taşınmışsa (edat + relative word yapısı), bu relative word sadece whom, which ya da whose + noun olabilir; "that" edattan sonra asla gelmez.\n` +
+    `[STRATEJI]\n` +
+    `Cümlede virgül varsa (non-defining) → that kullanılmaz, who/which tercih edilir.\n` +
+    `Edattan hemen sonra gelen relative word → sadece whom / which / whose + noun; that, where, why, when ve who bu konumda kullanılamaz.\n` +
+    `Edatı cümlenin sonuna bırakırsanız (Defining yapılarda) that ya da Ø tekrar kullanılabilir hale gelir; yani "the book that I told you about" doğruyken "the book about that I told you" yanlıştır.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"The scholarship, ---- I applied last spring, covers both tuition and accommodation."\n` +
+    `Doğru yapı: for which\n` +
+    `Cümlede virgül olduğu için non-defining bir yapı söz konusudur ve boşluktan hemen önce gelen "apply for" fiilinin edatı boşluğa taşınmıştır; bu yüzden "that" ya da "why" değil, edat + which kalıbı olan "for which" doğru yanıttır.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sıfat Cümleciğinin Kısaltılması: Aktif Ving, Pasif V3\n` +
+    `Özne konumundaki bir defining sıfat cümleciği, relative word ve yardımcı fiil birlikte atılarak katılım bilgisine (participle) indirgenebilir; YDS'de bu kısaltılmış hâller sık sık boşluk olarak karşımıza çıkar.\n` +
+    `Nitelenen isim, kısaltılan cümlecikteki eylemi kendisi yapıyorsa yani anlam aktifse fiil Ving hâline getirilir; nitelenen isim eylemi kendisi yapmıyor, o eylemi başkası ona yapıyorsa yani anlam pasifse fiil V3 ya da being V3 hâline getirilir.\n` +
+    `Nitelenen ismin önünde bir isim daha varsa ve bu ismin öncesinde bir fiil bulunuyorsa (örneğin "persuade somebody to V0" gibi), kısaltma "isim + to V0" biçiminde de yapılabilir.\n` +
+    `Superlative (en üstünlük) yapısını niteleyen sıfat cümlecikleri de aynı mantıkla "the first/best/only + to V0" (aktif) ya da "the first/best/only + to be V3" (pasif) şeklinde kısaltılır.\n` +
+    `[STRATEJI]\n` +
+    `Noun + Ving → aktif kısaltma (isim eylemi kendisi yapıyor).\n` +
+    `Noun + V3 / being V3 → pasif kısaltma (eylem isme yapılıyor).\n` +
+    `Superlative + to V0 → aktif kısaltma; Superlative + to be V3 → pasif kısaltma.\n` +
+    `Boşluktan hemen önce yalın bir isim, boşluktan hemen sonra da bir başka fiil ya da nesne varsa, önce cümlenin aktif mi pasif mi olduğuna anlamına göre karar verin; özne eylemi yapıyorsa Ving, özne eyleme maruz kalıyorsa V3/being V3 işaretleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Whose + İsim: Sahiplik Bildiren Sıfat Cümlecikleri\n` +
+    `Nitelenen isimle sıfat cümleciği içindeki bir başka isim arasında "-nin/-ın" şeklinde bir aitlik ilişkisi varsa relative word olarak whose kullanılır; whose hem insanlar hem de insan dışı varlıklar için geçerlidir ve defining ile non-defining kullanımında biçimi değişmez.\n` +
+    `Whose'dan hemen sonra mutlaka yalın bir isim ya da sıfat + isim gelir; "a, an, the, some, many" gibi belirteçlerle kurulmuş bir yapı whose'dan sonra gelemez.\n` +
+    `İnsan dışı varlıklardaki sahiplik ilişkisi istenirse "whose + isim" yerine "the + isim + of which" kalıbıyla da kurulabilir; bu kalıpta isim, of which'in önüne değil ismin kendisi öne alınır.\n` +
+    `[STRATEJI]\n` +
+    `Boşluktan önce insan ya da insan dışı bir isim nitelenip boşluktan sonra yalın isim ya da sıfat+isim geliyorsa (belirteçsiz) → whose.\n` +
+    `Whose + a / an / the / many / some + isim gibi bir seçenek gördüğünüzde bu seçeneği doğrudan eleyin; whose çıplak isimle çalışır.\n` +
+    `İnsan dışı varlıklarda "whose + isim" ile "the + isim + of which" anlamca eşdeğerdir; seçeneklerde ikisinden hangisi varsa dizilim kurallarına (whose isimden önce, of which isimden sonra) göre işaretleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `Yer, Zaman ve Sebep Bildiren Yapılar: Where, When, Why\n` +
+    `Nitelenen isim bir yer, zaman ya da sebep bildiriyorsa ve sıfat cümleciği içinde bu isim edatlı bir tümleç (dolaylı tümleç) görevindeyse, edat + which yerine kısaca where (yer), when (zaman) ya da why (sebep) kullanılabilir.\n` +
+    `Bu üç yapıdan hangisinin doğru olduğuna karar vermenin en pratik yolu, boşluktan sonra gelen dizilimin tam bir cümle olup olmadığına bakmaktır; boşluktan sonra özne ve nesnesiyle eksiksiz bir cümle varsa where/when/why doğrudur, ama boşluktan sonra özne ya da nesne eksikse bu üçü değil which ya da that kullanılmalıdır.\n` +
+    `Where, when ve why sadece edatın "yerini tutan" birer kısaltmadır; bu yüzden aynı anlam edat + which ile de verilebilir (in which, on which, at which, during which, for which gibi).\n` +
+    `[STRATEJI]\n` +
+    `Boşluktan sonra tam cümle (özne+yüklem+varsa nesne eksiksiz) → where (yer) / when (zaman) / why (sebep) / edat + which.\n` +
+    `Boşluktan sonra özne ya da nesne eksik → which / that (where, when, why bu durumda kullanılamaz).\n` +
+    `Yer bildiren isimden sonra sahiplik ilişkisi varsa (örn. "ülke, insanları...") where değil whose + isim kullanılır.\n` +
+    `"The reason" ifadesinden sonra boşluk geliyorsa ve devamı tam cümleyse why, değilse which/that/Ø tercih edilir.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Archaeologists finally located the cave ---- the ancient manuscripts had been hidden for centuries."\n` +
+    `Doğru yapı: where\n` +
+    `Boşluktan sonra "the ancient manuscripts had been hidden for centuries" tam bir cümledir, yani ne özne ne de nesne eksiktir; nitelenen isim de bir yer olduğu için which değil where doğru yanıttır.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Bütün Cümleyi Niteleyen "Which": Co-ordinating Adjective Clause\n` +
+    `Sıfat cümlecikleri her zaman tek bir ismi nitelemek zorunda değildir; virgülden sonra gelen "which", kendisinden önceki ismi değil, kendisinden önceki cümlenin tamamını ya da orada anlatılan durumu niteleyebilir.\n` +
+    `Bu kullanımda relative word olarak sadece which kullanılır; who, whom, that ya da Ø bu görevi üstlenemez, çünkü nitelenen bir isim değil bütün bir önermedir.\n` +
+    `Bu yapıyı defining bir sıfat cümleciğinden ayırt etmenin yolu, virgülden hemen önce nitelenmeye uygun tekil bir ismin değil, tam bir cümlenin bulunmasıdır; which bu durumda "ki bu" ya da "bu da" anlamı taşır.\n` +
+    `[STRATEJI]\n` +
+    `Virgülden önce tam bir cümle var ve virgülden sonraki boşlukta özne eksikse → which (bütün cümleyi niteleyen co-ordinating kullanım).\n` +
+    `Bu konumda who / whom / that / Ø seçeneklerini doğrudan eleyin; sadece which doğru olabilir.\n` +
+    `Anlam kontrolü için virgülden sonraki kısmı "ki bu durum..." ya da "bu da..." diye çevirin; çeviri anlamlı oluyorsa co-ordinating which kullanımı doğrulanmış olur.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sonuç olarak, YDS'deki adjective clause sorularının neredeyse tamamı aynı üç soruyu sırayla sormanızı ister: nitelenen isim insan mı değil mi, boşluktan sonraki dizilim özne mi nesne mi yoksa tam bir cümle mi eksik, ve cümlede virgül ya da edat var mı. Bu üç soruya verdiğiniz cevaplar sizi otomatik olarak who/whom, which/that, whose+isim, where/when/why ya da Ving/V3 kısaltmalarından birine götürür. Bu bölümdeki strateji kutularını bu sırayla uygulayarak, seçenekleri tek tek cümleye yerleştirmek yerine doğru yapıyı doğrudan tahmin edebilirsiniz.`;
+  const stratejiNounClausesIntro =
+    `YDS'de "isim cümlecikleri" (noun clauses) başlığı, bir yan cümleciğin cümle içinde özne, nesne ya da tümleç görevi üstlenmesini inceler; bu yapılar sınavda genellikle boşluk doldurma sorularında "that", "the fact that", "whether", "if" ya da bir soru kelimesiyle başlayan cümlecikler arasından doğru bağlacı seçmeyi test eder. Aynı bölümde işlenen "yardımcı fiil" yapıları ise -devrik cümleler, "so/neither/nor" kalıpları, question tag'ler ve vurgulu "do/does/did" kullanımı- görünüşte farklı bir konu gibi dursa da aslında aynı mantığı paylaşır: her ikisinde de cümlenin standart özne-yüklem sırasından sapan bir dizilim doğru okunmalıdır.\n` +
+    `Bu bölümde önce isim cümleciklerinin hangi bağlaçla kurulacağını ve cümle içinde nasıl bir sıralama izleyeceğini, ardından yardımcı fiillerin devrik yapılarda ve kısa onay/vurgu kalıplarında nasıl kullanıldığını, sınavda doğrudan işinize yarayacak strateji kutularıyla ele alıyoruz.\n\n` +
+    `"That" ve "The Fact That" ile Kurulan Kararlı Durum Cümlecikleri\n` +
+    `Cümlede kesin ve tartışmasız bir bilgi aktarılıyorsa isim cümleciği "that" ya da "the fact that" ile kurulur; bu iki yapı fiilin nesnesi konumunda genellikle birbirinin yerine kullanılabilir, ancak bir edattan hemen sonra sadece "the fact that" gelir, çünkü "that" tek başına bir edatın ardından kullanılmaz.\n` +
+    `[STRATEJI]\n` +
+    `S + fiil + that/the fact that + S + V + O: fiilin nesnesi konumunda (She announced that/the fact that the merger had been approved.).\n` +
+    `S + yardımcı fiil (be, seem, appear) + that + S + V + O: öznenin tümleci konumunda (Her main concern is that the deadline is too close.).\n` +
+    `It + edilgen fiil + that + S + V + O: haber ya da iddia bildiren edilgen yapılarda (It is widely believed that the data was manipulated.).\n` +
+    `...sıfat + that + S + V + O: duygu ya da yorum bildiren sıfatlardan sonra (It is unlikely that they will reach an agreement.).\n` +
+    `...soyut isim + that + S + V + O: fikir ya da olgu bildiren soyut isimlerden sonra (There is no doubt that the strategy will succeed.).\n` +
+    `...edat + the fact that + S + V + O: bir edattan hemen sonra sadece bu yapı kullanılır (They are concerned about the fact that sales have dropped sharply.).\n` +
+    `Bu altı kalıptan biri boşluktan önce verilmişse ve cümlede herhangi bir belirsizlik yoksa, seçeneklerde önce "that" ya da "the fact that" yapısını arayın.\n` +
+    `[/STRATEJI]\n\n` +
+    `Soru Kelimeleriyle Kurulan Kararsız Durum Cümlecikleri: Düz Cümle Sırası\n` +
+    `Bir wh- sorusu isim cümleciğine dönüştüğünde soru kalıbından çıkar ve düz cümle diziliminie döner; yani yardımcı fiil özne ile yer değiştirmez, özne yüklemin önünde kalır. Bu, YDS'de en sık yapılan tuzaklardan biridir: aday soru sırasını isim cümleciğinin içine taşıyıp yanlış seçeneği işaretleyebilir.\n` +
+    `[STRATEJI]\n` +
+    `Soru cümlesi isim cümleciği olduğunda yardımcı fiil-özne devriği bozulur, soru kelimesi + özne + yüklem sırasına dönülür (What does she want? → I wonder what she wants.).\n` +
+    `Soru kelimesi cümlede öznenin kendisini soruyorsa (yani soruda özne eksikse) ayrı bir yardımcı fiil kullanılmaz, soru kelimesi doğrudan fiille devam eder (Who stole the money? → I don't know who stole the money.).\n` +
+    `Soru kelimesinin önüne isim ya da sıfat gelmişse (whose + isim, which/what + isim, how many/how much + isim) bu öbek bir bütün olarak cümleciğin başında kalır (I didn't know whose car it was. / They know how many tickets were sold.).\n` +
+    `Soru kelimesinin sıfat ya da zarf niteleyicisi varsa "how + sıfat/zarf + özne + yüklem" sırası önceliklidir (I didn't know how difficult the exam was.).\n` +
+    `[/STRATEJI]\n\n` +
+    `"Whether" ve "If": Kullanım Alanları ve "Or Not"\n` +
+    `İki seçenekli, belirsiz bir durumu isim cümleciğine çevirirken "whether" ya da "if" kullanılır; ancak bu iki bağlaç her pozisyonda birbirinin yerine geçmez.\n` +
+    `[STRATEJI]\n` +
+    `Cümlenin öznesi konumunda sadece "whether" kullanılır, "if" özne olamaz (Whether the plan will work is still unclear.).\n` +
+    `Bir edattan hemen sonra sadece "whether" kullanılır (They disagree about whether the policy is fair.).\n` +
+    `"Or not" ifadesinden hemen önce sadece "whether" kullanılır (whether or not); "if" bu konumda gelmez.\n` +
+    `Fiilden hemen sonra, nesne konumunda hem "whether" hem "if" kullanılabilir (She hasn't decided whether/if she will accept the offer.).\n` +
+    `"Or not" fiilden sonraki kullanımda cümlenin sonuna atılabilir ve anlamda değişiklik olmaz; ancak "if" ile birlikte kullanılacaksa "or not" mutlaka cümle sonunda yer almalıdır, hiçbir zaman "if"in hemen ardından gelmez.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"---- the company will relocate its headquarters or not depends entirely on the outcome of tomorrow's board meeting."\n` +
+    `Doğru yapı: Whether\n` +
+    `Boşluk cümlenin öznesi konumundadır ve hemen ardından "or not" ifadesi gelmektedir; özne konumunda ve "or not"tan önce sadece "whether" kullanılabildiği için "if" seçeneği burada işaretlenemez.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Özne Konumundaki İsim Cümleciklerinde Tekil Fiil Uyumu\n` +
+    `Bir isim cümleciği -ister "that" ile, ister bir soru kelimesiyle, ister "whether" ile kurulmuş olsun- cümlenin öznesi olduğunda tek bir olgu ya da durum ifade ettiği kabul edilir; bu yüzden ana cümlenin yüklemi her zaman tekil alınır, cümleciğin içindeki özne çoğul olsa bile bu kuralı değiştirmez.\n` +
+    `[STRATEJI]\n` +
+    `Noun clause özne olduğunda ana fiil her zaman tekildir: "What the committee decides" tek bir birim sayılır ve "is/has/does" gibi tekil yardımcı fiillerle devam eder, "are/have/do" ile değil.\n` +
+    `Cümlecik içindeki özne çoğul olsa da (the students, the results, the members) bu çoğulluk ana cümlenin fiiline yansımaz; uyum isim cümleciğinin bütününe göre yapılır.\n` +
+    `Aynı kural "the fact that...", "whether..." ve "how/what/why..." ile kurulan tüm özne cümlecikleri için geçerlidir: cümlenin öznesi tek bir blok olarak değerlendirilir.\n` +
+    `Seçeneklerde çoğul bir yardımcı fiil (are, have, do) ile tekil bir yardımcı fiil (is, has, does) arasında kalırsanız ve boşluktan önce bir isim cümleciği varsa, tekil olanı işaretleyin.\n` +
+    `[/STRATEJI]\n\n` +
+    `İsim Cümleciklerinin Mastar (Infinitive) Yapılara Kısaltılması\n` +
+    `Ana cümlenin öznesi ile isim cümleciğinin öznesi aynı kişiyi gösteriyorsa, isim cümleciği kısaltılıp "soru kelimesi/whether + to V0" yapısına indirgenebilir; bu kısaltma anlamda herhangi bir kayba yol açmaz ve YDS'de hem soru kökünde hem seçeneklerde sık karşınıza çıkar.\n` +
+    `[STRATEJI]\n` +
+    `Kısaltmanın şartı aynı öznedir: "I don't know what I should do." → "I don't know what to do." (özne her iki cümlecikte de "I").\n` +
+    `Kısaltmada "if" kullanılmaz, yerine mutlaka "whether" tercih edilir: "I can't decide whether I should go." → "I can't decide whether to go."\n` +
+    `"That clause" doğrudan kısaltılamaz; ana cümlenin öznesi boş özne "it" ise ve cümlecikte farklı bir özne bildirilmek isteniyorsa "for + object + to V0" kalıbı kullanılır: "It is necessary that you arrive early." → "It is necessary for you to arrive early."\n` +
+    `Soru kelimesi + isim öbeği (whose car, which way, how many tickets) kısaltmada bozulmadan kalır, yalnızca cümleciğin geri kalanı mastara döner: "Can you tell me which way I should take?" → "Can you tell me which way to take?"\n` +
+    `[/STRATEJI]\n\n` +
+    `Olumsuz Zarflardan Sonra Devrik Yapı (Inversion)\n` +
+    `Cümle olumsuz ya da sınırlayıcı anlam taşıyan bir zarf öbeğiyle (never, rarely, seldom, little, not only, no sooner, hardly) başladığında, yardımcı fiil özne ile yer değiştirir; cümle bir soru kalıbındaymış gibi dizilir, ancak anlam soru değil vurgulu bir olumsuzlamadır.\n` +
+    `[STRATEJI]\n` +
+    `Never / Rarely / Seldom / Little + yardımcı fiil + özne + V0: bu zarflardan biri cümle başına geldiğinde devrik yapı zorunludur (Never have I seen such a chaotic meeting. / Little did she know that she had already been promoted.).\n` +
+    `Not only + yardımcı fiil + özne + V0 ..., but (also) ...: iki eylemi bağlayan bu kalıpta devrik yapı sadece "not only" tarafında olur, "but" tarafı normal sırada kalır (Not only did the company cut costs, but it also doubled its exports.).\n` +
+    `No sooner + yardımcı fiil + özne + V0 + than + S + V2: iki olayın art arda gerçekleştiğini anlatır, "no sooner" tarafı her zaman devriktir (No sooner had the plane landed than the passengers began to applaud.).\n` +
+    `Cümlede zaten bir yardımcı fiil (is, has, will, can...) yoksa, Present Simple'da "does/do", Past Simple'da "did" yardımcı fiili devrik yapıyı kurmak için eklenir ve ana fiil V0 halini alır (Rarely does he complain about his workload.).\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"---- realize how much the local economy depended on tourism until the pandemic brought it to a halt."\n` +
+    `Doğru yapı: Little did people\n` +
+    `Cümle olumsuz anlam taşıyan "little" zarfıyla başladığı için yardımcı fiil (did) özneden önce gelmelidir; bu nedenle "people little realized" gibi düz bir sıralama değil, "little did people realize" gibi devrik bir yapı doğrudur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `So/Neither/Nor, Question Tag ve Emphatic Do Yapılarında Yardımcı Fiil Kullanımı\n` +
+    `İki cümle arasında benzerlik ya da doğrulama kurulurken, bir cümleye kısa bir onay eklenirken ya da bir eylem özellikle vurgulanmak istendiğinde de yardımcı fiil cümlenin standart sırasını bozarak öne çıkar; bu üç kullanım da aynı mantığı paylaşır, ana fiilin yerini bir yardımcı fiil alır ve bu yardımcı fiil öznenin önüne geçer.\n` +
+    `[STRATEJI]\n` +
+    `Olumlu bir cümleye "de/da öyle" anlamıyla ekleme yaparken: So + yardımcı fiil + özne (She enjoyed the seminar, and so did her colleagues.); aynı anlamı devrik yapı kurmadan "..., özne + too/as well" ile de verebilirsiniz.\n` +
+    `Olumsuz bir cümleye "ne de o" anlamıyla ekleme yaparken: Neither/Nor + yardımcı fiil + özne (He hasn't finished the report, and neither has his assistant.); bu kalıpta "neither/nor" cümle sonunda kullanılmaz.\n` +
+    `Question tag kurarken cümle olumluysa etiket olumsuz, cümle olumsuzsa etiket olumlu yardımcı fiille kurulur ve özne mutlaka zamire çevrilir (The results were surprising, weren't they?); ana cümle "I" öznesiyle kurulmuş bir isim cümleciği içeriyorsa, tag genelde isim cümleciğinin öznesine göre şekillenir.\n` +
+    `Bir eylemi ya da karşıt bir görüşü vurgulamak için Present/Past Simple'da normalde görünmeyen do/does/did yardımcı fiili ana fiilin önüne eklenir ve ana fiil V0 haline döner (I do believe her explanation. / She did warn us about the risks.); bu yapı "gerçekten, kesinlikle" vurgusu katar, cümlenin zamanını değiştirmez.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sonuç olarak, isim cümlecikleri ve yardımcı fiil yapıları YDS'de görünüşte iki ayrı konu gibi ele alınsa da ikisi de aynı beceriyi ölçer: cümledeki standart özne-yüklem sırasının ne zaman bozulacağını ve hangi bağlacın hangi pozisyonda kullanılabileceğini fark etmek. Boşluktan önceki cümlenin bir isim cümleciğine mi ihtiyaç duyduğunu, olumsuz bir zarfla mı başladığını, yoksa "so/neither" ile bir onaylama mı yaptığını hızla teşhis edin; bu teşhisten sonra yukarıdaki strateji kutularını bir kontrol listesi gibi uygulayarak doğru yapıya çoğu zaman cümlenin anlamını tam çözmeden de ulaşabilirsiniz.`;
+  const stratejiConditionalsIntro =
+    `YDS'de "If Clause" ve "Wish" yapıları, gramer sorularının önemli bir kısmını oluşturan ve genellikle tek bir kritik ipucuna (bir zaman ifadesi, yan cümlecik ile ana cümlecik arasındaki zaman uyumu ya da devrik bir dizilim) dayanan sorulardır. Bu sorularda başarı, cümlenin anlamını satır satır çözmekten çok, karşınıza çıkan yapının hangi "Type" olduğunu ilk saniyelerde tanıyıp o Type'ın izin verdiği fiil kalıplarına yönelmekten geçer.\n` +
+    `Bu bölümde, gramer kitabının "Conditionals" ve "Conditionals Konu Özeti" başlıklarında verilen Type I, Type II, Type III, Mixed Type, devrik şart yapıları, "if" yerine geçen bağlaçlar ve "wish/if only" kalıplarını, sınavda doğrudan işinize yarayacak stratejiler halinde topladık.\n\n` +
+    `If Clause Type I: Gerçek ve Gelecek Şart Yapıları\n` +
+    `Type I, şu anda ya da gelecekte gerçekleşmesi imkansız olmayan, aksine olası kabul edilen şartları anlatır; bu yüzden "unreality" yani gerçekdışılık anlamı taşımaz.\n` +
+    `Yan cümlecikte (if'in bağlı olduğu taraf) temel yapı Present Simple'dır; ancak am/is/are Ving, have/has V3, can V0, must/have to V0 gibi yapılar da bu tarafta kullanılabilir.\n` +
+    `Ana cümlecikte ise will/shall V0 temel yapıdır; may/might/could V0, can V0, must/have to V0 ya da doğrudan bir emir cümlesi de sonuç tarafında yer alabilir.\n` +
+    `[STRATEJI]\n` +
+    `If clause tarafında will, would, shall, be going to ve olasılık bildiren may/might/could KESİNLİKLE kullanılmaz; bu taraf her zaman present bir yapıyla kurulur.\n` +
+    `If, when, before, unless, as soon as, once, until, by the time gibi bir bağlaç gördüğünüzde, o bağlacın kendi cümleciğindeki "will" içeren bir seçeneği doğrudan eleyebilirsiniz.\n` +
+    `If clause tarafında "should" görürseniz bu ihtimalin düşük olduğunu, "olur da" anlamı kattığını unutmayın; bu durumda ana cümlecikte emir kipi de doğal bir sonuç yapısıdır.\n` +
+    `Ana cümlecikte have/has V3, was/were, had V3 gibi geçmişe ait yapılar kullanılmaz; am/is/are ise yalnızca planlı bir geleceği anlatıyorsa kabul edilir, salt tanım ya da genel bilgi cümlelerinde şart aranmaz.\n` +
+    `[/STRATEJI]\n\n` +
+    `If Clause Type II: Şu Anki Gerçek Dışı Durumlar ve "were" Kuralı\n` +
+    `Type II, şu anki ya da gelecekteki bir durumun tam tersini varsayarak kurulan, gerçekleşme ihtimali bulunmayan ya da çok düşük olan şart cümleleridir; bu yapıda "unreality" anlamı devreye girer.\n` +
+    `Kurulum mantığı, gerçeği anlatan zaman yapısını bir kademe geriye çekmektir: Present Simple yerine Past Simple, will yerine would, can yerine could, may yerine might kullanılır.\n` +
+    `Yan cümlecikte özne ne olursa olsun "be" fiilinin geçmiş hali her zaman "were" şeklinde çekilir; "was" formu bu yapıda tercih edilmez.\n` +
+    `[STRATEJI]\n` +
+    `Yan cümlecikte "I/she/he/it were" gördüğünüzde bunu yazım hatası sanmayın; Type II'de tekil özneler dahi "were" alır.\n` +
+    `Yan cümlecik Past Simple, ana cümlecik would/could/might V0 (ya da would/could/might be Ving) ise ve cümlede geçmişe ait bir zaman ifadesi yoksa doğrudan Type II düşünün.\n` +
+    `Cümlede "now, today, at the moment, currently" gibi şimdiki zaman ifadeleri varken fiiller Past görünüyorsa bu bir Type II sinyalidir, gerçek bir geçmiş zaman değildir.\n` +
+    `Ana cümlecikte Present Perfect, Past Perfect ya da Past Simple/Past Continuous asla doğru seçenek olmaz; sonuç tarafı daima would/could/might ailesinden bir yapıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `If Clause Type III: Geçmişteki Gerçek Dışı Durumlar ve "had V3"\n` +
+    `Type III, geçmişte gerçekleşmiş bir olayın ya da durumun tam tersini varsayarak kurulur; anlattığı şey artık değiştirilemez, sadece "keşke böyle olsaydı" mantığıyla kurgulanmış bir geçmiştir.\n` +
+    `Burada da aynı "bir kademe geriye çekme" mantığı işler: gerçek zaman olan Past Simple yerine Past Perfect (had V3), would/could/might yerine would/could/might have V3 kullanılır.\n` +
+    `Type III, üç Type içinde "past" anlamı veren tek yapıdır; Type I ve Type II şimdiki zamana ya da geleceğe aittir.\n` +
+    `[STRATEJI]\n` +
+    `Yan cümlecikte had V3 (ya da had been Ving, could have V3), ana cümlecikte would/could/might have V3 görüyorsanız bu kalıp Type III'tür ve olay geçmişte kesinleşmiştir, artık değiştirilemez.\n` +
+    `Cümlede "centuries ago, in the 1800s, back then" gibi net bir geçmiş zaman noktası varsa ve fiiller had V3/would have V3 kalıbına uyuyorsa Type III'ü seçin, diğer Type'ları eleyin.\n` +
+    `Had V3 yapısı Type III dışında "I wish/if only + had V3", "as if/as though + had V3" ve "would rather + had V3" kalıplarında da görülür; bu üçlüyü Type III ile birlikte hatırlamak had V3'ü tanımayı kolaylaştırır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Mixed Conditionals: Type III ve Type II'nin Karışık Kullanımı\n` +
+    `Mixed Type, yan cümlecik ile ana cümleciğin farklı zaman dilimlerine ait olduğu durumlarda ortaya çıkar; yani şart geçmişe, sonuç şimdiye ait olabilir ya da bunun tam tersi geçerli olabilir.\n` +
+    `If + Type III (had V3), ana cümlecik + Type II sonucu (would V0) kalıbı, geçmişteki bir olayın bugünkü etkisinden bahseder; cümle sonunda genellikle "now, today, at the moment" gibi bir şimdiki zaman ifadesi bulunur.\n` +
+    `If + Type II (V2/were), ana cümlecik + Type III sonucu (would have V3) kalıbı ise tersini anlatır: sürekli ya da genel bir özelliğin geçmişteki bir olayı nasıl etkilediğini gösterir; bu yapıda cümle sonunda genellikle geçmişe ait bir zaman ifadesi bulunur.\n` +
+    `[STRATEJI]\n` +
+    `Cümle sonunda "now, today, at the moment, still" gibi bir şimdiki zaman ipucu görüp yan cümlecikte had V3 varsa, ana cümlecikte would/could/might V0 (Type II sonucu) arayın; would have V3 bu bağlamda yanlış olur.\n` +
+    `Cümle sonunda geçmişe ait bir zaman ifadesi (yesterday, last night, in 2010) görüp yan cümlecikte Past Simple/were varsa, ana cümlecikte would/could/might have V3 (Type III sonucu) arayın.\n` +
+    `Mixed Type'ı ayırt etmenin anahtarı her zaman cümledeki zaman ifadesidir; zaman ifadesi yoksa iki taraf da aynı Type'a ait olmalıdır, karışık bir kombinasyon aramayın.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Investigators believe that if the bridge's cables had been inspected more frequently, the structure ---- in better condition today."\n` +
+    `Doğru yapı: would be (Type III yan cümlecik + Type II sonucu)\n` +
+    `Yan cümlecikteki "had been inspected" geçmişe (Type III) işaret eder; cümle sonundaki "today" ise ana cümleciğin şimdiki zamana ait bir sonuç istediğini gösterir, bu yüzden ana cümlecikte "would have been" değil "would be" (Type II sonucu) gelmelidir.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Devrik Şart Cümlecikleri: Were I..., Had she..., Should you...\n` +
+    `Her üç Type de "if" bağlacı kullanılmadan, yan cümlecik devrik hale getirilerek de kurulabilir; bu yapı özellikle yazılı ve resmi İngilizcede, YDS metinlerinde sıkça karşınıza çıkar.\n` +
+    `Devrik yapıda "if" düşer, yerine yardımcı fiil (should/were/had) cümle başına alınır; yan cümlecikte ya da ana cümlecikte başka hiçbir değişiklik yapılmaz.\n` +
+    `[STRATEJI]\n` +
+    `Type I devriği: Should + özne + V0 ile kurulur; yalnızca "should" cümle başına gelir, başka bir değişiklik yoktur.\n` +
+    `Type II devriği: Were + özne (+ to V0) ile kurulur; yan cümlecikteki fiil "be" ise sadece "were" başa gelir, başka bir fiilse "were" başa gelip fiil "to V0" şeklinde eklenir.\n` +
+    `Type III devriği: Had + özne + V3 ile kurulur; yalnızca "had" cümle başına gelir, ana cümlecik değişmez.\n` +
+    `Devrik bir yapı gördüğünüzde önce cümle başındaki yardımcı fiile bakın (should/were/had); bu üçünden hangisiyse cümlenin Type'ını doğrudan o belirler, ayrıca bir zaman ifadesi aramanıza gerek kalmaz.\n` +
+    `[/STRATEJI]\n\n` +
+    `Unless, Provided That, As Long As, Only If: "If" Yerine Geçen Bağlaçlar\n` +
+    `YDS'de şart anlamı yalnızca "if" ile değil, ona eşdeğer bağlaçlarla da sorulur; bu bağlaçların tümü kendi yan cümleciklerinde "if" ile aynı zaman kurallarına (will/would yasak, Type kuralları geçerli) tabidir.\n` +
+    `Bu bağlaçların birbirinden farkı çoğunlukla anlam nüansındadır: kimi olumsuz şart, kimi tek bir şartı vurgulama, kimi de sürerlilik bildirir.\n` +
+    `[STRATEJI]\n` +
+    `Unless = if...not: olumsuz şart bildirir; "unless" ile kurulan yan cümlecik zaten olumsuz bir anlam taşıdığı için cümlenin geri kalanında ayrıca "not" aramayın, fiil olumlu haliyle kullanılır.\n` +
+    `Provided (that) / providing (that) / on condition that = "koşuluyla, şartıyla": anlam ve kullanım olarak doğrudan "if" ile aynıdır, birebir yer değiştirebilir.\n` +
+    `As long as / so long as = "-dığı sürece": şartın sürekliliğini vurgular; bir kere gerçekleşen değil, devam eden bir koşulu anlatır.\n` +
+    `Only if = "ancak ...-sa": şartı vurgulu şekilde tekilleştirir; "only if" yan cümleciği cümle BAŞINDA kullanılırsa ana cümlecik devrik yapılır, cümle ortasında kullanılırsa devrik yapılmaz.\n` +
+    `Bu bağlaçlardan biri seçenekte görüldüğünde önce cümlenin olumlu mu olumsuz mu bir şart istediğine bakın; "unless" olumsuz şart, diğerleri olumlu şart ister.\n` +
+    `[/STRATEJI]\n\n` +
+    `Wish / If Only Yapıları: Şimdiki, Geçmiş ve Başkasına Yönelik Dilekler\n` +
+    `"Wish" ve "if only" aynı gerçekdışı (unreal) anlamı taşır; ikisi de elde olmayan ya da gerçekleşmemiş bir durumdan duyulan pişmanlığı ya da dileği anlatır. Aralarındaki fark vurgudur: "if only" daha güçlü bir pişmanlık/dilek bildirir ve yalnızca Type II ile Type III mantığında kullanılır.\n` +
+    `Wish yapısını çözerken önce zamanı belirleyin: dilek şimdiki/gelecek bir durum için mi, yoksa geçmişte olup bitmiş bir durum için mi kuruluyor?\n` +
+    `[STRATEJI]\n` +
+    `Şimdiki/gelecek dilek (present wish): wish + özne + V2 (be fiili için were) → şu anki bir durumdan memnuniyetsizlik; wish + özne + could V0 → şu an yapamadığı bir şeyi yapabilmeyi dilemek.\n` +
+    `Şimdiki dilekte özne kendi geleceğinden bahsediyorsa "would" KULLANILMAZ; wish + would V0 sadece BAŞKA bir özneye yönelik bir eleştiri/sitem içeriyorsa doğru olur (örn. "I wish you would listen" doğrudur, ama "I wish I would" hiçbir zaman doğru değildir).\n` +
+    `Geçmiş dilek (past wish): wish + özne + had V3 → geçmişte olmuş bir şeyden pişmanlık; wish + özne + would have V3 / could have V3 → geçmişte yapılabilecek ama yapılmamış bir eylem için pişmanlık.\n` +
+    `Seçeneklerde "would" gören ve cümledeki özne "I wish I..." şeklinde aynıysa bu seçeneği doğrudan eleyebilirsiniz; "would" her zaman farklı bir özneye yönelik sitemde kullanılır.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"Kerem missed the last train because he left the office so late. Now he keeps saying, "I wish I ---- earlier.""\n` +
+    `Doğru yapı: had left (wish + özne + had V3)\n` +
+    `Cümle geçmişte olup bitmiş bir olaydan (treni kaçırmaktan) duyulan pişmanlığı anlatır; bu nedenle wish sonrasında had V3 (had left) kullanılır, present bir dilek yapısı burada anlamca yanlış olur.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, "If Clause" ve "Wish" soruları, YDS'nin gramer bölümünde neredeyse her sınavda karşınıza çıkan, ama az sayıda kesin kuralla çözülebilen bir konudur. Kritik olan, önce cümlede "if" ya da "wish" yerine geçen bağlacı ya da devrik yapıyı fark etmek, ardından yan cümlecik ile ana cümlecik arasındaki zaman ilişkisini (Type I / Type II / Type III / Mixed) doğru okumaktır. Bu bölümdeki strateji kutularını bir kontrol listesi gibi kullanın: önce Type'ı belirleyin, sonra o Type'ın izin verdiği yapıları seçeneklerle karşılaştırın, izin vermediği yapıları doğrudan eleyin. "Conditionals" konusundaki kurallar bu mantıkla tekrar edildiğinde, sınavın bu bölümü ezbere değil, sistematik bir eleme yöntemiyle çözülebilir hale gelir.`;
+  const stratejiConjunctionsIntro =
+    `YDS'nin cloze test ve cümle tamamlama sorularında en yoğun test edilen kategorilerden biri "Conjunctions & Adverbial Clauses & Inversions" yani bağlaçlar, zarf cümlecikleri ve devrik yapılardır. Bu bölüm gramer kitabının en hacimli bölümü olmasına rağmen sorularda dönüp dolaşıp aynı mantığı test eder: aynı anlamı (zıtlık, sebep-sonuç, amaç, zaman vb.) veren birkaç farklı yapı arasından, boşluktan hemen sonra gelen kelime türüne uyan doğru yapıyı seçmek. Bu bölümde, gramer kitabının "Bağlaç, Cümle Zarfı ve Edatlar Konu Özeti" tablosunu ve devrik yapı anlatımını sınavda doğrudan işinize yarayacak strateji kutuları haline getirdik.\n` +
+    `Aşağıdaki her strateji kutusu, aynı Türkçe anlamı veren yapıları (bağlaç / edat / cümle zarfı) bir arada karşılaştırır. Amacı, cümlenin tamamını çözmeden önce boşluktan sonraki dizilime bakarak seçeneklerin büyük kısmını elemenizi sağlamaktır.\n\n` +
+    `Bağlaç mı, Edat mı, Cümle Zarfı mı? Yapıyı Tanımanın İlk Adımı\n` +
+    `Bu bölümdeki hemen hemen her konu (zıtlık, sebep-sonuç, ekleme vb.) aynı üçlü ayrımın üzerine kuruludur; bu yüzden diğer başlıklara geçmeden önce bu üç yapı türünün cümle içindeki davranışını netleştirmek gerekir.\n` +
+    `Bağlaç (conjunction) kendisinden sonra mutlaka özne ve yüklem taşıyan tam bir cümlecik alır ve iki cümleciği tek bir cümlede birleştirir.\n` +
+    `Edat (preposition) kendisinden sonra bir isim öbeği, zamir ya da Ving alır; hiçbir zaman doğrudan özne+yüklem içeren bir cümlecik almaz.\n` +
+    `Cümle zarfı (sentence adverb / transition word) bağımsız bir cümleyi anlamca başka bağımsız bir cümleye bağlar; ama iki cümleyi gramer olarak birleştirmez, bu yüzden önünde nokta ya da noktalı virgül, arkasında da genellikle virgül bulunur.\n` +
+    `[STRATEJI]\n` +
+    `Bağlaç: (Bağlaç + Özne + Yüklem), Özne + Yüklem. / Özne + Yüklem (bağlaç + Özne + Yüklem). → iki cümlecik tek cümledir.\n` +
+    `Edat: (Edat + isim öbeği/zamir/Ving), Özne + Yüklem. / Özne + Yüklem (edat + isim öbeği/zamir/Ving). → cümlecik değil isim alır.\n` +
+    `Cümle zarfı: Cümle1. Cümle zarfı, Cümle2. / Cümle1; cümle zarfı, Cümle2. → iki AYRI cümle, aralarında nokta ya da noktalı virgül şarttır.\n` +
+    `Seçenekleri incelemeden önce boşluktan hemen sonra bir isim öbeği mi yoksa özne+yüklem içeren tam bir cümlecik mi geldiğine bakın; bu tek kontrol çoğu zaman seçeneklerin yarısını elemenize yeter.\n` +
+    `[/STRATEJI]\n\n` +
+    `Zıtlık Bildiren Yapılar: Although mı, Despite mı, However mı?\n` +
+    `Zıtlık ilişkisi YDS'de üç ayrı yapı grubuyla verilir ve bu üç grup birbirinin yerine doğrudan kullanılamaz, çünkü her biri kendisinden sonra farklı bir gramer yapısı ister.\n` +
+    `"Although / even though / though / much as / even if" bir bağlaçtır ve kendisinden sonra özne+yüklem içeren tam bir cümlecik ister.\n` +
+    `"Despite / in spite of" bir edattır ve kendisinden sonra isim öbeği, zamir ya da Ving alır; "despite the fact that" ve "in spite of the fact that" şeklinde cümlecikle de devam edebilir.\n` +
+    `"However / nevertheless / nonetheless / still / even so / all the same" birer cümle zarfıdır; bağımsız bir cümleyi başka bağımsız bir cümleye bağlar.\n` +
+    `[STRATEJI]\n` +
+    `Although / Even though / Though / Much as / Even if + Özne + Yüklem → bağlaç, tam cümlecik gerekir.\n` +
+    `Despite / In spite of + isim öbeği / zamir / Ving / the fact that + Özne + Yüklem → edat.\n` +
+    `However / Nevertheless / Nonetheless / Still / Even so + [nokta veya ; sonrası], Özne + Yüklem → cümle zarfı, bağımsız ikinci cümle.\n` +
+    `"Though" tek başına cümle sonuna ya da iki virgül arasına da yerleşebilir; bu konumda kullanıldığında "however" ile yer değiştirebilir.\n` +
+    `Boşluktan hemen sonra bir isim mi tam bir cümle mi geldiğine bakın: isim geliyorsa "despite/in spite of", tam cümlecik geliyorsa "although" grubu, cümle başında nokta/; işareti varsa "however" grubu aranmalıdır.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"---- the sudden power outage lasted nearly six hours, the hospital's emergency generators kept every operating room running without interruption."\n` +
+    `Doğru yapı: Although (bağlaç + özne + yüklem)\n` +
+    `Boşluktan sonra "the sudden power outage lasted nearly six hours" özne ve yüklem içeren tam bir cümleciktir; isim öbeği isteyen "despite/in spite of" bu boşluğa giremeyeceği için cümlecik isteyen "although" doğru seçimdir.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sebep-Sonuç Bağlantısı: Because, Because Of, Therefore Üçlüsü\n` +
+    `Sebep-sonuç ilişkisi de tıpkı zıtlıkta olduğu gibi üç ayrı yapı türüyle kurulur ve sınav genellikle bu üçünü karıştırmanız için tasarlanmış cümleler sunar.\n` +
+    `"Because / since / as / seeing that / seeing as / inasmuch as / on the grounds that" birer bağlaçtır ve kendilerinden sonra özne+yüklem içeren tam bir cümlecik ister.\n` +
+    `"Because of / due to / owing to / on account of / in view of / thanks to / as a result of" birer edattır ve kendilerinden sonra isim öbeği ya da Ving alır.\n` +
+    `"Therefore / thus / hence / consequently / accordingly / as a result / as a consequence" birer cümle zarfıdır ve iki bağımsız cümleyi anlamca birbirine bağlar.\n` +
+    `[STRATEJI]\n` +
+    `Because / Since / As / Seeing that / Inasmuch as + Özne + Yüklem → bağlaç, tam cümlecik gerekir.\n` +
+    `Because of / Due to / Owing to / On account of / Thanks to + isim öbeği / Ving → edat, cümlecik ALAMAZ.\n` +
+    `Therefore / Thus / Hence / Consequently / As a result + [nokta veya ; sonrası], Özne + Yüklem → cümle zarfı, ayrı cümle.\n` +
+    `"Since" bağlacının hem "çünkü" hem "o zamandan beri" (zaman) anlamı olduğunu unutmayın; cümlede net bir geçmiş zaman noktası varsa zaman anlamı, genel bir gerekçe veriliyorsa neden-sonuç anlamı öne çıkar.\n` +
+    `Boşluktan sonra doğrudan bir isim öbeği (örn. "the heavy traffic") geliyorsa "because of" grubu, özne+yüklem içeren tam bir cümle (örn. "the traffic was heavy") geliyorsa "because" grubu aranmalıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Amaç Bildiren Yapılar: So That, So As To, For\n` +
+    `Amaç (purpose) bildiren yapılar da gramer davranışlarına göre üçe ayrılır ve cloze test sorularında sıkça bu ayrım test edilir.\n` +
+    `"So that / in order that" bir bağlaçtır ve kendisinden sonra genellikle "can/could", "will/would" ya da "may/might" gibi bir modal içeren tam bir cümlecik ister.\n` +
+    `"So as to / in order to" kendisinden sonra doğrudan fiilin yalın hali (V0) alır; iki cümlenin öznesi aynı olduğunda kullanılır ve olumsuzu "so as not to / in order not to" şeklindedir.\n` +
+    `"For" bu bağlamda edat gibi davranır ve kendisinden sonra sadece bir isim alarak amacı belirtir.\n` +
+    `[STRATEJI]\n` +
+    `So that / In order that + Özne + can/could/will/would/may/might + V0 → bağlaç, modal içeren amaç cümleciği.\n` +
+    `So as to / In order to + V0 → öznesi ana cümleyle aynı olan kısa amaç yapısı; olumsuzu "so as not to / in order not to" + V0.\n` +
+    `For + isim → amaç bildiren edat kullanımı (örn. "for safety reasons").\n` +
+    `Lest + Özne + should + V0 ve for fear that + Özne + should/might + V0 → olumsuz amaç, "...olmasın diye" anlamı.\n` +
+    `Boşluktan sonra çıplak fiil (V0) geliyorsa "so as to/in order to", modal içeren tam cümlecik geliyorsa "so that/in order that" aranmalıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Sonuç Cümlecikleri: So...That ile Such...That Farkı\n` +
+    `"So...that" ve "such...that" aynı "o kadar...ki" anlamını taşısa da hangi kelime türünden önce geldiklerine göre kesin olarak ayrılır; bu ayrım YDS'de sıkça karşınıza çıkar.\n` +
+    `"So" kendisinden sonra doğrudan bir sıfat ya da zarf alır ve devamında "that + Özne + Yüklem" cümleciği gelir.\n` +
+    `"Such" kendisinden sonra bir isim öbeği alır (isim tek başına ya da sıfat+isim biçiminde olabilir) ve devamında yine "that + Özne + Yüklem" gelir.\n` +
+    `[STRATEJI]\n` +
+    `So + sıfat/zarf + that + Özne + Yüklem → örn. "so difficult that", "so quickly that".\n` +
+    `Such + (a/an) + (sıfat) + isim + that + Özne + Yüklem → örn. "such a difficult exam that", "such heavy rain that".\n` +
+    `Boşluktan hemen sonra çıplak bir sıfat/zarf mı yoksa bir isim mi geldiğine bakın: isim varsa "such", sıfat/zarf varsa "so" seçilmelidir.\n` +
+    `Bu yapıyı amaç bağlacı olan "so that" ile karıştırmayın: "so that" bir amaç bildirir ve genellikle modal alır, "so...that" ise bir sonucun derecesini bildirir ve modal aramaz.\n` +
+    `[/STRATEJI]\n\n` +
+    `Zaman Bağlaçları: As Soon As, Once, By The Time, Until\n` +
+    `Zaman bildiren bağlaçlar kendi başlarına geleceğe işaret ettikleri için, bu bağlaçların bulunduğu cümlecikte "will/would/shall/be going to" gibi gelecek zaman yapıları kullanılmaz.\n` +
+    `"As soon as / once" bir eylemin biter bitmez diğerinin başladığını anlatır; kendi cümleciğinde present ya da V2, ana cümlecikte ise zamana uyumlu bir yapı bulunur.\n` +
+    `"By the time" bağlacı, kendi cümleciğinde present kullanıldığında ana cümlecikte "will have V3" (future perfect), kendi cümleciğinde V2 kullanıldığında ana cümlecikte "had V3" (past perfect) gerektirir.\n` +
+    `"Until / till" bir eylemin belirtilen ana kadar sürdüğünü/sürmediğini anlatır ve bu bağlacın kendi cümleciğinde de gelecek zaman yapısı kullanılmaz.\n` +
+    `[STRATEJI]\n` +
+    `As soon as / Once + present, ---- will + V0 (gelecekte ardışık iki olay).\n` +
+    `As soon as / Once + V2, ---- V2 (geçmişte ardışık iki olay).\n` +
+    `By the time + present, ---- will have V3 (ana cümlecikte).\n` +
+    `By the time + V2, ---- had V3 (ana cümlecikte).\n` +
+    `Until / Till + present veya V2, ama ASLA kendi cümleciğinde will/would ile birlikte kullanılmaz.\n` +
+    `Bu bağlaçlardan biri gördüğünüzde, o bağlacın kendi cümleciğinde "will" içeren bir seçeneği doğrudan eleyebilirsiniz; doğru seçenek çoğunlukla diğer cümlecikte ya da bağlacın kendisinde aranır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Paralel Yapılar: Not Only...But Also, Both...And, Either...Or, Neither...Nor\n` +
+    `Bu dört yapı, birbirine bağladığı iki ögenin aynı gramer türünde (iki isim, iki sıfat, iki fiil ya da iki cümle) olmasını zorunlu kılar; bu yüzden "paralel yapı" olarak adlandırılır.\n` +
+    `"Not only...but also" ve "both...and" olumlu cümlelerde kullanılır; "either...or" cümlenin olumlu ya da olumsuz olmasından etkilenmez, "neither...nor" ise kendi içinde olumsuzluk taşıdığı için cümleyi olumsuz çevirir.\n` +
+    `"Both...and" tek başına iki ögeyi bağlar ve iki bağımsız cümleyi birbirine bağlayamaz; diğer üç yapı hem öge hem de cümle bağlayabilir.\n` +
+    `[STRATEJI]\n` +
+    `Not only + X + but (also) + Y → "sadece X değil aynı zamanda Y de"; X ve Y aynı gramer türünde olmalı.\n` +
+    `Both + X + and + Y → "hem X hem de Y"; sadece öge bağlar, iki cümleyi bağlamaz.\n` +
+    `Either + X + or + Y → "ya X ya da Y"; olumsuzu "neither...nor" ile karşılanır.\n` +
+    `Neither + X + nor + Y → "ne X ne de Y"; kendisi olumsuzluk taşıdığı için cümle tekrar olumsuz yapılmaz.\n` +
+    `Boşluktan sonraki iki ögenin gramer türünü (isim mi, sıfat mı, fiil mi) karşılaştırın; doğru seçenek her zaman bu iki ögeyi aynı türde tamamlayan yapıdır.\n` +
+    `[/STRATEJI]\n\n` +
+    `Devrik Yapı: Olumsuz ve Sınırlayıcı Zarflarla Başlayan Cümleler\n` +
+    `"Never, rarely, seldom, hardly, scarcely, little, not only, no sooner" gibi olumsuz ya da sınırlayıcı anlam taşıyan zarflar cümle başına getirildiğinde, cümledeki özne ile yardımcı fiilin yeri değişir; buna devrik yapı (inversion) denir.\n` +
+    `Devrik yapıda yardımcı fiil (do/does/did, have/has/had, be fiili ya da bir modal) özneden önce gelir; tıpkı soru cümlesindeki dizilim ortaya çıkar.\n` +
+    `"No sooner...than" ve "hardly/scarcely...when" kalıpları iki olayın art arda gerçekleştiğini anlatır ve genellikle "had + Özne + V3 ... than/when + Özne + V2" biçiminde kurulur.\n` +
+    `"Only after / only when / only by + Ving" gibi "only" ile başlayan zaman ya da yol bildiren ifadeler cümle başına geldiğinde de ana cümlecikte devrik yapı tetikler.\n` +
+    `[STRATEJI]\n` +
+    `Never / Rarely / Seldom / Little + yardımcı fiil + Özne + V0 → "hiçbir zaman/nadiren..." + devrik.\n` +
+    `Not only + yardımcı fiil + Özne + V0, but (also) + Özne + Yüklem → devrik yapı sadece "not only" tarafında kurulur.\n` +
+    `No sooner + had + Özne + V3 + than + Özne + V2 → "...er...mez" anlamı.\n` +
+    `Hardly / Scarcely + had + Özne + V3 + when/before + Özne + V2 → "...er...mez" anlamı.\n` +
+    `Only after / Only when / Only by + Ving/cümlecik + yardımcı fiil + Özne + V0 → "ancak...dığında/...dıktan sonra" + devrik.\n` +
+    `Cümle başında bu zarflardan birini gördüğünüzde, hemen ardından özne değil yardımcı fiil ya da "be" fiili bekleyin; normal (devriksiz) dizilim sunan seçenekler elenebilir.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"No sooner ---- the new tax regulation than several small business owners announced their plans to relocate abroad."\n` +
+    `Doğru yapı: had the government announced (had + Özne + V3)\n` +
+    `"No sooner...than" cümle başında kullanıldığında devrik yapı gerektirir ve genellikle iki ardışık geçmiş olayı "had + Özne + V3 ... than + Özne + V2" kalıbıyla bağlar; ikinci olay ("announced") V2 halinde verildiği için ilk cümlecik "had + V3" ile devrik kurulmalıdır.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, bağlaçlar, zarf cümlecikleri ve devrik yapılar YDS'nin cloze test ve cümle tamamlama sorularında en sık karşınıza çıkan ve en fazla puan getiren kategorilerden biridir, çünkü bu sorular çoğunlukla cümlenin tam anlamını çözmenizi değil, boşluktan hemen sonra gelen yapının bağlaç mı, edat mı, cümle zarfı mı olduğunu ve gerekiyorsa bir devrik dizilim sinyali olup olmadığını fark etmenizi test eder. Bu bölümdeki strateji kutularını bir sözlük gibi kullanın: önce cümledeki anlam ilişkisini (zıtlık, sebep-sonuç, amaç, zaman) belirleyin, sonra boşluktan sonra gelen yapıyı (isim mi, cümlecik mi, ayrı bir cümle mi) kontrol edin, son olarak cümle başında devrik yapı tetikleyen bir zarf olup olmadığına bakın; bu üç adımı sırayla uyguladığınızda seçeneklerin çoğunu cümleyi tam çevirmeden eleyebilirsiniz.`;
+  const stratejiQuantifiersIntro =
+    `YDS'nin "Quantifiers" (Miktar Belirteçleri) sorularında asıl belirleyici olan, kelimenin Türkçe anlamını bilmek değil, o miktar belirtecinin hangi isim türüyle (sayılabilir çoğul mu, sayılamayan mı) ve hangi fiil çekimiyle (tekil mi, çoğul mu) bir arada kullanılabildiğini bilmektir. Bu bölümde, gramer kitabının "Quantifiers" ve "Miktar Yapılarının Özet Tablosu" başlıkları altında verilen yapı-anlam-isim türü eşleşmelerini, sınavda hızlı ve güvenli karar almanızı sağlayacak stratejiler halinde bir araya getirdik.\n` +
+    `Aşağıdaki her strateji kutusu, karşınıza çıkan bir miktar belirtecini gördüğünüzde önce boşluktan hemen sonraki ismin sayılabilir mi sayılamayan mı olduğunu, ardından cümledeki yardımcı ya da ana fiilin tekil mi çoğul mu çekimlenmesi gerektiğini gösterir. Amaç, seçenekleri cümleye tek tek yerleştirip uzun uzun düşünmek yerine, bu iki kontrolü yaptığınızda doğru yapıya doğrudan ulaşabilmenizdir.\n\n` +
+    `Sayılabilir ve Sayılamayan İsimlerle Kullanılan Temel Miktar Belirteçleri\n` +
+    `Miktar belirteçlerini doğru seçmenin ilk adımı, boşluktan hemen sonra gelen ismin sayılabilir çoğul mu yoksa sayılamayan tekil mi olduğunu tespit etmektir. Bazı yapılar sadece çoğul isimlerle, bazıları sadece sayılamayan isimlerle, bazıları ise her ikisiyle birden kullanılabilir.\n` +
+    `[STRATEJI]\n` +
+    `"Many / several / a few / few / a number of / a good many / quite a few / a great many / scores of" → sadece ÇOĞUL isim.\n` +
+    `"Much / a little / little / a great deal of / a large amount of / a great quantity of" → sadece SAYILAMAYAN isim.\n` +
+    `"A lot of / lots of / plenty of / some / any / most / no" → hem ÇOĞUL isim hem SAYILAMAYAN isimle birlikte kullanılabilir.\n` +
+    `Bu yapılardan biri kendinden sonra "of" alıp devamında "them / us / you / it" gibi bir nesne zamiri ya da "the / this / my / his" gibi bir belirteç (determiner) getirirse, artık boşluktaki değil "of"tan sonraki ismin türü belirleyicidir.\n` +
+    `[/STRATEJI]\n\n` +
+    `"A Few / Few" ve "A Little / Little": Aynı Azlık, Zıt Anlam\n` +
+    `"A few" ve "a little" sayıca azlığı "azıcık ama yeterli" vurgusuyla anlatırken, aynı azlığı ifade eden "few" ve "little" bunu "yok denecek kadar az, yetersiz" anlamıyla anlatır; bu ince anlam farkı YDS'de cümlenin olumlu bir yeterliliği mi yoksa olumsuz bir yetersizliği mi anlattığını belirler.\n` +
+    `[STRATEJI]\n` +
+    `"A few + çoğul isim" → "azıcık ama yeterli" (cümleye olumlu bir çağrışım katar).\n` +
+    `"Few + çoğul isim" → "neredeyse hiç, yeterli değil" (cümleye olumsuz bir çağrışım katar).\n` +
+    `"A little + sayılamayan isim" → "birazcık ama yeterli" (cümleye olumlu bir çağrışım katar).\n` +
+    `"Little + sayılamayan isim" → "neredeyse hiç" (cümleye olumsuz bir çağrışım katar).\n` +
+    `Cümlede "but / although / despite / yet" gibi bir zıtlık bağlacı ya da başarısızlık bildiren bir sonuç varsa "few / little" yapısını, bir yeterlilik ya da başarı ifadesi varsa "a few / a little" yapısını arayın.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"---- of the applicants had the qualifications the company was looking for, so the position remained unfilled for months."\n` +
+    `Doğru yapı: Few\n` +
+    `Cümledeki "remained unfilled for months" (aylarca boş kaldı) ifadesi olumsuz bir sonucu işaret eder; bu nedenle "yeterli sayıda değil, neredeyse hiç" anlamı veren "few" doğrudur; "a few" seçilseydi cümle "yeterli sayıda aday vardı" anlamına gelir ve pozisyonun aylarca boş kalmasıyla çelişirdi.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `"Most", "Most of the" ve "The Majority of" Kullanımı\n` +
+    `"Most" yapısı bir ismin önüne doğrudan geldiğinde başına "the" almaz ve genel, tanımsız bir çoğunluğu anlatır; ancak belirli, daha önce tanımlanmış bir gruptan bahsedilecekse araya mutlaka "of the" ya da bir iyelik sıfatı girmelidir.\n` +
+    `[STRATEJI]\n` +
+    `"Most + çoğul isim / sayılamayan isim" (başında the YOK) → genel olarak "çoğu, pek çoğu" (belirsiz, tanımsız bir grup).\n` +
+    `"Most of the / most of my / most of these + çoğul isim veya sayılamayan isim" → belirli, daha önce tanımlanmış bir gruptaki çoğunluk.\n` +
+    `"The majority of + çoğul isim" yapısı da anlamca "most of the" ile örtüşür ve genellikle çoğul fiil alır; "the majority" tek başına özne olduğunda ise fiil tekil de çekimlenebilir.\n` +
+    `"Most", kendisinden önce geçen bir isme gönderme yaparak tek başına zamir olarak da kullanılabilir; bu durumda ismin önüne "the" gelmez.\n` +
+    `[/STRATEJI]\n\n` +
+    `"All, Both, Each, Every, Either, Neither": Fiil Uyumu Farkları\n` +
+    `"All" ve "both" birden fazla (both için tam olarak iki) varlığı bir bütün olarak ele alıp çoğul fiil isterken, "each" ve "every" aynı grubun üyelerini teker teker ele aldığı için her zaman tekil isim ve tekil fiil ister; bu, YDS'nin en sık sınadığı özne-fiil uyumsuzluğu tuzaklarından biridir.\n` +
+    `[STRATEJI]\n` +
+    `"Each / every + tekil isim" → TEKİL fiil ("every" sıfat olarak kullanılır ve asla tek başına zamir olamaz; "each" ise hem sıfat hem zamir olabilir).\n` +
+    `"All / both + çoğul isim" → ÇOĞUL fiil.\n` +
+    `"Either / neither + tekil isim" → TEKİL fiil; sadece iki seçenekten bahsedilirken kullanılırlar ("either" = ikisinden biri, "neither" = ikisinden hiçbiri).\n` +
+    `"Every" sadece "almost / practically / nearly" zarflarıyla ve "not" ile nitelenebilir; "each" hiçbir zarfla nitelenmez ve kendinden sonra "of" da alabilir ("each of the").\n` +
+    `Özne + "each" / "all" / "both" birlikte kullanıldığında (Örn: They each..., We all...), bu belirteçler cümlede yardımcı fiil varsa ondan sonra, yoksa ana fiilden önce yer alır.\n` +
+    `[/STRATEJI]\n\n` +
+    `"None Of" ve "Neither Of" + Çoğul İsim: Fiil Tekil mi, Çoğul mu?\n` +
+    `"None of" ve "neither of" yapıları kendilerinden sonra mutlaka "the / these / my" gibi bir belirteç ya da "them / us" gibi bir nesne zamiri, ardından da çoğul bir isim ister; ancak bu iki yapının fiil çekimiyle ilgili kural, günlük konuşma alışkanlıklarından biraz farklı işler.\n` +
+    `[STRATEJI]\n` +
+    `"None of + çoğul isim/zamir" → fiil resmi (formal) kullanımda TEKİL, günlük kullanımda ÇOĞUL çekimlenebilir; YDS'de seçenekler arasında tekil çekim genellikle daha güvenli tercihtir.\n` +
+    `"Neither of + çoğul isim/zamir" → aynı mantıkla fiil resmi kullanımda TEKİL tercih edilir.\n` +
+    `"None", kendisinden önce geçen bir isme gönderme yaparak isim almadan tek başına zamir olarak kullanılabilir; buna karşılık "no" hiçbir zaman tek başına zamir olarak kullanılamaz, mutlaka bir isimle birlikte gelir.\n` +
+    `"No" ile "none of" yapılarını karıştırmayın: "no" doğrudan ismin önüne gelir ("no student"), "none of" ise araya bir belirteç ya da zamir ister ("none of the students").\n` +
+    `[/STRATEJI]\n\n` +
+    `"A Number Of" ile "The Number Of" Arasındaki Kritik Fark\n` +
+    `"A number of" ve "the number of" yazılış olarak birbirine çok benzese de anlamca ve fiil uyumu açısından tamamen farklı davranır; YDS bu iki yapıyı birbirine karıştırtacak şekilde seçeneklere sıkça yerleştirir.\n` +
+    `[STRATEJI]\n` +
+    `"A number of + çoğul isim" → "birçok" anlamı verir ve cümledeki fiil ÇOĞUL çekimlenir.\n` +
+    `"The number of + çoğul isim" → "...in sayısı" anlamı verir; asıl özne "sayı" (the number) olduğu için cümledeki fiil TEKİL çekimlenir.\n` +
+    `Cümlede bir sayının arttığından, azaldığından ya da sabit kaldığından bahsediliyorsa "the number of" yapısını, sadece kalabalık bir çoğulluktan bahsediliyorsa "a number of" yapısını tercih edin.\n` +
+    `[/STRATEJI]\n` +
+    `[ORNEK_SORU]\n` +
+    `"---- of the students enrolled in the online course has doubled since the pandemic began."\n` +
+    `Doğru yapı: The number\n` +
+    `Cümledeki "has doubled" (iki katına çıktı) ifadesi tekil bir özneye bağlı yardımcı fiildir ve bir sayının zaman içindeki değişiminden söz edilmektedir; bu nedenle "öğrenci sayısı" anlamına gelen ve tekil fiil alan "the number of" yapısı doğrudur; "a number of" seçilseydi fiilin "have doubled" olması gerekirdi.\n` +
+    `[/ORNEK_SORU]\n\n` +
+    `Sonuç olarak, Quantifiers sorularının çözümü üç basit kontrolden geçer: boşluktan hemen sonraki ismin sayılabilir mi sayılamayan mı olduğuna bakın, cümledeki yardımcı ya da ana fiilin tekil mi çoğul mu çekimlendiğine bakın ve son olarak cümlenin anlamca bir yeterliliği mi yoksa bir yetersizliği mi anlattığına bakın. Bu bölümdeki strateji kutularını bir kontrol listesi gibi kullanıp seçenekleri bu üç süzgeçten geçirdiğinizde, "Miktar Belirteçleri" konusundaki soruların büyük çoğunluğunu hızlı ve güvenli biçimde çözebilirsiniz.`;
+
+  function ydsStratejileriLessonDefs(def) {
+    return [
+      {
+        title: `${def.name} – 1. Tense System`,
+        durationMinutes: 25,
+        contentBody: stratejiTenseSystemIntro,
+      },
+      {
+        title: `${def.name} – 2. Modality`,
+        durationMinutes: 22,
+        contentBody: stratejiModalityIntro,
+      },
+      {
+        title: `${def.name} – 3. Passive Voice & Causatives`,
+        durationMinutes: 20,
+        contentBody: stratejiPassiveVoiceIntro,
+      },
+      {
+        title: `${def.name} – 4. Gerunds & Infinitives`,
+        durationMinutes: 20,
+        contentBody: stratejiGerundsInfinitivesIntro,
+      },
+      {
+        title: `${def.name} – 5. Adjectives & Adverbs`,
+        durationMinutes: 20,
+        contentBody: stratejiAdjectivesAdverbsIntro,
+      },
+      {
+        title: `${def.name} – 6. Adjective Clauses`,
+        durationMinutes: 20,
+        contentBody: stratejiAdjectiveClausesIntro,
+      },
+      {
+        title: `${def.name} – 7. Noun Clauses & Auxiliaries`,
+        durationMinutes: 20,
+        contentBody: stratejiNounClausesIntro,
+      },
+      {
+        title: `${def.name} – 8. "If" & "Wish" Clauses / Conditionals`,
+        durationMinutes: 20,
+        contentBody: stratejiConditionalsIntro,
+      },
+      {
+        title: `${def.name} – 9. Conjunctions & Adverbial Clauses & Inversions`,
+        durationMinutes: 24,
+        contentBody: stratejiConjunctionsIntro,
+      },
+      {
+        title: `${def.name} – 10. Quantifiers`,
+        durationMinutes: 18,
+        contentBody: stratejiQuantifiersIntro,
+      },
+    ];
+  }
+  // --- END: yds-stratejileri ---
+
   for (const [index, def] of ydsTopicDefs.entries()) {
     const topic = await db.examTopic.upsert({
       where: { examTypeId_slug: { examTypeId: examTypes.YDS.id, slug: def.slug } },
@@ -1999,6 +2847,7 @@ async function main() {
       "paragraf-tamamlama": paragrafTamamlamaLessonDefs(def),
       "anlatim-butunlugunu-bozan-cumle": anlatimButunluguLessonDefs(def),
       "diyalog-tamamlama": diyalogTamamlamaLessonDefs(def),
+      "yds-stratejileri": ydsStratejileriLessonDefs(def),
     };
 
     const lessonDefs =

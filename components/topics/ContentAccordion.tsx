@@ -1,6 +1,8 @@
 "use client";
 
 import { StudyContent } from "@/components/topics/StudyContent";
+import { StrategyBox } from "@/components/topics/StrategyBox";
+import { hasStrategyBoxes, parseStrategyBoxes } from "@/components/topics/parseStrategyBoxes";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { AccordionSection } from "@/components/topics/parseAccordionSections";
@@ -35,8 +37,18 @@ export function ContentAccordion({
               />
             </button>
             {open ? (
-              <div className="border-t border-slate-100 px-5 py-5">
-                <StudyContent text={section.body} glossary={glossary} />
+              <div className="space-y-4 border-t border-slate-100 px-5 py-5">
+                {hasStrategyBoxes(section.body) ? (
+                  parseStrategyBoxes(section.body).map((segment, segmentIndex) =>
+                    segment.kind === "box" ? (
+                      <StrategyBox key={segmentIndex} boxType={segment.boxType} content={segment.content} />
+                    ) : (
+                      <StudyContent key={segmentIndex} text={segment.content} glossary={glossary} />
+                    ),
+                  )
+                ) : (
+                  <StudyContent text={section.body} glossary={glossary} />
+                )}
               </div>
             ) : null}
           </div>

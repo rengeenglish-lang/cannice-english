@@ -9,6 +9,7 @@ import {
 import { pickStudyQuote } from "@/lib/study-quotes";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
 import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
+import { hasStrategyBoxes } from "@/components/topics/parseStrategyBoxes";
 import {
   parseGlossaryEntries,
   groupGlossaryIntoAccordion,
@@ -115,7 +116,8 @@ export function KonuAnlatimDashboard({
       : [];
 
   const isGirisLesson = selectedLesson
-    ? /Konuya Giriş/i.test(selectedLesson.title)
+    ? /Konuya Giriş/i.test(selectedLesson.title) ||
+      hasStrategyBoxes(selectedLesson.contentBody ?? "")
     : false;
   const isGlossaryLesson = selectedLesson
     ? /Sözlüğü|Referansı/i.test(selectedLesson.title)

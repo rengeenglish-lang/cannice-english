@@ -1,7 +1,7 @@
 /** Present lesson prose as readable study points without changing its wording. */
 const sentences = new Intl.Segmenter("tr", { granularity: "sentence" });
 
-function HighlightedText({ text }: { text: string }) {
+export function HighlightedText({ text }: { text: string }) {
   // Only short quoted terms and explicit rule phrases receive emphasis.
   // Apostrophes within Turkish suffixes and English contractions stay untouched.
   const parts = text.split(/("[^"\n]{1,65}"|“[^”\n]{1,65}”|tamamen farklı bir anlam|nesne almaz|mutlaka bir nesne ister|her zaman particle'dan sonra|bir formül değildir|ortalama \d+ soru)/g);
