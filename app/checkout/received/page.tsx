@@ -1,6 +1,8 @@
 import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getAuthContext } from "@/server/auth/context";
+import { notFound, redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { formatTRY } from "@/lib/pricing";
 
@@ -16,6 +18,12 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
         include: { items: true },
       })
     : null;
+
+  if (order?.userId) {
+    const viewer = await getAuthContext();
+    if (viewer?.id !== order.userId) notFound();
+    if (order.commercialKind) redirect(`/checkout/membership/${order.id}`);
+  }
 
   return (
     <main className="inner-page mx-auto w-full max-w-[700px] px-4 py-14 text-center sm:px-6 lg:px-8">

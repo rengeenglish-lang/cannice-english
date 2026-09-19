@@ -1,4 +1,5 @@
 import "server-only";
+import { hasCourseAccess } from "./access.service";
 import { db } from "@/server/db";
 
 const visibleSessions = (userId: string) => ({
@@ -13,7 +14,8 @@ const visibleSessions = (userId: string) => ({
   ],
 });
 
-export function getEnrollmentForCourse(userId: string, courseId: string) {
+export async function getEnrollmentForCourse(userId: string, courseId: string) {
+  if (!(await hasCourseAccess(userId, courseId))) return null;
   return db.enrollment.findUnique({
     where: { userId_courseId: { userId, courseId } },
     include: {
@@ -35,8 +37,8 @@ export function getEnrollmentForCourse(userId: string, courseId: string) {
   });
 }
 
-export function listEnrollmentsForUser(userId: string) {
-  return db.enrollment.findMany({
+export async function listEnrollmentsForUser(userId: string) {
+  const enrollments = await db.enrollment.findMany({
     where: { userId, status: "ACTIVE", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
     include: {
       course: {
@@ -56,6 +58,8 @@ export function listEnrollmentsForUser(userId: string) {
     },
     orderBy: { grantedAt: "desc" },
   });
+  const access = await Promise.all(enrollments.map((e) => hasCourseAccess(userId, e.courseId)));
+  return enrollments.filter((_, index) => access[index]);
 }
 
 export async function toggleLessonProgress(

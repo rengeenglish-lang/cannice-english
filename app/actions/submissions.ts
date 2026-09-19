@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
+import { hasCourseAccess } from "@/server/services/access.service";
 import { db } from "@/server/db";
 import { createSubmission } from "@/server/services/submissions.service";
 
@@ -18,7 +19,7 @@ export async function submitPracticeExamAction(
   if (!user) redirect("/sign-in");
 
   const enrollment = await db.enrollment.findUnique({ where: { id: enrollmentId } });
-  if (!enrollment || enrollment.userId !== user.id) redirect("/dashboard");
+  if (!enrollment || enrollment.userId !== user.id || enrollment.courseId !== courseId || !(await hasCourseAccess(user.id, courseId))) redirect("/dashboard");
 
   try {
     await createSubmission(enrollmentId, { title: formData.get("title"), studentAnswer: formData.get("studentAnswer") });

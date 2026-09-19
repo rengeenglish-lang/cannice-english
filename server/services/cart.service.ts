@@ -33,7 +33,8 @@ export async function getOrCreateCart(userId?: string) {
 
 export async function addToCart(productId: string, userId?: string) {
   const cart = await getOrCreateCart(userId);
-  const product = await db.product.findUniqueOrThrow({ where: { id: productId } });
+  const product = await db.product.findUniqueOrThrow({ where: { id: productId }, include: { course: true } });
+  if (!product.isPublished || product.course?.curriculumKey || product.slug === "platform-premium-subscription") throw new Error("Bu ürün sepet üzerinden alınamaz.");
   return db.cartItem.upsert({
     where: { cartId_productId: { cartId: cart.id, productId } },
     update: { quantity: { increment: 1 } },

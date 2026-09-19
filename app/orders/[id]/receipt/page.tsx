@@ -22,7 +22,7 @@ export default async function OrderReceiptPage({ params }: Props) {
   const session = await auth();
   const viewer = await getAuthContext();
   const isOwner = order.userId ? session?.user?.id === order.userId : true;
-  const isStaff = viewer?.role === "TEACHER" || viewer?.role === "ADMIN";
+  const isStaff = viewer?.role === "SUPER_ADMIN" || viewer?.role === "ADMIN";
   if (!isOwner && !isStaff) notFound();
 
   const kdvTotal = kdvIncludedIn(String(order.total));

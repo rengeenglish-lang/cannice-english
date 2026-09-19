@@ -1,4 +1,5 @@
 import "server-only";
+import { hasCourseAccess } from "./access.service";
 import { z } from "zod";
 import { db, type TransactionClient } from "@/server/db";
 import { ACTIVITY_TYPES, PROGRAMME_MINUTES, approvedProgrammePlans, curriculumReport, programmeProgress } from "@/lib/curriculum";
@@ -175,6 +176,7 @@ export async function verifyActivityCompletion(actorId: string, enrollmentId: st
     await tx.$queryRaw`SELECT id FROM enrollments WHERE id = ${enrollmentId} FOR UPDATE`;
     const enrollment = await tx.enrollment.findUniqueOrThrow({ where: { id: enrollmentId }, include: { user: true, course: true } });
     if (!enrollment.user.isActive || enrollment.status !== "ACTIVE" || (enrollment.expiresAt && enrollment.expiresAt <= new Date())) throw new Error("Aktif program kaydı gerekli.");
+    if (!(await hasCourseAccess(enrollment.userId, enrollment.courseId, tx))) throw new Error("Aktif program erişimi gerekli.");
     if (!enrollment.course.curriculumPublishedAt) throw new Error("Taslak programda ilerleme kaydedilemez.");
     const activity = await tx.curriculumActivity.findUniqueOrThrow({ where: { id: activityId }, include: { lesson: { include: { module: true } }, prerequisites: true, assessment: true } });
     if (activity.lesson.module.courseId !== enrollment.courseId) throw new Error("Etkinlik öğrencinin programına ait değil.");

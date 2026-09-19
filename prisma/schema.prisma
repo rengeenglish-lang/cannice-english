@@ -63,6 +63,7 @@ enum EnrollmentStatus {
 }
 
 enum OrderStatus {
+  PAYMENT_REVIEW
   PENDING
   AWAITING_PAYMENT
   PAID
@@ -481,6 +482,9 @@ model Order {
   discountTotal  Decimal     @default(0) @db.Decimal(12, 2)
   total          Decimal     @db.Decimal(12, 2)
   currency       String      @default("TRY")
+  commercialKind CommercialKind?
+  checkoutKey String? @unique
+  reservation SeatReservation?
   couponCode     String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
@@ -518,6 +522,13 @@ model OrderItem {
   id            String   @id @default(cuid())
   orderId       String
   productId     String
+  purchaseType PurchaseType @default(LEGACY)
+  billingInterval BillingInterval?
+  cohortId String?
+  cohort ProgrammeCohort? @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  periodStartsAt DateTime?
+  paidThrough DateTime?
+  accessExpiresAt DateTime?
   titleSnapshot String
   unitPrice     Decimal  @db.Decimal(12, 2)
   quantity      Int      @default(1)
@@ -530,6 +541,7 @@ model OrderItem {
   subscription MembershipSubscription?
   enrollment Enrollment?
 
+  @@index([cohortId])
   @@map("order_items")
 }
 
@@ -750,6 +762,7 @@ model CommercialPrice {
  amountMinor Int
  currency String @default("TRY")
  active Boolean @default(true)
+ checkoutEnabled Boolean @default(false)
  updatedAt DateTime @updatedAt
  @@unique([kind, interval])
  @@map("commercial_prices")
@@ -922,6 +935,11 @@ model ProgrammeCohort {
  timezone String @default("Europe/Istanbul")
  minimumCapacity Int @default(5)
  maximumCapacity Int @default(10)
+ graceDays Int @default(0)
+ seatHoldMinutes Int @default(1440)
+ salesEnabled Boolean @default(false)
+ orderItems OrderItem[]
+ reservations SeatReservation[]
  status CohortStatus @default(DRAFT)
  createdAt DateTime @default(now())
  updatedAt DateTime @updatedAt
@@ -986,4 +1004,23 @@ model CohortEvent {
  cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
  @@index([processedAt, createdAt])
  @@map("cohort_events")
+}
+
+enum PurchaseType {
+ LEGACY
+ PREMIUM_SUBSCRIPTION
+ GROUP_PROGRAM
+ DIGITAL_PRODUCT
+}
+model SeatReservation {
+ id String @id @default(cuid())
+ orderId String @unique
+ cohortId String
+ expiresAt DateTime
+ releasedAt DateTime?
+ createdAt DateTime @default(now())
+ order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+ cohort ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+ @@index([cohortId, releasedAt, expiresAt])
+ @@map("seat_reservations")
 }
