@@ -265,9 +265,14 @@ a {
 }
 .inner-page-hero h1 {
   text-wrap: balance;
+  color: #ffffff !important;
 }
 .inner-page-hero p:not(.eyebrow):not(.page-copy) {
-  color: #cbd5e1;
+  color: #dbe7f7 !important;
+}
+.inner-page-hero .eyebrow,
+.inner-page-hero > p:first-child:not(.exam-pill) {
+  color: #b9d1ff !important;
 }
 .panel,
 .dashboard-panel {

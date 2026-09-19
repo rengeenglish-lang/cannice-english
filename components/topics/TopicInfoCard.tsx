@@ -1,7 +1,7 @@
 import { BookOpen, Clock, HelpCircle, Gauge, Target } from "lucide-react";
 
 const CARD =
-  "relative isolate overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-gradient-to-br before:from-white/80 before:via-white/0 before:content-['']";
+  "relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(7,27,52,.07)]";
 
 const DIFFICULTY_STYLE: Record<string, { width: string; className: string }> = {
   Kolay: { width: "33%", className: "bg-emerald-500" },
