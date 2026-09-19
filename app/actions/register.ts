@@ -1,5 +1,6 @@
 "use server";
 
+import { slotReturnPath } from "@/lib/availability";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { hashPassword } from "@/server/auth/password";
@@ -25,5 +26,6 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
     data: { name: parsed.data.name, email, phone: parsed.data.phone, password, role: "STUDENT" },
   });
 
-  redirect("/sign-in?registered=1");
+  const next = slotReturnPath(formData.get("next"));
+redirect(`/sign-in?registered=1${next ? `&next=${encodeURIComponent(next)}` : ""}`);
 }

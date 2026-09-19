@@ -1,6 +1,17 @@
 import "server-only";
 import { db } from "@/server/db";
 
+const visibleSessions = (userId: string) => ({
+  OR: [
+    { availabilityEnabled: false },
+    {
+      availabilityEnabled: true,
+      cancelled: false,
+      bookings: { some: { studentId: userId, status: "ACTIVE" as const } },
+    },
+  ],
+});
+
 export function getEnrollmentForCourse(userId: string, courseId: string) {
   return db.enrollment.findUnique({
     where: { userId_courseId: { userId, courseId } },
@@ -12,7 +23,10 @@ export function getEnrollmentForCourse(userId: string, courseId: string) {
             orderBy: { position: "asc" },
             include: { lessons: { orderBy: { position: "asc" } } },
           },
-          liveSessions: { orderBy: { startsAt: "asc" } },
+          liveSessions: {
+            where: visibleSessions(userId),
+            orderBy: { startsAt: "asc" },
+          },
         },
       },
       lessonProgresses: true,
@@ -32,7 +46,7 @@ export function listEnrollmentsForUser(userId: string) {
             include: { lessons: { orderBy: { position: "asc" } } },
           },
           liveSessions: {
-            where: { endsAt: { gte: new Date() } },
+            where: { ...visibleSessions(userId), endsAt: { gte: new Date() } },
             orderBy: { startsAt: "asc" },
           },
         },

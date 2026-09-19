@@ -1,3 +1,4 @@
+import { MyGroupBookings } from "@/components/availability/MyGroupBookings";
 import type { Metadata } from "next";
 import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
@@ -33,7 +34,9 @@ export default async function StudentDashboardPage() {
     )
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   return (
-    <LearningDashboard
+    <>
+<MyGroupBookings userId={user.id} />
+<LearningDashboard
       name={user.name}
       courses={courses}
       sessions={sessions}
@@ -45,5 +48,6 @@ export default async function StudentDashboardPage() {
         status: o.status,
       }))}
     />
+</>
   );
 }

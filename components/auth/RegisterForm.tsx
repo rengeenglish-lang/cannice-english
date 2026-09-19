@@ -5,10 +5,11 @@ import { registerAction, type RegisterFormState } from "@/app/actions/register";
 
 const initialState: RegisterFormState = { status: "idle" };
 
-export function RegisterForm() {
+export function RegisterForm({next}: {next?: string}) {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
   return (
     <form action={formAction} className="panel space-y-4">
+<input type="hidden" name="next" value={next || ""} />
       <div>
         <label className="label" htmlFor="name">Adınız Soyadınız</label>
         <input id="name" name="name" required className="auth-input" />

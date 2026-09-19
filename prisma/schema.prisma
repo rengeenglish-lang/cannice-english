@@ -216,6 +216,8 @@ model User {
   blogPosts            BlogPost[]
   topicLessonProgresses TopicLessonProgress[]
   topicNotes            TopicNote[]
+  groupBookings GroupLessonEnrollment[]
+  instructedSessions LiveSession[] @relation("SessionInstructor")
 
   @@map("users")
 }
@@ -313,11 +315,25 @@ model LiveSession {
   timezone      String   @default("Europe/Istanbul")
   meetingUrl    String?
   recordingUrl  String?
-  capacity      Int?
+  capacity      Int? @default(10)
   createdAt     DateTime @default(now())
 
+  availabilityEnabled Boolean @default(false)
+  enrollmentOpen Boolean @default(true)
+  cancelled Boolean @default(false)
+  displayedOccupancy Int?
+  useDisplayedOccupancy Boolean @default(false)
+  adminNotes String?
+  instructorId String?
+  recurringSeriesId String?
+  updatedAt DateTime @default(now()) @updatedAt
+  instructor User? @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
+  recurringSeries GroupLessonSeries? @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
+  bookings GroupLessonEnrollment[]
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  @@index([startsAt, availabilityEnabled])
+  @@index([recurringSeriesId])
   @@index([courseId])
   @@map("live_sessions")
 }
@@ -639,4 +655,29 @@ model CallbackRequest {
   examType ExamType? @relation(fields: [examTypeId], references: [id])
 
   @@map("callback_requests")
+}
+
+model GroupLessonSeries {
+ id String @id @default(cuid())
+ repeatUntil DateTime
+ createdAt DateTime @default(now())
+ sessions LiveSession[]
+ @@map("group_lesson_series")
+}
+enum GroupBookingStatus {
+ ACTIVE
+ CANCELLED
+}
+model GroupLessonEnrollment {
+ id String @id @default(cuid())
+ slotId String
+ studentId String
+ status GroupBookingStatus @default(ACTIVE)
+ enrolledAt DateTime @default(now())
+ cancelledAt DateTime?
+ slot LiveSession @relation(fields: [slotId], references: [id], onDelete: Restrict)
+ student User @relation(fields: [studentId], references: [id], onDelete: Restrict)
+ @@unique([slotId, studentId])
+ @@index([slotId, status])
+ @@map("group_lesson_enrollments")
 }

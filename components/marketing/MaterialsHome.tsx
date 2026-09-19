@@ -16,6 +16,7 @@ import type { listHomepageProducts } from "@/server/services/catalog.service";
 import { EXAM_META } from "@/lib/exam-types";
 import { formatTRY } from "@/lib/pricing";
 import { StudySample } from "./StudySample";
+import { AvailabilityHome } from "@/components/availability/AvailabilityHome";
 import styles from "./MaterialsHome.module.css";
 
 type HomeProduct = Awaited<ReturnType<typeof listHomepageProducts>>[number];
@@ -214,6 +215,7 @@ export function MaterialsHome({
         </div>
       </section>
 
+      <AvailabilityHome />
       <section
         id="exam-path"
         className={styles.examSection}
