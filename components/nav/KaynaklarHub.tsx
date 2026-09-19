@@ -2,18 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Package, BookOpen, Library, ArrowRight } from "lucide-react";
+import { BookOpen, Library, ArrowRight, Mic2 } from "lucide-react";
 
 const RESOURCES = [
-  {
-    key: "materyaller",
-    label: "Materyaller",
-    href: "/packages",
-    icon: Package,
-    title: "Materyaller & Canlı Gruplar",
-    description:
-      "Hazırlık gruplarını, soru & deneme kamplarını, çalışma paketlerini ve akademik çeviri desteğini sınavınıza göre filtreleyerek inceleyin.",
-  },
   {
     key: "konu-anlatim",
     label: "Konu Anlatım",
@@ -25,12 +16,30 @@ const RESOURCES = [
   },
   {
     key: "kitaplar",
-    label: "Kitaplar ve Kaynaklar",
+    label: "Kaynaklar",
     href: "/books",
     icon: Library,
-    title: "Kitaplar ve Kaynaklar",
+    title: "Kaynaklar",
     description:
       "Sınav uzmanları tarafından hazırlanan kelime kitaplarını ve deneme setlerini basılı veya dijital formatta edinin.",
+  },
+  {
+    key: "toefl-speaking",
+    label: "TOEFL iBT Speaking",
+    href: "/dashboard/speaking-practice/toefl",
+    icon: Mic2,
+    title: "TOEFL iBT Speaking",
+    description:
+      "Güncel TOEFL iBT formatındaki Listen and Repeat ve Take an Interview görevlerini tarayıcınızda uygulayın.",
+  },
+  {
+    key: "ielts-speaking",
+    label: "IELTS Speaking",
+    href: "/dashboard/speaking-practice/ielts",
+    icon: Mic2,
+    title: "IELTS Speaking",
+    description:
+      "IELTS Speaking Part 1, Part 2 ve Part 3 akışlarını tek görev veya tam deneme modunda çalışın.",
   },
 ] as const;
 

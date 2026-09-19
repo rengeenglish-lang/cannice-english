@@ -4,7 +4,7 @@ import { PageHero } from "@/components/ui/PageHero";
 export const metadata: Metadata = { title: "Soru & Cevap" };
 const ITEMS = [
   {
-    q: "Materyalleri ayrı ayrı satın alabilir miyim?",
+    q: "Kaynakları ayrı ayrı satın alabilir miyim?",
     a: "Kitaplar ve çalışma paketleri ayrı ürünler olarak sunulur. Ürün sayfasında formatı, içeriği ve fiyatı inceleyerek seçim yapabilirsiniz.",
   },
   {

@@ -38,7 +38,7 @@ export default async function PackagesPage({ searchParams }: Props) {
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">MATERYALLER & CANLI GRUPLAR</p>
+        <p className="eyebrow">PAKETLER & CANLI GRUPLAR</p>
         <h1 className="page-title">Hedefinize uygun kaynağı bulun.</h1>
         <p className="page-copy">
           Kategoriye veya sınava göre filtreleyin, size uygun paketi bulun.

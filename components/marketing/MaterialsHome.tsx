@@ -137,7 +137,7 @@ export function MaterialsHome({
   return (
     <main id="main-content" className={styles.home}>
       <a href="#materials" className={styles.skipLink}>
-        Materyallere geç
+        Kaynaklara geç
       </a>
       <section className={styles.hero} aria-labelledby="home-title">
         <div className={styles.heroInner}>
@@ -154,12 +154,12 @@ export function MaterialsHome({
             </h1>
             <p className={styles.heroDescription}>
               İngilizce sınav hazırlığınız için tek tek seçebileceğiniz
-              materyaller ve canlı grup dersleri. Kendi başınıza çalışın ya da
+              kaynaklar ve canlı grup dersleri. Kendi başınıza çalışın ya da
               bir grupla ilerleyin; size uygun yolu seçin.
             </p>
             <div className={styles.heroButtons}>
               <Link href="#materials" className={styles.buttonDark}>
-                Materyalleri keşfet{" "}
+                Kaynakları keşfet{" "}
                 <ArrowUpRight size={19} aria-hidden="true" />
               </Link>
               <Link href="#sample" className={styles.textLink}>
@@ -261,7 +261,7 @@ export function MaterialsHome({
           <BookOpen size={26} aria-hidden="true" />
           <div>
             <span>KENDİ TEMPONUZDA</span>
-            <h2>Materyalinizi seçin.</h2>
+            <h2>Kaynağınızı seçin.</h2>
             <p>İhtiyacınız olan kitap veya çalışma paketini ayrı ayrı alın.</p>
           </div>
           <ArrowUpRight size={22} aria-hidden="true" />

@@ -29,7 +29,7 @@ export default function AboutPage() {
           {
             icon: BookOpen,
             title: "Size uygun kaynağı seçin",
-            copy: "İçeriği, formatı ve kapsamı inceleyin; ihtiyacınız olan materyali ayrı olarak alın.",
+            copy: "İçeriği, formatı ve kapsamı inceleyin; ihtiyacınız olan kaynağı ayrı olarak alın.",
           },
           {
             icon: Users,

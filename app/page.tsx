@@ -8,7 +8,7 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Cannice English — İngilizce Sınav Hazırlık Materyalleri",
+    absolute: "Cannice English — İngilizce Sınav Hazırlık Kaynakları",
   },
   description:
     "İngilizce sınav hazırlığı için konu anlatımlarını keşfedin, çalışma paketleri ve kitapları karşılaştırın. Önce örnek alıştırmayı deneyin, sonra kaynağınızı seçin.",

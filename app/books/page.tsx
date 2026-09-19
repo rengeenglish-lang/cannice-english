@@ -3,14 +3,14 @@ import type { Metadata } from "next";
 import { listProducts } from "@/server/services/catalog.service";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 
-export const metadata: Metadata = { title: "Kitaplar ve Kaynaklar" };
+export const metadata: Metadata = { title: "Kaynaklar" };
 
 export default async function BooksPage() {
   const products = await listProducts({ category: "BOOK" });
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">Kitaplar ve Kaynaklar</p>
+        <p className="eyebrow">Kaynaklar</p>
         <h1 className="page-title">
           Sınavınıza özel kelime kitapları ve deneme setleri
         </h1>

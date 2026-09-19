@@ -268,7 +268,7 @@ export function LearningDashboard({
           </ul>
         ) : (
           <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-            Henüz bir siparişiniz yok. Seçtiğiniz materyallerin ve derslerin
+            Henüz bir siparişiniz yok. Seçtiğiniz kaynakların ve derslerin
             sipariş durumu burada görünür.
           </p>
         )}

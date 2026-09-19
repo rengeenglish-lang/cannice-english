@@ -11,8 +11,8 @@ export default function KaynaklarPage() {
         <p className="eyebrow">KAYNAKLAR</p>
         <h1 className="page-title">Tüm kaynaklarınız tek yerde.</h1>
         <p className="page-copy">
-          Materyaller, Konu Anlatım ve Kitaplar ve Kaynaklar arasında geçiş
-          yapın, size uygun olanı seçin.
+          Konu anlatımlarını, sınav kaynaklarını ve IELTS ile TOEFL konuşma
+          pratiklerini tek yerden seçin.
         </p>
       </PageHero>
       <KaynaklarHub />
