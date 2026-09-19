@@ -10,7 +10,7 @@ import {
 } from "@/lib/availability";
 import { z } from "zod";
 const include = {
-  course: { include: { product: true } },
+  course: { include: { product: { include: { examType: true } } } },
   instructor: { select: { name: true } },
   _count: { select: { bookings: { where: { status: "ACTIVE" as const } } } },
 };

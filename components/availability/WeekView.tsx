@@ -1,18 +1,28 @@
 import Link from "next/link";
-import { weekRange, lessonDate, localDate } from "@/lib/availability";
+import {
+  weekRange,
+  lessonDate,
+  lessonWeekday,
+  localDate,
+  type GroupExamFilter,
+} from "@/lib/availability";
 import { SlotCard } from "./SlotCard";
 import type { GroupSlot } from "@/server/services/group-availability.service";
 export function WeekView({
   week,
   slots,
   admin = false,
+  exam,
 }: {
   week?: string;
   slots: GroupSlot[];
   admin?: boolean;
+  exam?: GroupExamFilter;
 }) {
   const range = weekRange(week),
     base = admin ? "/admin/group-availability" : "/group-lessons";
+  const href = (target: string) =>
+    `${base}?week=${target}${!admin && exam ? `&exam=${exam}` : ""}`;
   return (
     <>
       <nav
@@ -21,22 +31,22 @@ export function WeekView({
       >
         <Link
           className="min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100"
-          href={`${base}?week=${range.previous}`}
+          href={href(range.previous)}
         >
           ‹ Önceki hafta
         </Link>
         <div className="text-center">
-          <p className="font-bold">
-            {lessonDate(range.start)} –{" "}
-            {lessonDate(new Date(range.end.getTime() - 86400000))}
-          </p>
-          <Link className="text-sm text-blue-700 underline" href={base}>
+          <p className="font-bold">Bu haftanın dersleri</p>
+          <Link
+            className="text-sm text-blue-700 underline"
+            href={!admin && exam ? `${base}?exam=${exam}` : base}
+          >
             Bu hafta
           </Link>
         </div>
         <Link
           className="min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100"
-          href={`${base}?week=${range.next}`}
+          href={href(range.next)}
         >
           Sonraki hafta ›
         </Link>
@@ -68,15 +78,26 @@ export function WeekView({
             (day) => (
               <section key={day}>
                 <h2 className="mb-3 text-lg font-bold">
-                  {lessonDate(
-                    slots.find((s) => localDate(s.startsAt) === day)!.startsAt,
-                  )}
+                  {admin
+                    ? lessonDate(
+                        slots.find((s) => localDate(s.startsAt) === day)!
+                          .startsAt,
+                      )
+                    : lessonWeekday(
+                        slots.find((s) => localDate(s.startsAt) === day)!
+                          .startsAt,
+                      )}
                 </h2>
                 <div className="space-y-4">
                   {slots
                     .filter((s) => localDate(s.startsAt) === day)
                     .map((slot) => (
-                      <SlotCard key={slot.id} slot={slot} admin={admin} />
+                      <SlotCard
+                        key={slot.id}
+                        slot={slot}
+                        admin={admin}
+                        weekdayOnly={!admin}
+                      />
                     ))}
                 </div>
               </section>

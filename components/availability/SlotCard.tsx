@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { lessonTime, lessonDate, STATUS_LABELS } from "@/lib/availability";
+import {
+  lessonTime,
+  lessonDate,
+  lessonWeekday,
+  groupExamLabel,
+  STATUS_LABELS,
+} from "@/lib/availability";
 import type { GroupSlot } from "@/server/services/group-availability.service";
 const tones = {
   AVAILABLE: "bg-emerald-50 text-emerald-800",
@@ -18,15 +24,17 @@ const bars = {
 export function SlotCard({
   slot,
   admin = false,
+  weekdayOnly = false,
 }: {
   slot: GroupSlot;
   admin?: boolean;
+  weekdayOnly?: boolean;
 }) {
   const a = slot.availability;
   return (
     <article className="flex min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-        {lessonDate(slot.startsAt)}
+        {weekdayOnly ? lessonWeekday(slot.startsAt) : lessonDate(slot.startsAt)}
       </p>
       <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900">
         {lessonTime(slot.startsAt)}{" "}
@@ -39,6 +47,9 @@ export function SlotCard({
         </span>
       </p>
       <h3 className="mt-2 text-base font-bold text-slate-800">{slot.title}</h3>
+      <p className="mt-2 text-xs font-extrabold uppercase tracking-wider text-blue-700">
+        {groupExamLabel(slot.course.product)} dersi
+      </p>
       <p className="mt-1 text-sm text-slate-500">
         {slot.course.product.title}
         {slot.instructor ? ` · ${slot.instructor.name}` : ""}

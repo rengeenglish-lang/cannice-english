@@ -1,5 +1,7 @@
 export const DEFAULT_CAPACITY = 10;
 export const LESSON_TIMEZONE = "Europe/Istanbul";
+export const GROUP_EXAM_FILTERS = ["yds", "yokdil", "toefl", "ielts"] as const;
+export type GroupExamFilter = (typeof GROUP_EXAM_FILTERS)[number];
 export type AvailabilityStatus =
   "AVAILABLE" | "ALMOST_FULL" | "FULL" | "CLOSED" | "CANCELLED";
 export const STATUS_LABELS: Record<AvailabilityStatus, string> = {
@@ -107,6 +109,40 @@ export function lessonDate(date: Date) {
     day: "numeric",
     month: "long",
   }).format(date);
+}
+export function lessonWeekday(date: Date) {
+  return new Intl.DateTimeFormat("tr-TR", {
+    timeZone: LESSON_TIMEZONE,
+    weekday: "long",
+  }).format(date);
+}
+export function groupExamFilter(value: unknown): GroupExamFilter {
+  return GROUP_EXAM_FILTERS.includes(value as GroupExamFilter)
+    ? (value as GroupExamFilter)
+    : "yds";
+}
+type GroupExamProduct = {
+  title: string;
+  examType: { code: string; name: string } | null;
+};
+function isMixedYdsYokdil(product: GroupExamProduct) {
+  const title = product.title.toLocaleUpperCase("tr-TR");
+  return title.includes("YDS") && title.includes("YÖKDİL");
+}
+export function matchesGroupExam(
+  product: GroupExamProduct,
+  filter: GroupExamFilter,
+) {
+  const code = product.examType?.code;
+  if (filter === "yokdil")
+    return Boolean(code?.startsWith("YOKDIL_") || isMixedYdsYokdil(product));
+  if (filter === "yds") return code === "YDS" || isMixedYdsYokdil(product);
+  return code?.toLowerCase() === filter;
+}
+export function groupExamLabel(product: GroupExamProduct) {
+  if (isMixedYdsYokdil(product)) return "YDS · YÖKDİL";
+  if (product.examType?.code.startsWith("YOKDIL_")) return "YÖKDİL";
+  return product.examType?.name ?? "Genel İngilizce";
 }
 export function slotReturnPath(value: unknown) {
   return typeof value === "string" &&

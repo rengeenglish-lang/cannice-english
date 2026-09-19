@@ -9,6 +9,9 @@ import {
   localDate,
   weekRange,
   slotReturnPath,
+  groupExamFilter,
+  matchesGroupExam,
+  groupExamLabel,
 } from "../lib/availability";
 import {
   saveGroupSlot,
@@ -19,7 +22,10 @@ import {
   createDemoGroupSlots,
   listGroupSlots,
 } from "../server/services/group-availability.service";
-import { getEnrollmentForCourse, listEnrollmentsForUser } from "../server/services/learning.service";
+import {
+  getEnrollmentForCourse,
+  listEnrollmentsForUser,
+} from "../server/services/learning.service";
 const url = new URL(process.env.DATABASE_URL!);
 if (
   !["127.0.0.1", "localhost"].includes(url.hostname) ||
@@ -70,6 +76,24 @@ test("thresholds, proportional capacity, demo occupancy, timezone and safe retur
   assert.equal(slotReturnPath("https://evil.example"), undefined);
   assert.equal(slotReturnPath("//evil.example"), undefined);
   assert.equal(slotReturnPath("/group-lessons/abc"), "/group-lessons/abc");
+  const mixed = {
+    title: "YDS + YÖKDİL Hazırlık",
+    examType: { code: "YDS", name: "YDS" },
+  };
+  assert.equal(groupExamFilter("unknown"), "yds");
+  assert.equal(matchesGroupExam(mixed, "yds"), true);
+  assert.equal(matchesGroupExam(mixed, "yokdil"), true);
+  assert.equal(groupExamLabel(mixed), "YDS · YÖKDİL");
+  assert.equal(
+    matchesGroupExam(
+      {
+        title: "Sağlık grubu",
+        examType: { code: "YOKDIL_SAGLIK", name: "YÖKDİL Sağlık" },
+      },
+      "yokdil",
+    ),
+    true,
+  );
 });
 test("database booking and admin lifecycle", async () => {
   const suffix = Date.now().toString();
@@ -109,7 +133,11 @@ test("database booking and admin lifecycle", async () => {
   };
   const id = await saveGroupSlot(base);
   try {
-    assert.equal((await getEnrollmentForCourse(users[0].id, courseId))!.course.liveSessions.length, 0);
+    assert.equal(
+      (await getEnrollmentForCourse(users[0].id, courseId))!.course.liveSessions
+        .length,
+      0,
+    );
     for (let i = 0; i < 9; i++) await enrollGroupSlot(id, users[i].id);
     const results = await Promise.allSettled(
       users.slice(9).map((u) => enrollGroupSlot(id, u.id)),
@@ -121,7 +149,11 @@ test("database booking and admin lifecycle", async () => {
     );
     assert.equal((await getGroupSlot(id))!.availability.actual, 10);
     await enrollGroupSlot(id, users[0].id);
-    assert.equal((await getEnrollmentForCourse(users[0].id, courseId))!.course.liveSessions.length, 1);
+    assert.equal(
+      (await getEnrollmentForCourse(users[0].id, courseId))!.course.liveSessions
+        .length,
+      1,
+    );
     assert.equal(
       await db.groupLessonEnrollment.count({ where: { slotId: id } }),
       10,
@@ -138,7 +170,10 @@ test("database booking and admin lifecycle", async () => {
     await manageGroupSlot(id, "open");
     await enrollGroupSlot(id, users[0].id);
     await manageGroupSlot(id, "cancel");
-    assert.equal((await listEnrollmentsForUser(users[0].id))[0].course.liveSessions.length, 0);
+    assert.equal(
+      (await listEnrollmentsForUser(users[0].id))[0].course.liveSessions.length,
+      0,
+    );
     assert.equal((await getGroupSlot(id))!.availability.status, "CANCELLED");
     await assert.rejects(manageGroupSlot(id, "delete"), /silinemez/);
     await manageGroupSlot(id, "open");

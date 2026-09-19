@@ -8,7 +8,7 @@ The existing `LiveSession` is reused with default capacity 10, configurable per 
 
 ## Pages and files
 
-- `/group-lessons`: public weekly calendar, previous/next/current week, Istanbul time.
+- `/group-lessons`: public weekly calendar with weekday-only labels, YDS/YÖKDİL/TOEFL/IELTS filtering, previous/next/current week, and Istanbul time.
 - `/group-lessons/[id]`: confirmation, real capacity, booking/cancellation and alternatives.
 - `/admin/group-availability`: admin calendar and demo creation.
 - `/admin/group-availability/new` and `/admin/group-availability/[id]`: creation/editing and actual student list.
