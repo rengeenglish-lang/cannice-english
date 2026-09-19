@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MyGroupBookings } from "@/components/availability/MyGroupBookings";
 import type { Metadata } from "next";
 import { getAuthContext } from "@/server/auth/context";
@@ -35,6 +36,7 @@ export default async function StudentDashboardPage() {
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   return (
     <>
+<Link href="/checkout/membership" className="ghost-button mb-4 inline-flex">Üyelik, program ödemeleri ve yenileme</Link>
 <MyGroupBookings userId={user.id} />
 <LearningDashboard
       name={user.name}

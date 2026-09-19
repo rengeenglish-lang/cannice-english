@@ -7,8 +7,8 @@ import { markOrderPaid } from "@/server/services/orders.service";
 
 export async function markOrderPaidAction(orderId: string) {
   const user = await getAuthContext();
-  if (!user || (user.role !== "TEACHER" && user.role !== "ADMIN")) forbidden();
-  await markOrderPaid(orderId);
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) forbidden();
+  await markOrderPaid(orderId, user.id);
   revalidatePath("/admin/orders");
   revalidatePath("/dashboard");
 }

@@ -4,7 +4,6 @@ import {
   availability,
   addDays,
   dateAt,
-  localDate,
   DEFAULT_CAPACITY,
   LESSON_TIMEZONE,
 } from "@/lib/availability";
@@ -18,6 +17,7 @@ export async function listGroupSlots(start: Date, end: Date, admin = false) {
   const slots = await db.liveSession.findMany({
     where: {
       availabilityEnabled: true,
+      cohortId: null,
       startsAt: { gte: start, lt: end },
       ...(!admin ? { course: { product: { isPublished: true } } } : {}),
     },
@@ -33,6 +33,7 @@ export async function getGroupSlot(id: string, admin = false) {
   const slot = await db.liveSession.findFirst({
     where: {
       id,
+      cohortId: null,
       availabilityEnabled: true,
       ...(!admin ? { course: { product: { isPublished: true } } } : {}),
     },
@@ -60,7 +61,7 @@ async function lockSlot(tx: TransactionClient, id: string) {
 export async function enrollGroupSlot(slotId: string, studentId: string) {
   return db.$transaction(async (tx) => {
     const slot = await lockSlot(tx, slotId);
-    if (!slot || !slot.availabilityEnabled || !slot.course.product.isPublished)
+    if (!slot || slot.cohortId || !slot.availabilityEnabled || !slot.course.product.isPublished)
       throw new Error("Ders bulunamadı.");
     const student = await tx.user.findUnique({ where: { id: studentId } });
     if (!student?.isActive) throw new Error("Aktif bir hesap gerekiyor.");
@@ -118,12 +119,6 @@ const schema = z.object({
 });
 export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
   const input = schema.parse(raw);
-  if (
-    input.useDisplayedOccupancy &&
-    (input.displayedOccupancy === undefined ||
-      input.displayedOccupancy > input.capacity)
-  )
-    throw new Error("Gösterim doluluğu kapasiteyi aşamaz.");
   const startsAt = dateAt(input.date, input.time);
   if (startsAt <= new Date())
     throw new Error("Gelecekte bir ders saati seçin.");
@@ -146,8 +141,8 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
     enrollmentOpen: input.enrollmentOpen,
     instructorId: input.instructorId || null,
     adminNotes: input.adminNotes || null,
-    displayedOccupancy: input.displayedOccupancy ?? null,
-    useDisplayedOccupancy: input.useDisplayedOccupancy,
+    displayedOccupancy: null,
+    useDisplayedOccupancy: false,
     timezone: LESSON_TIMEZONE,
   };
   return db.$transaction(
@@ -156,7 +151,7 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
         const original = await tx.liveSession.findUniqueOrThrow({
           where: { id },
         });
-        if (!original.availabilityEnabled)
+        if (original.cohortId || !original.availabilityEnabled)
           throw new Error("Bu ders uygunluk takviminde değil.");
         if (original.courseId !== input.courseId)
           throw new Error(
@@ -241,7 +236,7 @@ export async function manageGroupSlot(
 ) {
   return db.$transaction(async (tx) => {
     const slot = await lockSlot(tx, id);
-    if (!slot?.availabilityEnabled) throw new Error("Ders bulunamadı.");
+    if (slot?.cohortId || !slot?.availabilityEnabled) throw new Error("Ders bulunamadı.");
     if (operation === "delete") {
       if (await tx.groupLessonEnrollment.count({ where: { slotId: id } }))
         throw new Error("Öğrenci kaydı olan ders silinemez; dersi iptal edin.");
@@ -277,35 +272,7 @@ export async function manageGroupSlot(
     return id;
   });
 }
-export async function createDemoGroupSlots(courseId: string) {
-  const start = dateAt(localDate(addDays(new Date(), 1)), "18:00");
-  return db.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(72819534)::text`;
-    if (
-      await tx.groupLessonSeries.findUnique({
-        where: { id: "availability-demo" },
-      })
-    )
-      return;
-    await tx.groupLessonSeries.create({
-      data: { id: "availability-demo", repeatUntil: addDays(start, 6) },
-    });
-    for (const [n, count] of [0, 2, 4, 7, 8, 9, 10].entries()) {
-      const startsAt = addDays(start, n);
-      await tx.liveSession.create({
-        data: {
-          title: "Grup dersi · demo",
-          courseId,
-          startsAt,
-          endsAt: new Date(startsAt.getTime() + 3600000),
-          capacity: DEFAULT_CAPACITY,
-          availabilityEnabled: true,
-          displayedOccupancy: count,
-          useDisplayedOccupancy: true,
-          recurringSeriesId: "availability-demo",
-          adminNotes: "DEMO: yalnızca gösterim; gerçek öğrenci değildir.",
-        },
-      });
-    }
-  });
+export async function createDemoGroupSlots(_courseId: string) {
+  void _courseId;
+  throw new Error("Demo doluluk oluşturma devre dışı. Kontenjan yalnızca gerçek kayıtlardan hesaplanır.");
 }

@@ -1,0 +1,50 @@
+name: Platform foundation verification
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  database-and-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: cannice_platform_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:5432/cannice_platform_test
+      DATABASE_URL_UNPOOLED: postgresql://postgres:local-test-only@127.0.0.1:5432/cannice_platform_test
+      AUTH_SECRET: isolated-ci-only-not-a-production-secret-12345
+      AUTH_URL: https://localhost.example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate schema and apply every migration
+        run: |
+          npx prisma validate
+          npx prisma migrate deploy
+          npx prisma migrate status
+      - name: Check generated client and types
+        run: npm run typecheck
+      - name: Access policies and progress regressions
+        run: node --import tsx --test tests/commercial.test.ts tests/learning-overview.test.mjs tests/curriculum.test.ts tests/cohorts.test.ts
+      - name: Payment approval and concurrent final-seat booking
+        run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/commercial-database.test.ts tests/group-availability.test.ts tests/curriculum-database.test.ts tests/cohorts-database.test.ts tests/commercial-checkout-database.test.ts
+      - name: Production build against isolated database
+        run: npm run build

@@ -1,7 +1,9 @@
 import "server-only";
+import { hasCourseAccess } from "./access.service";
 import { db } from "@/server/db";
 
 const visibleSessions = (userId: string) => ({
+  AND: [{ OR: [{ cohortId: null }, { cohort: { status: { in: ["OPEN" as const, "CLOSED" as const] }, enrollments: { some: { studentId: userId, status: "CONFIRMED" as const } } } }] }],
   OR: [
     { availabilityEnabled: false },
     {
@@ -12,7 +14,8 @@ const visibleSessions = (userId: string) => ({
   ],
 });
 
-export function getEnrollmentForCourse(userId: string, courseId: string) {
+export async function getEnrollmentForCourse(userId: string, courseId: string) {
+  if (!(await hasCourseAccess(userId, courseId))) return null;
   return db.enrollment.findUnique({
     where: { userId_courseId: { userId, courseId } },
     include: {
@@ -34,9 +37,9 @@ export function getEnrollmentForCourse(userId: string, courseId: string) {
   });
 }
 
-export function listEnrollmentsForUser(userId: string) {
-  return db.enrollment.findMany({
-    where: { userId, status: "ACTIVE" },
+export async function listEnrollmentsForUser(userId: string) {
+  const enrollments = await db.enrollment.findMany({
+    where: { userId, status: "ACTIVE", OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
     include: {
       course: {
         include: {
@@ -55,6 +58,8 @@ export function listEnrollmentsForUser(userId: string) {
     },
     orderBy: { grantedAt: "desc" },
   });
+  const access = await Promise.all(enrollments.map((e) => hasCourseAccess(userId, e.courseId)));
+  return enrollments.filter((_, index) => access[index]);
 }
 
 export async function toggleLessonProgress(

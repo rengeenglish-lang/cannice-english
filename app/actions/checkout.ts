@@ -14,6 +14,9 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   const cart = await getOrCreateCart(session?.user?.id);
   if (cart.items.length === 0) return { status: "error" as const, message: "Sepetiniz boş." };
 
+  const blocked = await db.product.count({ where: { id: { in: cart.items.map((item) => item.productId) }, OR: [{ isPublished: false }, { course: { curriculumKey: { not: null } } }, { slug: "platform-premium-subscription" }] } });
+  if (blocked) return { status: "error", message: "Sepetinizde satışa uygun olmayan ürün var. Programlar için üyelik ödeme akışını kullanın." };
+
   let guest: { guestName: string; guestEmail: string; guestPhone: string } | null = null;
   if (!session?.user?.id) {
     const parsed = guestCheckoutSchema.safeParse({

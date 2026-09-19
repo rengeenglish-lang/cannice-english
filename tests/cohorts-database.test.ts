@@ -1,0 +1,72 @@
+import { test, after } from "node:test";
+import assert from "node:assert/strict";
+import { db } from "../server/db";
+import { createCohort, changeCohortStatus, changeCohortCapacity, requestCohortEnrollment, confirmPaidCohortEnrollment, joinCohortWaitlist, leaveCohortWaitlist, cancelCohortEnrollment, getCohortRoster, getCohortWaitlist, listProgrammeCohorts, attachCohortSession } from "../server/services/cohorts.service";
+import { getEnrollmentForCourse } from "../server/services/learning.service";
+const url = new URL(process.env.DATABASE_URL!);
+if (!["127.0.0.1", "localhost"].includes(url.hostname) || !url.pathname.endsWith("_test")) throw new Error("Requires isolated local *_test database");
+after(async () => db.$disconnect());
+test("cohort concurrency, paid confirmation, waitlist, capacity edits and role isolation", async () => {
+  const stamp = `${Date.now()}-${Math.random()}`;
+  const admin = await db.user.create({ data: { name: "Admin", email: `a-${stamp}@example.test`, role: "ADMIN" } });
+  const teacher = await db.user.create({ data: { name: "Teacher", email: `t-${stamp}@example.test`, role: "TEACHER" } });
+  const other = await db.user.create({ data: { name: "Other teacher", email: `o-${stamp}@example.test`, role: "TEACHER" } });
+  const product = await db.product.create({ data: { title: "Cohort test", slug: stamp, category: "PREP_GROUP", basePrice: 1990, salePrice: 1990, isPublished: false, course: { create: { curriculumKey: `test-${stamp}`, curriculumTargetMinutes: 15000 } } }, include: { course: true } });
+  const courseId = product.course!.id;
+  const raw = { courseId, teacherId: teacher.id, title: "Evening group", startsAt: new Date(Date.now()+86400000), expectedEndsAt: new Date(Date.now()+86400000*180), schedule: [{ weekday: 2, startMinute: 1200, endMinute: 1290 }] };
+  await assert.rejects(createCohort(teacher.id, raw), /Yönetici/);
+  const cohort = await createCohort(admin.id, raw);
+  assert.equal(cohort.maximumCapacity, 10);
+  assert.equal(cohort.minimumCapacity, 5);
+  await assert.rejects(changeCohortStatus(admin.id, cohort.id, "OPEN"), /Yayımlanmış/);
+  // Published fixture only: academic content gate is tested separately.
+  await db.course.update({ where: { id: courseId }, data: { curriculumPublishedAt: new Date() } });
+  await changeCohortStatus(admin.id, cohort.id, "OPEN");
+  const students = [];
+  for (let i=0; i<11; i++) {
+    const student = await db.user.create({ data: { name: `Student ${i}`, email: `s${i}-${stamp}@example.test` } });
+    const order = await db.order.create({ data: { userId: student.id, status: "PAID", subtotal: 1990, total: 1990, items: { create: { productId: product.id, titleSnapshot: product.title, unitPrice: 1990, lineTotal: 1990 } }, payment: { create: { amount: 1990, status: "SUCCEEDED", paidAt: new Date() } } }, include: { items: true } });
+    const itemId = order.items[0].id;
+    await db.enrollment.create({ data: { userId: student.id, courseId, orderItemId: itemId } });
+    await requestCohortEnrollment(student.id, cohort.id);
+    students.push({ id: student.id, itemId, orderId: order.id });
+  }
+  assert.equal((await getCohortRoster(admin.id, cohort.id)).confirmed, 0);
+  assert.equal((await getCohortRoster(admin.id, cohort.id)).pending, 11);
+  await assert.rejects(getCohortRoster(other.id, cohort.id), /atanmış/);
+  await assert.rejects(confirmPaidCohortEnrollment(teacher.id, cohort.id, students[0].id, students[0].itemId), /Yönetici/);
+  await db.payment.update({ where: { orderId: students[0].orderId }, data: { status: "FAILED" } });
+  await assert.rejects(confirmPaidCohortEnrollment(admin.id, cohort.id, students[0].id, students[0].itemId), /başarılı ödeme/);
+  await db.payment.update({ where: { orderId: students[0].orderId }, data: { status: "SUCCEEDED" } });
+  for (const student of students.slice(0,9)) await confirmPaidCohortEnrollment(admin.id, cohort.id, student.id, student.itemId);
+  const last = await Promise.allSettled(students.slice(9).map((s) => confirmPaidCohortEnrollment(admin.id, cohort.id, s.id, s.itemId)));
+  assert.equal(last.filter((r) => r.status === "fulfilled").length, 1);
+  assert.equal(last.filter((r) => r.status === "rejected").length, 1);
+  assert.equal((await getCohortRoster(teacher.id, cohort.id)).confirmed, 10);
+  const loser = students[9 + last.findIndex((r) => r.status === "rejected")];
+  await assert.rejects(requestCohortEnrollment(loser.id, cohort.id), /Kontenjan/);
+  const waits = await Promise.all([joinCohortWaitlist(loser.id, cohort.id), joinCohortWaitlist(loser.id, cohort.id)]);
+  assert.equal(waits[0].id, waits[1].id);
+  assert.equal((await getCohortWaitlist(admin.id, cohort.id)).length, 1);
+  await assert.rejects(changeCohortCapacity(admin.id, cohort.id, 5, 9), /Kapasite/);
+  await assert.rejects(db.programmeCohort.update({ where: { id: cohort.id }, data: { maximumCapacity: 9 } }), /Capacity/);
+  const pending = await db.cohortEnrollment.findUniqueOrThrow({ where: { cohortId_studentId: { cohortId: cohort.id, studentId: loser.id } } });
+  await assert.rejects(db.cohortEnrollment.update({ where: { id: pending.id }, data: { status: "CONFIRMED", orderItemId: loser.itemId, confirmedAt: new Date() } }), /capacity/);
+  await cancelCohortEnrollment(admin.id, cohort.id, students[0].id);
+  assert.equal(await db.cohortEvent.count({ where: { cohortId: cohort.id, type: "SEAT_AVAILABLE" } }), 1);
+  assert.equal(await db.cohortEvent.count({ where: { cohortId: cohort.id, type: "GROUP_CONFIRMED" } }), 1);
+  assert.equal((await getCohortRoster(admin.id, cohort.id)).confirmed, 9);
+  assert.equal((await getCohortWaitlist(admin.id, cohort.id)).length, 1); // no automatic charge or enrollment
+  await confirmPaidCohortEnrollment(admin.id, cohort.id, loser.id, loser.itemId);
+  assert.equal((await getCohortWaitlist(admin.id, cohort.id)).length, 0);
+  const session = await db.liveSession.create({ data: { courseId, title: "Cohort-only lesson", startsAt: new Date(raw.startsAt.getTime()+3600000), endsAt: new Date(raw.startsAt.getTime()+7200000), meetingUrl: "https://example.test/lesson" } });
+  await attachCohortSession(admin.id, cohort.id, session.id);
+  assert.ok((await getEnrollmentForCourse(students[1].id, courseId))!.course.liveSessions.some((s) => s.id === session.id));
+  assert.ok(!(await getEnrollmentForCourse(students[0].id, courseId))!.course.liveSessions.some((s) => s.id === session.id));
+  await changeCohortStatus(admin.id, cohort.id, "CLOSED");
+  await confirmPaidCohortEnrollment(admin.id, cohort.id, students[1].id, students[1].itemId); // paid retry stays idempotent after closure
+
+  assert.ok(!(await listProgrammeCohorts()).some((c) => c.id === cohort.id));
+  await assert.rejects(changeCohortStatus(admin.id, cohort.id, "CANCELLED"), /onaylı/);
+  await leaveCohortWaitlist(loser.id, cohort.id);
+});

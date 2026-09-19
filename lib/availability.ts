@@ -34,12 +34,8 @@ export function availability(
   now = new Date(),
 ) {
   const capacity = slot.capacity ?? DEFAULT_CAPACITY;
-  const simulated =
-    slot.useDisplayedOccupancy && slot.displayedOccupancy !== null;
-  const displayed = Math.min(
-    capacity,
-    Math.max(actual, simulated ? slot.displayedOccupancy! : actual),
-  );
+  const simulated = false;
+  const displayed = actual;
   const override = slot.cancelled
     ? "CANCELLED"
     : !slot.enrollmentOpen || slot.startsAt <= now

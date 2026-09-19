@@ -55,7 +55,7 @@ test("thresholds, proportional capacity, demo occupancy, timezone and safe retur
     useDisplayedOccupancy: true,
   };
   assert.equal(availability(slot, 2).remaining, 8);
-  assert.equal(availability(slot, 2).status, "FULL");
+  assert.equal(availability(slot, 2).status, "AVAILABLE");
   assert.equal(availability(slot, 2).canEnroll, true);
   assert.equal(availability({ ...slot, cancelled: true }, 2).canEnroll, false);
   assert.equal(
@@ -241,16 +241,7 @@ test("database booking and admin lifecycle", async () => {
       (await listGroupSlots(range.start, range.end)).some((s) => s.id === id),
     );
     const before = await db.groupLessonEnrollment.count();
-    await createDemoGroupSlots(courseId);
-    await createDemoGroupSlots(courseId);
-    const demos = await db.liveSession.findMany({
-      where: { recurringSeriesId: "availability-demo" },
-      orderBy: { startsAt: "asc" },
-    });
-    assert.deepEqual(
-      demos.map((s) => s.displayedOccupancy),
-      [0, 2, 4, 7, 8, 9, 10],
-    );
+    await assert.rejects(createDemoGroupSlots(courseId), /devre dışı/);
     assert.equal(await db.groupLessonEnrollment.count(), before);
   } finally {
     const slots = await db.liveSession.findMany({ where: { courseId } });
