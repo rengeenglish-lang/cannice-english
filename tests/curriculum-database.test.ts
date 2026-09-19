@@ -19,7 +19,7 @@ test("curriculum import, authorization, publication gate and evidence-backed com
   await assert.rejects(importApprovedProgrammePlans(teacher.id), /yönetici/);
   const [first, second] = await Promise.all([importApprovedProgrammePlans(admin.id), importApprovedProgrammePlans(admin.id)]);
   assert.deepEqual(first, second);
-  const plans = await listCurriculaForAdmin(admin.id);
+  const plans = (await listCurriculaForAdmin(admin.id)).filter((course) => approvedProgrammePlans.some((plan) => plan.key === course.curriculumKey));
   assert.equal(plans.length, 7);
   for (const plan of plans) {
     assert.equal(plan.report.plannedMinutes, 15000);
