@@ -2664,6 +2664,62 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
       "'So far' + tekrar sayısı ('three separate occasions') Present Perfect gerektirir; 'still pending' ifadesi de şu anki bağlantıyı doğrular, bu yüzden 'has rejected' doğrudur.",
     tags: ["present-perfect-repetition"],
   },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "zamanlar",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt:
+      "The new regulations ---- into effect on the first of January, regardless of the ongoing parliamentary debate.",
+    options: ["come", "are coming", "will have come", "came"],
+    correctIndex: 0,
+    explanation:
+      "Resmi olarak planlanmış, takvime bağlı gelecek olaylar (yasalar, tarifeler, programlar) Present Simple ile ifade edilir; bu yüzden 'come' doğrudur. 'Are coming' kişisel bir düzenlemeyi, 'will have come' başka bir ana kadar tamamlanmış bir eylemi ima eder ve bağlamla uyuşmaz; 'came' ise yanlış zamandır (geçmiş).",
+    tags: ["present-simple-scheduled-future"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "zamanlar",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt:
+      "Every summer during her childhood, she ---- to her grandmother's farm, where she would spend hours exploring the orchards.",
+    options: ["would travel", "was travelling", "had travelled", "travels"],
+    correctIndex: 0,
+    explanation:
+      "'Every summer' geçmişte düzenli olarak tekrar eden bir alışkanlığı işaret eder; bu tür tekrarlayan geçmiş eylemler için 'would' kullanılır (cümledeki 'would spend' bunu doğrular). 'Was travelling' tek bir anı, 'had travelled' başka bir geçmiş noktadan önceki bir eylemi, 'travels' ise şimdiki zamanı ifade eder ve hiçbiri tekrarlayan alışkanlık anlamını vermez.",
+    tags: ["would-habitual-past"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "zamanlar",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt:
+      "No sooner ---- the announcement than the stock price began to fall sharply.",
+    options: ["had the CEO made", "the CEO had made", "did the CEO make", "the CEO made"],
+    correctIndex: 0,
+    explanation:
+      "Cümle başında 'no sooner' gibi olumsuz anlamlı bir zarf geldiğinde özne-yardımcı fiil devrik yapısı (inversion) gerekir; 'no sooner ... than' kalıbı ayrıca Past Perfect ister. Bu nedenle 'had the CEO made' doğrudur — diğer seçeneklerin hiçbiri hem devrik yapıyı hem de doğru zamanı bir arada vermez.",
+    tags: ["inversion", "no-sooner-than", "past-perfect"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "zamanlar",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt:
+      "This time next week, the negotiation team ---- the final terms of the merger with their counterparts in Tokyo.",
+    options: ["will be discussing", "will discuss", "will have discussed", "discuss"],
+    correctIndex: 0,
+    explanation:
+      "'This time next week' belirli bir gelecek anında devam etmekte olan bir eylemi işaret eder; bu tür ifadelerle Future Continuous ('will be discussing') kullanılır. 'Will have discussed' o ana kadar TAMAMLANMIŞ bir eylemi ima eder ki bağlamla çelişir; 'will discuss' ise eylemin o anda devam ettiğini değil sadece gerçekleşeceğini belirtir.",
+    tags: ["future-continuous", "this-time-next-week"],
+  },
 
   // ============================================================
   // EDILGEN CATI / PASSIVE VOICE & CAUSATIVES (17)
@@ -2901,6 +2957,45 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
     explanation:
       "Sonuçlar değerlendiren değil değerlendirilen konumundadır ('board' tarafından); bu yüzden basit edilgen çatı olan 'were considered' doğrudur.",
     tags: ["stative-passive"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "edilgen-cati",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The suspect ---- to have fled the country before the investigation even began.",
+    options: ["is believed", "believes", "is believing", "has believed"],
+    correctIndex: 0,
+    explanation:
+      "'Believe' gibi rapor bildiren fiillerle kurulan pasif yapıda 'özne + is/are believed + to have V3' kalıbı kullanılır; şüpheli inanan değil hakkında inanılan konumundadır, bu yüzden 'is believed' doğrudur. 'Believe' bir durum (stative) fiili olduğu için '-ing' hali ('is believing') kullanılmaz.",
+    tags: ["reporting-verb-passive"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "edilgen-cati",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The meeting ---- until further notice due to the ongoing renovations in the conference room.",
+    options: ["has put off", "has been put off", "put off", "is putting off"],
+    correctIndex: 1,
+    explanation:
+      "'Put off' (ertelemek) öbek fiili edilgen çatıda 'be + put off' şeklinde kullanılır; toplantı erteleyen değil ertelenen konumunda olduğu için 'has been put off' doğrudur. 'Has put off' ve 'is putting off' aktif çatıdadır ve toplantının kendi kendini ertelediğini ima eder, ki bu anlamsızdır.",
+    tags: ["phrasal-verb-passive"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "edilgen-cati",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "The bridge, ---- by a team of Ottoman-era engineers, has withstood earthquakes for over two centuries.",
+    options: ["designed", "which designed", "having designed", "was designed"],
+    correctIndex: 0,
+    explanation:
+      "'The bridge' tasarlayan değil tasarlanan konumundadır; sıfat cümleciği kısaltıldığında ('which was designed' → 'designed') sadece V3 hali kalır. 'Was designed' çekimli bir fiildir ve bağlaç olmadan araya sıkıştırılamaz; 'which designed' ve 'having designed' ise aktif anlam taşıdığı için yanlıştır.",
+    tags: ["reduced-relative-clause-passive"],
   },
 
   // ============================================================
@@ -3359,6 +3454,48 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
     explanation:
       "Ana cümlecikteki 'could have escalated' geçmişe dönük bir sonucu (Type 3) işaret eder; devrik Type 3 eşdeğeri olan 'had it not been for' bu zamanla uyumludur, 'if it were not for' ise Type 2 (şimdiki zaman) ile uyumludur ve burada zaman uyuşmazlığı yaratır.",
     tags: ["type-3-but-for"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "kosul-cumleleri",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt:
+      "You may attend the seminar without prior registration, ---- you arrive before the doors close at nine.",
+    options: ["provided that", "even though", "in case", "as though"],
+    correctIndex: 0,
+    explanation:
+      "'Provided that' (şu şartla ki) 'if' ile eşdeğer bir koşul bağlacıdır. 'Even though' zıtlık, 'in case' önlem, 'as though' ise benzetme anlamı taşır ve cümledeki koşul anlamıyla uyuşmaz.",
+    tags: ["provided-that"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "kosul-cumleleri",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt:
+      "If the central bank ---- interest rates again this quarter, many small businesses would struggle to repay their loans.",
+    options: ["were to raise", "raise", "will raise", "has raised"],
+    correctIndex: 0,
+    explanation:
+      "Ana cümlecikteki 'would struggle' Type 2 (şimdiki/gelecek gerçek dışı koşul) yapısını işaret eder; yan cümlecikte 'were to + V0' bu koşulu daha resmi ve pek olası görülmeyen bir şekilde ifade eder. 'Will raise' if-cümleciğinde asla kullanılmaz; 'raise' ve 'has raised' bu yapıyla zaman uyuşmazlığı yaratır.",
+    tags: ["were-to-conditional"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YDS",
+    topicSlug: "kosul-cumleleri",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt:
+      "The team submitted the report just in time; ----, they would have faced a substantial penalty for missing the deadline.",
+    options: ["otherwise", "therefore", "although", "unless"],
+    correctIndex: 0,
+    explanation:
+      "'Otherwise' (aksi takdirde) söylenmeyen bir zıt koşulu ima eder ('eğer raporu zamanında teslim etmeselerdi') ve bu, 'would have faced' ile uyumlu bir Type 3 anlamı yaratır. 'Therefore' sonuç, 'although' zıtlık bağlacıdır; 'unless' ise ayrı bir koşul cümleciği gerektirdiği için burada tek başına kullanılamaz.",
+    tags: ["otherwise-implicit-conditional"],
   },
 
   // ============================================================

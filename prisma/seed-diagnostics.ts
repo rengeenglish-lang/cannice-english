@@ -68,16 +68,23 @@ export async function seedDiagnosticJourney(db: PrismaClient, examTypes: Record<
 
   let created = 0;
   let updated = 0;
-  for (const [index, q] of DIAGNOSTIC_QUESTIONS.entries()) {
+  // Keyed per-topic, not by the question's position in the flat DIAGNOSTIC_QUESTIONS array —
+  // a global array index would shift (and silently break idempotency, creating duplicates)
+  // whenever a new question is inserted anywhere earlier in the file for a different topic.
+  const localIndexByTopic = new Map<string, number>();
+  for (const q of DIAGNOSTIC_QUESTIONS) {
     const topicId = topicIdBySlug.get(q.topicSlug);
-    if (!topicId) throw new Error(`Unknown topicSlug "${q.topicSlug}" on question #${index}`);
+    if (!topicId) throw new Error(`Unknown topicSlug "${q.topicSlug}"`);
+    const localIndex = localIndexByTopic.get(q.topicSlug) ?? 0;
+    localIndexByTopic.set(q.topicSlug, localIndex + 1);
+
     const secondaryTopicIds = (q.secondaryTopicSlugs ?? []).map((slug) => {
       const id = topicIdBySlug.get(slug);
-      if (!id) throw new Error(`Unknown secondaryTopicSlugs entry "${slug}" on question #${index}`);
+      if (!id) throw new Error(`Unknown secondaryTopicSlugs entry "${slug}" on topic "${q.topicSlug}" #${localIndex}`);
       return id;
     });
     const examTypeId = q.examTypeCode ? (examTypes[q.examTypeCode as ExamCode]?.id ?? null) : null;
-    const seedKey = `seed:${q.topicSlug}:${index}`;
+    const seedKey = `seed:${q.topicSlug}:${localIndex}`;
 
     const data = {
       examFamily: q.examFamily,
