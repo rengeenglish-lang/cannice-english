@@ -64,6 +64,7 @@ function SidebarContent({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
+  const isAdmin = role === "ADMIN";
   const active = (href: string) =>
     !href.includes("#") &&
     (pathname === href ||
@@ -73,7 +74,7 @@ function SidebarContent({
   return (
     <>
       <Link
-        href="/dashboard"
+        href={isAdmin ? "/admin" : "/dashboard"}
         onClick={onNavigate}
         className="mb-7 flex items-center gap-3 px-3 py-2 text-white"
       >
@@ -83,15 +84,15 @@ function SidebarContent({
         <span className="text-sm font-extrabold">
           Cannice English
           <span className="mt-1 block text-[10px] font-medium uppercase tracking-widest text-blue-200">
-            Öğrenme alanınız
+            {isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"}
           </span>
         </span>
       </Link>
-      <nav aria-label="Öğrenci menüsü" className="space-y-6">
-        {[
+      <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className="space-y-6">
+        {(isAdmin ? [] : [
           { label: "ÖĞRENME", items: LEARNING },
           { label: "HESABINIZ", items: ACCOUNT },
-        ].map((group) => (
+        ]).map((group) => (
           <div key={group.label}>
             <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
               {group.label}
@@ -160,6 +161,8 @@ export function DashboardShell({
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const close = () => dialog.current?.close();
+  const isAdmin = role === "ADMIN";
+  const menuLabel = isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü";
   return (
     <div className="dashboard-frame lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="dashboard-sidebar hidden p-4 lg:flex">
@@ -168,7 +171,7 @@ export function DashboardShell({
       <dialog
         ref={dialog}
         id="learning-menu"
-        aria-label="Öğrenci menüsü"
+        aria-label={menuLabel}
         onClose={() => setOpen(false)}
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
@@ -190,7 +193,7 @@ export function DashboardShell({
         <div className="flex h-14 items-center gap-3 border-b border-[color:var(--border)] bg-white px-4 lg:hidden">
           <button
             type="button"
-            aria-label="Öğrenci menüsünü aç"
+            aria-label={`${menuLabel}nü aç`}
             aria-expanded={open}
             aria-controls="learning-menu"
             onClick={() => {
@@ -201,7 +204,7 @@ export function DashboardShell({
           >
             <Menu size={21} />
           </button>
-          <span className="text-sm font-bold">Çalışma alanım</span>
+          <span className="text-sm font-bold">{isAdmin ? "Yönetim Paneli" : "Çalışma alanım"}</span>
         </div>
         <main className="dashboard-main">{children}</main>
       </div>
