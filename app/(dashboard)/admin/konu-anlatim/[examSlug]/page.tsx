@@ -40,7 +40,10 @@ export default async function AdminExamTopicsPage({ params }: Props) {
             {topics.map((topic) => (
               <tr key={topic.id}>
                 <td>{topic.displayOrder}</td>
-                <td className="font-bold text-[color:var(--foreground)]">{topic.name}</td>
+                <td className="font-bold text-[color:var(--foreground)]">
+                  {topic.name}
+                  {topic.lessons.length === 0 ? <span className="ml-2 text-xs font-bold text-[color:var(--warning)]">⚠ İçerik yok</span> : null}
+                </td>
                 <td>{topic.category ?? "—"}</td>
                 <td>{topic.questionCount ?? "—"}</td>
                 <td>{topic.lessons.length}</td>
