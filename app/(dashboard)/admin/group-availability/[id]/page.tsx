@@ -12,13 +12,10 @@ import { AdminSlotForm } from "@/components/availability/AdminSlotForm";
 import { AdminSlotActions } from "@/components/availability/AdminSlotActions";
 export default async function EditGroupSlotPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string }>;
 }) {
   const { id } = await params;
-  const { saved } = await searchParams;
   const slot = await getGroupSlot(id, true);
   if (!slot) notFound();
   const [courses, teachers, bookings, series] = await Promise.all([
@@ -45,11 +42,6 @@ export default async function EditGroupSlotPage({
         ← Grup uygunluğu
       </Link>
       <h1 className="page-title my-6">Ders yönetimi</h1>
-      {saved && (
-        <p role="status" className="mb-4 font-bold text-emerald-700">
-          Ders kaydedildi.
-        </p>
-      )}
       <div className="mb-6 rounded-xl bg-blue-50 p-5">
         <p className="font-bold">
           {STATUS_LABELS[slot.availability.status]} · {slot.availability.actual}{" "}

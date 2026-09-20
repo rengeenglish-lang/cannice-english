@@ -249,6 +249,11 @@ export function AdminSlotForm({
           {state.error}
         </p>
       )}
+      {state.success && (
+        <p role="status" className="font-semibold text-emerald-700">
+          {state.success}
+        </p>
+      )}
       <button disabled={pending} className="primary-button">
         {pending
           ? "Kaydediliyor…"

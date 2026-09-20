@@ -7,6 +7,7 @@ import {
   STATUS_LABELS,
 } from "@/lib/availability";
 import type { GroupSlot } from "@/server/services/group-availability.service";
+import { AdminSlotCardButton } from "./AdminSlotCardButton";
 const tones = {
   AVAILABLE: "bg-emerald-50 text-emerald-800",
   ALMOST_FULL: "bg-amber-50 text-amber-900",
@@ -31,8 +32,9 @@ export function SlotCard({
   weekdayOnly?: boolean;
 }) {
   const a = slot.availability;
-  return (
-    <article className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)]">
+
+  const body = (
+    <>
       <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
         {weekdayOnly ? lessonWeekday(slot.startsAt) : lessonDate(slot.startsAt)}
       </p>
@@ -97,23 +99,29 @@ export function SlotCard({
           {a.actual}. Demo sayıları gerçek kontenjanı azaltmaz.
         </p>
       )}
-      <Link
-        href={
-          admin
-            ? `/admin/group-availability/${slot.id}`
-            : `/group-lessons/${slot.id}`
-        }
-        className="primary-button mt-5 w-full"
-      >
-        {admin
-          ? "Dersi yönet"
-          : !a.canEnroll
-            ? "Başka saat seç"
-            : a.simulated && a.status === "FULL"
-              ? "Gerçek uygunluğu gör"
-              : a.status === "ALMOST_FULL"
-                ? "Yerini ayır"
-                : "Gruba katıl"}
+    </>
+  );
+
+  if (admin) {
+    return (
+      <AdminSlotCardButton slotId={slot.id}>
+        {body}
+        <span className="primary-button mt-5 w-full justify-center">Dersi yönet</span>
+      </AdminSlotCardButton>
+    );
+  }
+
+  return (
+    <article className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)]">
+      {body}
+      <Link href={`/group-lessons/${slot.id}`} className="primary-button mt-5 w-full">
+        {!a.canEnroll
+          ? "Başka saat seç"
+          : a.simulated && a.status === "FULL"
+            ? "Gerçek uygunluğu gör"
+            : a.status === "ALMOST_FULL"
+              ? "Yerini ayır"
+              : "Gruba katıl"}
       </Link>
     </article>
   );

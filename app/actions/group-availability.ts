@@ -36,9 +36,8 @@ export async function saveSlotAction(
   form: FormData,
 ): Promise<AvailabilityFormState> {
   await requireAdmin();
-  let saved: string;
   try {
-    saved = await saveGroupSlot(
+    await saveGroupSlot(
       {
         ...Object.fromEntries(form),
         enrollmentOpen: form.get("enrollmentOpen") === "on",
@@ -59,7 +58,12 @@ export async function saveSlotAction(
     };
   }
   refresh();
-  redirect(`/admin/group-availability/${saved}?saved=1`);
+  // Editing (id already set) now happens inline — in the list page's slot dialog, or on the
+  // standalone page — so stay put and show a success message instead of forcing a navigation.
+  // Creating (no id, only reachable from the separate "new slot" page) still redirects, since
+  // there's no existing view to return the admin to.
+  if (id) return { success: "Ders kaydedildi." };
+  redirect(`/admin/group-availability`);
 }
 export async function manageSlotAction(
   id: string,
@@ -71,16 +75,15 @@ export async function manageSlotAction(
     .enum(["open", "close", "cancel", "duplicate", "delete"])
     .safeParse(form.get("operation"));
   if (!op.success) return { error: "Geçersiz işlem." };
-  let target: string | null;
   try {
-    target = await manageGroupSlot(id, op.data);
+    await manageGroupSlot(id, op.data);
   } catch (e) {
     return { error: e instanceof Error ? e.message : "İşlem yapılamadı." };
   }
   refresh();
-  if (op.data === "delete") redirect("/admin/group-availability");
-  if (op.data === "duplicate" && target)
-    redirect(`/admin/group-availability/${target}`);
+  // Both land back on the list — delete removes the card entirely, duplicate adds a new one the
+  // admin can click straight into (consistent with managing everything from the list's dialog).
+  if (op.data === "delete" || op.data === "duplicate") redirect("/admin/group-availability");
   return { success: "Ders güncellendi." };
 }
 export async function demoSlotsAction(
