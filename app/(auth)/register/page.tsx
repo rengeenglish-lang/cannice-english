@@ -1,4 +1,4 @@
-import { slotReturnPath } from "@/lib/availability";
+import { safeNextPath } from "@/lib/availability";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { RegisterForm } from "@/components/auth/RegisterForm";
@@ -6,7 +6,7 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 export const metadata: Metadata = { title: "Hesap Oluştur" };
 
 export default async function RegisterPage({searchParams}: {searchParams: Promise<{next?: string}>}) {
-const next = slotReturnPath((await searchParams).next);
+const next = safeNextPath((await searchParams).next);
   return (
     <div>
       <p className="eyebrow text-center">Öğrenme Yolculuğunuza Başlayın</p>

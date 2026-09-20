@@ -2,9 +2,10 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Calculator, ChevronDown, CircleDollarSign, FilePenLine, Headphones, Home, Info, LayoutList, Mail, Menu, MessageSquareText, Mic2, Newspaper, NotebookTabs, Send, Sparkles, TrendingUp, X } from "lucide-react";
+import { BookOpen, Calculator, ChevronDown, CircleDollarSign, ClipboardCheck, FilePenLine, Headphones, Home, Info, LayoutList, Mail, Menu, MessageSquareText, Mic2, Newspaper, NotebookTabs, Send, Sparkles, TrendingUp, X } from "lucide-react";
+import type { ExamFamily } from "@/lib/generated/prisma/enums";
 
-type MenuProps = { examName: string; slug: string; speakingHref?: string };
+type MenuProps = { examName: string; slug: string; speakingHref?: string; examFamily?: ExamFamily };
 
 export function ExamSectionMenu(props: MenuProps) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -20,20 +21,30 @@ export function ExamSectionMenu(props: MenuProps) {
   </>;
 }
 
-function MenuContent({ examName, slug, speakingHref, onNavigate }: MenuProps & { onNavigate?: () => void }) {
+function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKILLS", onNavigate }: MenuProps & { onNavigate?: () => void }) {
   const overview = `/exams/${slug}#exam-sections`;
-  const groups = [
-    { label: "Full Test", icon: Send, href: `/packages?exam=${slug}`, child: "Deneme ve paketler" },
-    { label: "Reading", icon: BookOpen, href: overview, child: "Bölüm yapısı" },
-    { label: "Listening", icon: Headphones, href: overview, child: "Bölüm yapısı" },
-    { label: "Writing", icon: FilePenLine, href: overview, child: "Bölüm yapısı" },
-    { label: "Speaking", icon: Mic2, href: speakingHref ?? overview, child: speakingHref ? "Speaking pratiği" : "Bölüm yapısı" },
-  ];
+  const isTranslationGrammar = examFamily === "TRANSLATION_GRAMMAR";
+
+  const groups = isTranslationGrammar
+    ? [
+        { label: "Denemeler", icon: Send, href: `/packages?exam=${slug}`, child: "Deneme ve paketler" },
+        { label: "Seviye Tespit", icon: ClipboardCheck, href: "/seviye-tespit", child: "Eksiklerini bul" },
+        { label: "Pratik Sorular", icon: LayoutList, href: "/dashboard/practice", child: "Konu bazlı pratik" },
+        { label: "Konu Anlatımı", icon: NotebookTabs, href: `/konu-anlatim?exam=${slug}`, child: "Gramer ve çeviri konuları" },
+      ]
+    : [
+        { label: "Full Test", icon: Send, href: `/packages?exam=${slug}`, child: "Deneme ve paketler" },
+        { label: "Reading", icon: BookOpen, href: overview, child: "Bölüm yapısı" },
+        { label: "Listening", icon: Headphones, href: overview, child: "Bölüm yapısı" },
+        { label: "Writing", icon: FilePenLine, href: overview, child: "Bölüm yapısı" },
+        { label: "Speaking", icon: Mic2, href: speakingHref ?? overview, child: speakingHref ? "Speaking pratiği" : "Bölüm yapısı" },
+      ];
+
   const links = [
-    { label: "Study Course", icon: NotebookTabs, href: "/konu-anlatim" },
-    { label: "AI Speaking Tutor", icon: Mic2, href: speakingHref ?? overview, badge: "NEW" },
-    { label: "Practice Exercises", icon: LayoutList, href: "/konu-anlatim", badge: "NEW" },
-    { label: "Score History", icon: TrendingUp, href: "/dashboard" },
+    ...(isTranslationGrammar ? [] : [{ label: "Study Course", icon: NotebookTabs, href: "/konu-anlatim" }]),
+    ...(isTranslationGrammar || !speakingHref ? [] : [{ label: "AI Speaking Tutor", icon: Mic2, href: speakingHref, badge: "NEW" }]),
+    ...(isTranslationGrammar ? [] : [{ label: "Practice Exercises", icon: LayoutList, href: "/konu-anlatim", badge: "NEW" }]),
+    { label: isTranslationGrammar ? "İlerleme" : "Score History", icon: TrendingUp, href: isTranslationGrammar ? "/dashboard/history" : "/dashboard" },
     { label: "Score Calculator", icon: Calculator, href: "/tools/score-calculator" },
     { label: "About Us", icon: Info, href: "/about" },
     { label: "Contact Us", icon: Mail, href: "/about" },

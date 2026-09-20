@@ -22,7 +22,7 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
   const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });
   if (!question) notFound();
 
-  const topic = attempt.kind === "MASTERY_CHECK" && attempt.scopeTopicId ? await db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : null;
+  const topic = attempt.scopeTopicId ? await db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : null;
 
   return (
     <main className="px-4 py-10 sm:px-6">

@@ -15,7 +15,9 @@ export type DiagnosticAnalyticsEvent =
   | "roadmap_item_started"
   | "mastery_check_started"
   | "mastery_check_completed"
-  | "roadmap_item_completed";
+  | "roadmap_item_completed"
+  | "practice_started"
+  | "practice_completed";
 
 /** Minimal internal event log — no third-party SDK, this codebase has none and adding one is unnecessary. */
 export async function logEvent(event: DiagnosticAnalyticsEvent, userId?: string, metadata?: Record<string, unknown>) {

@@ -57,6 +57,15 @@ export function listEnrollmentsForUser(userId: string) {
   });
 }
 
+/** Standalone purchased materials (books) — everything else purchasable already has a Course + Enrollment. */
+export function getPurchasedMaterials(userId: string) {
+  return db.orderItem.findMany({
+    where: { order: { userId, status: "PAID" }, product: { category: "BOOK" } },
+    include: { product: { include: { book: true } }, order: true },
+    orderBy: { order: { createdAt: "desc" } },
+  });
+}
+
 export async function toggleLessonProgress(
   enrollmentId: string,
   recordedLessonId: string,

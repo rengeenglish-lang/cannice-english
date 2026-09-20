@@ -1,6 +1,6 @@
 "use server";
 
-import { slotReturnPath } from "@/lib/availability";
+import { safeNextPath } from "@/lib/availability";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 import { db } from "@/server/db";
@@ -15,7 +15,7 @@ export async function signInAction(_prev: SignInFormState, formData: FormData): 
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: slotReturnPath(formData.get("next")) ?? (isStaff ? "/admin" : "/dashboard"),
+      redirectTo: safeNextPath(formData.get("next")) ?? (isStaff ? "/admin" : "/dashboard"),
     });
     return { status: "idle" };
   } catch (error) {

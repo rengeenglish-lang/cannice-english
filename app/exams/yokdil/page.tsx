@@ -17,7 +17,7 @@ export default async function YokdilHubPage() {
 
   return (
     <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)]">
-      <ExamSectionMenu examName="YÖKDİL" slug="yokdil" />
+      <ExamSectionMenu examName="YÖKDİL" slug="yokdil" examFamily="TRANSLATION_GRAMMAR" />
       <main className="min-w-0 bg-white">
       <section className="relative overflow-hidden bg-[#071b34] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(91,79,224,.45),transparent_38%)]" /><div className="relative mx-auto w-full max-w-[1320px] px-4 py-20 sm:px-6 lg:px-8"><span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-blue-100">Üç alan · Tek hedef</span><h1 className="mt-6 max-w-4xl text-4xl font-black tracking-[-.04em] sm:text-6xl">YÖKDİL alanınızı seçin, hazırlığınızı özelleştirin.</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">Sosyal, Sağlık ve Fen Bilimleri için farklılaşan terminoloji ve metin yapılarıyla yalnızca kendi sınavınıza odaklanın.</p></div></section>
       <section id="exam-sections" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"><div className="mb-8"><p className="eyebrow">YÖKDİL branşları</p><h2 className="mt-2 text-3xl font-black">Hazırlanacağınız alanı seçin</h2></div><div className="grid grid-cols-1 gap-5 sm:grid-cols-3">

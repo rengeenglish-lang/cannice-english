@@ -15,30 +15,46 @@ import {
   X,
   Settings,
   Mic2,
+  ClipboardCheck,
+  ListChecks,
+  TrendingUp,
+  History,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
+import type { ExamFamily } from "@/lib/generated/prisma/enums";
 
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
-const LEARNING = [
-  { href: "/dashboard", label: "Çalışma alanım", icon: Home },
-  { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 },
-  { href: "/dashboard#courses", label: "Derslerim", icon: BookOpen },
-  {
-    href: "/dashboard#live-sessions",
-    label: "Canlı ders takvimi",
-    icon: CalendarDays,
-  },
-  { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen },
-  {
-    href: "/tools/score-calculator",
-    label: "Puan hesaplama",
-    icon: Calculator,
-  },
-  { href: "/packages", label: "Kaynakları keşfet", icon: ShoppingBag },
-];
+
+/**
+ * Nav adapts to the student's active exam goal: YDS/YÖKDİL (TRANSLATION_GRAMMAR) students lead
+ * with Seviye Tespit/Pratik/İlerleme (this family's live diagnostic system) and Konu Anlatımı
+ * moves down — not deleted, just de-emphasized, per the "don't display irrelevant features"
+ * requirement. Konuşma pratiği only applies to IELTS/TOEFL, so it's hidden for this family too.
+ * No goal yet, or an ACADEMIC_SKILLS goal, keeps today's generic order (that family has no live
+ * diagnostic/practice/history yet, so showing those links would just dead-end).
+ */
+function learningNav(examFamily: ExamFamily | null) {
+  const base = [{ href: "/dashboard", label: "Çalışma alanım", icon: Home }, { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen }, { href: "/dashboard/live-sessions", label: "Canlı ders takvimi", icon: CalendarDays }];
+  const shared = [
+    { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
+    { href: "/packages", label: "Kaynakları keşfet", icon: ShoppingBag },
+  ];
+  if (examFamily === "TRANSLATION_GRAMMAR") {
+    return [
+      ...base,
+      { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
+      { href: "/dashboard/practice", label: "Pratik Sorular", icon: ListChecks },
+      { href: "/dashboard/progress", label: "İlerleme", icon: TrendingUp },
+      { href: "/dashboard/history", label: "Geçmiş Sorular", icon: History },
+      { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen },
+      ...shared,
+    ];
+  }
+  return [...base, { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
+}
 const ACCOUNT = [
   { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
-  { href: "/dashboard#orders", label: "Siparişlerim", icon: ShoppingBag },
+  { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
   { href: "/faq", label: "Yardım ve sorular", icon: HelpCircle },
 ];
 const STAFF = [
@@ -58,9 +74,11 @@ const STAFF = [
 
 function SidebarContent({
   role,
+  examFamily,
   onNavigate,
 }: {
   role: Role;
+  examFamily: ExamFamily | null;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
@@ -90,7 +108,7 @@ function SidebarContent({
       </Link>
       <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className="space-y-6">
         {(isAdmin ? [] : [
-          { label: "ÖĞRENME", items: LEARNING },
+          { label: "ÖĞRENME", items: learningNav(examFamily) },
           { label: "HESABINIZ", items: ACCOUNT },
         ]).map((group) => (
           <div key={group.label}>
@@ -153,9 +171,11 @@ function SidebarContent({
 }
 export function DashboardShell({
   role,
+  examFamily = null,
   children,
 }: {
   role: Role;
+  examFamily?: ExamFamily | null;
   children: React.ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -166,7 +186,7 @@ export function DashboardShell({
   return (
     <div className="dashboard-frame lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="dashboard-sidebar hidden p-4 lg:flex">
-        <SidebarContent role={role} />
+        <SidebarContent role={role} examFamily={examFamily} />
       </aside>
       <dialog
         ref={dialog}
@@ -186,7 +206,7 @@ export function DashboardShell({
           >
             <X size={22} />
           </button>
-          <SidebarContent role={role} onNavigate={close} />
+          <SidebarContent role={role} examFamily={examFamily} onNavigate={close} />
         </div>
       </dialog>
       <div className="flex min-w-0 flex-col">

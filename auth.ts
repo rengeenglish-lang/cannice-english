@@ -3,12 +3,13 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { verifyPassword } from "@/server/auth/password";
-import { getAuthSecret, validateCanonicalUrl } from "@/server/env";
+import { validateCanonicalUrl } from "@/server/env";
+import { authConfig } from "@/auth.config";
 
 validateCanonicalUrl();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: getAuthSecret(),
+  ...authConfig,
   providers: [
     Credentials({
       credentials: { email: { type: "email" }, password: { type: "password" } },
@@ -24,19 +25,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  session: { strategy: "jwt", maxAge: 8 * 60 * 60, updateAge: 60 * 60 },
-  pages: { signIn: "/sign-in" },
   logger: {
     error(error) {
       if (error.name === "CredentialsSignin" || ("type" in error && error.type === "CredentialsSignin")) return;
       if (process.env.NODE_ENV === "development") console.error(error);
       else console.error(`[auth] ${error.name || "Authentication error"}`);
-    },
-  },
-  callbacks: {
-    session({ session, token }) {
-      if (session.user && token.sub) session.user.id = token.sub;
-      return session;
     },
   },
 });

@@ -7,12 +7,15 @@ type AttemptConfig = {
   masteryCheckQuestions: number;
   /** Fraction of questionsAnswered/masteryCheckQuestions needed to pass a mastery check. */
   masteryPassThreshold: number;
+  /** How many questions in a free-practice set (single topic or "karma" mixed). */
+  practiceSetSize: number;
 };
 
 const DEFAULT_CONFIG: AttemptConfig = {
   questionsPerTopic: 3,
   masteryCheckQuestions: 6,
   masteryPassThreshold: 0.7,
+  practiceSetSize: 10,
 };
 
 const CONFIG_BY_EXAM_CODE: Partial<Record<ExamCode, AttemptConfig>> = {

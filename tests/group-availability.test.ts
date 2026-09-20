@@ -8,7 +8,7 @@ import {
   addDays,
   localDate,
   weekRange,
-  slotReturnPath,
+  safeNextPath,
   groupExamFilter,
   matchesGroupExam,
   groupExamLabel,
@@ -38,14 +38,15 @@ after(async () => {
 test("thresholds, proportional capacity, demo occupancy, timezone and safe return path", () => {
   for (const [n, expected] of [
     [0, "AVAILABLE"],
-    [6, "AVAILABLE"],
-    [7, "ALMOST_FULL"],
+    [5, "AVAILABLE"],
+    [6, "ALMOST_FULL"],
+    [8, "ALMOST_FULL"],
     [9, "ALMOST_FULL"],
     [10, "FULL"],
   ] as const)
     assert.equal(occupancyStatus(n, 10), expected);
-  assert.equal(occupancyStatus(5, 8), "AVAILABLE");
-  assert.equal(occupancyStatus(6, 8), "ALMOST_FULL");
+  assert.equal(occupancyStatus(4, 8), "AVAILABLE");
+  assert.equal(occupancyStatus(5, 8), "ALMOST_FULL");
   const slot = {
     capacity: 10,
     enrollmentOpen: true,
@@ -73,9 +74,13 @@ test("thresholds, proportional capacity, demo occupancy, timezone and safe retur
     "2026-09-21T15:00:00.000Z",
   );
   assert.throws(() => dateAt("2026-02-30"));
-  assert.equal(slotReturnPath("https://evil.example"), undefined);
-  assert.equal(slotReturnPath("//evil.example"), undefined);
-  assert.equal(slotReturnPath("/group-lessons/abc"), "/group-lessons/abc");
+  assert.equal(safeNextPath("https://evil.example"), undefined);
+  assert.equal(safeNextPath("//evil.example"), undefined);
+  assert.equal(safeNextPath("/group-lessons/abc"), "/group-lessons/abc");
+  assert.equal(safeNextPath("/dashboard/plan"), "/dashboard/plan");
+  assert.equal(safeNextPath("/dashboard/practice?topic=zamanlar"), "/dashboard/practice?topic=zamanlar");
+  assert.equal(safeNextPath("javascript:alert(1)"), undefined);
+  assert.equal(safeNextPath(undefined), undefined);
   const mixed = {
     title: "YDS + YÖKDİL Hazırlık",
     examType: { code: "YDS", name: "YDS" },

@@ -39,6 +39,16 @@ async function selectMasteryCheckQuestions(tx: TransactionClient, topicId: strin
   return shuffle(questions).slice(0, config.masteryCheckQuestions).map((q) => q.id);
 }
 
+/** `topicId: null` means "karma" — a mixed sample across every topic in the family, not one topic's pool. */
+async function selectPracticeQuestions(tx: TransactionClient, topicId: string | null, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
+  const config = attemptConfigForExam(examCode);
+  const questions = await tx.diagnosticQuestion.findMany({
+    where: { isActive: true, examFamily, OR: [{ examTypeId: null }, { examTypeId }], ...(topicId ? { topicId } : {}) },
+    select: { id: true },
+  });
+  return shuffle(questions).slice(0, config.practiceSetSize).map((q) => q.id);
+}
+
 export async function findOrCreateFullDiagnosticAttempt(
   userId: string,
   examTypeId: string,
@@ -77,6 +87,31 @@ export async function findOrCreateMasteryCheckAttempt(
     if (questionOrder.length === 0) return { attempt: null, resumed: false };
     const attempt = await tx.diagnosticAttempt.create({
       data: { userId, examTypeId, examFamily, kind: "MASTERY_CHECK", scopeTopicId: topicId, goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}
+
+/** `topicId: null` starts a "karma" (mixed cross-topic) practice set. Practice never touches the roadmap. */
+export async function findOrCreatePracticeAttempt(
+  userId: string,
+  examTypeId: string,
+  examCode: ExamCode,
+  examFamily: ExamFamily,
+  goalId: string,
+  topicId: string | null,
+) {
+  const lockKey = topicId ?? "karma";
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${lockKey} || 'practice'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({
+      where: { userId, kind: "PRACTICE", scopeTopicId: topicId, status: "IN_PROGRESS", examTypeId },
+    });
+    if (existing) return { attempt: existing, resumed: true };
+    const questionOrder = await selectPracticeQuestions(tx, topicId, examFamily, examTypeId, examCode);
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId, examFamily, kind: "PRACTICE", scopeTopicId: topicId, goalId, questionOrder, status: "IN_PROGRESS" },
     });
     return { attempt, resumed: false };
   });

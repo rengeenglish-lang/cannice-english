@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, Check, Clock3, Gauge, Sparkles } from "lucide-react";
 import type { ExamLandingContent } from "@/lib/exam-landing";
+import type { ExamFamily } from "@/lib/generated/prisma/enums";
 import { ExamSectionMenu } from "@/components/exams/ExamSectionMenu";
 
-export function ExamShowcase({ name, slug, content, speakingHref, children }: { name: string; slug: string; content: ExamLandingContent; speakingHref?: string; children?: React.ReactNode }) {
-  return <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)]"><ExamSectionMenu examName={name} slug={slug} speakingHref={speakingHref} /><main className="min-w-0 bg-white">
+export function ExamShowcase({ name, slug, content, speakingHref, examFamily, children }: { name: string; slug: string; content: ExamLandingContent; speakingHref?: string; examFamily?: ExamFamily; children?: React.ReactNode }) {
+  return <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)]"><ExamSectionMenu examName={name} slug={slug} speakingHref={speakingHref} examFamily={examFamily} /><main className="min-w-0 bg-white">
     <section className="relative overflow-hidden border-b border-slate-200 bg-[#071b34] text-white">
       <div className="absolute inset-0 opacity-30" style={{ background: `radial-gradient(circle at 75% 35%, ${content.accent}, transparent 34%)` }} />
       <div className="relative mx-auto grid w-full max-w-[1320px] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-24">

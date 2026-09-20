@@ -11,13 +11,20 @@ export const STATUS_LABELS: Record<AvailabilityStatus, string> = {
   CLOSED: "Kayıt kapalı",
   CANCELLED: "İptal edildi",
 };
+/**
+ * Tiers are calibrated for the standard 10-seat capacity: 0-5 available (green), 6-8 almost full
+ * (yellow), 9 still yellow but effectively urgent (1 spot left — SlotCard's remaining-count copy
+ * already surfaces this once it's correctly classified ALMOST_FULL, no separate status needed),
+ * 10 full (red). Scaled proportionally (60% threshold) so a non-default capacity still lands on
+ * the same tier boundaries a 10-seat group would.
+ */
 export function occupancyStatus(
   count: number,
   capacity: number,
 ): AvailabilityStatus {
   return count >= capacity
     ? "FULL"
-    : count >= Math.ceil(capacity * 0.7)
+    : count >= Math.ceil(capacity * 0.6)
       ? "ALMOST_FULL"
       : "AVAILABLE";
 }
@@ -144,9 +151,13 @@ export function groupExamLabel(product: GroupExamProduct) {
   if (product.examType?.code.startsWith("YOKDIL_")) return "YÖKDİL";
   return product.examType?.name ?? "Genel İngilizce";
 }
-export function slotReturnPath(value: unknown) {
-  return typeof value === "string" &&
-    /^\/group-lessons\/[a-zA-Z0-9_-]+$/.test(value)
-    ? value
-    : undefined;
+/** Validates a `?next=` redirect target is a same-origin internal path — never an absolute or protocol-relative URL. */
+export function safeNextPath(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.startsWith("/")) return undefined;
+  try {
+    const url = new URL(value, "http://internal.local");
+    return url.origin === "http://internal.local" ? url.pathname + url.search : undefined;
+  } catch {
+    return undefined;
+  }
 }

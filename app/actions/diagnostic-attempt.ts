@@ -7,6 +7,7 @@ import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
 import {
   findOrCreateFullDiagnosticAttempt,
   findOrCreateMasteryCheckAttempt,
+  findOrCreatePracticeAttempt,
   submitAnswer,
   getAttempt,
   finishAttempt,
@@ -54,6 +55,25 @@ export async function startMasteryCheckAction(topicId: string) {
   redirect(`/seviye-tespit/sinav/${attempt.id}`);
 }
 
+export async function startPracticeAction(topicId: string | null) {
+  const user = await getAuthContext();
+  if (!user) redirect("/sign-in");
+  const goal = await getActiveGoal(user.id);
+  if (!goal) redirect("/seviye-tespit/hedef");
+
+  const { attempt } = await findOrCreatePracticeAttempt(
+    user.id,
+    goal.examTypeId,
+    goal.examType.code,
+    examFamilyForCode(goal.examType.code),
+    goal.id,
+    topicId,
+  );
+  if (!attempt) return;
+  await logEvent("practice_started", user.id, { attemptId: attempt.id, topicId });
+  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+}
+
 export async function answerAndAdvanceAction(attemptId: string, formData: FormData) {
   const user = await getAuthContext();
   if (!user) redirect("/sign-in");
@@ -68,7 +88,8 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
   const attempt = await getAttempt(attemptId, user.id);
   if (attempt && attempt.currentIndex >= attempt.questionOrder.length) {
     await finishAttempt(attemptId, user.id);
-    await logEvent(attempt.kind === "MASTERY_CHECK" ? "mastery_check_completed" : "diagnostic_completed", user.id, { attemptId });
+    const event = attempt.kind === "MASTERY_CHECK" ? "mastery_check_completed" : attempt.kind === "PRACTICE" ? "practice_completed" : "diagnostic_completed";
+    await logEvent(event, user.id, { attemptId });
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/plan");
     redirect(`/seviye-tespit/sonuc/${attemptId}`);

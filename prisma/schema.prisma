@@ -134,6 +134,7 @@ enum DiagnosticDifficulty {
 enum DiagnosticAttemptKind {
   FULL_DIAGNOSTIC
   MASTERY_CHECK
+  PRACTICE
 }
 
 enum DiagnosticAttemptStatus {

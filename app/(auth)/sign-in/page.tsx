@@ -1,4 +1,4 @@
-import { slotReturnPath } from "@/lib/availability";
+import { safeNextPath } from "@/lib/availability";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SignInForm } from "@/components/auth/SignInForm";
@@ -6,7 +6,7 @@ import { SignInForm } from "@/components/auth/SignInForm";
 export const metadata: Metadata = { title: "Üye Girişi" };
 
 export default async function SignInPage({searchParams}: {searchParams: Promise<{next?: string}>}) {
-const next = slotReturnPath((await searchParams).next);
+const next = safeNextPath((await searchParams).next);
   return (
     <div>
       <p className="eyebrow text-center">Üye Girişi</p>

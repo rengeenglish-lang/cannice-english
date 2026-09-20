@@ -7,6 +7,7 @@ import {
 import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { ExamShowcase } from "@/components/exams/ExamShowcase";
 import { EXAM_LANDING_CONTENT } from "@/lib/exam-landing";
+import { examFamilyForCode } from "@/lib/diagnostics/exam-family";
 
 type Props = { params: Promise<{ examSlug: string }> };
 
@@ -31,6 +32,7 @@ export default async function ExamLandingPage({ params }: Props) {
         slug={exam.slug}
         content={content}
         speakingHref={exam.code === "TOEFL" ? "/dashboard/speaking-practice/toefl" : exam.code === "IELTS" ? "/dashboard/speaking-practice/ielts" : undefined}
+        examFamily={examFamilyForCode(exam.code)}
       >
         <section className="mx-auto w-full max-w-[1320px] px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-7"><p className="eyebrow">Hazırlık seçenekleri</p><h2 className="mt-2 text-3xl font-black tracking-tight">{exam.name} kaynakları</h2></div>

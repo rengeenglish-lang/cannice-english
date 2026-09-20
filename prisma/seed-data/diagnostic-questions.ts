@@ -1,6 +1,6 @@
 export type DiagnosticQuestionSeed = {
   examFamily: "TRANSLATION_GRAMMAR";
-  examTypeCode?: "YDS"; // set this on every question — omit only if truly exam-agnostic (rare)
+  examTypeCode?: "YDS" | "YOKDIL_SOSYAL" | "YOKDIL_SAGLIK" | "YOKDIL_FEN"; // omit for family-wide (shared) questions
   topicSlug: string; // must match a slug from diagnostic-topics.ts
   secondaryTopicSlugs?: string[]; // root-cause grammar tags for non-grammar-labeled questions
   questionType: "MCQ" | "CLOZE" | "TRANSLATION_EN_TR" | "TRANSLATION_TR_EN" | "SENTENCE_COMPLETION" | "PARAGRAPH_COMPLETION" | "READING_COMPREHENSION" | "RESTATEMENT";
@@ -259,7 +259,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -274,7 +273,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -289,7 +287,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -304,7 +301,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["zamanlar", "edilgen-cati"],
     questionType: "CLOZE",
@@ -319,7 +315,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -334,7 +329,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     questionType: "CLOZE",
     difficulty: "ORTA",
@@ -348,7 +342,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["zamanlar"],
     questionType: "CLOZE",
@@ -363,7 +356,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -378,7 +370,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["sifat-cumlecikleri"],
     questionType: "CLOZE",
@@ -393,7 +384,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar", "kosul-cumleleri"],
     questionType: "CLOZE",
@@ -408,7 +398,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["edilgen-cati", "modal-fiiller"],
     questionType: "CLOZE",
@@ -423,7 +412,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -438,7 +426,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -458,7 +445,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     questionType: "CLOZE",
     difficulty: "ZOR",
@@ -472,7 +458,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar", "zamanlar"],
     questionType: "CLOZE",
@@ -487,7 +472,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["kosul-cumleleri"],
     questionType: "CLOZE",
@@ -502,7 +486,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cloze-test",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "CLOZE",
@@ -521,7 +504,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["ulac-mastar"],
     questionType: "SENTENCE_COMPLETION",
@@ -535,7 +517,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "SENTENCE_COMPLETION",
@@ -554,7 +535,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["sifat-cumlecikleri"],
     questionType: "SENTENCE_COMPLETION",
@@ -573,7 +553,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["kosul-cumleleri"],
     questionType: "SENTENCE_COMPLETION",
@@ -592,7 +571,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["ulac-mastar"],
     questionType: "SENTENCE_COMPLETION",
@@ -606,7 +584,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["sifat-cumlecikleri"],
     questionType: "SENTENCE_COMPLETION",
@@ -620,7 +597,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "SENTENCE_COMPLETION",
@@ -639,7 +615,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["zamanlar"],
     questionType: "SENTENCE_COMPLETION",
@@ -658,7 +633,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["zamanlar"],
     questionType: "SENTENCE_COMPLETION",
@@ -673,7 +647,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["baglaclar", "kosul-cumleleri"],
     questionType: "SENTENCE_COMPLETION",
@@ -692,7 +665,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["sifat-cumlecikleri", "edilgen-cati"],
     questionType: "SENTENCE_COMPLETION",
@@ -707,7 +679,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     questionType: "SENTENCE_COMPLETION",
     difficulty: "ORTA",
@@ -720,7 +691,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     questionType: "SENTENCE_COMPLETION",
     difficulty: "ORTA",
@@ -733,7 +703,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["kosul-cumleleri"],
     questionType: "SENTENCE_COMPLETION",
@@ -752,7 +721,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "SENTENCE_COMPLETION",
@@ -771,7 +739,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["edilgen-cati", "modal-fiiller"],
     questionType: "SENTENCE_COMPLETION",
@@ -786,7 +753,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "cumle-tamamlama",
     secondaryTopicSlugs: ["baglaclar", "zamanlar"],
     questionType: "SENTENCE_COMPLETION",
@@ -1460,7 +1426,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "PARAGRAPH_COMPLETION",
@@ -1481,7 +1446,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "PARAGRAPH_COMPLETION",
@@ -1502,7 +1466,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "KOLAY",
@@ -1522,7 +1485,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "KOLAY",
@@ -1542,7 +1504,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "KOLAY",
@@ -1562,7 +1523,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1582,7 +1542,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1602,7 +1561,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1622,7 +1580,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1642,7 +1599,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1662,7 +1618,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1682,7 +1637,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "PARAGRAPH_COMPLETION",
@@ -1703,7 +1657,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ORTA",
@@ -1723,7 +1676,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ZOR",
@@ -1743,7 +1695,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ZOR",
@@ -1763,7 +1714,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     questionType: "PARAGRAPH_COMPLETION",
     difficulty: "ZOR",
@@ -1783,7 +1733,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "paragraf-tamamlama",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "PARAGRAPH_COMPLETION",
@@ -2116,7 +2065,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "RESTATEMENT",
@@ -2135,7 +2083,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "RESTATEMENT",
@@ -2154,7 +2101,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar", "zamanlar"],
     questionType: "RESTATEMENT",
@@ -2173,7 +2119,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar", "kosul-cumleleri"],
     questionType: "RESTATEMENT",
@@ -2192,7 +2137,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["edilgen-cati"],
     questionType: "RESTATEMENT",
@@ -2211,7 +2155,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["modal-fiiller", "kosul-cumleleri"],
     questionType: "RESTATEMENT",
@@ -2230,7 +2173,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["kosul-cumleleri"],
     questionType: "RESTATEMENT",
@@ -2249,7 +2191,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar", "kosul-cumleleri"],
     questionType: "RESTATEMENT",
@@ -2268,7 +2209,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["edilgen-cati"],
     questionType: "RESTATEMENT",
@@ -2287,7 +2227,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar", "zamanlar"],
     questionType: "RESTATEMENT",
@@ -2306,7 +2245,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     questionType: "RESTATEMENT",
     difficulty: "ORTA",
@@ -2324,7 +2262,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["modal-fiiller"],
     questionType: "RESTATEMENT",
@@ -2343,7 +2280,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["modal-fiiller"],
     questionType: "RESTATEMENT",
@@ -2362,7 +2298,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     questionType: "RESTATEMENT",
     difficulty: "ZOR",
@@ -2380,7 +2315,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar", "zamanlar"],
     questionType: "RESTATEMENT",
@@ -2399,7 +2333,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     secondaryTopicSlugs: ["baglaclar"],
     questionType: "RESTATEMENT",
@@ -2418,7 +2351,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "anlamda-en-yakin-cumle",
     questionType: "RESTATEMENT",
     difficulty: "ZOR",
@@ -2440,7 +2372,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2453,7 +2384,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2466,7 +2396,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2479,7 +2408,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2492,7 +2420,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2505,7 +2432,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2519,7 +2445,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2532,7 +2457,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2545,7 +2469,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2558,7 +2481,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2572,7 +2494,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2585,7 +2506,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2599,7 +2519,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2612,7 +2531,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2625,7 +2543,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2638,7 +2555,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2652,7 +2568,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2666,7 +2581,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2680,7 +2594,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2694,7 +2607,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2708,7 +2620,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "zamanlar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2726,7 +2637,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2739,7 +2649,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2752,7 +2661,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2765,7 +2673,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2778,7 +2685,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -2791,7 +2697,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2804,7 +2709,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2818,7 +2722,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2832,7 +2735,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2846,7 +2748,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2865,7 +2766,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2879,7 +2779,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2893,7 +2792,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2906,7 +2804,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2920,7 +2817,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2933,7 +2829,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2946,7 +2841,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -2960,7 +2854,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2973,7 +2866,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -2986,7 +2878,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "edilgen-cati",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3003,7 +2894,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3017,7 +2907,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3030,7 +2919,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3043,7 +2931,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3056,7 +2943,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3069,7 +2955,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3082,7 +2967,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3095,7 +2979,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3108,7 +2991,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3121,7 +3003,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3134,7 +3015,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3147,7 +3027,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3161,7 +3040,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3175,7 +3053,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3188,7 +3065,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3202,7 +3078,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3215,7 +3090,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "sifat-cumlecikleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3233,7 +3107,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3246,7 +3119,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3259,7 +3131,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3272,7 +3143,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3285,7 +3155,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3298,7 +3167,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3311,7 +3179,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3324,7 +3191,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3337,7 +3203,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3350,7 +3215,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3363,7 +3227,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3376,7 +3239,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3389,7 +3251,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3402,7 +3263,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3416,7 +3276,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3430,7 +3289,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3443,7 +3301,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3457,7 +3314,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3471,7 +3327,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3485,7 +3340,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "kosul-cumleleri",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3503,7 +3357,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3516,7 +3369,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3529,7 +3381,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3543,7 +3394,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3556,7 +3406,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3569,7 +3418,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3582,7 +3430,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3601,7 +3448,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3615,7 +3461,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3629,7 +3474,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3643,7 +3487,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3656,7 +3499,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3669,7 +3511,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3682,7 +3523,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3696,7 +3536,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3710,7 +3549,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3724,7 +3562,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "modal-fiiller",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3741,7 +3578,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3753,7 +3589,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3765,7 +3600,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3777,7 +3611,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3789,7 +3622,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3801,7 +3633,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3814,7 +3645,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3827,7 +3657,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3841,7 +3670,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3853,7 +3681,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3866,7 +3693,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3879,7 +3705,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3891,7 +3716,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -3903,7 +3727,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3917,7 +3740,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3930,7 +3752,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3943,7 +3764,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "ulac-mastar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -3961,7 +3781,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   // ============================================================
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3974,7 +3793,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -3987,7 +3805,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -4000,7 +3817,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -4013,7 +3829,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "KOLAY",
@@ -4026,7 +3841,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4039,7 +3853,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4051,7 +3864,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4063,7 +3875,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4077,7 +3888,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4091,7 +3901,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4103,7 +3912,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4115,7 +3923,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ORTA",
@@ -4128,7 +3935,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -4142,7 +3948,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -4155,7 +3960,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -4169,7 +3973,6 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
   },
   {
     examFamily: "TRANSLATION_GRAMMAR",
-    examTypeCode: "YDS",
     topicSlug: "baglaclar",
     questionType: "MCQ",
     difficulty: "ZOR",
@@ -4179,5 +3982,533 @@ export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [
     explanation:
       "Cümlenin devamındaki 'but also' ifadesi 'not only...but also' paralel yapısını gerektirir; bu yüzden cümle başında devrik yapı kuran 'not only' doğrudur.",
     tags: ["not-only-inversion"],
+  },
+
+  // ============================================================
+  // YÖKDİL SAĞLIK — KELİME BİLGİSİ (domain vocabulary, not a YDS clone)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The vaccine trial was halted after several participants showed signs of a severe allergic ----.",
+    options: ["reaction", "infection", "diagnosis", "prescription"],
+    correctIndex: 0,
+    explanation: "'Allergic reaction' (alerjik tepki) tıp dilinde standart bir kalıptır; diğer seçenekler aşı sonrası ani gelişen bir tepkiyi tanımlamaz.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "KOLAY",
+    prompt: "Doctors recommend a balanced diet to ---- the risk of cardiovascular disease.",
+    options: ["reduce", "increase", "diagnose", "cure"],
+    correctIndex: 0,
+    explanation: "Dengeli beslenme riski azaltır; 'increase' anlamca terstir, 'diagnose/cure' bu bağlamda riskle birlikte kullanılmaz.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The surgeon had to ---- the operation after unexpected complications arose.",
+    options: ["postpone", "prescribe", "immunize", "diagnose"],
+    correctIndex: 0,
+    explanation: "Beklenmeyen komplikasyonlar ameliyatın inted ertelenmesini ('postpone') gerektirir; diğer fiiller bu bağlamla uyuşmaz.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Chronic stress can have a detrimental ---- on the immune system.",
+    options: ["effect", "cause", "symptom", "remedy"],
+    correctIndex: 0,
+    explanation: "'Have a detrimental effect on' (olumsuz etkisi olmak) tıp ve bilim metinlerinde sık kullanılan bir kalıptır.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "The clinical trial demonstrated that the new drug is both safe and ---- in treating hypertension.",
+    options: ["effective", "contagious", "terminal", "benign"],
+    correctIndex: 0,
+    explanation: "Bir ilacın tedavide başarılı olması 'effective' (etkili) sıfatıyla ifade edilir; diğer seçenekler bağlamla uyuşmaz.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Patients with a family history of the disease are advised to undergo regular ---- screenings.",
+    options: ["preventive", "contagious", "terminal", "adverse"],
+    correctIndex: 0,
+    explanation: "Risk taşıyanlara önerilen taramalar hastalığı önlemeye yönelik, yani 'preventive' (önleyici) niteliktedir.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "KOLAY",
+    prompt: "The infection spread rapidly because it was highly ----.",
+    options: ["contagious", "chronic", "benign", "sedentary"],
+    correctIndex: 0,
+    explanation: "Hızla yayılan bir enfeksiyon 'contagious' (bulaşıcı) olarak tanımlanır.",
+    tags: ["saglik-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "After years of steady decline, her condition suddenly ---- and she required immediate hospitalization.",
+    options: ["deteriorated", "recovered", "subsided", "improved"],
+    correctIndex: 0,
+    explanation: "Cümledeki 'acil hastaneye yatış gerektirmesi' durumun kötüleştiğini gösterir; bu yüzden 'deteriorated' doğrudur.",
+    tags: ["saglik-vocab"],
+  },
+
+  // ============================================================
+  // YÖKDİL SAĞLIK — OKUMA (domain reading passages)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Antibiotic resistance occurs when bacteria evolve mechanisms that protect them from the drugs designed to kill them. Overprescription and misuse of antibiotics, such as not completing a prescribed course, accelerate this process. Health authorities now warn that some infections may soon become untreatable with existing medications.",
+    prompt: "According to the passage, what is a major cause of antibiotic resistance?",
+    options: [
+      "Improper use of antibiotics, including incomplete courses",
+      "The natural aging process of bacteria",
+      "A shortage of antibiotic medications",
+      "Overly strict prescription regulations",
+    ],
+    correctIndex: 0,
+    explanation: "Parçada 'overprescription and misuse... such as not completing a prescribed course' antibiyotik direncinin nedeni olarak açıkça belirtilmiştir.",
+    tags: ["saglik-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Although vaccination programs have dramatically reduced the incidence of many infectious diseases, vaccine hesitancy has emerged as a significant public health challenge. Misinformation spread through social media, combined with a general decline in trust toward institutions, has led some parents to delay or refuse vaccinating their children, raising the risk of disease outbreaks in under-vaccinated communities.",
+    prompt: "What does the passage identify as a consequence of vaccine hesitancy?",
+    options: [
+      "An increased risk of disease outbreaks in communities with low vaccination rates",
+      "A permanent end to vaccination programs",
+      "Greater trust in public health institutions",
+      "A decrease in the spread of misinformation",
+    ],
+    correctIndex: 0,
+    explanation: "Parçanın son cümlesi, aşı tereddüdünün 'düşük aşılanma oranına sahip topluluklarda salgın riskini artırdığını' belirtir.",
+    tags: ["saglik-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Sleep plays a critical role in memory consolidation, the process by which short-term memories are transformed into long-term ones. During deep sleep stages, the brain replays and strengthens neural connections formed during the day. Chronic sleep deprivation, therefore, has been linked to impaired learning and difficulty retaining new information.",
+    prompt: "What is the main idea of the passage?",
+    options: [
+      "Sleep is essential for converting short-term memories into long-term ones",
+      "The brain is inactive during deep sleep stages",
+      "Sleep deprivation has no effect on learning",
+      "Memory consolidation occurs only while awake",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, uykunun 'kısa süreli anıları uzun süreliye dönüştürme' sürecindeki rolünü anlatır; bu ana fikri özetler.",
+    tags: ["saglik-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SAGLIK",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Obesity is a multifactorial condition influenced by genetics, diet, physical activity levels, and socioeconomic factors. While public health campaigns have traditionally emphasized individual responsibility, researchers increasingly argue that structural factors — such as limited access to affordable healthy food and safe spaces for exercise — play an equally significant role, particularly in low-income communities.",
+    prompt: "What point do the researchers mentioned in the passage make?",
+    options: [
+      "Structural and environmental factors are as important as personal choices in obesity",
+      "Obesity is caused solely by a lack of individual willpower",
+      "Genetics has no influence on obesity",
+      "Public health campaigns have completely solved the obesity problem",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, araştırmacıların 'yapısal faktörlerin bireysel sorumluluk kadar önemli olduğunu' savunduğunu belirtir.",
+    tags: ["saglik-reading"],
+  },
+
+  // ============================================================
+  // YÖKDİL FEN — KELİME BİLGİSİ (domain vocabulary, not a YDS clone)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Scientists were able to ---- the exact cause of the chemical reaction through repeated experiments.",
+    options: ["determine", "exaggerate", "dismiss", "ignore"],
+    correctIndex: 0,
+    explanation: "Tekrarlanan deneylerle bir nedeni tespit etmek 'determine' fiiliyle ifade edilir.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The experiment had to be repeated because the initial results were ----.",
+    options: ["inconclusive", "conclusive", "obvious", "redundant"],
+    correctIndex: 0,
+    explanation: "Bir deneyin tekrar edilmesinin nedeni sonuçların 'kesin olmaması'dır ('inconclusive'); 'conclusive' anlamca tam tersidir.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "KOLAY",
+    prompt: "Renewable energy sources are becoming increasingly ---- as fossil fuel reserves decline.",
+    options: ["viable", "obsolete", "toxic", "irrelevant"],
+    correctIndex: 0,
+    explanation: "Fosil yakıt rezervleri azaldıkça yenilenebilir enerji daha 'uygulanabilir' (viable) hale gelir.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The hypothesis was ---- after the data failed to support it.",
+    options: ["rejected", "confirmed", "patented", "measured"],
+    correctIndex: 0,
+    explanation: "Veriler hipotezi desteklemediğinde hipotez 'reddedilir' (rejected).",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "Researchers observed a significant ---- in temperature during the chemical reaction.",
+    options: ["fluctuation", "stagnation", "dilution", "extinction"],
+    correctIndex: 0,
+    explanation: "Sıcaklıktaki gözlemlenen değişim 'fluctuation' (dalgalanma) ile ifade edilir.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "The new alloy demonstrated remarkable resistance to ---- under extreme heat.",
+    options: ["corrosion", "expansion", "absorption", "saturation"],
+    correctIndex: 0,
+    explanation: "Metallerin aşınmaya karşı direnci 'corrosion resistance' (korozyon direnci) olarak adlandırılır.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The satellite was launched to ---- atmospheric changes over the polar regions.",
+    options: ["monitor", "ignore", "dismantle", "contaminate"],
+    correctIndex: 0,
+    explanation: "Bir uydunun görevi atmosferik değişimleri 'izlemek' (monitor) olabilir; diğer fiiller bağlamla uyuşmaz.",
+    tags: ["fen-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Despite the harsh environmental conditions, the species has managed to ---- for centuries.",
+    options: ["survive", "vanish", "dissolve", "erode"],
+    correctIndex: 0,
+    explanation: "Zorlu koşullara rağmen bir türün var olmaya devam etmesi 'survive' (hayatta kalmak) ile ifade edilir.",
+    tags: ["fen-vocab"],
+  },
+
+  // ============================================================
+  // YÖKDİL FEN — OKUMA (domain reading passages)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Plate tectonics theory explains that the Earth's outer shell is divided into several large plates that float on the semi-fluid mantle beneath them. The movement of these plates, driven by convection currents, is responsible for phenomena such as earthquakes, volcanic activity, and the formation of mountain ranges over millions of years.",
+    prompt: "According to the passage, what causes the movement of tectonic plates?",
+    options: [
+      "Convection currents in the mantle beneath the plates",
+      "The gravitational pull of the moon",
+      "Volcanic eruptions on the surface",
+      "Human activity affecting the Earth's crust",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, levha hareketinin 'convection currents' (konveksiyon akımları) tarafından yönlendirildiğini açıkça belirtir.",
+    tags: ["fen-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Quantum entanglement is a phenomenon in which two or more particles become correlated in such a way that the state of one instantly influences the state of the other, regardless of the distance separating them. Although this appears to violate the classical notion that information cannot travel faster than light, entanglement does not actually allow for faster-than-light communication, since no usable information can be transmitted this way.",
+    prompt: "What does the passage clarify about quantum entanglement?",
+    options: [
+      "It does not permit faster-than-light communication despite appearances",
+      "It proves that information can travel faster than light",
+      "It only occurs when particles are close together",
+      "It has been proven impossible by classical physics",
+    ],
+    correctIndex: 0,
+    explanation: "Parçanın son cümlesi, dolaşıklığın 'ışıktan hızlı iletişime izin vermediğini' açıkça belirtir.",
+    tags: ["fen-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Enzymes are biological catalysts that speed up chemical reactions within living organisms without being consumed in the process. Each enzyme is highly specific, typically catalyzing only one type of reaction or acting on a particular substrate, due to the unique shape of its active site.",
+    prompt: "What makes an enzyme specific to a particular reaction, according to the passage?",
+    options: [
+      "The unique shape of its active site",
+      "Its ability to be consumed during the reaction",
+      "Its capacity to catalyze any type of reaction",
+      "The temperature of the surrounding environment",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, enzimin özgüllüğünün 'aktif bölgesinin benzersiz şekli' sayesinde olduğunu belirtir.",
+    tags: ["fen-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_FEN",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Climate models predict that rising global temperatures will lead to more frequent and intense extreme weather events, including droughts, floods, and heatwaves. However, scientists caution that attributing any single weather event directly to climate change is methodologically complex, since natural variability also plays a substantial role in short-term weather patterns.",
+    prompt: "What caution do scientists express in the passage?",
+    options: [
+      "Linking one specific weather event to climate change is methodologically difficult",
+      "Climate change has no effect on weather patterns",
+      "Extreme weather events are becoming less frequent",
+      "Natural variability has been eliminated as a factor in weather",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, bilim insanlarının 'tek bir hava olayını iklim değişikliğine bağlamanın yöntemsel açıdan karmaşık olduğu' konusunda uyardığını belirtir.",
+    tags: ["fen-reading"],
+  },
+
+  // ============================================================
+  // YÖKDİL SOSYAL — KELİME BİLGİSİ (domain vocabulary, not a YDS clone)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Sociologists argue that rapid urbanization has led to a ---- of traditional community ties.",
+    options: ["breakdown", "strengthening", "celebration", "expansion"],
+    correctIndex: 0,
+    explanation: "Hızlı kentleşmenin geleneksel toplum bağları üzerindeki olumsuz etkisi 'breakdown' (çözülme) ile ifade edilir.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "KOLAY",
+    prompt: "The policy aims to ---- inequality between urban and rural populations.",
+    options: ["reduce", "celebrate", "worsen", "ignore"],
+    correctIndex: 0,
+    explanation: "Bir politikanın amacı genellikle eşitsizliği 'azaltmak' (reduce) olur.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Historians continue to debate the underlying ---- of the political revolution.",
+    options: ["causes", "symptoms", "prescriptions", "remedies"],
+    correctIndex: 0,
+    explanation: "Bir tarihsel olayın altında yatan etmenler 'causes' (nedenler) olarak tartışılır; diğerleri tıbbi bağlama aittir.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The study found a strong ---- between education level and income.",
+    options: ["correlation", "contradiction", "isolation", "extinction"],
+    correctIndex: 0,
+    explanation: "İki değişken arasındaki istatistiksel ilişki 'correlation' (korelasyon) olarak adlandırılır.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "KOLAY",
+    prompt: "Government policies often ---- social behavior in unintended ways.",
+    options: ["influence", "ignore", "exclude", "dismantle"],
+    correctIndex: 0,
+    explanation: "Politikaların toplumsal davranış üzerindeki etkisi 'influence' (etkilemek) ile ifade edilir.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ZOR",
+    prompt: "The economist warned that the new tariffs could ---- economic growth, leading to job losses.",
+    options: ["hinder", "accelerate", "celebrate", "publicize"],
+    correctIndex: 0,
+    explanation: "'İş kayıplarına yol açma' sonucu büyümenin 'engellendiğini' ('hinder') gösterir; 'accelerate' bu olumsuz sonuçla çelişir.",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "Anthropologists study the ---- of belief systems across different cultures.",
+    options: ["diversity", "uniformity", "absence", "prohibition"],
+    correctIndex: 0,
+    explanation: "Antropologların ilgilendiği konu farklı kültürler arasındaki inanç sistemlerinin 'çeşitliliği'dir (diversity).",
+    tags: ["sosyal-vocab"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "kelime-bilgisi",
+    questionType: "MCQ",
+    difficulty: "ORTA",
+    prompt: "The reform sought to ---- greater equality between social classes.",
+    options: ["promote", "discourage", "ignore", "criminalize"],
+    correctIndex: 0,
+    explanation: "Bir reformun amacı genellikle eşitliği 'teşvik etmek' (promote) olur.",
+    tags: ["sosyal-vocab"],
+  },
+
+  // ============================================================
+  // YÖKDİL SOSYAL — OKUMA (domain reading passages)
+  // ============================================================
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Social capital refers to the networks of relationships, trust, and shared norms that enable individuals and communities to work together effectively. Researchers have found that communities with high social capital tend to experience lower crime rates and better public health outcomes, as residents are more likely to look out for one another and cooperate on collective goals.",
+    prompt: "According to the passage, what benefit is associated with high social capital?",
+    options: [
+      "Lower crime rates and improved public health outcomes",
+      "Increased isolation among community members",
+      "A decline in collective cooperation",
+      "Higher rates of individualism",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, yüksek sosyal sermayeye sahip toplulukların 'daha düşük suç oranları ve daha iyi halk sağlığı sonuçları' yaşadığını belirtir.",
+    tags: ["sosyal-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Globalization has intensified economic interdependence among nations, but critics argue that its benefits have not been distributed evenly. While multinational corporations and highly skilled workers have often prospered, many low-skilled workers in developed economies have faced job displacement due to outsourcing and automation, fueling political backlash in several countries.",
+    prompt: "What criticism of globalization is presented in the passage?",
+    options: [
+      "Its economic benefits have not been shared equally among different groups",
+      "It has completely eliminated international trade",
+      "It has benefited low-skilled workers more than corporations",
+      "It has had no political consequences anywhere",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, küreselleşmenin faydalarının 'eşit dağıtılmadığını' ve bazı işçilerin zarar gördüğünü belirtir.",
+    tags: ["sosyal-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ORTA",
+    passageText: "Cultural relativism is the principle that a person's beliefs and practices should be understood based on that person's own culture, rather than judged against the standards of another. While this approach encourages tolerance and reduces ethnocentric bias, critics contend that taken to an extreme, it can make it difficult to critique harmful practices on moral grounds.",
+    prompt: "What criticism of cultural relativism is mentioned in the passage?",
+    options: [
+      "It can make it hard to morally criticize harmful practices if applied too strictly",
+      "It always leads to increased ethnocentric bias",
+      "It has no relationship to tolerance",
+      "It is universally accepted without any critics",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, kültürel görecelilik aşırıya kaçtığında 'zararlı uygulamaları ahlaki açıdan eleştirmeyi zorlaştırabileceğini' belirtir.",
+    tags: ["sosyal-reading"],
+  },
+  {
+    examFamily: "TRANSLATION_GRAMMAR",
+    examTypeCode: "YOKDIL_SOSYAL",
+    topicSlug: "okuma",
+    questionType: "READING_COMPREHENSION",
+    difficulty: "ZOR",
+    passageText: "Political scientists have long debated whether economic development leads to democratization or whether the relationship runs the other way. Modernization theory suggests that as societies grow wealthier and more educated, they tend to develop democratic institutions. However, numerous counterexamples, including wealthy authoritarian states, have led scholars to question whether this relationship is as direct as once assumed.",
+    prompt: "What challenge to modernization theory is presented in the passage?",
+    options: [
+      "The existence of wealthy authoritarian states questions the direct link between wealth and democracy",
+      "All wealthy nations have become democracies without exception",
+      "Education has no connection to political systems",
+      "Modernization theory has been universally accepted by all scholars",
+    ],
+    correctIndex: 0,
+    explanation: "Parça, 'zengin otoriter devletlerin' varlığının modernleşme teorisinin öngördüğü doğrudan ilişkiyi sorgulattığını belirtir.",
+    tags: ["sosyal-reading"],
   },
 ];

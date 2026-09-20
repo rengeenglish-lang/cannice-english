@@ -79,10 +79,22 @@ export default async function GroupLessonPage({
               <BookingForm id={id} booked />
             </>
           ) : !a.canEnroll ? (
-            <p role="status" className="mt-5 font-bold text-rose-700">
-              Bu gruba şu anda kayıt alınmıyor. Aşağıdaki alternatifleri
-              inceleyin.
-            </p>
+            <div className="mt-5">
+              <p role="status" className="font-bold text-rose-700">
+                {a.status === "FULL"
+                  ? "Üzgünüz, bu grup dolmuştur. Lütfen farklı bir ders saati seçiniz."
+                  : "Bu gruba şu anda kayıt alınmıyor. Aşağıdaki alternatifleri inceleyin."}
+              </p>
+              {alternatives.length ? (
+                <a href="#alternatives" className="ghost-button mt-3 inline-flex">
+                  Diğer Saatleri Gör
+                </a>
+              ) : (
+                <Link href="/group-lessons" className="ghost-button mt-3 inline-flex">
+                  Diğer Saatleri Gör
+                </Link>
+              )}
+            </div>
           ) : !user ? (
             <Link
               className="primary-button mt-5"
@@ -110,7 +122,7 @@ export default async function GroupLessonPage({
         </section>
       </div>
       {!a.canEnroll && (
-        <section className="mt-10">
+        <section id="alternatives" className="mt-10 scroll-mt-24">
           <h2 className="mb-4 text-2xl font-bold">En yakın uygun dersler</h2>
           {alternatives.length ? (
             <div className="grid gap-4 md:grid-cols-3">
