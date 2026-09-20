@@ -41,7 +41,7 @@ export default async function ProgressPage() {
       <p className="eyebrow">{goal.examType.name}</p>
       <h1 className="page-title">İlerlemem</h1>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
           { value: `%${overallProgress}`, label: "Genel İlerleme" },
           { value: completedTopicCount, label: "Tamamlanan Konu" },
@@ -70,7 +70,7 @@ export default async function ProgressPage() {
           <h2 className="section-title !text-lg">Geliştirilmesi Gereken Konular</h2>
           <ul className="mt-4 divide-y divide-[color:var(--border)]">
             {weakTopics.map((item) => (
-              <li key={item.id} className="flex items-center justify-between gap-3 py-3">
+              <li key={item.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <span className="text-sm font-bold">{item.topic.name}</span>
                 <SeverityBadge severity={item.severityAtCreation} />
               </li>
@@ -87,7 +87,7 @@ export default async function ProgressPage() {
         {history.length ? (
           <ul className="mt-4 divide-y divide-[color:var(--border)]">
             {history.slice(0, 5).map((a) => (
-              <li key={a.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+              <li key={a.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                 <span className="font-bold">{a.topicName ?? a.examName} · {a.completedAt?.toLocaleDateString("tr-TR")}</span>
                 <span className="font-bold text-[color:var(--accent-strong)]">%{a.percentage}</span>
               </li>

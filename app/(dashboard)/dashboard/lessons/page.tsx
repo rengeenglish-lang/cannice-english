@@ -84,14 +84,14 @@ export default async function LessonsPage() {
           <h2 id="materials-title" className="section-title !text-lg">Satın Aldığım Materyaller</h2>
           <ul className="mt-4 divide-y divide-[color:var(--border)] rounded-2xl border border-[color:var(--border)]">
             {materials.map((item) => (
-              <li key={item.id} className="flex items-center justify-between gap-4 p-4">
-                <span className="text-sm font-bold">{item.titleSnapshot}</span>
+              <li key={item.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <span className="min-w-0 text-sm font-bold">{item.titleSnapshot}</span>
                 {item.product.book?.digitalFileUrl ? (
-                  <a href={item.product.book.digitalFileUrl} target="_blank" rel="noopener noreferrer" className="ghost-button text-xs">
+                  <a href={item.product.book.digitalFileUrl} target="_blank" rel="noopener noreferrer" className="ghost-button self-start text-xs">
                     <Download size={14} aria-hidden="true" /> İndir
                   </a>
                 ) : (
-                  <Link href={`/books/${item.product.slug}`} className="ghost-button text-xs">Görüntüle</Link>
+                  <Link href={`/books/${item.product.slug}`} className="ghost-button self-start text-xs">Görüntüle</Link>
                 )}
               </li>
             ))}

@@ -32,15 +32,17 @@ export default async function OrdersPage() {
         {orders.length ? (
           <ul className="divide-y divide-[color:var(--border)]">
             {orders.map((order) => (
-              <li key={order.id} className="flex flex-wrap items-center justify-between gap-4 py-5">
-                <div className="min-w-0 flex-1">
+              <li key={order.id} className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0 sm:flex-1">
                   <p className="text-sm font-bold">{order.items.map((i) => i.titleSnapshot).join(", ")}</p>
                   <p className="mt-2 text-xs text-[color:var(--muted)]">{STATUS[order.status] ?? "Beklemede"}</p>
                 </div>
-                <strong className="text-sm">{formatTRY(String(order.total))}</strong>
-                <Link href={`/orders/${order.id}/receipt`} className="ghost-button text-xs">
-                  Siparişi görüntüle
-                </Link>
+                <div className="flex items-center justify-between gap-4 sm:justify-end">
+                  <strong className="text-sm">{formatTRY(String(order.total))}</strong>
+                  <Link href={`/orders/${order.id}/receipt`} className="ghost-button text-xs">
+                    Siparişi görüntüle
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

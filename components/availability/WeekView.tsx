@@ -27,15 +27,15 @@ export function WeekView({
     <>
       <nav
         aria-label="Hafta seçimi"
-        className="my-7 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4"
+        className="my-7 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
       >
         <Link
-          className="min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100"
+          className="order-2 min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100 sm:order-1"
           href={href(range.previous)}
         >
           ‹ Önceki hafta
         </Link>
-        <div className="text-center">
+        <div className="order-1 text-center sm:order-2">
           <p className="font-bold">Bu haftanın dersleri</p>
           <Link
             className="text-sm text-blue-700 underline"
@@ -45,13 +45,13 @@ export function WeekView({
           </Link>
         </div>
         <Link
-          className="min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100"
+          className="order-3 min-h-11 rounded-lg px-3 py-3 text-sm font-bold hover:bg-slate-100"
           href={href(range.next)}
         >
           Sonraki hafta ›
         </Link>
         {admin && (
-          <form className="flex w-full flex-wrap items-end gap-2">
+          <form className="order-4 flex w-full flex-wrap items-end gap-2">
             <label className="text-sm font-semibold">
               Tarihe git
               <input

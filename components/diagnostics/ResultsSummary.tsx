@@ -61,7 +61,7 @@ export function ResultsSummary({
         <h2 className="section-title !text-lg">Beceri Analizi</h2>
         <ul className="mt-4 divide-y divide-[color:var(--border)]">
           {topicResults.map((r) => (
-            <li key={r.topicId} className="flex items-center justify-between gap-3 py-3">
+            <li key={r.topicId} className="flex flex-wrap items-center justify-between gap-3 py-3">
               <span className="text-sm font-bold">{r.topic.name}</span>
               <span className="flex items-center gap-3">
                 <span className="text-sm font-semibold text-[color:var(--muted)]">%{Math.round(r.accuracy * 100)}</span>
