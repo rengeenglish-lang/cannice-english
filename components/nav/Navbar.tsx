@@ -90,10 +90,10 @@ export async function Navbar() {
                 Üye Girişi
               </Link>
               <Link
-                href="/#sample"
+                href="/register"
                 className="primary-button whitespace-nowrap"
               >
-                Örnek İçerik
+                Üye Ol
               </Link>
             </>
           )}

@@ -49,8 +49,8 @@ export function MobileNavToggle({ links, isSignedIn, examLinks, yokdilLinks }: {
                 <Link href="/sign-in" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
                   Üye Girişi
                 </Link>
-                <Link href="/#sample" onClick={close} className="primary-button mx-3 mt-2 justify-center">
-                  Örnek İçeriği Dene
+                <Link href="/register" onClick={close} className="primary-button mx-3 mt-2 justify-center">
+                  Üye Ol
                 </Link>
               </>
             )}
