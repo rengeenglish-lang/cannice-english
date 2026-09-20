@@ -49,6 +49,15 @@ async function selectPracticeQuestions(tx: TransactionClient, topicId: string | 
   return shuffle(questions).slice(0, config.practiceSetSize).map((q) => q.id);
 }
 
+async function selectMockExamQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
+  const config = attemptConfigForExam(examCode);
+  const questions = await tx.diagnosticQuestion.findMany({
+    where: { isActive: true, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+    select: { id: true },
+  });
+  return shuffle(questions).slice(0, config.mockExamQuestionCount).map((q) => q.id);
+}
+
 export async function findOrCreateFullDiagnosticAttempt(
   userId: string,
   examTypeId: string,
@@ -117,6 +126,27 @@ export async function findOrCreatePracticeAttempt(
   });
 }
 
+/** A timed, full-length simulation of the real exam paper — one in-progress attempt per exam type at a time. */
+export async function findOrCreateMockExamAttempt(
+  userId: string,
+  examTypeId: string,
+  examCode: ExamCode,
+  examFamily: ExamFamily,
+  goalId: string,
+) {
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${examTypeId} || 'mock'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, examTypeId, kind: "MOCK_EXAM", status: "IN_PROGRESS" } });
+    if (existing) return { attempt: existing, resumed: true };
+    const questionOrder = await selectMockExamQuestions(tx, examFamily, examTypeId, examCode);
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId, examFamily, kind: "MOCK_EXAM", goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}
+
 export function getAttempt(attemptId: string, userId: string) {
   return db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId }, include: { responses: true } });
 }
@@ -125,6 +155,13 @@ export async function submitAnswer(attemptId: string, userId: string, questionId
   const attempt = await db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId } });
   if (!attempt) throw new Error("Deneme bulunamadı.");
   if (attempt.status !== "IN_PROGRESS") throw new Error("Bu deneme artık düzenlenemez.");
+  if (attempt.kind === "MOCK_EXAM") {
+    const examType = await db.examType.findUnique({ where: { id: attempt.examTypeId } });
+    const limitMinutes = examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180;
+    if (Date.now() - attempt.startedAt.getTime() > limitMinutes * 60_000) {
+      throw new Error("Sınav süresi doldu.");
+    }
+  }
   const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });
   if (!question || !attempt.questionOrder.includes(questionId)) throw new Error("Soru bulunamadı.");
 
@@ -181,7 +218,7 @@ export async function finishAttempt(attemptId: string, userId: string) {
     return tx.diagnosticAttempt.update({ where: { id: attemptId }, data: { status: "COMPLETED", completedAt: new Date() } });
   });
 
-  if (attempt.kind === "FULL_DIAGNOSTIC" && attempt.goalId) {
+  if ((attempt.kind === "FULL_DIAGNOSTIC" || attempt.kind === "MOCK_EXAM") && attempt.goalId) {
     await regenerateRoadmap(userId, attempt.goalId);
   } else if (attempt.kind === "MASTERY_CHECK" && attempt.goalId && attempt.scopeTopicId) {
     const result = await db.diagnosticTopicResult.findUnique({ where: { attemptId_topicId: { attemptId, topicId: attempt.scopeTopicId } } });

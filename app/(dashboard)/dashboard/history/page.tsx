@@ -9,6 +9,7 @@ const KIND_LABEL: Record<string, string> = {
   FULL_DIAGNOSTIC: "Seviye Tespit",
   MASTERY_CHECK: "Konu Kontrolü",
   PRACTICE: "Pratik",
+  MOCK_EXAM: "Deneme Sınavı",
 };
 
 export default async function HistoryPage() {

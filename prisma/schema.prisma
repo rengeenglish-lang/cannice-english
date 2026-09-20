@@ -135,6 +135,7 @@ enum DiagnosticAttemptKind {
   FULL_DIAGNOSTIC
   MASTERY_CHECK
   PRACTICE
+  MOCK_EXAM
 }
 
 enum DiagnosticAttemptStatus {

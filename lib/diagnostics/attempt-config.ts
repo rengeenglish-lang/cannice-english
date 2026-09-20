@@ -9,6 +9,9 @@ type AttemptConfig = {
   masteryPassThreshold: number;
   /** How many questions in a free-practice set (single topic or "karma" mixed). */
   practiceSetSize: number;
+  /** Full mock exam length and time limit — matches the real YDS/YÖKDİL paper (80 questions, 180 minutes). */
+  mockExamQuestionCount: number;
+  mockExamTimeLimitMinutes: number;
 };
 
 const DEFAULT_CONFIG: AttemptConfig = {
@@ -16,6 +19,8 @@ const DEFAULT_CONFIG: AttemptConfig = {
   masteryCheckQuestions: 6,
   masteryPassThreshold: 0.7,
   practiceSetSize: 10,
+  mockExamQuestionCount: 80,
+  mockExamTimeLimitMinutes: 180,
 };
 
 const CONFIG_BY_EXAM_CODE: Partial<Record<ExamCode, AttemptConfig>> = {

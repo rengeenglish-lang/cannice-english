@@ -12,6 +12,8 @@ export function ResultsSummary({
   topicResults,
   topPriority,
   recommendationsByTopic,
+  kind = "FULL_DIAGNOSTIC",
+  overall,
 }: {
   examName: string;
   targetScoreRaw: string;
@@ -19,15 +21,27 @@ export function ResultsSummary({
   topicResults: { topicId: string; topic: { name: string }; accuracy: number; severity: DiagnosticSeverity }[];
   topPriority: { topicId: string; topic: { name: string; description: string | null } } | null;
   recommendationsByTopic: Map<string, TopicRecommendations>;
+  kind?: "FULL_DIAGNOSTIC" | "MOCK_EXAM";
+  overall?: { total: number; correct: number; incorrect: number; unanswered: number; percentage: number };
 }) {
+  const isMockExam = kind === "MOCK_EXAM";
   return (
     <div className="space-y-8">
       <header className="text-center">
-        <p className="eyebrow">Seviye Tespit Sonucun</p>
+        <p className="eyebrow">{isMockExam ? "Deneme Sonucun" : "Seviye Tespit Sonucun"}</p>
         <h1 className="page-title">{examName} · Hedef: {targetScoreRaw}</h1>
         {targetDate ? <p className="page-copy mt-2">Hedef tarih: {new Date(targetDate).toLocaleDateString("tr-TR")}</p> : null}
         <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Bu sonuçlar tahmini seviyeni gösterir, resmi sınav puanı değildir.</p>
       </header>
+
+      {isMockExam && overall ? (
+        <section className="dashboard-panel text-center">
+          <p className="text-5xl font-black text-[color:var(--foreground)]">%{overall.percentage}</p>
+          <p className="mt-2 text-sm font-semibold text-[color:var(--muted)]">
+            {overall.correct} doğru · {overall.incorrect} yanlış · {overall.unanswered} boş · {overall.total} soru
+          </p>
+        </section>
+      ) : null}
 
       {topPriority ? (
         <section className="dashboard-panel space-y-4 border-2 border-[color:var(--brand)]">

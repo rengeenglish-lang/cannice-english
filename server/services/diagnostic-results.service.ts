@@ -9,6 +9,7 @@ export async function getResultsForAttempt(attemptId: string, userId: string) {
       examType: true,
       goal: true,
       topicResults: { include: { topic: true }, orderBy: { accuracy: "asc" } },
+      responses: true,
     },
   });
   if (!attempt || attempt.status !== "COMPLETED") return null;
@@ -25,7 +26,12 @@ export async function getResultsForAttempt(attemptId: string, userId: string) {
   const recommendations = await recommendationsForTopics(userId, weakResults.map((r) => r.topicId));
   const recommendationsByTopic = new Map(recommendations.map((r) => [r.topicId, r]));
 
-  return { attempt, weakResults, topPriority, recommendationsByTopic };
+  const total = attempt.questionOrder.length;
+  const correct = attempt.responses.filter((r) => r.isCorrect === true).length;
+  const incorrect = attempt.responses.filter((r) => r.isCorrect === false).length;
+  const overall = { total, correct, incorrect, unanswered: total - correct - incorrect, percentage: total ? Math.round((correct / total) * 100) : 0 };
+
+  return { attempt, weakResults, topPriority, recommendationsByTopic, overall };
 }
 
 /** Every completed attempt (any kind), with totals from the attempt's own responses — not DiagnosticTopicResult, which double-counts via secondaryTopicIds fan-out. */
@@ -40,7 +46,8 @@ export async function getAttemptHistory(userId: string) {
   const topicNameById = new Map(topics.map((t) => [t.id, t.name]));
 
   return attempts.map((a) => {
-    const total = a.responses.length;
+    // Total question count, not just answered count — matters for a mock exam auto-submitted by the timer.
+    const total = a.questionOrder.length;
     const correct = a.responses.filter((r) => r.isCorrect === true).length;
     return {
       id: a.id,

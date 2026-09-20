@@ -19,6 +19,7 @@ import {
   ListChecks,
   TrendingUp,
   History,
+  Timer,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -43,6 +44,7 @@ function learningNav(examFamily: ExamFamily | null) {
     return [
       ...base,
       { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
+      { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
       { href: "/dashboard/practice", label: "Pratik Sorular", icon: ListChecks },
       { href: "/dashboard/progress", label: "İlerleme", icon: TrendingUp },
       { href: "/dashboard/history", label: "Geçmiş Sorular", icon: History },

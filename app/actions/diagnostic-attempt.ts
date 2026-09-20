@@ -8,6 +8,7 @@ import {
   findOrCreateFullDiagnosticAttempt,
   findOrCreateMasteryCheckAttempt,
   findOrCreatePracticeAttempt,
+  findOrCreateMockExamAttempt,
   submitAnswer,
   getAttempt,
   finishAttempt,
@@ -74,6 +75,39 @@ export async function startPracticeAction(topicId: string | null) {
   redirect(`/seviye-tespit/sinav/${attempt.id}`);
 }
 
+export async function startMockExamAction() {
+  const user = await getAuthContext();
+  if (!user) redirect("/sign-in");
+  const goal = await getActiveGoal(user.id);
+  if (!goal) redirect("/seviye-tespit/hedef");
+  if (!hasLiveDiagnostic(goal.examType.code)) return;
+
+  const { attempt, resumed } = await findOrCreateMockExamAttempt(
+    user.id,
+    goal.examTypeId,
+    goal.examType.code,
+    examFamilyForCode(goal.examType.code),
+    goal.id,
+  );
+  if (!attempt) return;
+  await logEvent(resumed ? "mock_exam_resumed" : "mock_exam_started", user.id, { attemptId: attempt.id });
+  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+}
+
+/** Called when the client-side countdown hits zero — finalizes with whatever was answered so far. */
+export async function autoSubmitMockExamAction(attemptId: string) {
+  const user = await getAuthContext();
+  if (!user) redirect("/sign-in");
+  const attempt = await getAttempt(attemptId, user.id);
+  if (attempt && attempt.status === "IN_PROGRESS") {
+    await finishAttempt(attemptId, user.id);
+    await logEvent("mock_exam_completed", user.id, { attemptId, autoSubmitted: true });
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/plan");
+  }
+  redirect(`/seviye-tespit/sonuc/${attemptId}`);
+}
+
 export async function answerAndAdvanceAction(attemptId: string, formData: FormData) {
   const user = await getAuthContext();
   if (!user) redirect("/sign-in");
@@ -84,11 +118,27 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
     return;
   }
 
-  await submitAnswer(attemptId, user.id, questionId, answerRaw);
+  try {
+    await submitAnswer(attemptId, user.id, questionId, answerRaw);
+  } catch (error) {
+    if (error instanceof Error && error.message === "Sınav süresi doldu.") {
+      await finishAttempt(attemptId, user.id);
+      await logEvent("mock_exam_completed", user.id, { attemptId, autoSubmitted: true });
+      redirect(`/seviye-tespit/sonuc/${attemptId}`);
+    }
+    throw error;
+  }
   const attempt = await getAttempt(attemptId, user.id);
   if (attempt && attempt.currentIndex >= attempt.questionOrder.length) {
     await finishAttempt(attemptId, user.id);
-    const event = attempt.kind === "MASTERY_CHECK" ? "mastery_check_completed" : attempt.kind === "PRACTICE" ? "practice_completed" : "diagnostic_completed";
+    const event =
+      attempt.kind === "MASTERY_CHECK"
+        ? "mastery_check_completed"
+        : attempt.kind === "PRACTICE"
+          ? "practice_completed"
+          : attempt.kind === "MOCK_EXAM"
+            ? "mock_exam_completed"
+            : "diagnostic_completed";
     await logEvent(event, user.id, { attemptId });
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/plan");

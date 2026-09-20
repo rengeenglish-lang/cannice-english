@@ -17,7 +17,10 @@ export type DiagnosticAnalyticsEvent =
   | "mastery_check_completed"
   | "roadmap_item_completed"
   | "practice_started"
-  | "practice_completed";
+  | "practice_completed"
+  | "mock_exam_started"
+  | "mock_exam_resumed"
+  | "mock_exam_completed";
 
 /** Minimal internal event log — no third-party SDK, this codebase has none and adding one is unnecessary. */
 export async function logEvent(event: DiagnosticAnalyticsEvent, userId?: string, metadata?: Record<string, unknown>) {
