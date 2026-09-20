@@ -60,6 +60,9 @@ export const productSchema = z.object({
   pageCount: z.coerce.number().int().min(0).optional().or(z.literal("")),
   isbn: z.string().trim().max(40).optional().or(z.literal("")),
   digitalFileUrl: z.string().trim().url().optional().or(z.literal("")),
+  // Diagnostic content tagging — comma-separated DiagnosticTopic slugs, matching the
+  // existing BlogPost.tags convention (formDataToObject can't carry a repeated field name).
+  diagnosticTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
 });
 
 export const moduleSchema = z.object({ title: z.string().trim().min(2).max(160) });
@@ -91,6 +94,61 @@ export const topicLessonSchema = z.object({
   durationMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
   videoUrl: z.string().trim().url().optional().or(z.literal("")),
   contentBody: z.string().trim().max(60000).optional().or(z.literal("")),
+  diagnosticTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+export function parseSlugList(value: string | undefined): string[] {
+  return (value ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+export const diagnosticTopicKindEnum = z.enum(["SKILL", "SUBSKILL", "TOPIC"]);
+export const examFamilyEnum = z.enum(["ACADEMIC_SKILLS", "TRANSLATION_GRAMMAR"]);
+
+export const diagnosticTopicSchema = z.object({
+  slug: z.string().trim().min(2).max(160).regex(/^[a-z0-9-]+$/, "Sadece küçük harf, rakam ve tire kullanın"),
+  name: z.string().trim().min(2).max(160),
+  kind: diagnosticTopicKindEnum,
+  examFamilies: z.array(examFamilyEnum).min(1),
+  parentSlug: z.string().trim().optional().or(z.literal("")),
+  importanceWeight: z.coerce.number().int().min(1).max(5).default(1),
+  estimatedMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
+  description: z.string().trim().max(600).optional().or(z.literal("")),
+  displayOrder: z.coerce.number().int().default(0),
+  dependsOnSlugs: z.string().trim().max(500).optional().or(z.literal("")),
+});
+
+export const diagnosticQuestionTypeEnum = z.enum([
+  "MCQ",
+  "LISTENING_MCQ",
+  "CLOZE",
+  "TRANSLATION_EN_TR",
+  "TRANSLATION_TR_EN",
+  "SENTENCE_COMPLETION",
+  "PARAGRAPH_COMPLETION",
+  "READING_COMPREHENSION",
+  "RESTATEMENT",
+]); // WRITING_TASK/SPEAKING_TASK intentionally omitted — no runner support yet, see plan.
+
+export const diagnosticDifficultyEnum = z.enum(["KOLAY", "ORTA", "ZOR"]);
+
+export const diagnosticQuestionSchema = z.object({
+  examFamily: examFamilyEnum,
+  examTypeId: z.string().trim().optional().or(z.literal("")),
+  topicSlug: z.string().trim().min(1),
+  secondaryTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
+  questionType: diagnosticQuestionTypeEnum,
+  difficulty: diagnosticDifficultyEnum.default("ORTA"),
+  prompt: z.string().trim().min(3).max(2000),
+  passageText: z.string().trim().max(4000).optional().or(z.literal("")),
+  audioUrl: z.string().trim().url().optional().or(z.literal("")),
+  optionsRaw: z.string().trim().min(1), // one option per line, exactly 4 lines
+  correctIndex: z.coerce.number().int().min(0).max(3),
+  explanation: z.string().trim().max(2000).optional().or(z.literal("")),
+  tags: z.string().trim().max(300).optional().or(z.literal("")),
+  isActive: z.coerce.boolean().default(false),
 });
 
 export const liveSessionSchema = z.object({

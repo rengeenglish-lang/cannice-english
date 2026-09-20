@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { productSchema, moduleSchema, lessonSchema, liveSessionSchema } from "@/lib/validation/admin";
+import { resolveDiagnosticTopicIds } from "@/server/services/diagnostic-topic-lookup.service";
 import type { z } from "zod";
 
 const COURSE_CATEGORIES = ["PREP_GROUP", "MOCK_CAMP", "STUDY_PACKAGE", "TRANSLATION_SUPPORT"] as const;
@@ -24,7 +25,7 @@ export function getProductForEdit(id: string) {
   });
 }
 
-function productData(input: z.infer<typeof productSchema>) {
+function productData(input: z.infer<typeof productSchema>, diagnosticTopicIds: string[]) {
   return {
     slug: input.slug,
     title: input.title,
@@ -41,13 +42,15 @@ function productData(input: z.infer<typeof productSchema>) {
     displayOrder: input.displayOrder,
     shortDescription: input.shortDescription || null,
     description: input.description || null,
+    diagnosticTopicIds,
   };
 }
 
 export async function createProduct(raw: Record<string, unknown>) {
   const input = productSchema.parse(raw);
+  const diagnosticTopicIds = await resolveDiagnosticTopicIds(input.diagnosticTopicSlugs);
   return db.$transaction(async (tx) => {
-    const product = await tx.product.create({ data: productData(input) });
+    const product = await tx.product.create({ data: productData(input, diagnosticTopicIds) });
 
     if (input.category === "BOOK") {
       await tx.book.create({
@@ -76,8 +79,9 @@ export async function createProduct(raw: Record<string, unknown>) {
 
 export async function updateProduct(id: string, raw: Record<string, unknown>) {
   const input = productSchema.parse(raw);
+  const diagnosticTopicIds = await resolveDiagnosticTopicIds(input.diagnosticTopicSlugs);
   return db.$transaction(async (tx) => {
-    const product = await tx.product.update({ where: { id }, data: productData(input) });
+    const product = await tx.product.update({ where: { id }, data: productData(input, diagnosticTopicIds) });
 
     if (input.category === "BOOK") {
       await tx.book.upsert({

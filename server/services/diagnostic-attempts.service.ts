@@ -1,0 +1,160 @@
+import "server-only";
+import { db, type TransactionClient } from "@/server/db";
+import type { ExamFamily } from "@/lib/generated/prisma/enums";
+import { attemptConfigForExam } from "@/lib/diagnostics/attempt-config";
+import { isAutoGraded, gradeAutoAnswer } from "@/lib/diagnostics/grading";
+import { severityFromAccuracy } from "@/lib/diagnostics/priority";
+import { regenerateRoadmap, applyMasteryCheckResult } from "@/server/services/study-roadmap.service";
+import type { ExamCode } from "@/lib/generated/prisma/enums";
+
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+async function selectFullDiagnosticQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
+  const config = attemptConfigForExam(examCode);
+  const topics = await tx.diagnosticTopic.findMany({ where: { isActive: true, examFamilies: { has: examFamily } } });
+  const selected: string[] = [];
+  for (const topic of topics) {
+    const questions = await tx.diagnosticQuestion.findMany({
+      where: { isActive: true, topicId: topic.id, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+      select: { id: true },
+    });
+    selected.push(...shuffle(questions).slice(0, config.questionsPerTopic).map((q) => q.id));
+  }
+  return shuffle(selected);
+}
+
+async function selectMasteryCheckQuestions(tx: TransactionClient, topicId: string, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
+  const config = attemptConfigForExam(examCode);
+  const questions = await tx.diagnosticQuestion.findMany({
+    where: { isActive: true, topicId, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+    select: { id: true },
+  });
+  return shuffle(questions).slice(0, config.masteryCheckQuestions).map((q) => q.id);
+}
+
+export async function findOrCreateFullDiagnosticAttempt(
+  userId: string,
+  examTypeId: string,
+  examCode: ExamCode,
+  examFamily: ExamFamily,
+  goalId: string,
+) {
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${goalId} || 'full'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, goalId, kind: "FULL_DIAGNOSTIC", status: "IN_PROGRESS" } });
+    if (existing) return { attempt: existing, resumed: true };
+    const questionOrder = await selectFullDiagnosticQuestions(tx, examFamily, examTypeId, examCode);
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId, examFamily, kind: "FULL_DIAGNOSTIC", goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}
+
+export async function findOrCreateMasteryCheckAttempt(
+  userId: string,
+  examTypeId: string,
+  examCode: ExamCode,
+  examFamily: ExamFamily,
+  goalId: string,
+  topicId: string,
+) {
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${goalId} || ${topicId} || 'mastery'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({
+      where: { userId, goalId, kind: "MASTERY_CHECK", scopeTopicId: topicId, status: "IN_PROGRESS" },
+    });
+    if (existing) return { attempt: existing, resumed: true };
+    const questionOrder = await selectMasteryCheckQuestions(tx, topicId, examFamily, examTypeId, examCode);
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId, examFamily, kind: "MASTERY_CHECK", scopeTopicId: topicId, goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}
+
+export function getAttempt(attemptId: string, userId: string) {
+  return db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId }, include: { responses: true } });
+}
+
+export async function submitAnswer(attemptId: string, userId: string, questionId: string, answerRaw: string) {
+  const attempt = await db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId } });
+  if (!attempt) throw new Error("Deneme bulunamadı.");
+  if (attempt.status !== "IN_PROGRESS") throw new Error("Bu deneme artık düzenlenemez.");
+  const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });
+  if (!question || !attempt.questionOrder.includes(questionId)) throw new Error("Soru bulunamadı.");
+
+  const autoGraded = isAutoGraded(question.questionType);
+  const isCorrect = autoGraded ? gradeAutoAnswer(question.correctAnswer, answerRaw) : null;
+
+  await db.diagnosticResponse.upsert({
+    where: { attemptId_questionId: { attemptId, questionId } },
+    create: { attemptId, questionId, answerRaw, isCorrect, gradingStatus: autoGraded ? null : "PENDING" },
+    update: { answerRaw, isCorrect },
+  });
+
+  const idx = attempt.questionOrder.indexOf(questionId);
+  if (idx === attempt.currentIndex) {
+    await db.diagnosticAttempt.update({
+      where: { id: attemptId },
+      data: { currentIndex: Math.min(attempt.currentIndex + 1, attempt.questionOrder.length) },
+    });
+  }
+}
+
+/** Completes the attempt, computes per-topic results, and triggers the right downstream update (roadmap regen or mastery-check status). */
+export async function finishAttempt(attemptId: string, userId: string) {
+  const attempt = await db.$transaction(async (tx) => {
+    const current = await tx.diagnosticAttempt.findFirst({ where: { id: attemptId, userId }, include: { responses: true } });
+    if (!current) throw new Error("Deneme bulunamadı.");
+    if (current.status === "COMPLETED") return current;
+
+    const questions = await tx.diagnosticQuestion.findMany({ where: { id: { in: current.questionOrder } } });
+    const questionById = new Map(questions.map((q) => [q.id, q]));
+
+    const stats = new Map<string, { answered: number; correct: number }>();
+    for (const response of current.responses) {
+      if (response.isCorrect === null) continue; // ungraded manual response — excluded until reviewed
+      const q = questionById.get(response.questionId);
+      if (!q) continue;
+      for (const topicId of [q.topicId, ...q.secondaryTopicIds]) {
+        const s = stats.get(topicId) ?? { answered: 0, correct: 0 };
+        s.answered += 1;
+        if (response.isCorrect) s.correct += 1;
+        stats.set(topicId, s);
+      }
+    }
+
+    for (const [topicId, s] of stats) {
+      const accuracy = s.correct / s.answered;
+      await tx.diagnosticTopicResult.upsert({
+        where: { attemptId_topicId: { attemptId, topicId } },
+        create: { attemptId, userId, topicId, questionsAnswered: s.answered, questionsCorrect: s.correct, accuracy, severity: severityFromAccuracy(accuracy, s.answered) },
+        update: { questionsAnswered: s.answered, questionsCorrect: s.correct, accuracy, severity: severityFromAccuracy(accuracy, s.answered) },
+      });
+    }
+
+    return tx.diagnosticAttempt.update({ where: { id: attemptId }, data: { status: "COMPLETED", completedAt: new Date() } });
+  });
+
+  if (attempt.kind === "FULL_DIAGNOSTIC" && attempt.goalId) {
+    await regenerateRoadmap(userId, attempt.goalId);
+  } else if (attempt.kind === "MASTERY_CHECK" && attempt.goalId && attempt.scopeTopicId) {
+    const result = await db.diagnosticTopicResult.findUnique({ where: { attemptId_topicId: { attemptId, topicId: attempt.scopeTopicId } } });
+    const config = await db.examType.findUnique({ where: { id: attempt.examTypeId } });
+    const passThreshold = config ? attemptConfigForExam(config.code).masteryPassThreshold : 0.7;
+    const passed = Boolean(result && result.accuracy >= passThreshold);
+    await db.$transaction((tx) => applyMasteryCheckResult(tx, userId, attempt.scopeTopicId!, attempt.goalId!, passed));
+  }
+
+  return attempt;
+}

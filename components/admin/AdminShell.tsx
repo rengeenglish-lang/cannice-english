@@ -48,6 +48,8 @@ const STAFF = [
   ["/admin/products", "Ürünler"],
   ["/admin/group-availability", "Grup uygunluğu"],
   ["/admin/konu-anlatim", "Konu anlatımı"],
+  ["/admin/diagnostik/konular", "Seviye tespit konuları"],
+  ["/admin/diagnostik/sorular", "Seviye tespit soruları"],
   ["/admin/testimonials", "Katılımcı görüşleri"],
   ["/admin/blog", "Blog"],
   ["/admin/submissions", "Değerlendirmeler"],

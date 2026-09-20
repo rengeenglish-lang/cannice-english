@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { examTopicSchema, topicLessonSchema } from "@/lib/validation/admin";
+import { resolveDiagnosticTopicIds } from "@/server/services/diagnostic-topic-lookup.service";
 
 export function listExamTypesForAdmin() {
   return db.examType.findMany({ orderBy: { displayOrder: "asc" } });
@@ -60,6 +61,7 @@ export async function createLesson(topicId: string, raw: Record<string, unknown>
       durationMinutes: input.durationMinutes === "" || input.durationMinutes === undefined ? null : Number(input.durationMinutes),
       videoUrl: input.videoUrl || null,
       contentBody: input.contentBody || null,
+      diagnosticTopicIds: await resolveDiagnosticTopicIds(input.diagnosticTopicSlugs),
     },
   });
 }
@@ -73,6 +75,7 @@ export async function updateLesson(lessonId: string, raw: Record<string, unknown
       durationMinutes: input.durationMinutes === "" || input.durationMinutes === undefined ? null : Number(input.durationMinutes),
       videoUrl: input.videoUrl || null,
       contentBody: input.contentBody || null,
+      diagnosticTopicIds: await resolveDiagnosticTopicIds(input.diagnosticTopicSlugs),
     },
   });
 }

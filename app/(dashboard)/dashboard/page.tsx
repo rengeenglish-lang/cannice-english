@@ -38,6 +38,7 @@ export default async function StudentDashboardPage() {
 <MyGroupBookings userId={user.id} />
 <LearningDashboard
       name={user.name}
+      userId={user.id}
       courses={courses}
       sessions={sessions}
       today={new Date().toISOString()}

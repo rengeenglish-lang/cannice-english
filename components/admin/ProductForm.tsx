@@ -106,6 +106,11 @@ export function ProductForm({
         <label className="label" htmlFor="description">Detaylı Açıklama</label>
         <textarea id="description" name="description" rows={4} defaultValue={product?.description ?? ""} className="auth-input" />
       </div>
+      <div>
+        <label className="label" htmlFor="diagnosticTopicSlugs">Seviye Tespit Konuları (slug, virgülle ayırın)</label>
+        <input id="diagnosticTopicSlugs" name="diagnosticTopicSlugs" placeholder="edilgen-cati, ceviri-tr-en" className="auth-input" />
+        <p className="mt-1 text-xs text-[color:var(--muted)]">Bu ürün, seçilen konularda zayıf çıkan öğrencilere önerilir (grup dersi paketleri dahil).</p>
+      </div>
 
       {category === "BOOK" ? (
         <div className="grid grid-cols-1 gap-4 rounded-2xl border border-[color:var(--border)] p-4 sm:grid-cols-2">

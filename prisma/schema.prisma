@@ -89,6 +89,74 @@ enum CallbackRequestStatus {
 }
 
 // ====================================================================
+// DIAGNOSTIC / PERSONALIZED PREP JOURNEY ENUMS
+// ====================================================================
+
+enum ExamFamily {
+  ACADEMIC_SKILLS
+  TRANSLATION_GRAMMAR
+}
+
+enum GoalTimeframe {
+  EXACT_DATE
+  ONE_MONTH
+  THREE_MONTHS
+  SIX_MONTHS
+  UNKNOWN
+}
+
+enum DiagnosticTopicKind {
+  SKILL
+  SUBSKILL
+  TOPIC
+}
+
+enum DiagnosticQuestionType {
+  MCQ
+  LISTENING_MCQ
+  CLOZE
+  TRANSLATION_EN_TR
+  TRANSLATION_TR_EN
+  SENTENCE_COMPLETION
+  PARAGRAPH_COMPLETION
+  READING_COMPREHENSION
+  RESTATEMENT
+  WRITING_TASK
+  SPEAKING_TASK
+}
+
+enum DiagnosticDifficulty {
+  KOLAY
+  ORTA
+  ZOR
+}
+
+enum DiagnosticAttemptKind {
+  FULL_DIAGNOSTIC
+  MASTERY_CHECK
+}
+
+enum DiagnosticAttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum DiagnosticSeverity {
+  CRITICAL
+  NEEDS_IMPROVEMENT
+  DEVELOPING
+  STRONG
+}
+
+enum RoadmapItemStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  MASTERY_CHECK_REQUIRED
+  COMPLETED
+}
+
+// ====================================================================
 // REFERENCE DATA
 // ====================================================================
 
@@ -112,6 +180,9 @@ model ExamType {
   freeResources      FreeResource[]
   callbackRequests   CallbackRequest[]
   topics             ExamTopic[]
+  examGoals          ExamGoal[]
+  diagnosticAttempts DiagnosticAttempt[]
+  diagnosticQuestions DiagnosticQuestion[]
 
   @@map("exam_types")
 }
@@ -159,20 +230,22 @@ model TopicNote {
 }
 
 model TopicLesson {
-  id              String   @id @default(cuid())
-  topicId         String
-  title           String
-  position        Int      @default(0)
-  videoUrl        String?
-  durationMinutes Int?
-  contentBody     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  topicId            String
+  title              String
+  position           Int      @default(0)
+  videoUrl           String?
+  durationMinutes    Int?
+  contentBody        String?
+  diagnosticTopicIds String[] @default([])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   topic      ExamTopic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
   progresses TopicLessonProgress[]
 
   @@index([topicId])
+  @@index([diagnosticTopicIds], type: Gin)
   @@map("topic_lessons")
 }
 
@@ -218,6 +291,10 @@ model User {
   topicNotes            TopicNote[]
   groupBookings GroupLessonEnrollment[]
   instructedSessions LiveSession[] @relation("SessionInstructor")
+  examGoals            ExamGoal[]
+  diagnosticAttempts   DiagnosticAttempt[]
+  studyRoadmapItems    StudyRoadmapItem[]
+  analyticsEvents      AnalyticsEvent[]
 
   @@map("users")
 }
@@ -227,25 +304,26 @@ model User {
 // ====================================================================
 
 model Product {
-  id               String          @id @default(cuid())
-  slug             String          @unique
-  title            String
-  subtitle         String?
-  category         ProductCategory
-  examTypeId       String?
-  level            ProductLevel?
-  posterImageUrl   String?
-  badgeLabel       String?
-  basePrice        Decimal         @db.Decimal(12, 2)
-  salePrice        Decimal         @db.Decimal(12, 2)
-  currency         String          @default("TRY")
-  isPublished      Boolean         @default(true)
-  isFeatured       Boolean         @default(false)
-  displayOrder     Int             @default(0)
-  shortDescription String?
-  description      String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  id                 String          @id @default(cuid())
+  slug               String          @unique
+  title              String
+  subtitle           String?
+  category           ProductCategory
+  examTypeId         String?
+  level              ProductLevel?
+  posterImageUrl     String?
+  badgeLabel         String?
+  basePrice          Decimal         @db.Decimal(12, 2)
+  salePrice          Decimal         @db.Decimal(12, 2)
+  currency           String          @default("TRY")
+  isPublished        Boolean         @default(true)
+  isFeatured         Boolean         @default(false)
+  displayOrder       Int             @default(0)
+  shortDescription   String?
+  description        String?
+  diagnosticTopicIds String[]        @default([])
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
   examType   ExamType? @relation(fields: [examTypeId], references: [id])
   course     Course?
@@ -255,6 +333,7 @@ model Product {
 
   @@index([category])
   @@index([examTypeId])
+  @@index([diagnosticTopicIds], type: Gin)
   @@map("products")
 }
 
@@ -680,4 +759,199 @@ model GroupLessonEnrollment {
  @@unique([slotId, studentId])
  @@index([slotId, status])
  @@map("group_lesson_enrollments")
+}
+
+// ====================================================================
+// PERSONALIZED PREP JOURNEY (GOAL → DIAGNOSTIC → ROADMAP)
+// ====================================================================
+
+model ExamGoal {
+  id                 String        @id @default(cuid())
+  userId             String
+  examTypeId         String
+  currentScoreRaw    String?
+  currentScoreKnown  Boolean       @default(false)
+  targetScoreRaw     String
+  targetTimeframe    GoalTimeframe @default(UNKNOWN)
+  targetDate         DateTime?
+  isActive           Boolean       @default(true)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examType        ExamType            @relation(fields: [examTypeId], references: [id])
+  attempts        DiagnosticAttempt[]
+  roadmapItems    StudyRoadmapItem[]
+
+  @@index([userId, examTypeId, isActive])
+  @@map("exam_goals")
+}
+
+model DiagnosticTopic {
+  id             String                @id @default(cuid())
+  slug           String                @unique
+  name           String
+  kind           DiagnosticTopicKind
+  examFamilies   ExamFamily[]
+  parentTopicId  String?
+  importanceWeight Int                 @default(1)
+  estimatedMinutes Int?
+  description    String?
+  displayOrder   Int                   @default(0)
+  isActive       Boolean               @default(true)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  parent   DiagnosticTopic?  @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: SetNull)
+  children DiagnosticTopic[] @relation("TopicHierarchy")
+
+  primaryQuestions   DiagnosticQuestion[]     @relation("PrimaryTopic")
+  topicResults       DiagnosticTopicResult[]
+  roadmapItems       StudyRoadmapItem[]
+  dependsOn          TopicDependency[]        @relation("TopicDependents")
+  dependents         TopicDependency[]        @relation("TopicPrerequisites")
+
+  @@index([kind])
+  @@index([parentTopicId])
+  @@map("diagnostic_topics")
+}
+
+model TopicDependency {
+  id               String @id @default(cuid())
+  topicId          String
+  dependsOnTopicId String
+
+  topic          DiagnosticTopic @relation("TopicDependents", fields: [topicId], references: [id], onDelete: Cascade)
+  dependsOnTopic DiagnosticTopic @relation("TopicPrerequisites", fields: [dependsOnTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, dependsOnTopicId])
+  @@map("topic_dependencies")
+}
+
+model DiagnosticQuestion {
+  id                String                 @id @default(cuid())
+  examFamily        ExamFamily
+  examTypeId        String?
+  topicId           String
+  secondaryTopicIds String[]               @default([])
+  questionType      DiagnosticQuestionType
+  difficulty        DiagnosticDifficulty   @default(ORTA)
+  prompt            String
+  passageText       String?
+  audioUrl          String?
+  options           Json?
+  correctAnswer     String?
+  explanation       String?
+  tags              String[]               @default([])
+  isActive          Boolean                @default(false)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  examType  ExamType?        @relation(fields: [examTypeId], references: [id])
+  topic     DiagnosticTopic  @relation("PrimaryTopic", fields: [topicId], references: [id], onDelete: Restrict)
+  responses DiagnosticResponse[]
+
+  @@index([examFamily, topicId, isActive])
+  @@index([examTypeId])
+  @@map("diagnostic_questions")
+}
+
+model DiagnosticAttempt {
+  id            String                  @id @default(cuid())
+  userId        String
+  examTypeId    String
+  examFamily    ExamFamily
+  kind          DiagnosticAttemptKind   @default(FULL_DIAGNOSTIC)
+  scopeTopicId  String?
+  goalId        String?
+  status        DiagnosticAttemptStatus @default(IN_PROGRESS)
+  questionOrder String[]
+  currentIndex  Int                     @default(0)
+  startedAt     DateTime                @default(now())
+  completedAt   DateTime?
+  createdAt     DateTime                @default(now())
+
+  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examType  ExamType                @relation(fields: [examTypeId], references: [id])
+  goal      ExamGoal?               @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  responses DiagnosticResponse[]
+  topicResults DiagnosticTopicResult[]
+
+  @@index([userId, examTypeId, status])
+  @@index([goalId])
+  @@map("diagnostic_attempts")
+}
+
+model DiagnosticResponse {
+  id             String    @id @default(cuid())
+  attemptId      String
+  questionId     String
+  answerRaw      String?
+  isCorrect      Boolean?
+  gradingStatus  SubmissionStatus?
+  teacherFeedback String?
+  score          Decimal?  @db.Decimal(5, 2)
+  reviewedAt     DateTime?
+  answeredAt     DateTime  @default(now())
+
+  attempt  DiagnosticAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question DiagnosticQuestion @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@unique([attemptId, questionId])
+  @@map("diagnostic_responses")
+}
+
+model DiagnosticTopicResult {
+  id               String             @id @default(cuid())
+  attemptId        String
+  userId           String
+  topicId          String
+  questionsAnswered Int
+  questionsCorrect  Int
+  accuracy          Float
+  severity          DiagnosticSeverity
+  createdAt         DateTime           @default(now())
+
+  attempt DiagnosticAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  topic   DiagnosticTopic   @relation(fields: [topicId], references: [id], onDelete: Restrict)
+
+  @@unique([attemptId, topicId])
+  @@index([userId, topicId, createdAt])
+  @@map("diagnostic_topic_results")
+}
+
+model StudyRoadmapItem {
+  id                 String             @id @default(cuid())
+  userId             String
+  goalId             String
+  topicId            String
+  priorityRank       Int
+  severityAtCreation DiagnosticSeverity
+  status             RoadmapItemStatus  @default(NOT_STARTED)
+  sourceAttemptId    String?
+  createdAt          DateTime           @default(now())
+  startedAt          DateTime?
+  completedAt        DateTime?
+
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal  ExamGoal        @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  topic DiagnosticTopic @relation(fields: [topicId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, goalId, topicId])
+  @@index([userId, goalId, priorityRank])
+  @@map("study_roadmap_items")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  event     String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([event, createdAt])
+  @@index([userId, createdAt])
+  @@map("analytics_events")
 }

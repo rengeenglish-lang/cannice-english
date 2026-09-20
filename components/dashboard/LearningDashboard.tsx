@@ -4,11 +4,12 @@ import {
   BookOpen,
   CheckCircle2,
   CalendarDays,
-  Calculator,
   ArrowRight,
 } from "lucide-react";
 import { formatTRY } from "@/lib/pricing";
 import { LiveCalendar, type CalendarSession } from "./LiveCalendar";
+import { PrepJourney } from "./PrepJourney";
+import { TodayWidget } from "./TodayWidget";
 
 export type LearningCourse = {
   id: string;
@@ -29,12 +30,14 @@ const STATUS: Record<string, string> = {
 };
 export function LearningDashboard({
   name,
+  userId,
   courses,
   orders,
   sessions,
   today,
 }: {
   name: string;
+  userId: string;
   courses: LearningCourse[];
   orders: Order[];
   sessions: CalendarSession[];
@@ -92,51 +95,8 @@ export function LearningDashboard({
           </div>
         ))}
       </div>
-      <section aria-labelledby="start-title" className="dashboard-panel">
-        <h2 id="start-title" className="section-title !text-xl">
-          Hazırlık yolunuz
-        </h2>
-        <p className="section-copy text-sm">
-          İhtiyacınız olan adımı seçin; çalışma düzeninizi siz belirleyin.
-        </p>
-        <div className="mt-5 grid gap-3 md:grid-cols-3">
-          {[
-            {
-              href: "/tools/score-calculator",
-              title: "Hedefinizi belirleyin",
-              description: "Sınav puanı hesaplama aracını kullanın.",
-              icon: Calculator,
-            },
-            {
-              href: "/konu-anlatim",
-              title: "Öğrenin ve uygulayın",
-              description: "Konu anlatımları ve örnek sorularla çalışın.",
-              icon: BookOpen,
-            },
-            {
-              href: "/dashboard#live-sessions",
-              title: "Derslerinizi planlayın",
-              description: "Kayıtlı olduğunuz grupların takvimini görün.",
-              icon: CalendarDays,
-            },
-          ].map((step, i) => (
-            <Link
-              key={step.href}
-              href={step.href}
-              className="focus-ring rounded-xl border border-[color:var(--border)] p-5 transition hover:border-[color:var(--accent)] hover:bg-[color:var(--brand-soft)]"
-            >
-              <span className="mb-4 flex items-center justify-between text-[color:var(--accent)]">
-                <step.icon size={22} aria-hidden="true" />
-                <span className="text-xs font-bold">0{i + 1}</span>
-              </span>
-              <h3 className="text-sm font-bold">{step.title}</h3>
-              <p className="mt-2 text-xs leading-6 text-[color:var(--muted)]">
-                {step.description}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <PrepJourney userId={userId} />
+      <TodayWidget userId={userId} />
       <section
         id="courses"
         aria-labelledby="courses-title"

@@ -13,6 +13,7 @@ type Lesson = {
   durationMinutes: number | null;
   videoUrl: string | null;
   contentBody: string | null;
+  diagnosticTopicIds?: string[];
 };
 
 function LessonFields({ lesson }: { lesson?: Lesson }) {
@@ -35,6 +36,11 @@ function LessonFields({ lesson }: { lesson?: Lesson }) {
       <div>
         <label className="label">Ders İçeriği</label>
         <textarea name="contentBody" rows={8} defaultValue={lesson?.contentBody ?? ""} className="auth-input" />
+      </div>
+      <div>
+        <label className="label">Seviye Tespit Konuları (slug, virgülle ayırın)</label>
+        <input name="diagnosticTopicSlugs" placeholder="edilgen-cati, zamanlar" className="auth-input" />
+        <p className="mt-1 text-xs text-[color:var(--muted)]">Bu ders, seçilen konularda zayıf çıkan öğrencilere önerilir.</p>
       </div>
     </>
   );

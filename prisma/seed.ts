@@ -3,6 +3,7 @@ import { randomBytes, scrypt as scryptCallback } from "node:crypto";
 import { promisify } from "node:util";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../lib/generated/prisma/client";
+import { seedDiagnosticJourney } from "./seed-diagnostics";
 
 const scrypt = promisify(scryptCallback);
 
@@ -4593,6 +4594,8 @@ async function main() {
       }
     }
   }
+
+  await seedDiagnosticJourney(db, examTypes);
 
   console.log("Seed complete.");
   console.log(`Teacher login: hoca@canniceenglish.com / ${process.env.CANNICE_TEACHER_PASSWORD || "CanniceTeacher2026!"}`);
