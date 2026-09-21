@@ -38,7 +38,7 @@ export default async function HistoryPage() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-sm font-bold text-[color:var(--accent-strong)]">%{a.percentage}</span>
-                <Link href={`/seviye-tespit/sonuc/${a.id}`} className="ghost-button text-xs">Görüntüle</Link>
+                <Link href={`/dashboard/sonuc/${a.id}`} className="ghost-button text-xs">Görüntüle</Link>
               </div>
             </li>
           ))}

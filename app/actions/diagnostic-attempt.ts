@@ -33,7 +33,7 @@ export async function startFullDiagnosticAction() {
   );
   if (!attempt) return;
   await logEvent(resumed ? "diagnostic_resumed" : "diagnostic_started", user.id, { attemptId: attempt.id });
-  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+  redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
 export async function startMasteryCheckAction(topicId: string) {
@@ -53,7 +53,7 @@ export async function startMasteryCheckAction(topicId: string) {
   );
   if (!attempt) return;
   await logEvent("mastery_check_started", user.id, { attemptId: attempt.id, topicId });
-  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+  redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
 export async function startPracticeAction(topicId: string | null) {
@@ -72,7 +72,7 @@ export async function startPracticeAction(topicId: string | null) {
   );
   if (!attempt) return;
   await logEvent("practice_started", user.id, { attemptId: attempt.id, topicId });
-  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+  redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
 export async function startMockExamAction() {
@@ -91,13 +91,13 @@ export async function startMockExamAction() {
   );
   if (!attempt) return;
   await logEvent(resumed ? "mock_exam_resumed" : "mock_exam_started", user.id, { attemptId: attempt.id });
-  redirect(`/seviye-tespit/sinav/${attempt.id}`);
+  redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
 /** Called when the client-side countdown hits zero — finalizes with whatever was answered so far. */
 export async function autoSubmitMockExamAction(attemptId: string) {
   const user = await getAuthContext();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/seviye-tespit/sinav/${attemptId}`)}`);
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/dashboard/sinav/${attemptId}`)}`);
   const attempt = await getAttempt(attemptId, user.id);
   if (attempt && attempt.status === "IN_PROGRESS") {
     await finishAttempt(attemptId, user.id);
@@ -105,16 +105,16 @@ export async function autoSubmitMockExamAction(attemptId: string) {
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/plan");
   }
-  redirect(`/seviye-tespit/sonuc/${attemptId}`);
+  redirect(`/dashboard/sonuc/${attemptId}`);
 }
 
 export async function answerAndAdvanceAction(attemptId: string, formData: FormData) {
   const user = await getAuthContext();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/seviye-tespit/sinav/${attemptId}`)}`);
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/dashboard/sinav/${attemptId}`)}`);
   const questionId = String(formData.get("questionId") ?? "");
   const answerRaw = String(formData.get("answerRaw") ?? "");
   if (!questionId || !answerRaw) {
-    revalidatePath(`/seviye-tespit/sinav/${attemptId}`);
+    revalidatePath(`/dashboard/sinav/${attemptId}`);
     return;
   }
 
@@ -124,7 +124,7 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
     if (error instanceof Error && error.message === "Sınav süresi doldu.") {
       await finishAttempt(attemptId, user.id);
       await logEvent("mock_exam_completed", user.id, { attemptId, autoSubmitted: true });
-      redirect(`/seviye-tespit/sonuc/${attemptId}`);
+      redirect(`/dashboard/sonuc/${attemptId}`);
     }
     throw error;
   }
@@ -142,9 +142,9 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
     await logEvent(event, user.id, { attemptId });
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/plan");
-    redirect(`/seviye-tespit/sonuc/${attemptId}`);
+    redirect(`/dashboard/sonuc/${attemptId}`);
   }
-  revalidatePath(`/seviye-tespit/sinav/${attemptId}`);
+  revalidatePath(`/dashboard/sinav/${attemptId}`);
 }
 
 export async function startRoadmapItemAction(itemId: string) {

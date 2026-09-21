@@ -41,7 +41,7 @@ export async function Navbar() {
                   <Link href={`/exams/${exam.slug}`} className="text-base font-black" style={{ color: exam.color }}>{exam.name}</Link>
                   <div className="mt-3 space-y-1 text-xs font-bold text-slate-600">
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examLearningHref(exam.slug)}>Konu anlatımları</Link>
-                    <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={exam.slug === "ielts" || exam.slug === "toefl" ? `/dashboard/speaking-practice/${exam.slug}` : `/exams/${exam.slug}#exam-sections`}>Pratik</Link>
+                    <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href="/dashboard/practice">Pratik</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examGroupHref(exam.slug)}>Grup dersleri</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examMaterialHref(exam.slug)}>Materyaller</Link>
                   </div>

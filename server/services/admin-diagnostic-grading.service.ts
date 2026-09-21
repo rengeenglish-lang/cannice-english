@@ -40,7 +40,7 @@ export async function reviewDiagnosticResponse(id: string, raw: Record<string, u
   await createNotification(response.attempt.userId, {
     title: "Yazma sorunuz değerlendirildi",
     body: input.score !== undefined && input.score !== "" ? `Puanınız: ${input.score}` : undefined,
-    href: `/seviye-tespit/sonuc/${response.attemptId}`,
+    href: `/dashboard/sonuc/${response.attemptId}`,
   });
   return response;
 }

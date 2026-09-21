@@ -13,7 +13,7 @@ export default async function SeviyeTespitHubPage() {
   const inProgress = await db.diagnosticAttempt.findFirst({
     where: { userId: user.id, goalId: goal.id, kind: "FULL_DIAGNOSTIC", status: "IN_PROGRESS" },
   });
-  if (inProgress) redirect(`/seviye-tespit/sinav/${inProgress.id}`);
+  if (inProgress) redirect(`/dashboard/sinav/${inProgress.id}`);
 
   const completed = await db.diagnosticAttempt.findFirst({
     where: { userId: user.id, goalId: goal.id, kind: "FULL_DIAGNOSTIC", status: "COMPLETED" },

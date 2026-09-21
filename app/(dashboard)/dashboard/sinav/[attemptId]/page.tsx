@@ -4,8 +4,13 @@ import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { DiagnosticRunner } from "@/components/diagnostics/DiagnosticRunner";
 import { attemptConfigForExam } from "@/lib/diagnostics/attempt-config";
+import { ATTEMPT_KIND_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
 
-export const metadata: Metadata = { title: "Seviye Tespit Sınavı" };
+export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
+  const { attemptId } = await params;
+  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true } });
+  return { title: attempt ? ATTEMPT_KIND_TITLES[attempt.kind] : "Sınav" };
+}
 
 export default async function DiagnosticRunnerPage({ params }: { params: Promise<{ attemptId: string }> }) {
   const { attemptId } = await params;
@@ -14,10 +19,10 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
 
   const attempt = await db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId: user.id } });
   if (!attempt) notFound();
-  if (attempt.status === "COMPLETED") redirect(`/seviye-tespit/sonuc/${attempt.id}`);
+  if (attempt.status === "COMPLETED") redirect(`/dashboard/sonuc/${attempt.id}`);
   if (attempt.status === "ABANDONED") redirect("/seviye-tespit");
 
-  if (attempt.currentIndex >= attempt.questionOrder.length) redirect(`/seviye-tespit/sonuc/${attempt.id}`);
+  if (attempt.currentIndex >= attempt.questionOrder.length) redirect(`/dashboard/sonuc/${attempt.id}`);
 
   const questionId = attempt.questionOrder[attempt.currentIndex];
   const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });

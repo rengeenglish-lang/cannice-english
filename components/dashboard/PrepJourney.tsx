@@ -81,7 +81,7 @@ export async function PrepJourney({ userId }: { userId: string }) {
         <div className="rounded-xl border border-[color:var(--border)] p-4">
           <p className="text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Son Seviye Tespiti</p>
           <p className="mt-1 text-lg font-extrabold">{completedDiagnostic.completedAt?.toLocaleDateString("tr-TR")}</p>
-          <Link href={`/seviye-tespit/sonuc/${completedDiagnostic.id}`} className="mt-1 inline-block text-xs font-semibold text-[color:var(--accent-strong)] hover:underline">
+          <Link href={`/dashboard/sonuc/${completedDiagnostic.id}`} className="mt-1 inline-block text-xs font-semibold text-[color:var(--accent-strong)] hover:underline">
             Sonuçları Gör
           </Link>
         </div>

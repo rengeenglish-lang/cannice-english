@@ -6,8 +6,13 @@ import { getResultsForAttempt, getPracticeResults } from "@/server/services/diag
 import { ResultsSummary } from "@/components/diagnostics/ResultsSummary";
 import { PracticeResults } from "@/components/diagnostics/PracticeResults";
 import { logEvent } from "@/lib/diagnostics/analytics";
+import { ATTEMPT_KIND_RESULT_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
 
-export const metadata: Metadata = { title: "Seviye Tespit Sonucun" };
+export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
+  const { attemptId } = await params;
+  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true } });
+  return { title: attempt ? ATTEMPT_KIND_RESULT_TITLES[attempt.kind] : "Sonuç" };
+}
 
 export default async function DiagnosticResultsPage({ params }: { params: Promise<{ attemptId: string }> }) {
   const { attemptId } = await params;
@@ -16,7 +21,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
 
   const attemptPreview = await db.diagnosticAttempt.findFirst({ where: { id: attemptId, userId: user.id } });
   if (!attemptPreview) notFound();
-  if (attemptPreview.status === "IN_PROGRESS") redirect(`/seviye-tespit/sinav/${attemptId}`);
+  if (attemptPreview.status === "IN_PROGRESS") redirect(`/dashboard/sinav/${attemptId}`);
 
   if (attemptPreview.kind === "PRACTICE") {
     const practice = await getPracticeResults(attemptId, user.id);
