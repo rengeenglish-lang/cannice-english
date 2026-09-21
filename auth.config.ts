@@ -2,9 +2,9 @@ import type { NextAuthConfig } from "next-auth";
 import { getAuthSecret } from "@/server/env";
 
 /**
- * Edge-safe subset of the NextAuth config — no Credentials provider (which needs Prisma/scrypt,
- * both Node-only). Shared by the full `auth.ts` (API routes/Server Components) and `middleware.ts`
- * (Edge runtime), so both read the same session cookie the same way.
+ * Minimal subset of the NextAuth config — no Credentials provider (which needs Prisma/scrypt).
+ * Shared by the full `auth.ts` (API routes/Server Components) and `proxy.ts` (the lean per-request
+ * session check), so both read the same session cookie the same way.
  */
 export const authConfig = {
   secret: getAuthSecret(),

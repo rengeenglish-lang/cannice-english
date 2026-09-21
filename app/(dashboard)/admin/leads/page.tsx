@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { db } from "@/server/db";
-import { markLeadContactedAction } from "@/app/actions/admin-leads";
+import { markLeadContactedAction, markLeadClosedAction } from "@/app/actions/admin-leads";
 
 export const metadata: Metadata = { title: "Gelen Talepler" };
 
@@ -27,10 +27,15 @@ export default async function AdminLeadsPage() {
                     {lead.status === "NEW" ? "Yeni" : lead.status === "CONTACTED" ? "Arandı" : "Kapatıldı"}
                   </span>
                 </td>
-                <td>
+                <td className="whitespace-nowrap">
                   {lead.status === "NEW" ? (
-                    <form action={async () => { "use server"; await markLeadContactedAction(lead.id); }}>
+                    <form action={async () => { "use server"; await markLeadContactedAction(lead.id); }} className="inline">
                       <button type="submit" className="ghost-button">Arandı olarak işaretle</button>
+                    </form>
+                  ) : null}
+                  {lead.status !== "CLOSED" ? (
+                    <form action={async () => { "use server"; await markLeadClosedAction(lead.id); }} className="inline">
+                      <button type="submit" className="ghost-button text-[color:var(--danger)]">Kapat</button>
                     </form>
                   ) : null}
                 </td>

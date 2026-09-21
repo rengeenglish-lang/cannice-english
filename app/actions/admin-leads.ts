@@ -11,3 +11,10 @@ export async function markLeadContactedAction(leadId: string) {
   await db.callbackRequest.update({ where: { id: leadId }, data: { status: "CONTACTED", contactedAt: new Date() } });
   revalidatePath("/admin/leads");
 }
+
+export async function markLeadClosedAction(leadId: string) {
+  const user = await getAuthContext();
+  if (!user || (user.role !== "TEACHER" && user.role !== "ADMIN")) forbidden();
+  await db.callbackRequest.update({ where: { id: leadId }, data: { status: "CLOSED" } });
+  revalidatePath("/admin/leads");
+}
