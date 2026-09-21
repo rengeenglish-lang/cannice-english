@@ -8,8 +8,10 @@ import { ATTEMPT_KIND_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
-  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true } });
-  return { title: attempt ? ATTEMPT_KIND_TITLES[attempt.kind] : "Sınav" };
+  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true, mockSetNumber: true } });
+  if (!attempt) return { title: "Sınav" };
+  const title = attempt.kind === "MOCK_EXAM" && attempt.mockSetNumber ? `${ATTEMPT_KIND_TITLES[attempt.kind]} ${attempt.mockSetNumber}` : ATTEMPT_KIND_TITLES[attempt.kind];
+  return { title };
 }
 
 export default async function DiagnosticRunnerPage({ params }: { params: Promise<{ attemptId: string }> }) {
@@ -47,6 +49,7 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
         topicName={topic?.name}
         startedAt={attempt.startedAt.toISOString()}
         timeLimitMinutes={timeLimitMinutes}
+        mockSetNumber={attempt.mockSetNumber}
       />
     </main>
   );

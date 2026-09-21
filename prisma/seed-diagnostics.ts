@@ -2,6 +2,32 @@ import type { PrismaClient } from "../lib/generated/prisma/client";
 import type { ExamCode } from "../lib/generated/prisma/enums";
 import { DIAGNOSTIC_TOPICS } from "./seed-data/diagnostic-topics";
 import { DIAGNOSTIC_QUESTIONS } from "./seed-data/diagnostic-questions";
+import { MOCK_GRAMMAR_SHARED } from "./seed-data/mock-exams/grammar-shared";
+import { MOCK_YDS } from "./seed-data/mock-exams/yds";
+import { MOCK_YOKDIL_SAGLIK } from "./seed-data/mock-exams/yokdil-saglik";
+import { MOCK_YOKDIL_FEN } from "./seed-data/mock-exams/yokdil-fen";
+import { MOCK_YOKDIL_SOSYAL } from "./seed-data/mock-exams/yokdil-sosyal";
+import { MOCK_IELTS } from "./seed-data/mock-exams/ielts";
+import { MOCK_TOEFL } from "./seed-data/mock-exams/toefl";
+import { MOCK_PTE } from "./seed-data/mock-exams/pte";
+
+/**
+ * Every DIAGNOSTIC_QUESTIONS-shaped array is concatenated in this fixed order before seeding.
+ * New arrays must be APPENDED here, never spliced earlier — seedKey is `topicSlug:<Nth
+ * occurrence of that topicSlug in the merged array>`, so inserting rows before existing
+ * same-topic rows would renumber (and duplicate) everything after them.
+ */
+const ALL_DIAGNOSTIC_QUESTIONS = [
+  ...DIAGNOSTIC_QUESTIONS,
+  ...MOCK_GRAMMAR_SHARED,
+  ...MOCK_YDS,
+  ...MOCK_YOKDIL_SAGLIK,
+  ...MOCK_YOKDIL_FEN,
+  ...MOCK_YOKDIL_SOSYAL,
+  ...MOCK_IELTS,
+  ...MOCK_TOEFL,
+  ...MOCK_PTE,
+];
 
 /**
  * Seeds the diagnostic topic tree, prerequisite edges, and question bank.
@@ -71,11 +97,12 @@ export async function seedDiagnosticJourney(db: PrismaClient, examTypes: Record<
 
   let created = 0;
   let updated = 0;
-  // Keyed per-topic, not by the question's position in the flat DIAGNOSTIC_QUESTIONS array —
-  // a global array index would shift (and silently break idempotency, creating duplicates)
-  // whenever a new question is inserted anywhere earlier in the file for a different topic.
+  // Keyed per-topic, not by the question's position in the merged array — a global array index
+  // would shift (and silently break idempotency, creating duplicates) whenever a new question
+  // is inserted anywhere earlier for a different topic. New arrays must only ever be APPENDED
+  // to ALL_DIAGNOSTIC_QUESTIONS above, never spliced in earlier.
   const localIndexByTopic = new Map<string, number>();
-  for (const q of DIAGNOSTIC_QUESTIONS) {
+  for (const q of ALL_DIAGNOSTIC_QUESTIONS) {
     const topicId = topicIdBySlug.get(q.topicSlug);
     if (!topicId) throw new Error(`Unknown topicSlug "${q.topicSlug}"`);
     const localIndex = localIndexByTopic.get(q.topicSlug) ?? 0;
@@ -102,6 +129,7 @@ export async function seedDiagnosticJourney(db: PrismaClient, examTypes: Record<
       correctAnswer: String(q.correctIndex),
       explanation: q.explanation ?? null,
       tags: [...(q.tags ?? []), seedKey],
+      mockSetNumber: q.mockSetNumber ?? null,
       isActive: true,
     };
 

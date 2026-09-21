@@ -13,6 +13,7 @@ export function ResultsSummary({
   topPriority,
   recommendationsByTopic,
   kind = "FULL_DIAGNOSTIC",
+  mockSetNumber,
   overall,
 }: {
   examName: string;
@@ -22,13 +23,14 @@ export function ResultsSummary({
   topPriority: { topicId: string; topic: { name: string; description: string | null } } | null;
   recommendationsByTopic: Map<string, TopicRecommendations>;
   kind?: "FULL_DIAGNOSTIC" | "MOCK_EXAM";
+  mockSetNumber?: number | null;
   overall?: { total: number; correct: number; incorrect: number; pendingReview: number; unanswered: number; percentage: number };
 }) {
   const isMockExam = kind === "MOCK_EXAM";
   return (
     <div className="space-y-8">
       <header className="text-center">
-        <p className="eyebrow">{isMockExam ? "Deneme Sonucun" : "Seviye Tespit Sonucun"}</p>
+        <p className="eyebrow">{isMockExam ? `Deneme${mockSetNumber ? ` ${mockSetNumber}` : ""} Sonucun` : "Seviye Tespit Sonucun"}</p>
         <h1 className="page-title">{examName} · Hedef: {targetScoreRaw}</h1>
         {targetDate ? <p className="page-copy mt-2">Hedef tarih: {new Date(targetDate).toLocaleDateString("tr-TR")}</p> : null}
         <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Bu sonuçlar tahmini seviyeni gösterir, resmi sınav puanı değildir.</p>

@@ -11,6 +11,8 @@ export type DiagnosticQuestionSeed = {
   correctIndex: number; // 0-3
   explanation: string; // Turkish, explain WHY the correct answer is right (and ideally why the closest distractor is wrong)
   tags?: string[];
+  /** 1-5 — pins this question into a fixed "Deneme N" mock-exam paper instead of the general pool. */
+  mockSetNumber?: number;
 };
 
 export const DIAGNOSTIC_QUESTIONS: DiagnosticQuestionSeed[] = [

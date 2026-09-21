@@ -10,6 +10,7 @@ export function DiagnosticRunner({
   topicName,
   startedAt,
   timeLimitMinutes,
+  mockSetNumber,
 }: {
   attemptId: string;
   question: RunnerQuestion;
@@ -19,6 +20,7 @@ export function DiagnosticRunner({
   topicName?: string;
   startedAt?: string;
   timeLimitMinutes?: number;
+  mockSetNumber?: number | null;
 }) {
   const heading =
     kind === "MASTERY_CHECK"
@@ -26,7 +28,7 @@ export function DiagnosticRunner({
       : kind === "PRACTICE"
         ? `Pratik${topicName ? ` · ${topicName}` : " · Karma Sorular"}`
         : kind === "MOCK_EXAM"
-          ? "Deneme Sınavı"
+          ? `Deneme Sınavı${mockSetNumber ? ` ${mockSetNumber}` : ""}`
           : "Seviye Tespit Sınavı";
   return (
     <div className="mx-auto w-full max-w-2xl space-y-4">

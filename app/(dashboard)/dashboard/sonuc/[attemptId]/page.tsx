@@ -10,8 +10,13 @@ import { ATTEMPT_KIND_RESULT_TITLES } from "@/lib/diagnostics/attempt-kind-label
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
-  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true } });
-  return { title: attempt ? ATTEMPT_KIND_RESULT_TITLES[attempt.kind] : "Sonuç" };
+  const attempt = await db.diagnosticAttempt.findUnique({ where: { id: attemptId }, select: { kind: true, mockSetNumber: true } });
+  if (!attempt) return { title: "Sonuç" };
+  const title =
+    attempt.kind === "MOCK_EXAM" && attempt.mockSetNumber
+      ? `Deneme ${attempt.mockSetNumber} Sonucun`
+      : ATTEMPT_KIND_RESULT_TITLES[attempt.kind];
+  return { title };
 }
 
 export default async function DiagnosticResultsPage({ params }: { params: Promise<{ attemptId: string }> }) {
@@ -61,6 +66,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
         topPriority={topPriority}
         recommendationsByTopic={recommendationsByTopic}
         kind={attempt.kind === "MOCK_EXAM" ? "MOCK_EXAM" : "FULL_DIAGNOSTIC"}
+        mockSetNumber={attempt.mockSetNumber}
         overall={overall}
       />
     </main>

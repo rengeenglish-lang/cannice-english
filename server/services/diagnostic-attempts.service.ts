@@ -22,7 +22,7 @@ async function selectFullDiagnosticQuestions(tx: TransactionClient, examFamily: 
   const selected: string[] = [];
   for (const topic of topics) {
     const questions = await tx.diagnosticQuestion.findMany({
-      where: { isActive: true, topicId: topic.id, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+      where: { isActive: true, topicId: topic.id, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }] },
       select: { id: true },
     });
     selected.push(...shuffle(questions).slice(0, config.questionsPerTopic).map((q) => q.id));
@@ -33,7 +33,7 @@ async function selectFullDiagnosticQuestions(tx: TransactionClient, examFamily: 
 async function selectMasteryCheckQuestions(tx: TransactionClient, topicId: string, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
-    where: { isActive: true, topicId, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+    where: { isActive: true, topicId, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }] },
     select: { id: true },
   });
   return shuffle(questions).slice(0, config.masteryCheckQuestions).map((q) => q.id);
@@ -43,19 +43,45 @@ async function selectMasteryCheckQuestions(tx: TransactionClient, topicId: strin
 async function selectPracticeQuestions(tx: TransactionClient, topicId: string | null, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
-    where: { isActive: true, examFamily, OR: [{ examTypeId: null }, { examTypeId }], ...(topicId ? { topicId } : {}) },
+    where: { isActive: true, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }], ...(topicId ? { topicId } : {}) },
     select: { id: true },
   });
   return shuffle(questions).slice(0, config.practiceSetSize).map((q) => q.id);
 }
 
-async function selectMockExamQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
+/** Pulls the fixed "Deneme N" paper — a curated, non-random question set — rather than a random pool sample. */
+async function selectMockExamQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode, setNumber: number) {
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
-    where: { isActive: true, examFamily, OR: [{ examTypeId: null }, { examTypeId }] },
+    where: { isActive: true, examFamily, mockSetNumber: setNumber, OR: [{ examTypeId: null }, { examTypeId }] },
     select: { id: true },
   });
   return shuffle(questions).slice(0, config.mockExamQuestionCount).map((q) => q.id);
+}
+
+/** Every mock-set number that has at least one active question for this exam (family-shared or exam-specific). */
+export async function listMockExamSetNumbers(examTypeId: string, examFamily: ExamFamily): Promise<number[]> {
+  const rows = await db.diagnosticQuestion.findMany({
+    where: { isActive: true, examFamily, mockSetNumber: { not: null }, OR: [{ examTypeId: null }, { examTypeId }] },
+    select: { mockSetNumber: true },
+    distinct: ["mockSetNumber"],
+  });
+  return rows.map((r) => r.mockSetNumber!).sort((a, b) => a - b);
+}
+
+/** Per-set status for the mock-exam picker: not started / in progress / best completed score. */
+export async function getMockExamSetsOverview(userId: string, examTypeId: string, examFamily: ExamFamily) {
+  const setNumbers = await listMockExamSetNumbers(examTypeId, examFamily);
+  const attempts = await db.diagnosticAttempt.findMany({
+    where: { userId, examTypeId, kind: "MOCK_EXAM", mockSetNumber: { in: setNumbers } },
+    orderBy: { startedAt: "desc" },
+  });
+  return setNumbers.map((setNumber) => {
+    const forSet = attempts.filter((a) => a.mockSetNumber === setNumber);
+    const inProgress = forSet.find((a) => a.status === "IN_PROGRESS");
+    const completed = forSet.filter((a) => a.status === "COMPLETED");
+    return { setNumber, inProgressAttemptId: inProgress?.id ?? null, completedCount: completed.length, lastCompletedAttemptId: completed[0]?.id ?? null };
+  });
 }
 
 export async function findOrCreateFullDiagnosticAttempt(
@@ -126,22 +152,23 @@ export async function findOrCreatePracticeAttempt(
   });
 }
 
-/** A timed, full-length simulation of the real exam paper — one in-progress attempt per exam type at a time. */
+/** A timed simulation of one fixed "Deneme N" paper — one in-progress attempt per (exam type, set number) at a time. */
 export async function findOrCreateMockExamAttempt(
   userId: string,
   examTypeId: string,
   examCode: ExamCode,
   examFamily: ExamFamily,
   goalId: string,
+  setNumber: number,
 ) {
   return db.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${examTypeId} || 'mock'))::text`;
-    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, examTypeId, kind: "MOCK_EXAM", status: "IN_PROGRESS" } });
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${examTypeId} || 'mock' || ${setNumber}::text))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, examTypeId, kind: "MOCK_EXAM", mockSetNumber: setNumber, status: "IN_PROGRESS" } });
     if (existing) return { attempt: existing, resumed: true };
-    const questionOrder = await selectMockExamQuestions(tx, examFamily, examTypeId, examCode);
+    const questionOrder = await selectMockExamQuestions(tx, examFamily, examTypeId, examCode, setNumber);
     if (questionOrder.length === 0) return { attempt: null, resumed: false };
     const attempt = await tx.diagnosticAttempt.create({
-      data: { userId, examTypeId, examFamily, kind: "MOCK_EXAM", goalId, questionOrder, status: "IN_PROGRESS" },
+      data: { userId, examTypeId, examFamily, kind: "MOCK_EXAM", mockSetNumber: setNumber, goalId, questionOrder, status: "IN_PROGRESS" },
     });
     return { attempt, resumed: false };
   });

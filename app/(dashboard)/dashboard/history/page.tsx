@@ -30,7 +30,9 @@ export default async function HistoryPage() {
             <li key={a.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
               <div>
                 <p className="text-sm font-bold text-[color:var(--foreground)]">
-                  {KIND_LABEL[a.kind] ?? a.kind}{a.topicName ? ` · ${a.topicName}` : ""}
+                  {KIND_LABEL[a.kind] ?? a.kind}
+                  {a.kind === "MOCK_EXAM" && a.mockSetNumber ? ` ${a.mockSetNumber}` : ""}
+                  {a.topicName ? ` · ${a.topicName}` : ""}
                 </p>
                 <p className="mt-1 text-xs text-[color:var(--muted)]">
                   {a.examName} · {a.completedAt?.toLocaleDateString("tr-TR")} · {a.correct}/{a.total} doğru

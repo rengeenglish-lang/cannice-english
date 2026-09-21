@@ -897,6 +897,9 @@ model DiagnosticQuestion {
   explanation       String?
   tags              String[]               @default([])
   isActive          Boolean                @default(false)
+  /** 1-5 — pins this question into a fixed "Deneme N" mock-exam paper instead of the general
+   *  full-diagnostic/practice/mastery-check pool. Null means "general pool, not a mock paper". */
+  mockSetNumber     Int?
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
 
@@ -906,6 +909,7 @@ model DiagnosticQuestion {
 
   @@index([examFamily, topicId, isActive])
   @@index([examTypeId])
+  @@index([examTypeId, mockSetNumber])
   @@map("diagnostic_questions")
 }
 
@@ -916,6 +920,8 @@ model DiagnosticAttempt {
   examFamily    ExamFamily
   kind          DiagnosticAttemptKind   @default(FULL_DIAGNOSTIC)
   scopeTopicId  String?
+  /** Which fixed "Deneme N" paper this MOCK_EXAM attempt drew from; null for every other kind. */
+  mockSetNumber Int?
   goalId        String?
   status        DiagnosticAttemptStatus @default(IN_PROGRESS)
   questionOrder String[]

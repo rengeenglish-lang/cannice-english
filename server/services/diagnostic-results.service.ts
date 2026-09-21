@@ -58,6 +58,7 @@ export async function getAttemptHistory(userId: string) {
     return {
       id: a.id,
       kind: a.kind,
+      mockSetNumber: a.mockSetNumber,
       examName: a.examType.name,
       topicName: a.scopeTopicId ? (topicNameById.get(a.scopeTopicId) ?? null) : null,
       completedAt: a.completedAt,

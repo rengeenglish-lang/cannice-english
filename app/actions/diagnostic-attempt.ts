@@ -75,7 +75,7 @@ export async function startPracticeAction(topicId: string | null) {
   redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
-export async function startMockExamAction() {
+export async function startMockExamAction(setNumber: number) {
   const user = await getAuthContext();
   if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/mock-exam")}`);
   const goal = await getActiveGoal(user.id);
@@ -88,9 +88,10 @@ export async function startMockExamAction() {
     goal.examType.code,
     examFamilyForCode(goal.examType.code),
     goal.id,
+    setNumber,
   );
   if (!attempt) return;
-  await logEvent(resumed ? "mock_exam_resumed" : "mock_exam_started", user.id, { attemptId: attempt.id });
+  await logEvent(resumed ? "mock_exam_resumed" : "mock_exam_started", user.id, { attemptId: attempt.id, setNumber });
   redirect(`/dashboard/sinav/${attempt.id}`);
 }
 
