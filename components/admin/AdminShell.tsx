@@ -63,6 +63,8 @@ const ACCOUNT = [
 ];
 const STAFF = [
   ["/admin", "Genel bakış"],
+  ["/admin/analitik", "Analitik"],
+  ["/admin/students", "Öğrenciler"],
   ["/admin/orders", "Siparişler"],
   ["/admin/coupons", "Kuponlar"],
   ["/admin/products", "Ürünler"],
@@ -70,6 +72,7 @@ const STAFF = [
   ["/admin/konu-anlatim", "Konu anlatımı"],
   ["/admin/diagnostik/konular", "Seviye tespit konuları"],
   ["/admin/diagnostik/sorular", "Seviye tespit soruları"],
+  ["/admin/diagnostik/degerlendirmeler", "Seviye tespit değerlendirmeleri"],
   ["/admin/testimonials", "Katılımcı görüşleri"],
   ["/admin/blog", "Blog"],
   ["/admin/submissions", "Değerlendirmeler"],

@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { diagnosticQuestionSchema, parseSlugList } from "@/lib/validation/admin";
 
 export function listQuestionsForAdmin(filters: { examFamily?: string; topicId?: string; isActive?: boolean } = {}) {
@@ -22,6 +23,8 @@ export function listTopicsForPicker() {
   return db.diagnosticTopic.findMany({ where: { isActive: true }, orderBy: { name: "asc" } });
 }
 
+const MANUAL_GRADING_QUESTION_TYPES = ["WRITING_TASK"];
+
 function optionsFromRaw(optionsRaw: string): string[] {
   const options = optionsRaw
     .split("\n")
@@ -37,7 +40,8 @@ async function questionData(raw: Record<string, unknown>) {
   if (!topic) throw new Error("Geçerli bir konu seçin.");
   const secondarySlugs = parseSlugList(input.secondaryTopicSlugs);
   const secondaryTopics = secondarySlugs.length ? await db.diagnosticTopic.findMany({ where: { slug: { in: secondarySlugs } } }) : [];
-  const options = optionsFromRaw(input.optionsRaw);
+  const isManuallyGraded = MANUAL_GRADING_QUESTION_TYPES.includes(input.questionType);
+  const options = isManuallyGraded ? null : optionsFromRaw(input.optionsRaw!);
 
   return {
     examFamily: input.examFamily,
@@ -49,8 +53,8 @@ async function questionData(raw: Record<string, unknown>) {
     prompt: input.prompt,
     passageText: input.passageText || null,
     audioUrl: input.audioUrl || null,
-    options,
-    correctAnswer: String(input.correctIndex),
+    options: options ?? Prisma.JsonNull,
+    correctAnswer: isManuallyGraded ? null : String(input.correctIndex),
     explanation: input.explanation || null,
     tags: parseSlugList(input.tags),
     isActive: input.isActive,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import type { AdminFormState } from "@/app/actions/admin-testimonials";
 
 const initialState: AdminFormState = { status: "idle" };
@@ -20,7 +20,10 @@ const TYPE_OPTIONS = [
   { value: "PARAGRAPH_COMPLETION", label: "Paragraf Tamamlama" },
   { value: "READING_COMPREHENSION", label: "Okuduğunu Anlama" },
   { value: "RESTATEMENT", label: "Anlamda En Yakın Cümle" },
+  { value: "WRITING_TASK", label: "Yazma (öğretmen tarafından değerlendirilir)" },
 ];
+
+const MANUAL_GRADING_TYPES = ["WRITING_TASK"];
 
 const DIFFICULTY_OPTIONS = [
   { value: "KOLAY", label: "Kolay" },
@@ -59,6 +62,8 @@ export function DiagnosticQuestionForm({
   const [state, formAction, pending] = useActionState(action, initialState);
   const options = Array.isArray(question?.options) ? (question!.options as string[]) : [];
   const secondarySlugs = (question?.secondaryTopicIds ?? []).map((id) => topicSlugById[id]).filter(Boolean).join(", ");
+  const [questionType, setQuestionType] = useState(question?.questionType ?? "MCQ");
+  const isManuallyGraded = MANUAL_GRADING_TYPES.includes(questionType);
 
   return (
     <form action={formAction} className="dashboard-panel space-y-4">
@@ -97,10 +102,17 @@ export function DiagnosticQuestionForm({
 
       <div>
         <label className="label" htmlFor="questionType">Soru Türü</label>
-        <select id="questionType" name="questionType" defaultValue={question?.questionType ?? "MCQ"} className="auth-input">
+        <select id="questionType" name="questionType" value={questionType} onChange={(e) => setQuestionType(e.target.value)} className="auth-input">
           {TYPE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
+
+      {questionType === "LISTENING_MCQ" ? (
+        <div>
+          <label className="label" htmlFor="audioUrl">Ses Dosyası URL&apos;si</label>
+          <input id="audioUrl" name="audioUrl" type="url" defaultValue={question?.audioUrl ?? ""} placeholder="https://…" className="auth-input" />
+        </div>
+      ) : null}
 
       <div>
         <label className="label" htmlFor="passageText">Okuma Parçası (opsiyonel)</label>
@@ -112,20 +124,28 @@ export function DiagnosticQuestionForm({
         <textarea id="prompt" name="prompt" required rows={3} defaultValue={question?.prompt} className="auth-input" />
       </div>
 
-      <div>
-        <label className="label" htmlFor="optionsRaw">Seçenekler (her satıra bir tane, tam 4 satır)</label>
-        <textarea id="optionsRaw" name="optionsRaw" required rows={4} defaultValue={options.join("\n")} className="auth-input font-mono text-sm" />
-      </div>
+      {isManuallyGraded ? (
+        <p className="rounded-xl bg-[color:var(--brand-soft)] px-4 py-3 text-sm text-[color:var(--foreground)]">
+          Bu soru türü serbest metin cevabı alır ve seçenek gerektirmez — öğrenci cevabı, Seviye Tespit Değerlendirmeleri sayfasından bir öğretmen tarafından puanlanır.
+        </p>
+      ) : (
+        <>
+          <div>
+            <label className="label" htmlFor="optionsRaw">Seçenekler (her satıra bir tane, tam 4 satır)</label>
+            <textarea id="optionsRaw" name="optionsRaw" required rows={4} defaultValue={options.join("\n")} className="auth-input font-mono text-sm" />
+          </div>
 
-      <div>
-        <label className="label" htmlFor="correctIndex">Doğru Seçenek</label>
-        <select id="correctIndex" name="correctIndex" defaultValue={question?.correctAnswer ?? "0"} className="auth-input">
-          <option value="0">A</option>
-          <option value="1">B</option>
-          <option value="2">C</option>
-          <option value="3">D</option>
-        </select>
-      </div>
+          <div>
+            <label className="label" htmlFor="correctIndex">Doğru Seçenek</label>
+            <select id="correctIndex" name="correctIndex" defaultValue={question?.correctAnswer ?? "0"} className="auth-input">
+              <option value="0">A</option>
+              <option value="1">B</option>
+              <option value="2">C</option>
+              <option value="3">D</option>
+            </select>
+          </div>
+        </>
+      )}
 
       <div>
         <label className="label" htmlFor="explanation">Açıklama</label>

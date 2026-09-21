@@ -4,6 +4,7 @@ const LETTERS = ["A", "B", "C", "D"];
 
 export type RunnerQuestion = {
   id: string;
+  questionType: string;
   prompt: string;
   passageText: string | null;
   audioUrl: string | null;
@@ -12,6 +13,7 @@ export type RunnerQuestion = {
 
 export function QuestionRenderer({ attemptId, question, index, total }: { attemptId: string; question: RunnerQuestion; index: number; total: number }) {
   const options = Array.isArray(question.options) ? (question.options as string[]) : [];
+  const isFreeResponse = question.questionType === "WRITING_TASK";
   const boundAction = answerAndAdvanceAction.bind(null, attemptId);
 
   return (
@@ -39,21 +41,37 @@ export function QuestionRenderer({ attemptId, question, index, total }: { attemp
 
       <input type="hidden" name="questionId" value={question.id} />
 
-      <fieldset className="space-y-3">
-        <legend className="sr-only">Seçenekler</legend>
-        {options.map((option, i) => (
-          <label
-            key={i}
-            className="focus-within:border-[color:var(--accent)] flex min-h-11 cursor-pointer items-center gap-3 rounded-2xl border border-[color:var(--border)] p-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)] hover:bg-[color:var(--brand-soft)]"
-          >
-            <input type="radio" name="answerRaw" value={String(i)} required className="size-4 accent-[color:var(--accent)]" />
-            <span className="grid size-7 shrink-0 place-items-center rounded-full border border-[color:var(--border-strong)] text-xs font-extrabold">
-              {LETTERS[i]}
-            </span>
-            <span>{option}</span>
+      {isFreeResponse ? (
+        <div>
+          <label htmlFor="answerRaw" className="mb-2 block text-xs font-bold text-[color:var(--muted)]">
+            Cevabınızı buraya yazın — bu soru bir öğretmen tarafından değerlendirilecektir.
           </label>
-        ))}
-      </fieldset>
+          <textarea
+            id="answerRaw"
+            name="answerRaw"
+            required
+            rows={10}
+            className="auth-input"
+            placeholder="Yanıtınızı buraya yazın…"
+          />
+        </div>
+      ) : (
+        <fieldset className="space-y-3">
+          <legend className="sr-only">Seçenekler</legend>
+          {options.map((option, i) => (
+            <label
+              key={i}
+              className="focus-within:border-[color:var(--accent)] flex min-h-11 cursor-pointer items-center gap-3 rounded-2xl border border-[color:var(--border)] p-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)] hover:bg-[color:var(--brand-soft)]"
+            >
+              <input type="radio" name="answerRaw" value={String(i)} required className="size-4 accent-[color:var(--accent)]" />
+              <span className="grid size-7 shrink-0 place-items-center rounded-full border border-[color:var(--border-strong)] text-xs font-extrabold">
+                {LETTERS[i]}
+              </span>
+              <span>{option}</span>
+            </label>
+          ))}
+        </fieldset>
+      )}
 
       <button type="submit" className="primary-button w-full justify-center sm:w-auto">
         {index + 1 >= total ? "Bitir" : "Sonraki Soru"}

@@ -31,6 +31,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
           total={practice.total}
           correct={practice.correct}
           incorrect={practice.incorrect}
+          pendingReview={practice.pendingReview}
           unanswered={practice.unanswered}
           percentage={practice.percentage}
         />

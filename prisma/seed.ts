@@ -198,6 +198,84 @@ async function main() {
       modules: [{ title: "İleri Seviye Denemeler", lessons: [{ title: "YÖKDİL Sağlık Deneme 1", durationMinutes: 60 }] }],
       liveSessions: [],
     },
+    {
+      slug: "ielts-reading-hazirlik-grubu",
+      title: "IELTS Reading Hazırlık Grubu",
+      subtitle: "Okuma Bölümüne Özel!",
+      category: "PREP_GROUP",
+      examCode: "IELTS",
+      level: "BEGINNER_TO_ADVANCED",
+      badgeLabel: "Özel İndirim 🔥",
+      basePrice: "12999.00",
+      salePrice: "8999.00",
+      displayOrder: 8,
+      isFeatured: true,
+      shortDescription: "IELTS Academic Reading'e özel strateji dersleri ve haftalık canlı çalışma.",
+      description: "True/False/Not Given, Matching Headings, çoktan seçmeli ve özet tamamlama soru tiplerine özel strateji dersleri; kayıtlı modüller ve haftalık canlı soru-cevap dahildir.",
+      deliveryFormat: "HYBRID",
+      modules: [
+        { title: "IELTS Reading Soru Tipleri", lessons: [
+          { title: "True / False / Not Given Stratejisi", durationMinutes: 30, isPreviewable: true },
+          { title: "Matching Headings Stratejisi", durationMinutes: 28 },
+        ]},
+        { title: "Zaman Yönetimi ve Pratik", lessons: [
+          { title: "60 Dakikada 40 Soru: Zaman Yönetimi", durationMinutes: 25 },
+        ]},
+      ],
+      liveSessions: [
+        { title: "Canlı Soru-Cevap: IELTS Reading", cohortLabel: "Aralık 2026 Grubu", startsAt: "2026-12-01T18:00:00.000Z", endsAt: "2026-12-01T19:30:00.000Z" },
+      ],
+    },
+    {
+      slug: "toefl-reading-hazirlik-grubu",
+      title: "TOEFL Reading Hazırlık Grubu",
+      subtitle: "Okuma Bölümüne Özel!",
+      category: "PREP_GROUP",
+      examCode: "TOEFL",
+      level: "BEGINNER_TO_ADVANCED",
+      badgeLabel: "Özel İndirim 🔥",
+      basePrice: "12999.00",
+      salePrice: "8999.00",
+      displayOrder: 9,
+      isFeatured: true,
+      shortDescription: "TOEFL iBT Reading'e özel strateji dersleri ve haftalık canlı çalışma.",
+      description: "Vocabulary-in-Context, Reference, Inference ve Sentence Simplification soru tiplerine özel strateji dersleri; kayıtlı modüller ve haftalık canlı soru-cevap dahildir.",
+      deliveryFormat: "HYBRID",
+      modules: [
+        { title: "TOEFL Reading Soru Tipleri", lessons: [
+          { title: "Vocabulary in Context Stratejisi", durationMinutes: 27, isPreviewable: true },
+          { title: "Inference ve Reference Soruları", durationMinutes: 30 },
+        ]},
+      ],
+      liveSessions: [
+        { title: "Canlı Soru-Cevap: TOEFL Reading", cohortLabel: "Aralık 2026 Grubu", startsAt: "2026-12-08T18:00:00.000Z", endsAt: "2026-12-08T19:30:00.000Z" },
+      ],
+    },
+    {
+      slug: "pte-reading-hazirlik-grubu",
+      title: "PTE Reading Hazırlık Grubu",
+      subtitle: "Okuma Bölümüne Özel!",
+      category: "PREP_GROUP",
+      examCode: "PTE",
+      level: "BEGINNER_TO_ADVANCED",
+      badgeLabel: "Özel İndirim 🔥",
+      basePrice: "12999.00",
+      salePrice: "8999.00",
+      displayOrder: 10,
+      isFeatured: true,
+      shortDescription: "PTE Academic Reading'e özel strateji dersleri ve haftalık canlı çalışma.",
+      description: "Çoktan seçmeli (tekli/çoklu cevap), Re-order Paragraphs ve Fill in the Blanks soru tiplerine özel strateji dersleri; kayıtlı modüller ve haftalık canlı soru-cevap dahildir.",
+      deliveryFormat: "HYBRID",
+      modules: [
+        { title: "PTE Reading Soru Tipleri", lessons: [
+          { title: "Re-order Paragraphs Stratejisi", durationMinutes: 26, isPreviewable: true },
+          { title: "Fill in the Blanks Stratejisi", durationMinutes: 24 },
+        ]},
+      ],
+      liveSessions: [
+        { title: "Canlı Soru-Cevap: PTE Reading", cohortLabel: "Aralık 2026 Grubu", startsAt: "2026-12-15T18:00:00.000Z", endsAt: "2026-12-15T19:30:00.000Z" },
+      ],
+    },
   ];
 
   for (const def of productDefs) {
@@ -255,6 +333,7 @@ async function main() {
     { slug: "yds-yokdil-kelime-defteri", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Cannice Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
     { slug: "yds-deneme-sinavlari-kitabi", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Cannice Hoca", format: "PRINT", pageCount: 180 },
     { slug: "the-ultimate-vocabulary-builder", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 150 },
+    { slug: "yokdil-sosyal-bilimler-kelime-kitabi", title: "YÖKDİL Sosyal Bilimler Kelime Kitabı", examCode: "YOKDIL_SOSYAL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
     { slug: "ielts-reading-practice-book", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
     { slug: "toefl-ibt-reading-practice-book", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 130 },
     { slug: "pte-academic-reading-practice-book", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 120 },

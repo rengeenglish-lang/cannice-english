@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { listOrders } from "@/server/services/orders.service";
 import { markOrderPaidAction } from "@/app/actions/admin-orders";
@@ -33,7 +34,9 @@ export default async function AdminOrdersPage() {
               const customerEmail = order.user?.email ?? order.guestEmail ?? "—";
               return (
                 <tr key={order.id}>
-                  <td className="font-mono text-xs text-[color:var(--muted)]">{order.id.slice(0, 10)}…</td>
+                  <td className="font-mono text-xs text-[color:var(--muted)]">
+                    <Link href={`/admin/orders/${order.id}`} className="hover:underline">{order.id.slice(0, 10)}…</Link>
+                  </td>
                   <td>
                     <p className="font-bold text-[color:var(--foreground)]">{customerName}</p>
                     <p className="text-xs text-[color:var(--muted)]">{customerEmail}{!order.user ? " (misafir)" : ""}</p>
@@ -43,12 +46,13 @@ export default async function AdminOrdersPage() {
                   <td>
                     <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${status.className}`}>{status.label}</span>
                   </td>
-                  <td>
+                  <td className="whitespace-nowrap">
                     {order.status === "AWAITING_PAYMENT" || order.status === "PENDING" ? (
-                      <form action={async () => { "use server"; await markOrderPaidAction(order.id); }}>
+                      <form action={async () => { "use server"; await markOrderPaidAction(order.id); }} className="inline">
                         <button type="submit" className="ghost-button">Ödemeyi Onayla</button>
                       </form>
                     ) : null}
+                    <Link href={`/admin/orders/${order.id}`} className="ghost-button">Detay</Link>
                   </td>
                 </tr>
               );

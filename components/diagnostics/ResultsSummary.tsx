@@ -22,7 +22,7 @@ export function ResultsSummary({
   topPriority: { topicId: string; topic: { name: string; description: string | null } } | null;
   recommendationsByTopic: Map<string, TopicRecommendations>;
   kind?: "FULL_DIAGNOSTIC" | "MOCK_EXAM";
-  overall?: { total: number; correct: number; incorrect: number; unanswered: number; percentage: number };
+  overall?: { total: number; correct: number; incorrect: number; pendingReview: number; unanswered: number; percentage: number };
 }) {
   const isMockExam = kind === "MOCK_EXAM";
   return (
@@ -38,7 +38,8 @@ export function ResultsSummary({
         <section className="dashboard-panel text-center">
           <p className="text-5xl font-black text-[color:var(--foreground)]">%{overall.percentage}</p>
           <p className="mt-2 text-sm font-semibold text-[color:var(--muted)]">
-            {overall.correct} doğru · {overall.incorrect} yanlış · {overall.unanswered} boş · {overall.total} soru
+            {overall.correct} doğru · {overall.incorrect} yanlış
+            {overall.pendingReview ? ` · ${overall.pendingReview} inceleniyor` : ""} · {overall.unanswered} boş · {overall.total} soru
           </p>
         </section>
       ) : null}

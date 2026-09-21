@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import { db } from "@/server/db";
 import { countPendingSubmissions } from "@/server/services/submissions.service";
+import { countPendingDiagnosticResponses } from "@/server/services/admin-diagnostic-grading.service";
 
 export const metadata: Metadata = { title: "Yönetim Paneli" };
 
 export default async function AdminOverviewPage() {
-  const [orderCount, newLeadCount, productCount, pendingSubmissionCount] = await Promise.all([
+  const [orderCount, newLeadCount, productCount, pendingSubmissionCount, pendingDiagnosticCount] = await Promise.all([
     db.order.count(),
     db.callbackRequest.count({ where: { status: "NEW" } }),
     db.product.count({ where: { isPublished: true } }),
     countPendingSubmissions(),
+    countPendingDiagnosticResponses(),
   ]);
 
   const metrics = [
     { label: "Toplam Sipariş", value: orderCount },
     { label: "Yayında Ürün", value: productCount },
     { label: "Yeni Talep", value: newLeadCount },
-    { label: "Bekleyen Değerlendirme", value: pendingSubmissionCount },
+    { label: "Bekleyen Değerlendirme", value: pendingSubmissionCount + pendingDiagnosticCount },
   ];
 
   return (

@@ -130,26 +130,42 @@ export const diagnosticQuestionTypeEnum = z.enum([
   "PARAGRAPH_COMPLETION",
   "READING_COMPREHENSION",
   "RESTATEMENT",
-]); // WRITING_TASK/SPEAKING_TASK intentionally omitted — no runner support yet, see plan.
+  "WRITING_TASK",
+]); // SPEAKING_TASK intentionally omitted — would need its own audio-recording pipeline, which
+// would just duplicate the existing, separate AI Speaking Tutor feature.
 
 export const diagnosticDifficultyEnum = z.enum(["KOLAY", "ORTA", "ZOR"]);
 
-export const diagnosticQuestionSchema = z.object({
-  examFamily: examFamilyEnum,
-  examTypeId: z.string().trim().optional().or(z.literal("")),
-  topicSlug: z.string().trim().min(1),
-  secondaryTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
-  questionType: diagnosticQuestionTypeEnum,
-  difficulty: diagnosticDifficultyEnum.default("ORTA"),
-  prompt: z.string().trim().min(3).max(2000),
-  passageText: z.string().trim().max(4000).optional().or(z.literal("")),
-  audioUrl: z.string().trim().url().optional().or(z.literal("")),
-  optionsRaw: z.string().trim().min(1), // one option per line, exactly 4 lines
-  correctIndex: z.coerce.number().int().min(0).max(3),
-  explanation: z.string().trim().max(2000).optional().or(z.literal("")),
-  tags: z.string().trim().max(300).optional().or(z.literal("")),
-  isActive: z.coerce.boolean().default(false),
-});
+const MANUAL_GRADING_QUESTION_TYPES = ["WRITING_TASK"];
+
+export const diagnosticQuestionSchema = z
+  .object({
+    examFamily: examFamilyEnum,
+    examTypeId: z.string().trim().optional().or(z.literal("")),
+    topicSlug: z.string().trim().min(1),
+    secondaryTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
+    questionType: diagnosticQuestionTypeEnum,
+    difficulty: diagnosticDifficultyEnum.default("ORTA"),
+    prompt: z.string().trim().min(3).max(2000),
+    passageText: z.string().trim().max(4000).optional().or(z.literal("")),
+    audioUrl: z.string().trim().url().optional().or(z.literal("")),
+    // One option per line, exactly 4 lines — required for every type except free-response ones
+    // (Writing has no fixed answer to pick from, so there's nothing to validate here).
+    optionsRaw: z.string().trim().optional().or(z.literal("")),
+    correctIndex: z.coerce.number().int().min(0).max(3).optional(),
+    explanation: z.string().trim().max(2000).optional().or(z.literal("")),
+    tags: z.string().trim().max(300).optional().or(z.literal("")),
+    isActive: z.coerce.boolean().default(false),
+  })
+  .superRefine((data, ctx) => {
+    if (MANUAL_GRADING_QUESTION_TYPES.includes(data.questionType)) return;
+    if (!data.optionsRaw) {
+      ctx.addIssue({ code: "custom", path: ["optionsRaw"], message: "Bu soru türü için 4 seçenek girin." });
+    }
+    if (data.correctIndex === undefined) {
+      ctx.addIssue({ code: "custom", path: ["correctIndex"], message: "Doğru seçeneği belirtin." });
+    }
+  });
 
 export const liveSessionSchema = z.object({
   title: z.string().trim().min(2).max(160),
