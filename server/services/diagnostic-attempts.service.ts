@@ -16,27 +16,55 @@ function shuffle<T>(arr: T[]): T[] {
   return copy;
 }
 
+/**
+ * Shuffles questions while keeping every reading-passage's questions contiguous (in their
+ * fetched, i.e. authored, order) — a plain shuffle scatters a passage's questions randomly
+ * through the attempt, which breaks any UI (e.g. a split-screen passage view) that expects to
+ * show one passage for a stretch of consecutive questions, the way a real reading test does.
+ */
+function groupedShuffle<T extends { passageText: string | null }>(items: T[]): T[] {
+  const byPassage = new Map<string, T[]>();
+  const groups: T[][] = [];
+  for (const item of items) {
+    if (!item.passageText) {
+      groups.push([item]);
+      continue;
+    }
+    const existing = byPassage.get(item.passageText);
+    if (existing) {
+      existing.push(item);
+    } else {
+      const group: T[] = [item];
+      byPassage.set(item.passageText, group);
+      groups.push(group);
+    }
+  }
+  return shuffle(groups).flat();
+}
+
 async function selectFullDiagnosticQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
   const config = attemptConfigForExam(examCode);
   const topics = await tx.diagnosticTopic.findMany({ where: { isActive: true, examFamilies: { has: examFamily }, OR: [{ examTypeId: null }, { examTypeId }] } });
-  const selected: string[] = [];
+  const selected: { id: string; passageText: string | null }[] = [];
   for (const topic of topics) {
     const questions = await tx.diagnosticQuestion.findMany({
       where: { isActive: true, topicId: topic.id, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }] },
-      select: { id: true },
+      select: { id: true, passageText: true },
+      orderBy: { createdAt: "asc" },
     });
-    selected.push(...shuffle(questions).slice(0, config.questionsPerTopic).map((q) => q.id));
+    selected.push(...shuffle(questions).slice(0, config.questionsPerTopic));
   }
-  return shuffle(selected);
+  return groupedShuffle(selected).map((q) => q.id);
 }
 
 async function selectMasteryCheckQuestions(tx: TransactionClient, topicId: string, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
     where: { isActive: true, topicId, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }] },
-    select: { id: true },
+    select: { id: true, passageText: true },
+    orderBy: { createdAt: "asc" },
   });
-  return shuffle(questions).slice(0, config.masteryCheckQuestions).map((q) => q.id);
+  return groupedShuffle(shuffle(questions).slice(0, config.masteryCheckQuestions)).map((q) => q.id);
 }
 
 /** `topicId: null` means "karma" — a mixed sample across every topic in the family, not one topic's pool. */
@@ -44,9 +72,10 @@ async function selectPracticeQuestions(tx: TransactionClient, topicId: string | 
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
     where: { isActive: true, examFamily, mockSetNumber: null, OR: [{ examTypeId: null }, { examTypeId }], ...(topicId ? { topicId } : {}) },
-    select: { id: true },
+    select: { id: true, passageText: true },
+    orderBy: { createdAt: "asc" },
   });
-  return shuffle(questions).slice(0, config.practiceSetSize).map((q) => q.id);
+  return groupedShuffle(shuffle(questions).slice(0, config.practiceSetSize)).map((q) => q.id);
 }
 
 /** Pulls the fixed "Deneme N" paper — a curated, non-random question set — rather than a random pool sample. */
@@ -54,9 +83,10 @@ async function selectMockExamQuestions(tx: TransactionClient, examFamily: ExamFa
   const config = attemptConfigForExam(examCode);
   const questions = await tx.diagnosticQuestion.findMany({
     where: { isActive: true, examFamily, mockSetNumber: setNumber, OR: [{ examTypeId: null }, { examTypeId }] },
-    select: { id: true },
+    select: { id: true, passageText: true },
+    orderBy: { createdAt: "asc" },
   });
-  return shuffle(questions).slice(0, config.mockExamQuestionCount).map((q) => q.id);
+  return groupedShuffle(questions.slice(0, config.mockExamQuestionCount)).map((q) => q.id);
 }
 
 /** Every mock-set number that has at least one active question for this exam (family-shared or exam-specific). */

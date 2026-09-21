@@ -4,11 +4,15 @@ import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { DiagnosticRunner } from "@/components/diagnostics/DiagnosticRunner";
 import { BookletRunner } from "@/components/diagnostics/BookletRunner";
+import { ReadingSplitRunner } from "@/components/diagnostics/ReadingSplitRunner";
 import { ExamViewToggle } from "@/components/diagnostics/ExamViewToggle";
 import { attemptConfigForExam } from "@/lib/diagnostics/attempt-config";
 import { ATTEMPT_KIND_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
 import { getExamViewMode } from "@/lib/diagnostics/exam-view-mode";
 import { packBookletPage } from "@/lib/diagnostics/booklet-pagination";
+import { buildPassageRuns, locateRun } from "@/lib/diagnostics/reading-passages";
+
+const SPLIT_SCREEN_EXAM_CODES = ["IELTS", "TOEFL"];
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
@@ -30,11 +34,8 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
 
   if (attempt.currentIndex >= attempt.questionOrder.length) redirect(`/dashboard/sonuc/${attempt.id}`);
 
-  let timeLimitMinutes: number | undefined;
-  if (attempt.kind === "MOCK_EXAM") {
-    const examType = await db.examType.findUnique({ where: { id: attempt.examTypeId } });
-    timeLimitMinutes = examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180;
-  }
+  const examType = await db.examType.findUnique({ where: { id: attempt.examTypeId } });
+  const timeLimitMinutes = attempt.kind === "MOCK_EXAM" ? (examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180) : undefined;
 
   // Booklet view (a real-exam-booklet-style page of several questions at once) is only offered
   // for YDS/YÖKDİL — IELTS/TOEFL/PTE are already screen-based exams in real life, one item at a time.
@@ -70,6 +71,39 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
   const questionId = attempt.questionOrder[attempt.currentIndex];
   const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });
   if (!question) notFound();
+
+  // IELTS/TOEFL Reading is a real split-screen, passage-fixed-on-one-side computer test in real
+  // life — show it that way instead of the generic one-question-per-screen runner.
+  if (examType && SPLIT_SCREEN_EXAM_CODES.includes(examType.code) && question.passageText) {
+    const orderedRows = await db.diagnosticQuestion.findMany({
+      where: { id: { in: attempt.questionOrder } },
+      select: { id: true, passageText: true },
+    });
+    const byId = new Map(orderedRows.map((r) => [r.id, r]));
+    const ordered = attempt.questionOrder.map((id) => byId.get(id)).filter((q): q is NonNullable<typeof q> => Boolean(q));
+    const runs = buildPassageRuns(ordered);
+    const located = locateRun(runs, attempt.currentIndex);
+
+    if (located?.run.passageText) {
+      return (
+        <main className="px-4 py-10 sm:px-6">
+          <ReadingSplitRunner
+            attemptId={attempt.id}
+            passageText={located.run.passageText}
+            question={question}
+            globalIndex={attempt.currentIndex}
+            globalTotal={attempt.questionOrder.length}
+            passageNumber={located.runIndex + 1}
+            totalPassages={runs.length}
+            indexInPassage={attempt.currentIndex - located.run.start}
+            totalInPassage={located.run.end - located.run.start + 1}
+            startedAt={attempt.startedAt.toISOString()}
+            timeLimitMinutes={timeLimitMinutes}
+          />
+        </main>
+      );
+    }
+  }
 
   const topic = attempt.scopeTopicId ? await db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : null;
 
