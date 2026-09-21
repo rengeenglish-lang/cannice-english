@@ -27,12 +27,13 @@ import type { ExamFamily } from "@/lib/generated/prisma/enums";
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
 
 /**
- * Nav adapts to the student's active exam goal: YDS/YÖKDİL (TRANSLATION_GRAMMAR) students lead
- * with Seviye Tespit/Pratik/İlerleme (this family's live diagnostic system) and Konu Anlatımı
- * moves down — not deleted, just de-emphasized, per the "don't display irrelevant features"
- * requirement. Konuşma pratiği only applies to IELTS/TOEFL, so it's hidden for this family too.
- * No goal yet, or an ACADEMIC_SKILLS goal, keeps today's generic order (that family has no live
- * diagnostic/practice/history yet, so showing those links would just dead-end).
+ * Nav adapts to the student's active exam goal: once a goal is set (either family — both
+ * TRANSLATION_GRAMMAR and ACADEMIC_SKILLS now have a live diagnostic/practice/mock-exam/progress
+ * system), those links lead and Konu Anlatımı moves down — not deleted, just de-emphasized, per
+ * the "don't display irrelevant features" requirement. Konuşma pratiği only applies to the
+ * ACADEMIC_SKILLS family (IELTS/TOEFL specifically have the AI tutor; PTE doesn't, but the link
+ * itself is still harmless to show). No goal yet keeps today's generic order, since we don't yet
+ * know which exam's diagnostic to link to.
  */
 function learningNav(examFamily: ExamFamily | null) {
   const base = [{ href: "/dashboard", label: "Çalışma alanım", icon: Home }, { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen }, { href: "/dashboard/live-sessions", label: "Canlı ders takvimi", icon: CalendarDays }];
@@ -40,17 +41,18 @@ function learningNav(examFamily: ExamFamily | null) {
     { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
     { href: "/packages", label: "Kaynakları keşfet", icon: ShoppingBag },
   ];
+  const diagnosticJourney = [
+    { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
+    { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
+    { href: "/dashboard/practice", label: "Pratik Sorular", icon: ListChecks },
+    { href: "/dashboard/progress", label: "İlerleme", icon: TrendingUp },
+    { href: "/dashboard/history", label: "Geçmiş Sorular", icon: History },
+  ];
   if (examFamily === "TRANSLATION_GRAMMAR") {
-    return [
-      ...base,
-      { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
-      { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
-      { href: "/dashboard/practice", label: "Pratik Sorular", icon: ListChecks },
-      { href: "/dashboard/progress", label: "İlerleme", icon: TrendingUp },
-      { href: "/dashboard/history", label: "Geçmiş Sorular", icon: History },
-      { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen },
-      ...shared,
-    ];
+    return [...base, ...diagnosticJourney, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
+  }
+  if (examFamily === "ACADEMIC_SKILLS") {
+    return [...base, ...diagnosticJourney, { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
   }
   return [...base, { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
 }

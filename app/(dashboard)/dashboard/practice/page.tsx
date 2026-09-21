@@ -22,7 +22,7 @@ export default async function PracticePage() {
 
   const examFamily = examFamilyForCode(goal.examType.code);
   const topics = await db.diagnosticTopic.findMany({
-    where: { isActive: true, examFamilies: { has: examFamily } },
+    where: { isActive: true, examFamilies: { has: examFamily }, OR: [{ examTypeId: null }, { examTypeId: goal.examTypeId }] },
     orderBy: { displayOrder: "asc" },
   });
   const topLevel = topics.filter((t) => !t.parentTopicId);

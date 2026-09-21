@@ -18,7 +18,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 async function selectFullDiagnosticQuestions(tx: TransactionClient, examFamily: ExamFamily, examTypeId: string, examCode: ExamCode) {
   const config = attemptConfigForExam(examCode);
-  const topics = await tx.diagnosticTopic.findMany({ where: { isActive: true, examFamilies: { has: examFamily } } });
+  const topics = await tx.diagnosticTopic.findMany({ where: { isActive: true, examFamilies: { has: examFamily }, OR: [{ examTypeId: null }, { examTypeId }] } });
   const selected: string[] = [];
   for (const topic of topics) {
     const questions = await tx.diagnosticQuestion.findMany({

@@ -185,6 +185,7 @@ model ExamType {
   examGoals          ExamGoal[]
   diagnosticAttempts DiagnosticAttempt[]
   diagnosticQuestions DiagnosticQuestion[]
+  diagnosticTopics   DiagnosticTopic[]
 
   @@map("exam_types")
 }
@@ -795,6 +796,13 @@ model DiagnosticTopic {
   name           String
   kind           DiagnosticTopicKind
   examFamilies   ExamFamily[]
+  /**
+   * Null = shared across every exam in examFamilies (how YDS/YÖKDİL topics work — one grammar
+   * pool for the whole TRANSLATION_GRAMMAR family). Set = scoped to one specific exam, needed for
+   * ACADEMIC_SKILLS where IELTS/TOEFL/PTE each have their own distinct Reading question formats
+   * that must not mix.
+   */
+  examTypeId     String?
   parentTopicId  String?
   importanceWeight Int                 @default(1)
   estimatedMinutes Int?
@@ -806,6 +814,7 @@ model DiagnosticTopic {
 
   parent   DiagnosticTopic?  @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: SetNull)
   children DiagnosticTopic[] @relation("TopicHierarchy")
+  examType ExamType?         @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
 
   primaryQuestions   DiagnosticQuestion[]     @relation("PrimaryTopic")
   topicResults       DiagnosticTopicResult[]
@@ -815,6 +824,7 @@ model DiagnosticTopic {
 
   @@index([kind])
   @@index([parentTopicId])
+  @@index([examTypeId])
   @@map("diagnostic_topics")
 }
 

@@ -17,12 +17,14 @@ export async function seedDiagnosticJourney(db: PrismaClient, examTypes: Record<
 
   // Pass 1: create/update every topic without parent linkage yet (parents may not exist until this loop finishes).
   for (const t of DIAGNOSTIC_TOPICS) {
+    const examTypeId = t.examTypeCode ? (examTypes[t.examTypeCode as ExamCode]?.id ?? null) : null;
     const topic = await db.diagnosticTopic.upsert({
       where: { slug: t.slug },
       update: {
         name: t.name,
         kind: t.kind,
         examFamilies: t.examFamilies,
+        examTypeId,
         importanceWeight: t.importanceWeight ?? 1,
         estimatedMinutes: t.estimatedMinutes ?? null,
         description: t.description ?? null,
@@ -34,6 +36,7 @@ export async function seedDiagnosticJourney(db: PrismaClient, examTypes: Record<
         name: t.name,
         kind: t.kind,
         examFamilies: t.examFamilies,
+        examTypeId,
         importanceWeight: t.importanceWeight ?? 1,
         estimatedMinutes: t.estimatedMinutes ?? null,
         description: t.description ?? null,

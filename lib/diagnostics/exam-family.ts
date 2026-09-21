@@ -16,7 +16,7 @@ export function examFamilyForCode(code: ExamCode): ExamFamily {
 }
 
 /** Exams with a live, seeded diagnostic in the current build. Others show a "yakında" bridge state. */
-export const DIAGNOSTIC_LIVE_EXAM_CODES: ExamCode[] = ["YDS", "YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN"];
+export const DIAGNOSTIC_LIVE_EXAM_CODES: ExamCode[] = ["YDS", "YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN", "IELTS", "TOEFL", "PTE"];
 
 export function hasLiveDiagnostic(code: ExamCode): boolean {
   return DIAGNOSTIC_LIVE_EXAM_CODES.includes(code);

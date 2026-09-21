@@ -35,7 +35,7 @@ export function QuestionRenderer({ attemptId, question, index, total }: { attemp
         </audio>
       ) : null}
 
-      <p className="text-lg font-bold leading-8 text-[color:var(--foreground)] sm:text-xl">{question.prompt}</p>
+      <p className="whitespace-pre-line text-lg font-bold leading-8 text-[color:var(--foreground)] sm:text-xl">{question.prompt}</p>
 
       <input type="hidden" name="questionId" value={question.id} />
 

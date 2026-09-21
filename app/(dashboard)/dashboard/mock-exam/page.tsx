@@ -4,7 +4,7 @@ import { Clock, ListChecks } from "lucide-react";
 import { getAuthContext } from "@/server/auth/context";
 import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
 import { db } from "@/server/db";
-import { hasLiveDiagnostic } from "@/lib/diagnostics/exam-family";
+import { hasLiveDiagnostic, examFamilyForCode } from "@/lib/diagnostics/exam-family";
 import { attemptConfigForExam } from "@/lib/diagnostics/attempt-config";
 import { startMockExamAction } from "@/app/actions/diagnostic-attempt";
 
@@ -35,6 +35,7 @@ export default async function MockExamPage() {
   }
 
   const config = attemptConfigForExam(goal.examType.code);
+  const isAcademicSkills = examFamilyForCode(goal.examType.code) === "ACADEMIC_SKILLS";
   const inProgress = await db.diagnosticAttempt.findFirst({
     where: { userId: user.id, examTypeId: goal.examTypeId, kind: "MOCK_EXAM", status: "IN_PROGRESS" },
   });
@@ -42,9 +43,11 @@ export default async function MockExamPage() {
   return (
     <main className="mx-auto w-full max-w-xl px-4 py-14 text-center sm:px-6">
       <p className="eyebrow">{goal.examType.name}</p>
-      <h1 className="page-title">Gerçek sınav formatında deneme</h1>
+      <h1 className="page-title">{isAcademicSkills ? "Reading bölümü denemesi" : "Gerçek sınav formatında deneme"}</h1>
       <p className="page-copy mt-4">
-        Bu deneme, gerçek {goal.examType.name} sınavıyla aynı soru sayısı ve süreyle uygulanır. Süre dolduğunda sınav otomatik olarak
+        {isAcademicSkills
+          ? `Bu deneme, gerçek ${goal.examType.name} Reading (Okuma) bölümüyle aynı soru sayısı ve sürede uygulanır. Listening, Writing ve Speaking bölümleri bu denemeye dahil değildir.`
+          : `Bu deneme, gerçek ${goal.examType.name} sınavıyla aynı soru sayısı ve süreyle uygulanır.`} Süre dolduğunda sınav otomatik olarak
         teslim edilir.
       </p>
 

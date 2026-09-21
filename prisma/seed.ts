@@ -255,6 +255,9 @@ async function main() {
     { slug: "yds-yokdil-kelime-defteri", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Cannice Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
     { slug: "yds-deneme-sinavlari-kitabi", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Cannice Hoca", format: "PRINT", pageCount: 180 },
     { slug: "the-ultimate-vocabulary-builder", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 150 },
+    { slug: "ielts-reading-practice-book", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
+    { slug: "toefl-ibt-reading-practice-book", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 130 },
+    { slug: "pte-academic-reading-practice-book", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 120 },
   ];
 
   for (const def of bookDefs) {
