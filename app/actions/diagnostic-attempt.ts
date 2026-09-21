@@ -19,7 +19,7 @@ import { logEvent } from "@/lib/diagnostics/analytics";
 
 export async function startFullDiagnosticAction() {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/seviye-tespit/basla")}`);
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
   if (!hasLiveDiagnostic(goal.examType.code)) return;
@@ -38,7 +38,7 @@ export async function startFullDiagnosticAction() {
 
 export async function startMasteryCheckAction(topicId: string) {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/plan")}`);
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
 
@@ -58,7 +58,7 @@ export async function startMasteryCheckAction(topicId: string) {
 
 export async function startPracticeAction(topicId: string | null) {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/practice")}`);
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
 
@@ -77,7 +77,7 @@ export async function startPracticeAction(topicId: string | null) {
 
 export async function startMockExamAction() {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/mock-exam")}`);
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
   if (!hasLiveDiagnostic(goal.examType.code)) return;
@@ -97,7 +97,7 @@ export async function startMockExamAction() {
 /** Called when the client-side countdown hits zero — finalizes with whatever was answered so far. */
 export async function autoSubmitMockExamAction(attemptId: string) {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/seviye-tespit/sinav/${attemptId}`)}`);
   const attempt = await getAttempt(attemptId, user.id);
   if (attempt && attempt.status === "IN_PROGRESS") {
     await finishAttempt(attemptId, user.id);
@@ -110,7 +110,7 @@ export async function autoSubmitMockExamAction(attemptId: string) {
 
 export async function answerAndAdvanceAction(attemptId: string, formData: FormData) {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/seviye-tespit/sinav/${attemptId}`)}`);
   const questionId = String(formData.get("questionId") ?? "");
   const answerRaw = String(formData.get("answerRaw") ?? "");
   if (!questionId || !answerRaw) {
@@ -149,7 +149,7 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
 
 export async function startRoadmapItemAction(itemId: string) {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/plan")}`);
   await startRoadmapItem(user.id, itemId);
   await logEvent("roadmap_item_started", user.id, { itemId });
   revalidatePath("/dashboard/plan");

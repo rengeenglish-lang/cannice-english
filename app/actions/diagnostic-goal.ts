@@ -15,7 +15,7 @@ function formDataToObject(formData: FormData) {
 
 export async function setGoalAction(_prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
   const user = await getAuthContext();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent("/seviye-tespit/hedef")}`);
   try {
     await setActiveGoal(user.id, formDataToObject(formData));
   } catch (error) {
