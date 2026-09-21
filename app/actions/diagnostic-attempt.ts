@@ -148,6 +148,46 @@ export async function answerAndAdvanceAction(attemptId: string, formData: FormDa
   revalidatePath(`/dashboard/sinav/${attemptId}`);
 }
 
+/** Booklet view submits a whole page (several questions) at once instead of one question per request. */
+export async function submitBookletPageAction(attemptId: string, formData: FormData) {
+  const user = await getAuthContext();
+  if (!user) redirect(`/sign-in?next=${encodeURIComponent(`/dashboard/sinav/${attemptId}`)}`);
+  const pageQuestionIds = formData.getAll("pageQuestionIds").map(String).filter(Boolean);
+
+  for (const questionId of pageQuestionIds) {
+    const answerRaw = String(formData.get(`answer_${questionId}`) ?? "");
+    if (!answerRaw) continue;
+    try {
+      await submitAnswer(attemptId, user.id, questionId, answerRaw);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Sınav süresi doldu.") {
+        await finishAttempt(attemptId, user.id);
+        await logEvent("mock_exam_completed", user.id, { attemptId, autoSubmitted: true });
+        redirect(`/dashboard/sonuc/${attemptId}`);
+      }
+      throw error;
+    }
+  }
+
+  const attempt = await getAttempt(attemptId, user.id);
+  if (attempt && attempt.currentIndex >= attempt.questionOrder.length) {
+    await finishAttempt(attemptId, user.id);
+    const event =
+      attempt.kind === "MASTERY_CHECK"
+        ? "mastery_check_completed"
+        : attempt.kind === "PRACTICE"
+          ? "practice_completed"
+          : attempt.kind === "MOCK_EXAM"
+            ? "mock_exam_completed"
+            : "diagnostic_completed";
+    await logEvent(event, user.id, { attemptId });
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/plan");
+    redirect(`/dashboard/sonuc/${attemptId}`);
+  }
+  revalidatePath(`/dashboard/sinav/${attemptId}`);
+}
+
 export async function startRoadmapItemAction(itemId: string) {
   const user = await getAuthContext();
   if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/plan")}`);
