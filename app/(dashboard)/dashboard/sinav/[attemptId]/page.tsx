@@ -34,13 +34,14 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
 
   if (attempt.currentIndex >= attempt.questionOrder.length) redirect(`/dashboard/sonuc/${attempt.id}`);
 
-  const examType = await db.examType.findUnique({ where: { id: attempt.examTypeId } });
-  const timeLimitMinutes = attempt.kind === "MOCK_EXAM" ? (examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180) : undefined;
-
   // Booklet view (a real-exam-booklet-style page of several questions at once) is only offered
   // for YDS/YÖKDİL — IELTS/TOEFL/PTE are already screen-based exams in real life, one item at a time.
   const canToggleView = attempt.examFamily === "TRANSLATION_GRAMMAR";
-  const viewMode = canToggleView ? await getExamViewMode() : "single";
+  const [examType, viewMode] = await Promise.all([
+    db.examType.findUnique({ where: { id: attempt.examTypeId } }),
+    canToggleView ? getExamViewMode() : Promise.resolve<Awaited<ReturnType<typeof getExamViewMode>>>("single"),
+  ]);
+  const timeLimitMinutes = attempt.kind === "MOCK_EXAM" ? (examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180) : undefined;
 
   if (viewMode === "booklet") {
     const windowIds = attempt.questionOrder.slice(attempt.currentIndex, attempt.currentIndex + 16);
@@ -69,16 +70,21 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
   }
 
   const questionId = attempt.questionOrder[attempt.currentIndex];
-  const question = await db.diagnosticQuestion.findUnique({ where: { id: questionId } });
+  // Whether this exam gets the split-screen treatment is known from examType alone (doesn't need
+  // the question itself), so its lookahead fetch can run in parallel with the question/topic
+  // fetches below instead of waiting on them first.
+  const wantsSplitScreen = Boolean(examType && SPLIT_SCREEN_EXAM_CODES.includes(examType.code));
+
+  const [question, orderedRows, topic] = await Promise.all([
+    db.diagnosticQuestion.findUnique({ where: { id: questionId } }),
+    wantsSplitScreen ? db.diagnosticQuestion.findMany({ where: { id: { in: attempt.questionOrder } }, select: { id: true, passageText: true } }) : Promise.resolve(null),
+    !wantsSplitScreen && attempt.scopeTopicId ? db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : Promise.resolve(null),
+  ]);
   if (!question) notFound();
 
   // IELTS/TOEFL Reading is a real split-screen, passage-fixed-on-one-side computer test in real
   // life — show it that way instead of the generic one-question-per-screen runner.
-  if (examType && SPLIT_SCREEN_EXAM_CODES.includes(examType.code) && question.passageText) {
-    const orderedRows = await db.diagnosticQuestion.findMany({
-      where: { id: { in: attempt.questionOrder } },
-      select: { id: true, passageText: true },
-    });
+  if (wantsSplitScreen && question.passageText && orderedRows) {
     const byId = new Map(orderedRows.map((r) => [r.id, r]));
     const ordered = attempt.questionOrder.map((id) => byId.get(id)).filter((q): q is NonNullable<typeof q> => Boolean(q));
     const runs = buildPassageRuns(ordered);
@@ -105,7 +111,9 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
     }
   }
 
-  const topic = attempt.scopeTopicId ? await db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : null;
+  // `topic` was already fetched above in the common case; only re-fetch here for the rare edge
+  // case where this exam wants split-screen but this particular question has no passage.
+  const resolvedTopic = topic ?? (wantsSplitScreen && attempt.scopeTopicId ? await db.diagnosticTopic.findUnique({ where: { id: attempt.scopeTopicId } }) : null);
 
   return (
     <main className="space-y-6 px-4 py-10 sm:px-6">
@@ -116,7 +124,7 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
         index={attempt.currentIndex}
         total={attempt.questionOrder.length}
         kind={attempt.kind}
-        topicName={topic?.name}
+        topicName={resolvedTopic?.name}
         startedAt={attempt.startedAt.toISOString()}
         timeLimitMinutes={timeLimitMinutes}
         mockSetNumber={attempt.mockSetNumber}
