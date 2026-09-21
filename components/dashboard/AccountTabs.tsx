@@ -3,7 +3,7 @@ import Link from "next/link";
 const TABS = [
   { href: "/dashboard/profile", label: "Hesabım" },
   { href: "/dashboard/addresses", label: "Adreslerim" },
-  { href: "/dashboard#orders", label: "Siparişlerim" },
+  { href: "/dashboard/orders", label: "Siparişlerim" },
   { href: "/dashboard/discounts", label: "İndirimlerim" },
   { href: "/dashboard/reviews", label: "Yorumlarım" },
   { href: "/dashboard/notifications", label: "Bildirim Ayarlarım" },

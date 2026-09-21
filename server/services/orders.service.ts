@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
+import { createNotification } from "@/server/services/notifications.service";
 
 export function listOrders() {
   return db.order.findMany({
@@ -16,7 +17,7 @@ export function getOrderForAdmin(id: string) {
 }
 
 export async function markOrderPaid(orderId: string) {
-  return db.$transaction(async (tx) => {
+  const result = await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({
       where: { id: orderId },
       include: { items: { include: { product: { include: { course: true } } } } },
@@ -25,7 +26,7 @@ export async function markOrderPaid(orderId: string) {
     await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
     await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date() } });
 
-    if (!order.userId) return { enrolled: 0, skippedGuest: true };
+    if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null };
 
     let enrolled = 0;
     for (const item of order.items) {
@@ -39,8 +40,13 @@ export async function markOrderPaid(orderId: string) {
       if (enrollment) enrolled += 1;
     }
 
-    return { enrolled, skippedGuest: false };
+    return { enrolled, skippedGuest: false, userId: order.userId };
   });
+
+  if (result.userId) {
+    await createNotification(result.userId, { title: "Ödemeniz onaylandı", body: "Siparişiniz onaylandı, dersleriniz hesabınızda hazır.", href: "/dashboard/orders" });
+  }
+  return result;
 }
 
 /** Only reachable before payment — no money has moved, so this is a plain status change. */
@@ -49,7 +55,11 @@ export async function markOrderCancelled(orderId: string) {
   if (order.status !== "PENDING" && order.status !== "AWAITING_PAYMENT") {
     throw new Error("Sadece ödeme bekleyen siparişler iptal edilebilir.");
   }
-  return db.order.update({ where: { id: orderId }, data: { status: "CANCELLED" } });
+  const updated = await db.order.update({ where: { id: orderId }, data: { status: "CANCELLED" } });
+  if (order.userId) {
+    await createNotification(order.userId, { title: "Siparişiniz iptal edildi", href: "/dashboard/orders" });
+  }
+  return updated;
 }
 
 /**
@@ -58,7 +68,7 @@ export async function markOrderCancelled(orderId: string) {
  * the access it granted — it never moves money itself.
  */
 export async function markOrderRefunded(orderId: string) {
-  return db.$transaction(async (tx) => {
+  const order = await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({ where: { id: orderId }, include: { items: true } });
     if (order.status !== "PAID") throw new Error("Sadece ödenmiş siparişler iade edilebilir.");
 
@@ -68,5 +78,10 @@ export async function markOrderRefunded(orderId: string) {
     for (const item of order.items) {
       await tx.enrollment.updateMany({ where: { orderItemId: item.id }, data: { status: "REVOKED" } });
     }
+    return order;
   });
+
+  if (order.userId) {
+    await createNotification(order.userId, { title: "Siparişiniz iade edildi", href: "/dashboard/orders" });
+  }
 }

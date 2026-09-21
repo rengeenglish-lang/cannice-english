@@ -17,7 +17,9 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  return { title: product?.title ?? "Kitap Bulunamadı" };
+  if (!product) return { title: "Kitap Bulunamadı" };
+  const description = product.shortDescription ?? `${product.title} — Cannice English'ten sınav hazırlık kitabı.`;
+  return { title: product.title, description, openGraph: { title: product.title, description, type: "website" } };
 }
 
 export default async function BookDetailPage({ params }: Props) {

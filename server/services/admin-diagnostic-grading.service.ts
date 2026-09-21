@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { reviewSubmissionSchema } from "@/lib/validation/submissions";
+import { createNotification } from "@/server/services/notifications.service";
 
 /** Writing/Speaking diagnostic answers are free text — never auto-graded, so they sit here until a teacher scores them. */
 export function listPendingDiagnosticResponses() {
@@ -26,7 +27,7 @@ export function getDiagnosticResponseForAdmin(id: string) {
 
 export async function reviewDiagnosticResponse(id: string, raw: Record<string, unknown>) {
   const input = reviewSubmissionSchema.parse(raw);
-  return db.diagnosticResponse.update({
+  const response = await db.diagnosticResponse.update({
     where: { id },
     data: {
       teacherFeedback: input.teacherFeedback,
@@ -34,7 +35,14 @@ export async function reviewDiagnosticResponse(id: string, raw: Record<string, u
       gradingStatus: "REVIEWED",
       reviewedAt: new Date(),
     },
+    include: { attempt: true },
   });
+  await createNotification(response.attempt.userId, {
+    title: "Yazma sorunuz değerlendirildi",
+    body: input.score !== undefined && input.score !== "" ? `Puanınız: ${input.score}` : undefined,
+    href: `/seviye-tespit/sonuc/${response.attemptId}`,
+  });
+  return response;
 }
 
 export function countPendingDiagnosticResponses() {

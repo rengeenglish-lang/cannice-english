@@ -14,7 +14,10 @@ type Props = { params: Promise<{ examSlug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { examSlug } = await params;
   const exam = await getExamTypeBySlug(examSlug);
-  return { title: exam ? `${exam.name} Online Dersler` : "Sınav Bulunamadı" };
+  if (!exam) return { title: "Sınav Bulunamadı" };
+  const title = `${exam.name} Online Dersler`;
+  const description = exam.shortDescription ?? `${exam.name} sınavına konu anlatımları, pratik sorular ve deneme sınavlarıyla hazırlanın.`;
+  return { title, description, openGraph: { title, description, type: "website" } };
 }
 
 export default async function ExamLandingPage({ params }: Props) {

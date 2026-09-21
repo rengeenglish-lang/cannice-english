@@ -20,3 +20,10 @@ export function validateCanonicalUrl() {
   const parsed = z.url().safeParse(process.env.AUTH_URL);
   if (!parsed.success || !parsed.data.startsWith("https://")) throw new Error("AUTH_URL must be the canonical HTTPS application URL in production");
 }
+
+/** The canonical site origin, for sitemap/robots/Open Graph URLs — same source of truth as Auth.js's own canonical URL, with a local-dev fallback since AUTH_URL isn't required outside production. */
+export function getSiteUrl() {
+  const url = process.env.AUTH_URL;
+  if (url && url.startsWith("https://")) return url;
+  return "http://localhost:3001";
+}

@@ -298,8 +298,48 @@ model User {
   diagnosticAttempts   DiagnosticAttempt[]
   studyRoadmapItems    StudyRoadmapItem[]
   analyticsEvents      AnalyticsEvent[]
+  notifications        Notification[]
+  reviews              Review[]
 
   @@map("users")
+}
+
+/**
+ * In-app notification center — there is no transactional email system (see .env.example), so this
+ * is currently the only way a student learns that an order/payment status changed or a Writing
+ * submission was graded, short of checking the relevant page themselves.
+ */
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String?
+  href      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt])
+  @@map("notifications")
+}
+
+/** A student's own rating/review of a product they bought — distinct from the admin-curated Testimonial model shown on marketing pages. */
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId])
+  @@map("reviews")
 }
 
 // ====================================================================
@@ -333,6 +373,7 @@ model Product {
   book       Book?
   cartItems  CartItem[]
   orderItems OrderItem[]
+  reviews    Review[]
 
   @@index([category])
   @@index([examTypeId])
