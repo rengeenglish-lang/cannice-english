@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { BookOpen, Calculator, ChevronDown, CircleDollarSign, ClipboardCheck, FilePenLine, Headphones, Home, Info, LayoutList, Mail, Menu, MessageSquareText, Mic2, Newspaper, NotebookTabs, Send, Sparkles, Timer, TrendingUp, X } from "lucide-react";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
+import { examLearningHref } from "@/lib/platform";
 
 type MenuProps = { examName: string; slug: string; speakingHref?: string; examFamily?: ExamFamily };
 
@@ -30,7 +31,7 @@ function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKIL
         { label: "Denemeler", icon: Send, href: `/packages?exam=${slug}`, child: "Deneme ve paketler" },
         { label: "Seviye Tespit", icon: ClipboardCheck, href: "/seviye-tespit", child: "Eksiklerini bul" },
         { label: "Pratik Sorular", icon: LayoutList, href: "/dashboard/practice", child: "Konu bazlı pratik" },
-        { label: "Konu Anlatımı", icon: NotebookTabs, href: `/konu-anlatim?exam=${slug}`, child: "Gramer ve çeviri konuları" },
+        { label: "Konu Anlatımı", icon: NotebookTabs, href: examLearningHref(slug), child: "Gramer ve çeviri konuları" },
       ]
     : [
         { label: "Seviye Tespit", icon: ClipboardCheck, href: "/seviye-tespit", child: "Reading eksiğini bul" },
@@ -44,7 +45,7 @@ function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKIL
       ];
 
   const links = [
-    ...(isTranslationGrammar ? [] : [{ label: "Study Course", icon: NotebookTabs, href: "/konu-anlatim" }]),
+    ...(isTranslationGrammar ? [] : [{ label: "Study Course", icon: NotebookTabs, href: examLearningHref(slug) }]),
     ...(isTranslationGrammar || !speakingHref ? [] : [{ label: "AI Speaking Tutor", icon: Mic2, href: speakingHref, badge: "NEW" }]),
     { label: "İlerleme", icon: TrendingUp, href: "/dashboard/history" },
     { label: "Score Calculator", icon: Calculator, href: "/tools/score-calculator" },
