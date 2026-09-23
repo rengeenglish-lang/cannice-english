@@ -23,7 +23,7 @@ export function ExamSectionMenu(props: MenuProps) {
 }
 
 function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKILLS", onNavigate }: MenuProps & { onNavigate?: () => void }) {
-  const overview = `/exams/${slug}#exam-sections`;
+  const overview = `/exams/${slug}`;
   const isTranslationGrammar = examFamily === "TRANSLATION_GRAMMAR";
 
   const groups = isTranslationGrammar
