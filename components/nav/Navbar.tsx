@@ -2,10 +2,11 @@ import Link from "next/link";
 import { after } from "next/server";
 import { auth } from "@/auth";
 import { cartItemCount } from "@/server/services/cart.service";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import { recordVisit } from "@/server/services/visits.service";
 import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
-import { ChevronDown, ShoppingCart } from "lucide-react";
+import { ChevronDown, Heart, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
 
 const NAV_LINKS = [
@@ -26,6 +27,7 @@ export async function Navbar() {
   const session = await auth();
   const userId = session?.user?.id;
   const cartCount = await cartItemCount(userId).catch(() => 0);
+  const favoriteCount = (await favoriteProductIds(userId).catch(() => new Set<string>())).size;
   // Every signed-in page view counts toward İlerleme Raporu → Site Ziyaret Sıklığı.
   if (userId) after(() => recordVisit(userId));
   return (
@@ -68,6 +70,18 @@ export async function Navbar() {
           ))}
         </nav>
         <div className="hidden shrink-0 items-center gap-2 xl:flex">
+          <Link
+            href="/dashboard/favoriler"
+            className="ghost-button relative gap-2 whitespace-nowrap px-2.5"
+            aria-label={favoriteCount ? `Favorilerim (${favoriteCount} ürün)` : "Favorilerim"}
+          >
+            <Heart size={18} aria-hidden="true" />
+            {favoriteCount ? (
+              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-black leading-5 text-white">
+                {favoriteCount}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/cart"
             className="ghost-button relative gap-2 whitespace-nowrap"
@@ -116,6 +130,7 @@ export async function Navbar() {
           links={NAV_LINKS}
           isSignedIn={Boolean(session?.user)}
           cartCount={cartCount}
+          favoriteCount={favoriteCount}
           examLinks={PLATFORM_EXAMS.map((exam) => ({ href: `/exams/${exam.slug}`, label: exam.name }))}
           yokdilLinks={YOKDIL_LINKS}
         />
