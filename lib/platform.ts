@@ -16,3 +16,4 @@ export const PLATFORM_EXAMS = [
 export function examLearningHref(slug: string) { return slug === "yokdil" ? "/exams/yokdil#exam-sections" : `/konu-anlatim?exam=${slug}`; }
 export function examGroupHref(slug: string) { return `/group-lessons?exam=${slug}`; }
 export function examMaterialHref(slug: string) { return slug === "yokdil" ? "/exams/yokdil#exam-sections" : `/packages?exam=${slug}`; }
+export function examResourcesHref(slug: string) { return slug === "yokdil" ? "/exams/yokdil#exam-sections" : `/kaynaklar/konu-konu/${slug}`; }
