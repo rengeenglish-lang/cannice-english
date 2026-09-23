@@ -5,6 +5,8 @@ import {
   listProducts,
 } from "@/server/services/catalog.service";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
+import { auth } from "@/auth";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import { ExamShowcase } from "@/components/exams/ExamShowcase";
 import { EXAM_LANDING_CONTENT } from "@/lib/exam-landing";
 import { examFamilyForCode } from "@/lib/diagnostics/exam-family";
@@ -21,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ExamLandingPage({ params }: Props) {
+  const favoriteIds = await favoriteProductIds((await auth())?.user?.id);
   const { examSlug } = await params;
   const exam = await getExamTypeBySlug(examSlug);
   if (!exam) notFound();
@@ -39,7 +42,7 @@ export default async function ExamLandingPage({ params }: Props) {
       >
         <section className="mx-auto w-full max-w-[1320px] px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-7"><p className="eyebrow">Hazırlık seçenekleri</p><h2 className="mt-2 text-3xl font-black tracking-tight">{exam.name} kaynakları</h2></div>
-          <ProductGrid products={products} emptyLabel={`${exam.name} için hazırlık paketleri yakında eklenecek.`} />
+          <ProductGrid favoriteIds={favoriteIds} products={products} emptyLabel={`${exam.name} için hazırlık paketleri yakında eklenecek.`} />
         </section>
       </ExamShowcase>
     );
@@ -55,7 +58,7 @@ export default async function ExamLandingPage({ params }: Props) {
         <p className="page-copy">{exam.shortDescription}</p>
       ) : null}
       <div className="mt-10">
-        <ProductGrid
+        <ProductGrid favoriteIds={favoriteIds}
           products={products}
           emptyLabel={`${exam.name} için hazırlık paketleri yakında eklenecek.`}
         />

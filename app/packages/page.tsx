@@ -2,6 +2,8 @@ import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { listProducts, listExamTypes } from "@/server/services/catalog.service";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
+import { auth } from "@/auth";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "Online Dersler ve Paketler" };
@@ -25,6 +27,7 @@ const CATEGORY_TABS: {
 type Props = { searchParams: Promise<{ category?: string; exam?: string }> };
 
 export default async function PackagesPage({ searchParams }: Props) {
+  const favoriteIds = await favoriteProductIds((await auth())?.user?.id);
   const { category, exam } = await searchParams;
   const exams = await listExamTypes();
   const activeExam = exam
@@ -89,7 +92,7 @@ export default async function PackagesPage({ searchParams }: Props) {
       </div>
 
       <div className="mt-10">
-        <ProductGrid products={products} />
+        <ProductGrid favoriteIds={favoriteIds} products={products} />
       </div>
     </main>
   );

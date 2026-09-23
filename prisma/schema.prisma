@@ -333,6 +333,7 @@ model User {
   planSubscriptions     PlanSubscription[]
   savedExamTopics       SavedExamTopic[]
   visits                UserVisit[]
+  favorites             FavoriteProduct[]
   sentMessages          TeacherMessage[]        @relation("MessageStudent")
   answeredMessages      TeacherMessage[]        @relation("MessageResponder")
 
@@ -413,12 +414,13 @@ model Product {
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 
-  examType   ExamType?   @relation(fields: [examTypeId], references: [id])
-  course     Course?
-  book       Book?
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-  reviews    Review[]
+  examType    ExamType?         @relation(fields: [examTypeId], references: [id])
+  course      Course?
+  book        Book?
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  favoritedBy FavoriteProduct[]
 
   @@index([category])
   @@index([examTypeId])
@@ -1188,4 +1190,20 @@ model UserVisit {
 
   @@unique([userId, day])
   @@map("user_visits")
+}
+
+/**
+ * Favorilerim — products a student saved for later (heart button, or "Favorilere taşı" from the cart).
+ */
+model FavoriteProduct {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("favorite_products")
 }

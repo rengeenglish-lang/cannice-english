@@ -2,6 +2,7 @@ import { Check, Crown } from "lucide-react";
 import { formatTRY } from "@/lib/pricing";
 import { PLAN_CARD_COPY, PLAN_NAMES, PLAN_RANK, type PlanTierCode } from "@/lib/plans";
 import { buyPlanAction } from "@/app/actions/plans";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 
 type PlanProduct = { id: string; title: string; planTier: PlanTierCode | null; basePrice: unknown; salePrice: unknown };
 
@@ -13,10 +14,12 @@ export function PlanCards({
   products,
   currentTier,
   currentExpiresAt,
+  favoriteIds = new Set<string>(),
 }: {
   products: PlanProduct[];
   currentTier: PlanTierCode | null;
   currentExpiresAt?: Date | null;
+  favoriteIds?: Set<string>;
 }) {
   const byTier = new Map(products.filter((p) => p.planTier).map((p) => [p.planTier!, p]));
   const tiers = (["BASLANGIC", "CIRAK", "UZMAN"] as const).filter((tier) => byTier.has(tier));
@@ -48,7 +51,10 @@ export function PlanCards({
             {isCurrent ? (
               <span className="absolute -top-3 left-6 rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-black tracking-wider text-white">MEVCUT PLANIN</span>
             ) : null}
-            <div className="flex items-center gap-2">
+            <div className="absolute right-4 top-4">
+              <FavoriteButton productId={product.id} initial={favoriteIds.has(product.id)} title={`${PLAN_NAMES[tier]} planı`} />
+            </div>
+            <div className="flex items-center gap-2 pr-12">
               {tier === "UZMAN" ? <Crown size={20} className="text-amber-500" aria-hidden="true" /> : null}
               <h3 className="text-2xl font-black">{PLAN_NAMES[tier]}</h3>
             </div>

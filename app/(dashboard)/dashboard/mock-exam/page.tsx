@@ -10,6 +10,7 @@ import { startMockExamAction } from "@/app/actions/diagnostic-attempt";
 import { PlanCards } from "@/components/plans/PlanCards";
 import { getPlanAccess, listPlanProducts, remainingMockExamStarts } from "@/server/services/plans.service";
 import { BASLANGIC_MOCK_EXAM_LIMIT, PLAN_NAMES } from "@/lib/plans";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 
 export const metadata: Metadata = { title: "Deneme Sınavı" };
 
@@ -17,7 +18,7 @@ export default async function MockExamPage({ searchParams }: { searchParams: Pro
   const user = await getAuthContext();
   if (!user) return null;
   const { limit } = await searchParams;
-  const [access, planProducts, goal] = await Promise.all([getPlanAccess(user), listPlanProducts(), getActiveGoal(user.id)]);
+  const [access, planProducts, goal, favoriteIds] = await Promise.all([getPlanAccess(user), listPlanProducts(), getActiveGoal(user.id), favoriteProductIds(user.id)]);
   const remaining = access.can("MOCK_EXAMS") ? await remainingMockExamStarts(user.id, access) : 0;
 
   const plans = (
@@ -39,7 +40,7 @@ export default async function MockExamPage({ searchParams }: { searchParams: Pro
         </p>
       ) : null}
       <div className="mt-6">
-        <PlanCards products={planProducts} currentTier={access.plan?.tier ?? null} currentExpiresAt={access.plan?.expiresAt} />
+        <PlanCards products={planProducts} currentTier={access.plan?.tier ?? null} currentExpiresAt={access.plan?.expiresAt} favoriteIds={favoriteIds} />
       </div>
     </section>
   );

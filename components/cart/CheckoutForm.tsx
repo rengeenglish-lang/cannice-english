@@ -5,7 +5,7 @@ import { placeOrderAction, type CheckoutFormState } from "@/app/actions/checkout
 
 const initialState: CheckoutFormState = { status: "idle" };
 
-export function CheckoutForm({ isGuest }: { isGuest: boolean }) {
+export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean; defaultCoupon?: string }) {
   const [state, formAction, pending] = useActionState(placeOrderAction, initialState);
   const [paymentMethod, setPaymentMethod] = useState<"MANUAL" | "PAYPAL">("PAYPAL");
 
@@ -51,7 +51,7 @@ export function CheckoutForm({ isGuest }: { isGuest: boolean }) {
       ) : null}
       <div>
         <label className="label" htmlFor="couponCode">Kupon Kodu (opsiyonel)</label>
-        <input id="couponCode" name="couponCode" placeholder="PASS25" className="auth-input uppercase" />
+        <input id="couponCode" name="couponCode" placeholder="PASS25" defaultValue={defaultCoupon} className="auth-input uppercase" />
       </div>
       {paymentMethod === "MANUAL" ? (
         <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--brand-soft)] p-4 text-sm text-[color:var(--brand)]">

@@ -4,6 +4,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { PlanCards } from "@/components/plans/PlanCards";
 import { getAuthContext } from "@/server/auth/context";
 import { getActivePlan, listPlanProducts } from "@/server/services/plans.service";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 
 export const metadata: Metadata = {
   title: "Planlar",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function PlansPage() {
   const user = await getAuthContext();
-  const [products, plan] = await Promise.all([listPlanProducts(), user ? getActivePlan(user.id) : null]);
+  const [products, plan, favoriteIds] = await Promise.all([listPlanProducts(), user ? getActivePlan(user.id) : null, favoriteProductIds(user?.id)]);
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
@@ -23,7 +24,7 @@ export default async function PlansPage() {
         </p>
       </PageHero>
       <div className="mt-10">
-        <PlanCards products={products} currentTier={plan?.tier ?? null} currentExpiresAt={plan?.expiresAt} />
+        <PlanCards products={products} currentTier={plan?.tier ?? null} currentExpiresAt={plan?.expiresAt} favoriteIds={favoriteIds} />
       </div>
       <p className="mt-8 text-center text-sm text-[color:var(--muted)]">
         Satın alımdan itibaren 14 gün içinde iade talep edebilirsin. Ayrıntılar için{" "}

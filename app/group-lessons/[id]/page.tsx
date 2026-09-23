@@ -18,6 +18,8 @@ import { enrollmentGrantsAccess } from "@/lib/diagnostics/access";
 import { billingState, isMonthlyBilledCategory } from "@/lib/billing";
 import { PLAN_PERK_LABELS } from "@/lib/plans";
 import { formatTRY } from "@/lib/pricing";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 export const dynamic = "force-dynamic";
 export default async function GroupLessonPage({
   params,
@@ -45,6 +47,7 @@ export default async function GroupLessonPage({
   const locked = access?.status === "ACTIVE" && billingState(access.paidThrough) === "LOCKED";
   const perk = user && !entitled ? await availablePerkForCourse(user.id, slot.courseId) : null;
   const monthly = isMonthlyBilledCategory(slot.course.product.category);
+  const isFavorite = (await favoriteProductIds(user?.id)).has(slot.course.productId);
   const alternatives = !a.canEnroll ? await nearestGroupSlots(id) : [];
   return (
     <main className="mx-auto max-w-5xl px-5 py-12">
@@ -52,9 +55,12 @@ export default async function GroupLessonPage({
       <Link href="/group-lessons" className="text-sm font-bold text-blue-700">
         ← Haftalık dersler
       </Link>
-      <h1 className="page-title mt-5">
-        {enrolled ? "Grup kaydınız" : "Bu gruba katıl"}
-      </h1>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="page-title !mt-0">
+          {enrolled ? "Grup kaydınız" : "Bu gruba katıl"}
+        </h1>
+        <FavoriteButton productId={slot.course.productId} initial={isFavorite} title={slot.course.product.title} variant="full" />
+      </div>
       <div className="mt-7 grid gap-6 md:grid-cols-2">
         <SlotCard slot={slot} />
         <section className="rounded-2xl border border-slate-200 bg-white p-6">

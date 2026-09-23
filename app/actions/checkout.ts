@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { db } from "@/server/db";
-import { getOrCreateCart } from "@/server/services/cart.service";
+import { cookies } from "next/headers";
+import { getOrCreateCart, refreshCartPrices } from "@/server/services/cart.service";
+import { inspectCart } from "@/server/services/cart-checks.service";
+import { getAuthContext } from "@/server/auth/context";
+import { CART_COUPON_COOKIE } from "@/lib/cart";
 import { guestCheckoutSchema } from "@/lib/validation/checkout";
 import { validateCouponForOrder, redeemCoupon } from "@/server/services/coupons.service";
 
@@ -13,6 +17,11 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   const session = await auth();
   const cart = await getOrCreateCart(session?.user?.id);
   if (cart.items.length === 0) return { status: "error" as const, message: "Sepetiniz boş." };
+  // Same checks the cart page shows (unpublished product, full group time, plan below the one the
+  // student holds, already-owned item...) — enforced here too, and always at today's prices.
+  await refreshCartPrices(cart);
+  const { issues, blocking } = await inspectCart(cart, await getAuthContext());
+  if (blocking) return { status: "error" as const, message: issues.find((i) => i.level === "error")!.message };
 
   let guest: { guestName: string; guestEmail: string; guestPhone: string } | null = null;
   if (!session?.user?.id) {
@@ -75,6 +84,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
 
   if (appliedCouponId) await redeemCoupon(appliedCouponId);
   await db.cartItem.deleteMany({ where: { cartId: cart.id } });
+  (await cookies()).delete(CART_COUPON_COOKIE);
 
   redirect(paymentMethod === "PAYPAL" ? `/checkout/pay/${order.id}` : `/checkout/received?order=${order.id}`);
 }
