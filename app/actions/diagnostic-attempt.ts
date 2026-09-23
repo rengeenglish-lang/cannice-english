@@ -16,6 +16,8 @@ import {
 import { startRoadmapItem } from "@/server/services/study-roadmap.service";
 import { examFamilyForCode, hasLiveDiagnostic } from "@/lib/diagnostics/exam-family";
 import { logEvent } from "@/lib/diagnostics/analytics";
+import { getPlanAccess, remainingMockExamStarts } from "@/server/services/plans.service";
+import { db } from "@/server/db";
 
 export async function startFullDiagnosticAction() {
   const user = await getAuthContext();
@@ -61,6 +63,8 @@ export async function startPracticeAction(topicId: string | null) {
   if (!user) redirect(`/sign-in?next=${encodeURIComponent("/dashboard/practice")}`);
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
+  // Pratik Bankası is a Çırak/Uzman feature — enforced here, not just hidden in the UI.
+  if (!(await getPlanAccess(user)).can("PRACTICE_QUESTIONS")) redirect("/dashboard/practice");
 
   const { attempt } = await findOrCreatePracticeAttempt(
     user.id,
@@ -81,6 +85,17 @@ export async function startMockExamAction(setNumber: number) {
   const goal = await getActiveGoal(user.id);
   if (!goal) redirect("/seviye-tespit/hedef");
   if (!hasLiveDiagnostic(goal.examType.code)) return;
+
+  // Any plan unlocks denemeler; Başlangıç caps new starts (resuming never counts).
+  const access = await getPlanAccess(user);
+  if (!access.can("MOCK_EXAMS")) redirect("/dashboard/mock-exam#planlar");
+  const inProgress = await db.diagnosticAttempt.findFirst({
+    where: { userId: user.id, examTypeId: goal.examTypeId, kind: "MOCK_EXAM", mockSetNumber: setNumber, status: "IN_PROGRESS" },
+  });
+  if (!inProgress) {
+    const remaining = await remainingMockExamStarts(user.id, access);
+    if (remaining !== null && remaining <= 0) redirect("/dashboard/mock-exam?limit=1#planlar");
+  }
 
   const { attempt, resumed } = await findOrCreateMockExamAttempt(
     user.id,

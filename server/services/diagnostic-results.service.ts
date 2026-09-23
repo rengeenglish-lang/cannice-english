@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { recommendationsForTopics } from "@/lib/diagnostics/recommendations";
+import { cefrFromPercentage } from "@/lib/diagnostics/cefr";
 
 export async function getResultsForAttempt(attemptId: string, userId: string) {
   const attempt = await db.diagnosticAttempt.findFirst({
@@ -106,4 +107,31 @@ export async function getPracticeResults(attemptId: string, userId: string) {
     unanswered,
     percentage: total ? Math.round((correct / total) * 100) : 0,
   };
+}
+
+/** Completed seviye tespit (FULL_DIAGNOSTIC) attempts, newest first, with score, CEFR band and per-topic results. */
+export async function getLevelTestHistory(userId: string) {
+  const attempts = await db.diagnosticAttempt.findMany({
+    where: { userId, kind: "FULL_DIAGNOSTIC", status: "COMPLETED" },
+    include: { examType: true, responses: { select: { isCorrect: true } }, topicResults: { include: { topic: true }, orderBy: { accuracy: "asc" } } },
+    orderBy: { completedAt: "desc" },
+  });
+  return attempts.map((a) => {
+    const total = a.questionOrder.length;
+    const correct = a.responses.filter((r) => r.isCorrect === true).length;
+    const percentage = total ? Math.round((correct / total) * 100) : 0;
+    const academic = a.examFamily === "ACADEMIC_SKILLS";
+    return {
+      id: a.id,
+      examTypeId: a.examTypeId,
+      examName: a.examType.name,
+      academic,
+      completedAt: a.completedAt,
+      total,
+      correct,
+      percentage,
+      cefr: academic ? cefrFromPercentage(percentage) : null,
+      topicResults: a.topicResults.map((r) => ({ name: r.topic.name, accuracy: r.accuracy, severity: r.severity, answered: r.questionsAnswered })),
+    };
+  });
 }

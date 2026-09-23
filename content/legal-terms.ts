@@ -1,4 +1,19 @@
-export const LEGAL_DOCS: Record<string, { title: string; body: string }> = {
+import { REFUND_POLICY, TERMS_OF_USE } from "@/content/policies";
+
+export type LegalSection = { heading: string; paragraphs: string[] };
+export type LegalDoc = {
+  title: string;
+  body: string;
+  /** Full structured text; placeholder docs only have `body`. */
+  sections?: LegalSection[];
+  updatedAt?: string;
+  /** Placeholder docs awaiting legal review show a "TASLAK" badge. */
+  draft?: boolean;
+};
+
+export const LEGAL_DOCS: Record<string, LegalDoc> = {
+  "iade-politikasi": REFUND_POLICY,
+  "kullanim-kosullari": TERMS_OF_USE,
   "mesafeli-satis-sozlesmesi": {
     title: "Mesafeli Satış Sözleşmesi",
     body: "Bu sözleşme, Cannice English platformu üzerinden gerçekleştirilen mesafeli satışlara ilişkin tarafların hak ve yükümlülüklerini düzenler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",

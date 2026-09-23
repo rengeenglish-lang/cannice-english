@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const [examTypes, products, blogPosts] = await Promise.all([
     db.examType.findMany({ where: { active: true }, select: { slug: true } }),
-    db.product.findMany({ where: { isPublished: true }, select: { slug: true, category: true, updatedAt: true } }),
+    db.product.findMany({ where: { isPublished: true, category: { not: "PLAN" } }, select: { slug: true, category: true, updatedAt: true } }),
     db.blogPost.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, publishedAt: true } }),
   ]);
 
@@ -21,7 +21,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/group-lessons` },
     { url: `${base}/konu-anlatim` },
     { url: `${base}/about` },
-    { url: `${base}/faq` },
+    { url: `${base}/yardim` },
+    { url: `${base}/planlar` },
+    { url: `${base}/legal/iade-politikasi` },
+    { url: `${base}/legal/kullanim-kosullari` },
     { url: `${base}/grammar` },
     { url: `${base}/campaigns` },
     { url: `${base}/kaynaklar` },

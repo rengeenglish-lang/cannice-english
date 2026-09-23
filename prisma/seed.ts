@@ -487,16 +487,53 @@ async function main() {
   }
 
   const resourceDefs = [
-    { slug: "yds-onemli-kelimeler", title: "YDS Önemli Kelimeler", description: "En sık çıkan 200 kelimelik liste.", examCode: "YDS", fileUrl: "https://example.com/placeholder.pdf" },
-    { slug: "yokdil-saglik-kelimeleri", title: "YÖKDİL Sağlık Kelimeleri", description: "Sağlık bilimleri terminoloji listesi.", examCode: "YOKDIL_SAGLIK", fileUrl: "https://example.com/placeholder.pdf" },
+    { slug: "yds-onemli-kelimeler", title: "YDS Önemli Kelimeler", description: "En sık çıkan 200 kelimelik liste.", examCode: "YDS", fileUrl: "https://example.com/placeholder.pdf", kind: "E_BOOK" as const },
+    { slug: "yokdil-saglik-kelimeleri", title: "YÖKDİL Sağlık Kelimeleri", description: "Sağlık bilimleri terminoloji listesi.", examCode: "YOKDIL_SAGLIK", fileUrl: "https://example.com/placeholder.pdf", kind: "E_BOOK" as const },
   ];
   for (const def of resourceDefs) {
     await db.freeResource.upsert({
       where: { slug: def.slug },
-      update: { title: def.title, description: def.description, examTypeId: examTypes[def.examCode].id, fileUrl: def.fileUrl },
-      create: { slug: def.slug, title: def.title, description: def.description, examTypeId: examTypes[def.examCode].id, fileUrl: def.fileUrl },
+      update: { title: def.title, description: def.description, examTypeId: examTypes[def.examCode].id, fileUrl: def.fileUrl, kind: def.kind },
+      create: { slug: def.slug, title: def.title, description: def.description, examTypeId: examTypes[def.examCode].id, fileUrl: def.fileUrl, kind: def.kind },
     });
   }
+
+  // Deneme Sınavı plans. Prices are placeholders — edit them in Yönetim → Ürünler. What each tier
+  // unlocks is fixed in lib/plans.ts, not stored here.
+  const planDefs = [
+    { slug: "plan-baslangic", title: "Başlangıç Planı", planTier: "BASLANGIC" as const, accessMonths: 1, basePrice: "599.00", salePrice: "449.00", displayOrder: 1 },
+    { slug: "plan-cirak", title: "Çırak Planı", planTier: "CIRAK" as const, accessMonths: 4, basePrice: "1999.00", salePrice: "1499.00", displayOrder: 2 },
+    { slug: "plan-uzman", title: "Uzman Planı", planTier: "UZMAN" as const, accessMonths: 4, basePrice: "3999.00", salePrice: "2999.00", displayOrder: 3 },
+  ];
+  for (const def of planDefs) {
+    const existingPlan = await db.product.findUnique({ where: { slug: def.slug } });
+    // Never overwrite prices an admin has already edited.
+    if (!existingPlan) {
+      await db.product.create({ data: { ...def, category: "PLAN", badgeLabel: null, shortDescription: `${def.title} — deneme sınavı planı` } });
+    }
+  }
+
+  // A konuşma kulübü group, so the Uzman plan's free speaking-club perk has somewhere to be used.
+  const clubProduct = await db.product.upsert({
+    where: { slug: "ielts-toefl-konusma-kulubu" },
+    update: {},
+    create: {
+      slug: "ielts-toefl-konusma-kulubu",
+      title: "IELTS & TOEFL Konuşma Kulübü",
+      subtitle: "Haftalık canlı konuşma pratiği",
+      category: "PREP_GROUP",
+      examTypeId: examTypes.IELTS.id,
+      basePrice: "899.00",
+      salePrice: "699.00",
+      shortDescription: "Küçük gruplarda, eğitmen eşliğinde haftalık Speaking pratiği. Aylık ücretlidir.",
+      displayOrder: 20,
+    },
+  });
+  await db.course.upsert({
+    where: { productId: clubProduct.id },
+    update: { isSpeakingClub: true },
+    create: { productId: clubProduct.id, deliveryFormat: "LIVE_ONLY", isSpeakingClub: true, syllabusSummary: "Speaking Part 1-2-3 ve TOEFL konuşma görevleri üzerine haftalık canlı pratik." },
+  });
 
   const ydsTopicDefs = [
     { slug: "kelime-phrasal-verb", name: "Kelime – Phrasal Verb Soruları", questionCount: 6, difficulty: "Orta" },

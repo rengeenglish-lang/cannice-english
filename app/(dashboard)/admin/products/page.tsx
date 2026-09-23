@@ -11,6 +11,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   MOCK_CAMP: "Soru & Deneme Kampı",
   STUDY_PACKAGE: "Çalışma Paketi",
   TRANSLATION_SUPPORT: "Akademik Çeviri",
+  PLAN: "Deneme Sınavı Planı",
   BOOK: "Kitap",
 };
 

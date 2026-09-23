@@ -55,6 +55,7 @@ export default async function GroupAdminPage({
         capacity: slot.capacity ?? DEFAULT_CAPACITY,
         instructorId: slot.instructorId ?? undefined,
         adminNotes: slot.adminNotes ?? undefined,
+        meetingUrl: slot.meetingUrl ?? undefined,
         displayedOccupancy: slot.displayedOccupancy ?? undefined,
         useDisplayedOccupancy: slot.useDisplayedOccupancy,
         enrollmentOpen: slot.enrollmentOpen,

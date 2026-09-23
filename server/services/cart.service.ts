@@ -31,13 +31,19 @@ export async function getOrCreateCart(userId?: string) {
   });
 }
 
-export async function addToCart(productId: string, userId?: string) {
+/** Plans and monthly group lessons are one-per-order — re-adding them never bumps the quantity. */
+const SINGLE_QUANTITY_CATEGORIES = new Set(["PLAN", "PREP_GROUP"]);
+
+export async function addToCart(productId: string, userId?: string, opts: { groupSlotId?: string } = {}) {
   const cart = await getOrCreateCart(userId);
   const product = await db.product.findUniqueOrThrow({ where: { id: productId } });
+  const single = SINGLE_QUANTITY_CATEGORIES.has(product.category);
   return db.cartItem.upsert({
     where: { cartId_productId: { cartId: cart.id, productId } },
-    update: { quantity: { increment: 1 } },
-    create: { cartId: cart.id, productId, unitPriceSnapshot: product.salePrice },
+    update: single
+      ? { quantity: 1, unitPriceSnapshot: product.salePrice, ...(opts.groupSlotId ? { groupSlotId: opts.groupSlotId } : {}) }
+      : { quantity: { increment: 1 } },
+    create: { cartId: cart.id, productId, unitPriceSnapshot: product.salePrice, groupSlotId: opts.groupSlotId ?? null },
   });
 }
 

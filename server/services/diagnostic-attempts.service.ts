@@ -287,3 +287,44 @@ export async function finishAttempt(attemptId: string, userId: string) {
 
   return attempt;
 }
+
+/**
+ * Seviye Tespit → Yeni Test: a full level test for any exam, not only the active goal's. When
+ * the exam matches the student's active goal the attempt is linked to it (so the roadmap is
+ * regenerated as before); otherwise it is a standalone level test with no roadmap side effects.
+ */
+export async function startLevelTestAttempt(userId: string, examType: { id: string; code: ExamCode }, examFamily: ExamFamily, goalId: string | null) {
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${examType.id} || 'level'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, examTypeId: examType.id, kind: "FULL_DIAGNOSTIC", status: "IN_PROGRESS" } });
+    if (existing) return { attempt: existing, resumed: true };
+    const questionOrder = await selectFullDiagnosticQuestions(tx, examFamily, examType.id, examType.code);
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId: examType.id, examFamily, kind: "FULL_DIAGNOSTIC", goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}
+
+/**
+ * Seviye Tespit → Tekrar Çöz: re-sits the exact same question paper as an earlier completed level
+ * test, so the new score is directly comparable. Questions deactivated since are dropped.
+ */
+export async function retakeLevelTestAttempt(userId: string, sourceAttemptId: string, goalId: string | null) {
+  const source = await db.diagnosticAttempt.findFirst({ where: { id: sourceAttemptId, userId, kind: "FULL_DIAGNOSTIC", status: "COMPLETED" } });
+  if (!source) throw new Error("Tekrar çözülecek seviye tespit sınavı bulunamadı.");
+  return db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtext(${userId} || ${source.examTypeId} || 'level'))::text`;
+    const existing = await tx.diagnosticAttempt.findFirst({ where: { userId, examTypeId: source.examTypeId, kind: "FULL_DIAGNOSTIC", status: "IN_PROGRESS" } });
+    if (existing) return { attempt: existing, resumed: true };
+    const active = await tx.diagnosticQuestion.findMany({ where: { id: { in: source.questionOrder }, isActive: true }, select: { id: true } });
+    const activeIds = new Set(active.map((q) => q.id));
+    const questionOrder = source.questionOrder.filter((id) => activeIds.has(id));
+    if (questionOrder.length === 0) return { attempt: null, resumed: false };
+    const attempt = await tx.diagnosticAttempt.create({
+      data: { userId, examTypeId: source.examTypeId, examFamily: source.examFamily, kind: "FULL_DIAGNOSTIC", goalId, questionOrder, status: "IN_PROGRESS" },
+    });
+    return { attempt, resumed: false };
+  });
+}

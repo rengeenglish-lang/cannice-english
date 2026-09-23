@@ -39,7 +39,7 @@ export default async function StartDiagnosticPage() {
       ) : (
         <>
           <p className="page-copy mt-4">
-            {goal.examType.name} için seviye tespit sınavımız yakında yayında olacak. Bu sırada ücretsiz konu anlatımlarımızla çalışmaya başlayabilirsin.
+            {goal.examType.name} için seviye tespit sınavımız yakında yayında olacak. Bu sırada konu anlatımlarımızla çalışmaya başlayabilirsin.
           </p>
           <Link href="/konu-anlatim" className="primary-button mx-auto mt-8 inline-flex">
             Konu Anlatımlarına Git

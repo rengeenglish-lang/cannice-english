@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     absolute: "Cannice English — IELTS, TOEFL, YDS ve YÖKDİL Hazırlık Platformu",
   },
   description:
-    "IELTS, TOEFL, YDS ve YÖKDİL için ücretsiz konu anlatımları, sınav pratiği, canlı grup dersleri ve çalışma materyalleri tek platformda.",
+    "IELTS, TOEFL, YDS ve YÖKDİL için konu anlatımları, deneme sınavları, seviye tespit, canlı grup dersleri ve çalışma materyalleri tek platformda.",
 };
 
 export default async function HomePage() {

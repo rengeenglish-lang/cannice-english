@@ -11,9 +11,22 @@ import {
   getTopicNotesForUser,
 } from "@/server/services/topics.service";
 import { getAuthContext } from "@/server/auth/context";
+import { getPlanAccess } from "@/server/services/plans.service";
 import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
+import { ArrowRight, Lock } from "lucide-react";
 
 export const metadata: Metadata = { title: "Konu Anlatım" };
+
+/** The seven subject buttons, in the order the brief lists them. */
+const SUBJECTS = [
+  { slug: "ielts", name: "IELTS", copy: "Reading, Listening, Writing ve Speaking" },
+  { slug: "toefl", name: "TOEFL", copy: "Güncel iBT formatının tüm bölümleri" },
+  { slug: "pte", name: "PTE", copy: "Speaking, Writing, Reading ve Listening görevleri" },
+  { slug: "yds", name: "YDS", copy: "Kelime, gramer, çeviri ve paragraf" },
+  { slug: "yokdil-sosyal-bilimler", name: "YÖKDİL Sosyal Bilimler", copy: "Sosyal bilimler metinleriyle gramer ve okuma" },
+  { slug: "yokdil-saglik-bilimleri", name: "YÖKDİL Sağlık Bilimleri", copy: "Sağlık bilimleri metinleriyle gramer ve okuma" },
+  { slug: "yokdil-fen-bilimleri", name: "YÖKDİL Fen Bilimleri", copy: "Fen bilimleri metinleriyle gramer ve okuma" },
+] as const;
 
 function formatWeightPercent(questionCount: number, totalQuestions: number) {
   if (totalQuestions === 0) return "—";
@@ -22,19 +35,65 @@ function formatWeightPercent(questionCount: number, totalQuestions: number) {
   return `%${rounded.toString().replace(".", ",")}`;
 }
 
-type Props = { searchParams: Promise<{ exam?: string }> };
+type Props = { searchParams: Promise<{ exam?: string; topic?: string }> };
 
 export default async function TopicsIndexPage({ searchParams }: Props) {
-  const { exam } = await searchParams;
-  const examSlug = exam ?? "yds";
-  const [exams, activeExam, user] = await Promise.all([
+  const { exam, topic: topicSlug } = await searchParams;
+  const user = await getAuthContext();
+  const access = await getPlanAccess(user);
+  const hasAccess = access.can("KONU_ANLATIMI");
+
+  if (!exam) {
+    return (
+      <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
+        <PageHero>
+          <p className="eyebrow">Konu Anlatım</p>
+          <h1 className="page-title">Sınavınıza konu konu, sıfırdan hazırlanın</h1>
+          <p className="page-copy !text-lg !font-semibold">
+            Bir sınav seçin ve içeriği açın. Her sınavın ilk konusu ücretsiz önizlemedir; tüm konulara erişim planınıza dahildir.
+          </p>
+        </PageHero>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SUBJECTS.map((subject) => (
+            <Link
+              key={subject.slug}
+              href={`/konu-anlatim?exam=${subject.slug}`}
+              className="group flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)] transition hover:-translate-y-1 hover:border-blue-300"
+            >
+              <h2 className="text-xl font-black text-slate-900">{subject.name}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{subject.copy}</p>
+              <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-3.5 py-1.5 text-xs font-bold text-white transition group-hover:bg-[color:var(--accent-strong)]">
+                {hasAccess ? null : <Lock size={13} aria-hidden="true" />}
+                İçeriği Aç <ArrowRight size={14} aria-hidden="true" />
+              </span>
+            </Link>
+          ))}
+        </div>
+        {!hasAccess ? (
+          <p className="mt-8 text-center text-sm text-slate-600">
+            Tüm konu anlatımlarına erişim Başlangıç, Çırak ve Uzman planlarına dahildir.{" "}
+            <Link href="/planlar" className="font-bold text-[color:var(--accent-strong)] underline">Planları incele</Link>
+          </p>
+        ) : null}
+      </main>
+    );
+  }
+
+  const examSlug = exam;
+  const [exams, activeExam] = await Promise.all([
     listExamTypes(),
     getExamTypeBySlug(examSlug),
-    getAuthContext(),
   ]);
-  const topics = activeExam
+  const allTopics = activeExam
     ? await listExamTopicsWithLessons(activeExam.id)
     : [];
+  // Without a plan only the first topic is a free preview; the rest are sent without their lesson
+  // bodies/videos so the paid content never reaches the browser.
+  const lockedTopicIds = hasAccess ? [] : allTopics.slice(1).map((t) => t.id);
+  const topics = hasAccess
+    ? allTopics
+    : allTopics.map((t, i) => (i === 0 ? t : { ...t, lessons: t.lessons.map((l) => ({ ...l, contentBody: null, videoUrl: null })) }));
+  const initialTopicId = topics.find((t) => t.slug === topicSlug)?.id;
   const [completedLessonIds, notes] = await Promise.all([
     user
       ? getCompletedTopicLessonIdsForUser(user.id)
@@ -62,7 +121,8 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
           dersleri sırayla tamamlayın.
         </p>
       </PageHero>
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <Link href="/konu-anlatim" className="rounded-full px-3 py-2 text-sm font-bold text-slate-500 hover:text-blue-700">← Tüm sınavlar</Link>
         {exams.map((item) => (
           <Link
             key={item.id}
@@ -85,7 +145,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
             burada olacak
           </p>
           <p className="mt-2 text-sm text-slate-500">
-            Şu an için YDS, YÖKDİL ve PTE konu anlatımlarını inceleyebilirsiniz.
+            <Link href="/konu-anlatim" className="underline">Diğer sınavların</Link> konu anlatımlarını inceleyebilirsiniz.
           </p>
         </div>
       ) : (
@@ -150,12 +210,14 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
 
           <div className="mt-8">
             <KonuAnlatimDashboard
-              key={activeExam?.id ?? examSlug}
+              key={`${activeExam?.id ?? examSlug}-${topicSlug ?? ""}`}
               examName={activeExam?.name ?? ""}
               topics={topics}
               initialCompletedLessonIds={[...completedLessonIds]}
               initialNotes={notes}
               isSignedIn={Boolean(user)}
+              initialTopicId={initialTopicId}
+              lockedTopicIds={lockedTopicIds}
             />
           </div>
         </>

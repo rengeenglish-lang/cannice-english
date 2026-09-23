@@ -27,7 +27,8 @@ export function listProducts(
   return db.product.findMany({
     where: {
       isPublished: true,
-      ...(params.category ? { category: params.category } : {}),
+      // Plans are sold from /planlar and the Deneme Sınavı page, not the package catalogue.
+      ...(params.category ? { category: params.category } : { category: { not: "PLAN" } }),
       ...(params.examTypeId ? { examTypeId: params.examTypeId } : {}),
       ...(params.featuredOnly ? { isFeatured: true } : {}),
     },

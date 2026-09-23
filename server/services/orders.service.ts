@@ -1,6 +1,9 @@
 import "server-only";
 import { db } from "@/server/db";
 import { createNotification } from "@/server/services/notifications.service";
+import { grantPlanForOrderItem } from "@/server/services/plans.service";
+import { enrollGroupSlotAndSeries } from "@/server/services/group-availability.service";
+import { isMonthlyBilledCategory, nextPaidThrough } from "@/lib/billing";
 
 export function listOrders() {
   return db.order.findMany({
@@ -22,29 +25,60 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
       where: { id: orderId },
       include: { items: { include: { product: { include: { course: true } } } } },
     });
+    // Idempotent: a PayPal capture retry or a double click in the admin panel must not grant a
+    // second plan period or push a group lesson's paidThrough forward twice.
+    if (order.status === "PAID") return { enrolled: 0, skippedGuest: !order.userId, userId: null, slotBookings: [] };
 
     await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
     await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date(), ...(opts?.providerRef ? { providerRef: opts.providerRef } : {}) } });
 
-    if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null };
+    if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null, slotBookings: [] };
 
     let enrolled = 0;
+    const slotBookings: string[] = [];
     for (const item of order.items) {
+      if (item.product.category === "PLAN") {
+        await grantPlanForOrderItem(tx, order.userId, item, item.product);
+        continue;
+      }
       const course = item.product.course;
       if (!course) continue;
+      const existing = await tx.enrollment.findUnique({ where: { userId_courseId: { userId: order.userId, courseId: course.id } } });
+      // Hazırlık grupları are billed monthly: each paid unit extends paidThrough by one calendar month.
+      let billing = {};
+      if (isMonthlyBilledCategory(item.product.category)) {
+        let paidThrough = existing?.paidThrough ?? null;
+        for (let n = 0; n < Math.max(1, item.quantity); n++) paidThrough = nextPaidThrough(paidThrough);
+        billing = { paidThrough, renewalNoticeSentAt: null };
+      }
       const enrollment = await tx.enrollment.upsert({
         where: { userId_courseId: { userId: order.userId, courseId: course.id } },
-        update: { status: "ACTIVE", orderItemId: item.id },
-        create: { userId: order.userId, courseId: course.id, orderItemId: item.id, status: "ACTIVE" },
+        update: { status: "ACTIVE", orderItemId: item.id, ...billing },
+        create: { userId: order.userId, courseId: course.id, orderItemId: item.id, status: "ACTIVE", ...billing },
       });
       if (enrollment) enrolled += 1;
+      if (item.groupSlotId) slotBookings.push(item.groupSlotId);
     }
 
-    return { enrolled, skippedGuest: false, userId: order.userId };
+    return { enrolled, skippedGuest: false, userId: order.userId, slotBookings };
   });
 
   if (result.userId) {
     await createNotification(result.userId, { title: "Ödemeniz onaylandı", body: "Siparişiniz onaylandı, dersleriniz hesabınızda hazır.", href: "/dashboard/orders" });
+    // "Gruba Katıl" purchases book their chosen group straight away, so it shows up in Canlı
+    // Derslerim without a second confirmation step. A seat can fill up between checkout and a
+    // manual (havale) approval, in which case the student is told to pick another time.
+    for (const slotId of result.slotBookings) {
+      try {
+        await enrollGroupSlotAndSeries(slotId, result.userId);
+      } catch (error) {
+        await createNotification(result.userId, {
+          title: "Grup dersi kaydınız tamamlanamadı",
+          body: `${error instanceof Error ? error.message : "Seçtiğiniz grup artık müsait değil."} Ödemeniz geçerli; lütfen haftalık takvimden başka bir saat seçin.`,
+          href: "/group-lessons",
+        });
+      }
+    }
   }
   return result;
 }
@@ -77,6 +111,7 @@ export async function markOrderRefunded(orderId: string) {
 
     for (const item of order.items) {
       await tx.enrollment.updateMany({ where: { orderItemId: item.id }, data: { status: "REVOKED" } });
+      await tx.planSubscription.updateMany({ where: { orderItemId: item.id }, data: { status: "REVOKED" } });
     }
     return order;
   });

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { db } from "@/server/db";
 import { lessonDate, lessonTime } from "@/lib/availability";
-export async function MyGroupBookings({ userId }: { userId: string }) {
+/** `showBookings: false` keeps only the "return to the slot you picked" banner (Canlı Derslerim lists bookings per group itself). */
+export async function MyGroupBookings({ userId, showBookings = true }: { userId: string; showBookings?: boolean }) {
   const selected = (await cookies()).get("selected-group-slot")?.value;
   const bookings = await db.groupLessonEnrollment.findMany({
     where: {
@@ -23,7 +24,7 @@ export async function MyGroupBookings({ userId }: { userId: string }) {
           Seçtiğiniz grup dersine dönün ve kaydınızı tamamlayın →
         </Link>
       )}
-      {!!bookings.length && (
+      {showBookings && !!bookings.length && (
         <>
           <h2 className="text-xl font-bold">Grup dersi rezervasyonlarım</h2>
           {bookings.map(({ slot }) => (

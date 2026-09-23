@@ -43,7 +43,7 @@ export function LiveCalendar({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="eyebrow">BİRLİKTE ÖĞRENELİM</p>
-          <h2 className="section-title !text-xl">Canlı ders takvimi</h2>
+          <h2 className="section-title !text-xl">Canlı Derslerim takvimi</h2>
           <p className="mt-2 text-xs text-[color:var(--muted)]">
             Kayıtlı olduğunuz gruplar · Türkiye saati (Europe/Istanbul)
           </p>
