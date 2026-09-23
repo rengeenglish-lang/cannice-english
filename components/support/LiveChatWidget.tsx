@@ -18,8 +18,10 @@ declare global {
   }
 }
 
-const PROPERTY_ID = process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID;
-const WIDGET_ID = process.env.NEXT_PUBLIC_TAWK_WIDGET_ID;
+// Cannice English's Tawk.to widget. These IDs are public (they appear in every visitor's page
+// source); the env vars only exist to point a staging deploy at a different widget.
+const PROPERTY_ID = process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID || "6ab37e2fd971a1344458da5c";
+const WIDGET_ID = process.env.NEXT_PUBLIC_TAWK_WIDGET_ID || "1k36i9qc3";
 
 /** Timed exam screens and the admin panel stay distraction-free — the bubble is hidden there. */
 function hiddenOn(pathname: string) {
