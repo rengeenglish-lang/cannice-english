@@ -9,6 +9,7 @@ import { listSubmissionsForEnrollment } from "@/server/services/submissions.serv
 import { LearnModuleAccordion } from "@/components/course/LearnModuleAccordion";
 import { LiveSessionSchedule } from "@/components/course/LiveSessionSchedule";
 import { PracticeSubmissionPanel } from "@/components/course/PracticeSubmissionPanel";
+import { billingState } from "@/lib/billing";
 
 type Props = { params: Promise<{ courseId: string }> };
 
@@ -37,6 +38,10 @@ export default async function CourseLearningPage({ params }: Props) {
   );
   const percent = progress.percent;
   const submissions = await listSubmissionsForEnrollment(enrollment.id);
+  // A group locked for non-payment keeps its recorded content, but its live-lesson links are
+  // withheld until the student renews (Canlı Derslerim shows the "Devam etmek için öde" button).
+  const liveLocked = billingState(enrollment.paidThrough) === "LOCKED";
+  const liveSessions = liveLocked ? enrollment.course.liveSessions.map((s) => ({ ...s, meetingUrl: null })) : enrollment.course.liveSessions;
 
   return (
     <div>
@@ -70,9 +75,14 @@ export default async function CourseLearningPage({ params }: Props) {
       </div>
 
       <div className="mt-8 space-y-6">
-        {enrollment.course.liveSessions.length > 0 ? (
+        {liveLocked ? (
+          <p role="alert" className="mb-4 rounded-xl bg-rose-50 p-4 text-sm font-semibold text-rose-800">
+            Aylık ödemen yapılmadığı için canlı ders bağlantıları kapalı. <Link href="/dashboard/live-sessions" className="underline">Canlı Derslerim</Link> sayfasından ödemeni yaparak devam edebilirsin.
+          </p>
+        ) : null}
+        {liveSessions.length > 0 ? (
           <LiveSessionSchedule
-            sessions={enrollment.course.liveSessions}
+            sessions={liveSessions}
             now={new Date().getTime()}
             allowJoin
           />

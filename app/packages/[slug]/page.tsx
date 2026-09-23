@@ -1,10 +1,13 @@
 import { PageHero } from "@/components/ui/PageHero";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getProductBySlug } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
 import { DiscountBadge } from "@/components/catalog/DiscountBadge";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
+import { auth } from "@/auth";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import { ModuleAccordion } from "@/components/course/ModuleAccordion";
 import { LiveSessionSchedule } from "@/components/course/LiveSessionSchedule";
 import { EXAM_META } from "@/lib/exam-types";
@@ -23,6 +26,8 @@ export default async function PackageDetailPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  if (product.category === "PLAN") redirect("/planlar");
+  const isFavorite = (await favoriteProductIds((await auth())?.user?.id)).has(product.id);
   const palette = product.examType
     ? EXAM_META[product.examType.code]
     : undefined;
@@ -90,8 +95,9 @@ export default async function PackageDetailPage({ params }: Props) {
             {formatTRY(String(product.salePrice))}
           </p>
           <p className="text-xs text-[color:var(--muted)]">KDV Dahildir</p>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-wrap gap-2">
             <AddToCartButton productId={product.id} />
+            <FavoriteButton productId={product.id} initial={isFavorite} title={product.title} variant="full" />
           </div>
           {product.course ? (
             <ul className="mt-6 space-y-2 border-t border-[color:var(--border)] pt-5 text-sm text-[color:var(--muted)]">

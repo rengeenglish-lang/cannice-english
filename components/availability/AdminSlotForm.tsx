@@ -19,6 +19,7 @@ export type SlotFormValues = {
   capacity: number;
   instructorId?: string;
   adminNotes?: string;
+  meetingUrl?: string;
   displayedOccupancy?: number;
   useDisplayedOccupancy: boolean;
   enrollmentOpen: boolean;
@@ -234,6 +235,16 @@ export function AdminSlotForm({
           </select>
         </label>
       )}
+      <label className="label">
+        Canlı ders bağlantısı (Zoom, Meet vb. — https ile başlamalı)
+        <input
+          name="meetingUrl"
+          type="url"
+          placeholder="https://"
+          defaultValue={slot.meetingUrl || ""}
+          className="auth-input"
+        />
+      </label>
       <label className="label">
         Yönetici notları
         <textarea

@@ -1,15 +1,19 @@
 import Link from "next/link";
+import { after } from "next/server";
 import { auth } from "@/auth";
+import { cartItemCount } from "@/server/services/cart.service";
+import { recordVisit } from "@/server/services/visits.service";
 import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
 
 const NAV_LINKS = [
   { href: "/exams", label: "Sınavlar" },
   { href: "/konu-anlatim", label: "Konu Anlatımları" },
   { href: "/group-lessons", label: "Grup Dersleri" },
-  { href: "/packages", label: "Materyaller" },
+  { href: "/planlar", label: "Planlar" },
+  { href: "/kaynaklar", label: "Kaynaklar" },
 ];
 
 const YOKDIL_LINKS = [
@@ -20,6 +24,10 @@ const YOKDIL_LINKS = [
 
 export async function Navbar() {
   const session = await auth();
+  const userId = session?.user?.id;
+  const cartCount = await cartItemCount(userId).catch(() => 0);
+  // Every signed-in page view counts toward İlerleme Raporu → Site Ziyaret Sıklığı.
+  if (userId) after(() => recordVisit(userId));
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -43,7 +51,7 @@ export async function Navbar() {
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examLearningHref(exam.slug)}>Konu anlatımları</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href="/dashboard/practice">Pratik</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examGroupHref(exam.slug)}>Grup dersleri</Link>
-                    <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examMaterialHref(exam.slug)}>Materyaller</Link>
+                    <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examMaterialHref(exam.slug)}>Paketler</Link>
                   </div>
                 </div>)}
               </div>
@@ -62,10 +70,16 @@ export async function Navbar() {
         <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <Link
             href="/cart"
-            className="ghost-button whitespace-nowrap"
-            aria-label="Sepet"
+            className="ghost-button relative gap-2 whitespace-nowrap"
+            aria-label={cartCount ? `Sepet (${cartCount} ürün)` : "Sepet"}
           >
+            <ShoppingCart size={18} aria-hidden="true" />
             Sepet
+            {cartCount ? (
+              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-black leading-5 text-white">
+                {cartCount}
+              </span>
+            ) : null}
           </Link>
           {session?.user ? (
             <>
@@ -101,6 +115,7 @@ export async function Navbar() {
         <MobileNavToggle
           links={NAV_LINKS}
           isSignedIn={Boolean(session?.user)}
+          cartCount={cartCount}
           examLinks={PLATFORM_EXAMS.map((exam) => ({ href: `/exams/${exam.slug}`, label: exam.name }))}
           yokdilLinks={YOKDIL_LINKS}
         />

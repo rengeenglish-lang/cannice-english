@@ -15,6 +15,7 @@ function formDataToObject(formData: FormData) {
   obj.isPublished = formData.get("isPublished") === "on";
   obj.isFeatured = formData.get("isFeatured") === "on";
   obj.isPreviewable = formData.get("isPreviewable") === "on";
+  obj.isSpeakingClub = formData.get("isSpeakingClub") === "on";
   return obj;
 }
 

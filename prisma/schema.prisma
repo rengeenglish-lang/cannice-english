@@ -34,6 +34,35 @@ enum ProductCategory {
   STUDY_PACKAGE
   TRANSLATION_SUPPORT
   BOOK
+  PLAN
+}
+
+/**
+ * Deneme Sınavı subscription tiers (Başlangıç / Çırak / Uzman). Which features each tier unlocks
+ * lives in lib/plans.ts — the single place site-wide access checks read from.
+ */
+enum PlanTier {
+  BASLANGIC
+  CIRAK
+  UZMAN
+}
+
+/**
+ * The three free live-lesson perks bundled into the Uzman plan, each claimable once per subscription.
+ */
+enum PlanPerk {
+  SPEAKING_CLUB
+  SYSTEMATIC_LIVE
+  ELECTIVE_LIVE
+}
+
+/**
+ * Which Kaynaklar hub section a FreeResource is listed under.
+ */
+enum ResourceKind {
+  E_BOOK
+  TOPIC
+  PDF_MOCK
 }
 
 enum ProductLevel {
@@ -208,9 +237,10 @@ model ExamTopic {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  examType ExamType      @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
+  examType ExamType         @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
   lessons  TopicLesson[]
   notes    TopicNote[]
+  savedBy  SavedExamTopic[]
 
   @@unique([examTypeId, slug])
   @@index([examTypeId])
@@ -300,6 +330,12 @@ model User {
   analyticsEvents       AnalyticsEvent[]
   notifications         Notification[]
   reviews               Review[]
+  planSubscriptions     PlanSubscription[]
+  savedExamTopics       SavedExamTopic[]
+  visits                UserVisit[]
+  favorites             FavoriteProduct[]
+  sentMessages          TeacherMessage[]        @relation("MessageStudent")
+  answeredMessages      TeacherMessage[]        @relation("MessageResponder")
 
   @@map("users")
 }
@@ -367,15 +403,24 @@ model Product {
   shortDescription   String?
   description        String?
   diagnosticTopicIds String[]        @default([])
+  /**
+   * Set only for category PLAN.
+   */
+  planTier           PlanTier?
+  /**
+   * Plan length in calendar months (PLAN only), so "1 aylık" is 30 or 31 days depending on the month.
+   */
+  accessMonths       Int?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 
-  examType   ExamType?   @relation(fields: [examTypeId], references: [id])
-  course     Course?
-  book       Book?
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-  reviews    Review[]
+  examType    ExamType?         @relation(fields: [examTypeId], references: [id])
+  course      Course?
+  book        Book?
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  favoritedBy FavoriteProduct[]
 
   @@index([category])
   @@index([examTypeId])
@@ -388,13 +433,19 @@ model Course {
   productId       String               @unique
   deliveryFormat  CourseDeliveryFormat @default(HYBRID)
   syllabusSummary String?
+  /**
+   * Konuşma kulübü groups — the only courses the Uzman plan's SPEAKING_CLUB perk can be claimed on.
+   */
+  isSpeakingClub  Boolean              @default(false)
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
 
-  product      Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product      Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
   modules      CourseModule[]
   liveSessions LiveSession[]
   enrollments  Enrollment[]
+  perkClaims   PlanPerkClaim[]
+  messages     TeacherMessage[]
 
   @@map("courses")
 }
@@ -483,13 +534,23 @@ model Book {
 // ====================================================================
 
 model Enrollment {
-  id          String           @id @default(cuid())
-  userId      String
-  courseId    String
-  orderItemId String?          @unique
-  status      EnrollmentStatus @default(ACTIVE)
-  grantedAt   DateTime         @default(now())
-  expiresAt   DateTime?
+  id                  String           @id @default(cuid())
+  userId              String
+  courseId            String
+  orderItemId         String?          @unique
+  status              EnrollmentStatus @default(ACTIVE)
+  grantedAt           DateTime         @default(now())
+  expiresAt           DateTime?
+  /**
+   * Monthly-billed group lessons (PREP_GROUP) only: the end of the paid billing month. When it
+   * passes the student is notified; one day later live-lesson access locks until they renew.
+   * Null = not billed monthly (legacy enrollments and every non-group course keep working as-is).
+   */
+  paidThrough         DateTime?
+  /**
+   * Set once the "payment due" notification for the current paidThrough has been sent.
+   */
+  renewalNoticeSentAt DateTime?
 
   user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   course           Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -559,6 +620,10 @@ model CartItem {
   productId         String
   quantity          Int      @default(1)
   unitPriceSnapshot Decimal  @db.Decimal(12, 2)
+  /**
+   * The group-lesson slot a "Gruba Katıl" purchase should book once payment is confirmed.
+   */
+  groupSlotId       String?
   createdAt         DateTime @default(now())
 
   cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
@@ -620,10 +685,12 @@ model OrderItem {
   unitPrice     Decimal @db.Decimal(12, 2)
   quantity      Int     @default(1)
   lineTotal     Decimal @db.Decimal(12, 2)
+  groupSlotId   String?
 
-  order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product    Product     @relation(fields: [productId], references: [id])
-  enrollment Enrollment?
+  order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product          Product           @relation(fields: [productId], references: [id])
+  enrollment       Enrollment?
+  planSubscription PlanSubscription?
 
   @@map("order_items")
 }
@@ -748,15 +815,16 @@ model ExamCalendarEntry {
 }
 
 model FreeResource {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   title         String
-  slug          String   @unique
+  slug          String        @unique
   description   String?
   fileUrl       String
   examTypeId    String?
   category      String?
-  downloadCount Int      @default(0)
-  createdAt     DateTime @default(now())
+  kind          ResourceKind?
+  downloadCount Int           @default(0)
+  createdAt     DateTime      @default(now())
 
   examType ExamType? @relation(fields: [examTypeId], references: [id])
 
@@ -1032,4 +1100,110 @@ model AppSetting {
   updatedAt DateTime @updatedAt
 
   @@map("app_settings")
+}
+
+// ====================================================================
+// PLANS, SAVED TOPICS, MESSAGING, VISIT TRACKING
+// ====================================================================
+
+model PlanSubscription {
+  id          String           @id @default(cuid())
+  userId      String
+  tier        PlanTier
+  orderItemId String?          @unique
+  status      EnrollmentStatus @default(ACTIVE)
+  startsAt    DateTime         @default(now())
+  expiresAt   DateTime
+  createdAt   DateTime         @default(now())
+
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItem  OrderItem?      @relation(fields: [orderItemId], references: [id])
+  perkClaims PlanPerkClaim[]
+
+  @@index([userId, status, expiresAt])
+  @@map("plan_subscriptions")
+}
+
+model PlanPerkClaim {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  perk           PlanPerk
+  courseId       String
+  claimedAt      DateTime @default(now())
+
+  subscription PlanSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  course       Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriptionId, perk])
+  @@map("plan_perk_claims")
+}
+
+/**
+ * A Konu Anlatımı topic the student added to Derslerim via "Ders Ekle".
+ */
+model SavedExamTopic {
+  id          String   @id @default(cuid())
+  userId      String
+  examTopicId String
+  createdAt   DateTime @default(now())
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic ExamTopic @relation(fields: [examTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examTopicId])
+  @@map("saved_exam_topics")
+}
+
+/**
+ * "Öğretmenine mesaj gönder" — a student question to the teaching staff, answered from /admin/mesajlar.
+ */
+model TeacherMessage {
+  id          String    @id @default(cuid())
+  studentId   String
+  courseId    String?
+  body        String
+  reply       String?
+  repliedById String?
+  repliedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  student   User    @relation("MessageStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  repliedBy User?   @relation("MessageResponder", fields: [repliedById], references: [id], onDelete: SetNull)
+  course    Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  @@index([studentId, createdAt])
+  @@index([repliedAt])
+  @@map("teacher_messages")
+}
+
+/**
+ * One row per student per (Europe/Istanbul) calendar day they used the site — powers İlerleme Raporu's visit frequency.
+ */
+model UserVisit {
+  id        String   @id @default(cuid())
+  userId    String
+  day       DateTime @db.Date
+  pageViews Int      @default(1)
+  lastSeen  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, day])
+  @@map("user_visits")
+}
+
+/**
+ * Favorilerim — products a student saved for later (heart button, or "Favorilere taşı" from the cart).
+ */
+model FavoriteProduct {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("favorite_products")
 }

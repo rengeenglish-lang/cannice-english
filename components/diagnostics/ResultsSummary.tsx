@@ -15,6 +15,7 @@ export function ResultsSummary({
   kind = "FULL_DIAGNOSTIC",
   mockSetNumber,
   overall,
+  cefr,
 }: {
   examName: string;
   targetScoreRaw: string;
@@ -25,16 +26,34 @@ export function ResultsSummary({
   kind?: "FULL_DIAGNOSTIC" | "MOCK_EXAM";
   mockSetNumber?: number | null;
   overall?: { total: number; correct: number; incorrect: number; pendingReview: number; unanswered: number; percentage: number };
+  /** Indicative CEFR band — only for IELTS/TOEFL/PTE level tests. */
+  cefr?: string | null;
 }) {
   const isMockExam = kind === "MOCK_EXAM";
   return (
     <div className="space-y-8">
       <header className="text-center">
         <p className="eyebrow">{isMockExam ? `Deneme${mockSetNumber ? ` ${mockSetNumber}` : ""} Sonucun` : "Seviye Tespit Sonucun"}</p>
-        <h1 className="page-title">{examName} · Hedef: {targetScoreRaw}</h1>
+        <h1 className="page-title">{examName}{targetScoreRaw !== "—" ? ` · Hedef: ${targetScoreRaw}` : ""}</h1>
         {targetDate ? <p className="page-copy mt-2">Hedef tarih: {new Date(targetDate).toLocaleDateString("tr-TR")}</p> : null}
         <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[color:var(--muted)]">Bu sonuçlar tahmini seviyeni gösterir, resmi sınav puanı değildir.</p>
       </header>
+
+      {!isMockExam && overall ? (
+        <section className="dashboard-panel text-center">
+          {cefr ? (
+            <>
+              <p className="text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Tahmini CEFR seviyen</p>
+              <p className="mt-1 text-5xl font-black text-[color:var(--brand)]">{cefr}</p>
+            </>
+          ) : (
+            <p className="text-5xl font-black text-[color:var(--foreground)]">%{overall.percentage}</p>
+          )}
+          <p className="mt-2 text-sm font-semibold text-[color:var(--muted)]">
+            %{overall.percentage} başarı · {overall.correct} doğru · {overall.incorrect} yanlış · {overall.unanswered} boş · {overall.total} soru
+          </p>
+        </section>
+      ) : null}
 
       {isMockExam && overall ? (
         <section className="dashboard-panel text-center">
@@ -56,9 +75,9 @@ export function ResultsSummary({
             <button type="submit" className="primary-button">Konuya Başla</button>
           </form>
         </section>
-      ) : (
+      ) : topicResults.every((r) => r.severity === "STRONG") ? (
         <p className="text-center text-sm font-semibold text-[color:var(--success)]">Tebrikler — belirgin bir zayıf noktan görünmüyor!</p>
-      )}
+      ) : null}
 
       <section className="dashboard-panel">
         <h2 className="section-title !text-lg">Beceri Analizi</h2>

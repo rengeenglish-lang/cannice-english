@@ -1,7 +1,10 @@
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { auth } from "@/auth";
-import { getOrCreateCart } from "@/server/services/cart.service";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { findCart, refreshCartPrices } from "@/server/services/cart.service";
+import { CART_COUPON_COOKIE } from "@/lib/cart";
 import { formatTRY } from "@/lib/pricing";
 import { CheckoutForm } from "@/components/cart/CheckoutForm";
 
@@ -9,8 +12,11 @@ export const metadata: Metadata = { title: "Ödeme" };
 
 export default async function CheckoutPage() {
   const session = await auth();
-  const cart = await getOrCreateCart(session?.user?.id);
-  const total = cart.items.reduce(
+  const cart = await findCart(session?.user?.id);
+  if (cart) await refreshCartPrices(cart);
+  const items = cart?.items ?? [];
+  const couponCode = (await cookies()).get(CART_COUPON_COOKIE)?.value ?? "";
+  const total = items.reduce(
     (sum, item) => sum + Number(item.unitPriceSnapshot) * item.quantity,
     0,
   );
@@ -23,7 +29,7 @@ export default async function CheckoutPage() {
       </PageHero>
       <div className="panel mt-8 flex items-center justify-between">
         <span className="font-bold text-slate-600">
-          {cart.items.length} ürün
+          {items.length} ürün · <Link href="/cart" className="underline">Sepeti düzenle</Link>
         </span>
         <div className="text-right">
           <span className="text-xl font-black text-[color:var(--brand)]">
@@ -33,7 +39,7 @@ export default async function CheckoutPage() {
         </div>
       </div>
       <div className="mt-6">
-        <CheckoutForm isGuest={!session?.user} />
+        <CheckoutForm isGuest={!session?.user} defaultCoupon={couponCode} />
       </div>
     </main>
   );

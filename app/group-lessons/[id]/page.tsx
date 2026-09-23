@@ -11,6 +11,15 @@ import { BookingForm } from "@/components/availability/BookingForm";
 import { SlotCard } from "@/components/availability/SlotCard";
 import { AvailabilityRefresh } from "@/components/availability/AvailabilityRefresh";
 import { purchaseSlotAction } from "@/app/actions/group-availability";
+import { joinGroupAction, renewGroupAction } from "@/app/actions/live-lessons";
+import { claimPerkAction } from "@/app/actions/plans";
+import { availablePerkForCourse } from "@/server/services/plans.service";
+import { enrollmentGrantsAccess } from "@/lib/diagnostics/access";
+import { billingState, isMonthlyBilledCategory } from "@/lib/billing";
+import { PLAN_PERK_LABELS } from "@/lib/plans";
+import { formatTRY } from "@/lib/pricing";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 export const dynamic = "force-dynamic";
 export default async function GroupLessonPage({
   params,
@@ -34,9 +43,11 @@ export default async function GroupLessonPage({
         },
       })
     : null;
-  const entitled =
-    access?.status === "ACTIVE" &&
-    (!access.expiresAt || access.expiresAt > new Date());
+  const entitled = enrollmentGrantsAccess(access);
+  const locked = access?.status === "ACTIVE" && billingState(access.paidThrough) === "LOCKED";
+  const perk = user && !entitled ? await availablePerkForCourse(user.id, slot.courseId) : null;
+  const monthly = isMonthlyBilledCategory(slot.course.product.category);
+  const isFavorite = (await favoriteProductIds(user?.id)).has(slot.course.productId);
   const alternatives = !a.canEnroll ? await nearestGroupSlots(id) : [];
   return (
     <main className="mx-auto max-w-5xl px-5 py-12">
@@ -44,9 +55,12 @@ export default async function GroupLessonPage({
       <Link href="/group-lessons" className="text-sm font-bold text-blue-700">
         ← Haftalık dersler
       </Link>
-      <h1 className="page-title mt-5">
-        {enrolled ? "Grup kaydınız" : "Bu gruba katıl"}
-      </h1>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="page-title !mt-0">
+          {enrolled ? "Grup kaydınız" : "Bu gruba katıl"}
+        </h1>
+        <FavoriteButton productId={slot.course.productId} initial={isFavorite} title={slot.course.product.title} variant="full" />
+      </div>
       <div className="mt-7 grid gap-6 md:grid-cols-2">
         <SlotCard slot={slot} />
         <section className="rounded-2xl border border-slate-200 bg-white p-6">
@@ -100,22 +114,37 @@ export default async function GroupLessonPage({
               className="primary-button mt-5"
               href={`/sign-in?next=${encodeURIComponent(`/group-lessons/${id}`)}`}
             >
-              Giriş yap ve devam et
+              Giriş yap ve gruba katıl
             </Link>
           ) : entitled ? (
             <BookingForm id={id} booked={false} />
+          ) : locked ? (
+            <>
+              <p className="mt-4 text-sm leading-6">
+                Bu grubun aylık ödemesi yapılmadığı için erişimin durduruldu. Ödemeni yaptığında bu derse hemen kaydolabilirsin.
+              </p>
+              <form action={renewGroupAction.bind(null, slot.courseId)}>
+                <button className="primary-button mt-5">Devam etmek için öde</button>
+              </form>
+            </>
           ) : (
             <>
               <p className="mt-4 text-sm leading-6">
-                Bu ders için {slot.course.product.title} paketine aktif erişim
-                gerekiyor. Satın aldıktan sonra çalışma alanınızdan seçtiğiniz
-                derse dönebilirsiniz. Ödeme kontenjan ayırmaz; son adımda
-                kaydınızı onaylayın.
+                {monthly
+                  ? `Bu grup aylık ücretlidir: ${formatTRY(String(slot.course.product.salePrice))} / ay. Ödemen onaylandığında bu ders saati ve grubun sonraki haftalık dersleri Canlı Derslerim bölümüne otomatik eklenir. Her ay sonunda ödeme hatırlatması alırsın.`
+                  : `Bu ders ${slot.course.product.title} paketine dahildir (${formatTRY(String(slot.course.product.salePrice))}). Ödemen onaylandığında ders Canlı Derslerim bölümüne otomatik eklenir.`}
               </p>
+              {perk ? (
+                <form action={claimPerkAction.bind(null, slot.courseId, id)}>
+                  <button className="primary-button mt-5 w-full">Uzman planınla ücretsiz katıl</button>
+                  <p className="mt-2 text-xs text-[color:var(--muted)]">Kullanılacak hak: {PLAN_PERK_LABELS[perk]}</p>
+                </form>
+              ) : null}
+              <form action={joinGroupAction.bind(null, id)}>
+                <button className={`${perk ? "secondary-button" : "primary-button"} mt-5 w-full`}>Gruba Katıl</button>
+              </form>
               <form action={purchaseSlotAction.bind(null, id)}>
-                <button className="primary-button mt-5">
-                  Paketi incele ve devam et
-                </button>
+                <button className="ghost-button mt-2 w-full">Grup programını incele</button>
               </form>
             </>
           )}

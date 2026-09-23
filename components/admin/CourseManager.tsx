@@ -64,7 +64,7 @@ export function CourseManager({
       </div>
 
       <div className="panel">
-        <h2 className="section-title text-lg">Canlı Ders Takvimi</h2>
+        <h2 className="section-title text-lg">Canlı Dersler</h2>
         <ul className="mt-4 space-y-2">
           {liveSessions.map((session) => (
             <li key={session.id} className="flex items-center justify-between gap-3 rounded-xl border border-[color:var(--border)] px-4 py-3 text-sm">
