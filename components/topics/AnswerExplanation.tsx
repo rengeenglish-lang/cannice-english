@@ -3,16 +3,20 @@ import type { ParsedOption } from "@/components/topics/parseExampleBlock";
 
 export function AnswerExplanation({ correctOption, explanation }: { correctOption: ParsedOption; explanation: string }) {
   return (
-    <div className="mt-5 rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-6">
-      <p className="flex items-center gap-2 text-xl font-extrabold text-emerald-800 sm:text-2xl">
-        <CheckCircle2 className="size-6 shrink-0" />
-        Doğru Cevap: {correctOption.letter}) {correctOption.text}
-      </p>
-      <p className="mt-4 flex items-start gap-2 text-base font-bold text-emerald-700">
-        <BookOpen className="mt-0.5 size-5 shrink-0" />
+    <div className="mt-5 rounded-2xl border border-[color:var(--success)]/30 bg-[color:var(--success-soft)] p-6">
+      <div className="flex items-center gap-3">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[color:var(--success)] text-white shadow-[0_8px_18px_rgba(23,165,104,.3)]">
+          <CheckCircle2 className="size-5" />
+        </span>
+        <p className="text-lg font-extrabold leading-tight text-[color:var(--success)] sm:text-xl">
+          Doğru Cevap: {correctOption.letter}) {correctOption.text}
+        </p>
+      </div>
+      <p className="mt-4 flex items-center gap-2 text-sm font-black uppercase tracking-wide text-[color:var(--success)]">
+        <BookOpen className="size-4 shrink-0" />
         Açıklama
       </p>
-      <p className="mt-1 whitespace-pre-line text-lg font-semibold leading-8 text-emerald-950">{explanation}</p>
+      <p className="mt-1 whitespace-pre-line text-lg font-semibold leading-8 text-slate-900">{explanation}</p>
     </div>
   );
 }
