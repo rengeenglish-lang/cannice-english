@@ -1,4 +1,5 @@
 import {
+  Check,
   Mic,
   PenLine,
   BookOpen,
@@ -30,6 +31,7 @@ export function TopicSidebar<T extends Topic>({
   selectedTopicId,
   completedTopicCount,
   topicCompleted,
+  topicPercent,
   onSelect,
 }: {
   examName: string;
@@ -38,6 +40,7 @@ export function TopicSidebar<T extends Topic>({
   selectedTopicId: string | undefined;
   completedTopicCount: number;
   topicCompleted: (topic: T) => boolean;
+  topicPercent: (topic: T) => number;
   onSelect: (topic: T) => void;
 }) {
   return (
@@ -65,38 +68,61 @@ export function TopicSidebar<T extends Topic>({
       <div className="mt-4 space-y-3">
         {groups.map((group) => {
           const meta = group.category ? CATEGORY_META[group.category] : null;
+          const RowIcon = meta?.Icon ?? BookOpen;
           const body = (
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               {group.topics.map((topic) => {
                 const globalIndex = topics.findIndex(
                   (item) => item.id === topic.id,
                 );
                 const active = topic.id === selectedTopicId;
                 const done = topicCompleted(topic);
+                const percent = topicPercent(topic);
                 return (
                   <li key={topic.id}>
                     <button
                       type="button"
                       onClick={() => onSelect(topic)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-lg transition ${
+                      className={`flex w-full flex-col gap-2.5 rounded-2xl border px-4 py-3.5 text-left transition ${
                         active
-                          ? "bg-[color:var(--accent)] text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]"
-                          : "text-slate-800 hover:bg-blue-50"
+                          ? "border-transparent bg-[color:var(--brand)] text-white shadow-[0_10px_24px_rgba(19,47,89,.25)]"
+                          : "border-[color:var(--border)] bg-white text-slate-800 hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)]"
                       }`}
                     >
-                      <span
-                        className={`grid size-7 shrink-0 place-items-center rounded-full border-2 text-sm font-black ${
-                          done
-                            ? "border-emerald-400 bg-emerald-400 text-white"
-                            : active
-                              ? "border-white/70 text-transparent"
-                              : "border-slate-300 text-transparent"
-                        }`}
-                      >
-                        ✓
+                      <span className="flex items-center gap-3">
+                        <span
+                          className={`grid size-9 shrink-0 place-items-center rounded-xl ${
+                            active ? "bg-white/15" : "bg-[color:var(--accent-soft)]"
+                          }`}
+                        >
+                          {done ? (
+                            <Check
+                              className={`size-5 ${active ? "text-white" : "text-[color:var(--success)]"}`}
+                            />
+                          ) : (
+                            <RowIcon
+                              className={`size-5 ${active ? "text-white" : "text-[color:var(--accent)]"}`}
+                            />
+                          )}
+                        </span>
+                        <span className="min-w-0 flex-1 text-base font-bold leading-snug">
+                          {globalIndex + 1}. {topic.name}
+                        </span>
+                        <span
+                          className={`shrink-0 text-sm font-black ${active ? "text-white" : "text-[color:var(--accent-strong)]"}`}
+                        >
+                          %{percent}
+                        </span>
                       </span>
-                      <span className="min-w-0 flex-1 font-bold leading-snug">
-                        {globalIndex + 1}. {topic.name}
+                      <span
+                        className={`h-1.5 w-full overflow-hidden rounded-full ${active ? "bg-white/20" : "bg-slate-100"}`}
+                      >
+                        <span
+                          className={`block h-full rounded-full transition-all ${
+                            done ? "bg-emerald-400" : active ? "bg-white" : "bg-[color:var(--accent)]"
+                          }`}
+                          style={{ width: `${percent}%` }}
+                        />
                       </span>
                     </button>
                   </li>

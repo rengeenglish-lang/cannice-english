@@ -136,6 +136,15 @@ export function KonuAnlatimDashboard({
   const topicCompleted = (topic: Topic) =>
     topic.lessons.length > 0 &&
     topic.lessons.every((lesson) => completedIds.has(lesson.id));
+  const topicPercent = (topic: Topic) =>
+    topic.lessons.length > 0
+      ? Math.round(
+          (topic.lessons.filter((lesson) => completedIds.has(lesson.id))
+            .length /
+            topic.lessons.length) *
+            100,
+        )
+      : 0;
   const completedTopicCount = topics.filter(topicCompleted).length;
   const totalLessons = topics.reduce(
     (sum, topic) => sum + topic.lessons.length,
@@ -205,6 +214,7 @@ export function KonuAnlatimDashboard({
         selectedTopicId={selectedTopicId}
         completedTopicCount={completedTopicCount}
         topicCompleted={topicCompleted}
+        topicPercent={topicPercent}
         onSelect={selectTopic}
       />
 
