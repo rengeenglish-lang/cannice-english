@@ -19,7 +19,7 @@ const CATEGORY_TABS: {
 }[] = [
   { value: undefined, label: "Tümü" },
   { value: "PREP_GROUP", label: "Hazırlık Grupları" },
-  { value: "MOCK_CAMP", label: "Soru & Deneme Grupları" },
+  { value: "MOCK_CAMP", label: "Soru & Deneme Kampı" },
   { value: "STUDY_PACKAGE", label: "Çalışma Paketleri" },
   { value: "TRANSLATION_SUPPORT", label: "Akademik Çeviri" },
 ];
