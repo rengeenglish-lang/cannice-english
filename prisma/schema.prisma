@@ -1,7 +1,7 @@
 generator client {
-  provider      = "prisma-client"
-  output        = "../lib/generated/prisma"
-  moduleFormat  = "esm"
+  provider     = "prisma-client"
+  output       = "../lib/generated/prisma"
+  moduleFormat = "esm"
 }
 
 datasource db {
@@ -174,18 +174,18 @@ model ExamType {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  products           Product[]
-  testimonials       Testimonial[]
-  dictionaryTerms    DictionaryTerm[]
+  products            Product[]
+  testimonials        Testimonial[]
+  dictionaryTerms     DictionaryTerm[]
   scoreConversionRows ScoreConversionEntry[]
-  calendarEntries    ExamCalendarEntry[]
-  freeResources      FreeResource[]
-  callbackRequests   CallbackRequest[]
-  topics             ExamTopic[]
-  examGoals          ExamGoal[]
-  diagnosticAttempts DiagnosticAttempt[]
+  calendarEntries     ExamCalendarEntry[]
+  freeResources       FreeResource[]
+  callbackRequests    CallbackRequest[]
+  topics              ExamTopic[]
+  examGoals           ExamGoal[]
+  diagnosticAttempts  DiagnosticAttempt[]
   diagnosticQuestions DiagnosticQuestion[]
-  diagnosticTopics   DiagnosticTopic[]
+  diagnosticTopics    DiagnosticTopic[]
 
   @@map("exam_types")
 }
@@ -244,7 +244,7 @@ model TopicLesson {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  topic      ExamTopic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topic      ExamTopic             @relation(fields: [topicId], references: [id], onDelete: Cascade)
   progresses TopicLessonProgress[]
 
   @@index([topicId])
@@ -286,20 +286,20 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  orders               Order[]
-  cart                 Cart?
-  enrollments          Enrollment[]
-  blogPosts            BlogPost[]
+  orders                Order[]
+  cart                  Cart?
+  enrollments           Enrollment[]
+  blogPosts             BlogPost[]
   topicLessonProgresses TopicLessonProgress[]
   topicNotes            TopicNote[]
-  groupBookings GroupLessonEnrollment[]
-  instructedSessions LiveSession[] @relation("SessionInstructor")
-  examGoals            ExamGoal[]
-  diagnosticAttempts   DiagnosticAttempt[]
-  studyRoadmapItems    StudyRoadmapItem[]
-  analyticsEvents      AnalyticsEvent[]
-  notifications        Notification[]
-  reviews              Review[]
+  groupBookings         GroupLessonEnrollment[]
+  instructedSessions    LiveSession[]           @relation("SessionInstructor")
+  examGoals             ExamGoal[]
+  diagnosticAttempts    DiagnosticAttempt[]
+  studyRoadmapItems     StudyRoadmapItem[]
+  analyticsEvents       AnalyticsEvent[]
+  notifications         Notification[]
+  reviews               Review[]
 
   @@map("users")
 }
@@ -324,7 +324,9 @@ model Notification {
   @@map("notifications")
 }
 
-/** A student's own rating/review of a product they bought — distinct from the admin-curated Testimonial model shown on marketing pages. */
+/**
+ * A student's own rating/review of a product they bought — distinct from the admin-curated Testimonial model shown on marketing pages.
+ */
 model Review {
   id        String   @id @default(cuid())
   userId    String
@@ -368,7 +370,7 @@ model Product {
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 
-  examType   ExamType? @relation(fields: [examTypeId], references: [id])
+  examType   ExamType?   @relation(fields: [examTypeId], references: [id])
   course     Course?
   book       Book?
   cartItems  CartItem[]
@@ -382,12 +384,12 @@ model Product {
 }
 
 model Course {
-  id               String                @id @default(cuid())
-  productId        String                @unique
-  deliveryFormat   CourseDeliveryFormat  @default(HYBRID)
-  syllabusSummary  String?
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
+  id              String               @id @default(cuid())
+  productId       String               @unique
+  deliveryFormat  CourseDeliveryFormat @default(HYBRID)
+  syllabusSummary String?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
 
   product      Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   modules      CourseModule[]
@@ -412,16 +414,16 @@ model CourseModule {
 }
 
 model RecordedLesson {
-  id              String   @id @default(cuid())
+  id              String  @id @default(cuid())
   moduleId        String
   title           String
   position        Int
   videoUrl        String?
   durationMinutes Int?
-  isPreviewable   Boolean  @default(false)
+  isPreviewable   Boolean @default(false)
   description     String?
 
-  module           CourseModule       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  module           CourseModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   lessonProgresses LessonProgress[]
 
   @@unique([moduleId, position])
@@ -429,31 +431,31 @@ model RecordedLesson {
 }
 
 model LiveSession {
-  id            String   @id @default(cuid())
-  courseId      String
-  title         String
-  cohortLabel   String?
-  startsAt      DateTime
-  endsAt        DateTime
-  timezone      String   @default("Europe/Istanbul")
-  meetingUrl    String?
-  recordingUrl  String?
-  capacity      Int? @default(10)
-  createdAt     DateTime @default(now())
+  id           String   @id @default(cuid())
+  courseId     String
+  title        String
+  cohortLabel  String?
+  startsAt     DateTime
+  endsAt       DateTime
+  timezone     String   @default("Europe/Istanbul")
+  meetingUrl   String?
+  recordingUrl String?
+  capacity     Int?     @default(10)
+  createdAt    DateTime @default(now())
 
-  availabilityEnabled Boolean @default(false)
-  enrollmentOpen Boolean @default(true)
-  cancelled Boolean @default(false)
-  displayedOccupancy Int?
-  useDisplayedOccupancy Boolean @default(false)
-  adminNotes String?
-  instructorId String?
-  recurringSeriesId String?
-  updatedAt DateTime @default(now()) @updatedAt
-  instructor User? @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
-  recurringSeries GroupLessonSeries? @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
-  bookings GroupLessonEnrollment[]
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  availabilityEnabled   Boolean                 @default(false)
+  enrollmentOpen        Boolean                 @default(true)
+  cancelled             Boolean                 @default(false)
+  displayedOccupancy    Int?
+  useDisplayedOccupancy Boolean                 @default(false)
+  adminNotes            String?
+  instructorId          String?
+  recurringSeriesId     String?
+  updatedAt             DateTime                @default(now()) @updatedAt
+  instructor            User?                   @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
+  recurringSeries       GroupLessonSeries?      @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
+  bookings              GroupLessonEnrollment[]
+  course                Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([startsAt, availabilityEnabled])
   @@index([recurringSeriesId])
@@ -489,9 +491,9 @@ model Enrollment {
   grantedAt   DateTime         @default(now())
   expiresAt   DateTime?
 
-  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course           Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  orderItem        OrderItem?        @relation(fields: [orderItemId], references: [id])
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course           Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  orderItem        OrderItem?           @relation(fields: [orderItemId], references: [id])
   lessonProgresses LessonProgress[]
   submissions      PracticeSubmission[]
 
@@ -567,19 +569,19 @@ model CartItem {
 }
 
 model Order {
-  id             String      @id @default(cuid())
-  userId         String?
-  guestName      String?
-  guestEmail     String?
-  guestPhone     String?
-  status         OrderStatus @default(PENDING)
-  subtotal       Decimal     @db.Decimal(12, 2)
-  discountTotal  Decimal     @default(0) @db.Decimal(12, 2)
-  total          Decimal     @db.Decimal(12, 2)
-  currency       String      @default("TRY")
-  couponCode     String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id            String      @id @default(cuid())
+  userId        String?
+  guestName     String?
+  guestEmail    String?
+  guestPhone    String?
+  status        OrderStatus @default(PENDING)
+  subtotal      Decimal     @db.Decimal(12, 2)
+  discountTotal Decimal     @default(0) @db.Decimal(12, 2)
+  total         Decimal     @db.Decimal(12, 2)
+  currency      String      @default("TRY")
+  couponCode    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   user    User?       @relation(fields: [userId], references: [id])
   items   OrderItem[]
@@ -611,13 +613,13 @@ model Coupon {
 }
 
 model OrderItem {
-  id            String   @id @default(cuid())
+  id            String  @id @default(cuid())
   orderId       String
   productId     String
   titleSnapshot String
-  unitPrice     Decimal  @db.Decimal(12, 2)
-  quantity      Int      @default(1)
-  lineTotal     Decimal  @db.Decimal(12, 2)
+  unitPrice     Decimal @db.Decimal(12, 2)
+  quantity      Int     @default(1)
+  lineTotal     Decimal @db.Decimal(12, 2)
 
   order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product    Product     @relation(fields: [productId], references: [id])
@@ -627,15 +629,15 @@ model OrderItem {
 }
 
 model Payment {
-  id         String        @id @default(cuid())
-  orderId    String        @unique
-  provider   String        @default("MANUAL")
+  id          String        @id @default(cuid())
+  orderId     String        @unique
+  provider    String        @default("MANUAL")
   providerRef String?
-  amount     Decimal       @db.Decimal(12, 2)
-  currency   String        @default("TRY")
-  status     PaymentStatus @default(PENDING)
-  paidAt     DateTime?
-  createdAt  DateTime      @default(now())
+  amount      Decimal       @db.Decimal(12, 2)
+  currency    String        @default("TRY")
+  status      PaymentStatus @default(PENDING)
+  paidAt      DateTime?
+  createdAt   DateTime      @default(now())
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
@@ -647,17 +649,17 @@ model Payment {
 // ====================================================================
 
 model Testimonial {
-  id             String   @id @default(cuid())
-  studentName    String
+  id              String   @id @default(cuid())
+  studentName     String
   studentPhotoUrl String?
-  examTypeId     String?
-  resultSummary  String?
-  quote          String
-  rating         Int      @default(5)
-  isPublished    Boolean  @default(true)
-  isFeatured     Boolean  @default(false)
-  displayOrder   Int      @default(0)
-  createdAt      DateTime @default(now())
+  examTypeId      String?
+  resultSummary   String?
+  quote           String
+  rating          Int      @default(5)
+  isPublished     Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  displayOrder    Int      @default(0)
+  createdAt       DateTime @default(now())
 
   examType ExamType? @relation(fields: [examTypeId], references: [id])
 
@@ -665,11 +667,11 @@ model Testimonial {
 }
 
 model BlogCategory {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   name         String
-  slug         String   @unique
-  displayOrder Int      @default(0)
-  active       Boolean  @default(true)
+  slug         String  @unique
+  displayOrder Int     @default(0)
+  active       Boolean @default(true)
 
   posts BlogPost[]
 
@@ -717,14 +719,14 @@ model DictionaryTerm {
 }
 
 model ScoreConversionEntry {
-  id           String @id @default(cuid())
+  id           String  @id @default(cuid())
   examTypeId   String
   inputLabel   String
   resultLabel  String
   notes        String?
   minCorrect   Int
   maxCorrect   Int
-  displayOrder Int    @default(0)
+  displayOrder Int     @default(0)
 
   examType ExamType @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
 
@@ -781,28 +783,32 @@ model CallbackRequest {
 }
 
 model GroupLessonSeries {
- id String @id @default(cuid())
- repeatUntil DateTime
- createdAt DateTime @default(now())
- sessions LiveSession[]
- @@map("group_lesson_series")
+  id          String        @id @default(cuid())
+  repeatUntil DateTime
+  createdAt   DateTime      @default(now())
+  sessions    LiveSession[]
+
+  @@map("group_lesson_series")
 }
+
 enum GroupBookingStatus {
- ACTIVE
- CANCELLED
+  ACTIVE
+  CANCELLED
 }
+
 model GroupLessonEnrollment {
- id String @id @default(cuid())
- slotId String
- studentId String
- status GroupBookingStatus @default(ACTIVE)
- enrolledAt DateTime @default(now())
- cancelledAt DateTime?
- slot LiveSession @relation(fields: [slotId], references: [id], onDelete: Restrict)
- student User @relation(fields: [studentId], references: [id], onDelete: Restrict)
- @@unique([slotId, studentId])
- @@index([slotId, status])
- @@map("group_lesson_enrollments")
+  id          String             @id @default(cuid())
+  slotId      String
+  studentId   String
+  status      GroupBookingStatus @default(ACTIVE)
+  enrolledAt  DateTime           @default(now())
+  cancelledAt DateTime?
+  slot        LiveSession        @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  student     User               @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  @@unique([slotId, studentId])
+  @@index([slotId, status])
+  @@map("group_lesson_enrollments")
 }
 
 // ====================================================================
@@ -810,58 +816,58 @@ model GroupLessonEnrollment {
 // ====================================================================
 
 model ExamGoal {
-  id                 String        @id @default(cuid())
-  userId             String
-  examTypeId         String
-  currentScoreRaw    String?
-  currentScoreKnown  Boolean       @default(false)
-  targetScoreRaw     String
-  targetTimeframe    GoalTimeframe @default(UNKNOWN)
-  targetDate         DateTime?
-  isActive           Boolean       @default(true)
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  userId            String
+  examTypeId        String
+  currentScoreRaw   String?
+  currentScoreKnown Boolean       @default(false)
+  targetScoreRaw    String
+  targetTimeframe   GoalTimeframe @default(UNKNOWN)
+  targetDate        DateTime?
+  isActive          Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
-  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  examType        ExamType            @relation(fields: [examTypeId], references: [id])
-  attempts        DiagnosticAttempt[]
-  roadmapItems    StudyRoadmapItem[]
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examType     ExamType            @relation(fields: [examTypeId], references: [id])
+  attempts     DiagnosticAttempt[]
+  roadmapItems StudyRoadmapItem[]
 
   @@index([userId, examTypeId, isActive])
   @@map("exam_goals")
 }
 
 model DiagnosticTopic {
-  id             String                @id @default(cuid())
-  slug           String                @unique
-  name           String
-  kind           DiagnosticTopicKind
-  examFamilies   ExamFamily[]
+  id               String              @id @default(cuid())
+  slug             String              @unique
+  name             String
+  kind             DiagnosticTopicKind
+  examFamilies     ExamFamily[]
   /**
    * Null = shared across every exam in examFamilies (how YDS/YÖKDİL topics work — one grammar
    * pool for the whole TRANSLATION_GRAMMAR family). Set = scoped to one specific exam, needed for
    * ACADEMIC_SKILLS where IELTS/TOEFL/PTE each have their own distinct Reading question formats
    * that must not mix.
    */
-  examTypeId     String?
-  parentTopicId  String?
+  examTypeId       String?
+  parentTopicId    String?
   importanceWeight Int                 @default(1)
   estimatedMinutes Int?
-  description    String?
-  displayOrder   Int                   @default(0)
-  isActive       Boolean               @default(true)
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime              @updatedAt
+  description      String?
+  displayOrder     Int                 @default(0)
+  isActive         Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
 
   parent   DiagnosticTopic?  @relation("TopicHierarchy", fields: [parentTopicId], references: [id], onDelete: SetNull)
   children DiagnosticTopic[] @relation("TopicHierarchy")
   examType ExamType?         @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
 
-  primaryQuestions   DiagnosticQuestion[]     @relation("PrimaryTopic")
-  topicResults       DiagnosticTopicResult[]
-  roadmapItems       StudyRoadmapItem[]
-  dependsOn          TopicDependency[]        @relation("TopicDependents")
-  dependents         TopicDependency[]        @relation("TopicPrerequisites")
+  primaryQuestions DiagnosticQuestion[]    @relation("PrimaryTopic")
+  topicResults     DiagnosticTopicResult[]
+  roadmapItems     StudyRoadmapItem[]
+  dependsOn        TopicDependency[]       @relation("TopicDependents")
+  dependents       TopicDependency[]       @relation("TopicPrerequisites")
 
   @@index([kind])
   @@index([parentTopicId])
@@ -897,14 +903,16 @@ model DiagnosticQuestion {
   explanation       String?
   tags              String[]               @default([])
   isActive          Boolean                @default(false)
-  /** 1-5 — pins this question into a fixed "Deneme N" mock-exam paper instead of the general
-   *  full-diagnostic/practice/mastery-check pool. Null means "general pool, not a mock paper". */
+  /**
+   * 1-5 — pins this question into a fixed "Deneme N" mock-exam paper instead of the general
+   * full-diagnostic/practice/mastery-check pool. Null means "general pool, not a mock paper".
+   */
   mockSetNumber     Int?
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
 
-  examType  ExamType?        @relation(fields: [examTypeId], references: [id])
-  topic     DiagnosticTopic  @relation("PrimaryTopic", fields: [topicId], references: [id], onDelete: Restrict)
+  examType  ExamType?            @relation(fields: [examTypeId], references: [id])
+  topic     DiagnosticTopic      @relation("PrimaryTopic", fields: [topicId], references: [id], onDelete: Restrict)
   responses DiagnosticResponse[]
 
   @@index([examFamily, topicId, isActive])
@@ -920,7 +928,9 @@ model DiagnosticAttempt {
   examFamily    ExamFamily
   kind          DiagnosticAttemptKind   @default(FULL_DIAGNOSTIC)
   scopeTopicId  String?
-  /** Which fixed "Deneme N" paper this MOCK_EXAM attempt drew from; null for every other kind. */
+  /**
+   * Which fixed "Deneme N" paper this MOCK_EXAM attempt drew from; null for every other kind.
+   */
   mockSetNumber Int?
   goalId        String?
   status        DiagnosticAttemptStatus @default(IN_PROGRESS)
@@ -930,10 +940,10 @@ model DiagnosticAttempt {
   completedAt   DateTime?
   createdAt     DateTime                @default(now())
 
-  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  examType  ExamType                @relation(fields: [examTypeId], references: [id])
-  goal      ExamGoal?               @relation(fields: [goalId], references: [id], onDelete: SetNull)
-  responses DiagnosticResponse[]
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examType     ExamType                @relation(fields: [examTypeId], references: [id])
+  goal         ExamGoal?               @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  responses    DiagnosticResponse[]
   topicResults DiagnosticTopicResult[]
 
   @@index([userId, examTypeId, status])
@@ -942,18 +952,18 @@ model DiagnosticAttempt {
 }
 
 model DiagnosticResponse {
-  id             String    @id @default(cuid())
-  attemptId      String
-  questionId     String
-  answerRaw      String?
-  isCorrect      Boolean?
-  gradingStatus  SubmissionStatus?
+  id              String            @id @default(cuid())
+  attemptId       String
+  questionId      String
+  answerRaw       String?
+  isCorrect       Boolean?
+  gradingStatus   SubmissionStatus?
   teacherFeedback String?
-  score          Decimal?  @db.Decimal(5, 2)
-  reviewedAt     DateTime?
-  answeredAt     DateTime  @default(now())
+  score           Decimal?          @db.Decimal(5, 2)
+  reviewedAt      DateTime?
+  answeredAt      DateTime          @default(now())
 
-  attempt  DiagnosticAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  attempt  DiagnosticAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
   question DiagnosticQuestion @relation(fields: [questionId], references: [id], onDelete: Restrict)
 
   @@unique([attemptId, questionId])
@@ -961,10 +971,10 @@ model DiagnosticResponse {
 }
 
 model DiagnosticTopicResult {
-  id               String             @id @default(cuid())
-  attemptId        String
-  userId           String
-  topicId          String
+  id                String             @id @default(cuid())
+  attemptId         String
+  userId            String
+  topicId           String
   questionsAnswered Int
   questionsCorrect  Int
   accuracy          Float
@@ -1013,4 +1023,13 @@ model AnalyticsEvent {
   @@index([event, createdAt])
   @@index([userId, createdAt])
   @@map("analytics_events")
+}
+
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
 }

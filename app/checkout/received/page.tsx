@@ -20,11 +20,12 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
   return (
     <main className="inner-page mx-auto w-full max-w-[700px] px-4 py-14 text-center sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">Talebiniz başarıyla gönderildi!</p>
+        <p className="eyebrow">{order?.status === "PAID" ? "Ödemeniz alındı!" : "Talebiniz başarıyla gönderildi!"}</p>
         <h1 className="page-title">Siparişiniz Alındı</h1>
         <p className="page-copy mx-auto">
-          Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede
-          iletişime geçecek.
+          {order?.status === "PAID"
+            ? "Ödemeniz onaylandı, dersleriniz hesabınızda hazır."
+            : "Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek."}
         </p>
       </PageHero>
       {order ? (

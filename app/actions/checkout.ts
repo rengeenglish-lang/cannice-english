@@ -41,6 +41,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   }
 
   const total = Math.max(0, subtotal - discountTotal);
+  const paymentMethod = formData.get("paymentMethod") === "PAYPAL" ? "PAYPAL" : "MANUAL";
 
   const order = await db.order.create({
     data: {
@@ -62,12 +63,12 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
           lineTotal: Number(item.unitPriceSnapshot) * item.quantity,
         })),
       },
-      payment: { create: { provider: "MANUAL", amount: total, status: "PENDING" } },
+      payment: { create: { provider: paymentMethod, amount: total, status: "PENDING" } },
     },
   });
 
   if (appliedCouponId) await redeemCoupon(appliedCouponId);
   await db.cartItem.deleteMany({ where: { cartId: cart.id } });
 
-  redirect(`/checkout/received?order=${order.id}`);
+  redirect(paymentMethod === "PAYPAL" ? `/checkout/pay/${order.id}` : `/checkout/received?order=${order.id}`);
 }

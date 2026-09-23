@@ -16,7 +16,7 @@ export function getOrderForAdmin(id: string) {
   });
 }
 
-export async function markOrderPaid(orderId: string) {
+export async function markOrderPaid(orderId: string, opts?: { providerRef?: string }) {
   const result = await db.$transaction(async (tx) => {
     const order = await tx.order.findUniqueOrThrow({
       where: { id: orderId },
@@ -24,7 +24,7 @@ export async function markOrderPaid(orderId: string) {
     });
 
     await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
-    await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date() } });
+    await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date(), ...(opts?.providerRef ? { providerRef: opts.providerRef } : {}) } });
 
     if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null };
 

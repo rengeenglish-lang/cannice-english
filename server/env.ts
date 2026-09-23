@@ -27,3 +27,12 @@ export function getSiteUrl() {
   if (url && url.startsWith("https://")) return url;
   return "http://localhost:3001";
 }
+
+export function getPaypalCredentials() {
+  const clientId = process.env.PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+  if (!clientId || !clientSecret) throw new Error("PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET must be set to use PayPal checkout");
+  const environment = process.env.PAYPAL_ENVIRONMENT === "live" ? "live" : "sandbox";
+  const baseUrl = environment === "live" ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com";
+  return { clientId, clientSecret, environment, baseUrl };
+}

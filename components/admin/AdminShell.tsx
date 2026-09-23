@@ -77,6 +77,7 @@ const STAFF = [
   ["/admin/blog", "Blog"],
   ["/admin/submissions", "Değerlendirmeler"],
   ["/admin/leads", "Gelen talepler"],
+  ["/admin/settings", "Ödeme Ayarları"],
 ];
 
 function SidebarContent({
