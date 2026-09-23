@@ -16,6 +16,11 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
 
   let guest: { guestName: string; guestEmail: string; guestPhone: string } | null = null;
   if (!session?.user?.id) {
+    // Plans and group lessons attach to a student account (Canlı Derslerim, plan access), which
+    // a guest order has nowhere to deliver to.
+    if (cart.items.some((item) => item.product.category === "PLAN" || item.product.category === "PREP_GROUP")) {
+      return { status: "error" as const, message: "Plan ve canlı grup dersi satın almak için lütfen önce giriş yapın veya üye olun." };
+    }
     const parsed = guestCheckoutSchema.safeParse({
       guestName: formData.get("guestName"),
       guestEmail: formData.get("guestEmail"),
@@ -61,6 +66,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
           unitPrice: item.unitPriceSnapshot,
           quantity: item.quantity,
           lineTotal: Number(item.unitPriceSnapshot) * item.quantity,
+          groupSlotId: item.groupSlotId,
         })),
       },
       payment: { create: { provider: paymentMethod, amount: total, status: "PENDING" } },

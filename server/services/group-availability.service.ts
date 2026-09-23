@@ -9,6 +9,8 @@ import {
   LESSON_TIMEZONE,
 } from "@/lib/availability";
 import { z } from "zod";
+import { enrollmentGrantsAccess } from "@/lib/diagnostics/access";
+import { billingState } from "@/lib/billing";
 const include = {
   course: { include: { product: { include: { examType: true } } } },
   instructor: { select: { name: true } },
@@ -80,18 +82,43 @@ export async function enrollGroupSlot(slotId: string, studentId: string) {
         userId_courseId: { userId: studentId, courseId: slot.courseId },
       },
     });
-    if (
-      !access ||
-      access.status !== "ACTIVE" ||
-      (access.expiresAt && access.expiresAt <= new Date())
-    )
-      throw new Error("Önce bu dersin paketine kayıt olmalısınız.");
+    if (!enrollmentGrantsAccess(access))
+      throw new Error(
+        access && billingState(access.paidThrough) === "LOCKED"
+          ? "Bu grubun aylık ödemesi yapılmadığı için kayıt alınamıyor. Devam etmek için ödemenizi tamamlayın."
+          : "Önce bu dersin paketine kayıt olmalısınız.",
+      );
     return tx.groupLessonEnrollment.upsert({
       where: { slotId_studentId: { slotId, studentId } },
       create: { slotId, studentId },
       update: { status: "ACTIVE", cancelledAt: null, enrolledAt: new Date() },
     });
   });
+}
+/**
+ * "Gruba Katıl" joins the whole group, not one date: books the chosen slot plus every later slot
+ * of the same weekly series. Later slots that are full or closed are skipped rather than failing
+ * the join — the chosen slot is the one the student explicitly picked, so only it is required.
+ */
+export async function enrollGroupSlotAndSeries(slotId: string, studentId: string) {
+  await enrollGroupSlot(slotId, studentId);
+  const slot = await db.liveSession.findUnique({ where: { id: slotId } });
+  if (!slot?.recurringSeriesId) return 1;
+  const later = await db.liveSession.findMany({
+    where: { recurringSeriesId: slot.recurringSeriesId, startsAt: { gt: slot.startsAt }, cancelled: false },
+    select: { id: true },
+    orderBy: { startsAt: "asc" },
+  });
+  let booked = 1;
+  for (const next of later) {
+    try {
+      await enrollGroupSlot(next.id, studentId);
+      booked += 1;
+    } catch {
+      // Full/closed later session — the student can pick an alternative from the weekly view.
+    }
+  }
+  return booked;
 }
 export async function cancelGroupBooking(slotId: string, studentId: string) {
   return db.$transaction(async (tx) => {
@@ -111,6 +138,7 @@ const schema = z.object({
   capacity: z.coerce.number().int().min(1).max(200).default(DEFAULT_CAPACITY),
   instructorId: z.string().optional(),
   adminNotes: z.string().max(4000).optional(),
+  meetingUrl: z.union([z.url().refine((u) => /^https:\/\//i.test(u), "https"), z.literal("")]).optional(),
   displayedOccupancy: z.coerce.number().int().min(0).max(200).optional(),
   useDisplayedOccupancy: z.boolean(),
   enrollmentOpen: z.boolean(),
@@ -146,6 +174,7 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
     enrollmentOpen: input.enrollmentOpen,
     instructorId: input.instructorId || null,
     adminNotes: input.adminNotes || null,
+    meetingUrl: input.meetingUrl || null,
     displayedOccupancy: input.displayedOccupancy ?? null,
     useDisplayedOccupancy: input.useDisplayedOccupancy,
     timezone: LESSON_TIMEZONE,
@@ -261,6 +290,7 @@ export async function manageGroupSlot(
           enrollmentOpen: false,
           instructorId: slot.instructorId,
           adminNotes: slot.adminNotes,
+          meetingUrl: slot.meetingUrl,
         },
       });
       return copy.id;

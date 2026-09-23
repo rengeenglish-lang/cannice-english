@@ -62,16 +62,24 @@ export function KonuAnlatimDashboard({
   initialCompletedLessonIds,
   initialNotes,
   isSignedIn,
+  initialTopicId,
+  lockedTopicIds = [],
 }: {
   examName: string;
   topics: Topic[];
   initialCompletedLessonIds: string[];
   initialNotes: Record<string, string>;
   isSignedIn: boolean;
+  /** Preselected topic (from `?topic=` — e.g. Hatalarım and Derslerim deep links). */
+  initialTopicId?: string;
+  /** Topics outside the student's plan; their lesson content is never sent to the client. */
+  lockedTopicIds?: string[];
 }) {
-  const [selectedTopicId, setSelectedTopicId] = useState(topics[0]?.id);
+  const initialTopic = topics.find((topic) => topic.id === initialTopicId) ?? topics[0];
+  const locked = useMemo(() => new Set(lockedTopicIds), [lockedTopicIds]);
+  const [selectedTopicId, setSelectedTopicId] = useState(initialTopic?.id);
   const [selectedLessonId, setSelectedLessonId] = useState(
-    topics[0]?.lessons[0]?.id,
+    initialTopic?.lessons[0]?.id,
   );
   const [exampleIndex, setExampleIndex] = useState(0);
   const [exampleIndexLessonId, setExampleIndexLessonId] =
@@ -224,7 +232,25 @@ export function KonuAnlatimDashboard({
         />
 
         <div className="mt-5">
-          {selectedLesson ? (
+          {locked.has(selectedTopic.id) ? (
+            <div className={`${CARD} text-center`}>
+              <p className="text-3xl" aria-hidden="true">🔒</p>
+              <p className="mt-3 text-xl font-extrabold text-slate-900">
+                Bu konu planına dahil değil
+              </p>
+              <p className="mx-auto mt-2 max-w-lg text-base text-slate-600">
+                Her sınavın ilk konusu ücretsiz önizlemedir. Tüm konu
+                anlatımlarına erişmek için Başlangıç, Çırak veya Uzman planlarından
+                birini seç.
+              </p>
+              <Link
+                href={isSignedIn ? "/dashboard/mock-exam#planlar" : "/planlar"}
+                className="primary-button mt-5"
+              >
+                Planları incele
+              </Link>
+            </div>
+          ) : selectedLesson ? (
             <>
               {selectedTopic.lessons.length === 1 ? (
                 <h2 className="mb-3 text-2xl font-extrabold text-slate-900">

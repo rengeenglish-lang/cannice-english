@@ -22,7 +22,7 @@ export const EXAM_LANDING_CONTENT: Partial<Record<ExamCode, ExamLandingContent>>
     badge: "IELTS hazırlık merkezi",
     headline: "IELTS hedefinize dört beceride ilerleyin.",
     accent: "#0f9b8e",
-    description: "Reading, Listening, Writing ve Speaking bölümlerini tanıyın; ücretsiz konular, sınav pratiği ve canlı destekle planlı hazırlanın.",
+    description: "Reading, Listening, Writing ve Speaking bölümlerini tanıyın; konu anlatımları, sınav pratiği ve canlı destekle planlı hazırlanın.",
     stats: [{ value: "4", label: "Beceri alanı" }, { value: "0–9", label: "Band puanı" }, { value: "3", label: "Speaking bölümü" }, { value: "2", label: "Writing görevi" }],
     sections: [
       { title: "Reading", description: "Metin türleri, soru stratejileri ve süre yönetimi.", meta: "Okuma becerisi" },

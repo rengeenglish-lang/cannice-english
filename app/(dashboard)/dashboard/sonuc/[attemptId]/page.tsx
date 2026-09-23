@@ -7,6 +7,7 @@ import { ResultsSummary } from "@/components/diagnostics/ResultsSummary";
 import { PracticeResults } from "@/components/diagnostics/PracticeResults";
 import { logEvent } from "@/lib/diagnostics/analytics";
 import { ATTEMPT_KIND_RESULT_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
+import { cefrFromPercentage } from "@/lib/diagnostics/cefr";
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
@@ -68,6 +69,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
         kind={attempt.kind === "MOCK_EXAM" ? "MOCK_EXAM" : "FULL_DIAGNOSTIC"}
         mockSetNumber={attempt.mockSetNumber}
         overall={overall}
+        cefr={attempt.kind === "FULL_DIAGNOSTIC" && attempt.examFamily === "ACADEMIC_SKILLS" ? cefrFromPercentage(overall.percentage) : null}
       />
     </main>
   );

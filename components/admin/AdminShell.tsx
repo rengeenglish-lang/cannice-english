@@ -20,6 +20,8 @@ import {
   TrendingUp,
   History,
   Timer,
+  Library,
+  MessageCircle,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -27,39 +29,32 @@ import type { ExamFamily } from "@/lib/generated/prisma/enums";
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
 
 /**
- * Nav adapts to the student's active exam goal: once a goal is set (either family — both
- * TRANSLATION_GRAMMAR and ACADEMIC_SKILLS now have a live diagnostic/practice/mock-exam/progress
- * system), those links lead and Konu Anlatımı moves down — not deleted, just de-emphasized, per
- * the "don't display irrelevant features" requirement. Konuşma pratiği only applies to the
- * ACADEMIC_SKILLS family (IELTS/TOEFL specifically have the AI tutor; PTE doesn't, but the link
- * itself is still harmless to show). No goal yet keeps today's generic order, since we don't yet
- * know which exam's diagnostic to link to.
+ * The learning journey (Seviye Tespit → Deneme → Pratik → İlerleme → Hatalarım) is always shown:
+ * each page handles a missing goal or plan itself (goal prompt / plan cards), so hiding the
+ * links would only hide the way in. Konuşma pratiği only applies to IELTS/TOEFL-style exams, so it
+ * is dropped once the student's goal is a YDS/YÖKDİL one.
  */
 function learningNav(examFamily: ExamFamily | null) {
-  const base = [{ href: "/dashboard", label: "Çalışma alanım", icon: Home }, { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen }, { href: "/dashboard/live-sessions", label: "Canlı ders takvimi", icon: CalendarDays }];
-  const shared = [
-    { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
-    { href: "/packages", label: "Kaynakları keşfet", icon: ShoppingBag },
-  ];
-  const diagnosticJourney = [
+  return [
+    { href: "/dashboard", label: "Çalışma alanım", icon: Home },
+    { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
+    { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
+    { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },
     { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
     { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
-    { href: "/dashboard/practice", label: "Pratik Sorular", icon: ListChecks },
-    { href: "/dashboard/progress", label: "İlerleme", icon: TrendingUp },
-    { href: "/dashboard/history", label: "Geçmiş Sorular", icon: History },
+    { href: "/dashboard/practice", label: "Pratik Bankası", icon: ListChecks },
+    { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
+    { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
+    ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
+    { href: "/kaynaklar", label: "Kaynaklar", icon: ShoppingBag },
+    { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
   ];
-  if (examFamily === "TRANSLATION_GRAMMAR") {
-    return [...base, ...diagnosticJourney, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
-  }
-  if (examFamily === "ACADEMIC_SKILLS") {
-    return [...base, ...diagnosticJourney, { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
-  }
-  return [...base, { href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }, { href: "/konu-anlatim", label: "Konu anlatımları", icon: BookOpen }, ...shared];
 }
 const ACCOUNT = [
   { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
   { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
-  { href: "/faq", label: "Yardım ve sorular", icon: HelpCircle },
+  { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
+  { href: "/yardim", label: "Yardım Masası", icon: HelpCircle },
 ];
 const STAFF = [
   ["/admin", "Genel bakış"],
@@ -77,6 +72,8 @@ const STAFF = [
   ["/admin/blog", "Blog"],
   ["/admin/submissions", "Değerlendirmeler"],
   ["/admin/leads", "Gelen talepler"],
+  ["/admin/mesajlar", "Öğrenci mesajları"],
+  ["/admin/kaynaklar", "Kaynaklar"],
   ["/admin/settings", "Ödeme Ayarları"],
 ];
 

@@ -30,7 +30,8 @@ export const blogCategorySchema = z.object({
   slug: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/, "Sadece küçük harf, rakam ve tire kullanın"),
 });
 
-export const productCategoryEnum = z.enum(["PREP_GROUP", "MOCK_CAMP", "STUDY_PACKAGE", "TRANSLATION_SUPPORT", "BOOK"]);
+export const productCategoryEnum = z.enum(["PREP_GROUP", "MOCK_CAMP", "STUDY_PACKAGE", "TRANSLATION_SUPPORT", "BOOK", "PLAN"]);
+export const planTierEnum = z.enum(["BASLANGIC", "CIRAK", "UZMAN"]);
 export const productLevelEnum = z.enum(["BEGINNER_TO_ADVANCED", "INTERMEDIATE_ADVANCED", "JUNIOR", "SENIOR"]);
 export const deliveryFormatEnum = z.enum(["HYBRID", "RECORDED_ONLY", "LIVE_ONLY"]);
 export const bookFormatEnum = z.enum(["PDF", "PRINT", "PRINT_AND_PDF"]);
@@ -54,6 +55,10 @@ export const productSchema = z.object({
   // Course-only
   deliveryFormat: z.union([deliveryFormatEnum, z.literal("")]).optional(),
   syllabusSummary: z.string().trim().max(500).optional().or(z.literal("")),
+  isSpeakingClub: z.coerce.boolean().default(false),
+  // Plan-only
+  planTier: z.union([planTierEnum, z.literal("")]).optional(),
+  accessMonths: z.coerce.number().int().min(1).max(36).optional().or(z.literal("")),
   // Book-only
   author: z.string().trim().max(120).optional().or(z.literal("")),
   format: z.union([bookFormatEnum, z.literal("")]).optional(),
@@ -63,7 +68,7 @@ export const productSchema = z.object({
   // Diagnostic content tagging — comma-separated DiagnosticTopic slugs, matching the
   // existing BlogPost.tags convention (formDataToObject can't carry a repeated field name).
   diagnosticTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
-});
+}).refine((p) => p.category !== "PLAN" || Boolean(p.planTier), { message: "Plan ürünleri için plan seviyesi seçin.", path: ["planTier"] });
 
 export const moduleSchema = z.object({ title: z.string().trim().min(2).max(160) });
 

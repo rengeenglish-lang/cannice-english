@@ -1,5 +1,5 @@
 import { PageHero } from "@/components/ui/PageHero";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getProductBySlug } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
@@ -23,6 +23,7 @@ export default async function PackageDetailPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  if (product.category === "PLAN") redirect("/planlar");
   const palette = product.examType
     ? EXAM_META[product.examType.code]
     : undefined;

@@ -11,6 +11,7 @@ const CATEGORY_OPTIONS = [
   { value: "STUDY_PACKAGE", label: "Çalışma Paketi" },
   { value: "TRANSLATION_SUPPORT", label: "Akademik Çeviri" },
   { value: "BOOK", label: "Kitap" },
+  { value: "PLAN", label: "Deneme Sınavı Planı" },
 ];
 
 const LEVEL_OPTIONS = [
@@ -27,7 +28,8 @@ type Product = {
   badgeLabel: string | null; basePrice: unknown; salePrice: unknown;
   isPublished: boolean; isFeatured: boolean; displayOrder: number;
   shortDescription: string | null; description: string | null;
-  course: { deliveryFormat: string; syllabusSummary: string | null } | null;
+  planTier?: string | null; accessMonths?: number | null;
+  course: { deliveryFormat: string; syllabusSummary: string | null; isSpeakingClub?: boolean } | null;
   book: { author: string; format: string; pageCount: number | null; isbn: string | null; digitalFileUrl: string | null } | null;
 } | null;
 
@@ -112,7 +114,24 @@ export function ProductForm({
         <p className="mt-1 text-xs text-[color:var(--muted)]">Bu ürün, seçilen konularda zayıf çıkan öğrencilere önerilir (grup dersi paketleri dahil).</p>
       </div>
 
-      {category === "BOOK" ? (
+      {category === "PLAN" ? (
+        <div className="grid grid-cols-1 gap-4 rounded-2xl border border-[color:var(--border)] p-4 sm:grid-cols-2">
+          <p className="col-span-full text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Plan Bilgileri</p>
+          <div>
+            <label className="label" htmlFor="planTier">Plan seviyesi</label>
+            <select id="planTier" name="planTier" required defaultValue={product?.planTier ?? "BASLANGIC"} className="auth-input">
+              <option value="BASLANGIC">Başlangıç</option>
+              <option value="CIRAK">Çırak</option>
+              <option value="UZMAN">Uzman</option>
+            </select>
+          </div>
+          <div>
+            <label className="label" htmlFor="accessMonths">Erişim süresi (ay)</label>
+            <input id="accessMonths" name="accessMonths" type="number" min={1} max={36} defaultValue={product?.accessMonths ?? ""} placeholder="Başlangıç 1 · Çırak 4 · Uzman 4" className="auth-input" />
+          </div>
+          <p className="col-span-full text-xs text-[color:var(--muted)]">Planın hangi özellikleri açtığı sabittir (lib/plans.ts); burada yalnızca fiyat ve süre değiştirilir.</p>
+        </div>
+      ) : category === "BOOK" ? (
         <div className="grid grid-cols-1 gap-4 rounded-2xl border border-[color:var(--border)] p-4 sm:grid-cols-2">
           <p className="col-span-full text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Kitap Bilgileri</p>
           <div>
@@ -151,6 +170,9 @@ export function ProductForm({
             <label className="label" htmlFor="syllabusSummary">Müfredat Özeti</label>
             <input id="syllabusSummary" name="syllabusSummary" defaultValue={product?.course?.syllabusSummary ?? ""} className="auth-input" />
           </div>
+          <label className="col-span-full flex items-center gap-2 text-sm font-semibold text-[color:var(--foreground)]">
+            <input type="checkbox" name="isSpeakingClub" defaultChecked={product?.course?.isSpeakingClub ?? false} className="size-4" /> Konuşma kulübü (Uzman planının ücretsiz konuşma kulübü hakkı bu gruplarda kullanılır)
+          </label>
         </div>
       )}
 

@@ -43,6 +43,8 @@ function productData(input: z.infer<typeof productSchema>, diagnosticTopicIds: s
     shortDescription: input.shortDescription || null,
     description: input.description || null,
     diagnosticTopicIds,
+    planTier: input.category === "PLAN" && input.planTier ? input.planTier : null,
+    accessMonths: input.category === "PLAN" && input.accessMonths ? Number(input.accessMonths) : null,
   };
 }
 
@@ -69,6 +71,7 @@ export async function createProduct(raw: Record<string, unknown>) {
           productId: product.id,
           deliveryFormat: (input.deliveryFormat as "HYBRID" | "RECORDED_ONLY" | "LIVE_ONLY") || "HYBRID",
           syllabusSummary: input.syllabusSummary || null,
+          isSpeakingClub: input.isSpeakingClub,
         },
       });
     }
@@ -108,11 +111,13 @@ export async function updateProduct(id: string, raw: Record<string, unknown>) {
         update: {
           deliveryFormat: (input.deliveryFormat as "HYBRID" | "RECORDED_ONLY" | "LIVE_ONLY") || "HYBRID",
           syllabusSummary: input.syllabusSummary || null,
+          isSpeakingClub: input.isSpeakingClub,
         },
         create: {
           productId: id,
           deliveryFormat: (input.deliveryFormat as "HYBRID" | "RECORDED_ONLY" | "LIVE_ONLY") || "HYBRID",
           syllabusSummary: input.syllabusSummary || null,
+          isSpeakingClub: input.isSpeakingClub,
         },
       });
     }

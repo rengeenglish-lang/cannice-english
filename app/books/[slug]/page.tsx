@@ -5,6 +5,8 @@ import { getProductBySlug } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
 import { DiscountBadge } from "@/components/catalog/DiscountBadge";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { getAuthContext } from "@/server/auth/context";
+import { getPlanAccess } from "@/server/services/plans.service";
 
 const FORMAT_LABEL: Record<string, string> = {
   PDF: "Dijital (PDF)",
@@ -26,6 +28,9 @@ export default async function BookDetailPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product || !product.book) notFound();
+  // Çırak/Uzman plans include digital extra materials — no separate purchase needed.
+  const access = await getPlanAccess(await getAuthContext());
+  const includedDownload = access.can("FREE_MATERIALS") && product.book.digitalFileUrl ? product.book.digitalFileUrl : null;
 
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
@@ -62,7 +67,16 @@ export default async function BookDetailPage({ params }: Props) {
             {formatTRY(String(product.salePrice))}
           </p>
           <div className="mt-5">
-            <AddToCartButton productId={product.id} />
+            {includedDownload ? (
+              <>
+                <p className="mb-3 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-800">Bu e-kitap planına dahil.</p>
+                <a href={includedDownload} target="_blank" rel="noopener noreferrer" className="primary-button w-full sm:w-auto">E-kitabı indir</a>
+                {product.book.format !== "PDF" ? <p className="mt-4 text-xs text-slate-500">Basılı kopya için sepete ekleyebilirsin:</p> : null}
+                {product.book.format !== "PDF" ? <div className="mt-2"><AddToCartButton productId={product.id} /></div> : null}
+              </>
+            ) : (
+              <AddToCartButton productId={product.id} />
+            )}
           </div>
           <ul className="mt-6 space-y-2 text-sm text-slate-600">
             <li>✓ Format: {FORMAT_LABEL[product.book.format]}</li>

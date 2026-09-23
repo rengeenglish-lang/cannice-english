@@ -7,18 +7,55 @@ import { hasLiveDiagnostic, examFamilyForCode } from "@/lib/diagnostics/exam-fam
 import { attemptConfigForExam } from "@/lib/diagnostics/attempt-config";
 import { getMockExamSetsOverview } from "@/server/services/diagnostic-attempts.service";
 import { startMockExamAction } from "@/app/actions/diagnostic-attempt";
+import { PlanCards } from "@/components/plans/PlanCards";
+import { getPlanAccess, listPlanProducts, remainingMockExamStarts } from "@/server/services/plans.service";
+import { BASLANGIC_MOCK_EXAM_LIMIT, PLAN_NAMES } from "@/lib/plans";
 
 export const metadata: Metadata = { title: "Deneme Sınavı" };
 
-export default async function MockExamPage() {
+export default async function MockExamPage({ searchParams }: { searchParams: Promise<{ limit?: string }> }) {
   const user = await getAuthContext();
   if (!user) return null;
-  const goal = await getActiveGoal(user.id);
+  const { limit } = await searchParams;
+  const [access, planProducts, goal] = await Promise.all([getPlanAccess(user), listPlanProducts(), getActiveGoal(user.id)]);
+  const remaining = access.can("MOCK_EXAMS") ? await remainingMockExamStarts(user.id, access) : 0;
+
+  const plans = (
+    <section id="planlar" className="scroll-mt-24">
+      <p className="eyebrow">Deneme Sınavı Planları</p>
+      <h1 className="page-title">{access.plan ? `${PLAN_NAMES[access.plan.tier]} planın aktif` : "Denemelere başlamak için planını seç"}</h1>
+      <p className="page-copy mt-2">
+        {access.plan
+          ? remaining === null
+            ? "Tüm deneme sınavlarına sınırsız erişimin var. Dilediğin zaman planını yükseltebilir veya süreni uzatabilirsin."
+            : `Başlangıç planınla ${BASLANGIC_MOCK_EXAM_LIMIT} denemeden ${remaining} tanesi kaldı. Sınırsız deneme için Çırak veya Uzman plana geçebilirsin.`
+          : access.isStaff
+            ? "Eğitmen hesabıyla tüm denemelere erişimin var."
+            : "Planlar tek seferlik ödemedir; otomatik yenilenmez. Satın alma sonrası 14 gün içinde iade talep edebilirsin."}
+      </p>
+      {limit ? (
+        <p role="alert" className="mt-4 rounded-xl bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+          Başlangıç planındaki {BASLANGIC_MOCK_EXAM_LIMIT} deneme hakkının tamamını kullandın. Devam etmek için planını yükselt.
+        </p>
+      ) : null}
+      <div className="mt-6">
+        <PlanCards products={planProducts} currentTier={access.plan?.tier ?? null} currentExpiresAt={access.plan?.expiresAt} />
+      </div>
+    </section>
+  );
+
+  if (!access.can("MOCK_EXAMS")) {
+    return <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">{plans}</main>;
+  }
+
   if (!goal) {
     return (
-      <main className="mx-auto w-full max-w-2xl px-4 py-14 text-center sm:px-6">
-        <p className="page-copy">Deneme sınavına girebilmek için önce hedefini belirlemelisin.</p>
-        <Link href="/seviye-tespit/hedef" className="primary-button mx-auto mt-6 inline-flex">Hedef Belirle</Link>
+      <main className="mx-auto w-full max-w-6xl space-y-10 px-4 py-10 sm:px-6">
+        <div className="dashboard-panel text-center">
+          <p className="page-copy">Deneme sınavına girebilmek için önce hazırlandığın sınavı ve hedefini belirlemelisin.</p>
+          <Link href="/seviye-tespit/hedef" className="primary-button mx-auto mt-6 inline-flex">Hedef Belirle</Link>
+        </div>
+        {plans}
       </main>
     );
   }
@@ -48,10 +85,13 @@ export default async function MockExamPage() {
     );
   }
 
+  const outOfStarts = remaining !== null && remaining <= 0;
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-6xl space-y-12 px-4 py-10 sm:px-6">
+    {plans}
+    <section className="mx-auto max-w-3xl">
       <p className="eyebrow">{goal.examType.name}</p>
-      <h1 className="page-title">{isAcademicSkills ? "Reading bölümü denemeleri" : "Gerçek sınav formatında denemeler"}</h1>
+      <h2 className="section-title">{isAcademicSkills ? "Reading bölümü denemeleri" : "Gerçek sınav formatında denemeler"}</h2>
       <p className="page-copy mt-4">
         {isAcademicSkills
           ? `Her deneme, gerçek ${goal.examType.name} Reading (Okuma) bölümüyle aynı soru sayısı ve sürede uygulanır. Listening, Writing ve Speaking bölümleri bu denemelere dahil değildir.`
@@ -95,7 +135,7 @@ export default async function MockExamPage() {
                   <Link href={`/dashboard/sonuc/${s.lastCompletedAttemptId}`} className="ghost-button text-xs">Sonuç</Link>
                 ) : null}
                 <form action={startMockExamAction.bind(null, s.setNumber)}>
-                  <button type="submit" className={isCompleted ? "secondary-button text-xs" : "primary-button text-xs"}>
+                  <button type="submit" disabled={outOfStarts && !isInProgress} className={isCompleted ? "secondary-button text-xs" : "primary-button text-xs"}>
                     {isInProgress ? "Devam Et" : isCompleted ? "Tekrar Çöz" : "Başlat"}
                   </button>
                 </form>
@@ -104,6 +144,7 @@ export default async function MockExamPage() {
           );
         })}
       </div>
+    </section>
     </main>
   );
 }

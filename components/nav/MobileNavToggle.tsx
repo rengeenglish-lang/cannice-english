@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 
-export function MobileNavToggle({ links, isSignedIn, examLinks, yokdilLinks }: { links: readonly { href: string; label: string }[]; isSignedIn: boolean; examLinks: readonly { href: string; label: string }[]; yokdilLinks: readonly { href: string; label: string }[] }) {
+export function MobileNavToggle({ links, isSignedIn, cartCount = 0, examLinks, yokdilLinks }: { links: readonly { href: string; label: string }[]; isSignedIn: boolean; cartCount?: number; examLinks: readonly { href: string; label: string }[]; yokdilLinks: readonly { href: string; label: string }[] }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -30,8 +31,10 @@ export function MobileNavToggle({ links, isSignedIn, examLinks, yokdilLinks }: {
               </Link>
             ))}
             <div className="my-2 border-t border-[color:var(--border)]" />
-            <Link href="/cart" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+            <Link href="/cart" onClick={close} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+              <ShoppingCart size={18} aria-hidden="true" />
               Sepetim
+              {cartCount ? <span className="rounded-full bg-[color:var(--accent)] px-2 text-[11px] font-black leading-5 text-white">{cartCount}</span> : null}
             </Link>
             {isSignedIn ? (
               <>
