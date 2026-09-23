@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { listExamTypes } from "@/server/services/catalog.service";
 import { db } from "@/server/db";
 import { ProductGrid } from "@/components/catalog/ProductGrid";
+import { auth } from "@/auth";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import type { ProductLevel } from "@/lib/generated/prisma/enums";
 
 export const metadata: Metadata = { title: "Rehberlik Aracı" };
@@ -24,6 +26,7 @@ function fetchRecommended(examTypeId: string, levels: ProductLevel[]) {
 type Props = { searchParams: Promise<{ exam?: string; goal?: string }> };
 
 export default async function GuidancePage({ searchParams }: Props) {
+  const favoriteIds = await favoriteProductIds((await auth())?.user?.id);
   const { exam: examId, goal } = await searchParams;
   const exams = await listExamTypes();
 
@@ -93,7 +96,7 @@ export default async function GuidancePage({ searchParams }: Props) {
       {examId && goal ? (
         <div className="mt-10">
           <p className="eyebrow mb-4">Size Önerilen Paketler</p>
-          <ProductGrid
+          <ProductGrid favoriteIds={favoriteIds}
             products={recommended}
             emptyLabel="Bu kriterlere uygun bir paket bulunamadı. Tüm paketlere göz atabilirsiniz."
           />

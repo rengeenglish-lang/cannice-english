@@ -22,6 +22,7 @@ import {
   Timer,
   Library,
   MessageCircle,
+  Heart,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -53,6 +54,7 @@ function learningNav(examFamily: ExamFamily | null) {
 const ACCOUNT = [
   { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
   { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
+  { href: "/dashboard/favoriler", label: "Favorilerim", icon: Heart },
   { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
   { href: "/yardim", label: "Yardım Masası", icon: HelpCircle },
 ];

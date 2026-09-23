@@ -5,6 +5,7 @@ import { DiscountBadge } from "@/components/catalog/DiscountBadge";
 import { formatTRY } from "@/lib/pricing";
 import { EXAM_META } from "@/lib/exam-types";
 import type { ExamCode } from "@/lib/generated/prisma/enums";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
 
 const LEVEL_LABEL: Record<string, string> = {
   BEGINNER_TO_ADVANCED: "Başlangıçtan ileri seviyeye",
@@ -13,6 +14,7 @@ const LEVEL_LABEL: Record<string, string> = {
   SENIOR: "İleri seviye",
 };
 type ProductCardData = {
+  id: string;
   slug: string;
   title: string;
   subtitle: string | null;
@@ -24,16 +26,18 @@ type ProductCardData = {
   examType: { name: string; code: ExamCode } | null;
 };
 
-export function ProductCard({ product }: { product: ProductCardData }) {
+export function ProductCard({ product, isFavorite = false }: { product: ProductCardData; isFavorite?: boolean }) {
   const palette = product.examType
     ? EXAM_META[product.examType.code]
     : undefined;
+  // The heart sits beside (not inside) the card link — a button nested in <a> is invalid HTML.
   return (
+    <div className="relative flex">
     <Link
       href={
         (product.category === "BOOK" ? "/books/" : "/packages/") + product.slug
       }
-      className="poster-card group"
+      className="poster-card group w-full"
       style={
         {
           "--catalog-color": palette?.solid ?? "var(--accent)",
@@ -83,5 +87,9 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         </span>
       </div>
     </Link>
+    <div className="absolute right-3 top-3 z-10">
+      <FavoriteButton productId={product.id} initial={isFavorite} title={product.title} />
+    </div>
+    </div>
   );
 }

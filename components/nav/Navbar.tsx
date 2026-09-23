@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { after } from "next/server";
-import { cookies } from "next/headers";
 import { auth } from "@/auth";
-import { db } from "@/server/db";
+import { cartItemCount } from "@/server/services/cart.service";
 import { recordVisit } from "@/server/services/visits.service";
 import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
@@ -16,13 +15,6 @@ const NAV_LINKS = [
   { href: "/planlar", label: "Planlar" },
   { href: "/kaynaklar", label: "Kaynaklar" },
 ];
-
-/** Read-only — never creates a cart (a Server Component can't set the cart cookie anyway). */
-async function cartItemCount(userId: string | undefined) {
-  if (userId) return db.cartItem.count({ where: { cart: { userId } } });
-  const token = (await cookies()).get("cannice_cart_token")?.value;
-  return token ? db.cartItem.count({ where: { cart: { sessionToken: token } } }) : 0;
-}
 
 const YOKDIL_LINKS = [
   { href: "/exams/yokdil-sosyal-bilimler", label: "Sosyal Bilimler" },

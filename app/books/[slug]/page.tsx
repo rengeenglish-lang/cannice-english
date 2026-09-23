@@ -5,6 +5,8 @@ import { getProductBySlug } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
 import { DiscountBadge } from "@/components/catalog/DiscountBadge";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { FavoriteButton } from "@/components/favorites/FavoriteButton";
+import { favoriteProductIds } from "@/server/services/favorites.service";
 import { getAuthContext } from "@/server/auth/context";
 import { getPlanAccess } from "@/server/services/plans.service";
 
@@ -29,7 +31,9 @@ export default async function BookDetailPage({ params }: Props) {
   const product = await getProductBySlug(slug);
   if (!product || !product.book) notFound();
   // Çırak/Uzman plans include digital extra materials — no separate purchase needed.
-  const access = await getPlanAccess(await getAuthContext());
+  const viewer = await getAuthContext();
+  const access = await getPlanAccess(viewer);
+  const isFavorite = (await favoriteProductIds(viewer?.id)).has(product.id);
   const includedDownload = access.can("FREE_MATERIALS") && product.book.digitalFileUrl ? product.book.digitalFileUrl : null;
 
   return (
@@ -77,6 +81,9 @@ export default async function BookDetailPage({ params }: Props) {
             ) : (
               <AddToCartButton productId={product.id} />
             )}
+            <div className="mt-3">
+              <FavoriteButton productId={product.id} initial={isFavorite} title={product.title} variant="full" />
+            </div>
           </div>
           <ul className="mt-6 space-y-2 text-sm text-slate-600">
             <li>✓ Format: {FORMAT_LABEL[product.book.format]}</li>
