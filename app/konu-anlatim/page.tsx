@@ -150,6 +150,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
 
           <div className="mt-8">
             <KonuAnlatimDashboard
+              key={activeExam?.id ?? examSlug}
               examName={activeExam?.name ?? ""}
               topics={topics}
               initialCompletedLessonIds={[...completedLessonIds]}
