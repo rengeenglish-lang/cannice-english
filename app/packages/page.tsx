@@ -13,7 +13,6 @@ const CATEGORY_TABS: {
     | "PREP_GROUP"
     | "MOCK_CAMP"
     | "STUDY_PACKAGE"
-    | "TRANSLATION_SUPPORT"
     | undefined;
   label: string;
 }[] = [
@@ -21,7 +20,6 @@ const CATEGORY_TABS: {
   { value: "PREP_GROUP", label: "Hazırlık Grupları" },
   { value: "MOCK_CAMP", label: "Soru & Deneme Kampı" },
   { value: "STUDY_PACKAGE", label: "Çalışma Paketleri" },
-  { value: "TRANSLATION_SUPPORT", label: "Akademik Çeviri" },
 ];
 
 type Props = { searchParams: Promise<{ category?: string; exam?: string }> };
