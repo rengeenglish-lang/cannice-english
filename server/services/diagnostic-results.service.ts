@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/server/db";
 import { recommendationsForTopics } from "@/lib/diagnostics/recommendations";
 import { cefrFromPercentage } from "@/lib/diagnostics/cefr";
+import { PRACTICE_SECTIONS, practiceSectionForTopic, type PracticeSectionKey } from "@/lib/practice-sections";
 
 export async function getResultsForAttempt(attemptId: string, userId: string) {
   const attempt = await db.diagnosticAttempt.findFirst({
@@ -134,4 +135,43 @@ export async function getLevelTestHistory(userId: string) {
       topicResults: a.topicResults.map((r) => ({ name: r.topic.name, accuracy: r.accuracy, severity: r.severity, answered: r.questionsAnswered })),
     };
   });
+}
+
+export type SkillResultCounts = { correct: number; wrong: number; pending: number; blank: number };
+
+/**
+ * İlerleme Raporu donut: every question the student has met (any test kind), bucketed by Pratik
+ * Bankası skill section and by outcome. "Boş" counts questions left unanswered in completed tests
+ * (they have no response row), so a timed-out deneme still shows its gaps.
+ */
+export async function getSkillBreakdown(userId: string): Promise<Record<PracticeSectionKey, SkillResultCounts>> {
+  const empty = (): SkillResultCounts => ({ correct: 0, wrong: 0, pending: 0, blank: 0 });
+  const result = Object.fromEntries(PRACTICE_SECTIONS.map((s) => [s.key, empty()])) as Record<PracticeSectionKey, SkillResultCounts>;
+  const attempts = await db.diagnosticAttempt.findMany({
+    where: { userId },
+    select: { status: true, questionOrder: true, responses: { select: { questionId: true, isCorrect: true, gradingStatus: true, answerRaw: true } } },
+  });
+  const outcomes: { questionId: string; bucket: keyof SkillResultCounts }[] = [];
+  for (const a of attempts) {
+    const answered = new Set<string>();
+    for (const r of a.responses) {
+      if (r.answerRaw === null) continue;
+      answered.add(r.questionId);
+      outcomes.push({ questionId: r.questionId, bucket: r.isCorrect === true ? "correct" : r.isCorrect === false ? "wrong" : "pending" });
+    }
+    if (a.status === "COMPLETED") {
+      for (const qid of a.questionOrder) if (!answered.has(qid)) outcomes.push({ questionId: qid, bucket: "blank" });
+    }
+  }
+  if (outcomes.length === 0) return result;
+  const questions = await db.diagnosticQuestion.findMany({
+    where: { id: { in: [...new Set(outcomes.map((o) => o.questionId))] } },
+    select: { id: true, topic: { select: { slug: true, parent: { select: { slug: true } } } } },
+  });
+  const sectionByQuestion = new Map(questions.map((q) => [q.id, practiceSectionForTopic({ slug: q.topic.slug, parentSlug: q.topic.parent?.slug })]));
+  for (const o of outcomes) {
+    const section = sectionByQuestion.get(o.questionId);
+    if (section) result[section][o.bucket] += 1;
+  }
+  return result;
 }

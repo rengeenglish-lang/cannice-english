@@ -4,7 +4,9 @@ import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
 import { getRoadmap, getTodayItem } from "@/server/services/study-roadmap.service";
-import { getAttemptHistory, getLevelTestHistory } from "@/server/services/diagnostic-results.service";
+import { getAttemptHistory, getLevelTestHistory, getSkillBreakdown } from "@/server/services/diagnostic-results.service";
+import { ProgressDonut } from "@/components/progress/ProgressDonut";
+import { PRACTICE_SECTIONS } from "@/lib/practice-sections";
 import { getPurchasedMaterials } from "@/server/services/learning.service";
 import { getPlanAccess } from "@/server/services/plans.service";
 import { listVisits } from "@/server/services/visits.service";
@@ -260,9 +262,10 @@ async function GeneralSection({
   planLabel: string;
   counts: Record<SectionKey, number | null>;
 }) {
-  const [responses, todayItem] = await Promise.all([
+  const [responses, todayItem, breakdown] = await Promise.all([
     db.diagnosticResponse.findMany({ where: { attempt: { userId } }, select: { isCorrect: true } }),
     goal ? getTodayItem(userId, goal.id) : null,
+    getSkillBreakdown(userId),
   ]);
   const totalAnswered = responses.length;
   const totalCorrect = responses.filter((r) => r.isCorrect === true).length;
@@ -274,6 +277,7 @@ async function GeneralSection({
   return (
     <div className="mt-4 space-y-6">
       <p className="text-sm text-[color:var(--muted)]">Planın: <strong className="text-[color:var(--foreground)]">{planLabel}</strong></p>
+      <ProgressDonut sections={PRACTICE_SECTIONS.map((s) => ({ key: s.key, label: s.label, counts: breakdown[s.key] }))} />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
           { value: goal ? `%${overallProgress}` : "—", label: "Hazırlık Planı İlerlemesi" },
