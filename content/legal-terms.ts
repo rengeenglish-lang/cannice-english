@@ -1,4 +1,13 @@
 import { REFUND_POLICY, TERMS_OF_USE } from "@/content/policies";
+import {
+  COOKIE_POLICY,
+  DISTANCE_SALES_AGREEMENT,
+  EXPLICIT_CONSENT,
+  KVKK_NOTICE,
+  MEMBERSHIP_AGREEMENT,
+  PRE_INFORMATION_FORM,
+  PRIVACY_POLICY,
+} from "@/content/legal-documents";
 
 export type LegalSection = { heading: string; paragraphs: string[] };
 export type LegalDoc = {
@@ -14,24 +23,11 @@ export type LegalDoc = {
 export const LEGAL_DOCS: Record<string, LegalDoc> = {
   "iade-politikasi": REFUND_POLICY,
   "kullanim-kosullari": TERMS_OF_USE,
-  "mesafeli-satis-sozlesmesi": {
-    title: "Mesafeli Satış Sözleşmesi",
-    body: "Bu sözleşme, Netfener platformu üzerinden gerçekleştirilen mesafeli satışlara ilişkin tarafların hak ve yükümlülüklerini düzenler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
-  },
-  "uyelik-sozlesmesi": {
-    title: "Üyelik Sözleşmesi",
-    body: "Bu sözleşme, Netfener platformuna üye olan kullanıcıların uyması gereken kuralları ve platformun sunduğu hizmetlerin kapsamını belirler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
-  },
-  "gizlilik-sozlesmesi": {
-    title: "Gizlilik Sözleşmesi",
-    body: "Kullanıcılarımızın kişisel verilerinin nasıl toplandığı, işlendiği ve korunduğu bu belgede açıklanır. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
-  },
-  "aydinlatma-metni": {
-    title: "Aydınlatma Metni",
-    body: "KVKK kapsamında veri sorumlusu sıfatıyla kişisel verilerinizin işlenmesine ilişkin aydınlatma metni. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
-  },
-  "acik-riza-metni": {
-    title: "Açık Rıza Metni",
-    body: "Kişisel verilerinizin belirli amaçlarla işlenmesine yönelik açık rızanızın alındığı metin. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
-  },
+  "mesafeli-satis-sozlesmesi": DISTANCE_SALES_AGREEMENT,
+  "on-bilgilendirme-formu": PRE_INFORMATION_FORM,
+  "uyelik-sozlesmesi": MEMBERSHIP_AGREEMENT,
+  "gizlilik-sozlesmesi": PRIVACY_POLICY,
+  "aydinlatma-metni": KVKK_NOTICE,
+  "acik-riza-metni": EXPLICIT_CONSENT,
+  "cerez-politikasi": COOKIE_POLICY,
 };
