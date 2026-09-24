@@ -330,21 +330,25 @@ async function main() {
 
   // ---- Books ----
   const bookDefs = [
-    { slug: "yds-yokdil-kelime-defteri", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Cannice Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
-    { slug: "yds-deneme-sinavlari-kitabi", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Cannice Hoca", format: "PRINT", pageCount: 180 },
-    { slug: "the-ultimate-vocabulary-builder", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 150 },
-    { slug: "yokdil-sosyal-bilimler-kelime-kitabi", title: "YÖKDİL Sosyal Bilimler Kelime Kitabı", examCode: "YOKDIL_SOSYAL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
-    { slug: "ielts-reading-practice-book", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
-    { slug: "toefl-ibt-reading-practice-book", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 130 },
-    { slug: "pte-academic-reading-practice-book", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 120 },
+    { slug: "yds-yokdil-kelime-defteri", shortDescription: "YDS ve YÖKDİL'de en sık çıkan akademik kelimeler; örnek cümle ve eş anlamlılarla, basılı + PDF.", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Cannice Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
+    { slug: "yds-deneme-sinavlari-kitabi", shortDescription: "Gerçek YDS formatında tam deneme sınavları; her soru için açıklamalı çözüm.", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Cannice Hoca", format: "PRINT", pageCount: 180 },
+    { slug: "the-ultimate-vocabulary-builder", shortDescription: "Fen bilimleri metinlerine özel terim ve kelime çalışması; YÖKDİL Fen için PDF kaynak.", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 150 },
+    { slug: "yokdil-sosyal-bilimler-kelime-kitabi", shortDescription: "Sosyal bilimler metinlerinde geçen akademik kelimeler; YÖKDİL Sosyal için PDF kaynak.", title: "YÖKDİL Sosyal Bilimler Kelime Kitabı", examCode: "YOKDIL_SOSYAL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
+    { slug: "ielts-reading-practice-book", shortDescription: "IELTS Academic Reading soru tipleri için strateji ve cevap anahtarlı alıştırmalar.", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
+    { slug: "toefl-ibt-reading-practice-book", shortDescription: "TOEFL iBT Reading bölümü için güncel formatta, cevap anahtarlı okuma pasajları.", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 130 },
+    { slug: "pte-academic-reading-practice-book", shortDescription: "PTE Academic Reading görev tipleri için adım adım strateji ve pratik sorular.", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 120 },
   ];
 
   for (const def of bookDefs) {
     const product = await db.product.upsert({
       where: { slug: def.slug },
       update: { title: def.title, category: "BOOK", examTypeId: examTypes[def.examCode].id, basePrice: def.basePrice, salePrice: def.salePrice, displayOrder: 1 },
-      create: { slug: def.slug, title: def.title, category: "BOOK", examTypeId: examTypes[def.examCode].id, basePrice: def.basePrice, salePrice: def.salePrice, displayOrder: 1 },
+      create: { slug: def.slug, title: def.title, shortDescription: def.shortDescription, category: "BOOK", examTypeId: examTypes[def.examCode].id, basePrice: def.basePrice, salePrice: def.salePrice, displayOrder: 1 },
     });
+    // Fill the card description on existing rows too, but never overwrite one an admin already wrote.
+    if (!product.shortDescription) {
+      await db.product.update({ where: { id: product.id }, data: { shortDescription: def.shortDescription } });
+    }
     await db.book.upsert({
       where: { productId: product.id },
       update: { author: def.author, format: def.format, pageCount: def.pageCount },
