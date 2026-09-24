@@ -44,7 +44,15 @@ export function GoalWizard({ exams }: { exams: Exam[] }) {
   const canAdvance = step === 0 ? Boolean(examTypeId) : true;
 
   return (
-    <form action={formAction} className="dashboard-panel mx-auto max-w-xl space-y-6">
+    <form
+      action={formAction}
+      onKeyDown={(e) => {
+        // Every step's inputs stay mounted (just CSS-hidden), so once step 3 renders a real
+        // type="submit" button, pressing Enter anywhere (e.g. after typing the Sınav Tarihi date)
+        // implicitly submits the form. Require an explicit click on Hedefimi Kaydet instead.
+        if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") e.preventDefault();
+      }}
+      className="dashboard-panel mx-auto max-w-xl space-y-6">
       <div>
         <div className="mb-2 flex justify-between text-xs font-bold text-[color:var(--muted)]">
           <span>Adım {step + 1} / 4</span>
@@ -148,11 +156,11 @@ export function GoalWizard({ exams }: { exams: Exam[] }) {
           <ArrowLeft size={16} /> Geri
         </button>
         {step < 3 ? (
-          <button type="button" onClick={() => setStep((s) => Math.min(3, s + 1))} disabled={!canAdvance} className="primary-button disabled:opacity-40">
+          <button key="advance" type="button" onClick={() => setStep((s) => Math.min(3, s + 1))} disabled={!canAdvance} className="primary-button disabled:opacity-40">
             Devam Et <ArrowRight size={16} />
           </button>
         ) : (
-          <button type="submit" disabled={pending || !examTypeId} className="primary-button disabled:opacity-40">
+          <button key="submit" type="submit" disabled={pending || !examTypeId} className="primary-button disabled:opacity-40">
             {pending ? "Kaydediliyor…" : "Hedefimi Kaydet"}
           </button>
         )}
