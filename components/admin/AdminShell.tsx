@@ -23,6 +23,7 @@ import {
   Library,
   MessageCircle,
   Heart,
+  Target,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -44,6 +45,7 @@ function learningNav(examFamily: ExamFamily | null) {
     { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
     { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
     { href: "/dashboard/practice", label: "Pratik Bankası", icon: ListChecks },
+    { href: "/dashboard/hedeflerim", label: "Hedef Geçmişim", icon: Target },
     { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
     { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
     ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),

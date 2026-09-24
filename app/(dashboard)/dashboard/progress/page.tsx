@@ -13,6 +13,8 @@ import { listVisits } from "@/server/services/visits.service";
 import { SeverityBadge } from "@/components/diagnostics/SeverityBadge";
 import { konuAnlatimHref } from "@/lib/konu-links";
 import { PLAN_NAMES } from "@/lib/plans";
+import { getStudyGoalFailureReports } from "@/server/services/study-goals.service";
+import { PERIOD_LABEL } from "@/lib/study-goal-periods";
 
 export const metadata: Metadata = { title: "İlerleme Raporu" };
 
@@ -26,6 +28,7 @@ const SECTIONS = [
   { key: "okunan", label: "Okunan Konu Anlatımları" },
   { key: "materyaller", label: "Alınan Ek Materyaller" },
   { key: "ziyaret", label: "Site Ziyaret Sıklığı" },
+  { key: "hedefler", label: "Kaçırılan Hedefler" },
 ] as const;
 type SectionKey = (typeof SECTIONS)[number]["key"];
 
@@ -41,7 +44,7 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
   const { bolum } = await searchParams;
   const active: SectionKey = SECTIONS.some((s) => s.key === bolum) ? (bolum as SectionKey) : "genel";
 
-  const [goal, history, levelTests, lessonProgress, submissions, materials, access] = await Promise.all([
+  const [goal, history, levelTests, lessonProgress, submissions, materials, access, failedGoals] = await Promise.all([
     getActiveGoal(user.id),
     getAttemptHistory(user.id),
     getLevelTestHistory(user.id),
@@ -57,6 +60,7 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
     }),
     getPurchasedMaterials(user.id),
     getPlanAccess(user),
+    getStudyGoalFailureReports(user.id),
   ]);
 
   const mocks = history.filter((a) => a.kind === "MOCK_EXAM");
@@ -89,6 +93,7 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
     okunan: lessonProgress.length,
     materyaller: materials.length + includedBooks.length,
     ziyaret: null,
+    hedefler: failedGoals.length,
   };
 
   return (
@@ -244,6 +249,30 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
         ) : null}
 
         {active === "ziyaret" ? <VisitSection userId={user.id} /> : null}
+
+        {active === "hedefler" ? (
+          <div className="mt-4">
+            <p className="text-sm text-[color:var(--muted)]">
+              Süresi dolmuş ve sebebini belirttiğin çalışma hedefleri. Tüm hedeflerini <Link href="/dashboard/hedeflerim" className="font-bold underline">Hedef Geçmişim</Link> sayfasından yönetebilirsin.
+            </p>
+            {failedGoals.length ? (
+              <ul className="mt-4 divide-y divide-[color:var(--border)]">
+                {failedGoals.map((g) => (
+                  <li key={g.id} className="py-3 text-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <strong>{PERIOD_LABEL[g.period]} hedef</strong>
+                      <span className="text-xs text-[color:var(--muted)]">{dateTR(g.periodStart)} – {dateTR(g.periodEnd)}</span>
+                    </div>
+                    <p className="mt-1 text-[color:var(--muted)]">{g.items.map((it) => (it.kind === "TOPIC" ? it.examTopic?.name : it.kind === "PRACTICE" ? `${it.quantity} pratik seti` : it.kind === "MOCK_EXAM" ? `${it.quantity} deneme` : it.label)).filter(Boolean).join(", ")}</p>
+                    <p className="mt-2 rounded-xl bg-rose-50 p-3 text-rose-800"><strong>Sebep:</strong> {g.failureReason}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Empty>Henüz sebebini belirttiğin kaçırılan bir hedef yok.</Empty>
+            )}
+          </div>
+        ) : null}
       </section>
     </main>
   );
