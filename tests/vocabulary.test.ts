@@ -2,11 +2,15 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { A1 } from "../content/vocabulary/a1";
 import { A2 } from "../content/vocabulary/a2";
+import { B1 } from "../content/vocabulary/b1";
 import type { LexiconEntry } from "../content/vocabulary/types";
 import { blankOut, buildQuiz, type QuizWord } from "../lib/vocabulary/quiz";
 
 const toQuiz = (entries: LexiconEntry[], level: string): QuizWord[] => entries.map(([word, pos, tr, exampleEn, exampleTr], i) => ({ id: `${level}-${i}`, word, pos, tr, exampleEn, exampleTr }));
-const LEVELS = { A1: { entries: A1, target: 800 }, A2: { entries: A2, target: 1000 } };
+const LEVELS = {
+  A1: { entries: A1, target: 800 }, A2: { entries: A2, target: 1000 },
+  B1: { entries: B1, target: 1200 },
+};
 
 for (const [code, { entries, target }] of Object.entries(LEVELS)) {
   test(`${code} has ${target} complete words in sets of 20`, () => {

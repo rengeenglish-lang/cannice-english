@@ -1,7 +1,8 @@
 // Sanity checks for Kelime Motoru content: counts, set sizes, duplicates, empty fields.
 import { A1 } from "../content/vocabulary/a1";
 import { A2 } from "../content/vocabulary/a2";
-const levels: Record<string, typeof A1> = { A1, A2 };
+import { B1 } from "../content/vocabulary/b1";
+const levels: Record<string, typeof A1> = { A1, A2, B1 };
 let problems = 0;
 let crossLevel = 0;
 const all = new Map<string, string>();
