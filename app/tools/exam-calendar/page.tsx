@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "ÖSYM Sınav Takvimi" };
 
@@ -60,6 +61,7 @@ export default async function ExamCalendarPage() {
           <p className="mt-4 text-slate-500">Takvim yakında eklenecek.</p>
         ) : null}
       </div>
+      <NextStepCta title="Sınav tarihin belli mi? Planını şimdiden yap." />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "İngilizce Gramer" };
 
@@ -50,6 +51,7 @@ export default async function GrammarPage() {
           </p>
         ) : null}
       </div>
+      <NextStepCta />
     </main>
   );
 }

@@ -58,7 +58,7 @@ export default function AboutPage() {
             başlayabilirsin.
           </p>
         </div>
-        <Link href="/#sample" className="primary-button shrink-0">
+        <Link href="/#ornek-soru" className="primary-button shrink-0">
           Örnek içeriği dene
         </Link>
       </section>

@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "Faydalı Araçlar" };
 
@@ -57,6 +58,7 @@ export default function ToolsIndexPage() {
           </Link>
         ))}
       </div>
+      <NextStepCta />
     </main>
   );
 }

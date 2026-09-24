@@ -22,6 +22,7 @@ export function LearningDashboard({
   upcomingSessionCount,
   resumeCourse,
   nextLesson,
+  plan,
 }: {
   name: string;
   userId: string;
@@ -30,17 +31,19 @@ export function LearningDashboard({
   upcomingSessionCount: number;
   resumeCourse: ResumeCourse;
   nextLesson: NextLesson;
+  /** The student's active plan; null shows the "choose a plan" prompt. */
+  plan: { name: string; expiresAt: string } | null;
 }) {
   return (
     <div className="space-y-7">
       <header className="learning-welcome">
         <div>
-          <p className="eyebrow">SİZİN ÖĞRENME YOLCULUĞUNUZ</p>
+          <p className="eyebrow">ÖĞRENME YOLCULUĞUN</p>
           <h1 className="page-title">Merhaba, {name.split(" ")[0]}.</h1>
           <p className="mt-4 text-sm leading-7 text-blue-100">
             {resumeCourse
-              ? "Küçük adımlar, düzenli ilerleme. Çalışmanıza kaldığınız yerden devam edin."
-              : "Çalışma alanınıza hoş geldiniz. Konuları keşfedin, hedefinize uygun bir başlangıç yapın."}
+              ? "Küçük adımlar, düzenli ilerleme. Çalışmana kaldığın yerden devam et."
+              : "Çalışma alanına hoş geldin. Konuları keşfet, hedefine uygun bir başlangıç yap."}
           </p>
         </div>
         <Link
@@ -51,6 +54,27 @@ export function LearningDashboard({
           <ArrowRight size={18} aria-hidden="true" />
         </Link>
       </header>
+
+      {plan ? (
+        <p className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
+          <span>
+            <strong>{plan.name} planın aktif</strong> · {new Date(plan.expiresAt).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} tarihine kadar
+          </span>
+          <Link href="/planlar" className="font-bold underline">Süreyi uzat veya yükselt</Link>
+        </p>
+      ) : (
+        <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[color:var(--border)] bg-white p-5 shadow-sm">
+          <div>
+            <p className="text-lg font-extrabold text-[color:var(--foreground)]">Henüz bir planın yok</p>
+            <p className="mt-1 text-sm text-[color:var(--muted)]">
+              Deneme sınavları, tüm konu anlatımları ve pratik sorular planlarda. 14 gün iade hakkı.
+            </p>
+          </div>
+          <Link href="/planlar" className="primary-button shrink-0">
+            Planını seç <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </section>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-3">
         {[

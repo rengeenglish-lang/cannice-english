@@ -6,6 +6,7 @@ import { ProductGrid } from "@/components/catalog/ProductGrid";
 import { auth } from "@/auth";
 import { favoriteProductIds } from "@/server/services/favorites.service";
 import type { ProductLevel } from "@/lib/generated/prisma/enums";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "Rehberlik Aracı" };
 
@@ -102,6 +103,7 @@ export default async function GuidancePage({ searchParams }: Props) {
           />
         </div>
       ) : null}
+      <NextStepCta />
     </main>
   );
 }

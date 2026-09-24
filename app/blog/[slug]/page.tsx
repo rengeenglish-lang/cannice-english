@@ -2,6 +2,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getBlogPostBySlug } from "@/server/services/catalog.service";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -33,6 +34,7 @@ export default async function BlogPostPage({ params }: Props) {
           <p key={index}>{paragraph}</p>
         ))}
       </div>
+      <NextStepCta />
     </main>
   );
 }

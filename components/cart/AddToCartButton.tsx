@@ -18,7 +18,7 @@ export function AddToCartButton({ productId }: { productId: string }) {
       })}
       className="primary-button w-full sm:w-auto"
     >
-      {pending ? "Ekleniyor…" : "Hızlı Ekle"}
+      {pending ? "Ekleniyor…" : "Sepete Ekle"}
     </button>
   );
 }

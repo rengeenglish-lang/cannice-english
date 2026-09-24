@@ -11,6 +11,8 @@ import { favoriteProductIds } from "@/server/services/favorites.service";
 import { ModuleAccordion } from "@/components/course/ModuleAccordion";
 import { LiveSessionSchedule } from "@/components/course/LiveSessionSchedule";
 import { EXAM_META } from "@/lib/exam-types";
+import { isMonthlyBilledCategory } from "@/lib/billing";
+import Link from "next/link";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,6 +28,7 @@ export default async function PackageDetailPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) notFound();
+  const monthly = isMonthlyBilledCategory(product.category);
   if (product.category === "PLAN") redirect("/planlar");
   const isFavorite = (await favoriteProductIds((await auth())?.user?.id)).has(product.id);
   const palette = product.examType
@@ -93,8 +96,11 @@ export default async function PackageDetailPage({ params }: Props) {
           </div>
           <p className="text-3xl font-extrabold text-[color:var(--foreground)]">
             {formatTRY(String(product.salePrice))}
+            {monthly ? <span className="text-base font-bold text-[color:var(--muted)]"> / ay</span> : null}
           </p>
-          <p className="text-xs text-[color:var(--muted)]">KDV Dahildir</p>
+          <p className="text-xs text-[color:var(--muted)]">
+            KDV dahil{monthly ? " · aylık ödenir, her ay sonunda hatırlatma alırsın" : ""}
+          </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <AddToCartButton productId={product.id} />
             <FavoriteButton productId={product.id} initial={isFavorite} title={product.title} variant="full" />
@@ -109,10 +115,13 @@ export default async function PackageDetailPage({ params }: Props) {
                     ? "Sadece canlı ders"
                     : "Sadece kayıtlı ders"}
               </li>
-              <li>✓ Kendi hızınızda çalışma imkânı</li>
+              <li>✓ Kendi hızında çalışma imkânı</li>
               <li>✓ Sınav formatında denemeler</li>
             </ul>
           ) : null}
+          <p className="mt-5 border-t border-[color:var(--border)] pt-4 text-xs text-[color:var(--muted)]">
+            ✓ 14 gün iade hakkı · <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link>
+          </p>
         </aside>
       </div>
     </main>

@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "Sözlük" };
 
@@ -40,6 +41,7 @@ export default async function DictionaryPage() {
           <p className="text-slate-500">Sözlük yakında eklenecek.</p>
         ) : null}
       </div>
+      <NextStepCta />
     </main>
   );
 }

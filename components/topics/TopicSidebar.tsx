@@ -3,6 +3,7 @@ import {
   Mic,
   PenLine,
   BookOpen,
+  Lock,
   Headphones,
   Target,
   Sprout,
@@ -32,6 +33,7 @@ export function TopicSidebar<T extends Topic>({
   completedTopicCount,
   topicCompleted,
   topicPercent,
+  topicLocked,
   onSelect,
 }: {
   examName: string;
@@ -41,6 +43,8 @@ export function TopicSidebar<T extends Topic>({
   completedTopicCount: number;
   topicCompleted: (topic: T) => boolean;
   topicPercent: (topic: T) => number;
+  /** Topics outside the student's plan show a lock instead of their progress. */
+  topicLocked?: (topic: T) => boolean;
   onSelect: (topic: T) => void;
 }) {
   return (
@@ -78,6 +82,7 @@ export function TopicSidebar<T extends Topic>({
                 const active = topic.id === selectedTopicId;
                 const done = topicCompleted(topic);
                 const percent = topicPercent(topic);
+                const isLocked = topicLocked?.(topic) ?? false;
                 return (
                   <li key={topic.id}>
                     <button
@@ -108,11 +113,18 @@ export function TopicSidebar<T extends Topic>({
                         <span className="min-w-0 flex-1 text-base font-bold leading-snug">
                           {globalIndex + 1}. {topic.name}
                         </span>
-                        <span
-                          className={`shrink-0 text-sm font-black ${active ? "text-white" : "text-[color:var(--accent-strong)]"}`}
-                        >
-                          %{percent}
-                        </span>
+                        {isLocked ? (
+                          <Lock
+                            aria-label="Planla açılır"
+                            className={`size-4 shrink-0 ${active ? "text-white" : "text-slate-400"}`}
+                          />
+                        ) : (
+                          <span
+                            className={`shrink-0 text-sm font-black ${active ? "text-white" : "text-[color:var(--accent-strong)]"}`}
+                          >
+                            %{percent}
+                          </span>
+                        )}
                       </span>
                       <span
                         className={`h-1.5 w-full overflow-hidden rounded-full ${active ? "bg-white/20" : "bg-slate-100"}`}
