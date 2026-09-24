@@ -1,4 +1,5 @@
-import { BookOpen, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
 export default function AuthLayout({
   children,
 }: {
@@ -7,9 +8,7 @@ export default function AuthLayout({
   return (
     <main className="auth-frame">
       <aside className="auth-story">
-        <div className="flex items-center gap-3 text-sm font-bold">
-          <BookOpen aria-hidden="true" /> NETFENER
-        </div>
+        <Logo size={44} tone="dark" />
         <div>
           <h2>
             Hedefin belli.

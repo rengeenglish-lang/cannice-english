@@ -8,6 +8,7 @@ import { MobileNavToggle } from "@/components/nav/MobileNavToggle";
 import { signOutAction } from "@/app/actions/sign-out";
 import { ChevronDown, Heart, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
+import { Logo } from "@/components/brand/Logo";
 
 const NAV_LINKS = [
   { href: "/exams", label: "Sınavlar" },
@@ -34,13 +35,8 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <span className="grid size-10 place-items-center rounded-2xl bg-[color:var(--brand)] text-lg font-extrabold text-white">
-            N
-          </span>
-          <span className="whitespace-nowrap text-lg font-extrabold tracking-[-.01em] text-[color:var(--foreground)]">
-            Net<span className="text-[color:var(--accent-strong)]">fener</span>
-          </span>
+        <Link href="/" className="flex shrink-0 items-center" aria-label="Netfener ana sayfa">
+          <Logo size={40} />
         </Link>
         <nav className="hidden items-center gap-4 xl:flex xl:gap-6">
           <div className="group relative">

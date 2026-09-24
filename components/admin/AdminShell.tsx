@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
+import { Logo } from "@/components/brand/Logo";
 
 type Role = "STUDENT" | "TEACHER" | "ADMIN";
 
@@ -107,15 +108,7 @@ function SidebarContent({
         onClick={onNavigate}
         className="mb-7 flex items-center gap-3 px-3 py-2 text-white"
       >
-        <span className="grid size-10 place-items-center rounded-xl bg-white/15 font-extrabold">
-          N
-        </span>
-        <span className="text-sm font-extrabold">
-          Netfener
-          <span className="mt-1 block text-[10px] font-medium uppercase tracking-widest text-blue-200">
-            {isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"}
-          </span>
-        </span>
+        <Logo size={40} tone="dark" subtitle={isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"} />
       </Link>
       <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className="space-y-6">
         {(isAdmin ? [] : [
