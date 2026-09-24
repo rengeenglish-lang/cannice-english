@@ -6,6 +6,7 @@ import { getAuthContext } from "@/server/auth/context";
 import { formatTRY } from "@/lib/pricing";
 import { kdvIncludedIn, KDV_RATE_PERCENT } from "@/lib/tax";
 import { PrintButton } from "@/components/orders/PrintButton";
+import { Logo } from "@/components/brand/Logo";
 
 export const metadata: Metadata = { title: "Sipariş Makbuzu" };
 
@@ -44,9 +45,7 @@ export default async function OrderReceiptPage({ params }: Props) {
       <div className="panel print:border-0 print:p-0 print:shadow-none">
         <div className="flex items-center justify-between border-b border-[color:var(--border)] pb-5">
           <div>
-            <p className="text-lg font-extrabold text-[color:var(--foreground)]">
-              Netfener
-            </p>
+            <Logo size={36} />
             <p className="text-xs text-[color:var(--muted)]">
               IELTS · TOEFL · PTE · YDS · YÖKDİL Online Dersler
             </p>

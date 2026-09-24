@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PLATFORM_EXAMS } from "@/lib/platform";
 import { SOCIAL_LINKS } from "@/lib/social";
+import { Logo } from "@/components/brand/Logo";
 
 const LEGAL_LINKS = [
   { doc: "iade-politikasi", name: "İade Politikası" },
@@ -17,7 +18,7 @@ export function Footer() {
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--brand-strong)] text-white/80">
       <div className="mx-auto grid w-full max-w-[1320px] grid-cols-2 gap-8 px-4 py-14 sm:grid-cols-3 sm:px-6 lg:grid-cols-5 lg:px-8">
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-          <span className="text-lg font-extrabold text-white">Netfener</span>
+          <Logo size={36} tone="dark" />
           <p className="mt-3 max-w-xs text-sm leading-6 text-white/55">
             İngilizce sınav hazırlığın için konu anlatımları, çalışma paketleri ve kitaplar. Doğru kaynağı kendi temponda keşfet.
           </p>
