@@ -117,7 +117,7 @@ export function StudyGoalDialog({ topics, triggerLabel = "Bugünkü hedeflerini 
             <div className="flex items-end gap-2">
               <div className="flex-1">
                 <label className="label" htmlFor="study-goal-practice">Pratik soru seti</label>
-                <input id="study-goal-practice" type="number" min={1} max={50} className="auth-input" value={practiceQty} onChange={(e) => setPracticeQty(Number(e.target.value) || 1)} />
+                <input id="study-goal-practice" type="number" min={0} max={50} className="auth-input" value={practiceQty} onChange={(e) => setPracticeQty(e.target.value === "" ? 0 : Number(e.target.value))} />
               </div>
               <button type="button" onClick={() => addItem({ kind: "PRACTICE", quantity: practiceQty })} className="secondary-button shrink-0"><Plus size={16} /> Ekle</button>
             </div>
@@ -125,7 +125,7 @@ export function StudyGoalDialog({ topics, triggerLabel = "Bugünkü hedeflerini 
             <div className="flex items-end gap-2">
               <div className="flex-1">
                 <label className="label" htmlFor="study-goal-mock">Deneme sayısı</label>
-                <input id="study-goal-mock" type="number" min={1} max={20} className="auth-input" value={mockQty} onChange={(e) => setMockQty(Number(e.target.value) || 1)} />
+                <input id="study-goal-mock" type="number" min={0} max={20} className="auth-input" value={mockQty} onChange={(e) => setMockQty(e.target.value === "" ? 0 : Number(e.target.value))} />
               </div>
               <button type="button" onClick={() => addItem({ kind: "MOCK_EXAM", quantity: mockQty })} className="secondary-button shrink-0"><Plus size={16} /> Ekle</button>
             </div>
