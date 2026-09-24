@@ -1,10 +1,11 @@
-import { BookOpen, GraduationCap, Headphones, Languages } from "lucide-react";
+import { BookOpen, GraduationCap, Headphones, Languages, Monitor } from "lucide-react";
 
 export const PLATFORM_EXAMS = [
   { slug: "ielts", name: "IELTS", description: "Reading, Listening, Writing ve Speaking", color: "#0f9b8e", soft: "#e2f7f5", icon: Headphones },
   { slug: "toefl", name: "TOEFL", description: "Akademik İngilizce ve güncel iBT formatı", color: "#3b6fed", soft: "#e8eefe", icon: GraduationCap },
   { slug: "yds", name: "YDS", description: "Kelime, gramer, çeviri ve paragraf", color: "#f5590b", soft: "#feece1", icon: BookOpen },
   { slug: "yokdil", name: "YÖKDİL", description: "Sosyal, Sağlık ve Fen Bilimleri", color: "#5b4fe0", soft: "#eceafd", icon: Languages },
+  { slug: "pte", name: "PTE", description: "Bilgisayar tabanlı akademik İngilizce", color: "#c2367a", soft: "#fce8f2", icon: Monitor },
 ] as const;
 
 /**

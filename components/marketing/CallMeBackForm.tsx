@@ -13,14 +13,14 @@ export function CallMeBackForm() {
       <div className="panel grid grid-cols-1 gap-8 bg-[color:var(--brand)] text-white lg:grid-cols-[1.1fr_1fr] lg:items-center">
         <div>
           <p className="eyebrow text-[#a99cf5]">Biz Sizi Arayalım?</p>
-          <h2 className="section-title text-white">Dersler, uygulamalar ve platform hakkında sorularınızın cevabını hemen alın</h2>
-          <p className="section-copy text-white/70">Adınızı ve telefon numaranızı bırakın, size en uygun paketi birlikte belirleyelim.</p>
+          <h2 className="section-title text-white">Dersler, uygulamalar ve platform hakkında sorularının cevabını hemen al</h2>
+          <p className="section-copy text-white/70">Adını ve telefon numaranı bırak, sana en uygun paketi birlikte belirleyelim.</p>
         </div>
         {state.status === "success" ? (
           <p className="success-banner">{state.message}</p>
         ) : (
           <form action={formAction} className="flex flex-col gap-3 sm:flex-row">
-            <input name="name" required placeholder="Adınız Soyadınız" className="auth-input border-white/20 bg-white/10 text-white placeholder:text-white/50 sm:flex-1" />
+            <input name="name" required placeholder="Adın Soyadın" className="auth-input border-white/20 bg-white/10 text-white placeholder:text-white/50 sm:flex-1" />
             <input name="phone" required placeholder="0 (5XX) XXX XX XX" className="auth-input border-white/20 bg-white/10 text-white placeholder:text-white/50 sm:flex-1" />
             <button type="submit" disabled={pending} className="primary-button shrink-0">
               {pending ? "Gönderiliyor…" : "Beni Arayın"}

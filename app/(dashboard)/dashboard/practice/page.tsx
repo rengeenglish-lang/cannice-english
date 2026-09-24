@@ -89,7 +89,7 @@ export default async function PracticePage({ searchParams }: { searchParams: Pro
               }`}
             >
               {s.label}
-              <span className={`text-[10px] font-bold ${s.key === active ? "text-white/80" : "text-[color:var(--muted)]"}`}>{count ? `${count} konu` : "yakında"}</span>
+              <span className={`text-[11px] font-bold ${s.key === active ? "text-white/80" : "text-[color:var(--muted)]"}`}>{count ? `${count} konu` : "yakında"}</span>
             </Link>
           );
         })}

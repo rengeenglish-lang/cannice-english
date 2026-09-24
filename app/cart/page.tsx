@@ -59,7 +59,7 @@ export default async function CartPage({ searchParams }: Props) {
     <main className="inner-page mx-auto w-full max-w-[1100px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
         <p className="eyebrow">Sepetim</p>
-        <h1 className="page-title">Sepetiniz</h1>
+        <h1 className="page-title">Sepetin</h1>
       </PageHero>
 
       <div className="mt-6 space-y-3">
@@ -89,7 +89,7 @@ export default async function CartPage({ searchParams }: Props) {
       {items.length === 0 ? (
         <div className="panel mt-8 text-center">
           <ShoppingCart size={32} className="mx-auto text-[color:var(--accent)]" aria-hidden="true" />
-          <p className="mt-3 text-slate-500">Sepetiniz şu an boş.</p>
+          <p className="mt-3 text-slate-500">Sepetin şu an boş.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link href="/planlar" className="primary-button">Planları incele</Link>
             <Link href="/kaynaklar" className="secondary-button">Kaynaklara göz at</Link>
@@ -108,7 +108,7 @@ export default async function CartPage({ searchParams }: Props) {
                 <article key={item.id} className="panel space-y-3">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <span className="rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[10px] font-black tracking-wider text-[color:var(--brand)]">
+                      <span className="rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[11px] font-black tracking-wide text-[color:var(--brand)]">
                         {d?.typeLabel.toLocaleUpperCase("tr-TR")}
                       </span>
                       <Link href={d?.href ?? "#"} className="mt-2 block font-black text-[color:var(--foreground)] hover:underline">

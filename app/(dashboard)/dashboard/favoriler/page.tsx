@@ -48,7 +48,7 @@ export default async function FavoritesPage() {
             return (
               <li key={product.id} className="dashboard-panel flex flex-col gap-3">
                 <div>
-                  <span className="rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[10px] font-black tracking-wider text-[color:var(--brand)]">
+                  <span className="rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[11px] font-black tracking-wide text-[color:var(--brand)]">
                     {(TYPE_LABEL[product.category] ?? "Ürün").toLocaleUpperCase("tr-TR")}
                   </span>
                   <Link href={href} className="mt-2 block font-black hover:underline">{product.title}</Link>

@@ -42,7 +42,7 @@ export default async function GuidancePage({ searchParams }: Props) {
           YDS ve YÖKDİL&apos;e Hazırlananlar İçin Öneriler
         </h1>
         <p className="page-copy">
-          Sınavınızı ve hedefinizi seçin, size en uygun paketi önerelim.
+          Sınavını ve hedefini seç, sana en uygun paketi önerelim.
         </p>
       </PageHero>
       <form
@@ -51,7 +51,7 @@ export default async function GuidancePage({ searchParams }: Props) {
       >
         <div>
           <label className="label" htmlFor="exam">
-            Sınavınız
+            Sınavın
           </label>
           <select
             id="exam"
@@ -61,7 +61,7 @@ export default async function GuidancePage({ searchParams }: Props) {
             className="auth-input"
           >
             <option value="" disabled>
-              Seçiniz
+              Seç
             </option>
             {exams.map((exam) => (
               <option key={exam.id} value={exam.id}>
@@ -72,7 +72,7 @@ export default async function GuidancePage({ searchParams }: Props) {
         </div>
         <div>
           <label className="label" htmlFor="goal">
-            Hedefiniz
+            Hedefin
           </label>
           <select
             id="goal"
@@ -82,7 +82,7 @@ export default async function GuidancePage({ searchParams }: Props) {
             className="auth-input"
           >
             <option value="" disabled>
-              Seçiniz
+              Seç
             </option>
             <option value="BEGINNER">Sıfırdan başlıyorum</option>
             <option value="ADVANCED">Puanımı artırmak istiyorum</option>
@@ -98,7 +98,7 @@ export default async function GuidancePage({ searchParams }: Props) {
           <p className="eyebrow mb-4">Size Önerilen Paketler</p>
           <ProductGrid favoriteIds={favoriteIds}
             products={recommended}
-            emptyLabel="Bu kriterlere uygun bir paket bulunamadı. Tüm paketlere göz atabilirsiniz."
+            emptyLabel="Bu kriterlere uygun bir paket bulunamadı. Tüm paketlere göz atabilirsin."
           />
         </div>
       ) : null}

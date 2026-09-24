@@ -9,10 +9,10 @@ type TestimonialData = {
   examType: { name: string; code: ExamCode } | null;
 };
 
-export function TestimonialsSection({ testimonials }: { testimonials: TestimonialData[] }) {
+export function TestimonialsSection({ testimonials, className = "mt-20" }: { testimonials: TestimonialData[]; className?: string }) {
   if (testimonials.length === 0) return null;
   return (
-    <section id="testimonials" className="mx-auto mt-20 w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
+    <section id="testimonials" className={`mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8 ${className}`}>
       <p className="eyebrow">Katılımcı Görüşleri</p>
       <h2 className="section-title">Öğrencilerimiz ne diyor?</h2>
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

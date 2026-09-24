@@ -20,7 +20,7 @@ export default async function ResourceTypePage({ params }: Props) {
       <Link href="/kaynaklar" className="ghost-button mb-4 -ml-4">← Kaynaklar</Link>
       <PageHero>
         <p className="eyebrow">{type.label}</p>
-        <h1 className="page-title">Hangi sınavın kaynaklarını arıyorsunuz?</h1>
+        <h1 className="page-title">Hangi sınavın kaynaklarını arıyorsun?</h1>
         <p className="page-copy">{type.description}</p>
       </PageHero>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

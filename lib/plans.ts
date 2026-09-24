@@ -59,7 +59,7 @@ export const PLAN_CARD_COPY: Record<PlanTierCode, { tagline: string; bullets: st
       "Tüm denemelere erişim",
       "Ücretsiz konuşma kulübü katılımı (1 ay)",
       "Ücretsiz sistematik canlı ders",
-      "Ücretsiz istediğiniz canlı ders",
+      "İstediğin canlı derse ücretsiz katılım",
       "Pratik sorulara erişim",
     ],
   },
@@ -68,14 +68,14 @@ export const PLAN_CARD_COPY: Record<PlanTierCode, { tagline: string; bullets: st
 export const PLAN_PERK_LABELS = {
   SPEAKING_CLUB: "Konuşma kulübü (1 ay)",
   SYSTEMATIC_LIVE: "Sistematik canlı ders (1 ay)",
-  ELECTIVE_LIVE: "İstediğiniz canlı ders (1 ay)",
+  ELECTIVE_LIVE: "İstediğin canlı ders (1 ay)",
 } as const;
 export type PlanPerkCode = keyof typeof PLAN_PERK_LABELS;
 
 /**
  * Which Uzman perk a live course can be claimed with, most specific first: a konuşma kulübü
  * uses the SPEAKING_CLUB perk, a hazırlık grubu the SYSTEMATIC_LIVE one, and ELECTIVE_LIVE
- * ("istediğiniz canlı ders") covers any live course as the fallback.
+ * ("istediğin canlı ders") covers any live course as the fallback.
  */
 export function perkCandidatesForCourse(course: { isSpeakingClub: boolean; category: string }): PlanPerkCode[] {
   if (course.isSpeakingClub) return ["SPEAKING_CLUB", "ELECTIVE_LIVE"];

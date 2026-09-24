@@ -46,7 +46,7 @@ export default async function ResourceListPage({ params }: Props) {
         <ul className="mt-8 grid gap-4 sm:grid-cols-2">
           {items.map((item) => (
             <li key={item.id} className="panel flex flex-col gap-3">
-              <span className="w-fit rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[10px] font-black tracking-wider text-[color:var(--brand)]">{item.badge}</span>
+              <span className="w-fit rounded-full bg-[color:var(--brand-soft)] px-3 py-1 text-[11px] font-black tracking-wide text-[color:var(--brand)]">{item.badge}</span>
               <h2 className="text-lg font-extrabold">{item.title}</h2>
               {item.description ? <p className="text-sm leading-6 text-[color:var(--muted)]">{item.description}</p> : null}
               <div className="mt-auto pt-2">

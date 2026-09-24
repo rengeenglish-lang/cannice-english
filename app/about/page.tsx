@@ -14,27 +14,27 @@ export default function AboutPage() {
           düzenli küçük adımlarla.
         </h1>
         <p className="page-copy">
-          İngilizce sınav hazırlığında kendi yolunuzu oluşturun. Konu
+          İngilizce sınav hazırlığında kendi yolunu oluştur. Konu
           anlatımları, kitaplar, çalışma paketleri ve canlı grup dersleriyle
-          ihtiyacınız olan desteği seçin.
+          ihtiyacın olan desteği seç.
         </p>
       </PageHero>
       <div className="grid gap-5 md:grid-cols-3">
         {[
           {
             icon: Compass,
-            title: "Hedefinizden başlayın",
-            copy: "IELTS, TOEFL, PTE, YDS ve YÖKDİL için kaynakları sınavınıza göre keşfedin.",
+            title: "Hedefinden başla",
+            copy: "IELTS, TOEFL, PTE, YDS ve YÖKDİL için kaynakları sınavına göre keşfet.",
           },
           {
             icon: BookOpen,
-            title: "Size uygun kaynağı seçin",
-            copy: "İçeriği, formatı ve kapsamı inceleyin; ihtiyacınız olan kaynağı ayrı olarak alın.",
+            title: "Sana uygun kaynağı seç",
+            copy: "İçeriği, formatı ve kapsamı incele; ihtiyacın olan kaynağı ayrı olarak al.",
           },
           {
             icon: Users,
-            title: "Birlikte ilerleyin",
-            copy: "Canlı grup derslerinin programını inceleyerek çalışma düzeninize uygun grubu seçin.",
+            title: "Birlikte ilerle",
+            copy: "Canlı grup derslerinin programını inceleyerek çalışma düzenine uygun grubu seç.",
           },
         ].map(({ icon: Icon, title, copy }) => (
           <section key={title} className="panel">
@@ -51,11 +51,11 @@ export default function AboutPage() {
       <section className="learning-welcome mt-8">
         <div>
           <h2 className="text-2xl font-extrabold">
-            Önce deneyin, sonra seçin.
+            Önce dene, sonra seç.
           </h2>
           <p className="mt-3 text-sm leading-7 text-blue-100">
             Konu anlatımlarını ve tanıtım alıştırmalarını keşfederek
-            başlayabilirsiniz.
+            başlayabilirsin.
           </p>
         </div>
         <Link href="/#sample" className="primary-button shrink-0">

@@ -102,7 +102,8 @@ export function ProductForm({
       </div>
       <div>
         <label className="label" htmlFor="shortDescription">Kısa Açıklama</label>
-        <input id="shortDescription" name="shortDescription" defaultValue={product?.shortDescription ?? ""} className="auth-input" />
+        <input id="shortDescription" name="shortDescription" defaultValue={product?.shortDescription ?? ""} className="auth-input" aria-describedby="shortDescription-hint" placeholder="Örn. 40 tam deneme, açıklamalı çözümlerle" />
+        <p id="shortDescription-hint" className="mt-1 text-xs text-[color:var(--muted)]">Ana sayfa ve katalog kartlarında görünür. İçinde ne olduğunu tek cümleyle yaz (soru/deneme sayısı, seviye, format).</p>
       </div>
       <div>
         <label className="label" htmlFor="description">Detaylı Açıklama</label>

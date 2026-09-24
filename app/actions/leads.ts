@@ -17,7 +17,7 @@ export async function submitCallbackFormAction(_prev: CallbackFormState, formDat
     phone: formData.get("phone"),
     examTypeId: formData.get("examTypeId") || undefined,
   });
-  if (!parsed.success) return { status: "error", message: "Lütfen adınızı ve telefon numaranızı kontrol edin." };
+  if (!parsed.success) return { status: "error", message: "Lütfen adını ve telefon numaranı kontrol et." };
   await submitCallbackRequest(parsed.data);
-  return { status: "success", message: "Talebiniz başarıyla gönderildi! Ekibimiz en kısa sürede sizinle iletişime geçecek." };
+  return { status: "success", message: "Talebin başarıyla gönderildi! Ekibimiz en kısa sürede seninle iletişime geçecek." };
 }

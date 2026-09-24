@@ -35,7 +35,7 @@ export function PaypalCheckoutButton({ orderId, clientId }: { orderId: string; c
         await capturePaypalOrderAction(orderId, data.orderID);
         router.push(`/checkout/received?order=${orderId}`);
       },
-      onError: () => setError("Ödeme tamamlanamadı. Lütfen tekrar deneyin veya banka havalesi seçeneğini kullanın."),
+      onError: () => setError("Ödeme tamamlanamadı. Lütfen tekrar dene veya banka havalesi seçeneğini kullan."),
     }).render("#paypal-button-container");
   }
 

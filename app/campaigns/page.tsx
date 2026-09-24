@@ -15,7 +15,7 @@ export default async function CampaignsPage() {
         <h1 className="page-title">Eğitim ve Kitaplara Özel Fırsatlar</h1>
         <p className="page-copy">
           Aşağıdaki kupon kodlarını ödeme adımında girerek indirimden
-          faydalanabilirsiniz.
+          faydalanabilirsin.
         </p>
       </PageHero>
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

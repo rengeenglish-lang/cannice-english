@@ -19,7 +19,7 @@ export function Footer() {
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
           <span className="text-lg font-extrabold text-white">Cannice English</span>
           <p className="mt-3 max-w-xs text-sm leading-6 text-white/55">
-            İngilizce sınav hazırlığınız için konu anlatımları, çalışma paketleri ve kitaplar. Doğru kaynağı kendi temponuzda keşfedin.
+            İngilizce sınav hazırlığın için konu anlatımları, çalışma paketleri ve kitaplar. Doğru kaynağı kendi temponda keşfet.
           </p>
 
           <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/70">

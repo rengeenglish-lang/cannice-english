@@ -1,6 +1,6 @@
 export const DEFAULT_CAPACITY = 10;
 export const LESSON_TIMEZONE = "Europe/Istanbul";
-export const GROUP_EXAM_FILTERS = ["yds", "yokdil", "toefl", "ielts"] as const;
+export const GROUP_EXAM_FILTERS = ["yds", "yokdil", "toefl", "ielts", "pte"] as const;
 export type GroupExamFilter = (typeof GROUP_EXAM_FILTERS)[number];
 export type AvailabilityStatus =
   "AVAILABLE" | "ALMOST_FULL" | "FULL" | "CLOSED" | "CANCELLED";

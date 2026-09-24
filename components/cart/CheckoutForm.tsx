@@ -21,7 +21,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean
             className={`rounded-xl border p-4 text-left transition ${paymentMethod === "PAYPAL" ? "border-[color:var(--brand)] bg-[color:var(--brand-soft)]" : "border-[color:var(--border)]"}`}
           >
             <span className="block font-bold text-[color:var(--foreground)]">PayPal ile Öde</span>
-            <span className="mt-1 block text-xs text-[color:var(--muted)]">Kart veya PayPal hesabınızla anında öde.</span>
+            <span className="mt-1 block text-xs text-[color:var(--muted)]">Kart veya PayPal hesabınla anında öde.</span>
           </button>
           <button
             type="button"
@@ -36,7 +36,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean
       {isGuest ? (
         <>
           <div>
-            <label className="label" htmlFor="guestName">Adınız Soyadınız</label>
+            <label className="label" htmlFor="guestName">Adın Soyadın</label>
             <input id="guestName" name="guestName" required className="auth-input" />
           </div>
           <div>
@@ -55,7 +55,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean
       </div>
       {paymentMethod === "MANUAL" ? (
         <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--brand-soft)] p-4 text-sm text-[color:var(--brand)]">
-          Siparişiniz &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz banka havalesi bilgileri için sizinle iletişime geçecektir.
+          Siparişin &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz banka havalesi bilgileri için seninle iletişime geçecek.
         </p>
       ) : null}
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}

@@ -11,7 +11,7 @@ export function RegisterForm({next}: {next?: string}) {
     <form action={formAction} className="panel space-y-4">
 <input type="hidden" name="next" value={next || ""} />
       <div>
-        <label className="label" htmlFor="name">Adınız Soyadınız</label>
+        <label className="label" htmlFor="name">Adın Soyadın</label>
         <input id="name" name="name" required className="auth-input" />
       </div>
       <div>
