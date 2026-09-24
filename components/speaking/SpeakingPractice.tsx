@@ -25,6 +25,8 @@ export function SpeakingPractice({ exam }: { exam: SpeakingExam }) {
   const [notes, setNotes] = useState("");
   const [audioUrl, setAudioUrl] = useState<string>();
   const [message, setMessage] = useState("");
+  // "blocked" = the browser refused the microphone; the student can retry or follow the steps.
+  const [mic, setMic] = useState<"unknown" | "blocked" | "asking" | "granted">("unknown");
   const [completedCount, setCompletedCount] = useState(0);
   const [history, setHistory] = useState<SavedAttempt[]>(() => {
     if (typeof window === "undefined") return [];
@@ -124,8 +126,21 @@ export function SpeakingPractice({ exam }: { exam: SpeakingExam }) {
       };
       recognition.onerror = () => setMessage("Konuşma tanıma kesildi; ses kaydınız devam ediyor.");
       recognition.start(); recognitionRef.current = recognition;
-      setElapsed(0); setPhase("recording"); setMessage("");
-    } catch { setMessage("Pratik yapabilmek için mikrofon iznine izin verin."); setPhase("ready"); }
+      setElapsed(0); setPhase("recording"); setMessage(""); setMic("unknown");
+    } catch { setMic("blocked"); setMessage(""); setPhase("ready"); }
+  }
+
+  /** "Mikrofon iznini ver": asks the browser again; if it's blocked for the site, explains how to allow it. */
+  async function requestMicrophone() {
+    setMic("asking");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((track) => track.stop());
+      setMic("granted");
+      setMessage("");
+    } catch {
+      setMic("blocked");
+    }
   }
 
   function finishResponse() {
@@ -187,6 +202,18 @@ export function SpeakingPractice({ exam }: { exam: SpeakingExam }) {
             {(phase === "preparing" || phase === "listening" || phase === "reading") && <textarea value={notes} onChange={(event) => setNotes(event.target.value)} className="auth-input mt-5 min-h-24" placeholder="Notlarınızı buraya yazabilirsiniz…" aria-label="Hazırlık notları" />}
             <PhaseDisplay phase={phase} remaining={remaining} />
             {message && <p role="alert" className="mt-4 rounded-xl bg-[color:var(--danger-soft)] p-4 text-sm font-semibold text-red-700">{message}</p>}
+            {mic === "blocked" || mic === "asking" ? (
+              <div role="alert" className="mt-4 rounded-xl bg-[color:var(--danger-soft)] p-4 text-sm">
+                <p className="font-semibold text-red-700">Pratik yapabilmek için mikrofon izni gerekiyor.</p>
+                <button type="button" onClick={requestMicrophone} disabled={mic === "asking"} className="primary-button mt-3 !min-h-10 !py-2">
+                  <Mic size={16} aria-hidden="true" /> {mic === "asking" ? "İzin isteniyor…" : "Mikrofon iznini ver"}
+                </button>
+                <p className="mt-3 leading-6 text-[color:var(--muted)]">
+                  İzin penceresi açılmıyorsa mikrofon bu site için engellenmiş olabilir: adres çubuğundaki kilit (🔒) veya ayar simgesine tıkla, <strong>Mikrofon → İzin ver</strong> seç ve sayfayı yenile. Telefonda tarayıcının site ayarlarından da açabilirsin.
+                </p>
+              </div>
+            ) : null}
+            {mic === "granted" ? <p role="status" className="mt-4 rounded-xl bg-[color:var(--success-soft)] p-4 text-sm font-semibold text-[color:var(--success)]">Mikrofon hazır. Görevi başlatabilirsin.</p> : null}
             <div className="mt-5 flex flex-wrap gap-3">
               {phase === "ready" && <button type="button" onClick={() => startTask(taskIndex)} className="primary-button"><Mic size={18} /> Görevi başlat</button>}
               {phase === "recording" && <button type="button" onClick={finishResponse} className="primary-button bg-red-600 hover:bg-red-700"><Square size={17} /> Yanıtı bitir</button>}
