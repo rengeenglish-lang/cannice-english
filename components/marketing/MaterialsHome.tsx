@@ -64,7 +64,7 @@ export function MaterialsHome({ products, groups = [], testimonials = [], isSign
           <p className="mt-5 flex items-center gap-2 text-sm text-blue-100"><Check size={18}/> İlk konu her sınavda ücretsiz.</p>
         </div>
         <div className="hidden rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur sm:p-7 lg:block">
-          <div className="flex items-center gap-3"><span className="grid size-12 place-items-center rounded-2xl bg-blue-500"><Sparkles/></span><div><p className="text-xs font-bold uppercase tracking-widest text-blue-200">Cannice English</p><p className="text-xl font-black">Çalışma alanın hazır</p></div></div>
+          <div className="flex items-center gap-3"><span className="grid size-12 place-items-center rounded-2xl bg-blue-500"><Sparkles/></span><div><p className="text-xs font-bold uppercase tracking-widest text-blue-200">Netfener</p><p className="text-xl font-black">Çalışma alanın hazır</p></div></div>
           <div className="mt-6 grid grid-cols-2 gap-3">{PILLARS.map(({label,href,membersOnly,icon:Icon})=><Link key={label} href={membersOnly ? memberHref(href, isSignedIn) : href} className="group rounded-2xl bg-white/10 p-4 transition hover:bg-white/15 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30"><Icon size={22} className="text-blue-300"/><p className="mt-3 flex items-center justify-between gap-2 text-sm font-extrabold">{label}<ArrowRight size={16} className="text-blue-200 transition group-hover:translate-x-1"/></p>{membersOnly && !isSignedIn ? <p className="mt-1 text-xs text-blue-200">{MEMBER_NOTE}</p> : null}</Link>)}</div>
         </div>
       </div>

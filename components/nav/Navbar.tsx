@@ -36,11 +36,10 @@ export async function Navbar() {
       <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <span className="grid size-10 place-items-center rounded-2xl bg-[color:var(--brand)] text-lg font-extrabold text-white">
-            C
+            N
           </span>
           <span className="whitespace-nowrap text-lg font-extrabold tracking-[-.01em] text-[color:var(--foreground)]">
-            Cannice{" "}
-            <span className="text-[color:var(--accent-strong)]">English</span>
+            Net<span className="text-[color:var(--accent-strong)]">fener</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-4 xl:flex xl:gap-6">

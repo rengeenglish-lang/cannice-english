@@ -45,7 +45,7 @@ export default async function OrderReceiptPage({ params }: Props) {
         <div className="flex items-center justify-between border-b border-[color:var(--border)] pb-5">
           <div>
             <p className="text-lg font-extrabold text-[color:var(--foreground)]">
-              Cannice English
+              Netfener
             </p>
             <p className="text-xs text-[color:var(--muted)]">
               IELTS · TOEFL · PTE · YDS · YÖKDİL Online Dersler

@@ -12,7 +12,7 @@ export const REFUND_POLICY: LegalDoc = {
   title: "İade Politikası",
   updatedAt: "23 Eylül 2026",
   draft: false,
-  body: "Bu politika, Cannice English üzerinden satın aldığınız planlar, canlı grup dersleri, paketler ve kitaplar için hangi durumlarda ve nasıl iade yapıldığını açıklar. Amacımız, memnun kalmadığınız bir satın alımdan adil ve hızlı bir şekilde vazgeçebilmenizi sağlamaktır.",
+  body: "Bu politika, Netfener üzerinden satın aldığınız planlar, canlı grup dersleri, paketler ve kitaplar için hangi durumlarda ve nasıl iade yapıldığını açıklar. Amacımız, memnun kalmadığınız bir satın alımdan adil ve hızlı bir şekilde vazgeçebilmenizi sağlamaktır.",
   sections: [
     {
       heading: "1. İade süresi",
@@ -64,7 +64,7 @@ export const REFUND_POLICY: LegalDoc = {
       heading: "7. İade ödemesi",
       paragraphs: [
         "Onaylanan iadeler, onay tarihinden itibaren en geç 14 gün içinde ödemeyi yaptığınız yöntemle gerçekleştirilir: PayPal ile yapılan ödemeler PayPal hesabınıza veya PayPal'da kullandığınız karta, banka havalesiyle yapılan ödemeler ise sizin adınıza kayıtlı ve bize bildirdiğiniz IBAN'a iade edilir.",
-        "PayPal ödemeleri ABD doları üzerinden tahsil edildiğinden iade de aynı para birimiyle yapılır; kur farkları ve bankanızın uyguladığı ücretler Cannice English'in kontrolünde değildir.",
+        "PayPal ödemeleri ABD doları üzerinden tahsil edildiğinden iade de aynı para birimiyle yapılır; kur farkları ve bankanızın uyguladığı ücretler Netfener'in kontrolünde değildir.",
         "İade tamamlandığında ilgili plan, grup dersi veya ürüne erişiminiz kapatılır ve durum hesabınıza bildirim olarak iletilir.",
       ],
     },
@@ -87,12 +87,12 @@ export const TERMS_OF_USE: LegalDoc = {
   title: "Kullanım Koşulları",
   updatedAt: "23 Eylül 2026",
   draft: false,
-  body: "Bu koşullar, Cannice English web sitesini ve bu site üzerinden sunulan tüm eğitim hizmetlerini kullanımınızı düzenler. Siteye üye olarak veya siteyi kullanarak bu koşulları kabul etmiş olursunuz.",
+  body: "Bu koşullar, Netfener web sitesini ve bu site üzerinden sunulan tüm eğitim hizmetlerini kullanımınızı düzenler. Siteye üye olarak veya siteyi kullanarak bu koşulları kabul etmiş olursunuz.",
   sections: [
     {
       heading: "1. Hizmetin kapsamı",
       paragraphs: [
-        "Cannice English; IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanan öğrencilere konu anlatımları, seviye tespit sınavları, deneme sınavları, pratik sorular, ilerleme takibi, canlı grup dersleri, e-kitaplar ve çalışma materyalleri sunan çevrim içi bir eğitim platformudur.",
+        "Netfener; IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanan öğrencilere konu anlatımları, seviye tespit sınavları, deneme sınavları, pratik sorular, ilerleme takibi, canlı grup dersleri, e-kitaplar ve çalışma materyalleri sunan çevrim içi bir eğitim platformudur.",
         "Platformda sunulan seviye tespit ve deneme sınavı sonuçları tahmini göstergelerdir; resmî sınav puanı, sertifika veya belirli bir sınav sonucunun garantisi değildir.",
       ],
     },
@@ -124,7 +124,7 @@ export const TERMS_OF_USE: LegalDoc = {
     {
       heading: "5. Fikrî mülkiyet",
       paragraphs: [
-        "Sitedeki konu anlatımları, sorular, açıklamalar, deneme sınavları, videolar, e-kitaplar ve diğer tüm içerikler Cannice English'e veya lisans verenlerine aittir ve fikrî mülkiyet mevzuatıyla korunur.",
+        "Sitedeki konu anlatımları, sorular, açıklamalar, deneme sınavları, videolar, e-kitaplar ve diğer tüm içerikler Netfener'e veya lisans verenlerine aittir ve fikrî mülkiyet mevzuatıyla korunur.",
         "İçerikleri yalnızca kendi kişisel sınav hazırlığınız için kullanabilirsiniz. İçerikleri kopyalamak, çoğaltmak, yeniden satmak, başka sitelerde veya sosyal medyada yayımlamak, ders ya da kurs materyali olarak kullanmak ve otomatik araçlarla toplamak yasaktır.",
       ],
     },

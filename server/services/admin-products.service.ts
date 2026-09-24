@@ -58,7 +58,7 @@ export async function createProduct(raw: Record<string, unknown>) {
       await tx.book.create({
         data: {
           productId: product.id,
-          author: input.author || "Cannice Hoca",
+          author: input.author || "Netfener Hoca",
           format: (input.format as "PDF" | "PRINT" | "PRINT_AND_PDF") || "PDF",
           pageCount: input.pageCount ? Number(input.pageCount) : null,
           isbn: input.isbn || null,
@@ -90,7 +90,7 @@ export async function updateProduct(id: string, raw: Record<string, unknown>) {
       await tx.book.upsert({
         where: { productId: id },
         update: {
-          author: input.author || "Cannice Hoca",
+          author: input.author || "Netfener Hoca",
           format: (input.format as "PDF" | "PRINT" | "PRINT_AND_PDF") || "PDF",
           pageCount: input.pageCount ? Number(input.pageCount) : null,
           isbn: input.isbn || null,
@@ -98,7 +98,7 @@ export async function updateProduct(id: string, raw: Record<string, unknown>) {
         },
         create: {
           productId: id,
-          author: input.author || "Cannice Hoca",
+          author: input.author || "Netfener Hoca",
           format: (input.format as "PDF" | "PRINT" | "PRINT_AND_PDF") || "PDF",
           pageCount: input.pageCount ? Number(input.pageCount) : null,
           isbn: input.isbn || null,

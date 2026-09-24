@@ -46,7 +46,7 @@ export function ProductCard({ product, isFavorite = false }: { product: ProductC
     >
       <div className="catalog-cover">
         <div className="catalog-cover-label">
-          <span>CANNICE / ENGLISH</span>
+          <span>NETFENER</span>
           <BookOpen size={22} aria-hidden="true" />
         </div>
         <h3 className="font-extrabold">{product.title}</h3>

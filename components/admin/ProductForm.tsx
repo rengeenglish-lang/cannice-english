@@ -137,7 +137,7 @@ export function ProductForm({
           <p className="col-span-full text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Kitap Bilgileri</p>
           <div>
             <label className="label" htmlFor="author">Yazar</label>
-            <input id="author" name="author" defaultValue={product?.book?.author ?? "Cannice Hoca"} className="auth-input" />
+            <input id="author" name="author" defaultValue={product?.book?.author ?? "Netfener Hoca"} className="auth-input" />
           </div>
           <div>
             <label className="label" htmlFor="format">Format</label>
