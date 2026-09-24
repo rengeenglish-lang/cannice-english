@@ -40,7 +40,7 @@ export default async function CartPage({ searchParams }: Props) {
   const cart = await findCart(user?.id);
   const priceChanges = cart ? await refreshCartPrices(cart) : [];
   const items = cart?.items ?? [];
-  const { issues, details, blocking } = cart ? await inspectCart(cart, user) : { issues: [] as CartIssue[], details: new Map<string, CartItemDetails>(), blocking: false };
+  const { issues, details, blocking, needsAccount } = cart ? await inspectCart(cart, user) : { issues: [] as CartIssue[], details: new Map<string, CartItemDetails>(), blocking: false, needsAccount: false };
 
   const listTotal = items.reduce((sum, i) => sum + Math.max(Number(i.product.basePrice), Number(i.product.salePrice)) * i.quantity, 0);
   const subtotal = items.reduce((sum, i) => sum + Number(i.unitPriceSnapshot) * i.quantity, 0);
@@ -177,6 +177,13 @@ export default async function CartPage({ searchParams }: Props) {
               <>
                 <button type="button" disabled className="primary-button w-full justify-center">Ödemeye Geç</button>
                 <p className="text-xs text-rose-700">Devam etmek için yukarıdaki kırmızı uyarıları çöz.</p>
+              </>
+            ) : needsAccount ? (
+              <>
+                <Link href={`/register?next=${encodeURIComponent("/checkout")}`} className="primary-button w-full justify-center">Ücretsiz Üye Ol ve Ödemeye Geç</Link>
+                <p className="text-center text-sm text-slate-600">
+                  Zaten üye misin? <Link href={`/sign-in?next=${encodeURIComponent("/checkout")}`} className="font-bold underline">Giriş yap</Link>
+                </p>
               </>
             ) : (
               <Link href="/checkout" className="primary-button w-full justify-center">Ödemeye Geç</Link>
