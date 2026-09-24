@@ -507,3 +507,18 @@ a {
   background: var(--accent);
   border-radius: 99px;
 }
+
+/* Coaching reports are print-friendly: only the report itself is printed. */
+@media print {
+  .dashboard-sidebar,
+  .no-print {
+    display: none !important;
+  }
+  .dashboard-frame {
+    display: block !important;
+  }
+  .dashboard-panel {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}

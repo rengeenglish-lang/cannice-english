@@ -324,7 +324,7 @@ model User {
   topicLessonProgresses TopicLessonProgress[]
   topicNotes            TopicNote[]
   groupBookings         GroupLessonEnrollment[]
-  instructedSessions    LiveSession[]           @relation("SessionInstructor")
+  instructedSessions    LiveSession[]             @relation("SessionInstructor")
   examGoals             ExamGoal[]
   diagnosticAttempts    DiagnosticAttempt[]
   studyRoadmapItems     StudyRoadmapItem[]
@@ -335,8 +335,18 @@ model User {
   savedExamTopics       SavedExamTopic[]
   visits                UserVisit[]
   favorites             FavoriteProduct[]
-  sentMessages          TeacherMessage[]        @relation("MessageStudent")
-  answeredMessages      TeacherMessage[]        @relation("MessageResponder")
+  coachingProfile       CoachingProfile?
+  studyPlanWeeks        StudyPlanWeek[]
+  studyTasks            StudyTask[]
+  planProposals         PlanProposal[]
+  vocabCards            VocabCard[]
+  mistakeEntries        MistakeEntry[]
+  coachingCheckIns      CoachingCheckIn[]
+  coachingFeedback      CoachingFeedback[]
+  coachingReports       CoachingReport[]
+  coachingNotifications CoachingNotificationLog[]
+  sentMessages          TeacherMessage[]          @relation("MessageStudent")
+  answeredMessages      TeacherMessage[]          @relation("MessageResponder")
   studyGoals            StudyGoal[]
 
   @@map("users")
@@ -1269,4 +1279,342 @@ model StudyGoalItem {
 
   @@index([studyGoalId])
   @@map("study_goal_items")
+}
+
+// ====================================================================
+// ÜCRETSİZ ÖĞRENCİ KOÇLUĞU (free, automated English exam coaching)
+// ====================================================================
+
+/**
+ * Coaching pathways. Versions (IELTS Academic/General, e-YDS, YÖKDİL branch...) live in lib/coaching/exams.ts.
+ */
+enum CoachingPathway {
+  IELTS
+  TOEFL
+  PTE
+  YDS
+  YOKDIL
+  YDT
+}
+
+enum StudyTaskKind {
+  LESSON
+  PRACTICE
+  TIMED_PRACTICE
+  MOCK
+  LEVEL_TEST
+  VOCAB_REVIEW
+  MISTAKE_REVIEW
+  SPEAKING
+  WRITING
+  LISTENING
+  READING
+  CUSTOM
+}
+
+enum StudyTaskStatus {
+  PLANNED
+  DONE
+  SKIPPED
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum CoachingReportKind {
+  WEEKLY
+  MONTHLY
+}
+
+/**
+ * One per student. Holds only what planning needs — no birth date, school name or other
+ * personal data. `isMinor` + `guardianConsentAt` gate activation for under-18 learners.
+ */
+model CoachingProfile {
+  id                String          @id @default(cuid())
+  userId            String          @unique
+  enabled           Boolean         @default(true)
+  pathway           CoachingPathway
+  examVersion       String
+  /**
+   * Site ExamType slug whose lessons/questions the plan links to (null = no site content, e.g. none yet).
+   */
+  contentExamSlug   String?
+  targetScore       String?
+  /**
+   * { reading: "7", writing: "6.5", ... } on the exam's own scale.
+   */
+  skillTargets      Json?
+  /**
+   * Exam date as entered by the student (always labelled as such).
+   */
+  examDate          DateTime?       @db.Date
+  currentLevel      String?
+  recentScore       String?
+  /**
+   * "PRACTICE" | "OFFICIAL" — a student-reported score, never shown as verified.
+   */
+  recentScoreKind   String?
+  /**
+   * ISO weekdays 1 (Mon) – 7 (Sun).
+   */
+  studyDays         Int[]
+  dailyMinutes      Int
+  commitment        String?
+  difficulties      String[]        @default([])
+  reminderTime      String          @default("19:00")
+  timezone          String          @default("Europe/Istanbul")
+  locale            String          @default("tr")
+  notifyInApp       Boolean         @default(true)
+  notifyEmail       Boolean         @default(false)
+  /**
+   * "NORMAL" | "LOW" (only essential follow-ups)
+   */
+  frequency         String          @default("NORMAL")
+  quietStart        String          @default("22:00")
+  quietEnd          String          @default("08:00")
+  pausedUntil       DateTime?
+  isMinor           Boolean         @default(false)
+  guardianConsentAt DateTime?
+  vocabSourceCursor Int             @default(0)
+  lastSyncedAt      DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("coaching_profiles")
+}
+
+model StudyPlanWeek {
+  id        String   @id @default(cuid())
+  userId    String
+  weekStart DateTime @db.Date
+  /**
+   * Snapshot of the inputs the week was generated with (minutes, days, weak skills).
+   */
+  basis     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks StudyTask[]
+
+  @@unique([userId, weekStart])
+  @@map("study_plan_weeks")
+}
+
+model StudyTask {
+  id              String          @id @default(cuid())
+  weekId          String
+  userId          String
+  date            DateTime        @db.Date
+  position        Int             @default(0)
+  kind            StudyTaskKind
+  skill           String?
+  title           String
+  detail          String?
+  href            String?
+  /**
+   * What the task points at ("EXAM_TOPIC", "DIAGNOSTIC_TOPIC", "MOCK_SET", "SPEAKING"...), for auto-completion.
+   */
+  refType         String?
+  refId           String?
+  /**
+   * No matching cannice-english content exists — an editable self-study task instead.
+   */
+  isGap           Boolean         @default(false)
+  minutes         Int
+  /**
+   * Shorter "busy day" version; null = skipped on a busy day.
+   */
+  busyMinutes     Int?
+  status          StudyTaskStatus @default(PLANNED)
+  /**
+   * "BUSY" | "STUDENT" | "MISSED"
+   */
+  skipReason      String?
+  /**
+   * "AUTO" (detected from real activity) | "SELF" (student ticked it)
+   */
+  completion      String?
+  completedAt     DateTime?
+  selfMinutes     Int?
+  attemptId       String?
+  startedAt       DateTime?
+  postponedCount  Int             @default(0)
+  editedByStudent Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+
+  week StudyPlanWeek @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("study_tasks")
+}
+
+/**
+ * A substantial plan change the coach suggests — applied only after the student confirms.
+ */
+model PlanProposal {
+  id        String         @id @default(cuid())
+  userId    String
+  reason    String
+  summary   String
+  payload   Json
+  status    ProposalStatus @default(PENDING)
+  createdAt DateTime       @default(now())
+  decidedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("plan_proposals")
+}
+
+/**
+ * Leitner-box spaced vocabulary review. Mastery needs several successful reviews on different days.
+ */
+model VocabCard {
+  id             String    @id @default(cuid())
+  userId         String
+  term           String
+  meaning        String
+  example        String?
+  /**
+   * "SITE" (from a Konu Anlatımı glossary lesson) | "STUDENT"
+   */
+  source         String
+  sourceRef      String?
+  box            Int       @default(1)
+  dueAt          DateTime
+  reviews        Int       @default(0)
+  lapses         Int       @default(0)
+  lastReviewedAt DateTime?
+  masteredAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, term])
+  @@index([userId, dueAt])
+  @@map("vocab_cards")
+}
+
+/**
+ * Kişisel hata defteri — collected automatically from wrong answers, or added by the student.
+ */
+model MistakeEntry {
+  id            String    @id @default(cuid())
+  userId        String
+  questionId    String?
+  note          String?
+  topicTags     String[]  @default([])
+  /**
+   * "AUTO" | "MANUAL"
+   */
+  source        String
+  timesWrong    Int       @default(1)
+  correctStreak Int       @default(0)
+  lastWrongAt   DateTime  @default(now())
+  lastRetryDay  String?
+  dueAt         DateTime
+  masteredAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([userId, dueAt])
+  @@map("mistake_entries")
+}
+
+model CoachingCheckIn {
+  id             String   @id @default(cuid())
+  userId         String
+  weekStart      DateTime @db.Date
+  /**
+   * "EASY" | "OK" | "HARD"
+   */
+  manageable     String
+  hardestSkills  String[] @default([])
+  blockers       String[] @default([])
+  /**
+   * "LESS" | "SAME" | "MORE"
+   */
+  workloadChange String
+  note           String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekStart])
+  @@map("coaching_check_ins")
+}
+
+model CoachingFeedback {
+  id                String   @id @default(cuid())
+  userId            String
+  /**
+   * "ADVICE" (report unhelpful advice) | "REPORT" (report survey)
+   */
+  kind              String
+  refId             String?
+  useful            Boolean?
+  workloadRealistic Boolean?
+  /**
+   * "TOO_MANY" | "OK" | "TOO_FEW"
+   */
+  reminderFrequency String?
+  message           String?
+  createdAt         DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("coaching_feedback")
+}
+
+model CoachingReport {
+  id          String             @id @default(cuid())
+  userId      String
+  kind        CoachingReportKind
+  periodStart DateTime           @db.Date
+  periodEnd   DateTime           @db.Date
+  data        Json
+  createdAt   DateTime           @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, periodStart])
+  @@map("coaching_reports")
+}
+
+/**
+ * Delivery log for coaching follow-ups. The unique dedupeKey makes every reminder send at most
+ * once; `notificationId` links to the in-app notification so engagement (read or not) can throttle
+ * future reminders.
+ */
+model CoachingNotificationLog {
+  id             String   @id @default(cuid())
+  userId         String
+  kind           String
+  dedupeKey      String
+  channel        String
+  /**
+   * "SENT" | "SKIPPED_PREFS" | "SKIPPED_THROTTLE"
+   */
+  status         String
+  notificationId String?
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dedupeKey])
+  @@index([userId, createdAt])
+  @@map("coaching_notification_logs")
 }
