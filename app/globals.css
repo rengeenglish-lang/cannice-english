@@ -1,29 +1,43 @@
 @import "tailwindcss";
 
+/* Theme is chosen by data-theme on <html> (set before paint by the script in app/layout.tsx). */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 :root {
-  --background: #f7f9ff;
-  --foreground: #132f59;
-  --brand: #132f59;
-  --brand-strong: #102747;
-  --brand-soft: #edf2ff;
-  --accent: #4162da;
-  --accent-strong: #304fbe;
-  --accent-soft: #edf2ff;
+  /* Netfener palette: warm paper + charcoal with lighthouse gold. */
+  --background: #f8f6f1;
+  --foreground: #161b26;
+  --brand: #161b26;
+  --brand-strong: #0f131c;
+  --brand-soft: #f3ecdb;
+  --accent: #d9a12e;
+  --accent-strong: #8f6206;
+  --accent-soft: #fbf1d9;
+  /* Text on accent (gold) backgrounds. */
+  --on-accent: #161b26;
   --success: #17a568;
   --success-soft: #e2f7ec;
   --warning: #e08a1f;
   --danger: #e5484d;
   --danger-soft: #fde8e8;
-  --muted: #53637b;
-  --canvas: #f0f4fa;
+  --muted: #5b6270;
+  --canvas: #f2eee5;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --border: #dce3f0;
-  --border-strong: #bccbe1;
+  --border: #e6dfcf;
+  --border-strong: #d2c6ac;
   --shadow-sm:
-    0 1px 2px rgba(22, 25, 43, 0.05), 0 1px 3px rgba(22, 25, 43, 0.06);
-  --shadow-md: 0 14px 34px rgba(24, 36, 73, 0.12);
-  --shadow-lg: 0 26px 60px rgba(24, 36, 73, 0.18);
+    0 1px 2px rgba(22, 27, 38, 0.05), 0 1px 3px rgba(22, 27, 38, 0.06);
+  --shadow-md: 0 14px 34px rgba(22, 27, 38, 0.1);
+  --shadow-lg: 0 26px 60px rgba(22, 27, 38, 0.16);
+  /* Text colour for brand-coloured links/labels; equals --brand in light mode. */
+  --brand-ink: #161b26;
+  /* Always-dark sections (heroes, sidebar, footer, auth panel). */
+  --night: #121826;
+  --night-2: #1b2232;
+  --gold: #f2c14e;
+  --gold-soft: #f6e3b0;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -32,6 +46,10 @@
   --font-sans:
     var(--font-body), ui-sans-serif, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
+  /* Calmer type: Inter at moderate weights instead of extra-bold everywhere. */
+  --font-weight-bold: 650;
+  --font-weight-extrabold: 700;
+  --font-weight-black: 750;
 }
 
 body {
@@ -97,11 +115,11 @@ a {
   }
 
   .panel {
-    @apply rounded-[1.6rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_1px_2px_rgba(22,25,43,.04),0_16px_36px_rgba(24,36,73,.08)] sm:p-6;
+    @apply rounded-[1.6rem] border border-[color:var(--border)] bg-white p-5 shadow-[0_1px_2px_rgba(22,25,43,.04),0_16px_36px_rgba(22,27,38,.08)] sm:p-6;
   }
 
   .primary-button {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[color:var(--accent)] px-6 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(65,98,218,.16)] transition duration-200 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:shadow-[0_16px_32px_rgba(65,98,218,.22)] focus:outline-none focus:ring-4 focus:ring-[color:var(--accent-soft)] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[color:var(--accent)] px-6 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(217,161,46,.22)] transition duration-200 hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] hover:shadow-[0_16px_32px_rgba(217,161,46,.3)] focus:outline-none focus:ring-4 focus:ring-[color:var(--accent-soft)] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .secondary-button {
     @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border-2 border-[color:var(--brand)] bg-white px-6 py-3 text-sm font-bold text-[color:var(--brand)] transition duration-200 hover:-translate-y-0.5 hover:bg-[color:var(--brand)] hover:text-white focus:outline-none focus:ring-4 focus:ring-[color:var(--brand-soft)] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
@@ -143,7 +161,7 @@ a {
   }
 
   .poster-card {
-    @apply relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-white shadow-[0_1px_2px_rgba(22,25,43,.05),0_16px_34px_rgba(24,36,73,.1)] transition duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgba(24,36,73,.16)];
+    @apply relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[color:var(--border)] bg-white shadow-[0_1px_2px_rgba(22,25,43,.05),0_16px_34px_rgba(22,27,38,.1)] transition duration-200 hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgba(22,27,38,.16)];
   }
   .poster-art {
     @apply relative flex aspect-[4/5] flex-col justify-end overflow-hidden p-5 text-white;
@@ -207,7 +225,7 @@ a {
 
 @layer utilities {
   .surface-glass {
-    @apply border border-white/70 bg-white/85 shadow-[0_12px_40px_rgba(24,36,73,.08)] backdrop-blur-xl;
+    @apply border border-white/70 bg-white/85 shadow-[0_12px_40px_rgba(22,27,38,.08)] backdrop-blur-xl;
   }
   .text-balance {
     text-wrap: balance;
@@ -245,8 +263,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 28px;
   background:
-    radial-gradient(circle at 84% 28%, rgba(65, 98, 218, 0.58), transparent 34%),
-    linear-gradient(135deg, #071b34 0%, #0a2447 58%, #102f62 100%);
+    radial-gradient(circle at 84% 28%, rgba(242, 193, 78, 0.3), transparent 36%),
+    linear-gradient(135deg, var(--night) 0%, #161c2a 58%, var(--night-2) 100%);
   padding: clamp(32px, 5vw, 64px);
   margin-bottom: 40px;
   color: white;
@@ -273,25 +291,25 @@ a {
 }
 .inner-page-hero .page-copy {
   max-width: 740px;
-  color: #cbd5e1;
+  color: #cfc9bb;
 }
 .inner-page-hero .eyebrow {
-  color: #a9c6ff;
+  color: var(--gold);
 }
 .inner-page-hero h1 {
   text-wrap: balance;
   color: #ffffff !important;
 }
 .inner-page-hero p:not(.eyebrow):not(.page-copy) {
-  color: #dbe7f7 !important;
+  color: #e7e2d6 !important;
 }
 .inner-page-hero .eyebrow,
 .inner-page-hero > p:first-child:not(.exam-pill) {
-  color: #b9d1ff !important;
+  color: var(--gold) !important;
 }
 .panel,
 .dashboard-panel {
-  border-color: #dce3f0;
+  border-color: var(--border);
   box-shadow: 0 12px 35px rgba(7, 27, 52, 0.07);
   border-radius: 24px;
 }
@@ -300,22 +318,22 @@ a {
 }
 .dashboard-sidebar {
   background: var(--brand);
-  color: #d5e1ff;
+  color: #e3ddcf;
   border-color: #ffffff14;
 }
 .dashboard-sidebar .dashboard-nav-item {
-  color: #d5e1ff;
+  color: #e3ddcf;
 }
 .dashboard-sidebar .dashboard-nav-item:hover {
   background: #ffffff12;
   color: white;
 }
 .dashboard-sidebar .dashboard-nav-item-active {
-  background: #4162da;
-  color: white;
+  background: var(--gold);
+  color: var(--night);
 }
 .dashboard-sidebar .dashboard-nav-item:focus-visible {
-  outline: 2px solid #9bb5ff;
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 .dashboard-main {
@@ -326,7 +344,7 @@ a {
   color: var(--muted);
 }
 .dashboard-table tbody tr:hover {
-  background: #f7f9ff;
+  background: var(--background);
 }
 .learning-welcome {
   border-radius: 22px;
@@ -339,7 +357,7 @@ a {
   gap: 24px;
 }
 .learning-welcome .eyebrow {
-  color: #a8c0ff;
+  color: var(--gold);
 }
 .learning-welcome .page-title {
   color: white;
@@ -348,7 +366,7 @@ a {
   max-width: 650px;
 }
 .learning-stat {
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 20px;
@@ -381,7 +399,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 18px;
   overflow: hidden;
-  background: white;
+  background: var(--surface);
 }
 .course-card-header {
   padding: 24px;
@@ -400,7 +418,7 @@ a {
   border: 1px dashed var(--border-strong);
   border-radius: 16px;
   text-align: center;
-  background: #f8faff;
+  background: var(--canvas);
 }
 .catalog-cover {
   min-height: 220px;
@@ -436,7 +454,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 24px;
   overflow: hidden;
-  background: white;
+  background: var(--surface);
 }
 .auth-story {
   background: var(--brand);
@@ -536,4 +554,155 @@ a {
     break-inside: avoid;
     box-shadow: none !important;
   }
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Dark ("gece") mode. Colours are tokens, so most of the site follows the variables below;
+ * the overrides after them cover Tailwind palette classes used directly in components.
+ * Sections that are always dark (heroes, sidebar, footer) keep their own colours.
+ * ---------------------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  --background: #0d1017;
+  --foreground: #eee9dd;
+  --brand: #1f2533;
+  --brand-strong: #090b10;
+  --brand-soft: #232a39;
+  --brand-ink: #f3e7c6;
+  --accent: #f2c14e;
+  --accent-strong: #f6cf6e;
+  --accent-soft: #2b2617;
+  --on-accent: #121826;
+  --success: #34d399;
+  --success-soft: #0f2e24;
+  --warning: #f5b544;
+  --danger: #f87171;
+  --danger-soft: #3a1719;
+  --muted: #a4aab7;
+  --canvas: #10141c;
+  --surface: #161b25;
+  --surface-raised: #1c2230;
+  --border: #272e3c;
+  --border-strong: #3a4254;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 26px 60px rgba(0, 0, 0, 0.55);
+  --night: #0b0e15;
+  --night-2: #161b27;
+  color-scheme: dark;
+}
+:root[data-theme="dark"] ::selection { background: #5a4a1e; color: #fff; }
+
+/* Brand colour as text/border → light ink; as background it stays a deep navy. */
+[data-theme="dark"] .text-\[color\:var\(--brand\)\],
+[data-theme="dark"] .hover\:text-\[color\:var\(--brand\)\]:hover { color: var(--brand-ink); }
+[data-theme="dark"] .border-\[color\:var\(--brand\)\],
+[data-theme="dark"] .hover\:border-\[color\:var\(--brand\)\]:hover { border-color: var(--accent); }
+[data-theme="dark"] .ghost-button { color: var(--brand-ink); }
+[data-theme="dark"] .secondary-button { background: transparent; border-color: var(--accent); color: var(--brand-ink); }
+[data-theme="dark"] .secondary-button:hover { background: var(--accent); color: var(--on-accent); }
+[data-theme="dark"] .catalog-cover h3 { color: var(--brand-ink); }
+
+/* Light surfaces → dark surfaces. */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .auth-input,
+[data-theme="dark"] .pill-tab:not(.pill-tab-active),
+[data-theme="dark"] .poster-card,
+[data-theme="dark"] .learning-stat,
+[data-theme="dark"] .course-card,
+[data-theme="dark"] .auth-frame,
+[data-theme="dark"] .dashboard-table thead { background: var(--surface); }
+[data-theme="dark"] .bg-white\/80,
+[data-theme="dark"] .bg-white\/85,
+[data-theme="dark"] .bg-white\/90,
+[data-theme="dark"] .bg-white\/95,
+[data-theme="dark"] .surface-glass { background: rgba(13, 16, 23, 0.9); border-color: var(--border); }
+[data-theme="dark"] .hover\:bg-white\/80:hover,
+[data-theme="dark"] .hover\:bg-slate-50:hover,
+[data-theme="dark"] .hover\:bg-slate-100:hover,
+[data-theme="dark"] .dashboard-table tbody tr:hover { background: var(--surface-raised); }
+[data-theme="dark"] .dashboard-panel { background: var(--surface); border-color: var(--border); }
+[data-theme="dark"] .dashboard-panel::before { background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 55%); }
+[data-theme="dark"] .learning-empty,
+[data-theme="dark"] .bg-slate-50,
+[data-theme="dark"] .bg-slate-50\/60 { background: #12161f; }
+[data-theme="dark"] .bg-slate-100 { background: #1c2230; }
+[data-theme="dark"] .bg-slate-200 { background: #252c3b; }
+[data-theme="dark"] .border-slate-100,
+[data-theme="dark"] .border-slate-200,
+[data-theme="dark"] .dashboard-table td { border-color: var(--border); }
+[data-theme="dark"] .border-slate-300 { border-color: var(--border-strong); }
+[data-theme="dark"] .auth-input:disabled { background: #12161f; color: #8a909c; }
+
+/* Slate text → light greys. */
+[data-theme="dark"] .text-slate-950,
+[data-theme="dark"] .text-slate-900,
+[data-theme="dark"] .text-slate-800 { color: var(--foreground); }
+[data-theme="dark"] .text-slate-700 { color: #d9d4c8; }
+[data-theme="dark"] .text-slate-600,
+[data-theme="dark"] .text-slate-500 { color: var(--muted); }
+[data-theme="dark"] .text-slate-400 { color: #8a909c; }
+[data-theme="dark"] .fill-slate-900 { fill: var(--foreground); }
+
+/* Soft status tints → translucent tints with light text. */
+[data-theme="dark"] :is(.bg-emerald-50, .bg-emerald-50\/50, .bg-emerald-50\/60, .bg-emerald-100, .bg-green-50) { background: rgba(16, 185, 129, 0.13); }
+[data-theme="dark"] :is(.bg-amber-50, .bg-amber-50\/50, .bg-amber-100, .bg-yellow-50) { background: rgba(245, 158, 11, 0.13); }
+[data-theme="dark"] :is(.bg-rose-50, .bg-rose-50\/60, .bg-red-50) { background: rgba(244, 63, 94, 0.13); }
+[data-theme="dark"] :is(.text-emerald-500, .text-emerald-600, .text-emerald-700, .text-emerald-800, .text-emerald-900, .text-green-700) { color: #6ee7b7; }
+[data-theme="dark"] :is(.text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900) { color: #fcd34d; }
+[data-theme="dark"] :is(.text-rose-500, .text-rose-600, .text-rose-700, .text-rose-800, .text-rose-900, .text-red-600, .text-red-700) { color: #fda4af; }
+[data-theme="dark"] :is(.border-emerald-200, .border-emerald-300, .border-emerald-400) { border-color: rgba(52, 211, 153, 0.4); }
+[data-theme="dark"] :is(.border-amber-200, .border-amber-300, .border-amber-400) { border-color: rgba(245, 181, 68, 0.4); }
+[data-theme="dark"] :is(.border-rose-200, .border-rose-400) { border-color: rgba(248, 113, 113, 0.45); }
+
+/* ------------------------------------------------------------------------------------------
+ * Netfener look: gold replaces the old blue accents everywhere (both themes).
+ * ---------------------------------------------------------------------------------------- */
+/* Gold backgrounds carry dark text for contrast. */
+.primary-button,
+.bg-\[color\:var\(--accent\)\] { color: var(--on-accent); }
+.primary-button:hover { background-color: #c58f1f; }
+[data-theme="dark"] .primary-button:hover { background-color: #f6cf6e; }
+.focus\:ring-\[color\:var\(--accent-soft\)\]:focus { --tw-ring-color: rgba(217, 161, 46, 0.35); }
+
+/* Blue utility classes used directly in components → gold family. */
+:is(.bg-blue-50, .bg-blue-50\/60, .bg-sky-50, .bg-sky-50\/50, .bg-sky-100, .bg-indigo-50, .bg-blue-100, .from-blue-50, .from-blue-100) { background-color: var(--accent-soft); }
+:is(.bg-blue-500, .bg-blue-600, .bg-indigo-500, .bg-cyan-400) { background-color: var(--accent); color: var(--on-accent); }
+:is(.bg-blue-900) { background-color: var(--night); }
+:is(.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-sky-900, .text-indigo-500) { color: var(--accent-strong); }
+:is(.border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400, .border-blue-500, .border-sky-400) { border-color: rgba(217, 161, 46, 0.45); }
+.border-blue-900 { border-color: var(--night-2); }
+/* Light blue text on always-dark sections → warm light tones and gold. */
+:is(.text-blue-100, .text-blue-200, .text-blue-200\/80) { color: var(--gold-soft); }
+:is(.text-blue-300, .text-cyan-300) { color: var(--gold); }
+.border-cyan-300\/40 { border-color: rgba(242, 193, 78, 0.4); }
+.focus-visible\:ring-cyan-300:focus-visible { --tw-ring-color: var(--gold); }
+[data-theme="dark"] :is(.bg-blue-50, .bg-blue-50\/60, .bg-sky-50, .bg-sky-50\/50, .bg-sky-100, .bg-indigo-50, .bg-blue-100) { background: rgba(242, 193, 78, 0.12); }
+[data-theme="dark"] :is(.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-sky-900, .text-indigo-500) { color: var(--accent-strong); }
+[data-theme="dark"] :is(.border-blue-100, .border-blue-200, .border-blue-300) { border-color: rgba(242, 193, 78, 0.4); }
+/* Hard-coded navy hero backgrounds → the lighthouse night colour. */
+:is(.bg-\[\#071b34\], .bg-\[\#061f3f\]) { background-color: var(--night); }
+:is(.text-\[\#071b34\], .text-\[\#061f3f\]) { color: var(--foreground); }
+/* Pastel exam cards on the home page become dark cards in dark mode (the accent colour stays). */
+[data-theme="dark"] .exam-card { background: var(--surface) !important; }
+/* In light mode, gold as *text* uses the deeper gold so it stays readable on white. */
+:root:not([data-theme="dark"]) :is(.text-\[color\:var\(--accent\)\], .hover\:text-\[color\:var\(--accent\)\]:hover) { color: var(--accent-strong); }
+
+/* ------------------------------------------------------------------------------------------
+ * Kelime Motoru flashcards: slide in/out and 3D flip.
+ * ---------------------------------------------------------------------------------------- */
+.lex-scene { perspective: 1400px; }
+.lex-card { position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-card.is-flipped { transform: rotateY(180deg); }
+.lex-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 1.75rem; }
+.lex-back { transform: rotateY(180deg); }
+@keyframes lex-in-right { from { opacity: 0; transform: translateX(70px) rotate(4deg); } to { opacity: 1; transform: none; } }
+@keyframes lex-in-left { from { opacity: 0; transform: translateX(-70px) rotate(-4deg); } to { opacity: 1; transform: none; } }
+@keyframes lex-pop { 0% { transform: scale(0.96); } 60% { transform: scale(1.02); } 100% { transform: scale(1); } }
+.lex-in-right { animation: lex-in-right 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-in-left { animation: lex-in-left 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-pop { animation: lex-pop 0.35s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .lex-card { transition: none; }
+  .lex-in-right, .lex-in-left, .lex-pop { animation: none; }
 }

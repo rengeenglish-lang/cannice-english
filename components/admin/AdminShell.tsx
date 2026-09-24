@@ -25,6 +25,7 @@ import {
   Heart,
   Target,
   Compass,
+  Layers,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -42,6 +43,7 @@ function learningNav(examFamily: ExamFamily | null) {
   return [
     { href: "/dashboard", label: "Çalışma alanım", icon: Home },
     { href: "/dashboard/kocluk", label: "Ücretsiz Koçluk", icon: Compass },
+    { href: "/dashboard/kelime-motoru", label: "Kelime Motoru", icon: Layers },
     { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
     { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
     { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },

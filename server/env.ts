@@ -22,10 +22,12 @@ export function validateCanonicalUrl() {
 }
 
 /** The canonical site origin, for sitemap/robots/Open Graph URLs — same source of truth as Auth.js's own canonical URL, with a local-dev fallback since AUTH_URL isn't required outside production. */
+export const CANONICAL_ORIGIN = "https://netfener.com";
+
 export function getSiteUrl() {
   const url = process.env.AUTH_URL;
   if (url && url.startsWith("https://")) return url;
-  return "http://localhost:3001";
+  return process.env.NODE_ENV === "production" ? CANONICAL_ORIGIN : "http://localhost:3001";
 }
 
 export function getPaypalCredentials() {

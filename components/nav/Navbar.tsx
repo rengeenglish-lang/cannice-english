@@ -9,6 +9,7 @@ import { signOutAction } from "@/app/actions/sign-out";
 import { ChevronDown, Heart, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
 import { Logo } from "@/components/brand/Logo";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const NAV_LINKS = [
   { href: "/exams", label: "Sınavlar" },
@@ -66,6 +67,7 @@ export async function Navbar() {
           ))}
         </nav>
         <div className="hidden shrink-0 items-center gap-2 xl:flex">
+          <ThemeToggle />
           <Link
             href="/dashboard/favoriler"
             className="ghost-button relative gap-2 whitespace-nowrap px-2.5"
@@ -122,14 +124,17 @@ export async function Navbar() {
             </>
           )}
         </div>
-        <MobileNavToggle
-          links={NAV_LINKS}
-          isSignedIn={Boolean(session?.user)}
-          cartCount={cartCount}
-          favoriteCount={favoriteCount}
-          examLinks={PLATFORM_EXAMS.map((exam) => ({ href: `/exams/${exam.slug}`, label: exam.name }))}
-          yokdilLinks={YOKDIL_LINKS}
-        />
+        <div className="flex items-center gap-1 xl:hidden">
+          <ThemeToggle />
+          <MobileNavToggle
+            links={NAV_LINKS}
+            isSignedIn={Boolean(session?.user)}
+            cartCount={cartCount}
+            favoriteCount={favoriteCount}
+            examLinks={PLATFORM_EXAMS.map((exam) => ({ href: `/exams/${exam.slug}`, label: exam.name }))}
+            yokdilLinks={YOKDIL_LINKS}
+          />
+        </div>
       </div>
     </header>
   );

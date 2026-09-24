@@ -345,6 +345,8 @@ model User {
   coachingFeedback      CoachingFeedback[]
   coachingReports       CoachingReport[]
   coachingNotifications CoachingNotificationLog[]
+  lexiconWords          LexiconWordState[]
+  lexiconTests          LexiconSetTest[]
   sentMessages          TeacherMessage[]          @relation("MessageStudent")
   answeredMessages      TeacherMessage[]          @relation("MessageResponder")
   studyGoals            StudyGoal[]
@@ -1619,4 +1621,50 @@ model CoachingNotificationLog {
   @@unique([userId, dedupeKey])
   @@index([userId, createdAt])
   @@map("coaching_notification_logs")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Kelime Motoru (vocabulary engine). Words live in content/vocabulary/*.ts (static, versioned
+// with the code); the database only stores each student's own progress, notes and set tests.
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * A student's state for one word: whether they marked it known or still learning, and their
+ * own note. `wordId` is the stable id from the content files (e.g. "a1-apple").
+ */
+model LexiconWordState {
+  id        String    @id @default(cuid())
+  userId    String
+  wordId    String
+  level     String
+  /**
+   * "KNOWN" | "LEARNING" (null = seen only / note only)
+   */
+  status    String?
+  note      String?
+  seenAt    DateTime?
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId])
+  @@index([userId, level])
+  @@map("lexicon_word_states")
+}
+
+/** One finished test after a flashcard set. */
+model LexiconSetTest {
+  id           String   @id @default(cuid())
+  userId       String
+  level        String
+  setNumber    Int
+  score        Int
+  total        Int
+  wrongWordIds String[] @default([])
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, level, setNumber])
+  @@map("lexicon_set_tests")
 }
