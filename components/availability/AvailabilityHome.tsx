@@ -8,6 +8,24 @@ export async function AvailabilityHome() {
   const slots = (await listGroupSlots(start, end))
     .filter((s) => s.startsAt > new Date() && !s.cancelled)
     .slice(0, 3);
+  if (!slots.length) {
+    return (
+      <section
+        id="group-availability"
+        className="mx-auto my-12 flex w-[calc(100%-32px)] max-w-[1320px] flex-wrap items-center justify-between gap-4 rounded-2xl border border-blue-100 bg-blue-50/60 px-5 py-4 sm:w-[calc(100%-48px)] lg:w-[calc(100%-64px)]"
+        aria-label="Bu haftanın grup dersleri"
+      >
+        <AvailabilityRefresh />
+        <p className="text-sm text-slate-700">
+          <span className="font-extrabold text-blue-700">Grup dersleri:</span>{" "}
+          Bu hafta için yeni dersler planlanıyor.
+        </p>
+        <Link className="text-sm font-extrabold text-blue-700 hover:underline" href="/group-lessons">
+          Tüm haftalık uygunluğu gör →
+        </Link>
+      </section>
+    );
+  }
   return (
     <section
       id="group-availability"
@@ -16,7 +34,7 @@ export async function AvailabilityHome() {
     >
       <AvailabilityRefresh />
       <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full bg-blue-600 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white">GRUP DERSİ</span>
+        <span className="rounded-full bg-blue-600 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">GRUP DERSİ</span>
         <p className="text-xs font-extrabold uppercase tracking-widest text-blue-700">Bu haftanın programı</p>
       </div>
       <h2
@@ -34,12 +52,6 @@ export async function AvailabilityHome() {
           <SlotCard slot={slot} key={slot.id} />
         ))}
       </div>
-      {!slots.length && (
-        <p className="my-6 rounded-xl bg-white p-5 text-slate-600">
-          Bu hafta için yeni dersler planlanıyor. Diğer haftaları
-          inceleyebilirsin.
-        </p>
-      )}
       <Link
         className="secondary-button mt-7"
         href="/group-lessons"
