@@ -65,6 +65,21 @@ a {
 }
 
 @layer components {
+  /* Desktop menu: brand navy text; on hover it turns royal blue and a gold "lighthouse beam"
+     underline (the Netfener logo's fener colour) sweeps in from the centre. */
+  .nav-link {
+    @apply relative text-[color:var(--brand)] transition-colors duration-200 hover:text-[color:var(--accent-strong)] focus-visible:text-[color:var(--accent-strong)] focus-visible:outline-none;
+  }
+  .nav-link::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 bottom-4 mx-auto h-[3px] w-0 rounded-full bg-[#ffcc4d] transition-all duration-300;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .group:focus-within > .nav-link::after,
+  .group:hover > .nav-link::after {
+    @apply w-full;
+  }
   .page-title {
     @apply mt-2 text-3xl font-extrabold leading-[1.08] tracking-[-.02em] text-[color:var(--foreground)] sm:text-4xl;
   }
