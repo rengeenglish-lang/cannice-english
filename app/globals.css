@@ -672,3 +672,22 @@ a {
 [data-theme="dark"] .exam-card { background: var(--surface) !important; }
 /* In light mode, gold as *text* uses the deeper gold so it stays readable on white. */
 :root:not([data-theme="dark"]) :is(.text-\[color\:var\(--accent\)\], .hover\:text-\[color\:var\(--accent\)\]:hover) { color: var(--accent-strong); }
+
+/* ------------------------------------------------------------------------------------------
+ * Kelime Motoru flashcards: slide in/out and 3D flip.
+ * ---------------------------------------------------------------------------------------- */
+.lex-scene { perspective: 1400px; }
+.lex-card { position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-card.is-flipped { transform: rotateY(180deg); }
+.lex-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 1.75rem; }
+.lex-back { transform: rotateY(180deg); }
+@keyframes lex-in-right { from { opacity: 0; transform: translateX(70px) rotate(4deg); } to { opacity: 1; transform: none; } }
+@keyframes lex-in-left { from { opacity: 0; transform: translateX(-70px) rotate(-4deg); } to { opacity: 1; transform: none; } }
+@keyframes lex-pop { 0% { transform: scale(0.96); } 60% { transform: scale(1.02); } 100% { transform: scale(1); } }
+.lex-in-right { animation: lex-in-right 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-in-left { animation: lex-in-left 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.lex-pop { animation: lex-pop 0.35s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .lex-card { transition: none; }
+  .lex-in-right, .lex-in-left, .lex-pop { animation: none; }
+}
