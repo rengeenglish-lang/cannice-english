@@ -1,22 +1,28 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Check, Clock3, Gauge, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookOpenCheck, Check, Gauge, Sparkles } from "lucide-react";
 import type { ExamLandingContent } from "@/lib/exam-landing";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
 import { ExamSectionMenu } from "@/components/exams/ExamSectionMenu";
 import { examResourcesHref } from "@/lib/platform";
+import { getAuthContext } from "@/server/auth/context";
+import { listTopicsForActiveExamGoal, syncStudyGoalStatuses } from "@/server/services/study-goals.service";
+import { StudyGoalDialog } from "@/components/dashboard/StudyGoalDialog";
 
 // Matches lib/exam-landing.ts's sharedSteps order (every exam entry, including the YÖKDİL
 // branch() helper, uses that same fixed 4-item list) - index 0 jumps to the exam-overview
 // section below, the rest deep-link to the matching dashboard tool.
 const STEP_HREFS = ["#sinavini-tani", "/seviye-tespit", "/dashboard/practice", "/dashboard/progress"];
 
-export function ExamShowcase({ name, slug, content, speakingHref, examFamily, children }: { name: string; slug: string; content: ExamLandingContent; speakingHref?: string; examFamily?: ExamFamily; children?: React.ReactNode }) {
+export async function ExamShowcase({ name, slug, content, speakingHref, examFamily, children }: { name: string; slug: string; content: ExamLandingContent; speakingHref?: string; examFamily?: ExamFamily; children?: React.ReactNode }) {
+  const user = await getAuthContext();
+  const topics = user ? await listTopicsForActiveExamGoal(user.id) : [];
+  if (user) await syncStudyGoalStatuses(user.id);
   return <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)]"><ExamSectionMenu examName={name} slug={slug} speakingHref={speakingHref} examFamily={examFamily} /><main className="min-w-0 bg-white">
     <section className="relative overflow-hidden border-b border-slate-200 bg-[#071b34] text-white">
       <div className="absolute inset-0 opacity-30" style={{ background: `radial-gradient(circle at 75% 35%, ${content.accent}, transparent 34%)` }} />
       <div className="relative mx-auto grid w-full max-w-[1320px] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-24">
         <div><span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[.15em] text-blue-100">{content.badge}</span><h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] tracking-[-.03em] sm:text-6xl">{content.headline}</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{content.description}</p><div className="mt-8 flex flex-wrap gap-3"><Link href={`/packages?exam=${slug}`} className="primary-button">Hazırlığa başla <ArrowRight size={18} /></Link><Link href={`/konu-anlatim?exam=${slug}`} className="inline-flex items-center justify-center rounded-xl border border-white/30 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10">Konu anlatımlarını gör</Link><Link href={examResourcesHref(slug)} className="inline-flex items-center justify-center rounded-xl border border-white/30 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10">{name} Kaynakları</Link></div></div>
-        <div className="self-end rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur sm:p-7"><div className="flex items-center justify-between"><div><p className="text-xs font-extrabold uppercase tracking-widest text-blue-200">Nasıl çalışır?</p><p className="mt-2 text-2xl font-black">4 Adımda Hazırlık</p></div><span className="grid size-12 place-items-center rounded-2xl" style={{ background: content.accent }}><Gauge /></span></div><div className="mt-6 grid grid-cols-2 gap-3">{content.steps.map((step, index) => <Link key={step.title} href={STEP_HREFS[index] ?? "#"} className="rounded-2xl bg-white/10 p-4 transition hover:bg-white/20"><p className="text-lg font-black leading-tight">{step.title}</p><p className="mt-1 text-xs font-semibold text-slate-300">{step.description}</p></Link>)}</div><div className="mt-5 flex items-center gap-3 rounded-2xl bg-white p-4 text-[#071b34]"><Clock3 className="text-[color:var(--accent)]" /><div><p className="text-sm font-black">Bugünkü hedef</p><p className="text-xs text-slate-500">Bir konu + bir süreli pratik</p></div></div></div>
+        <div className="self-end rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur sm:p-7"><div className="flex items-center justify-between"><div><p className="text-xs font-extrabold uppercase tracking-widest text-blue-200">Nasıl çalışır?</p><p className="mt-2 text-2xl font-black">4 Adımda Hazırlık</p><p className="mt-1 text-[11px] font-bold uppercase tracking-wide text-blue-300">Detaylar için tıklayın ↗</p></div><span className="grid size-12 place-items-center rounded-2xl" style={{ background: content.accent }}><Gauge /></span></div><div className="mt-6 grid grid-cols-2 gap-3">{content.steps.map((step, index) => <Link key={step.title} href={STEP_HREFS[index] ?? "#"} className="group relative rounded-2xl bg-white/10 p-4 transition hover:bg-white/20"><ArrowUpRight size={14} className="absolute right-3 top-3 text-blue-300 opacity-70 transition group-hover:opacity-100" /><p className="pr-4 text-lg font-black leading-tight">{step.title}</p><p className="mt-1 text-xs font-semibold text-slate-300">{step.description}</p></Link>)}</div>{user ? <StudyGoalDialog topics={topics} triggerClassName="mt-5 flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left text-[#071b34] transition hover:bg-blue-50" /> : <Link href={`/sign-in?next=${encodeURIComponent(`/exams/${slug}`)}`} className="mt-5 flex items-center gap-3 rounded-2xl bg-white p-4 text-[#071b34] transition hover:bg-blue-50"><Gauge className="text-[color:var(--accent)]" /><div><p className="text-sm font-black">Bugünkü hedeflerini belirle</p><p className="text-xs text-slate-500">Giriş yapıp konu, pratik veya deneme hedefi ekle</p></div></Link>}</div>
       </div>
     </section>
 

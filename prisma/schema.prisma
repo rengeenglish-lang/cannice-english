@@ -237,10 +237,11 @@ model ExamTopic {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  examType ExamType         @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
-  lessons  TopicLesson[]
-  notes    TopicNote[]
-  savedBy  SavedExamTopic[]
+  examType       ExamType         @relation(fields: [examTypeId], references: [id], onDelete: Cascade)
+  lessons        TopicLesson[]
+  notes          TopicNote[]
+  savedBy        SavedExamTopic[]
+  studyGoalItems StudyGoalItem[]
 
   @@unique([examTypeId, slug])
   @@index([examTypeId])
@@ -336,6 +337,7 @@ model User {
   favorites             FavoriteProduct[]
   sentMessages          TeacherMessage[]        @relation("MessageStudent")
   answeredMessages      TeacherMessage[]        @relation("MessageResponder")
+  studyGoals            StudyGoal[]
 
   @@map("users")
 }
@@ -1206,4 +1208,65 @@ model FavoriteProduct {
 
   @@unique([userId, productId])
   @@map("favorite_products")
+}
+
+enum StudyGoalPeriod {
+  DAY
+  WEEK
+  MONTH
+}
+
+enum StudyGoalStatus {
+  ACTIVE
+  REACHED
+  FAILED
+}
+
+enum StudyGoalItemKind {
+  TOPIC
+  PRACTICE
+  MOCK_EXAM
+  CUSTOM
+}
+
+/// A student-set study goal for a day/week/month, e.g. "3 topics + 1 deneme this week".
+/// Not tied to a specific exam (a student may be preparing for more than one) - the topic
+/// picker in the UI just defaults to their active ExamGoal's exam for convenience.
+model StudyGoal {
+  id            String          @id @default(cuid())
+  userId        String
+  period        StudyGoalPeriod
+  periodStart   DateTime
+  periodEnd     DateTime
+  status        StudyGoalStatus @default(ACTIVE)
+  reachedAt     DateTime?
+  failedAt      DateTime?
+  failureReason String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  user  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items StudyGoalItem[]
+
+  @@index([userId, period, periodStart])
+  @@index([userId, status])
+  @@map("study_goals")
+}
+
+/// One line item within a StudyGoal: a specific topic, N practice sets, N deneme (mock exams),
+/// or a freeform line the student typed themselves.
+model StudyGoalItem {
+  id          String            @id @default(cuid())
+  studyGoalId String
+  kind        StudyGoalItemKind
+  examTopicId String?
+  quantity    Int?
+  label       String?
+  createdAt   DateTime          @default(now())
+
+  studyGoal StudyGoal  @relation(fields: [studyGoalId], references: [id], onDelete: Cascade)
+  examTopic ExamTopic? @relation(fields: [examTopicId], references: [id], onDelete: SetNull)
+
+  @@index([studyGoalId])
+  @@map("study_goal_items")
 }
