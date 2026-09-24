@@ -328,7 +328,7 @@ export function KonuAnlatimDashboard({
                     className={
                       completedIds.has(selectedLesson.id)
                         ? "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-emerald-500 bg-emerald-50 px-6 py-2.5 text-base font-bold text-emerald-700 transition hover:bg-emerald-100"
-                        : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] disabled:translate-y-0 disabled:opacity-60"
+                        : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(217,161,46,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] disabled:translate-y-0 disabled:opacity-60"
                     }
                   >
                     {completedIds.has(selectedLesson.id)
@@ -338,7 +338,7 @@ export function KonuAnlatimDashboard({
                 ) : (
                   <Link
                     href="/sign-in"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(37,99,235,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)]"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(217,161,46,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)]"
                   >
                     Giriş yapıp ilerlemeyi kaydet
                   </Link>

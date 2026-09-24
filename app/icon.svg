@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs><clipPath id="c"><rect width="32" height="32" rx="7"/></clipPath></defs>
-  <g clip-path="url(#c)">
-    <rect width="32" height="32" fill="#0d2a55"/>
-    <path d="M15 8 L32 2 L32 18 L15 12 Z" fill="#ffcc4d"/>
-    <path d="M0 28 C5 25.5 10 25.5 15 28 C20 30.5 26 30.5 32 28 L32 32 L0 32 Z" fill="#4162da"/>
-    <path d="M6 29 L8.5 13 L14.5 13 L17 29 Z" fill="#ffffff"/>
-    <rect x="8" y="7" width="7" height="5.5" rx="1" fill="#ffcc4d"/>
-    <path d="M7 8 L11.5 3.5 L16 8 Z" fill="#ffffff"/>
-  </g>
+  <defs><clipPath id="t"><path d="M13 13 L19 13 L21.5 28 L10.5 28 Z"/></clipPath></defs>
+  <rect width="32" height="32" rx="7" fill="#121826"/>
+  <path d="M19 8 L31 4 L31 14 L19 11 Z" fill="#f2c14e" opacity="0.75"/>
+  <path d="M13 8 L1 4 L1 14 L13 11 Z" fill="#f2c14e" opacity="0.75"/>
+  <path d="M12 7 Q16 1.5 20 7 Z" fill="#f2c14e"/>
+  <rect x="12.5" y="7" width="7" height="5" rx="0.6" fill="#f2c14e"/>
+  <rect x="11" y="11.5" width="10" height="2" rx="0.6" fill="#f2c14e"/>
+  <g clip-path="url(#t)"><rect x="9" y="12" width="14" height="17" fill="#f2c14e"/><path d="M9 20 L23 16.5 L23 19.5 L9 23 Z" fill="#121826"/></g>
+  <rect x="8" y="27.5" width="16" height="2.5" rx="0.8" fill="#f2c14e"/>
 </svg>

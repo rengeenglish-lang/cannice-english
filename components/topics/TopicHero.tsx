@@ -51,7 +51,7 @@ export function TopicHero({
       </p>
       <div className="relative mt-3 flex items-start justify-between gap-6">
         <div className="min-w-0">
-          <span className="inline-flex items-center rounded-full bg-[color:var(--accent)] px-3.5 py-1.5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_10px_24px_rgba(37,99,235,.3)]">
+          <span className="inline-flex items-center rounded-full bg-[color:var(--accent)] px-3.5 py-1.5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_10px_24px_rgba(217,161,46,.3)]">
             Konu {index + 1}
           </span>
           <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-[-.02em] text-slate-900 sm:text-5xl lg:text-[52px]">
