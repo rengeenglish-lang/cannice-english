@@ -4,6 +4,7 @@ import { ArrowRight, BookMarked, CalendarCheck, CheckCircle2, ClipboardCheck, Fi
 import { PageHero } from "@/components/ui/PageHero";
 import { getAuthContext } from "@/server/auth/context";
 import { PATHWAYS, PATHWAY_CODES } from "@/lib/coaching/exams";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = {
   title: "Ücretsiz İngilizce Öğrenci Koçluğu",
@@ -82,6 +83,7 @@ export default async function CoachingLandingPage() {
           <p className="mt-4 flex items-center gap-2 text-sm font-bold"><NotebookPen size={16} aria-hidden="true" /> Koçluk ücretsizdir; plan, erişimin olan içeriklere ve ücretsiz etkinliklere göre hazırlanır.</p>
         </div>
       </section>
+      <NextStepCta title="Koçluk planını denemelerle güçlendir." copy="Koçun sana ne çalışacağını söyler; planlarla bu çalışmayı deneme sınavları, konu anlatımları ve pratik sorularla yaparsın." />
     </main>
   );
 }

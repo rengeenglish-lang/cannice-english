@@ -103,6 +103,13 @@ export async function removeFromCart(cartItemId: string, userId?: string) {
   return item;
 }
 
+/** Drops every PLAN line except `keepProductId` from the caller's cart. */
+export async function removeOtherPlansFromCart(keepProductId: string, userId?: string) {
+  const cart = await findCart(userId);
+  if (!cart) return;
+  await db.cartItem.deleteMany({ where: { cartId: cart.id, productId: { not: keepProductId }, product: { category: "PLAN" } } });
+}
+
 export async function clearCart(userId?: string) {
   const cart = await findCart(userId);
   if (cart) await db.cartItem.deleteMany({ where: { cartId: cart.id } });

@@ -223,6 +223,7 @@ export function KonuAnlatimDashboard({
         completedTopicCount={completedTopicCount}
         topicCompleted={topicCompleted}
         topicPercent={topicPercent}
+        topicLocked={(topic) => locked.has(topic.id)}
         onSelect={selectTopic}
       />
 
@@ -337,13 +338,26 @@ export function KonuAnlatimDashboard({
                   </button>
                 ) : (
                   <Link
-                    href="/sign-in"
+                    href={`/register?next=${encodeURIComponent("/konu-anlatim")}`}
                     className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(217,161,46,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)]"
                   >
-                    Giriş yapıp ilerlemeyi kaydet
+                    Ücretsiz üye ol, ilerlemeni kaydet
                   </Link>
                 )}
               </div>
+              {locked.size > 0 ? (
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-[#071b34] p-5 text-white">
+                  <div>
+                    <p className="text-lg font-extrabold">Bu konu ücretsiz önizleme.</p>
+                    <p className="mt-1 text-sm text-slate-300">
+                      Kalan {locked.size} konu, deneme sınavları ve pratik sorular planlarda. 14 gün iade hakkı.
+                    </p>
+                  </div>
+                  <Link href="/planlar" className="inline-flex min-h-11 items-center rounded-xl bg-white px-5 text-sm font-black text-[#071b34] transition hover:-translate-y-0.5">
+                    Planları incele
+                  </Link>
+                </div>
+              ) : null}
             </>
           ) : (
             <div className={CARD}>

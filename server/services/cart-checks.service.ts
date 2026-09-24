@@ -58,15 +58,16 @@ export async function inspectCart(cart: CartWithItems, user: User) {
     if (p.examType) notes.push(p.examType.name);
 
     if (!p.isPublished) {
-      issues.push({ itemId: item.id, level: "error", message: `“${p.title}” artık satışta değil. Devam etmek için sepetten kaldırın.` });
+      issues.push({ itemId: item.id, level: "error", message: `“${p.title}” artık satışta değil. Devam etmek için sepetten kaldır.` });
     }
 
+    // Not an error: the cart summary swaps "Ödemeye Geç" for sign-up / sign-in (see needsAccount),
+    // and placeOrderAction still refuses a guest order for these.
     if (!user && (p.category === "PLAN" || p.category === "PREP_GROUP")) {
       issues.push({
         itemId: item.id,
-        level: "error",
-        message: `“${p.title}” hesabınıza tanımlanacağı için ödeme öncesinde giriş yapmanız gerekiyor. Sepetiniz giriş yaptıktan sonra korunur.`,
-        action: { href: "/sign-in?next=%2Fcart", label: "Giriş yap" },
+        level: "info",
+        message: `“${p.title}” hesabına tanımlanır. Ödemeden önce ücretsiz üye ol veya giriş yap; sepetin korunur.`,
       });
     }
 
@@ -129,5 +130,6 @@ export async function inspectCart(cart: CartWithItems, user: User) {
     details.set(item.id, { typeLabel, href, notes });
   }
 
-  return { issues, details, blocking: issues.some((i) => i.level === "error") };
+  const needsAccount = !user && cart.items.some((item) => item.product.category === "PLAN" || item.product.category === "PREP_GROUP");
+  return { issues, details, blocking: issues.some((i) => i.level === "error"), needsAccount };
 }

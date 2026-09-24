@@ -25,7 +25,7 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
         <p className="page-copy mx-auto">
           {order?.status === "PAID"
             ? "Ödemen onaylandı, derslerin hesabında hazır."
-            : "Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek."}
+            : "Ekibimiz ödeme adımlarını tamamlamak için seninle en kısa sürede iletişime geçecek."}
         </p>
       </PageHero>
       {order ? (

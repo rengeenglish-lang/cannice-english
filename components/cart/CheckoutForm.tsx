@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { placeOrderAction, type CheckoutFormState } from "@/app/actions/checkout";
 
@@ -29,7 +30,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean
             className={`rounded-xl border p-4 text-left transition ${paymentMethod === "MANUAL" ? "border-[color:var(--brand)] bg-[color:var(--brand-soft)]" : "border-[color:var(--border)]"}`}
           >
             <span className="block font-bold text-[color:var(--foreground)]">Banka Havalesi</span>
-            <span className="mt-1 block text-xs text-[color:var(--muted)]">Ekibimiz sizinle iletişime geçer.</span>
+            <span className="mt-1 block text-xs text-[color:var(--muted)]">Ekibimiz seninle iletişime geçer.</span>
           </button>
         </div>
       </div>
@@ -51,13 +52,24 @@ export function CheckoutForm({ isGuest, defaultCoupon = "" }: { isGuest: boolean
       ) : null}
       <div>
         <label className="label" htmlFor="couponCode">Kupon Kodu (opsiyonel)</label>
-        <input id="couponCode" name="couponCode" placeholder="PASS25" defaultValue={defaultCoupon} className="auth-input uppercase" />
+        <input id="couponCode" name="couponCode" placeholder="Kupon kodu" defaultValue={defaultCoupon} className="auth-input uppercase placeholder:normal-case" />
       </div>
       {paymentMethod === "MANUAL" ? (
         <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--brand-soft)] p-4 text-sm text-[color:var(--brand)]">
           Siparişin &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz banka havalesi bilgileri için seninle iletişime geçecek.
         </p>
       ) : null}
+      <label className="flex items-start gap-3 rounded-xl border border-[color:var(--border)] p-4 text-sm leading-6 text-slate-700">
+        <input type="checkbox" name="acceptTerms" required className="mt-1 size-5 shrink-0 accent-[color:var(--accent)]" />
+        <span>
+          <Link href="/legal/on-bilgilendirme-formu" target="_blank" className="font-bold underline">Ön Bilgilendirme Formu</Link>&apos;nu ve{" "}
+          <Link href="/legal/mesafeli-satis-sozlesmesi" target="_blank" className="font-bold underline">Mesafeli Satış Sözleşmesi</Link>&apos;ni okudum, onaylıyorum.
+          Dijital içerik ve hizmetlerin ödeme onayıyla hemen hesabıma tanımlanmasını kabul ediyorum.
+        </span>
+      </label>
+      <p className="text-xs leading-5 text-[color:var(--muted)]">
+        14 gün içinde iade talep edebilirsin. <Link href="/legal/iade-politikasi" target="_blank" className="underline">İade Politikası</Link>
+      </p>
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       <button type="submit" disabled={pending} className="primary-button w-full justify-center">
         {pending ? "Sipariş oluşturuluyor…" : paymentMethod === "PAYPAL" ? "Ödemeye Geç" : "Siparişi Tamamla"}

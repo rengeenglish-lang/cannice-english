@@ -7,10 +7,12 @@ const LEGAL_LINKS = [
   { doc: "iade-politikasi", name: "İade Politikası" },
   { doc: "kullanim-kosullari", name: "Kullanım Koşulları" },
   { doc: "mesafeli-satis-sozlesmesi", name: "Mesafeli Satış Sözleşmesi" },
+  { doc: "on-bilgilendirme-formu", name: "Ön Bilgilendirme Formu" },
   { doc: "uyelik-sozlesmesi", name: "Üyelik Sözleşmesi" },
-  { doc: "gizlilik-sozlesmesi", name: "Gizlilik Sözleşmesi" },
-  { doc: "aydinlatma-metni", name: "Aydınlatma Metni" },
+  { doc: "gizlilik-sozlesmesi", name: "Gizlilik Politikası" },
+  { doc: "aydinlatma-metni", name: "KVKK Aydınlatma Metni" },
   { doc: "acik-riza-metni", name: "Açık Rıza Metni" },
+  { doc: "cerez-politikasi", name: "Çerez Politikası" },
 ];
 
 export function Footer() {

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { db } from "@/server/db";
 import { EXAM_META } from "@/lib/exam-types";
 import { ScoreCalculatorForm } from "@/components/tools/ScoreCalculatorForm";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "Puan Hesaplama" };
 
@@ -39,6 +40,7 @@ export default async function ScoreCalculatorPage() {
           </p>
         )}
       </div>
+      <NextStepCta title="Hedef puanına ne kadar uzaksın?" copy="Ücretsiz seviye tespitiyle hangi konularda puan kaybettiğini gör; deneme sınavları ve konu anlatımlarıyla farkı kapat." />
     </main>
   );
 }

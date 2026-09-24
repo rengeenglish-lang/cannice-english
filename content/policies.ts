@@ -15,6 +15,13 @@ export const REFUND_POLICY: LegalDoc = {
   body: "Bu politika, Netfener üzerinden satın aldığınız planlar, canlı grup dersleri, paketler ve kitaplar için hangi durumlarda ve nasıl iade yapıldığını açıklar. Amacımız, memnun kalmadığınız bir satın alımdan adil ve hızlı bir şekilde vazgeçebilmenizi sağlamaktır.",
   sections: [
     {
+      heading: "Kısaca: 14 gün iade hakkı",
+      paragraphs: [
+        "Satın aldığın her plan, canlı grup dersi, kitap ve dijital içerik için ödemenin onaylandığı tarihten itibaren 14 gün içinde iade talep edebilirsin.",
+        "Hiç kullanmadığın planlarda ve içeriğini açmadığın dijital ürünlerde ödediğin tutarın tamamını, kullanmaya başladığın planlarda ve canlı ders dönemlerinde kullandığın kısmın bedeli düşülerek kalan tutarı geri öderiz. Onaylanan iadeler en geç 14 gün içinde ödemeyi yaptığın yönteme gönderilir.",
+      ],
+    },
+    {
       heading: "1. İade süresi",
       paragraphs: [
         "Ödemenizin onaylandığı tarihten itibaren 14 gün içinde iade talep edebilirsiniz. Süre, PayPal ödemelerinde ödemenin tamamlandığı, banka havalesi ödemelerinde ise ödemenin ekibimiz tarafından onaylandığı gün başlar.",

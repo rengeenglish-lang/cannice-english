@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero } from "@/components/ui/PageHero";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -48,9 +49,9 @@ export default async function BookDetailPage({ params }: Props) {
             <p className="mt-1 text-sm font-bold text-slate-500">
               Yazar: {product.book.author}
             </p>
-            {product.description ? (
+            {product.description || product.shortDescription ? (
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-                {product.description}
+                {product.description || product.shortDescription}
               </p>
             ) : null}
           </PageHero>
@@ -90,6 +91,9 @@ export default async function BookDetailPage({ params }: Props) {
             {product.book.pageCount ? (
               <li>✓ {product.book.pageCount} sayfa</li>
             ) : null}
+            {product.book.format !== "PRINT" ? <li>✓ Dijital kopya ödeme onayıyla hemen hesabında</li> : null}
+            {product.book.format !== "PDF" ? <li>✓ Basılı kopya en geç 30 gün içinde kargoda</li> : null}
+            <li>✓ 14 gün iade hakkı · <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link></li>
           </ul>
         </aside>
       </div>

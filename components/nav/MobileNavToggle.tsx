@@ -26,24 +26,24 @@ export function MobileNavToggle({ links, isSignedIn, cartCount = 0, favoriteCoun
               </div>
             </details>
             {links.filter((link) => link.href !== "/exams").map((link) => (
-              <Link key={link.href} href={link.href} onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+              <Link key={link.href} href={link.href} onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--brand)] transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--accent-strong)]">
                 {link.label}
               </Link>
             ))}
             <div className="my-2 border-t border-[color:var(--border)]" />
-            <Link href="/dashboard/favoriler" onClick={close} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+            <Link href="/dashboard/favoriler" onClick={close} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--brand)] transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--accent-strong)]">
               <Heart size={18} aria-hidden="true" />
               Favorilerim
               {favoriteCount ? <span className="rounded-full bg-[color:var(--accent)] px-2 text-[11px] font-black leading-5 text-white">{favoriteCount}</span> : null}
             </Link>
-            <Link href="/cart" onClick={close} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+            <Link href="/cart" onClick={close} className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--brand)] transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--accent-strong)]">
               <ShoppingCart size={18} aria-hidden="true" />
               Sepetim
               {cartCount ? <span className="rounded-full bg-[color:var(--accent)] px-2 text-[11px] font-black leading-5 text-white">{cartCount}</span> : null}
             </Link>
             {isSignedIn ? (
               <>
-                <Link href="/dashboard" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+                <Link href="/dashboard" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--brand)] transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--accent-strong)]">
                   Hesabım
                 </Link>
                 <form action={signOutAction}>
@@ -54,7 +54,7 @@ export function MobileNavToggle({ links, isSignedIn, cartCount = 0, favoriteCoun
               </>
             ) : (
               <>
-                <Link href="/sign-in" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--foreground)] transition hover:bg-[color:var(--brand-soft)]">
+                <Link href="/sign-in" onClick={close} className="rounded-xl px-3 py-3 text-sm font-bold text-[color:var(--brand)] transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--accent-strong)]">
                   Üye Girişi
                 </Link>
                 <Link href="/register" onClick={close} className="primary-button mx-3 mt-2 justify-center">

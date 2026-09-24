@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { registerAction, type RegisterFormState } from "@/app/actions/register";
 
@@ -26,9 +27,14 @@ export function RegisterForm({next}: {next?: string}) {
         <label className="label" htmlFor="password">Şifre</label>
         <input id="password" name="password" type="password" required minLength={8} className="auth-input" />
       </div>
+      <p className="text-xs leading-5 text-[color:var(--muted)]">
+        Üye olarak <Link href="/legal/uyelik-sozlesmesi" target="_blank" className="underline">Üyelik Sözleşmesi</Link>&apos;ni ve{" "}
+        <Link href="/legal/kullanim-kosullari" target="_blank" className="underline">Kullanım Koşulları</Link>&apos;nı kabul etmiş olursun. Kişisel verilerin{" "}
+        <Link href="/legal/aydinlatma-metni" target="_blank" className="underline">KVKK Aydınlatma Metni</Link> kapsamında işlenir.
+      </p>
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       <button type="submit" disabled={pending} className="primary-button w-full justify-center">
-        {pending ? "Hesap oluşturuluyor…" : "Ücretsiz Denemeye Başla"}
+        {pending ? "Hesap oluşturuluyor…" : (next === "/checkout" ? "Hesabı Oluştur ve Ödemeye Geç" : "Ücretsiz Üye Ol")}
       </button>
     </form>
   );

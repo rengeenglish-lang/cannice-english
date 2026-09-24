@@ -11,6 +11,9 @@ const next = safeNextPath((await searchParams).next);
     <div>
       <p className="eyebrow text-center">Üye Girişi</p>
       <h1 className="page-title text-center">Tekrar Hoş Geldin</h1>
+      {next === "/checkout" ? (
+        <p className="mt-3 text-center text-sm font-semibold text-emerald-700">Sepetin seni bekliyor. Giriş yap, ödemeye devam et.</p>
+      ) : null}
       <div className="mt-6"><SignInForm next={next} /></div>
       <p className="mt-4 text-center text-sm text-slate-500">
         Üye değil misin? <Link href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"} className="font-bold text-[color:var(--brand)]">Üye Ol</Link>

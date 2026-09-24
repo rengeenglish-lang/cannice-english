@@ -2,6 +2,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { listExamTypes } from "@/server/services/catalog.service";
+import { NextStepCta } from "@/components/marketing/NextStepCta";
 
 export const metadata: Metadata = { title: "İngilizce Sınavlar" };
 
@@ -38,6 +39,7 @@ export default async function ExamsIndexPage() {
           </Link>
         ))}
       </div>
+      <NextStepCta title="Sınavını seçtin mi? Seviyeni öğren." />
     </main>
   );
 }

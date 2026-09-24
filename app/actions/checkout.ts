@@ -16,7 +16,12 @@ export type CheckoutFormState = { status: "idle" | "error"; message?: string };
 export async function placeOrderAction(_prev: CheckoutFormState, formData: FormData): Promise<CheckoutFormState> {
   const session = await auth();
   const cart = await getOrCreateCart(session?.user?.id);
-  if (cart.items.length === 0) return { status: "error" as const, message: "Sepetiniz boş." };
+  if (cart.items.length === 0) return { status: "error" as const, message: "Sepetin boş." };
+  // Mesafeli Sözleşmeler Yönetmeliği: the buyer confirms the Ön Bilgilendirme Formu and Mesafeli
+  // Satış Sözleşmesi before the order is placed; the timestamp is kept on the order as proof.
+  if (formData.get("acceptTerms") !== "on") {
+    return { status: "error" as const, message: "Devam etmek için Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi'ni onaylaman gerekiyor." };
+  }
   // Same checks the cart page shows (unpublished product, full group time, plan below the one the
   // student holds, already-owned item...) — enforced here too, and always at today's prices.
   await refreshCartPrices(cart);
@@ -28,14 +33,14 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
     // Plans and group lessons attach to a student account (Canlı Derslerim, plan access), which
     // a guest order has nowhere to deliver to.
     if (cart.items.some((item) => item.product.category === "PLAN" || item.product.category === "PREP_GROUP")) {
-      return { status: "error" as const, message: "Plan ve canlı grup dersi satın almak için lütfen önce giriş yapın veya üye olun." };
+      return { status: "error" as const, message: "Plan ve canlı grup dersi satın almak için önce giriş yap veya ücretsiz üye ol." };
     }
     const parsed = guestCheckoutSchema.safeParse({
       guestName: formData.get("guestName"),
       guestEmail: formData.get("guestEmail"),
       guestPhone: formData.get("guestPhone"),
     });
-    if (!parsed.success) return { status: "error" as const, message: "Lütfen bilgilerinizi kontrol edin." };
+    if (!parsed.success) return { status: "error" as const, message: "Lütfen bilgilerini kontrol et." };
     guest = parsed.data;
   }
 
@@ -68,6 +73,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
       discountTotal,
       total,
       couponCode,
+      termsAcceptedAt: new Date(),
       items: {
         create: cart.items.map((item) => ({
           productId: item.productId,

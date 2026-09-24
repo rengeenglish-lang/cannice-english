@@ -70,7 +70,20 @@ export function WeekView({
       </p>
       {!slots.length ? (
         <div className="rounded-2xl border border-dashed border-slate-300 p-10 text-center text-slate-600">
-          Bu hafta planlanmış grup dersi yok. Sonraki haftaya göz atın.
+          <p>Bu hafta planlanmış grup dersi yok. Sonraki haftaya göz at.</p>
+          {!admin ? (
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              <Link
+                href={`/packages?category=PREP_GROUP${exam && exam !== "yokdil" ? `&exam=${exam}` : ""}`}
+                className="primary-button"
+              >
+                Grup programlarını incele
+              </Link>
+              <Link href={href(range.next)} className="secondary-button">
+                Sonraki hafta
+              </Link>
+            </div>
+          ) : null}
         </div>
       ) : (
         <div className="grid items-start gap-7 md:grid-cols-2 xl:grid-cols-3">
