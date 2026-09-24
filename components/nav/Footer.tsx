@@ -49,6 +49,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-white/70">
             <li><Link href="/konu-anlatim" className="transition hover:text-white">Konu Anlatımları</Link></li>
             <li><Link href="/planlar" className="transition hover:text-white">Planlar</Link></li>
+            <li><Link href="/kocluk" className="transition hover:text-white">Ücretsiz Öğrenci Koçluğu</Link></li>
             <li><Link href="/dashboard/mock-exam" className="transition hover:text-white">Deneme Sınavları</Link></li>
             <li><Link href="/group-lessons" className="transition hover:text-white">Canlı Grup Dersleri</Link></li>
             <li><Link href="/kaynaklar" className="transition hover:text-white">Kaynaklar</Link></li>

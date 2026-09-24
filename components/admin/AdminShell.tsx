@@ -24,6 +24,7 @@ import {
   MessageCircle,
   Heart,
   Target,
+  Compass,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -39,6 +40,7 @@ type Role = "STUDENT" | "TEACHER" | "ADMIN";
 function learningNav(examFamily: ExamFamily | null) {
   return [
     { href: "/dashboard", label: "Çalışma alanım", icon: Home },
+    { href: "/dashboard/kocluk", label: "Ücretsiz Koçluk", icon: Compass },
     { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
     { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
     { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },
@@ -219,7 +221,7 @@ export function DashboardShell({
         </div>
       </dialog>
       <div className="flex min-w-0 flex-col">
-        <div className="flex h-14 items-center gap-3 border-b border-[color:var(--border)] bg-white px-4 lg:hidden">
+        <div className="no-print flex h-14 items-center gap-3 border-b border-[color:var(--border)] bg-white px-4 lg:hidden">
           <button
             type="button"
             aria-label={`${menuLabel}nü aç`}

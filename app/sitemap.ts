@@ -23,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/about` },
     { url: `${base}/yardim` },
     { url: `${base}/planlar` },
+    { url: `${base}/kocluk` },
     { url: `${base}/legal/iade-politikasi` },
     { url: `${base}/legal/kullanim-kosullari` },
     { url: `${base}/grammar` },

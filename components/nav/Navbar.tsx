@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { href: "/konu-anlatim", label: "Konu Anlatımları" },
   { href: "/group-lessons", label: "Grup Dersleri" },
   { href: "/planlar", label: "Planlar" },
+  { href: "/kocluk", label: "Ücretsiz Koçluk" },
   { href: "/kaynaklar", label: "Kaynaklar" },
 ];
 

@@ -3,6 +3,7 @@ import { BookOpen, CheckCircle2, CalendarDays, ArrowRight, ClipboardList, Trendi
 import { lessonDate, lessonTime } from "@/lib/availability";
 import { PrepJourney } from "./PrepJourney";
 import { TodayWidget } from "./TodayWidget";
+import { CoachingWidget } from "./CoachingWidget";
 
 type ResumeCourse = { id: string; nextLesson: { id: string; title: string } | null } | null;
 type NextLesson = { title: string; startsAt: string } | null;
@@ -69,6 +70,7 @@ export function LearningDashboard({
         ))}
       </div>
 
+      <CoachingWidget userId={userId} />
       <PrepJourney userId={userId} />
       <TodayWidget userId={userId} />
 
