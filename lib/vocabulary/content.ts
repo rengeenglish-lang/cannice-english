@@ -1,6 +1,7 @@
 import "server-only";
 import { A1 } from "@/content/vocabulary/a1";
 import { A2 } from "@/content/vocabulary/a2";
+import { B1 } from "@/content/vocabulary/b1";
 import type { LexiconEntry } from "@/content/vocabulary/types";
 import { LEXICON_LEVELS, SET_SIZE, type LexiconLevelCode } from "@/lib/vocabulary/levels";
 
@@ -15,7 +16,7 @@ export type LexiconWord = {
   tip: string | null;
 };
 
-const SOURCES: Partial<Record<LexiconLevelCode, LexiconEntry[]>> = { A1, A2 };
+const SOURCES: Partial<Record<LexiconLevelCode, LexiconEntry[]>> = { A1, A2, B1 };
 
 const slug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
