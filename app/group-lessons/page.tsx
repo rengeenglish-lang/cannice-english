@@ -27,6 +27,7 @@ export default async function GroupLessonsPage({
     yokdil: "YÖKDİL",
     toefl: "TOEFL",
     ielts: "IELTS",
+    pte: "PTE",
   };
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
@@ -40,7 +41,7 @@ export default async function GroupLessonsPage({
       </PageHero>
       <nav
         aria-label="Sınav türü"
-        className="grid grid-cols-2 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgba(7,27,52,.07)] sm:grid-cols-4"
+        className="grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgba(7,27,52,.07)] sm:grid-cols-5"
       >
         {GROUP_EXAM_FILTERS.map((value) => (
           <Link
