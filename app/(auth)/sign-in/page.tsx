@@ -10,10 +10,10 @@ const next = safeNextPath((await searchParams).next);
   return (
     <div>
       <p className="eyebrow text-center">Üye Girişi</p>
-      <h1 className="page-title text-center">Tekrar Hoş Geldiniz</h1>
+      <h1 className="page-title text-center">Tekrar Hoş Geldin</h1>
       <div className="mt-6"><SignInForm next={next} /></div>
       <p className="mt-4 text-center text-sm text-slate-500">
-        Üye değil misiniz? <Link href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"} className="font-bold text-[color:var(--brand)]">Üye Ol</Link>
+        Üye değil misin? <Link href={next ? `/register?next=${encodeURIComponent(next)}` : "/register"} className="font-bold text-[color:var(--brand)]">Üye Ol</Link>
       </p>
     </div>
   );

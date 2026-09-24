@@ -9,13 +9,13 @@ export default async function RegisterPage({searchParams}: {searchParams: Promis
 const next = safeNextPath((await searchParams).next);
   return (
     <div>
-      <p className="eyebrow text-center">Öğrenme Yolculuğunuza Başlayın</p>
-      <h1 className="page-title text-center">Hesabınızı Oluşturun</h1>
+      <p className="eyebrow text-center">Öğrenme Yolculuğuna Başla</p>
+      <h1 className="page-title text-center">Hesabını Oluştur</h1>
       <div className="mt-6">
         <RegisterForm next={next} />
       </div>
       <p className="mt-4 text-center text-sm text-slate-500">
-        Zaten üye misiniz?{" "}
+        Zaten üye misin?{" "}
         <Link href={next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in"} className="font-bold text-[color:var(--brand)]">
           Giriş Yapın
         </Link>

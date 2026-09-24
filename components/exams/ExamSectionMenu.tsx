@@ -60,7 +60,7 @@ function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKIL
     <Link href="/" onClick={onNavigate} className="exam-workspace-link"><Home size={18} /> Home</Link>
     {groups.map(({ label, icon: Icon, href, child }) => <details key={label} className="group/menu"><summary className="exam-workspace-link cursor-pointer list-none"><Icon size={18} /> <span className="flex-1">{label}</span><ChevronDown size={15} className="transition group-open/menu:rotate-180" /></summary><Link href={href} onClick={onNavigate} className="mx-3 mb-1 block rounded-lg border-l border-cyan-300/40 py-2 pl-7 text-xs font-semibold text-blue-200 hover:text-white">{child}</Link></details>)}
     <div className="my-3 border-t border-white/10" />
-    {links.map(({ label, icon: Icon, href, badge }) => <Link key={label} href={href} onClick={onNavigate} className="exam-workspace-link"><Icon size={18} /><span className="flex-1">{label}</span>{badge ? <span className="rounded-md bg-cyan-400 px-2 py-1 text-[9px] font-black text-[#061f3f]">{badge}</span> : null}</Link>)}
+    {links.map(({ label, icon: Icon, href, badge }) => <Link key={label} href={href} onClick={onNavigate} className="exam-workspace-link"><Icon size={18} /><span className="flex-1">{label}</span>{badge ? <span className="rounded-md bg-cyan-400 px-2 py-1 text-[11px] font-black text-[#061f3f]">{badge}</span> : null}</Link>)}
     <div className="mt-5 flex items-center gap-2 rounded-xl bg-white/5 px-3 py-3 text-xs text-blue-200"><Sparkles size={16} className="text-cyan-300" /> Sınavınıza özel çalışma alanı</div>
   </nav>;
 }

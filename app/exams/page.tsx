@@ -11,7 +11,7 @@ export default async function ExamsIndexPage() {
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
         <p className="eyebrow">İngilizce Sınavlar</p>
-        <h1 className="page-title">Hangi sınava hazırlanıyorsunuz?</h1>
+        <h1 className="page-title">Hangi sınava hazırlanıyorsun?</h1>
         <p className="page-copy">
           Her sınav için özel hazırlanmış paketler, ücretsiz kaynaklar ve puan
           hesaplama araçlarına göz atın.

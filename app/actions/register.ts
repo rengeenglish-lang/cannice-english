@@ -15,7 +15,7 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
     phone: formData.get("phone") || undefined,
     password: formData.get("password"),
   });
-  if (!parsed.success) return { status: "error", message: "Lütfen bilgilerinizi kontrol edin." };
+  if (!parsed.success) return { status: "error", message: "Lütfen bilgilerini kontrol et." };
 
   const email = parsed.data.email.trim().toLowerCase();
   const existing = await db.user.findUnique({ where: { email } });

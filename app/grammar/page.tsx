@@ -22,8 +22,8 @@ export default async function GrammarPage() {
         <p className="eyebrow">İngilizce Gramer</p>
         <h1 className="page-title">Gramer ve Konu Anlatımı</h1>
         <p className="page-copy">
-          Sınav hazırlığınıza destek olacak gramer konularını ve kullanım
-          örneklerini burada bulabilirsiniz.
+          Sınav hazırlığına destek olacak gramer konularını ve kullanım
+          örneklerini burada bulabilirsin.
         </p>
       </PageHero>
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

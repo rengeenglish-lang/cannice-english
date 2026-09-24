@@ -76,7 +76,7 @@ export function ScoreCalculatorForm({ exams }: { exams: ExamGroup[] }) {
             style={{ backgroundColor: activeExam.solid }}
           >
             <p className="text-xs font-bold uppercase tracking-wide text-white/70">
-              Tahmini Sonucunuz
+              Tahmini Sonucun
             </p>
             <p className="mt-1 text-3xl font-extrabold">
               {matchedRow.resultLabel}
@@ -87,7 +87,7 @@ export function ScoreCalculatorForm({ exams }: { exams: ExamGroup[] }) {
           </div>
         ) : (
           <p className="mt-6 text-sm font-semibold text-[color:var(--danger)]">
-            Lütfen 0-100 arasında geçerli bir doğru sayısı girin.
+            Lütfen 0-100 arasında geçerli bir doğru sayısı gir.
           </p>
         )
       ) : null}

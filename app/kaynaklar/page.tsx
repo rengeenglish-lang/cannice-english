@@ -13,7 +13,7 @@ export default function KaynaklarPage() {
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
         <p className="eyebrow">KAYNAKLAR</p>
-        <h1 className="page-title">Başarınız için özenle hazırlanmış kaynaklar</h1>
+        <h1 className="page-title">Başarın için özenle hazırlanmış kaynaklar</h1>
         <p className="page-copy">E-kitaplardan konu konu çalışma kaynaklarına, PDF denemelerden kayıtlı kaynaklarına kadar her şey tek yerde.</p>
       </PageHero>
       <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -34,7 +34,7 @@ export default function KaynaklarPage() {
         })}
       </div>
       <p className="mt-10 text-sm text-[color:var(--muted)]">
-        Hazırlık grupları ve çalışma paketleri için <Link href="/packages" className="font-bold underline">Paketler</Link> sayfasına göz atabilirsiniz.
+        Hazırlık grupları ve çalışma paketleri için <Link href="/packages" className="font-bold underline">Paketler</Link> sayfasına göz atabilirsin.
       </p>
     </main>
   );

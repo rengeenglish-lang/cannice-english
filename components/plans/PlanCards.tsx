@@ -46,10 +46,10 @@ export function PlanCards({
             }`}
           >
             {featured && !isCurrent ? (
-              <span className="absolute -top-3 left-6 rounded-full bg-[color:var(--brand)] px-3 py-1 text-[10px] font-black tracking-wider text-white">EN ÇOK TERCİH EDİLEN</span>
+              <span className="absolute -top-3 left-6 rounded-full bg-[color:var(--brand)] px-3 py-1 text-[11px] font-black tracking-wide text-white">EN ÇOK TERCİH EDİLEN</span>
             ) : null}
             {isCurrent ? (
-              <span className="absolute -top-3 left-6 rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-black tracking-wider text-white">MEVCUT PLANIN</span>
+              <span className="absolute -top-3 left-6 rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-black tracking-wide text-white">MEVCUT PLANIN</span>
             ) : null}
             <div className="absolute right-4 top-4">
               <FavoriteButton productId={product.id} initial={favoriteIds.has(product.id)} title={`${PLAN_NAMES[tier]} planı`} />

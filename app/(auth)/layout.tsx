@@ -12,18 +12,18 @@ export default function AuthLayout({
         </div>
         <div>
           <h2>
-            Hedefiniz belli.
+            Hedefin belli.
             <br />
-            Sıradaki adımınız burada.
+            Sıradaki adımın burada.
           </h2>
           <p className="mt-5 text-base leading-7 text-blue-100">
-            Kaynaklarınızı, derslerinizi ve ilerlemenizi tek bir yerde takip
-            edin.
+            Kaynaklarını, derslerini ve ilerlemeni tek bir yerde takip
+            et.
           </p>
         </div>
         <div className="space-y-4 text-sm text-blue-100">
           {[
-            "Kendi temponuzda çalışma",
+            "Kendi temponda çalışma",
             "Canlı grup dersleri",
             "Düzenli ilerleme takibi",
           ].map((text) => (

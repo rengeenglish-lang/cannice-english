@@ -26,8 +26,8 @@ export default async function ScoreCalculatorPage() {
         <p className="eyebrow">Faydalı Araçlar</p>
         <h1 className="page-title">YDS ve YÖKDİL Puan Hesaplama Aracı</h1>
         <p className="page-copy">
-          Sınavı seçin, doğru cevap sayınızı girin — tahmini puan aralığınızı
-          hemen görün.
+          Sınavı seç, doğru cevap sayını gir — tahmini puan aralığını
+          hemen gör.
         </p>
       </PageHero>
       <div className="mt-8">

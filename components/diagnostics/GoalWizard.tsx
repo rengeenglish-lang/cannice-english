@@ -27,7 +27,7 @@ const TIMEFRAME_OPTIONS = [
   { value: "UNKNOWN", label: "Henüz bilmiyorum" },
 ];
 
-const STEP_TITLES = ["Hangi sınava hazırlanıyorsunuz?", "Mevcut seviyeniz", "Hedef puanınız nedir?", "Sınava ne zaman girmeyi planlıyorsunuz?"];
+const STEP_TITLES = ["Hangi sınava hazırlanıyorsun?", "Mevcut seviyen", "Hedef puanın nedir?", "Sınava ne zaman girmeyi planlıyorsun?"];
 
 export function GoalWizard({ exams }: { exams: Exam[] }) {
   const [state, formAction, pending] = useActionState(setGoalAction, initialState);

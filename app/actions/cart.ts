@@ -74,7 +74,7 @@ export type CouponFormState = { status: "idle" | "error"; message?: string };
 /** Applies a coupon in the cart so the discounted total is visible before checkout; the code is carried into the checkout form. */
 export async function applyCartCouponAction(_state: CouponFormState, formData: FormData): Promise<CouponFormState> {
   const code = String(formData.get("couponCode") ?? "").trim().toUpperCase();
-  if (!code) return { status: "error", message: "Lütfen bir kupon kodu girin." };
+  if (!code) return { status: "error", message: "Lütfen bir kupon kodu gir." };
   const cart = await findCart(await currentUserId());
   const subtotal = (cart?.items ?? []).reduce((sum, i) => sum + Number(i.product.salePrice) * i.quantity, 0);
   const result = await validateCouponForOrder(code, subtotal);

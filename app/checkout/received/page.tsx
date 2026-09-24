@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { db } from "@/server/db";
 import { formatTRY } from "@/lib/pricing";
 
-export const metadata: Metadata = { title: "Siparişiniz Alındı" };
+export const metadata: Metadata = { title: "Siparişin Alındı" };
 
 type Props = { searchParams: Promise<{ order?: string }> };
 
@@ -20,11 +20,11 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
   return (
     <main className="inner-page mx-auto w-full max-w-[700px] px-4 py-14 text-center sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">{order?.status === "PAID" ? "Ödemeniz alındı!" : "Talebiniz başarıyla gönderildi!"}</p>
-        <h1 className="page-title">Siparişiniz Alındı</h1>
+        <p className="eyebrow">{order?.status === "PAID" ? "Ödemen alındı!" : "Talebin başarıyla gönderildi!"}</p>
+        <h1 className="page-title">Siparişin Alındı</h1>
         <p className="page-copy mx-auto">
           {order?.status === "PAID"
-            ? "Ödemeniz onaylandı, dersleriniz hesabınızda hazır."
+            ? "Ödemen onaylandı, derslerin hesabında hazır."
             : "Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek."}
         </p>
       </PageHero>

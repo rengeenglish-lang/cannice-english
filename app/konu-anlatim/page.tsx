@@ -48,9 +48,9 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
         <PageHero>
           <p className="eyebrow">Konu Anlatım</p>
-          <h1 className="page-title">Sınavınıza konu konu, sıfırdan hazırlanın</h1>
+          <h1 className="page-title">Sınavına konu konu, sıfırdan hazırlan</h1>
           <p className="page-copy !text-lg !font-semibold">
-            Bir sınav seçin ve içeriği açın. Her sınavın ilk konusu ücretsiz önizlemedir; tüm konulara erişim planınıza dahildir.
+            Bir sınav seç ve içeriği aç. Her sınavın ilk konusu ücretsiz önizlemedir; tüm konulara erişim planına dahildir.
           </p>
         </PageHero>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -114,11 +114,11 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
           Konu Anlatım
         </p>
         <h1 className="page-title">
-          Sınavınıza konu konu, sıfırdan hazırlanın
+          Sınavına konu konu, sıfırdan hazırlan
         </h1>
         <p className="page-copy !text-lg !font-semibold">
-          Her konunun sınavda kaç soru olarak karşınıza çıktığını görün,
-          dersleri sırayla tamamlayın.
+          Her konunun sınavda kaç soru olarak karşına çıktığını gör,
+          dersleri sırayla tamamla.
         </p>
       </PageHero>
       <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -145,7 +145,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
             burada olacak
           </p>
           <p className="mt-2 text-sm text-slate-500">
-            <Link href="/konu-anlatim" className="underline">Diğer sınavların</Link> konu anlatımlarını inceleyebilirsiniz.
+            <Link href="/konu-anlatim" className="underline">Diğer sınavların</Link> konu anlatımlarını inceleyebilirsin.
           </p>
         </div>
       ) : (
@@ -156,7 +156,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
                 {activeExam?.name} Soru Dağılımı
               </span>
               <span className="ml-2 text-sm font-semibold text-slate-500">
-                (görmek için tıklayın)
+                (görmek için tıkla)
               </span>
             </summary>
             <p className="mt-3 text-xs font-semibold text-slate-500 sm:hidden">

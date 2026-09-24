@@ -57,7 +57,7 @@ export default async function GroupLessonPage({
       </Link>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
         <h1 className="page-title !mt-0">
-          {enrolled ? "Grup kaydınız" : "Bu gruba katıl"}
+          {enrolled ? "Grup kaydın" : "Bu gruba katıl"}
         </h1>
         <FavoriteButton productId={slot.course.productId} initial={isFavorite} title={slot.course.product.title} variant="full" />
       </div>
@@ -80,14 +80,14 @@ export default async function GroupLessonPage({
           </p>
           {a.simulated && (
             <p className="mt-3 text-sm text-slate-600">
-              Karttaki doluluk demo amaçlıdır. Kaydınız yukarıdaki gerçek
+              Karttaki doluluk demo amaçlıdır. Kaydın yukarıdaki gerçek
               kontenjana göre alınır.
             </p>
           )}
           {enrolled ? (
             <>
               <p className="mt-4 font-bold text-emerald-700">
-                Bu derse kayıtlısınız.
+                Bu derse kayıtlısın.
                 {slot.cancelled ? " Ders iptal edildi." : ""}
               </p>
               <BookingForm id={id} booked />
@@ -96,8 +96,8 @@ export default async function GroupLessonPage({
             <div className="mt-5">
               <p role="status" className="font-bold text-rose-700">
                 {a.status === "FULL"
-                  ? "Üzgünüz, bu grup dolmuştur. Lütfen farklı bir ders saati seçiniz."
-                  : "Bu gruba şu anda kayıt alınmıyor. Aşağıdaki alternatifleri inceleyin."}
+                  ? "Üzgünüz, bu grup dolmuştur. Lütfen farklı bir ders saati seç."
+                  : "Bu gruba şu anda kayıt alınmıyor. Aşağıdaki alternatifleri incele."}
               </p>
               {alternatives.length ? (
                 <a href="#alternatives" className="ghost-button mt-3 inline-flex">

@@ -13,12 +13,12 @@ const TOOLS = [
   {
     href: "/tools/score-calculator",
     title: "Puan Hesaplama",
-    description: "Doğru sayınıza göre tahmini bant/puan aralığınızı görün.",
+    description: "Doğru sayına göre tahmini bant/puan aralığını gör.",
   },
   {
     href: "/tools/guidance",
     title: "Rehberlik Aracı",
-    description: "Sınavınızı ve hedefinizi seçin, size uygun paketi görün.",
+    description: "Sınavını ve hedefini seç, sana uygun paketi gör.",
   },
   {
     href: "/tools/exam-calendar",
@@ -38,7 +38,7 @@ export default function ToolsIndexPage() {
       <PageHero>
         <p className="eyebrow">Faydalı Araçlar</p>
         <h1 className="page-title">
-          Sınav hazırlığınızı destekleyen ücretsiz araçlar
+          Sınav hazırlığını destekleyen ücretsiz araçlar
         </h1>
       </PageHero>
       <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">

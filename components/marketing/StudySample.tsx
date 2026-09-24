@@ -60,11 +60,11 @@ export function StudySample() {
 
   return <div className="overflow-hidden rounded-[1.75rem] border border-white/15 bg-white text-[#071b34] shadow-2xl">
     <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
-      <div><p className="text-[10px] font-black uppercase tracking-[.16em] text-slate-400">Sınav sorusu</p><p className="mt-1 text-sm font-black" style={{ color: question.color }}>{question.exam} · {question.area}</p></div>
+      <div><p className="text-[11px] font-black uppercase tracking-[.12em] text-slate-400">Sınav sorusu</p><p className="mt-1 text-sm font-black" style={{ color: question.color }}>{question.exam} · {question.area}</p></div>
       <span className="text-xs font-extrabold text-slate-500">{active + 1} / {QUESTIONS.length}</span>
     </div>
 
-    <div className="flex gap-2 overflow-x-auto border-b border-slate-200 px-5 py-3" role="tablist" aria-label="Sınav sorusu seçin">
+    <div className="flex gap-2 overflow-x-auto border-b border-slate-200 px-5 py-3" role="tablist" aria-label="Sınav sorusu seç">
       {QUESTIONS.map((item, index) => <button key={item.exam} type="button" role="tab" aria-selected={active === index} onClick={() => go(index)} className={`min-h-10 shrink-0 rounded-xl px-4 text-xs font-black transition ${active === index ? "text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`} style={active === index ? { background: item.color } : undefined}>{item.exam}</button>)}
     </div>
 
