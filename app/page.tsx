@@ -9,7 +9,7 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Cannice English — IELTS, TOEFL, PTE, YDS ve YÖKDİL Hazırlık Platformu",
+    absolute: "Netfener — IELTS, TOEFL, PTE, YDS ve YÖKDİL Hazırlık Platformu",
   },
   description:
     "IELTS, TOEFL, PTE, YDS ve YÖKDİL için konu anlatımları, deneme sınavları, seviye tespit, canlı grup dersleri ve çalışma materyalleri tek platformda.",

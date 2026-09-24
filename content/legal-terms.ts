@@ -16,11 +16,11 @@ export const LEGAL_DOCS: Record<string, LegalDoc> = {
   "kullanim-kosullari": TERMS_OF_USE,
   "mesafeli-satis-sozlesmesi": {
     title: "Mesafeli Satış Sözleşmesi",
-    body: "Bu sözleşme, Cannice English platformu üzerinden gerçekleştirilen mesafeli satışlara ilişkin tarafların hak ve yükümlülüklerini düzenler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
+    body: "Bu sözleşme, Netfener platformu üzerinden gerçekleştirilen mesafeli satışlara ilişkin tarafların hak ve yükümlülüklerini düzenler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
   },
   "uyelik-sozlesmesi": {
     title: "Üyelik Sözleşmesi",
-    body: "Bu sözleşme, Cannice English platformuna üye olan kullanıcıların uyması gereken kuralları ve platformun sunduğu hizmetlerin kapsamını belirler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
+    body: "Bu sözleşme, Netfener platformuna üye olan kullanıcıların uyması gereken kuralları ve platformun sunduğu hizmetlerin kapsamını belirler. Nihai metin hukuki inceleme sonrasında yayınlanacaktır — bu sayfa yer tutucu (taslak) içeriktir.",
   },
   "gizlilik-sozlesmesi": {
     title: "Gizlilik Sözleşmesi",

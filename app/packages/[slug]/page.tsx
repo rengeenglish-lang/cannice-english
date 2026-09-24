@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Paket Bulunamadı" };
-  const description = product.shortDescription ?? `${product.title} — Cannice English'ten sınav hazırlık paketi.`;
+  const description = product.shortDescription ?? `${product.title} — Netfener'den sınav hazırlık paketi.`;
   return { title: product.title, description, openGraph: { title: product.title, description, type: "website" } };
 }
 

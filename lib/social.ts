@@ -1,6 +1,6 @@
 /**
  * Social media profile links shown in the footer. Placeholders — replace with the real
- * Cannice English profile URLs.
+ * Netfener profile URLs.
  */
 export const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/canniceenglish",

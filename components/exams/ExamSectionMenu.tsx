@@ -56,7 +56,7 @@ function MenuContent({ examName, slug, speakingHref, examFamily = "ACADEMIC_SKIL
     { label: "Partnership Enquiries", icon: MessageSquareText, href: "/about" },
   ];
   return <nav aria-label={`${examName} çalışma menüsü`}>
-    <div className="mb-5 border-b border-white/10 px-3 pb-5"><p className="text-xs font-extrabold uppercase tracking-[.16em] text-cyan-300">Cannice Exams</p><p className="mt-2 font-black text-white">{examName}</p></div>
+    <div className="mb-5 border-b border-white/10 px-3 pb-5"><p className="text-xs font-extrabold uppercase tracking-[.16em] text-cyan-300">Netfener Exams</p><p className="mt-2 font-black text-white">{examName}</p></div>
     <Link href="/" onClick={onNavigate} className="exam-workspace-link"><Home size={18} /> Home</Link>
     {groups.map(({ label, icon: Icon, href, child }) => <details key={label} className="group/menu"><summary className="exam-workspace-link cursor-pointer list-none"><Icon size={18} /> <span className="flex-1">{label}</span><ChevronDown size={15} className="transition group-open/menu:rotate-180" /></summary><Link href={href} onClick={onNavigate} className="mx-3 mb-1 block rounded-lg border-l border-cyan-300/40 py-2 pl-7 text-xs font-semibold text-blue-200 hover:text-white">{child}</Link></details>)}
     <div className="my-3 border-t border-white/10" />

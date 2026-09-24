@@ -10,7 +10,7 @@ export default async function BlogIndexPage() {
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">Cannice Blog</p>
+        <p className="eyebrow">Netfener Blog</p>
         <h1 className="page-title">
           Sınav hazırlığı, motivasyon ve çalışma teknikleri
         </h1>

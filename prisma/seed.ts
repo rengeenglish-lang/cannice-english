@@ -33,7 +33,7 @@ const EXAM_TYPES = [
 ];
 
 async function main() {
-  console.log("Seeding Cannice English…");
+  console.log("Seeding Netfener…");
 
   const examTypes = {};
   for (const exam of EXAM_TYPES) {
@@ -45,7 +45,7 @@ async function main() {
   const teacher = await db.user.upsert({
     where: { email: "hoca@canniceenglish.com" },
     update: {},
-    create: { email: "hoca@canniceenglish.com", name: "Cannice Hoca", role: "TEACHER", password: teacherPassword },
+    create: { email: "hoca@canniceenglish.com", name: "Netfener Hoca", role: "TEACHER", password: teacherPassword },
   });
 
   const studentPassword = await hashPassword(process.env.CANNICE_STUDENT_PASSWORD || "CanniceStudent2026!");
@@ -330,13 +330,13 @@ async function main() {
 
   // ---- Books ----
   const bookDefs = [
-    { slug: "yds-yokdil-kelime-defteri", shortDescription: "YDS ve YÖKDİL'de en sık çıkan akademik kelimeler; örnek cümle ve eş anlamlılarla, basılı + PDF.", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Cannice Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
-    { slug: "yds-deneme-sinavlari-kitabi", shortDescription: "Gerçek YDS formatında tam deneme sınavları; her soru için açıklamalı çözüm.", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Cannice Hoca", format: "PRINT", pageCount: 180 },
-    { slug: "the-ultimate-vocabulary-builder", shortDescription: "Fen bilimleri metinlerine özel terim ve kelime çalışması; YÖKDİL Fen için PDF kaynak.", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 150 },
-    { slug: "yokdil-sosyal-bilimler-kelime-kitabi", shortDescription: "Sosyal bilimler metinlerinde geçen akademik kelimeler; YÖKDİL Sosyal için PDF kaynak.", title: "YÖKDİL Sosyal Bilimler Kelime Kitabı", examCode: "YOKDIL_SOSYAL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
-    { slug: "ielts-reading-practice-book", shortDescription: "IELTS Academic Reading soru tipleri için strateji ve cevap anahtarlı alıştırmalar.", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 140 },
-    { slug: "toefl-ibt-reading-practice-book", shortDescription: "TOEFL iBT Reading bölümü için güncel formatta, cevap anahtarlı okuma pasajları.", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 130 },
-    { slug: "pte-academic-reading-practice-book", shortDescription: "PTE Academic Reading görev tipleri için adım adım strateji ve pratik sorular.", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Cannice Hoca", format: "PDF", pageCount: 120 },
+    { slug: "yds-yokdil-kelime-defteri", shortDescription: "YDS ve YÖKDİL'de en sık çıkan akademik kelimeler; örnek cümle ve eş anlamlılarla, basılı + PDF.", title: "YDS - YÖKDİL Kelime Defteri", examCode: "YDS", basePrice: "349.00", salePrice: "249.00", author: "Netfener Hoca", format: "PRINT_AND_PDF", pageCount: 220 },
+    { slug: "yds-deneme-sinavlari-kitabi", shortDescription: "Gerçek YDS formatında tam deneme sınavları; her soru için açıklamalı çözüm.", title: "YDS Deneme Sınavları", examCode: "YDS", basePrice: "399.00", salePrice: "299.00", author: "Netfener Hoca", format: "PRINT", pageCount: 180 },
+    { slug: "the-ultimate-vocabulary-builder", shortDescription: "Fen bilimleri metinlerine özel terim ve kelime çalışması; YÖKDİL Fen için PDF kaynak.", title: "The Ultimate Vocabulary Builder", examCode: "YOKDIL_FEN", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 150 },
+    { slug: "yokdil-sosyal-bilimler-kelime-kitabi", shortDescription: "Sosyal bilimler metinlerinde geçen akademik kelimeler; YÖKDİL Sosyal için PDF kaynak.", title: "YÖKDİL Sosyal Bilimler Kelime Kitabı", examCode: "YOKDIL_SOSYAL", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 140 },
+    { slug: "ielts-reading-practice-book", shortDescription: "IELTS Academic Reading soru tipleri için strateji ve cevap anahtarlı alıştırmalar.", title: "IELTS Reading Practice Book", examCode: "IELTS", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 140 },
+    { slug: "toefl-ibt-reading-practice-book", shortDescription: "TOEFL iBT Reading bölümü için güncel formatta, cevap anahtarlı okuma pasajları.", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 130 },
+    { slug: "pte-academic-reading-practice-book", shortDescription: "PTE Academic Reading görev tipleri için adım adım strateji ve pratik sorular.", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 120 },
   ];
 
   for (const def of bookDefs) {
@@ -358,7 +358,7 @@ async function main() {
 
   // ---- Testimonials ----
   const testimonialDefs = [
-    { studentName: "Elif K.", examCode: "YDS", resultSummary: "YDS 92.5", quote: "Cannice English ile çalıştıktan sonra YDS'de hedeflediğim puanı ilk denemede aldım. Canlı derslerde sorularıma anında cevap bulabiliyordum." },
+    { studentName: "Elif K.", examCode: "YDS", resultSummary: "YDS 92.5", quote: "Netfener ile çalıştıktan sonra YDS'de hedeflediğim puanı ilk denemede aldım. Canlı derslerde sorularıma anında cevap bulabiliyordum." },
     { studentName: "Mert A.", examCode: "YOKDIL_SAGLIK", resultSummary: "YÖKDİL 88", quote: "Sağlık bilimleri terminolojisine özel hazırlanan içerikler gerçekten işe yaradı, deneme sınavları sınav formatına çok yakındı." },
     { studentName: "Priya S.", examCode: "IELTS", resultSummary: "IELTS 7.5", quote: "The recorded lessons combined with weekly live classes made it easy to fit my prep around a full-time job." },
     { studentName: "Ahmet Y.", examCode: "YDS", resultSummary: "YDS 85", quote: "Akademik çeviri grubu sayesinde okuduğumu anlama hızım ciddi şekilde arttı." },

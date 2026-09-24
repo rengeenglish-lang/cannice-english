@@ -1,15 +1,15 @@
-# Google Flow — Cannice English video reklam prompt'u
+# Google Flow — Netfener video reklam prompt'u
 
 **Format:** 30 saniye · dikey 9:16 (Reels/TikTok/Shorts) + yatay 16:9 varyantı · Türkçe seslendirme
 **Hedef kitle:** IELTS, TOEFL, PTE, YDS ve YÖKDİL'e hazırlanan 18–35 yaş Türk öğrenciler, lisansüstü adayları ve akademisyenler
 **Ton:** Samimi, güven veren, enerjik ama sakin. "Rastgele çalışma yok, planlı ilerleme var."
-**Marka görünümü:** Lacivert (#071B34) ve mavi (#4162DA) ağırlıklı, beyaz kartlar, yumuşak gölgeler, yuvarlak köşeler. Temiz, modern, Plus Jakarta Sans benzeri geometrik yazı tipi. Logo: lacivert kare içinde beyaz "C" + "Cannice English".
+**Marka görünümü:** Lacivert (#071B34) ve mavi (#4162DA) ağırlıklı, beyaz kartlar, yumuşak gölgeler, yuvarlak köşeler. Temiz, modern, Plus Jakarta Sans benzeri geometrik yazı tipi. Logo: lacivert kare içinde beyaz "C" + "Netfener".
 
 ---
 
 ## Genel prompt (Flow'a tek parça olarak verilebilir)
 
-> Cinematic, modern ed-tech commercial for a Turkish online English exam-prep platform called "Cannice English". A Turkish university student (early 20s, casual, relatable) studies at a bright desk at night and in a café by day, using a laptop and phone. Screens show a clean navy-and-blue web app with white rounded cards. Shallow depth of field, warm practical lighting, smooth handheld camera, subtle UI motion graphics floating out of the screens. Colour palette navy #071B34, royal blue #4162DA, white, touches of emerald green for success states. Upbeat lo-fi / light electronic music building to an uplifting finish. All on-screen text in Turkish. No real exam logos; exam names shown only as plain text.
+> Cinematic, modern ed-tech commercial for a Turkish online English exam-prep platform called "Netfener". A Turkish university student (early 20s, casual, relatable) studies at a bright desk at night and in a café by day, using a laptop and phone. Screens show a clean navy-and-blue web app with white rounded cards. Shallow depth of field, warm practical lighting, smooth handheld camera, subtle UI motion graphics floating out of the screens. Colour palette navy #071B34, royal blue #4162DA, white, touches of emerald green for success states. Upbeat lo-fi / light electronic music building to an uplifting finish. All on-screen text in Turkish. No real exam logos; exam names shown only as plain text.
 
 ---
 
@@ -49,7 +49,7 @@
 ### Sahne 7 — Kapanış / Çağrı (0:26–0:30)
 - **Görüntü:** Gündüz, aynı öğrenci rahat ve kendinden emin; telefonunda "Tebrikler" bildirimi. Kamera geri çekilir, lacivert arka plana geçilir. Sınav adları sırayla belirir: IELTS · TOEFL · PTE · YDS · YÖKDİL. Ardından logo ve web adresi.
 - **Ekran yazısı:** "Sınavına hazırlan. Hedefine ulaş." + "Ücretsiz seviye tespitine başla"
-- **Seslendirme:** "IELTS, TOEFL, PTE, YDS ve YÖKDİL'de hedefine planlı ilerle. Cannice English'te ücretsiz seviye tespitine hemen başla!"
+- **Seslendirme:** "IELTS, TOEFL, PTE, YDS ve YÖKDİL'de hedefine planlı ilerle. Netfener'de ücretsiz seviye tespitine hemen başla!"
 
 ---
 
@@ -61,7 +61,7 @@
 > Küçük gruplarda canlı derslere katıl, takıldığın yerde öğretmenine hemen yaz.
 > İlerleme raporunla ne kadar yol aldığını her gün gör.
 > Hatalarım bölümü, yanlış yaptığın her soruyu açıklamasıyla ve ilgili konu anlatımıyla önüne getirir.
-> IELTS, TOEFL, PTE, YDS ve YÖKDİL'de hedefine planlı ilerle. Cannice English'te ücretsiz seviye tespitine hemen başla!
+> IELTS, TOEFL, PTE, YDS ve YÖKDİL'de hedefine planlı ilerle. Netfener'de ücretsiz seviye tespitine hemen başla!
 
 **Seslendirme notu:** Genç, sıcak, net diksiyonlu Türkçe ses (kadın veya erkek). Tempo orta-hızlı; "ücretsiz" ve "hedefine" kelimeleri hafif vurgulu.
 
@@ -70,7 +70,7 @@
 1. (0–3 sn) Sahne 1 kanca — "Nereden başlayacağını bilmiyor musun?"
 2. (3–7 sn) Sahne 2 — CEFR rozeti — "Ücretsiz seviye tespitiyle eksiklerini gör."
 3. (7–11 sn) Sahne 6 — Hatalarım kartı — "Hatalarından konu konu öğren."
-4. (11–15 sn) Sahne 7 — logo — "Cannice English. Hedefine planlı ilerle."
+4. (11–15 sn) Sahne 7 — logo — "Netfener. Hedefine planlı ilerle."
 
 ## Dikkat edilecekler
 - Ekranlardaki arayüz gerçek siteye benzemeli ama okunabilir büyüklükte ve sadeleştirilmiş olmalı.

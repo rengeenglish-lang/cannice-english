@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <main className="inner-page mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
       <PageHero>
-        <p className="eyebrow">CANNICE ENGLISH</p>
+        <p className="eyebrow">NETFENER</p>
         <h1 className="page-title">
           Büyük hedeflere,
           <br />

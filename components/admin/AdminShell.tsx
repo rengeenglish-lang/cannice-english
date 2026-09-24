@@ -108,10 +108,10 @@ function SidebarContent({
         className="mb-7 flex items-center gap-3 px-3 py-2 text-white"
       >
         <span className="grid size-10 place-items-center rounded-xl bg-white/15 font-extrabold">
-          C
+          N
         </span>
         <span className="text-sm font-extrabold">
-          Cannice English
+          Netfener
           <span className="mt-1 block text-[10px] font-medium uppercase tracking-widest text-blue-200">
             {isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"}
           </span>

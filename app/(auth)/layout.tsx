@@ -8,7 +8,7 @@ export default function AuthLayout({
     <main className="auth-frame">
       <aside className="auth-story">
         <div className="flex items-center gap-3 text-sm font-bold">
-          <BookOpen aria-hidden="true" /> CANNICE ENGLISH
+          <BookOpen aria-hidden="true" /> NETFENER
         </div>
         <div>
           <h2>

@@ -17,7 +17,7 @@ export function Footer() {
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--brand-strong)] text-white/80">
       <div className="mx-auto grid w-full max-w-[1320px] grid-cols-2 gap-8 px-4 py-14 sm:grid-cols-3 sm:px-6 lg:grid-cols-5 lg:px-8">
         <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-          <span className="text-lg font-extrabold text-white">Cannice English</span>
+          <span className="text-lg font-extrabold text-white">Netfener</span>
           <p className="mt-3 max-w-xs text-sm leading-6 text-white/55">
             İngilizce sınav hazırlığın için konu anlatımları, çalışma paketleri ve kitaplar. Doğru kaynağı kendi temponda keşfet.
           </p>
@@ -28,10 +28,10 @@ export function Footer() {
           </ul>
 
           <div className="mt-5 flex gap-3">
-            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Cannice English Facebook sayfası" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
+            <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Netfener Facebook sayfası" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3z" /></svg>
             </a>
-            <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Cannice English Instagram hesabı" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
+            <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Netfener Instagram hesabı" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>
             </a>
           </div>
@@ -78,7 +78,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-white/35 sm:px-6 lg:px-8">
-        © {new Date().getFullYear()} Cannice English. Tüm hakları saklıdır.
+        © {new Date().getFullYear()} Netfener. Tüm hakları saklıdır.
       </div>
     </footer>
   );
