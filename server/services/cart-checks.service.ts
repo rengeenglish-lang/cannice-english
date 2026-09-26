@@ -1,4 +1,5 @@
 import "server-only";
+import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { db } from "@/server/db";
 import { getGroupSlot } from "@/server/services/group-availability.service";
 import { getPlanAccess } from "@/server/services/plans.service";
@@ -57,11 +58,14 @@ export async function inspectCart(cart: CartWithItems, user: User) {
     let typeLabel = TYPE_LABEL[p.category] ?? "Ürün";
     if (p.examType) notes.push(p.examType.name);
 
+    if (findNetfenerEbook(p.slug) && Number(p.salePrice) <= 0) {
+      issues.push({ itemId: item.id, level: "error", message: `“${p.title}” henüz satışa açılmadı. Önizlemesini E-Kitaplar sayfasından inceleyebilirsiniz.` });
+    }
     if (!p.isPublished) {
       issues.push({ itemId: item.id, level: "error", message: `“${p.title}” artık satışta değil. Devam etmek için sepetten kaldırın.` });
     }
 
-    if (!user && (p.category === "PLAN" || p.category === "PREP_GROUP")) {
+    if (!user && (p.category === "PLAN" || p.category === "PREP_GROUP" || findNetfenerEbook(p.slug))) {
       issues.push({
         itemId: item.id,
         level: "error",
@@ -86,7 +90,7 @@ export async function inspectCart(cart: CartWithItems, user: User) {
       const digitalOnly = p.book?.format === "PDF";
       if (digitalOnly && ownedBookIds.has(p.id)) {
         issues.push({ itemId: item.id, level: "error", message: `“${p.title}” e-kitabını daha önce satın aldın; Derslerim sayfasından indirebilirsin.`, action: { href: "/dashboard/lessons", label: "Derslerime git" } });
-      } else if (access.can("FREE_MATERIALS") && p.book?.digitalFileUrl) {
+      } else if (!findNetfenerEbook(p.slug) && access.can("FREE_MATERIALS") && p.book?.digitalFileUrl) {
         issues.push(
           digitalOnly
             ? { itemId: item.id, level: "warning", message: `“${p.title}” planına dahil — satın almadan ücretsiz indirebilirsin.`, action: { href, label: "Ücretsiz indir" } }

@@ -82,3 +82,27 @@ test("purchase entitlement requires this account, this book and a paid order", a
   order = { ...order, status: "PAID", category: "PLAN" };
   assert.equal(await owns("buyer", "yokdil-saglik"), false);
 });
+
+test("cart requires login and a set price, without promising plan access to paid books", async () => {
+  const source = await fs.readFile("server/services/cart-checks.service.ts", "utf8");
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  type Issue = { level: string; message: string };
+  const exported: { inspectCart?: (cart: unknown, user: unknown) => Promise<{ issues: Issue[]; blocking: boolean }> } = {};
+  vm.runInNewContext(code, { exports: exported, require(name: string) {
+    if (name === "server-only") return {};
+    if (name === "@/lib/netfener-ebooks") return { findNetfenerEbook };
+    if (name === "@/server/db") return { db: { orderItem: { findMany: async () => [] } } };
+    if (name === "@/server/services/plans.service") return { getPlanAccess: async () => ({ can: () => true }) };
+    if (["@/server/services/group-availability.service", "@/lib/diagnostics/access", "@/lib/billing", "@/lib/availability", "@/lib/plans"].includes(name)) return {};
+    throw new Error(name);
+  } });
+  const product = { id: "book-id", slug: "yokdil-saglik", title: "YÖKDİL Sağlık", category: "BOOK", isPublished: true, salePrice: 100, book: { format: "PDF", digitalFileUrl: "/api/ebooks/yokdil-saglik" } };
+  const cart = { items: [{ id: "item", productId: product.id, product }] };
+  const inspect = exported.inspectCart!;
+  assert.equal((await inspect(cart, null)).blocking, true);
+  const member = await inspect(cart, { id: "subscriber", role: "STUDENT" });
+  assert.equal(member.blocking, false);
+  assert.equal(member.issues.length, 0);
+  product.salePrice = 0;
+  assert.equal((await inspect(cart, { id: "subscriber", role: "STUDENT" })).blocking, true);
+});
