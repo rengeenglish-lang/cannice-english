@@ -1,5 +1,6 @@
 "use server";
 
+import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { db } from "@/server/db";
@@ -17,6 +18,9 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   const session = await auth();
   const cart = await getOrCreateCart(session?.user?.id);
   if (cart.items.length === 0) return { status: "error" as const, message: "Sepetiniz boş." };
+  if (!session?.user?.id && cart.items.some((item) => findNetfenerEbook(item.product.slug))) {
+    return { status: "error", message: "E-kitap satın almak için lütfen giriş yapın veya üye olun." };
+  }
   // Same checks the cart page shows (unpublished product, full group time, plan below the one the
   // student holds, already-owned item...) — enforced here too, and always at today's prices.
   await refreshCartPrices(cart);

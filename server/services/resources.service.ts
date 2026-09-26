@@ -1,4 +1,5 @@
 import "server-only";
+import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { db } from "@/server/db";
 import { konuAnlatimHref } from "@/lib/konu-links";
 import type { PlanAccess } from "@/server/services/plans.service";
@@ -51,6 +52,10 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
   const owned = await ownedBookIds(user?.id ?? null);
 
   const bookItem = (b: { id: string; slug: string; title: string; shortDescription: string | null; book: { digitalFileUrl: string | null; format: string } | null }): ResourceItem => {
+    if (findNetfenerEbook(b.slug)) {
+      const purchased = owned.has(b.id);
+      return { id: b.id, title: b.title, description: b.shortDescription, badge: purchased ? "SATIN ALINDI" : "E-KİTAP", href: purchased ? `/api/ebooks/${b.slug}` : `/kaynaklar/e-kitaplar/onizleme/${b.slug}`, cta: purchased ? "Tam kitabı indir" : "İlk 3 sayfayı incele", external: purchased };
+    }
     const canDownload = Boolean(b.book?.digitalFileUrl) && (owned.has(b.id) || freeMaterials);
     if (canDownload) {
       return { id: b.id, title: b.title, description: b.shortDescription, badge: owned.has(b.id) ? "SATIN ALINDI" : "PLANINA DAHİL", href: b.book!.digitalFileUrl!, cta: "İndir", external: true };
@@ -63,7 +68,7 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
       db.product.findMany({ where: { category: "BOOK", isPublished: true, examTypeId: exam.id, book: { format: { in: [...DIGITAL_FORMATS] } } }, include: { book: true }, orderBy: { displayOrder: "asc" } }),
       db.freeResource.findMany({ where: { examTypeId: exam.id, OR: [{ kind: "E_BOOK" }, { kind: null }] }, orderBy: { createdAt: "desc" } }),
     ]);
-    return [...books.map(bookItem), ...free.map(freeResourceItem)];
+    return [...books.filter((book) => !findNetfenerEbook(book.slug)).map(bookItem), ...free.map(freeResourceItem)];
   }
 
   if (type === "konu-konu") {
@@ -104,7 +109,8 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
     db.savedExamTopic.findMany({ where: { userId: user.id, topic: { examTypeId: exam.id } }, include: { topic: true } }),
   ]);
   return [
-    ...books.map(bookItem),
+    ...books.filter((book) => !findNetfenerEbook(book.slug) || owned.has(book.id)).map(bookItem),
     ...saved.map((s) => ({ id: s.id, title: s.topic.name, description: "Derslerine eklediğin konu anlatımı", badge: "DERSLERİMDE", href: konuAnlatimHref(exam.slug, s.topic.slug), cta: "Konuyu aç" })),
   ];
 }
+
