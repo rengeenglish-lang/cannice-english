@@ -18,6 +18,9 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/api/ebooks/*": ["./content/ebooks/*.pdf"],
+  },
   images: {
     minimumCacheTTL: 2_678_400,
     formats: ["image/webp"],
@@ -46,3 +49,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+

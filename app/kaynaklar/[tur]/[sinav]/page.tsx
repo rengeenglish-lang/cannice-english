@@ -1,3 +1,5 @@
+import { NetfenerEbooks } from "@/components/resources/NetfenerEbooks";
+import { netfenerEbooksForExam } from "@/lib/netfener-ebooks";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -23,6 +25,7 @@ export default async function ResourceListPage({ params }: Props) {
   const user = await getAuthContext();
   const access = await getPlanAccess(user);
   const items = await listResources(type.slug, exam.slug, user, access);
+  const bundledBooks = type.slug === "e-kitaplar" ? netfenerEbooksForExam(exam.slug) : [];
   const needsLogin = type.slug === "kayitli-kaynaklar" && !user;
 
   return (
@@ -32,12 +35,13 @@ export default async function ResourceListPage({ params }: Props) {
         <p className="eyebrow">{type.label}</p>
         <h1 className="page-title">{exam.label}</h1>
       </PageHero>
+      <NetfenerEbooks books={bundledBooks} signedIn={Boolean(user)} canDownload={access.can("FREE_MATERIALS")} />
       {needsLogin ? (
         <div className="panel mt-8 text-center">
           <p className="font-bold">Kayıtlı kaynaklarını görmek için giriş yap.</p>
           <Link href={`/sign-in?next=${encodeURIComponent(`/kaynaklar/${type.slug}/${exam.slug}`)}`} className="primary-button mt-5">Giriş Yap</Link>
         </div>
-      ) : items.length === 0 ? (
+      ) : items.length === 0 && bundledBooks.length > 0 ? null : items.length === 0 ? (
         <div className="panel mt-8 text-center">
           <p className="font-bold">Bu bölüme {exam.label.replace(" Kaynakları", "")} için kaynak çok yakında eklenecek.</p>
           <Link href="/kaynaklar" className="secondary-button mt-5">Diğer kaynaklara göz at</Link>
@@ -65,3 +69,4 @@ export default async function ResourceListPage({ params }: Props) {
     </main>
   );
 }
+
