@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useId, useState, type ReactNode } from "react";
 import { Check, ExternalLink, FileText, MonitorPlay, CalendarClock } from "lucide-react";
-import { CHECKOUT_CONSENT_TEXT, CHECKOUT_CONSENT_VERSION, CONSENT_INFORMATION_LINKS, type ConsentRequirements } from "@/lib/checkout-consent";
+import { DEFAULT_CONSENT_CONFIGURATION, type ConsentConfiguration, CONSENT_INFORMATION_LINKS, type ConsentRequirements } from "@/lib/checkout-consent";
 
 function emphasize(text: string, phrase: string) {
   const position = text.indexOf(phrase);
@@ -11,19 +11,19 @@ function emphasize(text: string, phrase: string) {
   return <>{text.slice(0, position)}<strong className="font-bold text-[color:var(--foreground)]">{phrase}</strong>{text.slice(position + phrase.length)}</>;
 }
 
-export function CheckoutConsents({ requirements, pending = false, documentsDraft = false }: { requirements: ConsentRequirements; pending?: boolean; documentsDraft?: boolean }) {
+export function CheckoutConsents({ requirements, pending = false, documentsDraft = false, configuration = DEFAULT_CONSENT_CONFIGURATION }: { requirements: ConsentRequirements; pending?: boolean; documentsDraft?: boolean; configuration?: ConsentConfiguration }) {
   const id = useId();
   const [accepted, setAccepted] = useState<Record<string, boolean>>({});
   const choices: { key: keyof typeof CONSENT_INFORMATION_LINKS; title: string; text: ReactNode; icon: ReactNode }[] = [
-    { key: "agreementConsent", title: "Sözleşme ve Ön Bilgilendirme", text: emphasize(CHECKOUT_CONSENT_TEXT.agreement, "Mesafeli Satış Sözleşmesi'ni ve Ön Bilgilendirme Formu'nu"), icon: <FileText size={18} aria-hidden="true" /> },
-    ...(requirements.immediateDigital ? [{ key: "immediateDigitalConsent" as const, title: "Dijital İçeriğin Hemen Sunulması", text: emphasize(CHECKOUT_CONSENT_TEXT.immediateDigital, "ödeme sonrasında hemen kullanıma açılmasını"), icon: <MonitorPlay size={18} aria-hidden="true" /> }] : []),
-    ...(requirements.earlyService ? [{ key: "earlyServiceConsent" as const, title: "Canlı Hizmetin Erken Başlatılması", text: emphasize(CHECKOUT_CONSENT_TEXT.earlyService, "14 günlük cayma süresi sona ermeden önce başlamasını"), icon: <CalendarClock size={18} aria-hidden="true" /> }] : []),
+    { key: "agreementConsent", title: "Sözleşme ve Ön Bilgilendirme", text: emphasize(configuration.text.agreement, "Mesafeli Satış Sözleşmesi'ni ve Ön Bilgilendirme Formu'nu"), icon: <FileText size={18} aria-hidden="true" /> },
+    ...(requirements.immediateDigital ? [{ key: "immediateDigitalConsent" as const, title: "Dijital İçeriğin Hemen Sunulması", text: emphasize(configuration.text.immediateDigital, "ödeme sonrasında hemen kullanıma açılmasını"), icon: <MonitorPlay size={18} aria-hidden="true" /> }] : []),
+    ...(requirements.earlyService ? [{ key: "earlyServiceConsent" as const, title: "Canlı Hizmetin Erken Başlatılması", text: emphasize(configuration.text.earlyService, "14 günlük cayma süresi sona ermeden önce başlamasını"), icon: <CalendarClock size={18} aria-hidden="true" /> }] : []),
   ];
   const completed = choices.filter((choice) => accepted[choice.key]).length;
 
   return <fieldset disabled={pending} aria-describedby={`${id}-help`} className="min-w-0 space-y-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 sm:p-6">
     <legend className="px-2 text-lg font-extrabold">Sipariş Onayları</legend>
-    <input type="hidden" name="consentVersion" value={CHECKOUT_CONSENT_VERSION} />
+    <input type="hidden" name="consentVersion" value={configuration.version} />
     <div className="flex flex-wrap items-start justify-between gap-3">
       <p id={`${id}-help`} className="max-w-md text-sm leading-6 text-[color:var(--muted)]">Belgeleri inceleyin ve aşağıdaki onayları ayrı ayrı işaretleyin.</p>
       <span role="status" aria-live="polite" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--brand-soft)] px-3 py-1.5 text-xs font-bold text-[color:var(--brand)]">{completed === choices.length ? <Check size={14} aria-hidden="true" /> : null}{completed} / {choices.length} onay</span>

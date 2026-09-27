@@ -18,6 +18,8 @@ export const CONSENT_INFORMATION_LINKS = {
   ],
 } as const;
 export const CHECKOUT_ORDER_BUTTON = "ÖDEME YÜKÜMLÜLÜĞÜ DOĞURAN SİPARİŞİ ONAYLA";
+export type ConsentConfiguration = { version: string; text: { agreement: string; immediateDigital: string; earlyService: string } };
+export const DEFAULT_CONSENT_CONFIGURATION: ConsentConfiguration = { version: CHECKOUT_CONSENT_VERSION, text: CHECKOUT_CONSENT_TEXT };
 export type ConsentRequirements = { immediateDigital: boolean; earlyService: boolean };
 export type CheckoutDelivery = { productId: string; immediateDigital: boolean; liveStartsAt: Date | null };
 export function consentRequirements(deliveries: CheckoutDelivery[], now = new Date()): ConsentRequirements {
@@ -28,15 +30,15 @@ export function consentRequirements(deliveries: CheckoutDelivery[], now = new Da
   };
 }
 /** Requirements come from current server-side delivery data, never submitted flags. */
-export function acceptCheckoutConsents(requirements: ConsentRequirements, form: Pick<FormData, "get">, now = new Date()) {
-  if (form.get("consentVersion") !== CHECKOUT_CONSENT_VERSION) throw new Error("Sipariş onayları güncellendi. Lütfen sayfayı yenileyip tekrar inceleyin.");
+export function acceptCheckoutConsents(requirements: ConsentRequirements, form: Pick<FormData, "get">, now = new Date(), configuration: ConsentConfiguration = DEFAULT_CONSENT_CONFIGURATION) {
+  if (form.get("consentVersion") !== configuration.version) throw new Error("Sipariş onayları güncellendi. Lütfen sayfayı yenileyip tekrar inceleyin.");
   if (form.get("agreementConsent") !== "on") throw new Error("Sözleşme ve ön bilgilendirme onayını işaretleyin.");
   if (requirements.immediateDigital && form.get("immediateDigitalConsent") !== "on") throw new Error("Dijital içeriğin hemen sunulması için ayrı onayınız gerekiyor.");
   if (requirements.earlyService && form.get("earlyServiceConsent") !== "on") throw new Error("Hizmetin 14 gün dolmadan başlaması için ayrı onayınız gerekiyor.");
   return {
-    version: CHECKOUT_CONSENT_VERSION, acceptedAt: now.toISOString(),
-    agreement: { accepted: true, text: CHECKOUT_CONSENT_TEXT.agreement, informationLinks: [...CONSENT_INFORMATION_LINKS.agreementConsent] },
-    immediateDigital: { required: requirements.immediateDigital, accepted: requirements.immediateDigital, text: requirements.immediateDigital ? CHECKOUT_CONSENT_TEXT.immediateDigital : null, informationLinks: requirements.immediateDigital ? [...CONSENT_INFORMATION_LINKS.immediateDigitalConsent] : [] },
-    earlyService: { required: requirements.earlyService, accepted: requirements.earlyService, text: requirements.earlyService ? CHECKOUT_CONSENT_TEXT.earlyService : null, informationLinks: requirements.earlyService ? [...CONSENT_INFORMATION_LINKS.earlyServiceConsent] : [] },
+    version: configuration.version, acceptedAt: now.toISOString(),
+    agreement: { accepted: true, text: configuration.text.agreement, informationLinks: [...CONSENT_INFORMATION_LINKS.agreementConsent] },
+    immediateDigital: { required: requirements.immediateDigital, accepted: requirements.immediateDigital, text: requirements.immediateDigital ? configuration.text.immediateDigital : null, informationLinks: requirements.immediateDigital ? [...CONSENT_INFORMATION_LINKS.immediateDigitalConsent] : [] },
+    earlyService: { required: requirements.earlyService, accepted: requirements.earlyService, text: requirements.earlyService ? configuration.text.earlyService : null, informationLinks: requirements.earlyService ? [...CONSENT_INFORMATION_LINKS.earlyServiceConsent] : [] },
   };
 }

@@ -1,17 +1,19 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { LEGAL_DOCS } from "@/content/legal-terms";
+import { getPublishedLegalContent } from "@/server/services/legal-content.service";
 
 type Props = { params: Promise<{ doc: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { doc } = await params;
-  return { title: LEGAL_DOCS[doc]?.title ?? "Belge Bulunamadı" };
+  const { documents } = await getPublishedLegalContent();
+  return { title: documents[doc]?.title ?? "Belge Bulunamadı" };
 }
 
 export default async function LegalDocPage({ params }: Props) {
   const { doc } = await params;
-  const entry = LEGAL_DOCS[doc];
+  const { documents } = await getPublishedLegalContent();
+  const entry = documents[doc];
   if (!entry) notFound();
 
   return (

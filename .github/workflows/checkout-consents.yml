@@ -1,5 +1,15 @@
 name: Checkout consent verification
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/checkout/**'
+      - 'app/legal/**'
+      - 'app/(dashboard)/admin/legal/**'
+      - 'components/checkout/**'
+      - 'lib/checkout-consent.ts'
+      - 'server/services/legal-content.service.ts'
+      - 'scripts/verify-checkout-release.mjs'
   pull_request:
     paths:
       - 'app/actions/checkout.ts'
@@ -11,11 +21,18 @@ on:
       - 'server/services/checkout-consent.service.ts'
       - 'prisma/**'
       - 'tests/checkout-consent.test.ts'
+      - 'tests/legal-content-database.test.ts'
+      - 'lib/legal-content.ts'
+      - 'server/services/legal-content.service.ts'
+      - 'app/actions/admin-legal.ts'
+      - 'app/(dashboard)/admin/legal/**'
+      - 'components/admin/LegalContentEditor.tsx'
       - '.github/workflows/checkout-consents.yml'
 permissions:
   contents: read
 jobs:
   verify:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     services:
@@ -42,5 +59,21 @@ jobs:
       - run: npx prisma validate
       - run: npm run typecheck
       - run: node --import tsx --test tests/checkout-consent.test.ts
+      - name: Verify legal editor authorization and publishing against isolated database
+        run: |
+          npx prisma migrate deploy
+          node --conditions=react-server --import tsx --test tests/legal-content-database.test.ts
       - name: Apply migrations and verify production build
         run: npm run build
+
+  production-smoke:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Wait for and verify the production checkout release
+        run: node scripts/verify-checkout-release.mjs

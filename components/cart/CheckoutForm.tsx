@@ -1,13 +1,13 @@
 "use client";
 
 import { CheckoutConsents } from "@/components/checkout/CheckoutConsents";
-import { CHECKOUT_ORDER_BUTTON, type ConsentRequirements } from "@/lib/checkout-consent";
+import { CHECKOUT_ORDER_BUTTON, type ConsentConfiguration, type ConsentRequirements } from "@/lib/checkout-consent";
 import { useActionState, useState } from "react";
 import { placeOrderAction, type CheckoutFormState } from "@/app/actions/checkout";
 
 const initialState: CheckoutFormState = { status: "idle" };
 
-export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements, documentsDraft = false }: { isGuest: boolean; defaultCoupon?: string; consentRequirements: ConsentRequirements; documentsDraft?: boolean }) {
+export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements, documentsDraft = false, consentConfiguration }: { isGuest: boolean; defaultCoupon?: string; consentRequirements: ConsentRequirements; documentsDraft?: boolean; consentConfiguration: ConsentConfiguration }) {
   const [state, formAction, pending] = useActionState(placeOrderAction, initialState);
   const [paymentMethod, setPaymentMethod] = useState<"MANUAL" | "PAYPAL">("PAYPAL");
 
@@ -64,7 +64,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements,
           Siparişin &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz banka havalesi bilgileri için seninle iletişime geçecek.
         </p>
       ) : null}
-      <CheckoutConsents requirements={consentRequirements} pending={pending} documentsDraft={documentsDraft} />
+      <CheckoutConsents requirements={consentRequirements} pending={pending} documentsDraft={documentsDraft} configuration={consentConfiguration} />
       {state.status === "error" ? <p role="alert" className="rounded-xl border border-[color:var(--danger)] p-3 text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       <p className="text-xs leading-5 text-[color:var(--muted)]">{paymentMethod === "PAYPAL" ? "Siparişi onayladıktan sonra ödeme adımına geçersiniz." : "Siparişiniz ödeme bekler. Erişiminiz, havaleniz doğrulandıktan sonra açılır."}</p>
       <button type="submit" disabled={pending} className="primary-button min-h-14 w-full justify-center whitespace-normal px-4 py-4 text-center text-sm leading-6 disabled:cursor-wait disabled:opacity-60">

@@ -84,6 +84,7 @@ const STAFF = [
   ["/admin/mesajlar", "Öğrenci mesajları"],
   ["/admin/kaynaklar", "Kaynaklar"],
   ["/admin/settings", "Ödeme Ayarları"],
+  ["/admin/legal", "Hukuki Belgeler"],
 ];
 
 function SidebarContent({
@@ -145,7 +146,7 @@ function SidebarContent({
             <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
               YÖNETİM
             </p>
-            {STAFF.filter(([href]) => role === "ADMIN" || href !== "/admin/group-availability").map(([href, label]) => (
+            {STAFF.filter(([href]) => role === "ADMIN" || !["/admin/group-availability", "/admin/legal"].includes(href)).map(([href, label]) => (
               <Link
                 key={href}
                 href={href}

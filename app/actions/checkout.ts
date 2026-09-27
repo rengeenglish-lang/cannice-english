@@ -1,7 +1,7 @@
 "use server";
 
 import { acceptCheckoutConsents } from "@/lib/checkout-consent";
-import { LEGAL_DOCS } from "@/content/legal-terms";
+import { getPublishedLegalContent } from "@/server/services/legal-content.service";
 import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
 import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { redirect } from "next/navigation";
@@ -32,11 +32,12 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
 
   let checkoutConsent;
   try {
+    const legal = await getPublishedLegalContent();
     const now = new Date();
     const { requirements, deliveries } = await getCheckoutConsentRequirements(cart.items, now);
-    checkoutConsent = { ...acceptCheckoutConsents(requirements, formData, now),
+    checkoutConsent = { ...acceptCheckoutConsents(requirements, formData, now, legal.configuration),
       deliveries: deliveries.map((item) => ({ ...item, liveStartsAt: item.liveStartsAt?.toISOString() ?? null })),
-      documents: ["mesafeli-satis-sozlesmesi", "on-bilgilendirme-formu", "iade-politikasi"].map((key) => ({ key, title: LEGAL_DOCS[key].title, body: LEGAL_DOCS[key].body, sections: LEGAL_DOCS[key].sections ?? [], draft: LEGAL_DOCS[key].draft !== false })),
+      documents: ["mesafeli-satis-sozlesmesi", "on-bilgilendirme-formu", "iade-politikasi"].map((key) => ({ key, title: legal.documents[key].title, body: legal.documents[key].body, sections: legal.documents[key].sections ?? [], draft: legal.documents[key].draft !== false })),
     };
   } catch (error) { return { status: "error", message: error instanceof Error ? error.message : "Sipariş onaylarını kontrol edin." }; }
 
