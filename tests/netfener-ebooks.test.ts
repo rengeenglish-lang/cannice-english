@@ -7,7 +7,7 @@ import ts from "typescript";
 import { NETFENER_EBOOKS, findNetfenerEbook, netfenerEbooksForExam } from "../lib/netfener-ebooks";
 
 test("catalogue files exist and match the supported exam groups", async () => {
-  assert.equal(NETFENER_EBOOKS.length, 2);
+  assert.equal(NETFENER_EBOOKS.length, 3);
   for (const book of NETFENER_EBOOKS) {
     const pdf = await fs.readFile(path.join(process.cwd(), "content/ebooks", book.filename));
     assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
@@ -15,6 +15,7 @@ test("catalogue files exist and match the supported exam groups", async () => {
   }
   assert.equal(netfenerEbooksForExam("yokdil-saglik-bilimleri").length, 2);
   assert.deepEqual(netfenerEbooksForExam("yds").map((b) => b.slug), ["cumlenin-icini-gor"]);
+  assert.deepEqual(netfenerEbooksForExam("yokdil-fen-bilimleri").map((b) => b.slug), ["cumlenin-icini-gor", "yokdil-fen"]);
   assert.equal(netfenerEbooksForExam("ielts").length, 0);
   assert.equal(findNetfenerEbook("../../secret"), undefined);
 });

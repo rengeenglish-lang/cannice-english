@@ -20,6 +20,16 @@ export const NETFENER_EBOOKS = [
     filename: "netfener-yokdil-saglik.pdf",
     exams: ["yokdil-saglik-bilimleri"],
   },
+  {
+    slug: "yokdil-fen",
+    title: "YÖKDİL Fen Bilimleri",
+    subtitle: "Akademik Dil ve Sınav Uygulamaları",
+    description: "16 bölüm, 155 özgün soru, 80 soruluk tam deneme, bilimsel kelime çalışmaları ve Türkçe açıklamalı çözümlerle fen bilimleri için sınava hazırlık.",
+    pages: 100,
+    cover: "/ebooks/yokdil-fen.jpg",
+    filename: "netfener-yokdil-fen.pdf",
+    exams: ["yokdil-fen-bilimleri"],
+  },
 ] as const;
 
 export type NetfenerEbook = (typeof NETFENER_EBOOKS)[number];
