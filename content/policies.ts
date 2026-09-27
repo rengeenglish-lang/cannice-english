@@ -148,7 +148,7 @@ export const TERMS_OF_USE: LegalDoc = {
     {
       heading: "7. Ödemeler",
       paragraphs: [
-        "Fiyatlar Türk lirası olarak ve KDV dahil gösterilir. Ödemeler PayPal veya banka havalesi ile yapılabilir. PayPal ödemelerinde tutar, gösterilen TL fiyatın güncel kur üzerinden ABD doları karşılığı olarak tahsil edilir.",
+        "Fiyatlar Türk lirası olarak ve KDV dahil gösterilir. Ödemeler güvenli ödeme altyapısı üzerinden gerçekleştirilir.",
         "Havale ile verilen siparişlerde erişim, ödemenin ekibimiz tarafından onaylanmasıyla açılır. İadeler İade Politikası'na göre yapılır.",
       ],
     },
