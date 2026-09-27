@@ -36,7 +36,7 @@ export const NETFENER_EBOOKS = [
     subtitle: "Akademik Dil ve Sınav Uygulamaları",
     description: "16 bölüm, 139 özgün soru, 80 soruluk tam deneme, bağlamsal kelime çalışmaları ve Türkçe açıklamalı çözümlerle sosyal bilimler için sınava hazırlık.",
     pages: 96,
-    cover: "/ebooks/yokdil-sosyal.jpg",
+    cover: "/ebooks/yokdil-sosyal-v2.jpg",
     filename: "netfener-yokdil-sosyal.pdf",
     exams: ["yokdil-sosyal-bilimler"],
   },

@@ -31,7 +31,7 @@ export default async function EbookPreviewPage({ params }: Props) {
     <ol className="mx-auto mt-10 max-w-[820px] space-y-8" aria-label="Kitabın ilk üç sayfası">
       {[1, 2, 3].map((page) => <li key={page}>
         <p className="mb-3 text-center text-sm font-semibold">Sayfa {page} / 3</p>
-        <Image src={`/ebooks/previews/${book.slug}-${page}.jpg`} alt={`${book.title}, önizleme sayfası ${page}`} width={827} height={1170} sizes="(max-width: 860px) 100vw, 820px" className="h-auto w-full rounded-lg shadow-lg" />
+        <Image src={`/ebooks/previews/${book.slug}-${page}.jpg?cover=${encodeURIComponent(book.cover)}`} alt={`${book.title}, önizleme sayfası ${page}`} width={827} height={1170} sizes="(max-width: 860px) 100vw, 820px" className="h-auto w-full rounded-lg shadow-lg" />
       </li>)}
     </ol>
     <section className="panel mt-10 text-center" aria-label="Tam kitaba erişim">
