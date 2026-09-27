@@ -19,7 +19,7 @@ export const REFUND_POLICY: LegalDoc = {
       paragraphs: [
         "Plan kapsamında erişilen kaynaklar, kitaplar, konu anlatımları ve canlı grup dersleri yalnızca satın alınan planın iade koşullarına tabidir. Bu içeriklerin ayrı satışlarına ilişkin iade süreleri ve iade yapılmaması kuralı, plan kapsamında sağlanan erişime uygulanmaz. Plandan bağımsız olarak ayrıca satın alınan ürün ve hizmetlerde ise ilgili ürün veya hizmetin kendi iade koşulları geçerlidir.",
         "Netfener’in isteğe bağlı iade politikası kapsamında Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 takvim günü; Çırak ve Uzman planları için 14 takvim günü içinde iade talep edilebilir. Ayrı satın alınan kaynaklar ve kitaplar için isteğe bağlı iade yapılmaz. Ayrı satın alınan canlı grup derslerinin koşulları aşağıda ayrıca açıklanmıştır.",
-        "Bu politikadaki başvuru süreleri ödemenin onaylandığı tarihten itibaren hesaplanır. PayPal için ödemenin tamamlandığı, havale için ödemenin onaylandığı tarih esas alınır. İlgili süre geçtikten sonra isteğe bağlı iade talebi kabul edilmez. Yasal cayma hakkının bulunduğu durumlarda kanuni süre ve başlangıç tarihi uygulanır; bu politika yasal hakları kısaltmaz.",
+        "Ayrı satın alınan canlı grup derslerindeki ilk 7 günlük deneme süresi, öğrencinin kayıtlı olduğu ilk planlanan ders tarihinde başlar. Diğer başvuru süreleri ödemenin onaylandığı tarihten itibaren hesaplanır. PayPal için ödemenin tamamlandığı, havale için ödemenin onaylandığı tarih esas alınır. İlgili süre geçtikten sonra genel isteğe bağlı iade talebi kabul edilmez; aşağıdaki hizmetin sunulamaması ve duruma özel iade koşulları saklıdır. Yasal cayma hakkının bulunduğu durumlarda kanuni süre ve başlangıç tarihi uygulanır; bu politika yasal hakları kısaltmaz.",
       ],
     },
     {
@@ -34,9 +34,11 @@ export const REFUND_POLICY: LegalDoc = {
     {
       heading: "3. Ayrı satın alınan canlı grup dersleri",
       paragraphs: [
-        "Plandan bağımsız olarak satın alınan canlı grup dersleri aylık olarak ücretlendirilir ve her ödeme bir takvim ayını kapsar. Her aylık ödeme için, ödeme tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.",
-        "Aylık dönem içinde henüz hiçbir ders gerçekleşmemişse ödemenin tamamı iade edilir. Ders gerçekleşmişse, o döneme ait gerçekleşmiş derslerin bedeli (katılıp katılmadığınızdan bağımsız olarak) düşülür ve kalan tutar iade edilir.",
-        "Aylık ödemenizi yapmadığınızda grubunuza erişim durur; ödenmemiş dönemler için sizden herhangi bir ücret talep edilmez ve iade konusu olmaz.",
+        "Plandan bağımsız olarak satın alınan canlı grup derslerinde, öğrencinin kayıtlı olduğu ilk planlanan ders tarihinden itibaren 7 takvim günü öğretmeni tanıma, dersleri gözlemleme ve deneme süresidir. Bu süre içinde başvurulduğunda, derslere katılmış olsanız da ilgili canlı grup dersi kaydı için ödediğiniz tutarın tamamı kesintisiz iade edilir. Deneme süresi aynı kaydın sonraki aylık ödemelerinde yeniden başlamaz.",
+        "İlk 7 günlük deneme süresinden sonra, satın alma öncesinde öğrenciye sunulan ve kabul edilen devam taahhüdü kapsamında genel bir tam iade hakkı bulunmaz; yalnızca bu politikadaki duruma özel iadeler uygulanır. Bu koşul kanundan doğan cayma, fesih ve ayıplı hizmet haklarını sınırlamaz.",
+        "Eğitmen herhangi bir nedenle dersi gerçekleştiremezse, deneme süresi geçmiş olsa da yalnızca gerçekleştirilmeyen ders veya derslerin bedeli iade edilir. Hesaplama aşağıdaki hizmetin sunulamaması bölümünde açıklanmıştır; gerçekleşmiş derslerin bedeli bu iadeye dahil edilmez.",
+        "Grup dersleri ortak bir programa ve katılım sorumluluğuna dayanır. Öğrencinin kişisel bir nedenle derse katılamaması, ilk 7 günlük tam iade hakkı ve kanuni haklar saklı kalmak üzere, o ders için iade hakkı doğurmaz. Birden fazla dersi kaçıran öğrenciler ek ders hakkından yararlanmak için Yardım Masası’na başvurabilir; ek dersin zamanı ve düzenlemesi eğitmenle birlikte belirlenir.",
+        "Canlı grup dersleri aylık olarak ücretlendirilir ve her ödeme bir takvim ayını kapsar. Plan kapsamında sunulan canlı grup derslerinde ise yalnızca ilgili planın iade koşulları uygulanır.",
       ],
     },
     {
@@ -56,7 +58,7 @@ export const REFUND_POLICY: LegalDoc = {
     {
       heading: "6. Hizmetin sunulamaması",
       paragraphs: [
-        "Bir canlı ders bizim tarafımızdan iptal edilir ve telafi dersi yapılmazsa, o dersin bedeli süreye bakılmaksızın iade edilir veya bir sonraki aylık ödemenizden düşülür.",
+        "Ayrı satın alınan canlı grup derslerinde eğitmen herhangi bir nedenle dersi gerçekleştiremezse, 7 günlük deneme süresi geçmiş olsa da yalnızca gerçekleştirilmeyen ders veya derslerin bedeli için iade talep edilebilir. İade tutarı, ilgili dönem için fiilen ödenen tutarın o dönemde planlanan ders sayısına bölünmesi ve gerçekleştirilmeyen ders sayısıyla çarpılmasıyla hesaplanır. Bu durum, gerçekleşmiş dersleri de kapsayan tam dönem iadesi doğurmaz. Plan kapsamında sunulan derslerde planın iade koşulları geçerlidir. Kanundan doğan haklar saklıdır.",
         "Teknik bir arıza nedeniyle satın aldığınız içeriğe uzun süre erişemezseniz ve sorunu makul bir sürede çözemezsek, erişemediğiniz sürenin bedelini iade ederiz ya da planınızın süresini aynı gün sayısı kadar uzatırız.",
       ],
     },
@@ -72,7 +74,7 @@ export const REFUND_POLICY: LegalDoc = {
       paragraphs: [
         "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde ödemeyi yaptığınız yöntemle gerçekleştirilir: PayPal ile yapılan ödemeler PayPal hesabınıza veya PayPal'da kullandığınız karta, banka havalesiyle yapılan ödemeler ise sizin adınıza kayıtlı ve bize bildirdiğiniz IBAN'a iade edilir.",
         "PayPal ödemeleri ABD doları üzerinden tahsil edildiğinden iade de aynı para birimiyle yapılır; kur farkları ve bankanızın uyguladığı ücretler Netfener'in kontrolünde değildir.",
-        "İade tamamlandığında ilgili plan, grup dersi veya ürüne erişiminiz kapatılır ve durum hesabınıza bildirim olarak iletilir.",
+        "Tam iade tamamlandığında ilgili plan, grup dersi veya ürüne erişiminiz kapatılır. Yalnızca gerçekleştirilmeyen canlı derslere ilişkin kısmi iadede, kalan derslere erişiminiz devam eder. İade durumu hesabınıza bildirim olarak iletilir.",
       ],
     },
     {

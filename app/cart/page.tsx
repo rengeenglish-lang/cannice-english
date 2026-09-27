@@ -182,7 +182,7 @@ export default async function CartPage({ searchParams }: Props) {
               <Link href="/checkout" className="primary-button w-full justify-center">Ödemeye Geç</Link>
             )}
             <p className="text-xs text-slate-500">
-              Başlangıç planında 7 gün; Çırak ve Uzman planlarında 14 gün içinde iade talep edebilirsin. Plan kapsamındaki tüm içerikler yalnızca planın iade koşullarına tabidir. Ayrı satın alınan konu anlatımlarında 7 gün, canlı grup derslerinde 14 gün içinde başvuru yapılabilir; ayrı satın alınan kaynaklar ve kitaplarda isteğe bağlı iade yoktur. Koşulları karşılayan iadeler başvurudan itibaren en geç 7 takvim günü içinde yapılır. Yasal hakların saklıdır. <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link>
+              Başlangıç planında 7 gün; Çırak ve Uzman planlarında 14 gün içinde iade talep edebilirsin. Plan kapsamındaki tüm içerikler yalnızca planın iade koşullarına tabidir. Ayrı satın alınan konu anlatımlarında 7 gün içinde başvuru yapılabilir. Ayrı satın alınan canlı grup derslerinde ilk planlanan dersten itibaren 7 günlük deneme süresinde tam iade; sonrasında yalnızca duruma özel iade uygulanır; ayrı satın alınan kaynaklar ve kitaplarda isteğe bağlı iade yoktur. Koşulları karşılayan iadeler başvurudan itibaren en geç 7 takvim günü içinde yapılır. Yasal hakların saklıdır. <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link>
             </p>
           </aside>
         </div>

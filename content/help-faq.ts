@@ -110,11 +110,11 @@ export const HELP_FAQ: FaqCategory[] = [
       },
       {
         q: "Param ne zaman ve nasıl iade edilir?",
-        a: "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde, ödemeyi yaptığınız yöntemle yapılır: PayPal ödemeleri PayPal hesabınıza/kartınıza, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İnceleme ve onay bu süreyi yeniden başlatmaz. İade tamamlandığında ilgili plan, ders veya ürüne erişiminiz kapatılır.",
+        a: "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde, ödemeyi yaptığınız yöntemle yapılır: PayPal ödemeleri PayPal hesabınıza/kartınıza, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İnceleme ve onay bu süreyi yeniden başlatmaz. Tam iadede ilgili plan, ders veya ürüne erişiminiz kapatılır; yalnızca gerçekleştirilmeyen canlı derslere ilişkin kısmi iadede kalan derslere erişiminiz devam eder.",
       },
       {
         q: "Canlı grup dersi ödemem iade edilir mi?",
-        a: "Ayrı satın alınan canlı grup derslerinde aylık ödeme, ödeme tarihinden itibaren 14 gün içinde iade edilebilir; o döneme ait gerçekleşmiş derslerin bedeli düşülerek kalan tutar iade edilir. Plan kapsamında sunulan canlı grup derslerinde ise yalnızca planın iade koşulları uygulanır.",
+        a: "Ayrı satın alınan canlı grup derslerinde ilk planlanan ders tarihinden itibaren 7 takvim günü öğretmeni tanıma ve deneme süresidir; bu sürede derslere katılmış olsanız da tam iade alabilirsiniz. Sonraki aylık ödemeler deneme süresini yeniden başlatmaz. Bu süreden sonra genel tam iade yapılmaz; eğitmenin herhangi bir nedenle gerçekleştiremediği derslerin bedeli iade edilir. Öğrencinin devamsızlığı iade hakkı doğurmaz; birden fazla dersi kaçıran öğrenciler ek ders için Yardım Masası’na başvurabilir. Plan kapsamındaki derslerde yalnızca planın iade koşulları geçerlidir. Kanuni haklar saklıdır.",
       },
     ],
   },
