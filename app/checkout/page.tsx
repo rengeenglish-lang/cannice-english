@@ -1,3 +1,5 @@
+import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
+import { getPublishedLegalContent } from "@/server/services/legal-content.service";
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { auth } from "@/auth";
@@ -11,10 +13,11 @@ import { CheckoutForm } from "@/components/cart/CheckoutForm";
 export const metadata: Metadata = { title: "Ödeme" };
 
 export default async function CheckoutPage() {
-  const session = await auth();
+  const [session, legal] = await Promise.all([auth(), getPublishedLegalContent()]);
   const cart = await findCart(session?.user?.id);
   if (cart) await refreshCartPrices(cart);
   const items = cart?.items ?? [];
+  const { requirements } = await getCheckoutConsentRequirements(items);
   const couponCode = (await cookies()).get(CART_COUPON_COOKIE)?.value ?? "";
   const total = items.reduce(
     (sum, item) => sum + Number(item.unitPriceSnapshot) * item.quantity,
@@ -39,7 +42,7 @@ export default async function CheckoutPage() {
         </div>
       </div>
       <div className="mt-6">
-        <CheckoutForm isGuest={!session?.user} defaultCoupon={couponCode} />
+        <CheckoutForm isGuest={!session?.user} defaultCoupon={couponCode} consentRequirements={requirements} consentConfiguration={legal.configuration} documentsDraft={["mesafeli-satis-sozlesmesi", "on-bilgilendirme-formu"].some((key) => legal.documents[key].draft !== false)} />
       </div>
     </main>
   );
