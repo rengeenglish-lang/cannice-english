@@ -182,7 +182,7 @@ export default async function CartPage({ searchParams }: Props) {
               <Link href="/checkout" className="primary-button w-full justify-center">Ödemeye Geç</Link>
             )}
             <p className="text-xs text-slate-500">
-              Satın alma sonrası 14 gün içinde iade talep edebilirsin. <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link>
+              Başlangıç planı ve konu anlatımlarında 7 gün; Çırak ve Uzman planlarında 14 gün içinde iade talep edebilirsin. Kaynaklar ve kitaplarda isteğe bağlı iade yoktur. Yasal hakların saklıdır. <Link href="/legal/iade-politikasi" className="underline">İade Politikası</Link>
             </p>
           </aside>
         </div>

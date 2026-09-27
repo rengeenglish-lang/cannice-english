@@ -102,7 +102,7 @@ export const HELP_FAQ: FaqCategory[] = [
     items: [
       {
         q: "İade hakkım var mı?",
-        a: "Evet. Ödemenizin onaylandığı tarihten itibaren 14 gün içinde iade talep edebilirsiniz. Hangi durumda ne kadar iade yapıldığı İade Politikası sayfamızda ayrıntılı olarak açıklanmıştır.",
+        a: "Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 gün; Çırak ve Uzman planları için 14 gün içinde iade talep edebilirsiniz. Süre ödemenin onaylandığı tarihten itibaren hesaplanır. Kaynaklar ve kitaplarda isteğe bağlı iade yoktur; yasal haklar saklıdır. Ayrıntılar İade Politikası sayfamızdadır.",
       },
       {
         q: "İade talebini nasıl oluştururum?",

@@ -4,27 +4,27 @@ import { SUPPORT_EMAIL } from "@/lib/social";
 /**
  * İade Politikası and Kullanım Koşulları. Written to match how the platform actually works:
  * plans (lib/plans.ts), monthly group billing (lib/billing.ts), PayPal + havale checkout,
- * refunds processed manually by staff (orders.service.ts → markOrderRefunded), 14-day window.
+ * refunds processed manually by staff (orders.service.ts → markOrderRefunded), product-specific windows.
  * Have a lawyer review before relying on them.
  */
 
 export const REFUND_POLICY: LegalDoc = {
   title: "İade Politikası",
-  updatedAt: "23 Eylül 2026",
+  updatedAt: "27 Eylül 2026",
   draft: false,
-  body: "Bu politika, Netfener üzerinden satın aldığınız planlar, canlı grup dersleri, paketler ve kitaplar için hangi durumlarda ve nasıl iade yapıldığını açıklar. Amacımız, memnun kalmadığınız bir satın alımdan adil ve hızlı bir şekilde vazgeçebilmenizi sağlamaktır.",
+  body: "Bu politika, Netfener üzerinden satın aldığınız planlar, konu anlatımları, canlı grup dersleri, kaynaklar ve kitaplar için hangi durumlarda ve nasıl iade yapıldığını açıklar. Amacımız, memnun kalmadığınız bir satın alımdan adil ve hızlı bir şekilde vazgeçebilmenizi sağlamaktır.",
   sections: [
     {
       heading: "1. İade süresi",
       paragraphs: [
-        "Ödemenizin onaylandığı tarihten itibaren 14 gün içinde iade talep edebilirsiniz. Süre, PayPal ödemelerinde ödemenin tamamlandığı, banka havalesi ödemelerinde ise ödemenin ekibimiz tarafından onaylandığı gün başlar.",
-        "14 günlük süre dolduktan sonra yapılan talepler, yasal olarak zorunlu tutulan haller ve aşağıdaki “Hizmetin sunulamaması” başlığındaki durumlar dışında kabul edilmez.",
+        "Netfener’in isteğe bağlı iade politikası kapsamında Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 takvim günü; Çırak ve Uzman planları için 14 takvim günü içinde iade talep edilebilir. Kaynaklar ve kitaplar için isteğe bağlı iade yapılmaz. Canlı grup derslerinin koşulları aşağıda ayrıca açıklanmıştır.",
+        "Bu politikadaki başvuru süreleri ödemenin onaylandığı tarihten itibaren hesaplanır. PayPal için ödemenin tamamlandığı, havale için ödemenin onaylandığı tarih esas alınır. İlgili süre geçtikten sonra isteğe bağlı iade talebi kabul edilmez. Yasal cayma hakkının bulunduğu durumlarda kanuni süre ve başlangıç tarihi uygulanır; bu politika yasal hakları kısaltmaz.",
       ],
     },
     {
       heading: "2. Deneme sınavı planları (Başlangıç, Çırak, Uzman)",
       paragraphs: [
-        "Plan satın aldıktan sonraki 14 gün içinde, planınızı kullanmaya başlamamış olsanız da başlamış olsanız da iade talep edebilirsiniz.",
+        "Başlangıç planı için ödemenin onayından itibaren 7 gün; Çırak ve Uzman planları için 14 gün içinde, planı kullanmaya başlamış olsanız da başlamamış olsanız da iade talep edebilirsiniz.",
         "Planın hiç kullanılmadığı durumlarda (hiç deneme başlatılmamış, konu anlatımı dersi tamamlanmamış, pratik seti çözülmemiş ve plana dahil e-kitap indirilmemişse) ödediğiniz tutarın tamamı iade edilir.",
         "Plan kullanılmaya başlandıysa, planın toplam süresine oranla kullandığınız günlerin bedeli düşülerek kalan tutar iade edilir. Plana dahil olarak indirdiğiniz e-kitaplar dijital içerik olarak size teslim edildiğinden, bu e-kitapların sitedeki liste fiyatları da iade tutarından düşülür.",
         "Uzman planla ücretsiz kullandığınız canlı ders haklarından (konuşma kulübü, sistematik canlı ders, istediğiniz canlı ders) gerçekleşmiş derslerin bedeli, ilgili grubun aylık ücreti üzerinden orantılı olarak düşülür.",
@@ -40,28 +40,35 @@ export const REFUND_POLICY: LegalDoc = {
       ],
     },
     {
-      heading: "4. Kitaplar, e-kitaplar ve çalışma paketleri",
+      heading: "4. Kaynaklar ve kitaplar",
       paragraphs: [
-        "Dijital (PDF) kitaplar ve çalışma paketleri, indirme bağlantısı size sunulmadan veya kayıtlı içeriğe erişim başlamadan önce 14 gün içinde koşulsuz iade edilebilir. İçerik indirildikten veya izlenmeye başlandıktan sonra, Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda anında ifa edilen dijital içeriklerde cayma hakkı kullanılamaz; bu durumda iade yapılmaz.",
-        "Basılı kitaplarda, ürünü teslim aldığınız tarihten itibaren 14 gün içinde kullanılmamış ve yeniden satılabilir durumda olmak kaydıyla iade edebilirsiniz. İade kargo bilgileri talebiniz üzerine tarafınıza iletilir.",
+        "Kaynaklar, çalışma materyalleri ve kitaplar için isteğe bağlı iade yapılmaz. Elektronik ortamda anında teslim edilen PDF/e-kitap ve diğer dijital kaynaklarda, Mesafeli Sözleşmeler Yönetmeliği’ndeki cayma hakkı istisnasının koşulları sağlandığında cayma hakkı kullanılamaz.",
+        "Bu kural, ayıplı veya teslim edilmeyen içeriklere ilişkin yasal hakları ortadan kaldırmaz. Basılı kitaplarda ve cayma hakkı istisnasına girmeyen diğer satışlarda kanuni cayma ve iade hakları geçerlidir. Ayrı satın alınan konu anlatımları aşağıdaki 7 günlük iade koşuluna tabidir.",
       ],
     },
     {
-      heading: "5. Hizmetin sunulamaması",
+      heading: "5. Konu anlatımları",
+      paragraphs: [
+        "Ayrı satın alınan konu anlatımları için ödemenin onaylandığı tarihten itibaren 7 takvim günü içinde iade talep edilebilir. Talep süresi içinde Yardım Masası üzerinden başvuru yapılması yeterlidir; incelemenin bu süre içinde tamamlanması gerekmez.",
+        "Bir planın içinde sunulan konu anlatımları için ayrı bir iade süresi başlamaz; satın alınan planın iade süresi ve iade tutarına ilişkin koşulları uygulanır. Kanundan doğan haklar saklıdır.",
+      ],
+    },
+    {
+      heading: "6. Hizmetin sunulamaması",
       paragraphs: [
         "Bir canlı ders bizim tarafımızdan iptal edilir ve telafi dersi yapılmazsa, o dersin bedeli süreye bakılmaksızın iade edilir veya bir sonraki aylık ödemenizden düşülür.",
         "Teknik bir arıza nedeniyle satın aldığınız içeriğe uzun süre erişemezseniz ve sorunu makul bir sürede çözemezsek, erişemediğiniz sürenin bedelini iade ederiz ya da planınızın süresini aynı gün sayısı kadar uzatırız.",
       ],
     },
     {
-      heading: "6. İade talebi nasıl yapılır?",
+      heading: "7. İade talebi nasıl yapılır?",
       paragraphs: [
         `Yardım Masası'ndaki canlı destek üzerinden veya ${SUPPORT_EMAIL} adresine e-posta göndererek iade talebinde bulunabilirsiniz. Talebinizde hesabınıza kayıtlı e-posta adresini, sipariş numaranızı (Siparişlerim sayfasında yer alır) ve varsa iade gerekçenizi belirtin.`,
         "Talebinizi en geç 3 iş günü içinde inceleyip iade tutarını ve varsa yapılan kesintileri size yazılı olarak bildiririz.",
       ],
     },
     {
-      heading: "7. İade ödemesi",
+      heading: "8. İade ödemesi",
       paragraphs: [
         "Onaylanan iadeler, onay tarihinden itibaren en geç 14 gün içinde ödemeyi yaptığınız yöntemle gerçekleştirilir: PayPal ile yapılan ödemeler PayPal hesabınıza veya PayPal'da kullandığınız karta, banka havalesiyle yapılan ödemeler ise sizin adınıza kayıtlı ve bize bildirdiğiniz IBAN'a iade edilir.",
         "PayPal ödemeleri ABD doları üzerinden tahsil edildiğinden iade de aynı para birimiyle yapılır; kur farkları ve bankanızın uyguladığı ücretler Netfener'in kontrolünde değildir.",
@@ -69,14 +76,15 @@ export const REFUND_POLICY: LegalDoc = {
       ],
     },
     {
-      heading: "8. İndirimli ve kuponlu alımlar",
+      heading: "9. İndirimli ve kuponlu alımlar",
       paragraphs: [
         "Kupon veya kampanya indirimiyle yapılan alımlarda iade tutarı, fiilen ödediğiniz tutar üzerinden hesaplanır. Kullanılan kupon iade ile birlikte yeniden kullanıma açılmaz.",
       ],
     },
     {
-      heading: "9. İletişim",
+      heading: "10. İletişim ve yürürlük",
       paragraphs: [
+        "Bu güncelleme 27 Eylül 2026 ve sonrasında yapılan satın alımlar için geçerlidir. Daha önceki satın alımlarda, satın alma sırasında sunulan iade koşulları geriye dönük olarak daraltılmaz.",
         `Bu politikayla ilgili her türlü soru için Yardım Masası'na veya ${SUPPORT_EMAIL} adresine ulaşabilirsiniz. Bu politika, yürürlükteki tüketici mevzuatından doğan haklarınızı sınırlamaz; mevzuatın daha lehinize olduğu durumlarda mevzuat hükümleri uygulanır.`,
       ],
     },
