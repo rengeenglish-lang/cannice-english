@@ -17,7 +17,8 @@ export const REFUND_POLICY: LegalDoc = {
     {
       heading: "1. İade süresi",
       paragraphs: [
-        "Netfener’in isteğe bağlı iade politikası kapsamında Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 takvim günü; Çırak ve Uzman planları için 14 takvim günü içinde iade talep edilebilir. Kaynaklar ve kitaplar için isteğe bağlı iade yapılmaz. Canlı grup derslerinin koşulları aşağıda ayrıca açıklanmıştır.",
+        "Plan kapsamında erişilen kaynaklar, kitaplar, konu anlatımları ve canlı grup dersleri yalnızca satın alınan planın iade koşullarına tabidir. Bu içeriklerin ayrı satışlarına ilişkin iade süreleri ve iade yapılmaması kuralı, plan kapsamında sağlanan erişime uygulanmaz. Plandan bağımsız olarak ayrıca satın alınan ürün ve hizmetlerde ise ilgili ürün veya hizmetin kendi iade koşulları geçerlidir.",
+        "Netfener’in isteğe bağlı iade politikası kapsamında Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 takvim günü; Çırak ve Uzman planları için 14 takvim günü içinde iade talep edilebilir. Ayrı satın alınan kaynaklar ve kitaplar için isteğe bağlı iade yapılmaz. Ayrı satın alınan canlı grup derslerinin koşulları aşağıda ayrıca açıklanmıştır.",
         "Bu politikadaki başvuru süreleri ödemenin onaylandığı tarihten itibaren hesaplanır. PayPal için ödemenin tamamlandığı, havale için ödemenin onaylandığı tarih esas alınır. İlgili süre geçtikten sonra isteğe bağlı iade talebi kabul edilmez. Yasal cayma hakkının bulunduğu durumlarda kanuni süre ve başlangıç tarihi uygulanır; bu politika yasal hakları kısaltmaz.",
       ],
     },
@@ -26,23 +27,22 @@ export const REFUND_POLICY: LegalDoc = {
       paragraphs: [
         "Başlangıç planı için ödemenin onayından itibaren 7 gün; Çırak ve Uzman planları için 14 gün içinde, planı kullanmaya başlamış olsanız da başlamamış olsanız da iade talep edebilirsiniz.",
         "Planın hiç kullanılmadığı durumlarda (hiç deneme başlatılmamış, konu anlatımı dersi tamamlanmamış, pratik seti çözülmemiş ve plana dahil e-kitap indirilmemişse) ödediğiniz tutarın tamamı iade edilir.",
-        "Plan kullanılmaya başlandıysa, planın toplam süresine oranla kullandığınız günlerin bedeli düşülerek kalan tutar iade edilir. Plana dahil olarak indirdiğiniz e-kitaplar dijital içerik olarak size teslim edildiğinden, bu e-kitapların sitedeki liste fiyatları da iade tutarından düşülür.",
-        "Uzman planla ücretsiz kullandığınız canlı ders haklarından (konuşma kulübü, sistematik canlı ders, istediğiniz canlı ders) gerçekleşmiş derslerin bedeli, ilgili grubun aylık ücreti üzerinden orantılı olarak düşülür.",
+        "Plan kullanılmaya başlandıysa, planın toplam süresine oranla kullandığınız günlerin bedeli düşülerek kalan tutar iade edilir. Plan kapsamındaki kitap, kaynak, konu anlatımı ve canlı grup dersi kullanımı için ayrıca ürün veya ders bedeli kesintisi yapılmaz.",
         "Planlar otomatik yenilenmez; bu nedenle iptal etmeniz gereken bir abonelik veya ileride yapılacak bir çekim bulunmaz.",
       ],
     },
     {
-      heading: "3. Canlı grup dersleri",
+      heading: "3. Ayrı satın alınan canlı grup dersleri",
       paragraphs: [
-        "Canlı grup dersleri aylık olarak ücretlendirilir ve her ödeme bir takvim ayını kapsar. Her aylık ödeme için, ödeme tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.",
+        "Plandan bağımsız olarak satın alınan canlı grup dersleri aylık olarak ücretlendirilir ve her ödeme bir takvim ayını kapsar. Her aylık ödeme için, ödeme tarihinden itibaren 14 gün içinde iade talep edebilirsiniz.",
         "Aylık dönem içinde henüz hiçbir ders gerçekleşmemişse ödemenin tamamı iade edilir. Ders gerçekleşmişse, o döneme ait gerçekleşmiş derslerin bedeli (katılıp katılmadığınızdan bağımsız olarak) düşülür ve kalan tutar iade edilir.",
         "Aylık ödemenizi yapmadığınızda grubunuza erişim durur; ödenmemiş dönemler için sizden herhangi bir ücret talep edilmez ve iade konusu olmaz.",
       ],
     },
     {
-      heading: "4. Kaynaklar ve kitaplar",
+      heading: "4. Ayrı satın alınan kaynaklar ve kitaplar",
       paragraphs: [
-        "Kaynaklar, çalışma materyalleri ve kitaplar için isteğe bağlı iade yapılmaz. Elektronik ortamda anında teslim edilen PDF/e-kitap ve diğer dijital kaynaklarda, Mesafeli Sözleşmeler Yönetmeliği’ndeki cayma hakkı istisnasının koşulları sağlandığında cayma hakkı kullanılamaz.",
+        "Plandan bağımsız olarak satın alınan kaynaklar, çalışma materyalleri ve kitaplar için isteğe bağlı iade yapılmaz. Elektronik ortamda anında teslim edilen PDF/e-kitap ve diğer dijital kaynaklarda, Mesafeli Sözleşmeler Yönetmeliği’ndeki cayma hakkı istisnasının koşulları sağlandığında cayma hakkı kullanılamaz.",
         "Bu kural, ayıplı veya teslim edilmeyen içeriklere ilişkin yasal hakları ortadan kaldırmaz. Basılı kitaplarda ve cayma hakkı istisnasına girmeyen diğer satışlarda kanuni cayma ve iade hakları geçerlidir. Ayrı satın alınan konu anlatımları aşağıdaki 7 günlük iade koşuluna tabidir.",
       ],
     },
@@ -64,13 +64,13 @@ export const REFUND_POLICY: LegalDoc = {
       heading: "7. İade talebi nasıl yapılır?",
       paragraphs: [
         `Yardım Masası'ndaki canlı destek üzerinden veya ${SUPPORT_EMAIL} adresine e-posta göndererek iade talebinde bulunabilirsiniz. Talebinizde hesabınıza kayıtlı e-posta adresini, sipariş numaranızı (Siparişlerim sayfasında yer alır) ve varsa iade gerekçenizi belirtin.`,
-        "Talebinizi en geç 3 iş günü içinde inceleyip iade tutarını ve varsa yapılan kesintileri size yazılı olarak bildiririz.",
+        "Talebinizi en geç 3 iş günü içinde inceleyip iade tutarını ve varsa yapılan kesintileri size yazılı olarak bildiririz. İnceleme ve onay süreci, başvurunun bize ulaştığı tarihten başlayan 7 takvim günlük toplam iade süresinin içindedir; bu süreyi uzatmaz veya yeniden başlatmaz.",
       ],
     },
     {
       heading: "8. İade ödemesi",
       paragraphs: [
-        "Onaylanan iadeler, onay tarihinden itibaren en geç 14 gün içinde ödemeyi yaptığınız yöntemle gerçekleştirilir: PayPal ile yapılan ödemeler PayPal hesabınıza veya PayPal'da kullandığınız karta, banka havalesiyle yapılan ödemeler ise sizin adınıza kayıtlı ve bize bildirdiğiniz IBAN'a iade edilir.",
+        "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde ödemeyi yaptığınız yöntemle gerçekleştirilir: PayPal ile yapılan ödemeler PayPal hesabınıza veya PayPal'da kullandığınız karta, banka havalesiyle yapılan ödemeler ise sizin adınıza kayıtlı ve bize bildirdiğiniz IBAN'a iade edilir.",
         "PayPal ödemeleri ABD doları üzerinden tahsil edildiğinden iade de aynı para birimiyle yapılır; kur farkları ve bankanızın uyguladığı ücretler Netfener'in kontrolünde değildir.",
         "İade tamamlandığında ilgili plan, grup dersi veya ürüne erişiminiz kapatılır ve durum hesabınıza bildirim olarak iletilir.",
       ],

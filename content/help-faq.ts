@@ -102,7 +102,7 @@ export const HELP_FAQ: FaqCategory[] = [
     items: [
       {
         q: "İade hakkım var mı?",
-        a: "Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 gün; Çırak ve Uzman planları için 14 gün içinde iade talep edebilirsiniz. Süre ödemenin onaylandığı tarihten itibaren hesaplanır. Kaynaklar ve kitaplarda isteğe bağlı iade yoktur; yasal haklar saklıdır. Ayrıntılar İade Politikası sayfamızdadır.",
+        a: "Başlangıç planı ve ayrı satın alınan konu anlatımları için 7 gün; Çırak ve Uzman planları için 14 gün içinde iade talep edebilirsiniz. Süre ödemenin onaylandığı tarihten itibaren hesaplanır. Plan kapsamında erişilen tüm içeriklerde yalnızca planın iade koşulları geçerlidir. Ayrı satın alınan kaynaklar ve kitaplarda isteğe bağlı iade yoktur; yasal haklar saklıdır. Ayrıntılar İade Politikası sayfamızdadır.",
       },
       {
         q: "İade talebini nasıl oluştururum?",
@@ -110,11 +110,11 @@ export const HELP_FAQ: FaqCategory[] = [
       },
       {
         q: "Param ne zaman ve nasıl iade edilir?",
-        a: "Onaylanan iadeler en geç 14 gün içinde, ödemeyi yaptığınız yöntemle yapılır: PayPal ödemeleri PayPal hesabınıza/kartınıza, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İade tamamlandığında ilgili plan veya derse erişiminiz kapatılır.",
+        a: "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde, ödemeyi yaptığınız yöntemle yapılır: PayPal ödemeleri PayPal hesabınıza/kartınıza, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İnceleme ve onay bu süreyi yeniden başlatmaz. İade tamamlandığında ilgili plan, ders veya ürüne erişiminiz kapatılır.",
       },
       {
         q: "Canlı grup dersi ödemem iade edilir mi?",
-        a: "Aylık grup ödemesi, ödeme tarihinden itibaren 14 gün içinde iade edilebilir; o döneme ait gerçekleşmiş derslerin bedeli düşülerek kalan tutar iade edilir.",
+        a: "Ayrı satın alınan canlı grup derslerinde aylık ödeme, ödeme tarihinden itibaren 14 gün içinde iade edilebilir; o döneme ait gerçekleşmiş derslerin bedeli düşülerek kalan tutar iade edilir. Plan kapsamında sunulan canlı grup derslerinde ise yalnızca planın iade koşulları uygulanır.",
       },
     ],
   },

@@ -27,7 +27,7 @@ export default async function PlansPage() {
         <PlanCards products={products} currentTier={plan?.tier ?? null} currentExpiresAt={plan?.expiresAt} favoriteIds={favoriteIds} />
       </div>
       <p className="mt-8 text-center text-sm text-[color:var(--muted)]">
-        Ödemenin onayından itibaren Başlangıç planında 7 gün, Çırak ve Uzman planlarında 14 gün içinde iade talep edebilirsin. Yasal hakların saklıdır. Ayrıntılar için{" "}
+        Ödemenin onayından itibaren Başlangıç planında 7 gün, Çırak ve Uzman planlarında 14 gün içinde iade talep edebilirsin. Plan kapsamındaki tüm içerikler yalnızca planın iade koşullarına tabidir. Koşulları karşılayan iadeler başvurunun bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde yapılır. Yasal hakların saklıdır. Ayrıntılar için{" "}
         <Link href="/legal/iade-politikasi" className="font-bold underline">İade Politikası</Link>.
       </p>
     </main>
