@@ -32,3 +32,6 @@
 @media (max-width:480px) { .header { padding:14px; } .header h2 { font-size:15px; } .reader { padding:8px; } .navigation { padding:10px; font-size:12px; } }
 @media (prefers-reduced-motion:reduce) { .stage .book { animation:none!important; transition:none; } }
 :global(html:has(dialog[open])) { overflow:hidden; }
+
+.header,.navigation { flex-shrink:0; }
+.dialog { overflow:hidden; }

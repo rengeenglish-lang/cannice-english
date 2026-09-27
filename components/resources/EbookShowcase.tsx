@@ -41,7 +41,7 @@ export function EbookShowcase({ book }: { book: NetfenerEbook }) {
           <button type="button" className="ghost-button" onClick={() => dialog.current?.close()} aria-label="Önizlemeyi kapat">Kapat ✕</button>
         </header>
         <div className={styles.reader}>
-          {open ? <Image key={page} src={`/ebooks/previews/${book.slug}-${page}.jpg?cover=${encodeURIComponent(book.cover)}`} alt={`${book.title}, önizleme sayfası ${page}`} width={827} height={1170} sizes="(max-width: 760px) 92vw, 700px" className={styles.previewPage} /> : null}
+          {open ? <Image unoptimized key={page} src={`/ebooks/previews/${book.slug}-${page}.jpg?cover=${encodeURIComponent(book.cover)}`} alt={`${book.title}, önizleme sayfası ${page}`} width={827} height={1170} sizes="(max-width: 760px) 92vw, 700px" className={styles.previewPage} /> : null}
         </div>
         <footer className={styles.navigation}>
           <button type="button" className="secondary-button" disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Önceki</button>
