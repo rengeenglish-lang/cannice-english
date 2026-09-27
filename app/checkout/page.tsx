@@ -1,3 +1,5 @@
+import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
+import { LEGAL_DOCS } from "@/content/legal-terms";
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { auth } from "@/auth";
@@ -15,6 +17,7 @@ export default async function CheckoutPage() {
   const cart = await findCart(session?.user?.id);
   if (cart) await refreshCartPrices(cart);
   const items = cart?.items ?? [];
+  const { requirements } = await getCheckoutConsentRequirements(items);
   const couponCode = (await cookies()).get(CART_COUPON_COOKIE)?.value ?? "";
   const total = items.reduce(
     (sum, item) => sum + Number(item.unitPriceSnapshot) * item.quantity,
@@ -39,7 +42,7 @@ export default async function CheckoutPage() {
         </div>
       </div>
       <div className="mt-6">
-        <CheckoutForm isGuest={!session?.user} defaultCoupon={couponCode} />
+        <CheckoutForm isGuest={!session?.user} defaultCoupon={couponCode} consentRequirements={requirements} documentsDraft={["mesafeli-satis-sozlesmesi", "on-bilgilendirme-formu"].some((key) => LEGAL_DOCS[key].draft !== false)} />
       </div>
     </main>
   );

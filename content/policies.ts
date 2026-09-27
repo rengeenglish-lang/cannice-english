@@ -23,6 +23,7 @@ export const REFUND_POLICY: LegalDoc = {
       ],
     },
     {
+      id: "plan-iadeleri",
       heading: "2. Deneme sınavı planları (Başlangıç, Çırak, Uzman)",
       paragraphs: [
         "Başlangıç planı için ödemenin onayından itibaren 7 gün; Çırak ve Uzman planları için 14 gün içinde, planı kullanmaya başlamış olsanız da başlamamış olsanız da iade talep edebilirsiniz.",
@@ -32,6 +33,7 @@ export const REFUND_POLICY: LegalDoc = {
       ],
     },
     {
+      id: "canli-grup-dersleri",
       heading: "3. Ayrı satın alınan canlı grup dersleri",
       paragraphs: [
         "Plandan bağımsız olarak satın alınan canlı grup derslerinde, öğrencinin kayıtlı olduğu ilk planlanan ders tarihinden itibaren 7 takvim günü öğretmeni tanıma, dersleri gözlemleme ve deneme süresidir. Bu süre içinde başvurulduğunda, derslere katılmış olsanız da ilgili canlı grup dersi kaydı için ödediğiniz tutarın tamamı kesintisiz iade edilir. Deneme süresi aynı kaydın sonraki aylık ödemelerinde yeniden başlamaz.",
@@ -42,6 +44,7 @@ export const REFUND_POLICY: LegalDoc = {
       ],
     },
     {
+      id: "dijital-kaynaklar",
       heading: "4. Ayrı satın alınan kaynaklar ve kitaplar",
       paragraphs: [
         "Plandan bağımsız olarak satın alınan kaynaklar, çalışma materyalleri ve kitaplar için isteğe bağlı iade yapılmaz. Elektronik ortamda anında teslim edilen PDF/e-kitap ve diğer dijital kaynaklarda, Mesafeli Sözleşmeler Yönetmeliği’ndeki cayma hakkı istisnasının koşulları sağlandığında cayma hakkı kullanılamaz.",

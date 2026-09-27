@@ -1,0 +1,46 @@
+name: Checkout consent verification
+on:
+  pull_request:
+    paths:
+      - 'app/actions/checkout.ts'
+      - 'app/checkout/**'
+      - 'components/cart/CheckoutForm.tsx'
+      - 'components/checkout/CheckoutConsents.tsx'
+      - 'lib/checkout-consent.ts'
+      - 'content/legal-terms.ts'
+      - 'server/services/checkout-consent.service.ts'
+      - 'prisma/**'
+      - 'tests/checkout-consent.test.ts'
+      - '.github/workflows/checkout-consents.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test-only
+          POSTGRES_DB: checkout_consent_test
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:test-only@localhost:5432/checkout_consent_test
+      DATABASE_URL_UNPOOLED: postgresql://postgres:test-only@localhost:5432/checkout_consent_test
+      AUTH_SECRET: isolated-test-secret-not-used-for-production-123456
+      AUTH_URL: https://localhost.example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npm run typecheck
+      - run: node --import tsx --test tests/checkout-consent.test.ts
+      - name: Apply migrations and verify production build
+        run: npm run build

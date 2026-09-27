@@ -1,5 +1,8 @@
 "use server";
 
+import { acceptCheckoutConsents } from "@/lib/checkout-consent";
+import { LEGAL_DOCS } from "@/content/legal-terms";
+import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
 import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
@@ -26,6 +29,16 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   await refreshCartPrices(cart);
   const { issues, blocking } = await inspectCart(cart, await getAuthContext());
   if (blocking) return { status: "error" as const, message: issues.find((i) => i.level === "error")!.message };
+
+  let checkoutConsent;
+  try {
+    const now = new Date();
+    const { requirements, deliveries } = await getCheckoutConsentRequirements(cart.items, now);
+    checkoutConsent = { ...acceptCheckoutConsents(requirements, formData, now),
+      deliveries: deliveries.map((item) => ({ ...item, liveStartsAt: item.liveStartsAt?.toISOString() ?? null })),
+      documents: ["mesafeli-satis-sozlesmesi", "on-bilgilendirme-formu", "iade-politikasi"].map((key) => ({ key, title: LEGAL_DOCS[key].title, body: LEGAL_DOCS[key].body, sections: LEGAL_DOCS[key].sections ?? [], draft: LEGAL_DOCS[key].draft !== false })),
+    };
+  } catch (error) { return { status: "error", message: error instanceof Error ? error.message : "Sipariş onaylarını kontrol edin." }; }
 
   let guest: { guestName: string; guestEmail: string; guestPhone: string } | null = null;
   if (!session?.user?.id) {
@@ -72,6 +85,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
       discountTotal,
       total,
       couponCode,
+      checkoutConsent,
       items: {
         create: cart.items.map((item) => ({
           productId: item.productId,
