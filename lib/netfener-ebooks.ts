@@ -30,6 +30,16 @@ export const NETFENER_EBOOKS = [
     filename: "netfener-yokdil-fen.pdf",
     exams: ["yokdil-fen-bilimleri"],
   },
+  {
+    slug: "yokdil-sosyal",
+    title: "YÖKDİL Sosyal Bilimler",
+    subtitle: "Akademik Dil ve Sınav Uygulamaları",
+    description: "16 bölüm, 139 özgün soru, 80 soruluk tam deneme, bağlamsal kelime çalışmaları ve Türkçe açıklamalı çözümlerle sosyal bilimler için sınava hazırlık.",
+    pages: 96,
+    cover: "/ebooks/yokdil-sosyal.jpg",
+    filename: "netfener-yokdil-sosyal.pdf",
+    exams: ["yokdil-sosyal-bilimler"],
+  },
 ] as const;
 
 export type NetfenerEbook = (typeof NETFENER_EBOOKS)[number];
