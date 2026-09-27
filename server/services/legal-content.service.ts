@@ -37,7 +37,7 @@ export async function saveLegalContent(actorId: string, raw: unknown) {
   return db.$transaction(async (tx) => {
     await requireAdmin(actorId, tx);
     // All legal-editor writes serialize, and stale browser tabs cannot overwrite newer edits.
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(782941, 1)`;
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(782941, 1)`;
     const bundle = await readBundle(tx);
     if (bundle.revision !== input.revision) throw new Error("Başka bir düzenleme kaydedildi. Sayfayı yenileyip güncel sürümü açın; değişiklikleriniz henüz kaydedilmedi.");
     const at = new Date().toISOString();
