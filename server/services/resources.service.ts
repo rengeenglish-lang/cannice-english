@@ -54,7 +54,7 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
   const bookItem = (b: { id: string; slug: string; title: string; shortDescription: string | null; book: { digitalFileUrl: string | null; format: string } | null }): ResourceItem => {
     if (findNetfenerEbook(b.slug)) {
       const purchased = owned.has(b.id);
-      return { id: b.id, title: b.title, description: b.shortDescription, badge: purchased ? "SATIN ALINDI" : "E-KİTAP", href: purchased ? `/api/ebooks/${b.slug}` : `/kaynaklar/e-kitaplar/onizleme/${b.slug}`, cta: purchased ? "Tam kitabı indir" : "İlk 10 sayfayı incele", external: purchased };
+      return { id: b.id, title: b.title, description: b.shortDescription, badge: purchased ? "SATIN ALINDI" : "E-KİTAP", href: purchased ? `/api/ebooks/${b.slug}` : `/kaynaklar/e-kitaplar/onizleme/${b.slug}`, cta: purchased ? "Tam kitabı indir" : "10 sayfalık önizleme", external: purchased };
     }
     const canDownload = Boolean(b.book?.digitalFileUrl) && (owned.has(b.id) || freeMaterials);
     if (canDownload) {

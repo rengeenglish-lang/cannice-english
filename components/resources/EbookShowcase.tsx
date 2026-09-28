@@ -27,7 +27,7 @@ export function EbookShowcase({ book }: { book: NetfenerEbook }) {
       </span>
     </button>
     <p className={styles.hint}>360° keşfet · Önizlemek için dokun</p>
-    <button type="button" className="secondary-button" onClick={preview}>İlk 10 sayfayı incele</button>
+    <button type="button" className="secondary-button" onClick={preview}>10 sayfalık önizlemeyi incele</button>
     <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId}
       onClose={() => setOpen(false)}
       onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}
