@@ -16,7 +16,7 @@ export function EbookShowcase({ book }: { book: NetfenerEbook }) {
     dialog.current?.showModal();
   }
   return <div className={styles.showcase}>
-    <button type="button" className={styles.stage} onClick={preview} aria-label={book.title + ": 3 sayfalık önizlemeyi aç"}>
+    <button type="button" className={styles.stage} onClick={preview} aria-label={book.title + ": 6 sayfalık önizlemeyi aç"}>
       <span className={styles.book}>
         <span className={styles.front}><Image src={book.cover} alt={book.title + " kitap kapağı"} fill sizes="240px" /></span>
         <span className={styles.back} aria-hidden="true"><strong>NETFENER</strong><span>{book.title}</span><small>{book.subtitle}</small><span className={styles.backRule} /><small>netfener.com</small></span>
@@ -27,12 +27,12 @@ export function EbookShowcase({ book }: { book: NetfenerEbook }) {
       </span>
     </button>
     <p className={styles.hint}>360° keşfet · Önizlemek için dokun</p>
-    <button type="button" className="secondary-button" onClick={preview}>İlk 3 sayfayı incele</button>
+    <button type="button" className="secondary-button" onClick={preview}>İlk 6 sayfayı incele</button>
     <dialog ref={dialog} className={styles.dialog} aria-labelledby={titleId}
       onClose={() => setOpen(false)}
       onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}
       onKeyDown={(event) => {
-        if (event.key === "ArrowRight") { event.preventDefault(); setPage(p => Math.min(3, p + 1)); }
+        if (event.key === "ArrowRight") { event.preventDefault(); setPage(p => Math.min(6, p + 1)); }
         if (event.key === "ArrowLeft") { event.preventDefault(); setPage(p => Math.max(1, p - 1)); }
       }}>
       <div className={styles.modal}>
@@ -45,8 +45,8 @@ export function EbookShowcase({ book }: { book: NetfenerEbook }) {
         </div>
         <footer className={styles.navigation}>
           <button type="button" className="secondary-button" disabled={page === 1} onClick={() => setPage(p => p - 1)}>← Önceki</button>
-          <span aria-live="polite">Sayfa {page} / 3</span>
-          <button type="button" className="secondary-button" disabled={page === 3} onClick={() => setPage(p => p + 1)}>Sonraki →</button>
+          <span aria-live="polite">Sayfa {page} / 6</span>
+          <button type="button" className="secondary-button" disabled={page === 6} onClick={() => setPage(p => p + 1)}>Sonraki →</button>
         </footer>
       </div>
     </dialog>

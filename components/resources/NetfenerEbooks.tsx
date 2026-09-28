@@ -13,7 +13,7 @@ export function NetfenerEbooks({ books = NETFENER_EBOOKS, signedIn, offers }: {
   return (
     <section className="mt-10" aria-labelledby="netfener-ebooks-heading">
       <h2 id="netfener-ebooks-heading" className="section-title">Netfener çalışma kitapları</h2>
-      <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">İlk 3 sayfayı giriş yapmadan inceleyin. Tam PDF, giriş yaptıktan ve ilgili kitabı satın aldıktan sonra indirilebilir.</p>
+      <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">İlk 6 sayfayı giriş yapmadan inceleyin. Tam PDF, giriş yaptıktan ve ilgili kitabı satın aldıktan sonra indirilebilir.</p>
       <ul className="mt-6 grid gap-8">
         {books.map((book) => {
           return (
