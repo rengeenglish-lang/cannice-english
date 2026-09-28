@@ -11,6 +11,16 @@ export const NETFENER_EBOOKS = [
     exams: ["yds", "yokdil-fen-bilimleri", "yokdil-sosyal-bilimler", "yokdil-saglik-bilimleri"],
   },
   {
+    slug: "kelimenin-izini-sur",
+    title: "Kelimenin İzini Sür",
+    subtitle: "Cilt 1 · Temel Akademik Kelimeler",
+    description: "25 ünite, 125 kelime ailesi ve 250 çalışma sayfasıyla; her aileyi bağlam içinde okuma, cloze ve dilbilgisi uygulamaları ve çeldirici analizli özgün sorularla sınavda doğru biçimi seçme çalışması.",
+    pages: 282,
+    cover: "/ebooks/kelimenin-izini-sur.jpg",
+    filename: "netfener-kelimenin-izini-sur.pdf",
+    exams: ["yds", "yokdil-fen-bilimleri", "yokdil-sosyal-bilimler", "yokdil-saglik-bilimleri"],
+  },
+  {
     slug: "yokdil-saglik",
     title: "YÖKDİL Sağlık",
     subtitle: "Akademik Dil ve Sınav Uygulamaları",
