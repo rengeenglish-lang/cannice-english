@@ -5,6 +5,7 @@ import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 import { NETFENER_EBOOKS, findNetfenerEbook, netfenerEbooksForExam } from "../lib/netfener-ebooks";
+import { NETFENER_EBOOK_PITCH, findEbookPitch } from "../lib/netfener-ebook-copy";
 
 test("catalogue files exist and match the supported exam groups", async () => {
   assert.equal(NETFENER_EBOOKS.length, 7);
@@ -19,6 +20,24 @@ test("catalogue files exist and match the supported exam groups", async () => {
   assert.deepEqual(netfenerEbooksForExam("yokdil-sosyal-bilimler").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-sosyal"]);
   assert.equal(netfenerEbooksForExam("ielts").length, 0);
   assert.equal(findNetfenerEbook("../../secret"), undefined);
+});
+
+test("every book carries sales copy, and the copy describes a real book", () => {
+  assert.equal(Object.keys(NETFENER_EBOOK_PITCH).length, NETFENER_EBOOKS.length);
+  for (const book of NETFENER_EBOOKS) {
+    const pitch = findEbookPitch(book.slug);
+    assert.ok(pitch, `${book.slug}: no sales copy`);
+    assert.ok(pitch.lead.length > 120, `${book.slug}: lead too thin to sell with`);
+    assert.ok(pitch.closing.length > 40, `${book.slug}: no closing line`);
+    assert.ok(pitch.sections.length >= 4, `${book.slug}: fewer than four sections`);
+    for (const section of pitch.sections) {
+      assert.ok(section.title.length > 0 && section.body.length > 80, `${book.slug}: thin section`);
+    }
+    // The page count on the card and the one the copy advertises must not disagree.
+    const pages = pitch.facts.find((fact) => fact.label === "Sayfa");
+    assert.equal(pages?.value, String(book.pages), `${book.slug}: page count disagrees with the catalogue`);
+  }
+  assert.equal(findEbookPitch("../../secret"), undefined);
 });
 
 test("download endpoint enforces access before reading files and serves the exact PDF", async () => {

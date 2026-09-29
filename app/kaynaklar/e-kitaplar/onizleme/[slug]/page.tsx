@@ -6,6 +6,8 @@ import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { getAuthContext } from "@/server/auth/context";
 import { getEbookOffers } from "@/server/services/ebooks.service";
 import { EbookPurchase } from "@/components/resources/EbookPurchase";
+import { EbookPitchPanel } from "@/components/resources/EbookPitchPanel";
+import { findEbookPitch } from "@/lib/netfener-ebook-copy";
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -17,6 +19,7 @@ export default async function EbookPreviewPage({ params }: Props) {
   if (!book) notFound();
   const user = await getAuthContext();
   const offers = await getEbookOffers(user?.id);
+  const pitch = findEbookPitch(book.slug);
   return <main className="inner-page mx-auto w-full max-w-[1100px] px-4 py-12 sm:px-6">
     <Link className="ghost-button mb-5" href="/kaynaklar/e-kitaplar">← E-Kitaplar</Link>
     <section className="panel">
@@ -28,6 +31,7 @@ export default async function EbookPreviewPage({ params }: Props) {
       <div className="mt-6"><EbookPurchase book={book} signedIn={Boolean(user)} offer={offers[book.slug]} /></div>
       <a className="secondary-button mt-4" href={`/ebooks/previews/${book.slug}.pdf`} target="_blank" rel="noopener noreferrer">10 sayfalık önizlemeyi PDF olarak aç</a>
     </section>
+    {pitch ? <EbookPitchPanel title={book.title} pitch={pitch} /> : null}
     <ol className="mx-auto mt-10 max-w-[820px] space-y-8" aria-label="Kitaptan 10 örnek sayfa">
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((page) => <li key={page}>
         <p className="mb-3 text-center text-sm font-semibold">Sayfa {page} / 10</p>
