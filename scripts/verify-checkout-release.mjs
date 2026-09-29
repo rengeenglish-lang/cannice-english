@@ -1,6 +1,6 @@
 // Read-only production smoke check. No sign-in, order creation or payment calls.
 import assert from "node:assert/strict";
-const base = "https://cannice-english.vercel.app";
+const base = "https://netfener.com";
 const pages = [
   ["/checkout", ["ÖDEME YÜKÜMLÜLÜĞÜ DOĞURAN SİPARİŞİ ONAYLA", 'name="agreementConsent"', '/legal/on-bilgilendirme-formu', '/legal/mesafeli-satis-sozlesmesi']],
   ["/legal/on-bilgilendirme-formu", ["Ön Bilgilendirme Formu"]],
