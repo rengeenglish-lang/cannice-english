@@ -1,5 +1,6 @@
 import "server-only";
-import { findNetfenerEbook } from "@/lib/netfener-ebooks";
+import { findNetfenerEdition, type EbookEdition } from "@/lib/netfener-ebook-editions";
+import { hasEbookAccess } from "@/server/services/ebooks.service";
 import { db } from "@/server/db";
 import { getGroupSlot } from "@/server/services/group-availability.service";
 import { getPlanAccess } from "@/server/services/plans.service";
@@ -27,6 +28,12 @@ const TYPE_LABEL: Record<string, string> = {
   TRANSLATION_SUPPORT: "Akademik Çeviri",
 };
 const BOOK_FORMAT_LABEL: Record<string, string> = { PDF: "E-Kitap (PDF)", PRINT: "Basılı Kitap", PRINT_AND_PDF: "Basılı + E-Kitap" };
+/** Our own books are sold by edition, and the cart line should say which one is being bought. */
+const EDITION_LABEL: Record<EbookEdition, string> = {
+  online: "E-Kitap (online okuma)",
+  pdf: "E-Kitap (PDF)",
+  print: "Basılı Kitap",
+};
 
 type User = { id: string; role: string } | null;
 
@@ -54,18 +61,22 @@ export async function inspectCart(cart: CartWithItems, user: User) {
   for (const item of cart.items) {
     const p = item.product;
     const notes: string[] = [];
-    const href = p.category === "BOOK" ? `/books/${p.slug}` : p.category === "PLAN" ? "/planlar" : `/packages/${p.slug}`;
+    const ebook = findNetfenerEdition(p.slug);
+    // Every edition of one of our books belongs to that book's page, not to /books/<edition slug>.
+    const href = ebook
+      ? `/kaynaklar/e-kitaplar/onizleme/${ebook.book.slug}`
+      : p.category === "BOOK" ? `/books/${p.slug}` : p.category === "PLAN" ? "/planlar" : `/packages/${p.slug}`;
     let typeLabel = TYPE_LABEL[p.category] ?? "Ürün";
     if (p.examType) notes.push(p.examType.name);
 
-    if (findNetfenerEbook(p.slug) && Number(p.salePrice) <= 0) {
+    if (ebook && Number(p.salePrice) <= 0) {
       issues.push({ itemId: item.id, level: "error", message: `“${p.title}” henüz satışa açılmadı. Önizlemesini E-Kitaplar sayfasından inceleyebilirsiniz.` });
     }
     if (!p.isPublished) {
       issues.push({ itemId: item.id, level: "error", message: `“${p.title}” artık satışta değil. Devam etmek için sepetten kaldırın.` });
     }
 
-    if (!user && (p.category === "PLAN" || p.category === "PREP_GROUP" || findNetfenerEbook(p.slug))) {
+    if (!user && (p.category === "PLAN" || p.category === "PREP_GROUP" || ebook)) {
       issues.push({
         itemId: item.id,
         level: "error",
@@ -85,12 +96,19 @@ export async function inspectCart(cart: CartWithItems, user: User) {
       }
     }
 
-    if (p.category === "BOOK") {
+    if (p.category === "BOOK" && ebook) {
+      typeLabel = EDITION_LABEL[ebook.edition];
+      // A heavier edition covers the lighter one, so owning the PDF already covers online reading.
+      // Another printed copy, on the other hand, is a perfectly sensible thing to order.
+      if (ebook.edition !== "print" && user && await hasEbookAccess(user.id, ebook.book.slug, ebook.edition)) {
+        issues.push({ itemId: item.id, level: "error", message: `“${p.title}” zaten hesabında; tekrar satın almana gerek yok.`, action: { href: "/dashboard/lessons", label: "Derslerime git" } });
+      }
+    } else if (p.category === "BOOK") {
       typeLabel = BOOK_FORMAT_LABEL[p.book?.format ?? "PDF"] ?? "Kitap";
       const digitalOnly = p.book?.format === "PDF";
       if (digitalOnly && ownedBookIds.has(p.id)) {
         issues.push({ itemId: item.id, level: "error", message: `“${p.title}” e-kitabını daha önce satın aldın; Derslerim sayfasından indirebilirsin.`, action: { href: "/dashboard/lessons", label: "Derslerime git" } });
-      } else if (!findNetfenerEbook(p.slug) && access.can("FREE_MATERIALS") && p.book?.digitalFileUrl) {
+      } else if (access.can("FREE_MATERIALS") && p.book?.digitalFileUrl) {
         issues.push(
           digitalOnly
             ? { itemId: item.id, level: "warning", message: `“${p.title}” planına dahil — satın almadan ücretsiz indirebilirsin.`, action: { href, label: "Ücretsiz indir" } }

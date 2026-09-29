@@ -1,5 +1,5 @@
 import "server-only";
-import { findNetfenerEbook } from "@/lib/netfener-ebooks";
+import { findNetfenerEdition } from "@/lib/netfener-ebook-editions";
 import { db } from "@/server/db";
 import { konuAnlatimHref } from "@/lib/konu-links";
 import type { PlanAccess } from "@/server/services/plans.service";
@@ -52,9 +52,17 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
   const owned = await ownedBookIds(user?.id ?? null);
 
   const bookItem = (b: { id: string; slug: string; title: string; shortDescription: string | null; book: { digitalFileUrl: string | null; format: string } | null }): ResourceItem => {
-    if (findNetfenerEbook(b.slug)) {
+    const ebook = findNetfenerEdition(b.slug);
+    if (ebook) {
       const purchased = owned.has(b.id);
-      return { id: b.id, title: b.title, description: b.shortDescription, badge: purchased ? "SATIN ALINDI" : "E-KİTAP", href: purchased ? `/api/ebooks/${b.slug}` : `/kaynaklar/e-kitaplar/onizleme/${b.slug}`, cta: purchased ? "Tam kitabı indir" : "10 sayfalık önizleme", external: purchased };
+      // Each edition opens where it lives: the reader, the download, or the free preview.
+      if (!purchased) {
+        return { id: b.id, title: b.title, description: b.shortDescription, badge: "E-KİTAP", href: `/kaynaklar/e-kitaplar/onizleme/${ebook.book.slug}`, cta: "10 sayfalık önizleme" };
+      }
+      const online = ebook.edition === "online";
+      return { id: b.id, title: b.title, description: b.shortDescription, badge: "SATIN ALINDI",
+        href: online ? `/kaynaklar/e-kitaplar/oku/${ebook.book.slug}` : `/api/ebooks/${ebook.book.slug}`,
+        cta: online ? "Online oku" : "Tam kitabı indir", external: true };
     }
     const canDownload = Boolean(b.book?.digitalFileUrl) && (owned.has(b.id) || freeMaterials);
     if (canDownload) {
@@ -68,7 +76,7 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
       db.product.findMany({ where: { category: "BOOK", isPublished: true, examTypeId: exam.id, book: { format: { in: [...DIGITAL_FORMATS] } } }, include: { book: true }, orderBy: { displayOrder: "asc" } }),
       db.freeResource.findMany({ where: { examTypeId: exam.id, OR: [{ kind: "E_BOOK" }, { kind: null }] }, orderBy: { createdAt: "desc" } }),
     ]);
-    return [...books.filter((book) => !findNetfenerEbook(book.slug)).map(bookItem), ...free.map(freeResourceItem)];
+    return [...books.filter((book) => !findNetfenerEdition(book.slug)).map(bookItem), ...free.map(freeResourceItem)];
   }
 
   if (type === "konu-konu") {
@@ -109,7 +117,7 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
     db.savedExamTopic.findMany({ where: { userId: user.id, topic: { examTypeId: exam.id } }, include: { topic: true } }),
   ]);
   return [
-    ...books.filter((book) => !findNetfenerEbook(book.slug) || owned.has(book.id)).map(bookItem),
+    ...books.filter((book) => !findNetfenerEdition(book.slug) || owned.has(book.id)).map(bookItem),
     ...saved.map((s) => ({ id: s.id, title: s.topic.name, description: "Derslerine eklediğin konu anlatımı", badge: "DERSLERİMDE", href: konuAnlatimHref(exam.slug, s.topic.slug), cta: "Konuyu aç" })),
   ];
 }

@@ -1,3 +1,5 @@
+import { findNetfenerEbook, type NetfenerEbook } from "@/lib/netfener-ebooks";
+
 /**
  * A book is sold in three editions, each its own product row. The PDF edition keeps the bare
  * slug the catalogue has always used, so existing orders and bundles keep working untouched.
@@ -26,4 +28,17 @@ export function slugsGranting(bookSlug: string, edition: EbookEdition): string[]
   }
   if (edition === "pdf") return [bookSlug];
   return [editionSlug(bookSlug, "print")];
+}
+
+/** The book and edition a product slug sells, or undefined when it is not one of our books. */
+export function findNetfenerEdition(productSlug: string): { book: NetfenerEbook; edition: EbookEdition } | undefined {
+  for (const edition of ["online", "print"] as const) {
+    const suffix = `-${SUFFIX[edition]}`;
+    if (productSlug.endsWith(suffix)) {
+      const book = findNetfenerEbook(productSlug.slice(0, -suffix.length));
+      return book ? { book, edition } : undefined;
+    }
+  }
+  const book = findNetfenerEbook(productSlug);
+  return book ? { book, edition: "pdf" } : undefined;
 }

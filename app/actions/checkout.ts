@@ -3,7 +3,7 @@
 import { acceptCheckoutConsents } from "@/lib/checkout-consent";
 import { getPublishedLegalContent } from "@/server/services/legal-content.service";
 import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
-import { findNetfenerEbook } from "@/lib/netfener-ebooks";
+import { findNetfenerEdition } from "@/lib/netfener-ebook-editions";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { db } from "@/server/db";
@@ -21,7 +21,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   const session = await auth();
   const cart = await getOrCreateCart(session?.user?.id);
   if (cart.items.length === 0) return { status: "error" as const, message: "Sepetiniz boş." };
-  if (!session?.user?.id && cart.items.some((item) => findNetfenerEbook(item.product.slug))) {
+  if (!session?.user?.id && cart.items.some((item) => findNetfenerEdition(item.product.slug))) {
     return { status: "error", message: "E-kitap satın almak için lütfen giriş yapın veya üye olun." };
   }
   // Same checks the cart page shows (unpublished product, full group time, plan below the one the

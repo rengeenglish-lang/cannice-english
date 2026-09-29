@@ -1,4 +1,4 @@
-import { findNetfenerEbook } from "@/lib/netfener-ebooks";
+import { findNetfenerEdition } from "@/lib/netfener-ebook-editions";
 import { redirect } from "next/navigation";
 import { PageHero } from "@/components/ui/PageHero";
 import { notFound } from "next/navigation";
@@ -22,7 +22,8 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  if (findNetfenerEbook(slug)) redirect(`/kaynaklar/e-kitaplar/onizleme/${slug}`);
+  const ebook = findNetfenerEdition(slug);
+  if (ebook) redirect(`/kaynaklar/e-kitaplar/onizleme/${ebook.book.slug}`);
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Kitap Bulunamadı" };
   const description = product.shortDescription ?? `${product.title} — Netfener'den sınav hazırlık kitabı.`;
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BookDetailPage({ params }: Props) {
   const { slug } = await params;
-  if (findNetfenerEbook(slug)) redirect(`/kaynaklar/e-kitaplar/onizleme/${slug}`);
+  const ebook = findNetfenerEdition(slug);
+  if (ebook) redirect(`/kaynaklar/e-kitaplar/onizleme/${ebook.book.slug}`);
   const product = await getProductBySlug(slug);
   if (!product || !product.book) notFound();
   // Çırak/Uzman plans include digital extra materials — no separate purchase needed.

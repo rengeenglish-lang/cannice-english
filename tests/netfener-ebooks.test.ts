@@ -7,7 +7,7 @@ import ts from "typescript";
 import { NETFENER_EBOOKS, findNetfenerEbook, netfenerEbooksForExam } from "../lib/netfener-ebooks";
 import { NETFENER_EBOOK_PITCH, findEbookPitch } from "../lib/netfener-ebook-copy";
 import { NETFENER_BUNDLES, bundlesContainingEbook, bundleBooks, findNetfenerBundle } from "../lib/netfener-bundles";
-import { EBOOK_EDITIONS, editionSlug, slugsGranting } from "../lib/netfener-ebook-editions";
+import { EBOOK_EDITIONS, editionSlug, slugsGranting, findNetfenerEdition } from "../lib/netfener-ebook-editions";
 
 test("catalogue files exist and match the supported exam groups", async () => {
   assert.equal(NETFENER_EBOOKS.length, 7);
@@ -160,6 +160,10 @@ test("editions: a heavier purchase covers the lighter one, and print stands alon
     assert.deepEqual(pdf, [book.slug]);
     const onlineSlug = editionSlug(book.slug, "online");
     assert.equal(pdf.some((granted) => granted === onlineSlug), false, `${book.slug}: online must not unlock the PDF`);
+    // every edition slug leads back to exactly this book and this edition
+    for (const edition of EBOOK_EDITIONS) {
+      assert.deepEqual(findNetfenerEdition(editionSlug(book.slug, edition)), { book, edition }, `${book.slug}: ${edition} slug does not lead back`);
+    }
     // an edition slug must never collide with another book or a bundle
     for (const edition of EBOOK_EDITIONS) {
       const slug = editionSlug(book.slug, edition);
@@ -167,16 +171,25 @@ test("editions: a heavier purchase covers the lighter one, and print stands alon
       assert.equal(findNetfenerBundle(slug), undefined, `${slug}: collides with a bundle slug`);
     }
   }
+  // slugs that are not ours stay not ours, suffix or no suffix
+  for (const slug of ["ielts-reading-practice-book", "set-netfener-kutuphanesi", "the-ultimate-vocabulary-builder-online", "../../secret", "-basili"]) {
+    assert.equal(findNetfenerEdition(slug), undefined, `${slug}: must not be read as one of our books`);
+  }
 });
 
 test("cart requires login and a set price, without promising plan access to paid books", async () => {
+  type Issue = { level: string; message: string };
+  type Details = { typeLabel: string; href: string };
+  type Inspect = (cart: unknown, user: unknown) => Promise<{ issues: Issue[]; details: Map<string, Details>; blocking: boolean }>;
   const source = await fs.readFile("server/services/cart-checks.service.ts", "utf8");
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
-  type Issue = { level: string; message: string };
-  const exported: { inspectCart?: (cart: unknown, user: unknown) => Promise<{ issues: Issue[]; blocking: boolean }> } = {};
-  vm.runInNewContext(code, { exports: exported, require(name: string) {
+  // what the buyer is entitled to before this purchase, per edition
+  let alreadyOwns = false;
+  const exported: { inspectCart?: Inspect } = {};
+  vm.runInNewContext(code, { exports: exported, Map, Number, Boolean, require(name: string) {
     if (name === "server-only") return {};
-    if (name === "@/lib/netfener-ebooks") return { findNetfenerEbook };
+    if (name === "@/lib/netfener-ebook-editions") return { findNetfenerEdition };
+    if (name === "@/server/services/ebooks.service") return { hasEbookAccess: async () => alreadyOwns };
     if (name === "@/server/db") return { db: { orderItem: { findMany: async () => [] } } };
     if (name === "@/server/services/plans.service") return { getPlanAccess: async () => ({ can: () => true }) };
     if (["@/server/services/group-availability.service", "@/lib/diagnostics/access", "@/lib/billing", "@/lib/availability", "@/lib/plans"].includes(name)) return {};
@@ -185,12 +198,34 @@ test("cart requires login and a set price, without promising plan access to paid
   const product = { id: "book-id", slug: "yokdil-saglik", title: "YÖKDİL Sağlık", category: "BOOK", isPublished: true, salePrice: 100, book: { format: "PDF", digitalFileUrl: "/api/ebooks/yokdil-saglik" } };
   const cart = { items: [{ id: "item", productId: product.id, product }] };
   const inspect = exported.inspectCart!;
+  const member = { id: "subscriber", role: "STUDENT" };
   assert.equal((await inspect(cart, null)).blocking, true);
-  const member = await inspect(cart, { id: "subscriber", role: "STUDENT" });
-  assert.equal(member.blocking, false);
-  assert.equal(member.issues.length, 0);
+  const signedIn = await inspect(cart, member);
+  assert.equal(signedIn.blocking, false);
+  assert.equal(signedIn.issues.length, 0);
+  // a plan does not quietly turn one of our books into a free download
+  assert.equal(signedIn.details.get("item")!.typeLabel, "E-Kitap (PDF)");
   product.salePrice = 0;
-  assert.equal((await inspect(cart, { id: "subscriber", role: "STUDENT" })).blocking, true);
+  assert.equal((await inspect(cart, member)).blocking, true);
+  product.salePrice = 100;
+
+  // the online edition sells under its own slug, and the same rules have to reach it
+  const online = { ...product, id: "online-id", slug: editionSlug("yokdil-saglik", "online"), title: "YÖKDİL Sağlık — online", book: null };
+  const onlineCart = { items: [{ id: "item", productId: online.id, product: online }] };
+  assert.equal((await inspect(onlineCart, null)).blocking, true, "an edition must not be bought signed out");
+  const buying = await inspect(onlineCart, member);
+  assert.equal(buying.blocking, false);
+  assert.equal(buying.details.get("item")!.typeLabel, "E-Kitap (online okuma)");
+  assert.equal(buying.details.get("item")!.href, "/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
+  alreadyOwns = true;
+  assert.equal((await inspect(onlineCart, member)).blocking, true, "buying a book you can already read must be blocked");
+  // but another printed copy is a reasonable thing to order
+  const print = { ...online, id: "print-id", slug: editionSlug("yokdil-saglik", "print") };
+  const printCart = { items: [{ id: "item", productId: print.id, product: print }] };
+  const reorder = await inspect(printCart, member);
+  assert.equal(reorder.blocking, false);
+  assert.equal(reorder.details.get("item")!.typeLabel, "Basılı Kitap");
+  alreadyOwns = false;
 });
 
 test("page images are gated per book, and the online edition is what unlocks them", async () => {
