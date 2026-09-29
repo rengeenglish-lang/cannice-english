@@ -6,6 +6,7 @@ import vm from "node:vm";
 import ts from "typescript";
 import { NETFENER_EBOOKS, findNetfenerEbook, netfenerEbooksForExam } from "../lib/netfener-ebooks";
 import { NETFENER_EBOOK_PITCH, findEbookPitch } from "../lib/netfener-ebook-copy";
+import { NETFENER_BUNDLES, bundlesContainingEbook, bundleBooks, findNetfenerBundle } from "../lib/netfener-bundles";
 
 test("catalogue files exist and match the supported exam groups", async () => {
   assert.equal(NETFENER_EBOOKS.length, 7);
@@ -86,8 +87,9 @@ test("purchase entitlement requires this account, this book and a paid order", a
   vm.runInNewContext(code, { exports: exported, require(name: string) {
     if (name === "server-only") return {};
     if (name === "@/lib/netfener-ebooks") return { NETFENER_EBOOKS, findNetfenerEbook };
-    if (name === "@/server/db") return { db: { orderItem: { findFirst: async ({ where }: { where: { order: { userId: string; status: string }; product: { slug: string; category: string } } }) =>
-      order.userId === where.order.userId && order.status === where.order.status && order.slug === where.product.slug && order.category === where.product.category ? { id: "paid-item" } : null,
+    if (name === "@/lib/netfener-bundles") return { NETFENER_BUNDLES, bundlesContainingEbook };
+    if (name === "@/server/db") return { db: { orderItem: { findFirst: async ({ where }: { where: { order: { userId: string; status: string }; product: { slug: { in: string[] }; category: string } } }) =>
+      order.userId === where.order.userId && order.status === where.order.status && where.product.slug.in.includes(order.slug) && order.category === where.product.category ? { id: "paid-item" } : null,
     } } };
     throw new Error(name);
   } });
@@ -102,6 +104,44 @@ test("purchase entitlement requires this account, this book and a paid order", a
   }
   order = { ...order, status: "PAID", category: "PLAN" };
   assert.equal(await owns("buyer", "yokdil-saglik"), false);
+});
+
+test("bundles list real books and a bundle purchase unlocks each of them", async () => {
+  assert.ok(NETFENER_BUNDLES.length >= 4);
+  const slugs = new Set<string>();
+  for (const bundle of NETFENER_BUNDLES) {
+    assert.equal(slugs.has(bundle.slug), false, `${bundle.slug}: duplicate bundle slug`);
+    slugs.add(bundle.slug);
+    assert.equal(findNetfenerEbook(bundle.slug), undefined, `${bundle.slug}: collides with a book slug`);
+    assert.ok(bundle.books.length >= 2, `${bundle.slug}: a bundle needs at least two books`);
+    assert.equal(new Set(bundle.books).size, bundle.books.length, `${bundle.slug}: repeats a book`);
+    // every listed book must exist, or the card would render a hole where a cover goes
+    assert.equal(bundleBooks(bundle).length, bundle.books.length, `${bundle.slug}: unknown book slug`);
+  }
+  assert.equal(findNetfenerBundle("../../secret"), undefined);
+  for (const book of NETFENER_EBOOKS) {
+    for (const bundleSlug of bundlesContainingEbook(book.slug)) {
+      assert.ok(findNetfenerBundle(bundleSlug), `${book.slug}: maps to a bundle that does not exist`);
+    }
+  }
+
+  const source = await fs.readFile("server/services/ebooks.service.ts", "utf8");
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const exported: { hasPurchasedEbook?: (user: string, slug: string) => Promise<boolean> } = {};
+  // The buyer owns the bundle row only — never the individual book row.
+  const owned = "set-netfener-kutuphanesi";
+  vm.runInNewContext(code, { exports: exported, require(name: string) {
+    if (name === "server-only") return {};
+    if (name === "@/lib/netfener-ebooks") return { NETFENER_EBOOKS, findNetfenerEbook };
+    if (name === "@/lib/netfener-bundles") return { NETFENER_BUNDLES, bundlesContainingEbook };
+    if (name === "@/server/db") return { db: { orderItem: { findFirst: async ({ where }: { where: { product: { slug: { in: string[] } } } }) =>
+      where.product.slug.in.includes(owned) ? { id: "paid-bundle" } : null } } };
+    throw new Error(name);
+  } });
+  const owns = exported.hasPurchasedEbook!;
+  for (const book of NETFENER_EBOOKS) {
+    assert.equal(await owns("buyer", book.slug), true, `${book.slug}: library bundle did not unlock it`);
+  }
 });
 
 test("cart requires login and a set price, without promising plan access to paid books", async () => {
