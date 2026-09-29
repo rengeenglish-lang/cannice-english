@@ -59,10 +59,11 @@ export async function listResources(type: ResourceTypeSlug, examSlug: string, us
       if (!purchased) {
         return { id: b.id, title: b.title, description: b.shortDescription, badge: "E-KİTAP", href: `/kaynaklar/e-kitaplar/onizleme/${ebook.book.slug}`, cta: "10 sayfalık önizleme" };
       }
-      const online = ebook.edition === "online";
+      // Only the PDF edition is a download; the online and printed editions both open the reader.
+      const download = ebook.edition === "pdf";
       return { id: b.id, title: b.title, description: b.shortDescription, badge: "SATIN ALINDI",
-        href: online ? `/kaynaklar/e-kitaplar/oku/${ebook.book.slug}` : `/api/ebooks/${ebook.book.slug}`,
-        cta: online ? "Online oku" : "Tam kitabı indir", external: true };
+        href: download ? `/api/ebooks/${ebook.book.slug}` : `/kaynaklar/e-kitaplar/oku/${ebook.book.slug}`,
+        cta: download ? "Tam kitabı indir" : "Online oku", external: true };
     }
     const canDownload = Boolean(b.book?.digitalFileUrl) && (owned.has(b.id) || freeMaterials);
     if (canDownload) {
