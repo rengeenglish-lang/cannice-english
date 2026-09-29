@@ -7,6 +7,7 @@ import ts from "typescript";
 import { NETFENER_EBOOKS, findNetfenerEbook, netfenerEbooksForExam } from "../lib/netfener-ebooks";
 import { NETFENER_EBOOK_PITCH, findEbookPitch } from "../lib/netfener-ebook-copy";
 import { NETFENER_BUNDLES, bundlesContainingEbook, bundleBooks, findNetfenerBundle } from "../lib/netfener-bundles";
+import { EBOOK_EDITIONS, editionSlug, slugsGranting } from "../lib/netfener-ebook-editions";
 
 test("catalogue files exist and match the supported exam groups", async () => {
   assert.equal(NETFENER_EBOOKS.length, 7);
@@ -88,6 +89,7 @@ test("purchase entitlement requires this account, this book and a paid order", a
     if (name === "server-only") return {};
     if (name === "@/lib/netfener-ebooks") return { NETFENER_EBOOKS, findNetfenerEbook };
     if (name === "@/lib/netfener-bundles") return { NETFENER_BUNDLES, bundlesContainingEbook };
+    if (name === "@/lib/netfener-ebook-editions") return { EBOOK_EDITIONS, editionSlug, slugsGranting };
     if (name === "@/server/db") return { db: { orderItem: { findFirst: async ({ where }: { where: { order: { userId: string; status: string }; product: { slug: { in: string[] }; category: string } } }) =>
       order.userId === where.order.userId && order.status === where.order.status && where.product.slug.in.includes(order.slug) && order.category === where.product.category ? { id: "paid-item" } : null,
     } } };
@@ -134,6 +136,7 @@ test("bundles list real books and a bundle purchase unlocks each of them", async
     if (name === "server-only") return {};
     if (name === "@/lib/netfener-ebooks") return { NETFENER_EBOOKS, findNetfenerEbook };
     if (name === "@/lib/netfener-bundles") return { NETFENER_BUNDLES, bundlesContainingEbook };
+    if (name === "@/lib/netfener-ebook-editions") return { EBOOK_EDITIONS, editionSlug, slugsGranting };
     if (name === "@/server/db") return { db: { orderItem: { findFirst: async ({ where }: { where: { product: { slug: { in: string[] } } } }) =>
       where.product.slug.in.includes(owned) ? { id: "paid-bundle" } : null } } };
     throw new Error(name);
@@ -141,6 +144,27 @@ test("bundles list real books and a bundle purchase unlocks each of them", async
   const owns = exported.hasPurchasedEbook!;
   for (const book of NETFENER_EBOOKS) {
     assert.equal(await owns("buyer", book.slug), true, `${book.slug}: library bundle did not unlock it`);
+  }
+});
+
+test("editions: a heavier purchase covers the lighter one, and print stands alone", () => {
+  for (const book of NETFENER_EBOOKS) {
+    assert.equal(editionSlug(book.slug, "pdf"), book.slug, "the PDF edition must keep the historic slug");
+    assert.equal(editionSlug(book.slug, "online"), `${book.slug}-online`);
+    assert.equal(editionSlug(book.slug, "print"), `${book.slug}-basili`);
+    // reading online is granted by any of the three purchases
+    const online = slugsGranting(book.slug, "online");
+    for (const edition of EBOOK_EDITIONS) assert.ok(online.includes(editionSlug(book.slug, edition)), `${book.slug}: ${edition} should grant online`);
+    // the download is not granted by the cheaper online edition
+    const pdf = slugsGranting(book.slug, "pdf");
+    assert.deepEqual(pdf, [book.slug]);
+    assert.equal(pdf.includes(editionSlug(book.slug, "online")), false, `${book.slug}: online must not unlock the PDF`);
+    // an edition slug must never collide with another book or a bundle
+    for (const edition of EBOOK_EDITIONS) {
+      const slug = editionSlug(book.slug, edition);
+      if (edition !== "pdf") assert.equal(findNetfenerEbook(slug), undefined, `${slug}: collides with a book slug`);
+      assert.equal(findNetfenerBundle(slug), undefined, `${slug}: collides with a bundle slug`);
+    }
   }
 });
 
