@@ -22,7 +22,7 @@ export const NETFENER_EBOOKS = [
   },
   {
     slug: "paragrafin-isigini-yak",
-    title: "Paragrafın Işığını Yak",
+    title: "Paragrafın Işığını Yak 1",
     subtitle: "Cilt 1 · Akademik Paragraf",
     description: "10 ünite, 40 özgün akademik metin ve 200 soruyla; her metinde okuma rotası, paragraf izi, kanıtı taşıyan cümle ve çeldirici analizli çözümlerle YDS ve YÖKDİL paragraf sorularında doğru şıkka karar verme çalışması.",
     pages: 135,
@@ -32,7 +32,7 @@ export const NETFENER_EBOOKS = [
   },
   {
     slug: "paragrafin-isigini-yak-cilt-2",
-    title: "Paragrafın Işığını Yak",
+    title: "Paragrafın Işığını Yak 2",
     subtitle: "Cilt 2 · İleri Paragraf",
     description: "10 ünite, 40 özgün metin ve 200 soruyla ileri düzey paragraf: iki metni karşılaştırma, söylenmeyen varsayımı görünür kılma, argüman değerlendirme, süreç kurma, kavram tarihi, sayı yorumlama, tanım sınırı ve örneğin gücünü ölçme.",
     pages: 135,

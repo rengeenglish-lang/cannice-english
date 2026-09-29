@@ -338,8 +338,8 @@ async function main() {
     { slug: "toefl-ibt-reading-practice-book", shortDescription: "TOEFL iBT Reading bölümü için güncel formatta, cevap anahtarlı okuma pasajları.", title: "TOEFL iBT Reading Practice Book", examCode: "TOEFL", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 130 },
     { slug: "pte-academic-reading-practice-book", shortDescription: "PTE Academic Reading görev tipleri için adım adım strateji ve pratik sorular.", title: "PTE Academic Reading Practice Book", examCode: "PTE", basePrice: "299.00", salePrice: "219.00", author: "Netfener Hoca", format: "PDF", pageCount: 120 },
     // Netfener's own e-books are sold individually; the slug must match lib/netfener-ebooks.ts.
-    { slug: "paragrafin-isigini-yak", shortDescription: "10 ünite, 40 özgün akademik metin ve 200 soruyla YDS ve YÖKDİL paragraf sorularında karar verme çalışması.", title: "Paragrafın Işığını Yak — Cilt 1", examCode: "YDS", basePrice: "299.00", salePrice: "299.00", author: "Netfener Hoca", format: "PDF", pageCount: 135 },
-    { slug: "paragrafin-isigini-yak-cilt-2", shortDescription: "İleri paragraf: karşılaştırma, varsayım, argüman değerlendirme ve uzun metin çalışmasıyla 40 özgün metin, 200 soru.", title: "Paragrafın Işığını Yak — Cilt 2", examCode: "YDS", basePrice: "299.00", salePrice: "299.00", author: "Netfener Hoca", format: "PDF", pageCount: 135 },
+    { slug: "paragrafin-isigini-yak", shortDescription: "10 ünite, 40 özgün akademik metin ve 200 soruyla YDS ve YÖKDİL paragraf sorularında karar verme çalışması.", title: "Paragrafın Işığını Yak 1", examCode: "YDS", basePrice: "299.00", salePrice: "299.00", author: "Netfener", format: "PDF", pageCount: 135 },
+    { slug: "paragrafin-isigini-yak-cilt-2", shortDescription: "İleri paragraf: karşılaştırma, varsayım, argüman değerlendirme ve uzun metin çalışmasıyla 40 özgün metin, 200 soru.", title: "Paragrafın Işığını Yak 2", examCode: "YDS", basePrice: "299.00", salePrice: "299.00", author: "Netfener", format: "PDF", pageCount: 135 },
   ];
 
   for (const def of bookDefs) {
