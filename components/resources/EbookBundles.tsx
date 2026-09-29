@@ -4,6 +4,9 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { NETFENER_BUNDLES, bundleBooks } from "@/lib/netfener-bundles";
 import type { BundleOffer } from "@/server/services/ebooks.service";
 
+/** How much shelf shows in front of the books, in pixels. */
+const FLOOR = 58;
+
 /** Bundle cards: the covers you get, what you save, and one button. */
 export function EbookBundles({ offers, signedIn }: {
   offers: Record<string, BundleOffer>;
@@ -37,7 +40,24 @@ export function EbookBundles({ offers, signedIn }: {
                 Birlikte al
               </span>
 
-              <div className="flex items-end justify-center rounded-2xl bg-[color:var(--brand-soft)] px-4 pb-7 pt-12">
+              <div
+                className="relative flex items-end justify-center overflow-hidden rounded-2xl px-4 pt-12"
+                style={{
+                  paddingBottom: FLOOR,
+                  // wall above, polished shelf below; the seam sits exactly on the books' baseline
+                  background: `linear-gradient(180deg,#f7f1e2 0%,#efe6d2 calc(100% - ${FLOOR}px),#e3d8bd calc(100% - ${FLOOR}px),#d3c5a5 100%)`,
+                }}
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 h-px"
+                  style={{ bottom: FLOOR, background: "linear-gradient(90deg,transparent,rgba(120,100,60,.45),transparent)" }}
+                />
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-0"
+                  style={{ height: FLOOR, background: "linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 55%)" }}
+                />
                 {shown.map((book, index) => (
                   <div
                     key={book.slug}
