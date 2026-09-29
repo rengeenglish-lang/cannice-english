@@ -4,6 +4,8 @@ import { createNotification } from "@/server/services/notifications.service";
 import { grantPlanForOrderItem } from "@/server/services/plans.service";
 import { enrollGroupSlotAndSeries } from "@/server/services/group-availability.service";
 import { isMonthlyBilledCategory, nextPaidThrough } from "@/lib/billing";
+import { NETFENER_EBOOKS } from "@/lib/netfener-ebooks";
+import { editionSlug } from "@/lib/netfener-ebook-editions";
 
 export function listOrders() {
   return db.order.findMany({
@@ -16,6 +18,28 @@ export function getOrderForAdmin(id: string) {
   return db.order.findUnique({
     where: { id },
     include: { items: true, payment: true, user: { select: { name: true, email: true } } },
+  });
+}
+
+/** Our printed editions; the older print books are matched by their format instead. */
+const PRINTED_SLUGS = NETFENER_EBOOKS.map((book) => editionSlug(book.slug, "print"));
+
+/**
+ * The print queue: paid orders holding something that has to be printed and posted, oldest first.
+ * This is what the fulfilment partner works from, so it carries the address the buyer gave.
+ */
+export function listPrintOrders() {
+  return db.order.findMany({
+    where: {
+      status: "PAID",
+      // Everything that arrives in a parcel: our printed editions, plus the older print books.
+      items: { some: { product: { OR: [{ slug: { in: PRINTED_SLUGS } }, { book: { format: { in: ["PRINT", "PRINT_AND_PDF"] } } }] } } },
+    },
+    orderBy: { createdAt: "asc" },
+    include: {
+      items: { include: { product: { select: { slug: true, book: { select: { format: true } } } } } },
+      user: { select: { name: true, email: true } },
+    },
   });
 }
 

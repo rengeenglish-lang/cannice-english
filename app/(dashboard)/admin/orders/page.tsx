@@ -21,7 +21,10 @@ export default async function AdminOrdersPage() {
   return (
     <div>
       <p className="eyebrow">Yönetim</p>
-      <h1 className="page-title">Siparişler</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="page-title">Siparişler</h1>
+        <Link href="/admin/orders/baski" className="ghost-button">Baskı siparişleri</Link>
+      </div>
       <div className="dashboard-panel mt-8 overflow-x-auto">
         <table className="dashboard-table">
           <thead>

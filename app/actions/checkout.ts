@@ -13,6 +13,7 @@ import { inspectCart } from "@/server/services/cart-checks.service";
 import { getAuthContext } from "@/server/auth/context";
 import { CART_COUPON_COOKIE } from "@/lib/cart";
 import { guestCheckoutSchema } from "@/lib/validation/checkout";
+import { shippingAddressSchema, shippingTotalFor } from "@/lib/shipping";
 import { validateCouponForOrder, redeemCoupon } from "@/server/services/coupons.service";
 
 export type CheckoutFormState = { status: "idle" | "error"; message?: string };
@@ -59,6 +60,22 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
 
   const subtotal = cart.items.reduce((sum, item) => sum + Number(item.unitPriceSnapshot) * item.quantity, 0);
 
+  // A printed book has to reach an address, and the flat fee is charged once per order.
+  const shippingTotal = shippingTotalFor(cart.items.map((item) => item.product));
+  let shippingAddress = null;
+  if (shippingTotal > 0) {
+    const text = (name: string) => {
+      const value = String(formData.get(name) ?? "").trim();
+      return value.length ? value : undefined;
+    };
+    const parsed = shippingAddressSchema.safeParse({
+      name: text("shipName"), phone: text("shipPhone"), line1: text("shipLine1"), line2: text("shipLine2"),
+      district: text("shipDistrict"), city: text("shipCity"), postalCode: text("shipPostalCode"), note: text("shipNote"),
+    });
+    if (!parsed.success) return { status: "error" as const, message: "Basılı kitabın gönderileceği adresi eksiksiz doldurun." };
+    shippingAddress = parsed.data;
+  }
+
   const rawCouponCode = String(formData.get("couponCode") ?? "").trim();
   let discountTotal = 0;
   let appliedCouponId: string | null = null;
@@ -72,7 +89,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
     couponCode = result.coupon.code;
   }
 
-  const total = Math.max(0, subtotal - discountTotal);
+  const total = Math.max(0, subtotal - discountTotal) + shippingTotal;
   const paymentMethod = formData.get("paymentMethod") === "PAYPAL" ? "PAYPAL" : "MANUAL";
 
   const order = await db.order.create({
@@ -84,6 +101,8 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
       status: "AWAITING_PAYMENT",
       subtotal,
       discountTotal,
+      shippingTotal,
+      shippingAddress: shippingAddress ?? undefined,
       total,
       couponCode,
       checkoutConsent,

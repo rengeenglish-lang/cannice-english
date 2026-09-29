@@ -9,6 +9,7 @@ import { findCart, refreshCartPrices } from "@/server/services/cart.service";
 import { inspectCart, type CartIssue, type CartItemDetails } from "@/server/services/cart-checks.service";
 import { validateCouponForOrder } from "@/server/services/coupons.service";
 import { formatTRY } from "@/lib/pricing";
+import { shippingTotalFor } from "@/lib/shipping";
 import { CART_COUPON_COOKIE } from "@/lib/cart";
 import { clearCartAction, moveToFavoritesAction, removeCartItemAction, restoreCartItemAction } from "@/app/actions/cart";
 import { CartCouponForm } from "@/components/cart/CartCouponForm";
@@ -49,7 +50,9 @@ export default async function CartPage({ searchParams }: Props) {
   const couponCode = (await cookies()).get(CART_COUPON_COOKIE)?.value ?? null;
   const coupon = couponCode && items.length ? await validateCouponForOrder(couponCode, subtotal) : null;
   const couponDiscount = coupon?.ok ? coupon.discount : 0;
-  const total = Math.max(0, subtotal - couponDiscount);
+  // A printed book in the basket adds one flat shipping fee, shown here rather than sprung at the end.
+  const shippingTotal = shippingTotalFor(items.map((item) => item.product));
+  const total = Math.max(0, subtotal - couponDiscount) + shippingTotal;
 
   const removedProduct = kaldirildi ? await db.product.findUnique({ where: { id: kaldirildi }, select: { id: true, title: true } }) : null;
   const removedStillGone = removedProduct && !items.some((i) => i.productId === removedProduct.id);
@@ -162,6 +165,9 @@ export default async function CartPage({ searchParams }: Props) {
               ) : null}
               {couponDiscount > 0 && coupon?.ok ? (
                 <div className="flex justify-between font-semibold text-emerald-700"><dt>Kupon ({coupon.coupon.code})</dt><dd>-{formatTRY(couponDiscount)}</dd></div>
+              ) : null}
+              {shippingTotal > 0 ? (
+                <div className="flex justify-between"><dt className="text-slate-500">Kargo (basılı kitap)</dt><dd>{formatTRY(shippingTotal)}</dd></div>
               ) : null}
               <div className="flex justify-between border-t border-[color:var(--border)] pt-2 text-base font-black text-[color:var(--brand)]">
                 <dt>Toplam</dt><dd>{formatTRY(total)}</dd>

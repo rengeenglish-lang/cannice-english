@@ -648,20 +648,24 @@ model CartItem {
 }
 
 model Order {
-  id            String      @id @default(cuid())
-  userId        String?
-  guestName     String?
-  guestEmail    String?
-  guestPhone    String?
-  status        OrderStatus @default(PENDING)
-  subtotal      Decimal     @db.Decimal(12, 2)
-  discountTotal Decimal     @default(0) @db.Decimal(12, 2)
-  total         Decimal     @db.Decimal(12, 2)
-  currency      String      @default("TRY")
+  id              String      @id @default(cuid())
+  userId          String?
+  guestName       String?
+  guestEmail      String?
+  guestPhone      String?
+  status          OrderStatus @default(PENDING)
+  subtotal        Decimal     @db.Decimal(12, 2)
+  discountTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  /// One flat fee per order that holds a printed book; zero for digital-only orders.
+  shippingTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  /// Where the printed books go. Absent on digital-only orders, and never guessed.
+  shippingAddress Json?
+  total           Decimal     @db.Decimal(12, 2)
+  currency        String      @default("TRY")
   checkoutConsent Json?
-  couponCode    String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  couponCode      String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   user    User?       @relation(fields: [userId], references: [id])
   items   OrderItem[]
@@ -1651,7 +1655,9 @@ model LexiconWordState {
   @@map("lexicon_word_states")
 }
 
-/** One finished test after a flashcard set. */
+/**
+ * One finished test after a flashcard set.
+ */
 model LexiconSetTest {
   id           String   @id @default(cuid())
   userId       String

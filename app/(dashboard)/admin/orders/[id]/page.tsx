@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getOrderForAdmin } from "@/server/services/orders.service";
 import { markOrderPaidAction, markOrderCancelledAction, markOrderRefundedAction } from "@/app/actions/admin-orders";
 import { formatTRY } from "@/lib/pricing";
+import { formatShippingAddress, parseShippingAddress } from "@/lib/shipping";
 
 export const metadata: Metadata = { title: "Sipariş Detayı" };
 
@@ -29,6 +30,7 @@ export default async function AdminOrderDetailPage({ params }: Props) {
   const canCancel = order.status === "PENDING" || order.status === "AWAITING_PAYMENT";
   const canMarkPaid = canCancel;
   const canRefund = order.status === "PAID";
+  const shippingAddress = parseShippingAddress(order.shippingAddress);
 
   return (
     <div>
@@ -47,6 +49,15 @@ export default async function AdminOrderDetailPage({ params }: Props) {
         {order.guestPhone ? <p className="text-sm text-[color:var(--muted)]">{order.guestPhone}</p> : null}
       </div>
 
+      {shippingAddress ? (
+        <div className="dashboard-panel mt-6">
+          <p className="eyebrow">Teslimat Adresi</p>
+          <address className="mt-2 not-italic leading-6 text-[color:var(--foreground)]">
+            {formatShippingAddress(shippingAddress).map((line) => <span key={line} className="block">{line}</span>)}
+          </address>
+        </div>
+      ) : null}
+
       <div className="dashboard-panel mt-6">
         <p className="eyebrow">Ürünler</p>
         <ul className="mt-3 divide-y divide-[color:var(--border)]">
@@ -64,6 +75,9 @@ export default async function AdminOrderDetailPage({ params }: Props) {
               <span>İndirim{order.couponCode ? ` (${order.couponCode})` : ""}</span>
               <span>-{formatTRY(String(order.discountTotal))}</span>
             </div>
+          ) : null}
+          {Number(order.shippingTotal) > 0 ? (
+            <div className="flex justify-between"><span className="text-[color:var(--muted)]">Kargo</span><span>{formatTRY(String(order.shippingTotal))}</span></div>
           ) : null}
           <div className="flex justify-between text-base font-bold text-[color:var(--foreground)]"><span>Toplam</span><span>{formatTRY(String(order.total))}</span></div>
         </div>

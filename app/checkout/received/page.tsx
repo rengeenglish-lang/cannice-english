@@ -58,6 +58,12 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
                 <span>-{formatTRY(String(order.discountTotal))}</span>
               </div>
             ) : null}
+            {Number(order.shippingTotal) > 0 ? (
+              <div className="flex justify-between text-sm text-[color:var(--muted)]">
+                <span>Kargo</span>
+                <span>{formatTRY(String(order.shippingTotal))}</span>
+              </div>
+            ) : null}
             <div className="flex justify-between pt-1 font-black text-[color:var(--brand)]">
               <span>Toplam (KDV Dahil)</span>
               <span>{formatTRY(String(order.total))}</span>

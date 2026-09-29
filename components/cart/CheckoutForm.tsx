@@ -4,10 +4,11 @@ import { CheckoutConsents } from "@/components/checkout/CheckoutConsents";
 import { CHECKOUT_ORDER_BUTTON, type ConsentConfiguration, type ConsentRequirements } from "@/lib/checkout-consent";
 import { useActionState, useState } from "react";
 import { placeOrderAction, type CheckoutFormState } from "@/app/actions/checkout";
+import { formatTRY } from "@/lib/pricing";
 
 const initialState: CheckoutFormState = { status: "idle" };
 
-export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements, documentsDraft = false, consentConfiguration }: { isGuest: boolean; defaultCoupon?: string; consentRequirements: ConsentRequirements; documentsDraft?: boolean; consentConfiguration: ConsentConfiguration }) {
+export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements, documentsDraft = false, consentConfiguration, shippingTotal = 0 }: { isGuest: boolean; defaultCoupon?: string; consentRequirements: ConsentRequirements; documentsDraft?: boolean; consentConfiguration: ConsentConfiguration; shippingTotal?: number }) {
   const [state, formAction, pending] = useActionState(placeOrderAction, initialState);
   const [paymentMethod, setPaymentMethod] = useState<"MANUAL" | "PAYPAL">("PAYPAL");
 
@@ -54,6 +55,48 @@ export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements,
             <input id="guestPhone" name="guestPhone" required className="auth-input" />
           </div>
         </>
+      ) : null}
+      {shippingTotal > 0 ? (
+        <fieldset className="rounded-xl border border-[color:var(--border)] p-4">
+          <legend className="label px-1">Teslimat Adresi</legend>
+          <p className="mb-3 text-xs text-[color:var(--muted)]">
+            Basılı kitap siparişe özel basılır ve bu adrese kargolanır. Kargo ücreti {formatTRY(shippingTotal)} olarak siparişe eklenir.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="label" htmlFor="shipName">Alıcı Adı Soyadı</label>
+              <input id="shipName" name="shipName" required autoComplete="name" className="auth-input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="shipPhone">Telefon</label>
+              <input id="shipPhone" name="shipPhone" required autoComplete="tel" className="auth-input" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="label" htmlFor="shipLine1">Adres</label>
+              <input id="shipLine1" name="shipLine1" required autoComplete="address-line1" placeholder="Mahalle, cadde, sokak, kapı no" className="auth-input" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="label" htmlFor="shipLine2">Adres (devamı, opsiyonel)</label>
+              <input id="shipLine2" name="shipLine2" autoComplete="address-line2" placeholder="Apartman, daire, kat" className="auth-input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="shipDistrict">İlçe</label>
+              <input id="shipDistrict" name="shipDistrict" required autoComplete="address-level2" className="auth-input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="shipCity">İl</label>
+              <input id="shipCity" name="shipCity" required autoComplete="address-level1" className="auth-input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="shipPostalCode">Posta Kodu (opsiyonel)</label>
+              <input id="shipPostalCode" name="shipPostalCode" inputMode="numeric" autoComplete="postal-code" className="auth-input" />
+            </div>
+            <div>
+              <label className="label" htmlFor="shipNote">Kargo Notu (opsiyonel)</label>
+              <input id="shipNote" name="shipNote" placeholder="Kapıcıya bırakılabilir" className="auth-input" />
+            </div>
+          </div>
+        </fieldset>
       ) : null}
       <div>
         <label className="label" htmlFor="couponCode">Kupon Kodu (opsiyonel)</label>

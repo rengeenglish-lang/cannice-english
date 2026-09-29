@@ -103,6 +103,12 @@ export default async function OrderReceiptPage({ params }: Props) {
               <span>-{formatTRY(String(order.discountTotal))}</span>
             </div>
           ) : null}
+          {Number(order.shippingTotal) > 0 ? (
+            <div className="flex justify-between text-[color:var(--muted)]">
+              <span>Kargo</span>
+              <span>{formatTRY(String(order.shippingTotal))}</span>
+            </div>
+          ) : null}
           <div className="flex justify-between text-[color:var(--muted)]">
             <span>KDV (%{KDV_RATE_PERCENT}, fiyata dahildir)</span>
             <span>{formatTRY(kdvTotal)}</span>
