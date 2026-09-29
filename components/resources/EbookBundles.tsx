@@ -26,11 +26,12 @@ export function EbookBundles({ offers, signedIn }: {
         {sellable.map((bundle) => {
           const offer = offers[bundle.slug];
           const books = bundleBooks(bundle);
-          // Five covers is the most that fans out without a title disappearing behind the next book.
+          // Five covers is the most that fits the shelf once they are spaced apart.
           const shown = books.slice(0, 5);
           const hidden = books.length - shown.length;
           const coverWidth = shown.length <= 3 ? 112 : shown.length === 4 ? 100 : 88;
-          const overlap = Math.round(coverWidth * 0.14);
+          // A gap, not an overlap: touching covers read as one continuous picture.
+          const gap = Math.round(coverWidth * 0.16);
           return (
             <li
               key={bundle.slug}
@@ -80,7 +81,7 @@ export function EbookBundles({ offers, signedIn }: {
                     <div
                       key={book.slug}
                       className="relative"
-                      style={{ zIndex: index + 1, marginLeft: index ? -overlap : 0 }}
+                      style={{ zIndex: index + 1, marginLeft: index ? gap : 0 }}
                     >
                       <Book3D src={book.cover} alt={book.title} width={coverWidth} />
                     </div>
