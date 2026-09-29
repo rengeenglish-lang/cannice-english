@@ -153,12 +153,13 @@ test("editions: a heavier purchase covers the lighter one, and print stands alon
     assert.equal(editionSlug(book.slug, "online"), `${book.slug}-online`);
     assert.equal(editionSlug(book.slug, "print"), `${book.slug}-basili`);
     // reading online is granted by any of the three purchases
-    const online = slugsGranting(book.slug, "online");
+    const online: string[] = slugsGranting(book.slug, "online");
     for (const edition of EBOOK_EDITIONS) assert.ok(online.includes(editionSlug(book.slug, edition)), `${book.slug}: ${edition} should grant online`);
     // the download is not granted by the cheaper online edition
-    const pdf = slugsGranting(book.slug, "pdf");
+    const pdf: string[] = slugsGranting(book.slug, "pdf");
     assert.deepEqual(pdf, [book.slug]);
-    assert.equal(pdf.includes(editionSlug(book.slug, "online")), false, `${book.slug}: online must not unlock the PDF`);
+    const onlineSlug = editionSlug(book.slug, "online");
+    assert.equal(pdf.some((granted) => granted === onlineSlug), false, `${book.slug}: online must not unlock the PDF`);
     // an edition slug must never collide with another book or a bundle
     for (const edition of EBOOK_EDITIONS) {
       const slug = editionSlug(book.slug, edition);
@@ -190,4 +191,51 @@ test("cart requires login and a set price, without promising plan access to paid
   assert.equal(member.issues.length, 0);
   product.salePrice = 0;
   assert.equal((await inspect(cart, { id: "subscriber", role: "STUDENT" })).blocking, true);
+});
+
+test("page images are gated per book, and the online edition is what unlocks them", async () => {
+  const source = await fs.readFile("app/api/ebooks/[slug]/sayfa/[page]/route.ts", "utf8");
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
+  let signedIn = false;
+  let entitled = false;
+  const asked: { slug: string; edition: string }[] = [];
+  const rendered: { slug: string; page: number }[] = [];
+  const image = new Uint8Array([0xff, 0xd8, 0xff, 1, 2, 3]);
+  const exported: { GET?: (request: Request, context: { params: Promise<{ slug: string; page: string }> }) => Promise<Response> } = {};
+  vm.runInNewContext(code, { exports: exported, Response, Uint8Array, String, Number, require(name: string) {
+    if (name === "@/server/auth/context") return { getAuthContext: async () => signedIn ? { id: "test-user" } : null };
+    if (name === "@/server/services/ebooks.service") return { hasEbookAccess: async (_user: string, slug: string, edition: string) => { asked.push({ slug, edition }); return entitled; } };
+    if (name === "@/server/services/ebook-pages.service") return { renderEbookPage: async (slug: string, page: number) => {
+      // the real service refuses a page outside the book, and the route must turn that into a 404
+      if (!Number.isInteger(page) || page < 1 || page > 135) throw new Error("Page out of range");
+      rendered.push({ slug, page });
+      return image;
+    } };
+    if (name === "@/lib/netfener-ebooks") return { findNetfenerEbook };
+    throw new Error(`Unexpected dependency: ${name}`);
+  } });
+  const get = (slug: string, page: string) => exported.GET!(new Request(`https://example.test/api/ebooks/${slug}/sayfa/${page}`), { params: Promise.resolve({ slug, page }) });
+
+  assert.equal((await get("../../secret", "1")).status, 404);
+  assert.equal((await get("paragrafin-isigini-yak", "1")).status, 401);
+  signedIn = true;
+  assert.equal((await get("paragrafin-isigini-yak", "1")).status, 403);
+  // nothing is rasterised for a visitor who has not bought the book
+  assert.deepEqual(rendered, []);
+  assert.deepEqual(asked, [{ slug: "paragrafin-isigini-yak", edition: "online" }]);
+
+  entitled = true;
+  const response = await get("paragrafin-isigini-yak", "7");
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "image/jpeg");
+  // the buyer's own browser may keep pages it has turned to; shared caches must not
+  assert.equal(response.headers.get("cache-control"), "private, max-age=3600");
+  assert.equal(response.headers.get("content-length"), String(image.byteLength));
+  assert.deepEqual(new Uint8Array(await response.arrayBuffer()), image);
+  assert.deepEqual(rendered, [{ slug: "paragrafin-isigini-yak", page: 7 }]);
+
+  for (const page of ["0", "999999", "abc", "-1", "1.5"]) {
+    assert.equal((await get("paragrafin-isigini-yak", page)).status, 404, `page ${page} should not render`);
+  }
+  assert.equal(rendered.length, 1);
 });

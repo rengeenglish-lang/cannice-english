@@ -20,7 +20,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
     "/api/ebooks/*": ["./content/ebooks/*.pdf"],
+    // the reader rasterises pages from the same PDFs
+    "/api/ebooks/*/sayfa/*": ["./content/ebooks/*.pdf"],
   },
+  serverExternalPackages: ["mupdf"],
   images: {
     minimumCacheTTL: 2_678_400,
     formats: ["image/webp"],
