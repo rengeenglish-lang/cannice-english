@@ -5,7 +5,7 @@ import { NETFENER_BUNDLES, bundleBooks } from "@/lib/netfener-bundles";
 import type { BundleOffer } from "@/server/services/ebooks.service";
 
 /** How much shelf shows in front of the books, in pixels. */
-const FLOOR = 58;
+const FLOOR = 64;
 
 /** Bundle cards: the covers you get, what you save, and one button. */
 export function EbookBundles({ offers, signedIn }: {
@@ -36,42 +36,61 @@ export function EbookBundles({ offers, signedIn }: {
               key={bundle.slug}
               className="panel group relative flex flex-col overflow-hidden border-2 border-[color:var(--border)] transition hover:-translate-y-1 hover:border-[color:var(--accent)]"
             >
-              <span className="absolute left-0 top-0 rounded-br-2xl bg-[color:var(--brand)] px-4 py-2 text-xs font-extrabold uppercase tracking-[.14em] text-[color:var(--gold)]">
+              <span className="absolute left-0 top-0 z-10 rounded-br-2xl bg-[color:var(--brand)] px-4 py-2 text-xs font-extrabold uppercase tracking-[.14em] text-[color:var(--gold)]">
                 Birlikte al
               </span>
 
               <div
-                className="relative flex items-end justify-center overflow-hidden rounded-2xl px-4 pt-12"
+                className="relative h-[240px] overflow-hidden rounded-2xl sm:h-[262px]"
                 style={{
-                  paddingBottom: FLOOR,
-                  // wall above, polished shelf below; the seam sits exactly on the books' baseline
-                  background: `linear-gradient(180deg,#f7f1e2 0%,#efe6d2 calc(100% - ${FLOOR}px),#e3d8bd calc(100% - ${FLOOR}px),#d3c5a5 100%)`,
+                  perspective: 900,
+                  perspectiveOrigin: "50% 42%",
+                  background: "linear-gradient(180deg,#171512 0%,#211d18 58%,#2a241d 100%)",
                 }}
               >
+                {/* the shelf itself: a plane laid down under the books, receding towards the wall */}
+                <div
+                  aria-hidden
+                  style={{
+                    position: "absolute",
+                    left: "-30%",
+                    right: "-30%",
+                    bottom: 0,
+                    height: 300,
+                    transformOrigin: "bottom center",
+                    transform: "rotateX(74deg)",
+                    background:
+                      "linear-gradient(180deg,#5a4028 0%,#402c1a 38%,#2a1c10 100%)," +
+                      "repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 58px,rgba(255,255,255,.05) 58px 60px)",
+                  }}
+                />
+                {/* lamp light falling from above the shelf */}
                 <span
                   aria-hidden
-                  className="absolute inset-x-0 h-px"
-                  style={{ bottom: FLOOR, background: "linear-gradient(90deg,transparent,rgba(120,100,60,.45),transparent)" }}
+                  className="pointer-events-none absolute left-1/2 top-[-40px] h-[260px] w-[420px] -translate-x-1/2"
+                  style={{ background: "radial-gradient(50% 60% at 50% 0%,rgba(255,215,150,.30),transparent 72%)" }}
                 />
                 <span
                   aria-hidden
-                  className="absolute inset-x-0 bottom-0"
-                  style={{ height: FLOOR, background: "linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 55%)" }}
+                  className="absolute inset-x-0 h-0.5"
+                  style={{ bottom: FLOOR, background: "linear-gradient(90deg,transparent,rgba(255,206,130,.35),transparent)" }}
                 />
-                {shown.map((book, index) => (
-                  <div
-                    key={book.slug}
-                    className="relative"
-                    style={{ zIndex: index + 1, marginLeft: index ? -overlap : 0 }}
-                  >
-                    <Book3D src={book.cover} alt={book.title} width={coverWidth} />
-                  </div>
-                ))}
-                {hidden > 0 ? (
-                  <span className="ml-4 self-center rounded-full bg-[color:var(--brand)] px-3 py-2 text-xs font-extrabold text-[color:var(--gold)]">
-                    +{hidden} kitap
-                  </span>
-                ) : null}
+                <div className="absolute inset-x-0 flex items-end justify-center px-4" style={{ bottom: FLOOR }}>
+                  {shown.map((book, index) => (
+                    <div
+                      key={book.slug}
+                      className="relative"
+                      style={{ zIndex: index + 1, marginLeft: index ? -overlap : 0 }}
+                    >
+                      <Book3D src={book.cover} alt={book.title} width={coverWidth} />
+                    </div>
+                  ))}
+                  {hidden > 0 ? (
+                    <span className="ml-4 self-center rounded-full border border-[color:var(--gold)]/40 bg-white/10 px-3 py-2 text-xs font-extrabold text-[color:var(--gold)]">
+                      +{hidden} kitap
+                    </span>
+                  ) : null}
+                </div>
               </div>
 
               <div className="flex flex-1 flex-col px-1 pt-6">

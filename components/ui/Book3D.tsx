@@ -21,8 +21,8 @@ export function Book3D({ src, alt, width = 104, angle = -20, priority = false, r
       {/* contact shadow on the shelf */}
       <span
         aria-hidden
-        className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 rounded-[50%] bg-[rgba(60,45,20,.38)] blur-[5px]"
-        style={{ width: width * 1.05, height: Math.max(7, width * 0.1) }}
+        className="absolute -bottom-[7px] left-1/2 -translate-x-1/2 rounded-[50%] bg-black/55 blur-[6px]"
+        style={{ width: width * 1.1, height: Math.max(7, width * 0.11) }}
       />
       <div
         className="relative h-full w-full transition-transform duration-500 ease-out motion-safe:group-hover:[transform:perspective(1100px)_rotateY(-8deg)]"
@@ -46,7 +46,7 @@ export function Book3D({ src, alt, width = 104, angle = -20, priority = false, r
           height={1274}
           sizes={`${width}px`}
           priority={priority}
-          className="relative h-full w-full rounded-[3px] object-cover shadow-[0_16px_30px_rgba(7,27,52,.35)]"
+          className="relative h-full w-full rounded-[3px] object-cover shadow-[0_18px_26px_rgba(0,0,0,.5)]"
         />
         {/* the spine wrap: dark at the hinge, a lift of light along the fold */}
         <span
@@ -55,7 +55,7 @@ export function Book3D({ src, alt, width = 104, angle = -20, priority = false, r
           style={{
             width: spine,
             background:
-              "linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.28) 45%,rgba(255,255,255,.16) 72%,rgba(0,0,0,.30) 100%)",
+              "linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.28) 45%,rgba(255,226,170,.18) 72%,rgba(0,0,0,.30) 100%)",
           }}
         />
         {/* sheen across the board */}
@@ -73,7 +73,7 @@ export function Book3D({ src, alt, width = 104, angle = -20, priority = false, r
             aria-hidden
             className="pointer-events-none absolute left-0 top-full w-full overflow-hidden opacity-25"
             style={{
-              height: Math.round(height * 0.34),
+              height: Math.round(height * 0.3),
               maskImage: "linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,0))",
               WebkitMaskImage: "linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,0))",
             }}
