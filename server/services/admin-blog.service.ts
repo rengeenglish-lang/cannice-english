@@ -4,11 +4,11 @@ import { blogPostSchema, blogCategorySchema } from "@/lib/validation/admin";
 import type { z } from "zod";
 
 export function listBlogPostsForAdmin() {
-  return db.blogPost.findMany({ include: { category: true }, orderBy: { createdAt: "desc" } });
+  return db.blogPost.findMany({ where: { seoDraft: { is: null } }, include: { category: true }, orderBy: { createdAt: "desc" } });
 }
 
 export function getBlogPost(id: string) {
-  return db.blogPost.findUnique({ where: { id } });
+  return db.blogPost.findFirst({ where: { id, seoDraft: { is: null } } });
 }
 
 export function listBlogCategories() {
@@ -42,6 +42,7 @@ export async function createBlogPost(authorId: string, raw: Record<string, unkno
 }
 
 export async function updateBlogPost(id: string, raw: Record<string, unknown>) {
+  await guardSeoDraft(id);
   const input = blogPostSchema.parse(raw);
   const existing = await db.blogPost.findUniqueOrThrow({ where: { id } });
   const data = toData(input);
@@ -52,5 +53,13 @@ export async function updateBlogPost(id: string, raw: Record<string, unknown>) {
 }
 
 export async function deleteBlogPost(id: string) {
+  await guardSeoDraft(id);
   return db.blogPost.delete({ where: { id } });
+}
+
+// SEO-managed drafts remain in BlogPost but cannot bypass the studio through
+// the legacy staff editor. Existing ordinary blog behavior is unchanged.
+async function guardSeoDraft(postId: string) {
+  if (await db.seoArticleDraft.findUnique({where:{postId},select:{id:true}}))
+    throw new Error("SEO taslakları Makale stüdyosundan yönetilir; bu editörden yayınlanamaz veya silinemez.");
 }

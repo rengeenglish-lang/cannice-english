@@ -8,7 +8,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
-  if (!post) return { title: "Yazı Bulunamadı" };
+  if (!post || post.status !== "PUBLISHED") return { title: "Yazı Bulunamadı", robots: { index: false, follow: false } };
   const title = post.seoTitle ?? post.title;
   const description = post.seoDescription ?? post.excerpt ?? undefined;
   return { title, description, openGraph: { title, description, type: "article" } };

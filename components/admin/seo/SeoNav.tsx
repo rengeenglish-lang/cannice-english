@@ -8,12 +8,17 @@ export function SeoNav() {
     <nav aria-label="SEO bölümleri" className="flex flex-wrap gap-2">
       {SEO_SECTIONS.map(([slug, title, phase]) => {
         const href = `/admin/seo/${slug}`;
-        return phase === 1 ? (
+        return phase === 1 ||
+          ["keywords", "opportunities", "studio"].includes(slug) ? (
           <Link
             key={slug}
             href={href}
-            aria-current={pathname === href ? "page" : undefined}
-            className={`${pathname === href ? "primary-button" : "ghost-button border border-[color:var(--border)]"} text-sm`}
+            aria-current={
+              pathname === href || pathname.startsWith(href + "/")
+                ? "page"
+                : undefined
+            }
+            className={`${pathname === href || pathname.startsWith(href + "/") ? "primary-button" : "ghost-button border border-[color:var(--border)]"} text-sm`}
           >
             {title}
           </Link>

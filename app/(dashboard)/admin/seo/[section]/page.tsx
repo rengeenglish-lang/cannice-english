@@ -1,3 +1,5 @@
+import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
+import { SeoStudioPage } from "@/components/admin/seo/SeoStudioPage";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
@@ -57,12 +59,22 @@ export default async function SeoSection({
   searchParams,
 }: {
   params: Promise<{ section: string }>;
-  searchParams: Promise<{ page?: string; q?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; archived?: string }>;
 }) {
   const actor = await getAuthContext();
   if (!actor || actor.role !== "ADMIN") forbidden();
   const { section } = await params;
   const query = await searchParams;
+  if (section === "studio")
+    return <SeoStudioPage actorId={actor.id} page={query.page} />;
+  if (["keywords", "opportunities"].includes(section))
+    return (
+      <SeoKeywordsPage
+        actorId={actor.id}
+        opportunities={section === "opportunities"}
+        query={query}
+      />
+    );
   if (section === "inventory") {
     const { items, count, page, q } = await listSeoInventory(actor.id, query);
     return (
@@ -181,6 +193,12 @@ export default async function SeoSection({
   if (section === "activity") {
     const { items, count, page } = await listSeoActivity(actor.id, query.page);
     const labels: Record<string, string> = {
+      BRAND_SAVED: "Marka profili kaydedildi",
+      KEYWORD_SAVED: "Anahtar kelime kaydedildi",
+      DRAFT_CREATED: "Makale çalışma alanı oluşturuldu",
+      BRIEF_SAVED: "Brief kaydedildi",
+      DRAFT_SAVED: "Makale taslağı kaydedildi",
+      DRAFT_REVIEWED: "Editör incelemesi kaydedildi",
       SETTINGS_SAVED: "Ayarlar kaydedildi",
       INVENTORY_REFRESHED: "Envanter tarandı",
       AUTOPILOT_PAUSED: "Autopilot duraklatıldı",
