@@ -50,7 +50,18 @@ async function main() {
     await page.screenshot({ path: "/tmp/seo-browser-artifacts/inventory-desktop.png", fullPage: true });
     await page.getByRole("navigation", { name: "SEO bölümleri" }).getByRole("link", { name: "İşlem geçmişi", exact: true }).click();
     await expect(page.getByText("SEO UI Test", { exact: false }).first()).toBeVisible();
+    await page.goto("https://localhost:3191/admin/seo/keywords");
+    await page.getByText("Anahtar kelime ekle", {exact:true}).click();
+    await page.getByLabel("Anahtar kelime", {exact:true}).fill("SEO browser fixture keyword");
+    await page.getByLabel("Araştırma kaynağı ve öğrenci ihtiyacı").fill("Isolated browser verification research note");
+    await page.getByRole("button", {name:"Anahtar kelimeyi kaydet",exact:true}).click();
+    await expect(page.getByRole("heading", {name:"SEO browser fixture keyword",exact:true})).toBeVisible();
+    await page.screenshot({path:"/tmp/seo-browser-artifacts/keywords-desktop.png",fullPage:true});
     await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("https://localhost:3191/admin/seo/opportunities");
+    await expect(page.getByRole("heading", {name:"SEO browser fixture keyword",exact:true})).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({path:"/tmp/seo-browser-artifacts/opportunities-mobile.png",fullPage:true});
     await page.goto("https://localhost:3191/admin/seo/settings");
     await expect(page.getByRole("heading", { name: "SEO ayarları", exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -67,6 +78,7 @@ async function main() {
       await page?.screenshot({ path: "/tmp/seo-browser-artifacts/final-state.png", fullPage: true }).catch(() => undefined);
       await browser.close();
     }
+    await db.seoKeyword.deleteMany({where:{keyword:"SEO browser fixture keyword"}});
     await db.user.delete({ where: { id: user.id } }); await db.$disconnect();
     await new Promise<void>((resolve) => proxy.close(() => resolve()));
   }

@@ -1,3 +1,4 @@
+import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
@@ -57,12 +58,13 @@ export default async function SeoSection({
   searchParams,
 }: {
   params: Promise<{ section: string }>;
-  searchParams: Promise<{ page?: string; q?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; archived?: string }>;
 }) {
   const actor = await getAuthContext();
   if (!actor || actor.role !== "ADMIN") forbidden();
   const { section } = await params;
   const query = await searchParams;
+  if (["keywords", "opportunities"].includes(section)) return <SeoKeywordsPage actorId={actor.id} opportunities={section === "opportunities"} query={query}/>;
   if (section === "inventory") {
     const { items, count, page, q } = await listSeoInventory(actor.id, query);
     return (

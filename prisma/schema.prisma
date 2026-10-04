@@ -192,16 +192,17 @@ enum RoadmapItemStatus {
 // ====================================================================
 
 model ExamType {
-  id               String   @id @default(cuid())
-  code             ExamCode @unique
-  slug             String   @unique
+  seoKeywords      SeoKeyword[]
+  id               String       @id @default(cuid())
+  code             ExamCode     @unique
+  slug             String       @unique
   name             String
   shortDescription String?
   iconKey          String?
-  displayOrder     Int      @default(0)
-  active           Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  displayOrder     Int          @default(0)
+  active           Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
   products            Product[]
   testimonials        Testimonial[]
@@ -1716,4 +1717,30 @@ model SeoActivityLog {
   @@index([createdAt])
   @@index([actorId, action, createdAt])
   @@map("seo_activity_logs")
+}
+
+// Phase 2 research records. Unknown demand is NULL, never fabricated.
+model SeoKeyword {
+  id              String    @id @default(cuid())
+  keyword         String
+  normalized      String
+  languageCode    String
+  market          String
+  intent          String
+  examId          String?
+  sourceNote      String
+  monthlySearches Int?
+  demandSource    String?
+  demandCheckedAt DateTime?
+  archived        Boolean   @default(false)
+  revision        Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  exam ExamType? @relation(fields: [examId], references: [id], onDelete: SetNull)
+
+  @@unique([normalized, languageCode, market])
+  @@index([examId])
+  @@index([archived, updatedAt])
+  @@map("seo_keywords")
 }

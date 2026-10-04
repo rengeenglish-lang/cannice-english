@@ -27,7 +27,7 @@ export default async function SeoLayout({
         <SeoControls kind="pause" />
       </header>
       <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm">
-        <strong>Faz 1 — Temel altyapı.</strong> Otomasyon duraklatıldı. AI
+        <strong>Faz 2 geliştiriliyor — Anahtar kelime araştırması.</strong> Otomasyon duraklatıldı. AI
         üretimi ve otomatik yayın etkin değil.
       </p>
       <SeoNav />

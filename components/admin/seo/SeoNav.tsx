@@ -8,7 +8,7 @@ export function SeoNav() {
     <nav aria-label="SEO bölümleri" className="flex flex-wrap gap-2">
       {SEO_SECTIONS.map(([slug, title, phase]) => {
         const href = `/admin/seo/${slug}`;
-        return phase === 1 ? (
+        return (phase === 1 || ["keywords", "opportunities"].includes(slug)) ? (
           <Link
             key={slug}
             href={href}
