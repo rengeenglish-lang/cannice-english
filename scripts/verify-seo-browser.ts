@@ -62,6 +62,8 @@ async function main() {
   } finally {
     if (browser) {
       const page = browser.contexts()[0]?.pages()[0];
+      console.log("Final browser URL:", page?.url());
+      console.log("Final browser text:", (await page?.locator("body").innerText().catch(() => "unavailable"))?.slice(0, 2000));
       await page?.screenshot({ path: "/tmp/seo-browser-artifacts/final-state.png", fullPage: true }).catch(() => undefined);
       await browser.close();
     }
