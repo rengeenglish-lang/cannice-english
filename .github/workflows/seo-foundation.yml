@@ -11,6 +11,7 @@ on:
       - 'server/services/seo/**'
       - 'tests/seo-foundation*'
       - 'scripts/verify-seo-local.ts'
+      - 'scripts/verify-seo-browser.ts'
       - 'prisma/**'
       - '.github/workflows/seo-foundation.yml'
 permissions:
@@ -56,3 +57,21 @@ jobs:
           trap 'kill "$seo_server_pid"' EXIT
           node --input-type=module -e 'for(let n=0;n<30;n++){try{const r=await fetch("http://localhost:3190/api/auth/csrf");if(r.ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,1000));}process.exit(1);'
           node --conditions=react-server --import tsx scripts/verify-seo-local.ts
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+      - name: Verify desktop and mobile admin interactions
+        env:
+          AUTH_URL: https://localhost:3191
+          AUTH_TRUST_HOST: 'true'
+        run: |
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout /tmp/seo-local-key.pem -out /tmp/seo-local-cert.pem -days 1 -subj '/CN=localhost' -addext 'subjectAltName=DNS:localhost' >/dev/null 2>&1
+          npm run start -- --port 3190 > /tmp/seo-browser-server.log 2>&1 &
+          seo_server_pid=$!
+          trap 'kill "$seo_server_pid"' EXIT
+          node --input-type=module -e 'for(let n=0;n<30;n++){try{const r=await fetch("http://localhost:3190/api/auth/csrf");if(r.ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,1000));}process.exit(1);'
+          node --conditions=react-server --import tsx scripts/verify-seo-browser.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-browser-verification
+          path: /tmp/seo-browser-artifacts
