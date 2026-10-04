@@ -175,7 +175,7 @@ export function SeoBriefForm({
       ))}
       <label className="block">
         Arama amacı
-        <select name="intent" defaultValue={brief.intent} className={field}>
+        <select aria-label="Arama amacı" name="intent" defaultValue={brief.intent} className={field}>
           {Object.entries(INTENT_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
               {label}
@@ -186,6 +186,7 @@ export function SeoBriefForm({
       <label className="block">
         Mevcut Netfener sayfası (isteğe bağlı, ilk 200 kayıt)
         <select
+          aria-label="Mevcut Netfener sayfası"
           name="ctaItemId"
           defaultValue={brief.ctaItemId}
           className={field}

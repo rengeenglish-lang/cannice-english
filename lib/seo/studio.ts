@@ -197,7 +197,7 @@ export function inspectDraft(post: DraftContent, brief: StudioBrief) {
   return {
     version: "manual-checklist-1",
     wordCount: words.length,
-    score: Math.round(
+    score: words.length === 0 ? 0 : Math.round(
       (checks.filter((c) => c.passed).length / checks.length) * 100,
     ),
     checks,
