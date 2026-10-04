@@ -33,3 +33,9 @@ Local isolated database migrations, lint and TypeScript pass. Nine SEO tests pas
 ## Boundaries
 
 Paid AI integration, automatic SERP/intent research and metadata generation are not activated. No automatic publishing, scheduling, Search Console, measured demand or attribution. Native publishing/version history belongs to Phase 4; this phase's reviewed drafts remain private. To use the studio: Admin → SEO Autopilot → Keywords → Brief oluştur / aç, complete the brief, copy its ChatGPT prompt, paste the article, save and review.
+
+## Final verification and release status
+
+On 2026-10-04, GitHub Actions SEO run 37228356259 passed all checks, including the full desktop/mobile create-keyword → brief → copyable prompt → paste/edit → rejected duplicate-slug save → retained text → successful save → factual review flow. Draft database state and private metadata were checked. Desktop and mobile screenshots were visually reviewed. Checkout regression run 37228356251 also passed. The two accessible-label defects found by the first browser runs were fixed before these passing runs.
+
+PR #24 is ready for review. It has not been merged or deployed: Vercel still reports resource provisioning failure, consistent with the previously confirmed Neon preview-branch limit. The user has been asked to remove the now-merged Phase 1 preview database `preview/feat/seo-autopilot-foundation`, preserving `main`, before another release attempt. Production remains Phase 1.
