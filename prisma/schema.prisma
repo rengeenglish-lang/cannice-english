@@ -317,6 +317,7 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  seoActivityLogs       SeoActivityLog[]
   orders                Order[]
   cart                  Cart?
   enrollments           Enrollment[]
@@ -1672,4 +1673,47 @@ model LexiconSetTest {
 
   @@index([userId, level, setNumber])
   @@map("lexicon_set_tests")
+}
+
+// SEO inventory is derived from existing content, not a second publishing system.
+model SeoContentItem {
+  id              String   @id @default(cuid())
+  sourceKey       String   @unique
+  sourceType      String
+  sourceId        String
+  url             String
+  title           String
+  excerpt         String?
+  seoTitle        String?
+  seoDescription  String?
+  examSlug        String?
+  topic           String?
+  languageCode    String?
+  access          String
+  publication     String
+  contentHash     String
+  internalLinks   Json
+  publishedAt     DateTime?
+  sourceUpdatedAt DateTime?
+  scannedAt       DateTime
+  available       Boolean  @default(true)
+
+  @@index([url])
+  @@index([available, sourceType])
+  @@index([examSlug])
+  @@index([scannedAt])
+  @@map("seo_content_items")
+}
+
+model SeoActivityLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  details   Json
+  createdAt DateTime @default(now())
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([actorId, action, createdAt])
+  @@map("seo_activity_logs")
 }

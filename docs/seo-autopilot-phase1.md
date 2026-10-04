@@ -1,0 +1,58 @@
+# SEO Autopilot — repository audit and Phase 1
+
+Audit date: 2026-10-04. Baseline: b217e3830794a1ff8b2ce9166e86aa4caffc7b01 (main).
+This is a source-code audit, not a claim to have read production database contents or Google indexing data.
+
+## Audit before implementation
+
+1. **Architecture:** one Next.js App Router app, React server components, server actions, service layer under server/services, Zod validation and Tailwind 4. Vercel deployment, Neon-compatible PostgreSQL. No existing SEO automation engine or LLM integration found.
+2. **Versions:** Next.js 16.3.0, React 19.2.4, NextAuth 5 beta, Prisma 7.9.1 dependency range. Local installed Next documentation governs new code.
+3. **Database:** Prisma-generated client under lib/generated/prisma, pg adapter, pooled runtime URL and unpooled migration URL. Migration files are deployed by npm run build. Reuse db and existing naming/index conventions.
+4. **Articles:** BlogPost and BlogCategory already store title, unique slug, excerpt, plain-text content, tags, image, author, DRAFT/PUBLISHED status and SEO title/description. Existing /admin/blog CRUD and /blog/[slug] renderer must stay authoritative. No separate competing article store in Phase 1. No version history, locale model or article-level canonical/schema yet; these belong to later phases.
+5. **Admin:** DashboardShell/AdminShell, admin route layout, dashboard-panel, page-title, primary/ghost buttons, useActionState forms. Admin parent layout permits teachers, so SEO needs its own ADMIN-only boundary and service-level checks.
+6. **Authentication:** credentials + hashed password, JWT sessions. getAuthContext re-reads role/isActive from User. Roles are STUDENT, TEACHER, ADMIN; there is no SUPER_ADMIN. All SEO reads/writes must verify an active admin server-side.
+7. **SEO today:** root title template, metadataBase, OpenGraph and Twitter; blog metadata exists. Rich article/schema/canonical/hreflang support is incomplete. No reason to change public rendering in this phase.
+8. **Sitemap/robots:** app/sitemap.ts reads active exams, published non-plan products, published blog posts and static routes; robots excludes admin/dashboard/API/checkout/cart. Topic query URLs and tool detail pages are not comprehensively listed. Blog lastmod currently uses publishedAt. Inventory presence must never be labeled Google-indexed status.
+9. **Analytics:** AnalyticsEvent stores learning funnel events; UserVisit stores signed-in daily visits. Admin analytics aggregate paid orders and learning performance. No Search Console, organic session attribution or external analytics SDK found. Show unavailable metrics as unavailable, not zero or invented data.
+10. **Reusable models:** User, ExamType, ExamTopic/TopicLesson, BlogPost/BlogCategory, Product/Course/Book, FreeResource, DiagnosticTopic/Question/Attempt, Order/Payment, AnalyticsEvent, AppSetting. Phase 1 must not collect student records for SEO.
+11. **Link destinations:** /exams/[examSlug], /blog/[slug], /packages/[slug], /books/[slug], /konu-anlatim?exam=...&topic=..., /tools/dictionary, /tools/score-calculator, /tools/guidance, /tools/exam-calendar, /tools/free-resources, /group-lessons, /kaynaklar, /planlar, /kocluk, /demo. /seviye-tespit and /dashboard practice/mock/vocabulary routes require sign-in and sometimes plan access. The inventory must label them accordingly, not describe them as free public pages.
+12. **Reusable UI:** DashboardShell, form/button/panel tokens and existing admin patterns. SEO uses compact responsive cards/list views with pagination and accessible feedback. Future sections are visibly marked as later phases, not simulated working features.
+13. **Migration:** add SeoContentItem as a refreshable derived inventory, and SeoActivityLog with actor relationship and action/time index. Reuse AppSetting for schema-validated SEO configuration with revision conflict protection. Existing BlogPost remains unchanged. No destructive migration and no production seed data.
+14. **Risks:** current ExamCode has IELTS/TOEFL/PTE/YDS and three YÖKDİL fields; YDT exists only in CoachingPathway and must not become a fabricated exam landing page. Current topic page only gives the first topic preview free; plan access is required for the rest (different from older briefs). Inventory must reflect actual current behavior. Query-based lessons are not necessarily independent indexable pages. Existing blog metadata queries drafts before the page rejects them; public behavior is left unchanged for this scoped phase. Snapshot content can become stale; record scan timestamp and mark removed/unpublished sources. Existing migration-on-build requires testing on a separate *_test database. Full publishing, actual paid AI calls, GSC, and attribution remain disabled/unimplemented in Phase 1.
+15. **Plan:** (a) add two additive models/migration; (b) build authorized, bounded, transactional inventory refresh from actual DB records + a route-verified static catalogue; (c) add validated assisted-mode settings, emergency pause, rate/concurrency guards and audit history; (d) add versioned prompts, schema-validated provider contracts and explicit unconfigured state, without paid provider calls; (e) add Overview/Existing Content/Settings/Activity Log pages, showing later-phase navigation as unavailable; (f) verify lint, types, logic + isolated DB tests, migration, production build, authentication and rendered admin pages; document limitations and environment changes. Stop at Phase 1.
+
+## Phase boundaries
+
+No article generation, automatic publication, live provider API calls, Search Console sync, keyword-volume estimates, conversion attribution, scheduler or competitor scraping is activated. Assisted mode is the default configuration; automation is paused until a later verified engine exists. Settings cannot enable full autopilot in this phase. No new secrets or environment variables are needed.
+
+## Implementation delivered
+
+- `/admin/seo` redirects to the Overview; Existing Content, Settings and Activity Log are functional. Navigation has active state, small-screen wrapping, pending feedback and accessible labels. Future sections are explicitly unavailable.
+- All SEO page reads and service mutations verify a real active ADMIN. Teachers do not see the sidebar entry. New layouts include noindex/nofollow. No public route or checkout behavior was changed.
+- `SeoContentItem` records stable source identity, URL, title, excerpt, explicit source SEO fields, exam/topic, optional language, access/publication state, content hash, explicit internal links, source dates and scan time. It is derived data; BlogPost/Product/ExamTopic remain authoritative.
+- Inventory refresh reads active exams, published non-plan products, topic metadata, blog drafts/published articles and verified static routes. Missing sources become unavailable; their records remain. Refresh is transactional, serialized and throttled to once per administrator per minute. It fails safely above 2,000 records rather than truncating; a future batched job is required beyond that scale. It does not crawl arbitrary URLs or consume personal student data.
+- AppSetting stores validated preferences with optimistic revision checks. Default ASSISTED, paused; FULL_AUTOPILOT cannot be enabled. Settings and pause actions are audited and rate limited. Concurrent writes cannot overwrite newer configuration.
+- Vendor-neutral AIProvider and ImageProvider contracts, strict output schemas and seven versioned prompt templates are present. The server provider resolver explicitly refuses calls until an actual adapter and cost accounting exist. Provider/model selection is a preference, not a claim of a connected integration.
+- `SeoActivityLog` captures successful settings saves, inventory refreshes and pause requests, with actor/time and non-secret details.
+- Additive migration: `20261004000100_seo_foundation`. Existing tables gain no data changes; only two new tables plus an actor foreign key/indexes.
+- A pull-request CI workflow covers schema, lint, types, isolated PostgreSQL tests and production build.
+
+## Verification (2026-10-04)
+
+- Fresh local PostgreSQL 17 database: all 28 migrations applied successfully. Re-running migration deploy is a no-op.
+- Lint and TypeScript checks pass.
+- New tests: 5/5 pass (settings safeguards, URL safety, route coverage, provider schema/prompt boundaries, and database integration covering authorization, conflict handling, stale writes, inventory lifecycle, non-destructive reads, throttling and audit).
+- Production build passes with the SEO routes included.
+- Running production HTTP checks use the actual Auth.js credentials login flow against a disposable local database. All four admin pages render, robots metadata is noindex/nofollow, guests redirect, teacher/student users receive a forbidden boundary, and a disabled admin loses access. Script: `scripts/verify-seo-local.ts`.
+- Fresh-database full suite: **60/61 pass**. Existing `tests/coaching-journey.test.ts:84` fails its “plan links the real Pratik Bankası topic” assertion on 2026-10-04. The same failure reproduces on unchanged baseline b217e38. No coaching code was modified. An earlier rerun in a reused test database also hit the pre-existing legal test's non-idempotent fixture; that test passes on the clean database.
+- Desktop and mobile browser verification now passes in GitHub Actions run 37201088027 using Chromium and the actual credentials flow. Settings persistence, inventory refresh/search, activity history, emergency pause, mobile overflow and browser errors are checked. Desktop overview and mobile settings screenshots were visually reviewed. Local macOS browser launch restrictions were avoided by running verification in CI. Checkout consent verification also passes (run 37201088042).
+
+## Environment and rollout
+
+**New production environment variables: none.** Reuses DATABASE_URL, DATABASE_URL_UNPOOLED, AUTH_SECRET and AUTH_URL. Optional `SEO_TEST_ORIGIN` is local verification only (default http://localhost:3190); test script rejects non-local server/database targets and requires a database name ending `_test`.
+
+Changes are prepared on `feat/seo-autopilot-foundation`. The user has authorized deployment and continued phased implementation toward the documented TrySoro feature scope. PR #23 is verified in CI, but production has not been deployed: the Vercel preview failed and its error logs are not accessible through the currently connected Vercel app. Resolve that failure before merging/releasing. The existing build command will deploy the additive migration. After deployment, an admin must save preferences and explicitly run the first inventory scan; no production analytics or example students/content are seeded.
+
+## Remaining limitations / next phase
+
+Phase 1 delivery boundary: no keyword opportunity engine, actual content generation, article editor replacement, publication workflow, scheduled jobs, Search Console, conversions, competitor analysis, budget spending or image generation is implemented. Ordinary blog drafts are labeled as drafts, not as SEO approval-queue entries. Inventory count is not Google indexing count; source-link extraction is not an orphan/broken-link audit. Static route metadata is curated, not a complete AST/runtime crawl; lesson bodies, downloadable assets, live cohort detail and individual resource shelves will need additional catalogue adapters. Language is left unknown where the source has no language metadata. A future content/publishing phase must implement HTML-safe Markdown rendering, source grounding, duplicate detection, slug redirects and publication gates before enabling generation/publication.
