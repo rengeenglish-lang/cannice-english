@@ -1,0 +1,58 @@
+name: SEO foundation verification
+on:
+  pull_request:
+    paths:
+      - 'app/(dashboard)/admin/seo/**'
+      - 'app/actions/admin-seo.ts'
+      - 'components/admin/seo/**'
+      - 'components/admin/AdminShell.tsx'
+      - 'lib/seo/**'
+      - 'server/seo/**'
+      - 'server/services/seo/**'
+      - 'tests/seo-foundation*'
+      - 'scripts/verify-seo-local.ts'
+      - 'prisma/**'
+      - '.github/workflows/seo-foundation.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test-only
+          POSTGRES_DB: seo_foundation_test
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:test-only@localhost:5432/seo_foundation_test
+      DATABASE_URL_UNPOOLED: postgresql://postgres:test-only@localhost:5432/seo_foundation_test
+      AUTH_SECRET: isolated-test-secret-not-used-for-production-123456
+      AUTH_URL: https://localhost.example
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npm run lint -- --quiet
+      - run: npm run typecheck
+      - run: npx prisma migrate deploy
+      - run: node --conditions=react-server --import tsx --test tests/seo-foundation.test.ts tests/seo-foundation-database.test.ts
+      - run: npm run build
+      - name: Verify rendered SEO pages and real credentials authorization
+        env:
+          AUTH_URL: https://localhost:3190
+          AUTH_TRUST_HOST: 'true'
+        run: |
+          npm run start -- --port 3190 > /tmp/seo-server.log 2>&1 &
+          seo_server_pid=$!
+          trap 'kill "$seo_server_pid"' EXIT
+          node --input-type=module -e 'for(let n=0;n<30;n++){try{const r=await fetch("http://localhost:3190/api/auth/csrf");if(r.ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,1000));}process.exit(1);'
+          node --conditions=react-server --import tsx scripts/verify-seo-local.ts
