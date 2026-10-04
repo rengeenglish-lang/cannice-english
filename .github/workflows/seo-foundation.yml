@@ -3,12 +3,14 @@ on:
   pull_request:
     paths:
       - 'app/(dashboard)/admin/seo/**'
+      - 'app/blog/**'
       - 'app/actions/admin-seo*.ts'
       - 'components/admin/seo/**'
       - 'components/admin/AdminShell.tsx'
       - 'lib/seo/**'
       - 'server/seo/**'
       - 'server/services/seo/**'
+      - 'server/services/admin-blog.service.ts'
       - 'tests/seo-*'
       - 'scripts/verify-seo-local.ts'
       - 'scripts/verify-seo-browser.ts'
@@ -45,7 +47,7 @@ jobs:
       - run: npm run lint -- --quiet
       - run: npm run typecheck
       - run: npx prisma migrate deploy
-      - run: node --conditions=react-server --import tsx --test tests/seo-foundation.test.ts tests/seo-foundation-database.test.ts tests/seo-keywords.test.ts
+      - run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/seo-foundation.test.ts tests/seo-foundation-database.test.ts tests/seo-keywords.test.ts tests/seo-studio.test.ts
       - run: npm run build
       - name: Verify rendered SEO pages and real credentials authorization
         env:

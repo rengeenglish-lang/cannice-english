@@ -6,9 +6,9 @@ This comparison covers publicly advertised capabilities, not a hands-on audit of
 | Capability | Netfener delivery / phase | Current status |
 |---|---|---|
 | Website understanding / setup | Existing inventory + targeted brand/audience context (1–3) | Foundation implemented |
-| Keywords and content ideas | Opportunities, intent and documented research sources (2, 8) | Planned |
-| Brand voice / audience | Editable style, audience and exam-specific terminology (2) | Planned |
-| Long-form generation / editing | Approved briefs, article studio, quality review (2) | Planned |
+| Keywords and content ideas | Opportunities, intent and documented research sources (2, 8) | Manual keywords/intent and editorial relevance implemented; automated research deferred |
+| Brand voice / audience | Editable style, audience and exam-specific terminology (2) | Manual profile implemented in Phase 2 |
+| Long-form generation / editing | Approved briefs, article studio, quality review (2) | Manual copy/paste studio implemented; API generation deferred by user |
 | Titles / descriptions / SEO | Metadata, canonical, truthful schema, indexing checks (2, 4) | Planned |
 | Content calendar / regular publication | Human approval, scheduling, durable jobs and limits (4, 7) | Planned |
 | Internal and external links | Verified destinations and legitimate source references (3, 8) | Planned |

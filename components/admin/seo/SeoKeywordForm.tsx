@@ -1,4 +1,5 @@
 "use client";
+import { SeoForm } from "./SeoForm";
 import { useActionState } from "react";
 import { saveKeywordAction } from "@/app/actions/admin-seo-keywords";
 import { INTENT_LABELS, type KeywordInput } from "@/lib/seo/keywords";
@@ -17,8 +18,9 @@ export function SeoKeywordForm({
   const field =
     "mt-1 w-full rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] p-3 focus-ring";
   return (
-    <form
-      action={(form) => {
+    <SeoForm
+      pending={pending}
+      onSave={(form) => {
         const input = {
           keyword: String(form.get("keyword")),
           languageCode: String(form.get("languageCode")),
@@ -130,6 +132,6 @@ export function SeoKeywordForm({
       <p role="status" aria-live="polite">
         {state.message}
       </p>
-    </form>
+    </SeoForm>
   );
 }

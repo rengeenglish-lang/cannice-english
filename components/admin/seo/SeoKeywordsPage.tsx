@@ -1,3 +1,4 @@
+import { CreateSeoDraftButton } from "./SeoStudioForms";
 import Link from "next/link";
 import { listSeoKeywords } from "@/server/services/seo/keywords.service";
 import { SeoKeywordForm } from "./SeoKeywordForm";
@@ -71,6 +72,9 @@ export async function SeoKeywordsPage({
         {result.items.map((item) => (
           <li key={item.id} className="dashboard-panel space-y-3 p-5">
             <h3 className="text-lg font-bold">{item.keyword}</h3>
+            {!item.archived ? (
+              <CreateSeoDraftButton keywordId={item.id} />
+            ) : null}
             <p>
               {item.languageCode} · {item.market} ·{" "}
               {INTENT_LABELS[item.intent] ?? item.intent}

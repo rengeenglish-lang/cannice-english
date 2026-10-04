@@ -767,6 +767,7 @@ model BlogCategory {
 }
 
 model BlogPost {
+  seoDraft SeoArticleDraft?
   id             String         @id @default(cuid())
   title          String
   slug           String         @unique
@@ -1721,6 +1722,7 @@ model SeoActivityLog {
 
 // Phase 2 research records. Unknown demand is NULL, never fabricated.
 model SeoKeyword {
+  articleDraft SeoArticleDraft?
   id              String    @id @default(cuid())
   keyword         String
   normalized      String
@@ -1743,4 +1745,23 @@ model SeoKeyword {
   @@index([examId])
   @@index([archived, updatedAt])
   @@map("seo_keywords")
+}
+
+
+// Workflow metadata only: article text remains in the existing BlogPost.
+model SeoArticleDraft {
+  id String @id @default(cuid())
+  keywordId String @unique
+  postId String @unique
+  brief Json
+  briefReady Boolean @default(false)
+  revision Int @default(0)
+  reviewedHash String?
+  reviewedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  keyword SeoKeyword @relation(fields: [keywordId], references: [id], onDelete: Restrict)
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@index([updatedAt])
+  @@map("seo_article_drafts")
 }

@@ -1,22 +1,35 @@
-# Phase 2 — Content engine (in progress)
+# Phase 2 — manual content engine
 
 Baseline: deployed main e5a032b. The approved roadmap has eight core phases; external CMS connectors are an additional parity extension.
 
-## Implemented first slice
+## Agreed delivery
 
-Admin keyword CRUD with archive/restore, locale/market uniqueness, manually recorded intent and research evidence, current active exam references, optimistic revision checks, audit entries and per-admin rate limits. Opportunities display an explicitly editorial relevance score with component points and related inventory records. Search demand and ranking feasibility remain unavailable. Similar titles raise a warning, not a claim of comprehensive semantic cannibalization detection (Phase 3).
+The user chose to use ChatGPT Plus manually rather than purchase API credits. This phase therefore provides a complete manual brief → copy prompt → paste draft → edit → check → review workflow. Provider-backed generation and API billing remain explicitly deferred and disabled. The interface does not claim to generate or research content automatically.
 
-The additive SeoKeyword migration includes a unique index, exam foreign key, archive/update index and demand-evidence check. No production schema has been changed for Phase 2. No public pages or BlogPost records are modified.
+## Implementation
 
-## Validation
+- Admin keyword creation, editing, archive/restore, locale/market uniqueness, recorded intent and research notes; validated current exam references, revision checks and audit history.
+- Opportunities show a transparent editorial relevance score and related existing inventory pages. Search demand and ranking feasibility remain unknown. Similar titles raise a warning; semantic cannibalization detection remains Phase 3.
+- Editable brand/audience/style configuration uses existing AppSetting storage with revisions.
+- One article workspace per keyword. SeoArticleDraft stores workflow metadata, brief and review fingerprint, while the existing BlogPost remains the only article body store. Starting the same brief twice returns the existing workspace.
+- Editable briefs capture reader, problem, goal, intent, language/market, title alternatives, outline, questions, differentiation, sources, word range and optional real inventory CTA. A complete brief is required before pasting a draft. Up to 200 catalogue choices are shown (plus an existing selected destination).
+- Ready briefs produce a copyable prompt for manual use in ChatGPT. No browser or server request is made to ChatGPT or an AI provider. The prompt uses the curated selected destination and explicitly rejects fabricated facts/products, personal data and source-text instructions.
+- Plain-text article editor and escaped preview match the existing blog renderer; HTML is never rendered. Separate title, slug, excerpt and SEO metadata fields are saved to BlogPost. URL uniqueness and both workspace revision and post timestamp protect against overwrites.
+- Deterministic editorial checklist: word range, metadata, summary, topic presence, paragraph length, duplicate paragraphs, raw HTML/code blocks and placeholders. It is not an AI detector, fact checker or ranking prediction.
+- Explicit editor factual-review confirmation records an audit event and content fingerprint. Article/brief edits invalidate review; even independent database edits change the fingerprint. Review does not publish.
+- Studio-managed posts are excluded from the legacy staff blog editor and its mutations, preventing teachers or direct legacy actions from bypassing the admin-only workflow. Ordinary blog posts retain their prior behavior. Public draft metadata is now also hidden.
+- List pagination, mobile cards, form pending states, accessible labels/statuses, admin/noindex boundaries and bounded payloads.
 
-Local isolated migration and keyword tests pass: Turkish normalization, missing metrics, permissions, disabled admins, exact duplicates, stale revisions, archive visibility and audit. Lint, type checks and the production build pass. All 29 migrations applied to a fresh isolated Phase 2 database. Browser CI coverage was extended for keyword creation and mobile opportunity display, but has not yet run for this branch.
+## Database and environment
 
-## Work still required before Phase 2 is complete
+Two additive migrations: 20261004000200_seo_keywords and 20261004000300_seo_manual_studio. Unique keys and foreign keys protect keyword/workspace/post identity. Keyword demand requires accompanying evidence if introduced later. No student records, payment records, fabricated SEO metrics or production example data are added.
 
-- Editable brand/audience profile and article briefs.
-- Provider-backed intent/brief/article/metadata generation with schema validation, explicit cost reservations, timeouts, usage accounting and configured spending caps.
-- Existing BlogPost integration for draft editing, quality diagnostics and factual review.
-- Full phase browser and regression verification, then release.
+New environment variables: none. Existing database and authentication configuration is reused. No new AI credentials or costs.
 
-Provider and monthly budget were requested from the user. No paid calls, AI credentials, generated production articles or automatic publication were introduced. Generation must remain unavailable until configured. New production environment variables in this slice: none.
+## Verification
+
+Local isolated database migrations, lint and TypeScript pass. Nine SEO tests pass, covering access control including inactive admins, revisions, concurrency, deduplication, immutable source content, safe prompts, checklist behavior, URL collisions, manual state transitions, old editor bypass prevention, and no publishing. Production build and full desktop/mobile browser CI are release gates; final results are recorded below after execution.
+
+## Boundaries
+
+Paid AI integration, automatic SERP/intent research and metadata generation are not activated. No automatic publishing, scheduling, Search Console, measured demand or attribution. Native publishing/version history belongs to Phase 4; this phase's reviewed drafts remain private. To use the studio: Admin → SEO Autopilot → Keywords → Brief oluştur / aç, complete the brief, copy its ChatGPT prompt, paste the article, save and review.
