@@ -77,6 +77,7 @@ async function main() {
       "noindex, nofollow",
     );
     await mkdir("/tmp/seo-browser-artifacts", { recursive: true });
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/overview-desktop.png",
       fullPage: true,
@@ -96,6 +97,7 @@ async function main() {
     await expect(
       page.getByLabel("Dil / bölge kodu", { exact: true }),
     ).toHaveValue("en-GB");
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/settings-desktop.png",
       fullPage: true,
@@ -117,6 +119,7 @@ async function main() {
     await expect(
       page.getByRole("heading", { name: "Sözlük", exact: true }),
     ).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/inventory-desktop.png",
       fullPage: true,
@@ -145,18 +148,17 @@ async function main() {
         exact: true,
       }),
     ).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/keywords-desktop.png",
       fullPage: true,
     });
-    const card = page
-      .getByRole("listitem")
-      .filter({
-        has: page.getByRole("heading", {
-          name: "SEO browser fixture keyword",
-          exact: true,
-        }),
-      });
+    const card = page.getByRole("listitem").filter({
+      has: page.getByRole("heading", {
+        name: "SEO browser fixture keyword",
+        exact: true,
+      }),
+    });
     await card
       .getByRole("button", { name: "Brief oluştur / aç", exact: true })
       .click();
@@ -207,7 +209,7 @@ async function main() {
       .click();
     await expect(
       page.getByLabel("ChatGPT için hazır istem", { exact: true }),
-    ).toContainText("SEO browser fixture keyword");
+    ).toHaveValue(/SEO browser fixture keyword/);
     await page
       .getByLabel("URL kısa adı", { exact: true })
       .fill("seo-browser-private-draft");
@@ -233,12 +235,38 @@ async function main() {
         exact: true,
       })
       .fill(body);
-    await db.blogPost.create({data:{title:"Collision fixture",slug:"seo-browser-slug-collision",excerpt:"Isolated test",content:"Isolated test",authorId:user.id,status:"DRAFT"}});
-    await page.getByLabel("URL kısa adı",{exact:true}).fill("seo-browser-slug-collision");
-    await page.getByRole("button",{name:"Taslağı ve metaverileri kaydet",exact:true}).click();
-    await expect(page.getByRole("status").filter({hasText:"Bu URL başka bir yazıda kullanılıyor."})).toBeVisible();
-    await expect(page.getByLabel("Makale metni (ChatGPT’den buraya yapıştırın)",{exact:true})).toHaveValue(body);
-    await page.getByLabel("URL kısa adı",{exact:true}).fill("seo-browser-private-draft");
+    await db.blogPost.create({
+      data: {
+        title: "Collision fixture",
+        slug: "seo-browser-slug-collision",
+        excerpt: "Isolated test",
+        content: "Isolated test",
+        authorId: user.id,
+        status: "DRAFT",
+      },
+    });
+    await page
+      .getByLabel("URL kısa adı", { exact: true })
+      .fill("seo-browser-slug-collision");
+    await page
+      .getByRole("button", {
+        name: "Taslağı ve metaverileri kaydet",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Bu URL başka bir yazıda kullanılıyor." }),
+    ).toBeVisible();
+    await expect(
+      page.getByLabel("Makale metni (ChatGPT’den buraya yapıştırın)", {
+        exact: true,
+      }),
+    ).toHaveValue(body);
+    await page
+      .getByLabel("URL kısa adı", { exact: true })
+      .fill("seo-browser-private-draft");
     await page
       .getByRole("button", {
         name: "Taslağı ve metaverileri kaydet",
@@ -265,6 +293,7 @@ async function main() {
         .getByRole("status")
         .filter({ hasText: "Editör inceledi · yayınlanmadı" }),
     ).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/studio-desktop.png",
       fullPage: true,
@@ -287,6 +316,7 @@ async function main() {
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/studio-mobile.png",
       fullPage: true,
@@ -304,6 +334,7 @@ async function main() {
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/opportunities-mobile.png",
       fullPage: true,
@@ -317,6 +348,7 @@ async function main() {
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path: "/tmp/seo-browser-artifacts/settings-mobile.png",
       fullPage: true,

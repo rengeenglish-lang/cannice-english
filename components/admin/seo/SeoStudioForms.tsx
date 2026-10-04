@@ -76,6 +76,7 @@ export function SeoBrandForm({
         <label className="block" key={name}>
           {label}
           <textarea
+            aria-label={label}
             name={name}
             rows={3}
             maxLength={max}
@@ -158,6 +159,7 @@ export function SeoBriefForm({
           {rows === 1 ? (
             <input
               className={field}
+              aria-label={label}
               name={name}
               maxLength={max}
               defaultValue={brief[name]}
@@ -165,6 +167,7 @@ export function SeoBriefForm({
           ) : (
             <textarea
               className={field}
+              aria-label={label}
               name={name}
               rows={rows}
               maxLength={max}
@@ -175,7 +178,12 @@ export function SeoBriefForm({
       ))}
       <label className="block">
         Arama amacı
-        <select aria-label="Arama amacı" name="intent" defaultValue={brief.intent} className={field}>
+        <select
+          aria-label="Arama amacı"
+          name="intent"
+          defaultValue={brief.intent}
+          className={field}
+        >
           {Object.entries(INTENT_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
               {label}
@@ -250,7 +258,13 @@ export function SeoManualPrompt({ text }: { text: string }) {
       </ol>
       <label className="block">
         ChatGPT için hazır istem
-        <textarea readOnly value={text} rows={9} className={field} />
+        <textarea
+          aria-label="ChatGPT için hazır istem"
+          readOnly
+          value={text}
+          rows={9}
+          className={field}
+        />
       </label>
       <button
         type="button"
@@ -321,6 +335,7 @@ export function SeoArticleForm({
           {rows === 1 ? (
             <input
               className={field}
+              aria-label={label}
               name={name}
               defaultValue={post[name]}
               maxLength={max}
@@ -330,6 +345,7 @@ export function SeoArticleForm({
           ) : (
             <textarea
               className={field}
+              aria-label={label}
               name={name}
               rows={rows}
               maxLength={max}

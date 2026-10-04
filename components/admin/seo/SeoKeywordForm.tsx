@@ -78,6 +78,7 @@ export function SeoKeywordForm({
       <label className="block">
         Arama amacı (editör değerlendirmesi)
         <select
+          aria-label="Arama amacı (editör değerlendirmesi)"
           name="intent"
           defaultValue={initial?.intent ?? "UNKNOWN"}
           className={field}
@@ -92,6 +93,7 @@ export function SeoKeywordForm({
       <label className="block">
         Sınav
         <select
+          aria-label="Sınav"
           name="examId"
           defaultValue={initial?.examId ?? ""}
           className={field}
@@ -107,6 +109,7 @@ export function SeoKeywordForm({
       <label className="block">
         Araştırma kaynağı ve öğrenci ihtiyacı
         <textarea
+          aria-label="Araştırma kaynağı ve öğrenci ihtiyacı"
           name="sourceNote"
           required
           minLength={5}
