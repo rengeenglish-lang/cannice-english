@@ -1,5 +1,5 @@
 /** CI-only visual/interaction checks. Never points at production or uses a real account. */
-import { chromium, expect } from "@playwright/test";
+import { chromium, expect, type Browser } from "@playwright/test";
 import { createServer as createHttpsServer } from "node:https";
 import { request as httpRequest } from "node:http";
 import { readFile, mkdir } from "node:fs/promises";
@@ -21,8 +21,9 @@ async function main() {
   await new Promise<void>((resolve) => proxy.listen(3191, "127.0.0.1", resolve));
   const email = `seo-ui-${randomUUID()}@example.test`, password = randomUUID();
   const user = await db.user.create({ data: { email, password: await hashPassword(password), role: "ADMIN", name: "SEO UI Test" } });
-  const browser = await chromium.launch();
+  let browser: Browser | undefined;
   try {
+    browser = await chromium.launch();
     const context = await browser.newContext({ ignoreHTTPSErrors: true, viewport: { width: 1440, height: 1000 } });
     const page = await context.newPage();
     const errors: string[] = []; page.on("pageerror", (error) => errors.push(error.message));
@@ -59,7 +60,12 @@ async function main() {
     expect(errors).toEqual([]);
     console.log("SEO desktop/mobile interactions, persisted settings, inventory, audit, pause and browser errors verified.");
   } finally {
-    await browser.close(); await db.user.delete({ where: { id: user.id } }); await db.$disconnect();
+    if (browser) {
+      const page = browser.contexts()[0]?.pages()[0];
+      await page?.screenshot({ path: "/tmp/seo-browser-artifacts/final-state.png", fullPage: true }).catch(() => undefined);
+      await browser.close();
+    }
+    await db.user.delete({ where: { id: user.id } }); await db.$disconnect();
     await new Promise<void>((resolve) => proxy.close(() => resolve()));
   }
 }
