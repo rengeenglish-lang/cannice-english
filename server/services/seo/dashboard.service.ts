@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { requireSeoAdmin } from "./access";
 import { readSeoSettings } from "./settings.service";
+import { readGscConfig } from "@/lib/seo/gsc";
 
 export async function getSeoOverview(actorId: string) {
   await requireSeoAdmin(actorId);
@@ -100,4 +101,35 @@ export async function listSeoActivity(actorId: string, requestedPage: unknown) {
     },
   });
   return { items, count, page };
+}
+
+/** Live counts for "what needs attention". Counts only; no content is loaded. */
+export async function getSeoAttention(actorId: string) {
+  await requireSeoAdmin(actorId);
+  const draft = { post: { status: "DRAFT" as const } };
+  const [needsBrief, writing, reviewed, approved, scheduled, parked, published, keywords, snapshot] = await Promise.all([
+    db.seoArticleDraft.count({ where: { ...draft, briefReady: false } }),
+    db.seoArticleDraft.count({ where: { ...draft, briefReady: true, reviewedHash: null } }),
+    db.seoArticleDraft.count({ where: { ...draft, reviewedHash: { not: null }, approvedHash: null } }),
+    db.seoArticleDraft.count({ where: { ...draft, approvedHash: { not: null }, scheduledFor: null } }),
+    db.seoArticleDraft.count({ where: { ...draft, scheduledFor: { not: null } } }),
+    db.seoArticleDraft.count({ where: { ...draft, scheduleError: { not: null } } }),
+    db.seoArticleDraft.count({ where: { post: { status: "PUBLISHED" } } }),
+    db.seoKeyword.count({ where: { archived: false } }),
+    db.seoSearchSnapshot.findFirst({ where: { kind: "PAGES" }, orderBy: { periodEnd: "desc" } }),
+  ]);
+  const totals = snapshot
+    ? await db.seoSearchRow.aggregate({ where: { snapshotId: snapshot.id }, _sum: { clicks: true, impressions: true }, _count: true })
+    : null;
+  return {
+    studio: { needsBrief, writing, reviewed, approved, scheduled, parked, published },
+    keywords,
+    search: {
+      connected: readGscConfig() !== null,
+      period: snapshot ? { start: snapshot.periodStart, end: snapshot.periodEnd } : null,
+      clicks: totals?._sum.clicks ?? 0,
+      impressions: totals?._sum.impressions ?? 0,
+      pages: totals?._count ?? 0,
+    },
+  };
 }

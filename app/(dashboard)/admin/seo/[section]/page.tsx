@@ -7,9 +7,11 @@ import { forbidden, notFound } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
 import {
   getSeoOverview,
+  getSeoAttention,
   listSeoInventory,
   listSeoActivity,
 } from "@/server/services/seo/dashboard.service";
+import { readGscConfig } from "@/lib/seo/gsc";
 import { SeoSettingsForm } from "@/components/admin/seo/SeoSettingsForm";
 import { SeoControls } from "@/components/admin/seo/SeoControls";
 import { ACCESS_LABELS } from "@/lib/seo/inventory";
@@ -254,6 +256,7 @@ export default async function SeoSection({
   }
   if (!["overview", "settings"].includes(section)) notFound();
   const overview = await getSeoOverview(actor.id);
+  const gscConnected = readGscConfig() !== null;
   if (section === "settings")
     return (
       <section className="space-y-5">
@@ -262,8 +265,8 @@ export default async function SeoSection({
         <div className="dashboard-panel space-y-2 p-5">
           <h3 className="font-bold">Entegrasyon durumu</h3>
           <p>
-            Search Console, organik dönüşüm ölçümü ve görsel sağlayıcısı: henüz
-            bağlı değil.
+            Search Console: {gscConnected ? "API bağlı" : "API bağlı değil (CSV içe aktarma kullanılabilir)"}.
+            Organik dönüşüm ölçümü (Faz 6) ve görsel sağlayıcısı: henüz yok.
           </p>
           <p>İstem sürümü: {PROMPT_VERSION}</p>
           <p className="break-words text-sm">
@@ -272,9 +275,97 @@ export default async function SeoSection({
         </div>
       </section>
     );
+  const attention = await getSeoAttention(actor.id);
+  const st = attention.studio;
+  const todo: { text: string; href: string; urgent?: boolean }[] = [
+    st.parked > 0 && { text: `${st.parked} planlanmış yayın durduruldu — nedenini görün`, href: "/admin/seo/calendar", urgent: true },
+    st.approved > 0 && { text: `${st.approved} yazı yayın için onaylı; yayınlayın veya zamanlayın`, href: "/admin/seo/studio" },
+    st.reviewed > 0 && { text: `${st.reviewed} yazı incelendi; yayın onayı bekliyor`, href: "/admin/seo/studio" },
+    st.writing > 0 && { text: `${st.writing} yazı taslağı düzenleniyor veya inceleme bekliyor`, href: "/admin/seo/studio" },
+    st.needsBrief > 0 && { text: `${st.needsBrief} makalenin briefi tamamlanmadı`, href: "/admin/seo/studio" },
+    overview.missingBlogMetadata > 0 && { text: `${overview.missingBlogMetadata} yayındaki blog yazısında SEO başlığı/açıklaması eksik`, href: "/admin/blog" },
+    overview.inventoryCount === 0 && { text: "İçerik envanteri henüz taranmadı (öneriler buna dayanır)", href: "/admin/seo/overview#envanter" },
+    !attention.search.period && { text: attention.search.connected ? "Search Console verisi henüz çekilmedi" : "Search Console bağlı değil; CSV ile veri aktarabilirsiniz", href: "/admin/seo/performance" },
+    attention.keywords === 0 && { text: "Henüz anahtar kelime yok — yazıya buradan başlanır", href: "/admin/seo/keywords" },
+  ].filter((t): t is { text: string; href: string; urgent?: boolean } => Boolean(t));
+  const tasks = [
+    ["Yeni makale başlat", "Anahtar kelime seç → brief oluştur", "/admin/seo/keywords"],
+    ["Yazıyı yayınla veya zamanla", "İncele, onayla, yayınla", "/admin/seo/studio"],
+    ["Yayın takvimini gör", "Onaylı, zamanlanan, yayındaki yazılar", "/admin/seo/calendar"],
+    ["Search Console verisi ekle", "API ile çek veya CSV içe aktar", "/admin/seo/performance"],
+    ["Hızlı kazanımları bul", "Küçük değişiklikle tıklama artışı", "/admin/seo/quick-wins"],
+    ["Eski yazıları iyileştir", "Düşen ve yenilenmesi gereken sayfalar", "/admin/seo/refresh"],
+  ];
+  const d = (v: Date) => new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeZone: "UTC" }).format(v);
   return (
     <section className="space-y-6">
-      <h2 className="text-2xl font-bold">Netfener SEO başlangıç görünümü</h2>
+      <h2 className="text-2xl font-bold">Başlangıç</h2>
+      <section className="dashboard-panel space-y-3 p-5" aria-label="Sıradaki işler">
+        <h3 className="text-lg font-bold">Sıradaki işler</h3>
+        {todo.length ? (
+          <ul className="space-y-2">
+            {todo.map((t) => (
+              <li key={t.text}>
+                <Link href={t.href} className="underline">{t.text}</Link>
+                {t.urgent ? <strong> · önemli</strong> : null}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Bekleyen iş yok.</p>
+        )}
+      </section>
+      <section aria-label="Ne yapmak istiyorsun?" className="space-y-3">
+        <h3 className="text-lg font-bold">Ne yapmak istiyorsun?</h3>
+        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {tasks.map(([title, hint, href]) => (
+            <li key={href}>
+              <Link href={href} className="dashboard-panel block h-full p-4 hover:shadow-md">
+                <span className="font-bold">{title}</span>
+                <span className="mt-1 block text-sm text-[color:var(--muted)]">{hint}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="dashboard-panel space-y-3 p-5" aria-label="Makale hattı">
+        <h3 className="text-lg font-bold">Makale hattı</h3>
+        <ol className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            ["Brief bekliyor", st.needsBrief],
+            ["Yazılıyor", st.writing],
+            ["İncelendi", st.reviewed],
+            ["Onaylı", st.approved],
+            ["Zamanlandı", st.scheduled],
+            ["Yayında", st.published],
+          ].map(([label, n]) => (
+            <li key={label}>
+              <p className="text-2xl font-bold">{n}</p>
+              <p className="text-sm text-[color:var(--muted)]">{label}</p>
+            </li>
+          ))}
+        </ol>
+        <Link href="/admin/seo/studio" className="underline">Makale stüdyosunu aç</Link>
+      </section>
+      <section className="dashboard-panel space-y-3 p-5" aria-label="Arama verileri">
+        <h3 className="text-lg font-bold">Arama verileri (Search Console)</h3>
+        <p className="text-sm">
+          {attention.search.connected ? "API bağlı." : "API bağlı değil (CSV ile veri aktarılabilir)."}{" "}
+          Veriler yalnızca içe aktarılan dönemleri kapsar; canlı veri değildir.
+        </p>
+        {attention.search.period ? (
+          <dl className="grid gap-3 sm:grid-cols-4">
+            <div><dt className="text-sm">Dönem</dt><dd className="font-semibold">{d(attention.search.period.start)} – {d(attention.search.period.end)}</dd></div>
+            <div><dt className="text-sm">Tıklama</dt><dd className="font-semibold">{attention.search.clicks}</dd></div>
+            <div><dt className="text-sm">Gösterim</dt><dd className="font-semibold">{attention.search.impressions}</dd></div>
+            <div><dt className="text-sm">Sayfa</dt><dd className="font-semibold">{attention.search.pages}</dd></div>
+          </dl>
+        ) : (
+          <p className="text-sm">Henüz veri aktarılmadı.</p>
+        )}
+        <p className="text-sm">Organik kayıt/satış ölçümü (Faz 6) henüz yok; bu alanlarda veri gösterilmez.</p>
+        <Link href="/admin/seo/performance" className="underline">Performans sayfasını aç</Link>
+      </section>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {[
           ["Envanterdeki içerik", overview.inventoryCount],
@@ -288,73 +379,22 @@ export default async function SeoSection({
           </div>
         ))}
       </div>
-      <div className="dashboard-panel space-y-4 p-5">
-        <h3 className="text-lg font-bold">İlk kurulum</h3>
-        <ol className="list-decimal space-y-2 pl-5">
-          <li>
-            <Link href="/admin/seo/settings" className="underline">
-              Etkin sınavları, dil ve pazarları seçin; çalışma tercihlerini
-              kaydedin.
-            </Link>
-          </li>
-          <li>
-            İçerik envanterini tarayın. Tarama yalnızca kaynak veriyi okur.
-          </li>
-          <li>
-            <Link href="/admin/seo/inventory" className="underline">
-              Envanteri ve erişim etiketlerini kontrol edin.
-            </Link>
-          </li>
-        </ol>
-        <SeoControls kind="refresh" />
-        <p className="text-sm">
-          Son tarama:{" "}
-          {overview.lastRefresh
-            ? date(overview.lastRefresh.createdAt)
-            : "Henüz çalıştırılmadı"}{" "}
-          · Artık kaynakta bulunmayan kayıt: {overview.unavailable}
-        </p>
-        <p className="text-sm">
-          Etkin sınavlar:{" "}
-          {overview.exams.map((e) => e.name).join(", ") || "Henüz yok"}. YDT
-          gibi koçluk seçenekleri otomatik olarak sınav kataloğuna eklenmez.
-        </p>
-      </div>
-      <div className="dashboard-panel space-y-3 p-5">
-        <h3 className="text-lg font-bold">Arama ve dönüşüm verileri</h3>
-        <p className="text-sm">
-          Search Console ve organik ziyaret ilişkilendirmesi bağlı değil. Mevcut
-          öğrenme olayları organik ziyaret verisi yerine kullanılmaz.
-        </p>
-        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            "Organik tıklamalar",
-            "Gösterimler",
-            "Ortalama CTR",
-            "Ortalama konum",
-            "Google dizinindeki sayfalar",
-            "Organik kayıtlar",
-            "Organik satın almalar",
-            "Organik dönüşüm oranı",
-          ].map((label) => (
-            <div key={label}>
-              <dt className="text-sm">{label}</dt>
-              <dd className="font-semibold">Veri bağlı değil</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-      <div className="dashboard-panel space-y-2 p-5">
-        <h3 className="text-lg font-bold">Analiz kapsamı</h3>
-        <p className="text-sm">
-          Büyüyen/gerileyen yazılar, hızlı kazanımlar, anahtar kelime çakışması,
-          konu boşlukları, bozuk bağlantı ve yetim sayfa analizi sonraki
-          fazlarda açılacak. Bu tarama bunların yapıldığını iddia etmez.
-        </p>
-        <Link className="ghost-button" href="/admin/blog">
-          Mevcut blog yönetimini aç
-        </Link>
-      </div>
+      <details id="envanter" className="dashboard-panel p-5" open={overview.inventoryCount === 0}>
+        <summary className="cursor-pointer text-lg font-bold">İçerik envanteri ve kurulum</summary>
+        <div className="mt-4 space-y-3">
+          <p>
+            <Link href="/admin/seo/settings" className="underline">Etkin sınavları, dil ve pazarları seçin</Link>; ardından envanteri tarayın. Tarama yalnızca kaynak veriyi okur.
+          </p>
+          <SeoControls kind="refresh" />
+          <p className="text-sm">
+            Son tarama: {overview.lastRefresh ? date(overview.lastRefresh.createdAt) : "Henüz çalıştırılmadı"} · Artık kaynakta bulunmayan kayıt: {overview.unavailable}
+          </p>
+          <p className="text-sm">
+            Etkin sınavlar: {overview.exams.map((e) => e.name).join(", ") || "Henüz yok"}. YDT gibi koçluk seçenekleri otomatik olarak sınav kataloğuna eklenmez.
+          </p>
+          <Link className="underline" href="/admin/blog">Mevcut blog yönetimini aç</Link>
+        </div>
+      </details>
     </section>
   );
 }

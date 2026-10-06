@@ -70,7 +70,7 @@ async function main() {
     await page.getByLabel("Şifre", { exact: true }).fill(password);
     await page.getByRole("button", { name: "Giriş Yap", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "Netfener SEO başlangıç görünümü" }),
+      page.getByRole("heading", { name: "Başlangıç", exact: true }),
     ).toBeVisible({ timeout: 30000 });
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
