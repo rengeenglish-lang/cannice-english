@@ -1,3 +1,4 @@
+import { getDraftIntelligence, getTopicMap } from "../server/services/seo/intelligence.service";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -142,6 +143,8 @@ test("manual studio isolation, revisions, review invalidation, slug uniqueness a
       await assert.rejects(createSeoDraft(user.id, keyword.id), /yönetici/);
       await assert.rejects(getSeoStudio(user.id), /yönetici/);
       await assert.rejects(getSeoDraft(user.id, "anything"), /yönetici/);
+      await assert.rejects(getDraftIntelligence(user.id, "anything"), /yönetici/);
+      await assert.rejects(getTopicMap(user.id), /yönetici/);
       await assert.rejects(saveSeoBrand(user.id, {}), /yönetici/);
       await assert.rejects(saveSeoBrief(user.id, {}), /yönetici/);
       await assert.rejects(saveSeoDraftContent(user.id, {}), /yönetici/);
@@ -149,6 +152,8 @@ test("manual studio isolation, revisions, review invalidation, slug uniqueness a
     }
     const started = await createSeoDraft(admin.id, keyword.id);
     const id = started.id;
+    assert.ok(await getDraftIntelligence(admin.id, id));
+    assert.ok((await getTopicMap(admin.id)).groups.some(g => g.items.some(i => i.id === keyword.id)));
     assert.deepEqual(await createSeoDraft(admin.id, keyword.id), { id });
     let current = (await getSeoDraft(admin.id, id))!;
     postId = current.postId;
@@ -318,6 +323,8 @@ test("manual studio isolation, revisions, review invalidation, slug uniqueness a
       data: { isActive: false },
     });
     await assert.rejects(getSeoDraft(admin.id, id), /yönetici/);
+    await assert.rejects(getTopicMap(admin.id), /yönetici/);
+    await assert.rejects(getDraftIntelligence(admin.id, id), /yönetici/);
   } finally {
     await db.blogPost.deleteMany({ where: { authorId: admin.id } });
     await db.seoKeyword.delete({ where: { id: keyword.id } });

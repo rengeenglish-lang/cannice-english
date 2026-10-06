@@ -322,6 +322,12 @@ async function main() {
       fullPage: true,
     });
     await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.getByRole("heading", { name: "İçerik bağlantı önerileri", exact: true })).toBeVisible();
+    await page.goto("https://localhost:3191/admin/seo/topics");
+    await expect(page.getByRole("heading", { name: "Editoryal konu haritası" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "SEO browser fixture keyword", exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({ path: "/tmp/seo-browser-artifacts/topics-mobile.png", fullPage: true });
     await page.goto("https://localhost:3191/admin/seo/opportunities");
     await expect(
       page.getByRole("heading", {
