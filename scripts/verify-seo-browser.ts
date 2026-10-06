@@ -338,12 +338,12 @@ async function main() {
     await page.getByLabel("Ana konu sayfası 1", { exact: true }).selectOption(blogChoice.id);
     await page.getByRole("checkbox", { name: "Sınavlar", exact: true }).check();
     await page.getByRole("button", { name: "Konu kümelerini kaydet" }).click();
-    await expect.poll(async () => JSON.parse((await db.appSetting.findUniqueOrThrow({where:{key:"seo_clusters_v1"}})).value).clusters.length).toBe(1);
+    await expect.poll(async () => JSON.parse((await db.appSetting.findUnique({where:{key:"seo_clusters_v1"}}))?.value ?? '{"clusters":[]}').clusters.length).toBe(1);
     await page.reload();
     await expect(page.getByLabel("Küme adı 1", { exact: true })).toHaveValue("Browser konu kümesi");
     await page.getByRole("button", { name: "Kümeyi kaldır 1" }).click();
     await page.getByRole("button", { name: "Konu kümelerini kaydet" }).click();
-    await expect.poll(async () => JSON.parse((await db.appSetting.findUniqueOrThrow({where:{key:"seo_clusters_v1"}})).value).clusters.length).toBe(0);
+    await expect.poll(async () => JSON.parse((await db.appSetting.findUnique({where:{key:"seo_clusters_v1"}}))?.value ?? '{"clusters":[]}').clusters.length).toBe(0);
     await page.screenshot({ path: "/tmp/seo-browser-artifacts/topics-mobile.png", fullPage: true });
     await page.goto("https://localhost:3191/admin/seo/opportunities");
     await expect(
