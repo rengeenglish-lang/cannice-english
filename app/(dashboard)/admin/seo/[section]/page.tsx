@@ -1,4 +1,5 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
+import { SeoConversionsPage } from "@/components/admin/seo/SeoConversionsPage";
 import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
 import { SeoPerformancePage } from "@/components/admin/seo/SeoPerformancePage";
 import { SeoStudioPage } from "@/components/admin/seo/SeoStudioPage";
@@ -63,7 +64,7 @@ export default async function SeoSection({
   searchParams,
 }: {
   params: Promise<{ section: string }>;
-  searchParams: Promise<{ page?: string; q?: string; archived?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; archived?: string; days?: string }>;
 }) {
   const actor = await getAuthContext();
   if (!actor || actor.role !== "ADMIN") forbidden();
@@ -71,6 +72,7 @@ export default async function SeoSection({
   const query = await searchParams;
   if (section === "performance" || section === "refresh" || section === "quick-wins")
     return <SeoPerformancePage actorId={actor.id} view={section} />;
+  if (section === "conversions") return <SeoConversionsPage actorId={actor.id} days={query.days} />;
   if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
@@ -266,7 +268,7 @@ export default async function SeoSection({
           <h3 className="font-bold">Entegrasyon durumu</h3>
           <p>
             Search Console: {gscConnected ? "API bağlı" : "API bağlı değil (CSV içe aktarma kullanılabilir)"}.
-            Organik dönüşüm ölçümü (Faz 6) ve görsel sağlayıcısı: henüz yok.
+            Dönüşüm ölçümü çerezsizdir ve sunucuda yapılır; görsel sağlayıcısı henüz yok.
           </p>
           <p>İstem sürümü: {PROMPT_VERSION}</p>
           <p className="break-words text-sm">
@@ -363,7 +365,7 @@ export default async function SeoSection({
         ) : (
           <p className="text-sm">Henüz veri aktarılmadı.</p>
         )}
-        <p className="text-sm">Organik kayıt/satış ölçümü (Faz 6) henüz yok; bu alanlarda veri gösterilmez.</p>
+        <p className="text-sm">Hangi yazı kayıt ve satış getiriyor? <Link href="/admin/seo/conversions" className="underline">Dönüşümler</Link> sayfasına bakın.</p>
         <Link href="/admin/seo/performance" className="underline">Performans sayfasını aç</Link>
       </section>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">

@@ -5,6 +5,7 @@ import {
   getBlogPostBySlug,
   getBlogRedirectSlug,
 } from "@/server/services/catalog.service";
+import { ArticleSignupCta, ArticleViewBeacon } from "@/components/blog/ArticleTracking";
 import { getSiteUrl } from "@/server/env";
 import { articlePath, buildArticleJsonLd, jsonLdScript } from "@/lib/seo/publishing";
 
@@ -72,6 +73,8 @@ export default async function BlogPostPage({ params }: Props) {
           <p key={index}>{paragraph}</p>
         ))}
       </div>
+      <ArticleSignupCta slug={post.slug} />
+      <ArticleViewBeacon slug={post.slug} />
     </main>
   );
 }

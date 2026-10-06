@@ -37,7 +37,7 @@ export const NAV_GROUPS: NavGroup[] = [
       item("performance", "Performans", "Search Console verisi ve düşen sayfalar"),
       item("quick-wins", "Hızlı kazanımlar", "Küçük değişikliklerle kazanılacak tıklamalar"),
       item("refresh", "İçerik yenileme", "Hangi sayfa güncellenmeli"),
-      { ...item("conversions", "Dönüşümler", "Hangi yazı kayıt ve satış getiriyor"), soon: "Faz 6" },
+      item("conversions", "Dönüşümler", "Hangi yazı kayıt ve satış getiriyor"),
     ],
   },
   {

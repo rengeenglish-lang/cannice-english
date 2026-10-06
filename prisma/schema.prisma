@@ -319,6 +319,7 @@ model User {
   updatedAt      DateTime  @updatedAt
 
   seoActivityLogs       SeoActivityLog[]
+  seoAttribution        SeoAttribution?
   orders                Order[]
   cart                  Cart?
   enrollments           Enrollment[]
@@ -769,6 +770,8 @@ model BlogCategory {
 model BlogPost {
   seoDraft SeoArticleDraft?
   slugRedirects SeoSlugRedirect[]
+  seoDays SeoArticleDay[]
+  seoAttributions SeoAttribution[]
   id             String         @id @default(cuid())
   title          String
   slug           String         @unique
@@ -1829,4 +1832,29 @@ model SeoSearchRow {
   @@unique([snapshotId, page, query])
   @@index([snapshotId, page])
   @@map("seo_search_rows")
+}
+
+// Phase 6: cookie-free, aggregate article traffic. No visitor identifier is stored.
+model SeoArticleDay {
+  id String @id @default(cuid())
+  postId String
+  day DateTime @db.Date
+  organicViews Int @default(0)
+  otherViews Int @default(0)
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@unique([postId, day])
+  @@map("seo_article_days")
+}
+
+// First-touch link between a new account and the article whose register link it used.
+model SeoAttribution {
+  id String @id @default(cuid())
+  userId String @unique
+  postId String?
+  slug String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post BlogPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+  @@index([postId, createdAt])
+  @@map("seo_attributions")
 }
