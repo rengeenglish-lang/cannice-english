@@ -1,3 +1,4 @@
+import { SeoIntelligence } from "@/components/admin/seo/SeoIntelligence";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
@@ -49,6 +50,7 @@ export default async function SeoArticlePage({
           )}
         </div>
       </details>
+      <SeoIntelligence actorId={actor.id} id={id} />
       {item.missingCta ? (
         <p role="alert">
           Seçilen bağlantı artık envanterde bulunmuyor. Briefteki bağlantıyı

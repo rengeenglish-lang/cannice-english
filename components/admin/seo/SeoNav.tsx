@@ -6,6 +6,7 @@ export function SeoNav() {
   const pathname = usePathname();
   return (
     <nav aria-label="SEO bölümleri" className="flex flex-wrap gap-2">
+      <Link className="ghost-button text-sm" href="/admin/seo/topics" aria-current={pathname === "/admin/seo/topics" ? "page" : undefined}>Konu haritası</Link>
       {SEO_SECTIONS.map(([slug, title, phase]) => {
         const href = `/admin/seo/${slug}`;
         return phase === 1 ||

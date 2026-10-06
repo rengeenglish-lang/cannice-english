@@ -147,7 +147,7 @@ export async function saveSeoBrief(actorId: string, raw: unknown) {
         where: {
           id: input.brief.ctaItemId,
           available: true,
-          publication: "PUBLISHED",
+          publication: { in: ["LIVE", "PUBLISHED"] },
         },
       }))
     )
@@ -315,7 +315,7 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
   const [brand, catalogue] = await Promise.all([
     brandEnvelope(),
     db.seoContentItem.findMany({
-      where: { available: true, publication: "PUBLISHED" },
+      where: { available: true, publication: { in: ["LIVE", "PUBLISHED"] } },
       select: { id: true, title: true, url: true, access: true },
       orderBy: { sourceKey: "asc" },
       take: 200,
@@ -328,7 +328,7 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
         where: {
           id: brief.ctaItemId,
           available: true,
-          publication: "PUBLISHED",
+          publication: { in: ["LIVE", "PUBLISHED"] },
         },
         select: { id: true, title: true, url: true, access: true },
       })
