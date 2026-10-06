@@ -16,7 +16,7 @@ export async function SeoCalendarPage({ actorId }: { actorId: string }) {
       <h2 className="text-2xl font-bold">İçerik takvimi</h2>
       <p>
         Liste görünümü. Yalnızca bir yönetici tarafından onaylanan, zamanlanan veya yayınlanan
-        makaleler görünür. Zamanlanan yayınlar günlük Vercel Cron çalışmasında (05:00 UTC)
+        makaleler görünür. Zamanlanan yayınlar saatlik Vercel Cron çalışmasında
         kapı yeniden denetlenerek yayınlanır. Ay/hafta görünümü ve sürükle-bırak sonraki
         aşamadadır.
       </p>

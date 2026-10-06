@@ -10,13 +10,13 @@ export const INVENTORY_LIMIT = 2000;
 /** Bounded synchronous database-only refresh. Future crawling/generation must use durable jobs.
  * Fail instead of silently truncating; the previous complete snapshot survives any error.
  */
-export async function refreshSeoInventory(actorId: string) {
-  await requireSeoAdmin(actorId);
+export async function refreshSeoInventory(actorId: string | null) {
+  if (actorId) await requireSeoAdmin(actorId);
   return db.$transaction(
     async (tx) => {
-      await requireSeoAdmin(actorId, tx);
+      if (actorId) await requireSeoAdmin(actorId, tx);
       await lockSeoWrites(tx);
-      await checkSeoRateLimit(tx, actorId, "INVENTORY_REFRESHED");
+      if (actorId) await checkSeoRateLimit(tx, actorId, "INVENTORY_REFRESHED");
       const [posts, exams, products, topics] = await Promise.all([
         tx.blogPost.findMany({
           take: INVENTORY_LIMIT + 1,

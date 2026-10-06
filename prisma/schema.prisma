@@ -1858,3 +1858,42 @@ model SeoAttribution {
   @@index([postId, createdAt])
   @@map("seo_attributions")
 }
+
+// Phase 7: durable background jobs (claimed with SKIP LOCKED, retried with backoff) and AI spend ledger.
+model SeoJob {
+  id String @id @default(cuid())
+  type String
+  status String @default("QUEUED")
+  dedupeKey String @unique
+  payload Json
+  runAt DateTime
+  attempts Int @default(0)
+  maxAttempts Int @default(3)
+  lockedAt DateTime?
+  finishedAt DateTime?
+  lastError String?
+  result Json?
+  createdAt DateTime @default(now())
+  @@index([status, runAt])
+  @@map("seo_jobs")
+}
+
+model SeoAiUsage {
+  id String @id @default(cuid())
+  month String
+  provider String
+  model String
+  operation String
+  status String @default("RESERVED")
+  estimatedUsd Decimal @db.Decimal(10, 4)
+  actualUsd Decimal? @db.Decimal(10, 4)
+  inputTokens Int?
+  outputTokens Int?
+  draftId String?
+  actorId String?
+  createdAt DateTime @default(now())
+  settledAt DateTime?
+  @@index([month, status])
+  @@index([createdAt])
+  @@map("seo_ai_usage")
+}

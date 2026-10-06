@@ -1,7 +1,8 @@
 import { forbidden, redirect } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
 import { SeoNav } from "@/components/admin/seo/SeoNav";
-import { SeoControls } from "@/components/admin/seo/SeoControls";
+import { EmergencyStopButton } from "@/components/admin/seo/SeoAutomationControls";
+import { readAutomation } from "@/server/services/seo/automation.service";
 export const metadata = {
   title: "SEO Autopilot",
   robots: { index: false, follow: false },
@@ -14,6 +15,7 @@ export default async function SeoLayout({
   const actor = await getAuthContext();
   if (!actor) redirect("/sign-in");
   if (actor.role !== "ADMIN") forbidden();
+  const automation = await readAutomation();
   return (
     <div className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -24,8 +26,13 @@ export default async function SeoLayout({
             İçerik, öğrenci faydası ve dönüşüm için ortak çalışma alanı.
           </p>
         </div>
-        <SeoControls kind="pause" />
+        <EmergencyStopButton stopped={automation.state.emergencyStop} revision={automation.revision} />
       </header>
+      {automation.state.emergencyStop ? (
+        <p role="alert" className="rounded-xl border border-[color:var(--danger)] p-4 text-sm font-bold">
+          ACİL DURDURMA etkin: arka plan işleri ve zamanlanmış otomatik yayın çalışmıyor.
+        </p>
+      ) : null}
       <p className="text-sm text-[color:var(--muted)]">
         Her yazı sizin onayınızla yayınlanır. AI üretimi ve tam otomatik yayın kapalıdır.
       </p>

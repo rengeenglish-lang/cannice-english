@@ -27,7 +27,7 @@ const day = (s: string) => new Date(`${s}T00:00:00.000Z`);
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 async function storeSnapshot(
-  actorId: string,
+  actorId: string | null,
   kind: SnapshotKind,
   period: { start: string; end: string },
   source: "CSV" | "GSC_API",
@@ -38,9 +38,9 @@ async function storeSnapshot(
   if (rows.length > MAX_IMPORT_ROWS) throw new PerformanceError(`En fazla ${MAX_IMPORT_ROWS} satır içe aktarılabilir.`);
   return db.$transaction(
     async (tx) => {
-      await requireSeoAdmin(actorId, tx);
+      if (actorId) await requireSeoAdmin(actorId, tx);
       await lockSeoWrites(tx);
-      await checkSeoRateLimit(tx, actorId, "SEARCH_SNAPSHOT_SAVED");
+      if (actorId) await checkSeoRateLimit(tx, actorId, "SEARCH_SNAPSHOT_SAVED");
       const where = { kind_periodStart_periodEnd: { kind, periodStart: day(period.start), periodEnd: day(period.end) } };
       const replaced = await tx.seoSearchSnapshot.findUnique({ where, select: { id: true } });
       if (replaced) await tx.seoSearchSnapshot.delete({ where });
@@ -80,6 +80,20 @@ export async function syncSearchConsole(actorId: string, raw: unknown) {
   try {
     const { rows, dropped } = await fetchGscRows(config, input.kind, input.period, siteHost());
     return storeSnapshot(actorId, input.kind, input.period, "GSC_API", mergeRows(rows), dropped);
+  } catch (e) {
+    if (e instanceof GscError) throw new PerformanceError(e.message);
+    throw e;
+  }
+}
+
+/** Scheduled-job entry point: same fetch and validation as the admin button, attributed to the system. */
+export async function syncSearchConsoleSystem(raw: unknown) {
+  const input = z.object({ kind: z.enum(SNAPSHOT_KINDS), period: periodSchema }).strict().parse(raw);
+  const config = readGscConfig();
+  if (!config) throw new PerformanceError("Search Console bağlı değil.");
+  try {
+    const { rows, dropped } = await fetchGscRows(config, input.kind, input.period, siteHost());
+    return await storeSnapshot(null, input.kind, input.period, "GSC_API", mergeRows(rows), dropped);
   } catch (e) {
     if (e instanceof GscError) throw new PerformanceError(e.message);
     throw e;
