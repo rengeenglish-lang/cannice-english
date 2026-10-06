@@ -1750,6 +1750,7 @@ model SeoKeyword {
 
 // Workflow metadata only: article text remains in the existing BlogPost.
 model SeoArticleDraft {
+  approvedLinks Json @default("[]")
   id String @id @default(cuid())
   keywordId String @unique
   postId String @unique

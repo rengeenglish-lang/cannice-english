@@ -193,6 +193,8 @@ export default async function SeoSection({
   if (section === "activity") {
     const { items, count, page } = await listSeoActivity(actor.id, query.page);
     const labels: Record<string, string> = {
+      LINKS_APPROVED: "İç bağlantılar onaylandı",
+      CLUSTERS_SAVED: "Konu kümeleri kaydedildi",
       BRAND_SAVED: "Marka profili kaydedildi",
       KEYWORD_SAVED: "Anahtar kelime kaydedildi",
       DRAFT_CREATED: "Makale çalışma alanı oluşturuldu",

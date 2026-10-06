@@ -1,3 +1,5 @@
+import { resolveDestination } from "./destinations";
+import { INTENT_LABELS } from "@/lib/seo/keywords";
 import "server-only";
 import { db } from "@/server/db";
 import { requireSeoAdmin } from "./access";
@@ -17,9 +19,11 @@ export async function getDraftIntelligence(actorId: string, id: string) {
     select: { id: true, title: true, url: true, sourceType: true, sourceId: true, examSlug: true, languageCode: true, excerpt: true, access: true, publication: true, available: true, scannedAt: true },
   });
   if (items.length > 2000) return { limited: true, scannedAt: null, links: [], products: [], overlaps: [] };
-  const candidates = analyzeDestinations({ keyword: brief.primaryKeyword,
+  const ranked = analyzeDestinations({ keyword: brief.primaryKeyword,
     language: brief.languageCode, examSlug: draft.keyword.exam?.slug ?? null,
     postId: draft.postId }, items);
+  const checked = await Promise.all(ranked.slice(0, 24).map(async item => ({item, live: await resolveDestination(item.id)})));
+  const candidates = checked.filter(c => c.live).map(c => c.item);
   return {
     limited: false,
     scannedAt: items.length ? new Date(Math.min(...items.map(i => i.scannedAt.getTime()))) : null,
@@ -40,7 +44,7 @@ export async function getTopicMap(actorId: string) {
   const groups = new Map<string, { key: string; name: string; items: typeof keywords }>();
   for (const keyword of keywords) {
     const key = JSON.stringify([keyword.examId, keyword.languageCode, keyword.market, keyword.intent]);
-    const group = groups.get(key) ?? { key, name: `${keyword.exam?.name ?? "Sınav atanmamış"} · ${keyword.languageCode} · ${keyword.market} · ${keyword.intent}`, items: [] };
+    const group = groups.get(key) ?? { key, name: `${keyword.exam?.name ?? "Sınav atanmamış"} · ${keyword.languageCode} · ${keyword.market} · ${INTENT_LABELS[keyword.intent] ?? keyword.intent}`, items: [] };
     group.items.push(keyword);
     groups.set(key, group);
   }

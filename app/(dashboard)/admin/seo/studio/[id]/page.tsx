@@ -1,3 +1,5 @@
+import { LinkPlanForm } from "@/components/admin/seo/SeoPlanningForms";
+import { getPlanningChoices } from "@/server/services/seo/planning.service";
 import { SeoIntelligence } from "@/components/admin/seo/SeoIntelligence";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
@@ -20,6 +22,7 @@ export default async function SeoArticlePage({
   const { id } = await params;
   const item = await getSeoDraft(actor.id, id);
   if (!item) notFound();
+  const choices = await getPlanningChoices(actor.id, item.approvedLinks.map(l => l.itemId));
   return (
     <section className="max-w-4xl space-y-6">
       <Link className="ghost-button" href="/admin/seo/studio">
@@ -51,6 +54,12 @@ export default async function SeoArticlePage({
         </div>
       </details>
       <SeoIntelligence actorId={actor.id} id={id} />
+      <section className="dashboard-panel space-y-4 p-5">
+        <h3 className="text-lg font-bold">Onaylı iç bağlantılar</h3>
+        <p>En fazla 12 bağlantı. Kaydetme hedefleri yeniden doğrular ve önceki editör incelemesini kaldırır. Metne otomatik eklenmez; yayın aşamasında kullanılacak bağlantı planıdır.</p>
+        {!item.published ? <LinkPlanForm key={item.revision} id={id} revision={item.revision} links={item.approvedLinks.map(({itemId,label})=>({itemId,label}))} choices={choices}/> : null}
+        <ul>{item.approvedLinks.map(l=><li key={l.itemId}>{l.destination ? <Link className="underline" href={l.destination.url}>{l.label}</Link> : <span role="alert">{l.label} — hedef artık kullanılamıyor; kaldırın veya yeniden seçin.</span>}</li>)}</ul>
+      </section>
       {item.missingCta ? (
         <p role="alert">
           Seçilen bağlantı artık envanterde bulunmuyor. Briefteki bağlantıyı

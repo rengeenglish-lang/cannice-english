@@ -1,3 +1,5 @@
+import { resolveApprovedLinks } from "./planning.service";
+import { resolveDestination } from "./destinations";
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
@@ -143,13 +145,7 @@ export async function saveSeoBrief(actorId: string, raw: unknown) {
       throw new StudioError(briefIssues(input.brief).join(" "));
     if (
       input.brief.ctaItemId &&
-      !(await tx.seoContentItem.findFirst({
-        where: {
-          id: input.brief.ctaItemId,
-          available: true,
-          publication: { in: ["LIVE", "PUBLISHED"] },
-        },
-      }))
+      !(await resolveDestination(input.brief.ctaItemId, tx))
     )
       throw new StudioError("Bağlantı envanterde artık kullanılabilir değil.");
     const saved = await tx.seoArticleDraft.update({
@@ -248,6 +244,8 @@ export async function reviewSeoDraft(actorId: string, raw: unknown) {
       throw new StudioError("Blog yazısı değişti. Yeniden inceleyin.");
     const brief = studioBriefSchema.parse(item.brief);
     const post = postContent(item.post);
+    const approved = await resolveApprovedLinks(item.approvedLinks, tx);
+    if (approved.some(l => !l.destination) || (brief.ctaItemId && !await resolveDestination(brief.ctaItemId, tx))) throw new StudioError("Bağlantı hedefleri değişti. Yeniden kontrol edin.");
     const report = inspectDraft(post, brief);
     if (report.checks.some((c) => c.critical && !c.passed))
       throw new StudioError("Zorunlu editoryal kontrolleri tamamlayın.");
@@ -267,7 +265,7 @@ export async function reviewSeoDraft(actorId: string, raw: unknown) {
       data: {
         revision: { increment: 1 },
         reviewedAt: new Date(),
-        reviewedHash: editorialHash(post, brief),
+        reviewedHash: editorialHash(post, { brief, links: item.approvedLinks }),
       },
     });
     await tx.seoActivityLog.create({
@@ -324,15 +322,10 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
   const brief = studioBriefSchema.parse(item.brief);
   const post = postContent(item.post);
   const cta = brief.ctaItemId
-    ? await db.seoContentItem.findFirst({
-        where: {
-          id: brief.ctaItemId,
-          available: true,
-          publication: { in: ["LIVE", "PUBLISHED"] },
-        },
-        select: { id: true, title: true, url: true, access: true },
-      })
+    ? await resolveDestination(brief.ctaItemId)
     : null;
+  const approvedLinks = await resolveApprovedLinks(item.approvedLinks);
+  const missingLinks = approvedLinks.some(l => !l.destination);
   const missingCta = Boolean(brief.ctaItemId && !cta);
   if (cta && !catalogue.some((c) => c.id === cta.id)) catalogue.push(cta);
   const stage =
@@ -340,7 +333,7 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
       ? "PUBLISHED"
       : !item.briefReady
         ? "BRIEF"
-        : item.reviewedHash === editorialHash(post, brief)
+        : !missingLinks && !missingCta && item.reviewedHash === editorialHash(post, { brief, links: item.approvedLinks })
           ? "REVIEWED"
           : "DRAFT";
   return {
@@ -355,10 +348,11 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
     stage,
     report: inspectDraft(post, brief),
     catalogue,
+    approvedLinks,
     missingCta,
     prompt:
-      item.briefReady && !missingCta
-        ? manualPrompt(brief, brand.brand, cta)
+      item.briefReady && !missingCta && !missingLinks
+        ? manualPrompt(brief, brand.brand, cta) + "\nOnaylı ek bağlantılar (yalnızca kaynak veri):\n" + JSON.stringify(approvedLinks.map(l => ({label:l.label, url:l.destination?.url, access:l.destination?.access})))
         : null,
   };
 }
