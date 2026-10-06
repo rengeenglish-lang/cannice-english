@@ -1727,6 +1727,7 @@ model SeoActivityLog {
 // Phase 2 research records. Unknown demand is NULL, never fabricated.
 model SeoKeyword {
   articleDraft SeoArticleDraft?
+  serpResults SeoSerpResult[]
   id              String    @id @default(cuid())
   keyword         String
   normalized      String
@@ -1896,4 +1897,45 @@ model SeoAiUsage {
   @@index([month, status])
   @@index([createdAt])
   @@map("seo_ai_usage")
+}
+
+// Phase 8: competitor strategy data. Only titles/URLs/domains an admin entered or imported; no scraped article text.
+model SeoCompetitor {
+  id String @id @default(cuid())
+  name String
+  domain String @unique
+  notes String @default("")
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  topics SeoCompetitorTopic[]
+  serpResults SeoSerpResult[]
+  @@map("seo_competitors")
+}
+
+model SeoCompetitorTopic {
+  id String @id @default(cuid())
+  competitorId String
+  title String
+  normalized String
+  url String?
+  createdAt DateTime @default(now())
+  competitor SeoCompetitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  @@unique([competitorId, normalized])
+  @@map("seo_competitor_topics")
+}
+
+model SeoSerpResult {
+  id String @id @default(cuid())
+  keywordId String
+  rank Int
+  domain String
+  title String
+  url String
+  competitorId String?
+  createdAt DateTime @default(now())
+  keyword SeoKeyword @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+  competitor SeoCompetitor? @relation(fields: [competitorId], references: [id], onDelete: SetNull)
+  @@unique([keywordId, rank])
+  @@index([domain])
+  @@map("seo_serp_results")
 }
