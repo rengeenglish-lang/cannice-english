@@ -1,4 +1,6 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
+import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
+import { SeoPerformancePage } from "@/components/admin/seo/SeoPerformancePage";
 import { SeoStudioPage } from "@/components/admin/seo/SeoStudioPage";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
@@ -65,6 +67,9 @@ export default async function SeoSection({
   if (!actor || actor.role !== "ADMIN") forbidden();
   const { section } = await params;
   const query = await searchParams;
+  if (section === "performance" || section === "refresh" || section === "quick-wins")
+    return <SeoPerformancePage actorId={actor.id} view={section} />;
+  if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
   if (["keywords", "opportunities"].includes(section))
@@ -193,6 +198,8 @@ export default async function SeoSection({
   if (section === "activity") {
     const { items, count, page } = await listSeoActivity(actor.id, query.page);
     const labels: Record<string, string> = {
+      LINKS_APPROVED: "İç bağlantılar onaylandı",
+      CLUSTERS_SAVED: "Konu kümeleri kaydedildi",
       BRAND_SAVED: "Marka profili kaydedildi",
       KEYWORD_SAVED: "Anahtar kelime kaydedildi",
       DRAFT_CREATED: "Makale çalışma alanı oluşturuldu",
@@ -202,6 +209,15 @@ export default async function SeoSection({
       SETTINGS_SAVED: "Ayarlar kaydedildi",
       INVENTORY_REFRESHED: "Envanter tarandı",
       AUTOPILOT_PAUSED: "Autopilot duraklatıldı",
+      DRAFT_APPROVED: "Yayın için onaylandı",
+      APPROVAL_REVOKED: "Yayın onayı geri alındı",
+      DRAFT_SCHEDULED: "Yayın zamanlandı",
+      SCHEDULE_CANCELLED: "Zamanlama iptal edildi",
+      SCHEDULE_FAILED: "Zamanlanmış yayın durduruldu",
+      ARTICLE_PUBLISHED: "Makale yayınlandı",
+      ARTICLE_UNPUBLISHED: "Makale yayından kaldırıldı",
+      VERSION_RESTORED: "Sürüm geri yüklendi",
+      SEARCH_SNAPSHOT_SAVED: "Search Console anlık görüntüsü kaydedildi",
     };
     return (
       <section className="space-y-4">

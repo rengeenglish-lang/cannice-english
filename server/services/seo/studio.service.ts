@@ -1,3 +1,6 @@
+import { resolveApprovedLinks } from "./planning.service";
+import { recordSeoVersion } from "./versions";
+import { resolveDestination } from "./destinations";
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
@@ -21,7 +24,16 @@ const identitySchema = z.object({
   revision: z.number().int().min(0),
 });
 export class StudioError extends Error {}
-function editorialHash(post: DraftContent, brief: unknown) {
+/** Any editorial change voids a prior approval and cancels a pending scheduled publication. */
+export const VOID_APPROVAL = {
+  reviewedHash: null,
+  reviewedAt: null,
+  approvedHash: null,
+  approvedAt: null,
+  approvedById: null,
+  scheduledFor: null,
+} as const;
+export function editorialHash(post: DraftContent, brief: unknown) {
   return createHash("sha256")
     .update(JSON.stringify({ post, brief }))
     .digest("hex");
@@ -143,13 +155,7 @@ export async function saveSeoBrief(actorId: string, raw: unknown) {
       throw new StudioError(briefIssues(input.brief).join(" "));
     if (
       input.brief.ctaItemId &&
-      !(await tx.seoContentItem.findFirst({
-        where: {
-          id: input.brief.ctaItemId,
-          available: true,
-          publication: { in: ["LIVE", "PUBLISHED"] },
-        },
-      }))
+      !(await resolveDestination(input.brief.ctaItemId, tx))
     )
       throw new StudioError("Bağlantı envanterde artık kullanılabilir değil.");
     const saved = await tx.seoArticleDraft.update({
@@ -158,8 +164,7 @@ export async function saveSeoBrief(actorId: string, raw: unknown) {
         brief: input.brief,
         briefReady: input.ready,
         revision: { increment: 1 },
-        reviewedHash: null,
-        reviewedAt: null,
+        ...VOID_APPROVAL,
       },
     });
     await tx.seoActivityLog.create({
@@ -198,6 +203,11 @@ export async function saveSeoDraftContent(actorId: string, raw: unknown) {
       })
     )
       throw new StudioError("Bu URL başka bir yazıda kullanılıyor.");
+    const claimed = await tx.seoSlugRedirect.findUnique({
+      where: { fromSlug: input.post.slug },
+    });
+    if (claimed && claimed.postId !== item.postId)
+      throw new StudioError("Bu URL daha önce başka bir yayında kullanıldı ve yönlendiriliyor.");
     const changed = await tx.blogPost.updateMany({
       where: {
         id: item.postId,
@@ -210,14 +220,25 @@ export async function saveSeoDraftContent(actorId: string, raw: unknown) {
       throw new StudioError(
         "Blog yazısı başka bir editörde değişti. Sayfayı yenileyin.",
       );
+    // A slug that ever served a published article keeps resolving to it (URL stability).
+    if (item.post.publishedAt && item.post.slug !== input.post.slug) {
+      await tx.seoSlugRedirect.upsert({
+        where: { fromSlug: item.post.slug },
+        create: { fromSlug: item.post.slug, postId: item.postId },
+        update: { postId: item.postId },
+      });
+    }
+    await tx.seoSlugRedirect.deleteMany({
+      where: { fromSlug: input.post.slug, postId: item.postId },
+    });
     const saved = await tx.seoArticleDraft.update({
       where: { id: item.id },
       data: {
         revision: { increment: 1 },
-        reviewedHash: null,
-        reviewedAt: null,
+        ...VOID_APPROVAL,
       },
     });
+    await recordSeoVersion(tx, item.id, input.post, "EDIT", actorId);
     await tx.seoActivityLog.create({
       data: {
         actorId,
@@ -248,6 +269,8 @@ export async function reviewSeoDraft(actorId: string, raw: unknown) {
       throw new StudioError("Blog yazısı değişti. Yeniden inceleyin.");
     const brief = studioBriefSchema.parse(item.brief);
     const post = postContent(item.post);
+    const approved = await resolveApprovedLinks(item.approvedLinks, tx);
+    if (approved.some(l => !l.destination) || (brief.ctaItemId && !await resolveDestination(brief.ctaItemId, tx))) throw new StudioError("Bağlantı hedefleri değişti. Yeniden kontrol edin.");
     const report = inspectDraft(post, brief);
     if (report.checks.some((c) => c.critical && !c.passed))
       throw new StudioError("Zorunlu editoryal kontrolleri tamamlayın.");
@@ -267,7 +290,11 @@ export async function reviewSeoDraft(actorId: string, raw: unknown) {
       data: {
         revision: { increment: 1 },
         reviewedAt: new Date(),
-        reviewedHash: editorialHash(post, brief),
+        reviewedHash: editorialHash(post, { brief, links: item.approvedLinks }),
+        approvedHash: null,
+        approvedAt: null,
+        approvedById: null,
+        scheduledFor: null,
       },
     });
     await tx.seoActivityLog.create({
@@ -324,25 +351,27 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
   const brief = studioBriefSchema.parse(item.brief);
   const post = postContent(item.post);
   const cta = brief.ctaItemId
-    ? await db.seoContentItem.findFirst({
-        where: {
-          id: brief.ctaItemId,
-          available: true,
-          publication: { in: ["LIVE", "PUBLISHED"] },
-        },
-        select: { id: true, title: true, url: true, access: true },
-      })
+    ? await resolveDestination(brief.ctaItemId)
     : null;
+  const approvedLinks = await resolveApprovedLinks(item.approvedLinks);
+  const missingLinks = approvedLinks.some(l => !l.destination);
   const missingCta = Boolean(brief.ctaItemId && !cta);
   if (cta && !catalogue.some((c) => c.id === cta.id)) catalogue.push(cta);
+  const currentHash = editorialHash(post, { brief, links: item.approvedLinks });
+  const reviewedCurrent = !missingLinks && !missingCta && item.reviewedHash === currentHash;
+  const approvedCurrent = reviewedCurrent && item.approvedHash === currentHash;
   const stage =
     item.post.status === "PUBLISHED"
       ? "PUBLISHED"
       : !item.briefReady
         ? "BRIEF"
-        : item.reviewedHash === editorialHash(post, brief)
-          ? "REVIEWED"
-          : "DRAFT";
+        : approvedCurrent && item.scheduledFor
+          ? "SCHEDULED"
+          : approvedCurrent
+            ? "APPROVED"
+            : reviewedCurrent
+              ? "REVIEWED"
+              : "DRAFT";
   return {
     id: item.id,
     revision: item.revision,
@@ -353,12 +382,18 @@ export async function getSeoDraft(actorId: string, raw: unknown) {
     brief,
     briefReady: item.briefReady,
     stage,
+    reviewedCurrent,
+    approvedCurrent,
+    scheduledFor: approvedCurrent ? item.scheduledFor?.toISOString() ?? null : null,
+    scheduleError: item.scheduleError,
+    wasPublished: Boolean(item.post.publishedAt),
     report: inspectDraft(post, brief),
     catalogue,
+    approvedLinks,
     missingCta,
     prompt:
-      item.briefReady && !missingCta
-        ? manualPrompt(brief, brand.brand, cta)
+      item.briefReady && !missingCta && !missingLinks
+        ? manualPrompt(brief, brand.brand, cta) + "\nOnaylı ek bağlantılar (yalnızca kaynak veri):\n" + JSON.stringify(approvedLinks.map(l => ({label:l.label, url:l.destination?.url, access:l.destination?.access})))
         : null,
   };
 }

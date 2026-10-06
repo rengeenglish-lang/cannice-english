@@ -171,6 +171,12 @@ async function main() {
         exact: true,
       }),
     ).toBeVisible();
+    await page.getByRole("button", { name: "Bağlantı ekle", exact: true }).click();
+    const blogChoice = await db.seoContentItem.findUniqueOrThrow({ where: { sourceKey: "ROUTE:/blog" } });
+    await page.getByLabel("Hedef sayfa 1", { exact: true }).selectOption(blogChoice.id);
+    await page.getByLabel("Bağlantı metni 1", { exact: true }).fill("İlgili blog yazıları");
+    await page.getByRole("button", { name: "Bağlantıları onayla ve kaydet" }).click();
+    await expect(page.getByRole("link", { name: "İlgili blog yazıları", exact: true })).toBeVisible();
     await page
       .getByLabel("Hedef okuyucu", { exact: true })
       .fill("Students preparing for an English exam");
@@ -321,12 +327,68 @@ async function main() {
       path: "/tmp/seo-browser-artifacts/studio-mobile.png",
       fullPage: true,
     });
+    // Phase 4: approval -> publish -> public structured data/sitemap -> unpublish.
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await expect(page.getByRole("heading", { name: "5. Yayın", exact: true })).toBeVisible();
+    await page
+      .getByLabel(
+        "Metni, bağlantıları ve metaverileri yayınlanmaya hazır olarak onaylıyorum. Onay yazıyı yayınlamaz.",
+        { exact: true },
+      )
+      .check();
+    await page.getByRole("button", { name: "Yayın için onayla", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Yayın için onaylandı · yayınlanmadı" }),
+    ).toBeVisible();
+    expect(
+      (await db.blogPost.findUniqueOrThrow({ where: { slug: "seo-browser-private-draft" } })).status,
+    ).toBe("DRAFT");
+    await page
+      .getByLabel("Yazı herkese açık olacak ve site haritasına girecek; bunu onaylıyorum.", { exact: true })
+      .check();
+    await page.getByRole("button", { name: "Şimdi yayınla", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Yayında · salt okunur" }),
+    ).toBeVisible();
+    const live = await context.request.get("https://localhost:3191/blog/seo-browser-private-draft");
+    const liveHtml = await live.text();
+    expect(liveHtml).toContain("A useful reading practice guide for students");
+    expect(liveHtml).toContain("application/ld+json");
+    expect(liveHtml).toContain('"@type":"BlogPosting"');
+    expect(liveHtml).toContain('rel="canonical"');
+    const sitemap = await (await context.request.get("https://localhost:3191/sitemap.xml")).text();
+    expect(sitemap).toContain("/blog/seo-browser-private-draft");
+    await expect(page.getByRole("heading", { name: "Sürüm geçmişi", exact: true })).toBeVisible();
+    await expect(page.getByText("Yayınlandı", { exact: false }).first()).toBeVisible();
+    await page.goto("https://localhost:3191/admin/seo/calendar");
+    await expect(page.getByRole("heading", { name: "Yayında (1)", exact: true })).toBeVisible();
+    await page.goBack();
+    await page
+      .getByLabel("Yazının yayından kalkacağını ve bu adreste 404 döneceğini anlıyorum.", { exact: true })
+      .check();
+    await page.getByRole("button", { name: "Yayından kaldır ve düzenle", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Taslak / inceleme bekliyor" }),
+    ).toBeVisible();
+    const gone = await context.request.get("https://localhost:3191/blog/seo-browser-private-draft");
+    expect(await gone.text()).not.toContain("A useful reading practice guide for students");
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(page.getByRole("heading", { name: "İçerik bağlantı önerileri", exact: true })).toBeVisible();
     await page.goto("https://localhost:3191/admin/seo/topics");
     await expect(page.getByRole("heading", { name: "Editoryal konu haritası" })).toBeVisible();
     await expect(page.getByRole("link", { name: "SEO browser fixture keyword", exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.getByRole("button", { name: "Konu kümesi ekle" }).click();
+    await page.getByLabel("Küme adı 1", { exact: true }).fill("Browser konu kümesi");
+    await page.getByLabel("Ana konu sayfası 1", { exact: true }).selectOption(blogChoice.id);
+    await page.getByRole("checkbox", { name: "Sınavlar", exact: true }).check();
+    await page.getByRole("button", { name: "Konu kümelerini kaydet" }).click();
+    await expect.poll(async () => JSON.parse((await db.appSetting.findUnique({where:{key:"seo_clusters_v1"}}))?.value ?? '{"clusters":[]}').clusters.length).toBe(1);
+    await page.reload();
+    await expect(page.getByLabel("Küme adı 1", { exact: true })).toHaveValue("Browser konu kümesi");
+    await page.getByRole("button", { name: "Kümeyi kaldır 1" }).click();
+    await page.getByRole("button", { name: "Konu kümelerini kaydet" }).click();
+    await expect.poll(async () => JSON.parse((await db.appSetting.findUnique({where:{key:"seo_clusters_v1"}}))?.value ?? '{"clusters":[]}').clusters.length).toBe(0);
     await page.screenshot({ path: "/tmp/seo-browser-artifacts/topics-mobile.png", fullPage: true });
     await page.goto("https://localhost:3191/admin/seo/opportunities");
     await expect(
