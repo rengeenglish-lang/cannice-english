@@ -1,5 +1,6 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
 import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
+import { SeoPerformancePage } from "@/components/admin/seo/SeoPerformancePage";
 import { SeoStudioPage } from "@/components/admin/seo/SeoStudioPage";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
@@ -66,6 +67,8 @@ export default async function SeoSection({
   if (!actor || actor.role !== "ADMIN") forbidden();
   const { section } = await params;
   const query = await searchParams;
+  if (section === "performance" || section === "refresh" || section === "quick-wins")
+    return <SeoPerformancePage actorId={actor.id} view={section} />;
   if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
@@ -214,6 +217,7 @@ export default async function SeoSection({
       ARTICLE_PUBLISHED: "Makale yayınlandı",
       ARTICLE_UNPUBLISHED: "Makale yayından kaldırıldı",
       VERSION_RESTORED: "Sürüm geri yüklendi",
+      SEARCH_SNAPSHOT_SAVED: "Search Console anlık görüntüsü kaydedildi",
     };
     return (
       <section className="space-y-4">

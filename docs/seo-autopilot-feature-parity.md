@@ -31,3 +31,6 @@ Real exam/product grounding; cannibalization checks; content version history; ac
 4. Treat external CMS connectors as a separate expansion of the native publisher; configuration and credentials for each target are required. Do not transmit content to third parties or publish to unspecified properties.
 
 A deploy authorization is not authorization to invent search-volume data, turn on unlimited AI spending, fabricate analytics, or publish unchecked articles. Full autopilot remains opt-in after its safeguards have passed tests.
+
+## Phase 5 status
+Search Console performance snapshots (CSV now; API client built but unverified against Google), quick wins, content decay and refresh recommendations are implemented as manual, evidence-thresholded tools. Phase 6 (conversion attribution) is designed but not built: a cookie-free attribution schema is parked in a git stash.
