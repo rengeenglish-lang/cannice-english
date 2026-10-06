@@ -64,7 +64,7 @@ async function main() {
     assert.match(guest.headers.get("location") ?? "", /sign-in/);
     const admin = await signIn("ADMIN");
     for (const [section, marker] of [
-      ["overview", "Netfener SEO başlangıç görünümü"],
+      ["overview", "Sıradaki işler"],
       ["inventory", "Mevcut içerik envanteri"],
       ["settings", "SEO ayarları"],
       ["activity", "İşlem geçmişi"],

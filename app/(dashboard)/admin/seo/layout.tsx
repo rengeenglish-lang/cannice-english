@@ -26,9 +26,8 @@ export default async function SeoLayout({
         </div>
         <SeoControls kind="pause" />
       </header>
-      <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] p-4 text-sm">
-        <strong>Manuel içerik stüdyosu ve editoryal öneriler.</strong> Otomasyon duraklatıldı. AI
-        üretimi ve otomatik yayın etkin değil.
+      <p className="text-sm text-[color:var(--muted)]">
+        Her yazı sizin onayınızla yayınlanır. AI üretimi ve tam otomatik yayın kapalıdır.
       </p>
       <SeoNav />
       {children}
