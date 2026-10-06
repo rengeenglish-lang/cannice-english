@@ -1,4 +1,5 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
+import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
 import { SeoStudioPage } from "@/components/admin/seo/SeoStudioPage";
 import Link from "next/link";
 import { forbidden, notFound } from "next/navigation";
@@ -65,6 +66,7 @@ export default async function SeoSection({
   if (!actor || actor.role !== "ADMIN") forbidden();
   const { section } = await params;
   const query = await searchParams;
+  if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
   if (["keywords", "opportunities"].includes(section))
@@ -204,6 +206,14 @@ export default async function SeoSection({
       SETTINGS_SAVED: "Ayarlar kaydedildi",
       INVENTORY_REFRESHED: "Envanter tarandı",
       AUTOPILOT_PAUSED: "Autopilot duraklatıldı",
+      DRAFT_APPROVED: "Yayın için onaylandı",
+      APPROVAL_REVOKED: "Yayın onayı geri alındı",
+      DRAFT_SCHEDULED: "Yayın zamanlandı",
+      SCHEDULE_CANCELLED: "Zamanlama iptal edildi",
+      SCHEDULE_FAILED: "Zamanlanmış yayın durduruldu",
+      ARTICLE_PUBLISHED: "Makale yayınlandı",
+      ARTICLE_UNPUBLISHED: "Makale yayından kaldırıldı",
+      VERSION_RESTORED: "Sürüm geri yüklendi",
     };
     return (
       <section className="space-y-4">

@@ -81,6 +81,15 @@ export function getBlogPostBySlug(slug: string) {
   });
 }
 
+/** Current slug of a published post that once lived at `slug` (set when a published slug changes). */
+export async function getBlogRedirectSlug(slug: string) {
+  const row = await db.seoSlugRedirect.findUnique({
+    where: { fromSlug: slug },
+    select: { post: { select: { slug: true, status: true } } },
+  });
+  return row?.post.status === "PUBLISHED" ? row.post.slug : null;
+}
+
 const homepageProductInclude = {
   examType: true,
   book: { select: { format: true, pageCount: true } },
