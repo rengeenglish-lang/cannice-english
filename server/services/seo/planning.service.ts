@@ -17,7 +17,7 @@ export async function saveApprovedLinks(actorId: string, raw: unknown) {
     if (!draft || draft.post.status !== "DRAFT" || draft.revision !== input.revision) throw new Error("Taslak değişti veya salt okunur. Sayfayı yenileyin.");
     const resolved = await resolveApprovedLinks(input.links, tx);
     if (resolved.some(l => !l.destination || (l.destination.sourceType === "BLOG" && l.destination.sourceId === draft.postId))) throw new Error("Bağlantı artık kullanılamıyor veya yazının kendisine gidiyor. Envanteri yenileyin.");
-    await tx.seoArticleDraft.update({ where: { id: input.id }, data: { approvedLinks: input.links, revision: { increment: 1 }, reviewedAt: null, reviewedHash: null } });
+    await tx.seoArticleDraft.update({ where: { id: input.id }, data: { approvedLinks: input.links, revision: { increment: 1 }, reviewedAt: null, reviewedHash: null, approvedHash: null, approvedAt: null, approvedById: null, scheduledFor: null } });
     await tx.seoActivityLog.create({ data: { actorId, action: "LINKS_APPROVED", details: { draftId: input.id, links: input.links } } });
   });
 }

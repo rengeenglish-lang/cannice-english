@@ -768,6 +768,7 @@ model BlogCategory {
 
 model BlogPost {
   seoDraft SeoArticleDraft?
+  slugRedirects SeoSlugRedirect[]
   id             String         @id @default(cuid())
   title          String
   slug           String         @unique
@@ -1759,10 +1760,73 @@ model SeoArticleDraft {
   revision Int @default(0)
   reviewedHash String?
   reviewedAt DateTime?
+  approvedHash String?
+  approvedAt DateTime?
+  approvedById String?
+  scheduledFor DateTime?
+  scheduleError String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   keyword SeoKeyword @relation(fields: [keywordId], references: [id], onDelete: Restrict)
   post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  versions SeoArticleVersion[]
   @@index([updatedAt])
+  @@index([scheduledFor])
   @@map("seo_article_drafts")
+}
+
+model SeoArticleVersion {
+  id String @id @default(cuid())
+  draftId String
+  version Int
+  reason String
+  snapshot Json
+  score Int?
+  actorId String?
+  createdAt DateTime @default(now())
+  draft SeoArticleDraft @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  @@unique([draftId, version])
+  @@map("seo_article_versions")
+}
+
+model SeoSlugRedirect {
+  id String @id @default(cuid())
+  fromSlug String @unique
+  postId String
+  createdAt DateTime @default(now())
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@index([postId])
+  @@map("seo_slug_redirects")
+}
+
+// Phase 5: immutable-per-period Search Console performance snapshots (API sync or manual CSV import).
+model SeoSearchSnapshot {
+  id String @id @default(cuid())
+  periodStart DateTime @db.Date
+  periodEnd DateTime @db.Date
+  kind String
+  source String
+  rowCount Int
+  droppedRows Int @default(0)
+  importedById String?
+  createdAt DateTime @default(now())
+  rows SeoSearchRow[]
+  @@unique([kind, periodStart, periodEnd])
+  @@index([kind, periodEnd])
+  @@map("seo_search_snapshots")
+}
+
+model SeoSearchRow {
+  id String @id @default(cuid())
+  snapshotId String
+  page String @default("")
+  query String @default("")
+  clicks Int
+  impressions Int
+  ctr Float
+  position Float
+  snapshot SeoSearchSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  @@unique([snapshotId, page, query])
+  @@index([snapshotId, page])
+  @@map("seo_search_rows")
 }

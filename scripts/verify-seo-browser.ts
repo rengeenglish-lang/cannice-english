@@ -327,6 +327,51 @@ async function main() {
       path: "/tmp/seo-browser-artifacts/studio-mobile.png",
       fullPage: true,
     });
+    // Phase 4: approval -> publish -> public structured data/sitemap -> unpublish.
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await expect(page.getByRole("heading", { name: "5. Yayın", exact: true })).toBeVisible();
+    await page
+      .getByLabel(
+        "Metni, bağlantıları ve metaverileri yayınlanmaya hazır olarak onaylıyorum. Onay yazıyı yayınlamaz.",
+        { exact: true },
+      )
+      .check();
+    await page.getByRole("button", { name: "Yayın için onayla", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Yayın için onaylandı · yayınlanmadı" }),
+    ).toBeVisible();
+    expect(
+      (await db.blogPost.findUniqueOrThrow({ where: { slug: "seo-browser-private-draft" } })).status,
+    ).toBe("DRAFT");
+    await page
+      .getByLabel("Yazı herkese açık olacak ve site haritasına girecek; bunu onaylıyorum.", { exact: true })
+      .check();
+    await page.getByRole("button", { name: "Şimdi yayınla", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Yayında · salt okunur" }),
+    ).toBeVisible();
+    const live = await context.request.get("https://localhost:3191/blog/seo-browser-private-draft");
+    const liveHtml = await live.text();
+    expect(liveHtml).toContain("A useful reading practice guide for students");
+    expect(liveHtml).toContain("application/ld+json");
+    expect(liveHtml).toContain('"@type":"BlogPosting"');
+    expect(liveHtml).toContain('rel="canonical"');
+    const sitemap = await (await context.request.get("https://localhost:3191/sitemap.xml")).text();
+    expect(sitemap).toContain("/blog/seo-browser-private-draft");
+    await expect(page.getByRole("heading", { name: "Sürüm geçmişi", exact: true })).toBeVisible();
+    await expect(page.getByText("Yayınlandı", { exact: false }).first()).toBeVisible();
+    await page.goto("https://localhost:3191/admin/seo/calendar");
+    await expect(page.getByRole("heading", { name: "Yayında (1)", exact: true })).toBeVisible();
+    await page.goBack();
+    await page
+      .getByLabel("Yazının yayından kalkacağını ve bu adreste 404 döneceğini anlıyorum.", { exact: true })
+      .check();
+    await page.getByRole("button", { name: "Yayından kaldır ve düzenle", exact: true }).click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Taslak / inceleme bekliyor" }),
+    ).toBeVisible();
+    const gone = await context.request.get("https://localhost:3191/blog/seo-browser-private-draft");
+    expect(await gone.text()).not.toContain("A useful reading practice guide for students");
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(page.getByRole("heading", { name: "İçerik bağlantı önerileri", exact: true })).toBeVisible();
     await page.goto("https://localhost:3191/admin/seo/topics");

@@ -81,6 +81,7 @@ export const SEO_SECTIONS = [
   ["inventory", "Mevcut içerik", 1],
   ["links", "İç bağlantılar", 3],
   ["refresh", "İçerik yenileme", 5],
+  ["quick-wins", "Hızlı kazanımlar", 5],
   ["performance", "Performans", 5],
   ["conversions", "Dönüşümler", 6],
   ["competitors", "Rakipler", 8],

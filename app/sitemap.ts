@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [examTypes, products, blogPosts] = await Promise.all([
     db.examType.findMany({ where: { active: true }, select: { slug: true } }),
     db.product.findMany({ where: { isPublished: true, category: { not: "PLAN" } }, select: { slug: true, category: true, updatedAt: true } }),
-    db.blogPost.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, publishedAt: true } }),
+    db.blogPost.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, publishedAt: true, updatedAt: true } }),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${base}/blog/${post.slug}`,
-    lastModified: post.publishedAt ?? undefined,
+    lastModified: post.updatedAt ?? post.publishedAt ?? undefined,
   }));
 
   return [...staticRoutes, ...examRoutes, ...productRoutes, ...blogRoutes];

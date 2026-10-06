@@ -9,13 +9,13 @@ This comparison covers publicly advertised capabilities, not a hands-on audit of
 | Keywords and content ideas | Opportunities, intent and documented research sources (2, 8) | Manual keywords/intent and editorial relevance implemented; automated research deferred |
 | Brand voice / audience | Editable style, audience and exam-specific terminology (2) | Manual profile implemented in Phase 2 |
 | Long-form generation / editing | Approved briefs, article studio, quality review (2) | Manual copy/paste studio implemented; API generation deferred by user |
-| Titles / descriptions / SEO | Metadata, canonical, truthful schema, indexing checks (2, 4) | Planned |
-| Content calendar / regular publication | Human approval, scheduling, durable jobs and limits (4, 7) | Planned |
+| Titles / descriptions / SEO | Metadata, canonical, truthful schema, indexing checks (2, 4) | Manual metadata, canonical, BlogPosting/Breadcrumb JSON-LD and sitemap lastmod implemented in Phase 4; indexing checks need Search Console (5) |
+| Content calendar / regular publication | Human approval, scheduling, durable jobs and limits (4, 7) | Approval, gated scheduling (daily cron), list calendar implemented in Phase 4; autopilot jobs deferred (7) |
 | Internal and external links | Verified destinations and legitimate source references (3, 8) | Planned |
 | Images / optional video embeds | Vendor-neutral image assets, alt text, restricted embed providers (3–4) | Contract only |
 | Multiple languages | Locale-aware brief/article identity; language-specific keywords and CTAs (2–4) | Configuration/contract only |
 | Business promotion | Contextual links to actual Netfener practice and products (3) | Planned |
-| Direct publishing | Native existing BlogPost integration (4) | Existing manual blog only |
+| Direct publishing | Native existing BlogPost integration (4) | Native gated publish/unpublish with version history and redirects implemented in Phase 4 |
 | CMS connectors / exports / webhooks | Additional publishing adapters after native publishing is verified (8 extension) | Not implemented |
 | Google / AI-search discoverability | Helpful crawlable content, citations, metadata and structured data (4–5) | Existing basic site SEO only; no ranking guarantee |
 
@@ -31,3 +31,6 @@ Real exam/product grounding; cannibalization checks; content version history; ac
 4. Treat external CMS connectors as a separate expansion of the native publisher; configuration and credentials for each target are required. Do not transmit content to third parties or publish to unspecified properties.
 
 A deploy authorization is not authorization to invent search-volume data, turn on unlimited AI spending, fabricate analytics, or publish unchecked articles. Full autopilot remains opt-in after its safeguards have passed tests.
+
+## Phase 5 status
+Search Console performance snapshots (CSV now; API client built but unverified against Google), quick wins, content decay and refresh recommendations are implemented as manual, evidence-thresholded tools. Phase 6 (conversion attribution) is designed but not built: a cookie-free attribution schema is parked in a git stash.

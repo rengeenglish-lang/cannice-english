@@ -10,7 +10,7 @@ export function SeoNav() {
       {SEO_SECTIONS.map(([slug, title, phase]) => {
         const href = `/admin/seo/${slug}`;
         return phase === 1 ||
-          ["keywords", "opportunities", "studio", "clusters", "links"].includes(slug) ? (
+          ["keywords", "opportunities", "studio", "clusters", "links", "calendar", "performance", "refresh", "quick-wins"].includes(slug) ? (
           <Link
             key={slug}
             href={href}

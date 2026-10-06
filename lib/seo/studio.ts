@@ -219,4 +219,6 @@ export const STAGE_LABELS: Record<string, string> = {
   BRIEF: "Brief hazırlanıyor",
   DRAFT: "Taslak / inceleme bekliyor",
   REVIEWED: "Editör inceledi · yayınlanmadı",
+  APPROVED: "Yayın için onaylandı · yayınlanmadı",
+  SCHEDULED: "Zamanlandı · henüz yayınlanmadı",
 };
