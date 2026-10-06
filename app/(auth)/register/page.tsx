@@ -1,3 +1,4 @@
+import { parseSource } from "@/lib/seo/attribution";
 import { safeNextPath } from "@/lib/availability";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -5,14 +6,16 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 
 export const metadata: Metadata = { title: "Hesap Oluştur" };
 
-export default async function RegisterPage({searchParams}: {searchParams: Promise<{next?: string}>}) {
-const next = safeNextPath((await searchParams).next);
+export default async function RegisterPage({searchParams}: {searchParams: Promise<{next?: string; src?: string}>}) {
+const params = await searchParams;
+const next = safeNextPath(params.next);
+const src = parseSource(params.src) ? params.src : undefined;
   return (
     <div>
       <p className="eyebrow text-center">Öğrenme Yolculuğuna Başla</p>
       <h1 className="page-title text-center">Hesabını Oluştur</h1>
       <div className="mt-6">
-        <RegisterForm next={next} />
+        <RegisterForm next={next} src={src} />
       </div>
       <p className="mt-4 text-center text-sm text-slate-500">
         Zaten üye misin?{" "}
