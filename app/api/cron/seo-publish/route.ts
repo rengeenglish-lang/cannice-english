@@ -5,7 +5,7 @@ import { runDueSeoPublications } from "@/server/services/seo/publishing.service"
 export const maxDuration = 60;
 
 /**
- * Hourly Vercel Cron (see vercel.json): publishes SEO articles that an administrator approved and
+ * Vercel Cron (every 3 hours) (see vercel.json): publishes SEO articles that an administrator approved and
  * scheduled for a past time. It never creates, approves or schedules content. Same
  * `Authorization: Bearer $CRON_SECRET` guard as the other cron routes.
  */

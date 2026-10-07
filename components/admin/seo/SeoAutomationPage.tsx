@@ -29,7 +29,7 @@ export async function SeoAutomationPage({ actorId }: { actorId: string }) {
         <EmergencyStopButton stopped={state.emergencyStop} revision={revision} />
         <div className="border-t border-[color:var(--border)] pt-3">
           <p className="mb-2 text-sm">
-            Otomatik veri eşitleme: <strong>{state.autoSync ? "açık" : "kapalı"}</strong>. Açıkken saatlik çalışma son 28 günü ve öncesindeki 28 günü Search Console’dan çeker
+            Otomatik veri eşitleme: <strong>{state.autoSync ? "açık" : "kapalı"}</strong>. Açıkken 3 saatte bir çalışma son 28 günü ve öncesindeki 28 günü Search Console’dan çeker
             ({gscStatus().configured ? "API bağlı" : "API bağlı değil — yalnızca envanter taraması çalışır"}) ve içerik envanterini haftada bir tarar.
           </p>
           <AutoSyncToggle enabled={state.autoSync} revision={revision} disabled={state.emergencyStop} />

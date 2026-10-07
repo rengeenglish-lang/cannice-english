@@ -3,7 +3,7 @@ import { planRecurringJobs, runDueJobs } from "@/server/services/seo/jobs.servic
 export const maxDuration = 60;
 
 /**
- * Hourly Vercel Cron (see vercel.json): plans the recurring read-only data jobs (when automatic
+ * Vercel Cron (every 3 hours) (see vercel.json): plans the recurring read-only data jobs (when automatic
  * sync is enabled) and runs due jobs. It never creates, approves or publishes content, and does
  * nothing while the emergency stop is active. Same `Authorization: Bearer $CRON_SECRET` guard as
  * the other crons.
