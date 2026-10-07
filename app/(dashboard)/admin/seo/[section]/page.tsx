@@ -1,5 +1,6 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
 import { SeoAutomationPage } from "@/components/admin/seo/SeoAutomationPage";
+import { SeoCompetitorsPage } from "@/components/admin/seo/SeoCompetitorsPage";
 import { SeoConversionsPage } from "@/components/admin/seo/SeoConversionsPage";
 import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
 import { SeoPerformancePage } from "@/components/admin/seo/SeoPerformancePage";
@@ -75,6 +76,7 @@ export default async function SeoSection({
     return <SeoPerformancePage actorId={actor.id} view={section} />;
   if (section === "conversions") return <SeoConversionsPage actorId={actor.id} days={query.days} />;
   if (section === "automation") return <SeoAutomationPage actorId={actor.id} />;
+  if (section === "competitors") return <SeoCompetitorsPage actorId={actor.id} />;
   if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
@@ -230,6 +232,10 @@ export default async function SeoSection({
       JOB_RETRY_SCHEDULED: "Arka plan işi yeniden denenecek",
       JOB_RETRIED: "İş yeniden sıraya alındı",
       JOB_CANCELLED: "İş iptal edildi",
+      COMPETITOR_SAVED: "Rakip kaydedildi",
+      COMPETITOR_REMOVED: "Rakip silindi",
+      COMPETITOR_TOPICS_IMPORTED: "Rakip konuları içe aktarıldı",
+      SERP_SAVED: "SERP sonuçları kaydedildi",
       SEARCH_SNAPSHOT_SAVED: "Search Console anlık görüntüsü kaydedildi",
     };
     return (
