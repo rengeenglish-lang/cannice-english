@@ -153,6 +153,10 @@ export function SeoBriefForm({
         Önce okuyucu ihtiyacını ve kaynakları belirleyin. Hazır işaretlemeden
         eksik briefi kaydedebilirsiniz.
       </p>
+      <p className="text-sm">
+        <strong>Özgün katkı için kendinize sorun:</strong> Netfener, şu an arama sonuçlarında bulunmayan neyi sunabilir? Örnekler: etkileşimli pratik, seviye tespiti,
+        deneme sınavı, örnek sorular, öğretmen açıklaması, indirilebilir materyal, çalışma planı, ilerleme takibi. “Özgün katkı” alanına yazın.
+      </p>
       {fields.map(([name, label, max, rows]) => (
         <label key={name} className="block">
           {label}
