@@ -1,4 +1,5 @@
 import { SeoKeywordsPage } from "@/components/admin/seo/SeoKeywordsPage";
+import { SeoAutomationPage } from "@/components/admin/seo/SeoAutomationPage";
 import { SeoConversionsPage } from "@/components/admin/seo/SeoConversionsPage";
 import { SeoCalendarPage } from "@/components/admin/seo/SeoCalendarPage";
 import { SeoPerformancePage } from "@/components/admin/seo/SeoPerformancePage";
@@ -73,6 +74,7 @@ export default async function SeoSection({
   if (section === "performance" || section === "refresh" || section === "quick-wins")
     return <SeoPerformancePage actorId={actor.id} view={section} />;
   if (section === "conversions") return <SeoConversionsPage actorId={actor.id} days={query.days} />;
+  if (section === "automation") return <SeoAutomationPage actorId={actor.id} />;
   if (section === "calendar") return <SeoCalendarPage actorId={actor.id} />;
   if (section === "studio")
     return <SeoStudioPage actorId={actor.id} page={query.page} />;
@@ -221,6 +223,13 @@ export default async function SeoSection({
       ARTICLE_PUBLISHED: "Makale yayınlandı",
       ARTICLE_UNPUBLISHED: "Makale yayından kaldırıldı",
       VERSION_RESTORED: "Sürüm geri yüklendi",
+      EMERGENCY_STOP: "ACİL DURDURMA etkinleştirildi",
+      EMERGENCY_RESUME: "Otomasyon devam ettirildi",
+      AUTOMATION_CHANGED: "Otomasyon ayarı değişti",
+      JOB_FAILED: "Arka plan işi başarısız",
+      JOB_RETRY_SCHEDULED: "Arka plan işi yeniden denenecek",
+      JOB_RETRIED: "İş yeniden sıraya alındı",
+      JOB_CANCELLED: "İş iptal edildi",
       SEARCH_SNAPSHOT_SAVED: "Search Console anlık görüntüsü kaydedildi",
     };
     return (

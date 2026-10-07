@@ -44,6 +44,7 @@ export const NAV_GROUPS: NavGroup[] = [
     id: "system",
     title: "Sistem",
     items: [
+      item("automation", "Otomasyon", "Arka plan işleri, acil durdurma, AI bütçesi"),
       item("settings", "Ayarlar", "Sınavlar, limitler, güvenlik eşikleri"),
       item("activity", "İşlem geçmişi", "Kim ne zaman ne yaptı"),
       { ...item("competitors", "Rakipler", "Rakip içerik boşlukları"), soon: "Faz 8" },

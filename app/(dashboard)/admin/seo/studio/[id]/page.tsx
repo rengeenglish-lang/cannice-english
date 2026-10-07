@@ -174,7 +174,7 @@ export default async function SeoArticlePage({
             <div className="space-y-3">
               <p>
                 Zamanlandı: <strong>{item.scheduledFor ? when(item.scheduledFor) : ""}</strong>.
-                Vercel Cron günlük çalışır (05:00 UTC); yazı zamanı geçtikten sonraki ilk çalışmada yayınlanır.
+                Vercel Cron 3 saatte bir çalışır; yazı zamanı geçtikten sonraki ilk çalışmada yayınlanır.
               </p>
               <PublishingStepForm id={id} revision={item.revision} mode="cancel" label="Zamanlamayı iptal et" tone="ghost-button" />
             </div>

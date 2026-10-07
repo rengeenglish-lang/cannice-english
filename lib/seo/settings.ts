@@ -85,6 +85,7 @@ export const SEO_SECTIONS = [
   ["performance", "Performans", 5],
   ["conversions", "Dönüşümler", 6],
   ["competitors", "Rakipler", 8],
+  ["automation", "Otomasyon", 7],
   ["settings", "Ayarlar", 1],
   ["activity", "İşlem geçmişi", 1],
 ] as const;

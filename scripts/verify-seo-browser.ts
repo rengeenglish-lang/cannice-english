@@ -422,11 +422,13 @@ async function main() {
       fullPage: true,
     });
     await page
-      .getByRole("button", { name: "Autopilot'u duraklat", exact: true })
+      .getByRole("button", { name: "Acil durdur", exact: true })
       .click();
     await expect(
-      page.getByRole("status").filter({ hasText: "Autopilot duraklatıldı" }),
+      page.getByRole("status").filter({ hasText: "Acil durdurma etkin" }),
     ).toBeVisible();
+    await page.getByRole("button", { name: "Otomasyonu devam ettir", exact: true }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Otomasyon devam ediyor" })).toBeVisible();
     expect(errors).toEqual([]);
     console.log(
       "SEO desktop/mobile interactions, persisted settings, inventory, audit, pause and browser errors verified.",
