@@ -19,7 +19,7 @@ export async function signInAction(_prev: SignInFormState, formData: FormData): 
     });
     return { status: "idle" };
   } catch (error) {
-    if (error instanceof AuthError) return { status: "error", message: "E-posta veya şifre hatalı." };
+    if (error instanceof AuthError) return { status: "error", message: "E-posta veya şifre hatalı. Daha önce Google ile giriş yaptıysanız “Google ile giriş yap” düğmesini kullanın." };
     throw error;
   }
 }
