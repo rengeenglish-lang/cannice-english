@@ -63,6 +63,31 @@ export const packageSchema = z.object({
 });
 export type GeneratedPackage = z.infer<typeof packageSchema>;
 
+const asJson = (value: unknown) => {
+  if (typeof value !== "string") return value;
+  const t = value.trim();
+  if (!/^[{[]/.test(t)) return value;
+  try { return JSON.parse(t); } catch { return value; }
+};
+const LIST_KEYS = ["secondaryKeywords", "alternativeTitles", "outline", "questions"] as const;
+/**
+ * Tool-calling models sometimes return a nested object or list as a JSON *string*. Unwrap exactly the fields that are
+ * supposed to be objects/lists, never the article text, so a valid answer is not thrown away after it has been paid for.
+ */
+export function normalizePackageInput(input: unknown) {
+  const root = asJson(input);
+  if (!root || typeof root !== "object") return root;
+  const out = { ...(root as Record<string, unknown>) };
+  out.brief = asJson(out.brief);
+  out.article = asJson(out.article);
+  if (out.brief && typeof out.brief === "object") {
+    const brief = { ...(out.brief as Record<string, unknown>) };
+    for (const k of LIST_KEYS) brief[k] = asJson(brief[k]);
+    out.brief = brief;
+  }
+  return out;
+}
+
 export const PACKAGE_TOOL = {
   name: "submit_article_package",
   description: "Makale brifini ve yazının kendisini teslim et.",

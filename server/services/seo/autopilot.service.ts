@@ -10,6 +10,7 @@ import {
   assess,
   buildStudioBrief,
   costUsd,
+  normalizePackageInput,
   packageSchema,
   repairMetadata,
   reserveUsd,
@@ -141,8 +142,13 @@ export async function generateArticleForKeyword(
   await settleAiUsage(reservation.id, { usd: spent, inputTokens: result.inputTokens, outputTokens: result.outputTokens });
 
   // ---- from here on every failure is final (the money is spent) ----
-  const parsed = packageSchema.safeParse(result.input);
-  if (!parsed.success) throw new NonRetryableError(`Model çıktısı doğrulanamadı: ${parsed.error.issues[0]?.path.join(".")} ${parsed.error.issues[0]?.message}`);
+  const parsed = packageSchema.safeParse(normalizePackageInput(result.input));
+  if (!parsed.success) {
+    const issue = `${parsed.error.issues[0]?.path.join(".")} ${parsed.error.issues[0]?.message}`;
+    // The call was paid for: keep what the model returned so the cause can be diagnosed.
+    await db.seoActivityLog.create({ data: { actorId: null, action: "AUTOPILOT_OUTPUT_REJECTED", details: { keywordId, issue, raw: JSON.stringify(result.input).slice(0, 12000) } } });
+    throw new NonRetryableError(`Model çıktısı doğrulanamadı: ${issue}`);
+  }
   const article = repairMetadata(parsed.data.article);
   const slug = await uniqueSlug(article.title);
   const post = draftContentSchema.safeParse({ title: article.title, slug, excerpt: article.excerpt, content: article.content, seoTitle: article.seoTitle, seoDescription: article.seoDescription });

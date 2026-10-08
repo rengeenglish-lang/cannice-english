@@ -9,6 +9,7 @@ import {
   buildStudioBrief,
   costUsd,
   mentions,
+  normalizePackageInput,
   packageSchema,
   parseBulkKeywords,
   pricingFromEnv,
@@ -93,6 +94,21 @@ test("model output is validated, metadata is repaired, and a clean article passe
   const a = assess({ ...pkg.article, slug: "yds-okuma-sorulari" }, brief, 85);
   assert.equal(a.ok, true, a.reasons.join("; "));
   assert.equal(a.score, 100);
+});
+
+test("a paid answer is not thrown away when the model returns nested parts as JSON strings", () => {
+  const good = goodPackage("YDS okuma soruları");
+  assert.ok(packageSchema.safeParse(normalizePackageInput(good)).success);
+  const wrapped = { brief: JSON.stringify(good.brief), article: JSON.stringify(good.article) };
+  assert.ok(packageSchema.safeParse(wrapped).success === false, "raw wrapped input is rejected by the strict schema");
+  assert.ok(packageSchema.safeParse(normalizePackageInput(wrapped)).success);
+  const lists = { ...good, brief: { ...good.brief, outline: JSON.stringify(good.brief.outline), questions: JSON.stringify(good.brief.questions) } };
+  assert.ok(packageSchema.safeParse(normalizePackageInput(lists)).success);
+  assert.ok(packageSchema.safeParse(normalizePackageInput(JSON.stringify(good))).success); // the whole answer as one string
+  // article text that merely starts with a bracket is left alone
+  const text = normalizePackageInput({ ...good, article: { ...good.article, content: `[not json] ${good.article.content}` } }) as { article: { content: string } };
+  assert.ok(text.article.content.startsWith("[not json]"));
+  assert.equal(normalizePackageInput("plain text"), "plain text");
 });
 
 test("unattended-publishing checks: markup, links, phantom references, long headlines, missing headings and placeholders", () => {
