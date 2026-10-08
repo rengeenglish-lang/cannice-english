@@ -7,8 +7,14 @@ import { isAutomationStopped, readAutomation } from "./automation.service";
 import { refreshSeoInventory } from "./inventory.service";
 import { syncSearchConsoleSystem } from "./performance.service";
 import { gscStatus } from "./performance.service";
+import { generateArticleForKeyword } from "./autopilot.service";
+import { readSeoSettings } from "./settings.service";
+import { claudeConfig, ClaudeApiError } from "@/server/seo/claude";
+import { istanbulWindow } from "@/lib/seo/publishing";
+import { mentions } from "@/lib/seo/autopilot";
 import {
   JOB_TYPES,
+  NonRetryableError,
   STALE_LOCK_MS,
   backoffMs,
   inventoryDedupeKey,
@@ -36,14 +42,66 @@ export async function enqueueJob(type: JobType, payload: Record<string, unknown>
  */
 export async function planRecurringJobs(now = new Date()) {
   const { state } = await readAutomation();
-  if (state.emergencyStop || !state.autoSync) return { planned: 0, skipped: state.emergencyStop ? "stopped" : "autoSync off" };
+  if (state.emergencyStop) return { planned: 0, skipped: "stopped" };
+  if (!state.autoSync && !state.autoGenerate) return { planned: 0, skipped: "autoSync and autoGenerate off" };
   let planned = 0;
-  if (gscStatus().configured)
-    for (const period of syncWindows(now))
-      for (const kind of KINDS)
-        if (await enqueueJob("SEARCH_SYNC", { kind, period }, syncDedupeKey(kind, period), now)) planned++;
-  if (await enqueueJob("INVENTORY_REFRESH", {}, inventoryDedupeKey(now), now)) planned++;
+  if (state.autoSync) {
+    if (gscStatus().configured)
+      for (const period of syncWindows(now))
+        for (const kind of KINDS)
+          if (await enqueueJob("SEARCH_SYNC", { kind, period }, syncDedupeKey(kind, period), now)) planned++;
+    if (await enqueueJob("INVENTORY_REFRESH", {}, inventoryDedupeKey(now), now)) planned++;
+  }
+  if (state.autoGenerate) planned += await planGenerationJobs(now);
   return { planned, skipped: null };
+}
+
+/**
+ * Queues article generation for the oldest keywords that have no draft yet, never more than the daily and weekly
+ * limits allow (counting what is already queued), and only while the provider, key, prices and budget are all set.
+ */
+export async function planGenerationJobs(now = new Date()) {
+  const { settings } = await readSeoSettings();
+  if (settings.provider !== "ANTHROPIC" || !settings.model || settings.monthlyBudgetUsd <= 0 || !claudeConfig()) return 0;
+  const [today, week, queued] = await Promise.all([
+    db.seoActivityLog.count({ where: { action: "AUTOPILOT_GENERATED", createdAt: { gte: istanbulWindow(now, "day").start } } }),
+    db.seoActivityLog.count({ where: { action: "AUTOPILOT_GENERATED", createdAt: { gte: istanbulWindow(now, "week").start } } }),
+    db.seoJob.count({ where: { type: "GENERATE_ARTICLE", status: { in: ["QUEUED", "RUNNING"] } } }),
+  ]);
+  const room = Math.min(settings.dailyArticleLimit - today - queued, settings.weeklyArticleLimit - week - queued);
+  if (room <= 0) return 0;
+  const candidates = await db.seoKeyword.findMany({
+    where: { archived: false, articleDraft: null, ...(settings.enabledExamIds.length ? { examId: { in: settings.enabledExamIds } } : {}) },
+    orderBy: { createdAt: "asc" },
+    take: 60,
+  });
+  const allowed = candidates.filter((k) => ![...settings.excludedKeywords, ...settings.excludedTopics].some((x) => mentions(k.keyword, x, k.languageCode)));
+  let planned = 0;
+  for (const k of allowed.slice(0, room)) if (await enqueueJob("GENERATE_ARTICLE", { keywordId: k.id }, `GENERATE_ARTICLE:${k.id}`, now)) planned++;
+  return planned;
+}
+
+/** Admin action: queue generation for one keyword now (ignores the schedule, not the budget or the stop switch). */
+export async function queueArticleGeneration(actorId: string, rawKeywordId: unknown) {
+  await requireSeoAdmin(actorId);
+  const keywordId = z.string().min(1).max(100).parse(rawKeywordId);
+  if (await isAutomationStopped()) throw new Error("Otomasyon acil durdurulmuş durumda; önce devam ettirin.");
+  const keyword = await db.seoKeyword.findUnique({ where: { id: keywordId }, select: { id: true, archived: true, articleDraft: { select: { id: true } } } });
+  if (!keyword || keyword.archived) throw new Error("Yalnızca mevcut etkin anahtar kelime seçilebilir.");
+  if (keyword.articleDraft) throw new Error("Yalnızca taslağı olmayan anahtar kelime için üretim başlatılır.");
+  const created = await enqueueJob("GENERATE_ARTICLE", { keywordId, manual: true }, `GENERATE_ARTICLE:${keywordId}`);
+  await db.seoActivityLog.create({ data: { actorId, action: "GENERATION_QUEUED", details: { keywordId, created } } });
+  return { created };
+}
+
+/** Admin action: run at most one due job right now (a generation takes about a minute). */
+export async function runOneJobNow(actorId: string) {
+  await requireSeoAdmin(actorId);
+  await db.$transaction(async (tx) => {
+    await checkSeoRateLimit(tx, actorId, "JOB_RUN_NOW");
+    await tx.seoActivityLog.create({ data: { actorId, action: "JOB_RUN_NOW", details: {} } });
+  });
+  return runDueJobs(new Date(), 1);
 }
 
 type Claimed = { id: string; type: string; payload: unknown; attempts: number; maxAttempts: number };
@@ -63,6 +121,10 @@ const syncPayload = z.object({ kind: z.enum(KINDS), period: z.object({ start: z.
 async function execute(type: string, payload: unknown) {
   if (type === "SEARCH_SYNC") return syncSearchConsoleSystem(syncPayload.parse(payload));
   if (type === "INVENTORY_REFRESH") return refreshSeoInventory(null);
+  if (type === "GENERATE_ARTICLE") {
+    const p = z.object({ keywordId: z.string().min(1), manual: z.boolean().optional() }).parse(payload);
+    return generateArticleForKeyword(p.keywordId, { ignoreLimits: p.manual === true });
+  }
   throw new Error(`Bilinmeyen iş türü: ${type}`);
 }
 
@@ -79,7 +141,7 @@ export async function runDueJobs(now = new Date(), limit = 5) {
       succeeded++;
     } catch (error) {
       const message = (error instanceof Error ? error.message : "Bilinmeyen hata").slice(0, 500);
-      const final = error instanceof StoppedError || job.attempts >= job.maxAttempts;
+      const final = error instanceof StoppedError || error instanceof NonRetryableError || (error instanceof ClaudeApiError && !error.retryable) || job.attempts >= job.maxAttempts;
       await db.seoJob.update({
         where: { id: job.id },
         data: error instanceof StoppedError

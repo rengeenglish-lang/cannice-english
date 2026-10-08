@@ -24,7 +24,7 @@ export async function isAutomationStopped() {
   }
 }
 
-const patchSchema = z.object({ revision: z.number().int().min(0), emergencyStop: z.boolean().optional(), autoSync: z.boolean().optional() }).strict();
+const patchSchema = z.object({ revision: z.number().int().min(0), emergencyStop: z.boolean().optional(), autoSync: z.boolean().optional(), autoGenerate: z.boolean().optional(), autoPublish: z.boolean().optional() }).strict();
 export async function setAutomation(actorId: string, raw: unknown) {
   await requireSeoAdmin(actorId);
   const input = patchSchema.parse(raw);
@@ -37,7 +37,11 @@ export async function setAutomation(actorId: string, raw: unknown) {
     const state: AutomationState = {
       emergencyStop: input.emergencyStop ?? current.state.emergencyStop,
       autoSync: input.autoSync ?? current.state.autoSync,
+      autoGenerate: input.autoGenerate ?? current.state.autoGenerate,
+      autoPublish: input.autoPublish ?? current.state.autoPublish,
     };
+    // Publishing without review only makes sense while generation is on.
+    if (!state.autoGenerate) state.autoPublish = false;
     const next = { revision: current.revision + 1, state };
     const value = JSON.stringify(next);
     await tx.appSetting.upsert({ where: { key: AUTOMATION_KEY }, create: { key: AUTOMATION_KEY, value }, update: { value } });

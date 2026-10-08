@@ -61,6 +61,9 @@ function Pagination({
     </nav>
   );
 }
+// "Şimdi bir iş çalıştır" runs one Claude generation inside this route (about a minute).
+export const maxDuration = 300;
+
 export default async function SeoSection({
   params,
   searchParams,
