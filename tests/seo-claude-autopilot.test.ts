@@ -136,7 +136,7 @@ process.env.SEO_AI_INPUT_USD_PER_MTOK = "2";
 process.env.SEO_AI_OUTPUT_USD_PER_MTOK = "10";
 const stamp = randomUUID().slice(0, 8);
 let admin: { id: string };
-let saved: Record<string, string | null> = {};
+const saved: Record<string, string | null> = {};
 const KEYS = [AUTOMATION_KEY, SEO_SETTINGS_KEY];
 const put = (key: string, value: unknown) => db.appSetting.upsert({ where: { key }, create: { key, value: JSON.stringify(value) }, update: { value: JSON.stringify(value) } });
 const keyword = (text: string, extra: Record<string, unknown> = {}) =>
