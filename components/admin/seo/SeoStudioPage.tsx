@@ -13,8 +13,8 @@ export async function SeoStudioPage({
     <section className="space-y-5">
       <h2 className="text-2xl font-bold">Makale stüdyosu</h2>
       <p>
-        Anahtar kelime → brief → ChatGPT’de yaz → buraya yapıştır → kontrol et.
-        API ücreti yok; içerik otomatik yayınlanmaz.
+        Anahtar kelime → brief → yazı → kontrol. Yazıyı dış bir araçta hazırlayıp buraya yapıştırabilir ya da Otomasyon sayfasından
+        Claude ile ürettirebilirsiniz. Yayın kapısındaki tüm kontroller her iki durumda da uygulanır.
       </p>
       <Link className="primary-button" href="/admin/seo/keywords">
         Anahtar kelimeden brief başlat

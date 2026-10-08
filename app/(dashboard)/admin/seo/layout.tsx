@@ -34,7 +34,7 @@ export default async function SeoLayout({
         </p>
       ) : null}
       <p className="text-sm text-[color:var(--muted)]">
-        Her yazı sizin onayınızla yayınlanır. AI üretimi ve tam otomatik yayın kapalıdır.
+        Makale üretimi ve otomatik yayın yalnızca Otomasyon sayfasındaki anahtarlar açıksa çalışır (varsayılan: kapalı). Diğer tüm yazılar sizin onayınızla yayınlanır.
       </p>
       <SeoNav />
       {children}

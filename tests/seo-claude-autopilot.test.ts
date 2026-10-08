@@ -260,6 +260,28 @@ test("the planner honours the daily limit and order, the runner never calls Clau
   }
 });
 
+test("a pasted batch is planned in the order it was written", async () => {
+  await put(SEO_SETTINGS_KEY, settings({ dailyArticleLimit: 3, weeklyArticleLimit: 10 }));
+  await put(AUTOMATION_KEY, automation({ autoPublish: false }));
+  await db.seoJob.deleteMany({ where: { dedupeKey: { startsWith: "GENERATE_ARTICLE:" } } });
+  await db.seoActivityLog.deleteMany({ where: { action: "AUTOPILOT_GENERATED" } });
+  const tag = randomUUID().slice(0, 6);
+  const names = [`sıra ${tag} birinci kelime`, `sıra ${tag} ikinci kelime`, `sıra ${tag} üçüncü kelime`, `sıra ${tag} dördüncü kelime`];
+  const others = await db.seoKeyword.findMany({ where: { archived: false, articleDraft: null }, select: { id: true } });
+  await db.seoKeyword.updateMany({ where: { id: { in: others.map((o) => o.id) } }, data: { archived: true } });
+  try {
+    await importSeoKeywords(admin.id, names.join("\n"));
+    assert.equal(await planGenerationJobs(), 3);
+    const jobs = await db.seoJob.findMany({ where: { type: "GENERATE_ARTICLE" }, orderBy: { createdAt: "asc" } });
+    const planned = await db.seoKeyword.findMany({ where: { id: { in: jobs.map((j) => (j.payload as { keywordId: string }).keywordId) } } });
+    assert.deepEqual(planned.map((k) => k.keyword).sort(), names.slice(0, 3).sort()); // the first three written, never the fourth
+  } finally {
+    await db.seoKeyword.updateMany({ where: { id: { in: others.map((o) => o.id) } }, data: { archived: false } });
+    await db.seoKeyword.updateMany({ where: { keyword: { in: names } }, data: { archived: true } });
+    await db.seoJob.deleteMany({ where: { dedupeKey: { startsWith: "GENERATE_ARTICLE:" } } });
+  }
+});
+
 test("pasting a keyword list creates rows, maps exams, skips duplicates and reports bad lines", async () => {
   const exam = await db.examType.findFirst({ where: { active: true } });
   const tag = randomUUID().slice(0, 6);

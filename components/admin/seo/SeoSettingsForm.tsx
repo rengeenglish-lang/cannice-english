@@ -186,8 +186,8 @@ export function SeoSettingsForm({
           ))}
         </div>
         <p className="text-sm">
-          Tam autopilot, otomatik yayın, görsel üretimi ve otomatik bağlantı
-          ekleme: <strong>kapalı / henüz kullanılamıyor.</strong>
+          Makale üretimi ve otomatik yayın Otomasyon sayfasındaki anahtarlarla açılır. Görsel üretimi ve otomatik bağlantı ekleme:{" "}
+          <strong>henüz kullanılamıyor.</strong>
         </p>
       </fieldset>
       <fieldset
