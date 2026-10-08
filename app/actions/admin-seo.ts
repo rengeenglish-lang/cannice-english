@@ -45,7 +45,7 @@ export async function saveSeoSettingsAction(
     revalidatePath("/admin/seo", "layout");
     return {
       status: "success",
-      message: "Ayarlar kaydedildi. Üretim ve otomatik yayın hâlâ kapalı.",
+      message: "Ayarlar kaydedildi. Makale üretimi ve otomatik yayın, Otomasyon sayfasındaki anahtarlara bağlıdır.",
       revision: saved.revision,
     };
   } catch (error) {

@@ -169,7 +169,9 @@ export async function importSeoKeywords(actorId: string, raw: unknown) {
         skipped.push({ line: row.line, message: "Bu anahtar kelime zaten kayıtlı" });
         continue;
       }
-      await tx.seoKeyword.create({ data: { ...parsed.data, normalized } });
+      // Explicit, strictly increasing timestamps keep the pasted list order (a transaction otherwise gives every row the same createdAt).
+      const at = new Date(Date.now() + created);
+      await tx.seoKeyword.create({ data: { ...parsed.data, normalized, createdAt: at } });
       created += 1;
     }
     await tx.seoActivityLog.create({ data: { actorId, action: "KEYWORDS_IMPORTED", details: { created, skipped: skipped.length } } });

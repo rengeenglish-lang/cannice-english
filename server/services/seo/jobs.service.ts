@@ -72,7 +72,8 @@ export async function planGenerationJobs(now = new Date()) {
   if (room <= 0) return 0;
   const candidates = await db.seoKeyword.findMany({
     where: { archived: false, articleDraft: null, ...(settings.enabledExamIds.length ? { examId: { in: settings.enabledExamIds } } : {}) },
-    orderBy: { createdAt: "asc" },
+    // Rows pasted together share one transaction timestamp, so break ties by insertion order (updatedAt, then id).
+    orderBy: [{ createdAt: "asc" }, { updatedAt: "asc" }, { id: "asc" }],
     take: 60,
   });
   const allowed = candidates.filter((k) => ![...settings.excludedKeywords, ...settings.excludedTopics].some((x) => mentions(k.keyword, x, k.languageCode)));
