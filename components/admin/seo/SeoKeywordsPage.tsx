@@ -2,6 +2,8 @@ import { CreateSeoDraftButton } from "./SeoStudioForms";
 import Link from "next/link";
 import { listSeoKeywords } from "@/server/services/seo/keywords.service";
 import { SeoKeywordForm } from "./SeoKeywordForm";
+import { SeoKeywordImport } from "./SeoKeywordImport";
+import { QueueGenerationButton } from "./SeoAutomationControls";
 import { INTENT_LABELS, type KeywordInput } from "@/lib/seo/keywords";
 export async function SeoKeywordsPage({
   actorId,
@@ -39,6 +41,14 @@ export async function SeoKeywordsPage({
             <SeoKeywordForm exams={result.exams} />
           </div>
         </details>
+      ) : null}
+      {!opportunities ? (
+        <details className="dashboard-panel p-5">
+          <summary className="cursor-pointer font-bold">Toplu içe aktar (liste yapıştır)</summary>
+          <div className="mt-4">
+            <SeoKeywordImport />
+          </div>
+        </details>
       ) : (
         <Link className="ghost-button" href="/admin/seo/keywords">
           Anahtar kelimeleri yönet
@@ -73,7 +83,10 @@ export async function SeoKeywordsPage({
           <li key={item.id} className="dashboard-panel space-y-3 p-5">
             <h3 className="text-lg font-bold">{item.keyword}</h3>
             {!item.archived ? (
-              <CreateSeoDraftButton keywordId={item.id} />
+              <div className="flex flex-wrap items-start gap-3">
+                <CreateSeoDraftButton keywordId={item.id} />
+                <QueueGenerationButton keywordId={item.id} />
+              </div>
             ) : null}
             <p>
               {item.languageCode} · {item.market} ·{" "}

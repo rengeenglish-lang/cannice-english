@@ -1,6 +1,6 @@
 import { planRecurringJobs, runDueJobs } from "@/server/services/seo/jobs.service";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 /**
  * Vercel Cron (every 3 hours) (see vercel.json): plans the recurring read-only data jobs (when automatic
@@ -14,6 +14,6 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
   const plan = await planRecurringJobs();
-  const run = await runDueJobs();
+  const run = await runDueJobs(new Date(), 2);
   return Response.json({ plan, run });
 }

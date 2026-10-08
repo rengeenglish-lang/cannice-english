@@ -69,9 +69,28 @@ export default async function BlogPostPage({ params }: Props) {
         </p>
       </PageHero>
       <div className="panel mt-8 space-y-4 text-base leading-7 text-slate-700">
-        {post.content.split("\n\n").map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
+        {post.content.split("\n\n").map((block, index) => {
+          const lines = block.trim().split("\n");
+          // Optional light structure: "## Heading" lines and "- item" lists. Plain paragraphs render as before.
+          if (lines[0].startsWith("## ")) {
+            const rest = lines.slice(1).join("\n").trim();
+            return (
+              <div key={index} className="space-y-4">
+                <h2 className="pt-4 text-2xl font-bold text-slate-900">{lines[0].slice(3)}</h2>
+                {rest ? <p>{rest}</p> : null}
+              </div>
+            );
+          }
+          if (lines.every((line) => line.startsWith("- ")))
+            return (
+              <ul key={index} className="list-disc space-y-1 pl-6">
+                {lines.map((line, i) => (
+                  <li key={i}>{line.slice(2)}</li>
+                ))}
+              </ul>
+            );
+          return <p key={index}>{block}</p>;
+        })}
       </div>
       <ArticleSignupCta slug={post.slug} />
       <ArticleViewBeacon slug={post.slug} />

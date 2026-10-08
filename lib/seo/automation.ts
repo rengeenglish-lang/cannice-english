@@ -6,19 +6,27 @@ export const automationSchema = z
     emergencyStop: z.boolean(),
     /** Scheduled, read-only data jobs (Search Console sync, inventory refresh). Never creates or publishes content. */
     autoSync: z.boolean(),
+    /** Claude writes articles for queued keywords on the schedule (within the daily/weekly limits and the AI budget). */
+    autoGenerate: z.boolean().default(false),
+    /** Generated articles publish themselves when every publish-gate check passes; otherwise they wait for review. */
+    autoPublish: z.boolean().default(false),
   })
   .strict();
 export const automationEnvelopeSchema = z
   .object({ revision: z.number().int().min(0), state: automationSchema })
   .strict();
 export type AutomationState = z.infer<typeof automationSchema>;
-export const DEFAULT_AUTOMATION: AutomationState = { emergencyStop: false, autoSync: false };
+export const DEFAULT_AUTOMATION: AutomationState = { emergencyStop: false, autoSync: false, autoGenerate: false, autoPublish: false };
 
-export const JOB_TYPES = ["SEARCH_SYNC", "INVENTORY_REFRESH"] as const;
+/** Thrown for failures a retry cannot fix (and that would only spend more). */
+export class NonRetryableError extends Error {}
+
+export const JOB_TYPES = ["SEARCH_SYNC", "INVENTORY_REFRESH", "GENERATE_ARTICLE"] as const;
 export type JobType = (typeof JOB_TYPES)[number];
 export const JOB_LABELS: Record<string, string> = {
   SEARCH_SYNC: "Search Console eşitleme",
   INVENTORY_REFRESH: "İçerik envanteri taraması",
+  GENERATE_ARTICLE: "Makale üretimi (Claude)",
 };
 export const STATUS_LABELS: Record<string, string> = {
   QUEUED: "Sırada",

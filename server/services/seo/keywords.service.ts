@@ -7,6 +7,9 @@ import {
   assessOpportunity,
 } from "@/lib/seo/keywords";
 import { requireSeoAdmin, lockSeoWrites, checkSeoRateLimit } from "./access";
+import { readSeoSettings } from "./settings.service";
+import { parseBulkKeywords } from "@/lib/seo/autopilot";
+import { z } from "zod";
 export async function saveSeoKeyword(
   actorId: string,
   raw: unknown,
@@ -124,4 +127,52 @@ export async function listSeoKeywords(
     exams,
     truncated,
   };
+}
+
+/**
+ * Paste-in import: `anahtar kelime | amaç | sınav | not` per line. Every line is validated like the single-keyword form;
+ * duplicates and bad lines are skipped and reported by line number, never silently dropped.
+ */
+export async function importSeoKeywords(actorId: string, raw: unknown) {
+  await requireSeoAdmin(actorId);
+  const text = z.string().max(30000).parse(raw);
+  const [{ settings }, exams] = await Promise.all([
+    readSeoSettings(),
+    db.examType.findMany({ where: { active: true }, select: { id: true, code: true, slug: true, name: true } }),
+  ]);
+  const { rows, errors } = parseBulkKeywords(text, exams);
+  const skipped = [...errors];
+  let created = 0;
+  await db.$transaction(async (tx) => {
+    await requireSeoAdmin(actorId, tx);
+    await lockSeoWrites(tx);
+    await checkSeoRateLimit(tx, actorId, "KEYWORDS_IMPORTED");
+    for (const row of rows) {
+      const parsed = keywordSchema.safeParse({
+        keyword: row.keyword,
+        languageCode: settings.languageCode,
+        market: settings.targetMarkets[0],
+        intent: row.intent,
+        examId: row.examId,
+        sourceNote: row.sourceNote,
+      });
+      if (!parsed.success) {
+        skipped.push({ line: row.line, message: parsed.error.issues[0]?.message ?? "Geçersiz satır" });
+        continue;
+      }
+      const normalized = normalizeKeyword(parsed.data.keyword, parsed.data.languageCode);
+      const exists = await tx.seoKeyword.findUnique({
+        where: { normalized_languageCode_market: { normalized, languageCode: parsed.data.languageCode, market: parsed.data.market } },
+        select: { id: true },
+      });
+      if (exists) {
+        skipped.push({ line: row.line, message: "Bu anahtar kelime zaten kayıtlı" });
+        continue;
+      }
+      await tx.seoKeyword.create({ data: { ...parsed.data, normalized } });
+      created += 1;
+    }
+    await tx.seoActivityLog.create({ data: { actorId, action: "KEYWORDS_IMPORTED", details: { created, skipped: skipped.length } } });
+  });
+  return { created, skipped: skipped.sort((a, b) => a.line - b.line) };
 }

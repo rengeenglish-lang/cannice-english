@@ -30,7 +30,7 @@ function load(tx: TransactionClient, id: string) {
 }
 
 /** Evaluates the publishing gate against current database state. */
-async function evaluate(tx: TransactionClient, item: Draft, assumeApproved = false) {
+async function evaluate(tx: TransactionClient, item: Draft, assumeApproved = false, assumeReviewed = false) {
   const brief = studioBriefSchema.parse(item.brief);
   const post = postContent(item.post);
   const links = await resolveApprovedLinks(item.approvedLinks, tx);
@@ -44,7 +44,7 @@ async function evaluate(tx: TransactionClient, item: Draft, assumeApproved = fal
     post,
     brief,
     minimumQualityScore: settings.settings.minimumQualityScore,
-    reviewedCurrent: item.reviewedHash === hash,
+    reviewedCurrent: assumeReviewed || item.reviewedHash === hash,
     approvedCurrent: assumeApproved || item.approvedHash === hash,
     slugTaken: Boolean(other) || Boolean(claimed && claimed.postId !== item.postId),
     linksValid: !links.some((l) => !l.destination),
@@ -219,7 +219,7 @@ export async function cancelSeoSchedule(actorId: string, raw: unknown) {
  * Publishes inside the caller's transaction after re-running every gate check against current
  * data. A failed gate never publishes; the caller decides how to report it.
  */
-async function publishInTx(tx: TransactionClient, item: Draft, actorId: string, origin: "MANUAL" | "SCHEDULED") {
+async function publishInTx(tx: TransactionClient, item: Draft, actorId: string, origin: "MANUAL" | "SCHEDULED" | "AUTOPILOT") {
   const { gate, post } = await evaluate(tx, item);
   const failed = gate.checks.filter((c) => !c.passed).map((c) => c.label);
   if (failed.length) return { published: false as const, failed };
@@ -254,6 +254,45 @@ export async function publishSeoDraftNow(actorId: string, raw: unknown) {
   if (!result.published)
     throw new StudioError("Yayın kapısı geçilemedi: " + result.failed.join("; "));
   return result;
+}
+
+/**
+ * Unattended publication for the autopilot. It applies exactly the same gate as a human publication (every check,
+ * no override, including the minimum checklist score) and only then records an AUTOMATED review and approval so the
+ * normal state machine and audit trail stay consistent. A failed gate publishes nothing and returns the reasons.
+ * The audit entries say AUTO, never claiming a person checked the facts.
+ */
+export async function autoPublishSeoDraft(draftId: string, actorId: string) {
+  await requireSeoAdmin(actorId);
+  return db.$transaction(async (tx) => {
+    await requireSeoAdmin(actorId, tx);
+    await lockSeoWrites(tx);
+    const item = await load(tx, draftId);
+    if (!item || item.post.status !== "DRAFT")
+      return { published: false as const, failed: ["Taslak bulunamadı ya da zaten yayında."] };
+    const { gate, hash } = await evaluate(tx, item, true, true);
+    const failed = gate.checks.filter((c) => !c.passed).map((c) => c.label);
+    if (failed.length) return { published: false as const, failed };
+    const now = new Date();
+    await tx.seoArticleDraft.update({
+      where: { id: item.id },
+      data: {
+        revision: { increment: 1 },
+        reviewedAt: now,
+        reviewedHash: hash,
+        approvedAt: now,
+        approvedHash: hash,
+        approvedById: actorId,
+        scheduledFor: null,
+        scheduleError: null,
+      },
+    });
+    await tx.seoActivityLog.create({
+      data: { actorId, action: "DRAFT_AUTO_APPROVED", details: { id: item.id, score: gate.score, automated: true } },
+    });
+    const fresh = await load(tx, draftId);
+    return publishInTx(tx, fresh!, actorId, "AUTOPILOT");
+  });
 }
 
 export async function unpublishSeoDraft(actorId: string, raw: unknown) {

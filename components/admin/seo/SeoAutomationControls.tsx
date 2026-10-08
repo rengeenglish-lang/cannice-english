@@ -46,3 +46,51 @@ export function JobButton({ jobId, mode, label }: { jobId: string; mode: "retry"
     </form>
   );
 }
+
+function Toggle({ mode, enabled, revision, disabled, on, off }: { mode: string; enabled: boolean; revision: number; disabled: boolean; on: string; off: string }) {
+  const [state, action, pending] = useActionState(automationAction, initial);
+  return (
+    <form action={action} className="space-y-2">
+      <input type="hidden" name="mode" value={mode} />
+      <input type="hidden" name="revision" value={revision} />
+      <input type="hidden" name="enabled" value={String(!enabled)} />
+      <button disabled={pending || disabled} className="ghost-button border border-[color:var(--border)]">
+        {pending ? "İşleniyor…" : enabled ? off : on}
+      </button>
+      <Msg s={state} />
+    </form>
+  );
+}
+export const AutoGenerateToggle = (p: { enabled: boolean; revision: number; disabled: boolean }) => (
+  <Toggle {...p} mode="autogenerate" on="Otomatik makale üretimini aç" off="Otomatik makale üretimini kapat" />
+);
+export const AutoPublishToggle = (p: { enabled: boolean; revision: number; disabled: boolean }) => (
+  <Toggle {...p} mode="autopublish" on="Puanı geçen yazıları otomatik yayınla" off="Otomatik yayını kapat" />
+);
+export function RunNowButton({ disabled }: { disabled: boolean }) {
+  const [state, action, pending] = useActionState(automationAction, initial);
+  return (
+    <form action={action} className="space-y-2">
+      <input type="hidden" name="mode" value="runnow" />
+      <input type="hidden" name="revision" value="0" />
+      <button disabled={pending || disabled} className="primary-button">
+        {pending ? "Çalışıyor… (yaklaşık 1 dakika sürebilir)" : "Şimdi bir iş çalıştır"}
+      </button>
+      <Msg s={state} />
+    </form>
+  );
+}
+export function QueueGenerationButton({ keywordId }: { keywordId: string }) {
+  const [state, action, pending] = useActionState(automationAction, initial);
+  return (
+    <form action={action} className="space-y-1">
+      <input type="hidden" name="mode" value="generate" />
+      <input type="hidden" name="keywordId" value={keywordId} />
+      <input type="hidden" name="revision" value="0" />
+      <button disabled={pending} className="ghost-button border border-[color:var(--border)]">
+        {pending ? "Sıraya alınıyor…" : "Claude ile yazdır (sıraya al)"}
+      </button>
+      <Msg s={state} />
+    </form>
+  );
+}

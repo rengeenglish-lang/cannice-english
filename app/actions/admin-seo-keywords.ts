@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { getAuthContext } from "@/server/auth/context";
-import { saveSeoKeyword } from "@/server/services/seo/keywords.service";
+import { importSeoKeywords, saveSeoKeyword } from "@/server/services/seo/keywords.service";
 export type KeywordState = { message: string; ok: boolean; revision?: number };
 export async function saveKeywordAction(
   previous: KeywordState,
@@ -36,5 +36,18 @@ export async function saveKeywordAction(
           ? error.message
           : "Kaydedilemedi. Alanları ve yönetici oturumunu kontrol edin.",
     };
+  }
+}
+
+export async function importKeywordsAction(_: KeywordState, form: FormData): Promise<KeywordState> {
+  try {
+    const actor = await getAuthContext();
+    if (actor?.role !== "ADMIN") throw new Error("Unauthorized");
+    const { created, skipped } = await importSeoKeywords(actor.id, String(form.get("keywords") || ""));
+    revalidatePath("/admin/seo", "layout");
+    const detail = skipped.slice(0, 5).map((s) => `satır ${s.line}: ${s.message}`).join("; ");
+    return { ok: true, message: `${created} anahtar kelime eklendi${skipped.length ? `, ${skipped.length} satır atlandı (${detail}${skipped.length > 5 ? "; …" : ""})` : "."}` };
+  } catch (error) {
+    return { ok: false, message: error instanceof Error && error.message.startsWith("Çok sık") ? error.message : "İçe aktarılamadı. Yönetici oturumunu ve satır biçimini kontrol edin." };
   }
 }
