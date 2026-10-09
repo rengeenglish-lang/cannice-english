@@ -5,7 +5,9 @@ import {
   getBlogPostBySlug,
   getBlogRedirectSlug,
 } from "@/server/services/catalog.service";
+import Link from "next/link";
 import { ArticleSignupCta, ArticleViewBeacon } from "@/components/blog/ArticleTracking";
+import { getArticleLinks } from "@/server/services/seo/research.service";
 import { getSiteUrl } from "@/server/env";
 import { articlePath, buildArticleJsonLd, jsonLdScript } from "@/lib/seo/publishing";
 
@@ -29,9 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       publishedTime: post.publishedAt?.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
-      images: post.coverImageUrl ? [post.coverImageUrl] : undefined,
+      images: [post.coverImageUrl ?? `${url}/cover`],
     },
-    twitter: { card: post.coverImageUrl ? "summary_large_image" : "summary", title, description },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -43,12 +45,14 @@ export default async function BlogPostPage({ params }: Props) {
     if (current) permanentRedirect(articlePath(current));
     notFound();
   }
+  const coverSrc = post.coverImageUrl ?? `${articlePath(post.slug)}/cover`;
+  const { links, cta } = await getArticleLinks(post.id);
   const jsonLd = buildArticleJsonLd({
     siteUrl: getSiteUrl(),
     slug: post.slug,
     title: post.seoTitle ?? post.title,
     description: post.seoDescription ?? post.excerpt,
-    imageUrl: post.coverImageUrl,
+    imageUrl: coverSrc,
     authorName: post.author.name,
     publishedAt: post.publishedAt,
     modifiedAt: post.updatedAt,
@@ -68,6 +72,8 @@ export default async function BlogPostPage({ params }: Props) {
           {post.author.name}
         </p>
       </PageHero>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={coverSrc} alt={post.title} width={1200} height={630} className="mt-8 w-full rounded-2xl" />
       <div className="panel mt-8 space-y-4 text-base leading-7 text-slate-700">
         {post.content.split("\n\n").map((block, index) => {
           const lines = block.trim().split("\n");
@@ -92,6 +98,28 @@ export default async function BlogPostPage({ params }: Props) {
           return <p key={index}>{block}</p>;
         })}
       </div>
+      {cta ? (
+        <aside className="panel mt-8 space-y-3" aria-label="Önerilen sayfa">
+          <p className="text-base leading-7 text-slate-700">{cta.text}</p>
+          <Link className="primary-button" href={cta.url}>
+            {cta.title}
+          </Link>
+        </aside>
+      ) : null}
+      {links.length ? (
+        <nav className="panel mt-8 space-y-2" aria-label="İlgili sayfalar">
+          <h2 className="text-lg font-bold text-slate-900">İlgili sayfalar</h2>
+          <ul className="list-disc space-y-1 pl-6">
+            {links.map((l) => (
+              <li key={l.url}>
+                <Link className="underline" href={l.url}>
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
       <ArticleSignupCta slug={post.slug} />
       <ArticleViewBeacon slug={post.slug} />
     </main>
