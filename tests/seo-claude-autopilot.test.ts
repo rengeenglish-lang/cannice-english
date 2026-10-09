@@ -117,6 +117,7 @@ test("unattended-publishing checks: markup, links, phantom references, long head
   const withLine = (line: string) => ({ ...base, content: `${base.content}\n\n${line}` });
   assert.match(autopilotProblems(withLine("Bu *önemli* bir nokta."))[0], /biçim/);
   assert.match(autopilotProblems(withLine("Detaylar için https://example.com adresine bakın."))[0], /biçim/);
+  assert.equal(autopilotProblems(withLine("Örnek: If she had left earlier, she ___ the train.")).length, 0); // exam blanks are fine
   assert.match(autopilotProblems(withLine("Ayrıntıları başka bir yazımızda anlattık."))[0], /başka bir Netfener yazısına/);
   assert.match(autopilotProblems({ ...base, title: "Çok uzun bir başlık ".repeat(5) })[0], /Başlık çok uzun/);
   assert.match(autopilotProblems({ ...base, content: base.content.replaceAll("## ", "") })[0], /Bölüm başlığı yok/);

@@ -191,13 +191,14 @@ const PHANTOM = [
   /\b(?:diğer|başka|önceki|ayrı)\s+(?:bir\s+)?(?:yazı|makale|rehber)/i,
   /\b(?:yazımız|makalemiz|rehberimiz|blogumuz)(?:da|de|ı|i|ın|in)?\b/i,
 ];
-const MARKUP = /\*|_{2,}|^#(?!#)\s|^###|https?:\/\/|www\.|\]\(/m;
+// Blanks such as "she ___ the train" are legitimate exam content, so underscores are allowed.
+const MARKUP = /\*|^#(?!#)\s|^###|https?:\/\/|www\.|\]\(/m;
 
 /** Checks beyond Netfener's editorial checklist that matter for unattended publishing. */
 export function autopilotProblems(post: DraftContent) {
   const problems: string[] = [];
   if (post.title.length > TITLE_MAX_CHARS) problems.push(`Başlık çok uzun: ${post.title.length} karakter (en çok ${TITLE_MAX_CHARS})`);
-  if (MARKUP.test(post.content)) problems.push("Desteklenmeyen biçim: yıldız, bağlantı, alt çizgi ya da '#' başlık");
+  if (MARKUP.test(post.content)) problems.push("Desteklenmeyen biçim: yıldız, bağlantı ya da '#' başlık");
   if (PHANTOM.some((r) => r.test(post.content))) problems.push("Var olmayabilecek başka bir Netfener yazısına gönderme yapıyor");
   if (!/^## /m.test(post.content)) problems.push("Bölüm başlığı yok ('## ' ile başlayan satır)");
   return problems;
