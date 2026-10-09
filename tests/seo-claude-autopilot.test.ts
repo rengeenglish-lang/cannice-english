@@ -8,11 +8,18 @@ import {
   autopilotProblems,
   buildStudioBrief,
   costUsd,
+  ctaTextOk,
   mentions,
   normalizePackageInput,
   packageSchema,
   parseBulkKeywords,
   pricingFromEnv,
+  rankLinkCandidates,
+  researchBlock,
+  selectCompetitorTitles,
+  selectLinks,
+  selectRelevantQueries,
+  candidatesBlock,
   repairMetadata,
   reserveUsd,
   systemPrompt,
@@ -24,6 +31,8 @@ import { DEFAULT_BRAND, studioBriefSchema } from "../lib/seo/studio";
 import { AUTOMATION_KEY, NonRetryableError } from "../lib/seo/automation";
 import { DEFAULT_SEO_SETTINGS, SEO_SETTINGS_KEY } from "../lib/seo/settings";
 import { ClaudeApiError, buildClaudeRequest, type ClaudeResult } from "../server/seo/claude";
+import { renderCover } from "../server/seo/cover";
+import { getArticleLinks } from "../server/services/seo/research.service";
 import { generateArticleForKeyword } from "../server/services/seo/autopilot.service";
 import { enqueueJob, planGenerationJobs, queueArticleGeneration, runDueJobs } from "../server/services/seo/jobs.service";
 import { importSeoKeywords } from "../server/services/seo/keywords.service";
@@ -55,6 +64,8 @@ function goodPackage(keyword: string, over: Partial<GeneratedPackage["article"]>
       content: [section("Soru Tipleri", "x"), section("Süre Yönetimi", "y"), section(`${keyword} Alıştırması`, "z")].join("\n\n") + `\n\nBugün deneyin: ${keyword} için bir pasaj seçin.`,
       ...over,
     },
+    links: [],
+    cta: null,
   };
 }
 const reply = (pkg: unknown, inputTokens = 3000, outputTokens = 5000): ClaudeResult => ({ input: pkg, inputTokens, outputTokens, stopReason: "tool_use" });
@@ -109,6 +120,54 @@ test("a paid answer is not thrown away when the model returns nested parts as JS
   const text = normalizePackageInput({ ...good, article: { ...good.article, content: `[not json] ${good.article.content}` } }) as { article: { content: string } };
   assert.ok(text.article.content.startsWith("[not json]"));
   assert.equal(normalizePackageInput("plain text"), "plain text");
+});
+
+test("link candidates are ranked by exam and words, and the model can only choose from what it was offered", () => {
+  const items = [
+    { id: "p1", sourceType: "PRODUCT", title: "YDS Okuma Soruları Kitabı", url: "/books/yds-okuma", examSlug: "yds", access: "PRODUCT" },
+    { id: "p2", sourceType: "PRODUCT", title: "IELTS Konuşma Paketi", url: "/packages/ielts-konusma", examSlug: "ielts", access: "PRODUCT" },
+    { id: "e1", sourceType: "EXAM", title: "YDS", url: "/exams/yds", examSlug: "yds", access: "PUBLIC" },
+    { id: "r1", sourceType: "ROUTE", title: "Blog", url: "/blog", examSlug: null, access: "PUBLIC" },
+    { id: "r2", sourceType: "ROUTE", title: "Sınav takvimi", url: "/tools/exam-calendar", examSlug: null, access: "PUBLIC" },
+  ];
+  const ranked = rankLinkCandidates(items, "YDS okuma soruları", "yds");
+  assert.deepEqual(ranked.map((i) => i.id), ["p1", "e1"]); // the IELTS package, the generic blog index and the calendar are not relevant
+  assert.equal(rankLinkCandidates(items, "yds okuma", null).some((i) => i.id === "r1"), false);
+  assert.ok(candidatesBlock(ranked).includes("p1 | kitap/paket | YDS Okuma Soruları Kitabı"));
+  assert.equal(candidatesBlock([]), "");
+  const chosen = selectLinks(
+    { links: [{ itemId: "p1", label: "YDS okuma kitabı" }, { itemId: "p1", label: "tekrar" }, { itemId: "made-up", label: "uydurma" }, { itemId: "e1", label: "YDS sayfası" }], cta: { itemId: "p1", text: "Okuma sorularını adım adım çalışmak için kitaba göz atın." } },
+    ranked,
+  );
+  assert.deepEqual(chosen.links.map((l) => l.itemId), ["p1", "e1"]);
+  assert.deepEqual(chosen.cta, { itemId: "p1", text: "Okuma sorularını adım adım çalışmak için kitaba göz atın." });
+  assert.equal(selectLinks({ links: [], cta: { itemId: "r2", text: "Takvime bakın." } }, items).cta, null); // a plain page is not a call-to-action target
+  assert.equal(selectLinks({ links: [], cta: { itemId: "p1", text: "Şimdi %50 indirimle alın" } }, ranked).cta, null);
+  assert.deepEqual([ctaTextOk("Kitaba göz atın."), ctaTextOk("Başarı garantili"), ctaTextOk("299 TL")], [true, false, false]);
+});
+
+test("search data: only related real queries, de-duplicated and ordered, never the keyword itself; empty data adds nothing", () => {
+  const rows = [
+    { query: "yds okuma soruları", impressions: 900, clicks: 40, position: 8 },
+    { query: "yds okuma soruları nasıl çözülür", impressions: 120, clicks: 4, position: 11.2 },
+    { query: "YDS Okuma Sorulari Nasil Cozulur", impressions: 30, clicks: 0, position: 14 },
+    { query: "yds okuma ipuçları", impressions: 300, clicks: 9, position: 9.5 },
+    { query: "ielts speaking", impressions: 5000, clicks: 100, position: 3 },
+    { query: "yds", impressions: 10, clicks: 0, position: 30 },
+  ];
+  const q = selectRelevantQueries(rows, "YDS okuma soruları");
+  assert.deepEqual(q.map((r) => r.query), ["yds okuma ipuçları", "yds okuma soruları nasıl çözülür"]);
+  assert.deepEqual(selectCompetitorTitles(["YDS Okuma Soruları Çözüm Teknikleri", "IELTS Writing", "YDS okuma soruları çözüm teknikleri"], "yds okuma soruları"), ["YDS Okuma Soruları Çözüm Teknikleri"]);
+  const block = researchBlock({ queries: q, competitorTitles: ["Rakip başlık"], serp: [{ rank: 1, domain: "ornek.com", title: "Örnek sonuç" }] });
+  for (const part of ["yds okuma ipuçları", "300 gösterim", "Rakip başlık", "1. ornek.com", "kopyalama"]) assert.ok(block.includes(part), part);
+  assert.equal(researchBlock(null), "");
+  assert.equal(researchBlock({ queries: [], competitorTitles: [], serp: [] }), "");
+});
+
+test("the branded cover renders as a 1200x630 PNG for Turkish titles", async () => {
+  const png = await renderCover({ title: "İngilizce Okuma Sınavına Nasıl Hazırlanılır? Şu Ğ Ö Ü Ç ı İ", label: "YÖKDİL SAĞLIK" });
+  assert.deepEqual([...png.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  assert.deepEqual([png.readUInt32BE(16), png.readUInt32BE(20)], [1200, 630]);
 });
 
 test("unattended-publishing checks: markup, links, phantom references, long headlines, missing headings and placeholders", () => {
@@ -203,6 +262,66 @@ test("publishes unattended only when every gate passes, settles the real cost, a
   const again = await generateArticleForKeyword(k.id, { actorId: admin.id, call: ai.fn, ignoreLimits: true });
   assert.equal(again.status, "SKIPPED");
   assert.equal(ai.calls.length, 1);
+});
+
+test("related pages and the call to action are saved, validated, shown to readers, and search data reaches the prompt", async () => {
+  await put(SEO_SETTINGS_KEY, settings());
+  await put(AUTOMATION_KEY, automation());
+  const tag = randomUUID().slice(0, 6);
+  const hadExam = await db.examType.findUnique({ where: { code: "PTE" } });
+  const exam = hadExam ?? (await db.examType.create({ data: { code: "PTE", slug: `pte-${tag}`, name: "PTE Academic", active: true } }));
+  const item = (sourceKey: string, data: Record<string, unknown>) =>
+    db.seoContentItem.upsert({
+      where: { sourceKey },
+      update: { available: true, ...data },
+      create: { sourceKey, internalLinks: [], contentHash: "test", scannedAt: new Date(), available: true, ...data } as never,
+    });
+  const examItem = await item(`EXAM:${exam.id}`, { sourceType: "EXAM", sourceId: exam.id, url: `/exams/${exam.slug}`, title: exam.name, examSlug: exam.slug, access: "PUBLIC", publication: "LIVE" });
+  const routeItem = await item("ROUTE:/books", { sourceType: "ROUTE", sourceId: "/books", url: "/books", title: "Kitaplar", examSlug: null, access: "PUBLIC", publication: "LIVE" });
+  // Keep unrelated inventory in the shared test database out of the candidate list, and restore it afterwards.
+  const others = await db.seoContentItem.findMany({ where: { available: true, id: { notIn: [examItem.id, routeItem.id] } }, select: { id: true } });
+  await db.seoContentItem.updateMany({ where: { id: { in: others.map((o) => o.id) } }, data: { available: false } });
+  const kw = await keyword(`kitaplar ${tag} okuma soruları`, { examId: exam.id });
+  const period = { periodStart: new Date("2099-01-01"), periodEnd: new Date("2099-01-28"), kind: "QUERIES", source: "test", rowCount: 2 };
+  const snap = await db.seoSearchSnapshot.create({ data: { ...period, rows: { create: [
+    { query: `kitaplar ${tag} okuma ipuçları`, impressions: 321, clicks: 7, ctr: 0.02, position: 9.4 },
+    { query: "tamamen alakasız sorgu", impressions: 9999, clicks: 1, ctr: 0, position: 2 },
+  ] } } });
+  const rival = await db.seoCompetitor.create({ data: { name: `Rakip ${tag}`, domain: `rakip-${tag}.example.test`, topics: { create: [{ title: `Kitaplar ${tag} okuma soruları rehberi`, normalized: `kitaplar ${tag} okuma soruları rehberi` }] } } });
+  let prompt = "";
+  try {
+    const ai = async (_cfg: unknown, call: { user: string }) => {
+      prompt = call.user;
+      const pkg = goodPackage(/Ana anahtar kelime: (.+)/.exec(call.user)![1]);
+      pkg.links = [{ itemId: examItem.id, label: "Sınav sayfası" }, { itemId: routeItem.id, label: "Kitap listesi" }, { itemId: "uydurma-kimlik", label: "Olmayan sayfa" }];
+      pkg.cta = { itemId: examItem.id, text: "Sınav sayfasında hazırlık yolunu görebilirsiniz." };
+      return reply(pkg);
+    };
+    const result = await generateArticleForKeyword(kw.id, { actorId: admin.id, call: ai as never, ignoreLimits: true });
+    assert.equal(result.status, "PUBLISHED", result.reasons.join("; "));
+    // the prompt offered real pages and real search data, and nothing irrelevant
+    assert.ok(prompt.includes(`${examItem.id} | sınav sayfası`) && prompt.includes(`${routeItem.id} | sayfa | Kitaplar`));
+    assert.ok(prompt.includes(`kitaplar ${tag} okuma ipuçları`) && prompt.includes("321 gösterim") && prompt.includes(`Kitaplar ${tag} okuma soruları rehberi`));
+    assert.ok(!prompt.includes("tamamen alakasız sorgu"));
+    // only offered pages were kept; the invented one was dropped
+    const draft = await db.seoArticleDraft.findUniqueOrThrow({ where: { keywordId: kw.id }, include: { post: true } });
+    assert.deepEqual((draft.approvedLinks as { itemId: string }[]).map((l) => l.itemId).sort(), [examItem.id, routeItem.id].sort());
+    assert.equal((draft.brief as { ctaItemId: string }).ctaItemId, examItem.id);
+    // readers get resolved, current destinations
+    const shown = await getArticleLinks(draft.postId);
+    assert.deepEqual(shown.links.map((l) => l.url).sort(), ["/books", `/exams/${exam.slug}`].sort());
+    assert.deepEqual(shown.cta, { text: "Sınav sayfasında hazırlık yolunu görebilirsiniz.", title: exam.name, url: `/exams/${exam.slug}` });
+    // a page that disappears stops being shown instead of leaving a dead link
+    await db.seoContentItem.update({ where: { id: routeItem.id }, data: { available: false } });
+    assert.deepEqual((await getArticleLinks(draft.postId)).links.map((l) => l.url), [`/exams/${exam.slug}`]);
+  } finally {
+    await db.seoCompetitor.delete({ where: { id: rival.id } });
+    await db.seoSearchSnapshot.delete({ where: { id: snap.id } });
+    await db.seoContentItem.update({ where: { id: routeItem.id }, data: { available: true } });
+    await db.seoContentItem.updateMany({ where: { id: { in: others.map((o) => o.id) } }, data: { available: true } });
+    await db.seoContentItem.deleteMany({ where: { id: examItem.id } });
+    if (!hadExam) await db.examType.delete({ where: { id: exam.id } });
+  }
 });
 
 test("with automatic publishing off, or when a check fails, the article is saved for review and nothing goes live", async () => {

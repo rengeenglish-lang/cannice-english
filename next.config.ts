@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
     "/api/ebooks/*": ["./content/ebooks/*.pdf"],
     // the reader rasterises pages from the same PDFs
     "/api/ebooks/*/sayfa/*": ["./content/ebooks/*.pdf"],
+    // the blog cover renderer reads this font at runtime
+    "/blog/[slug]/cover": ["./lib/fonts/**"],
   },
   serverExternalPackages: ["mupdf"],
   images: {

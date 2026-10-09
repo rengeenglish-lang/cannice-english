@@ -14,6 +14,7 @@ import {
   packageSchema,
   repairMetadata,
   reserveUsd,
+  selectLinks,
   systemPrompt,
   turkishSlug,
   userPrompt,
@@ -25,6 +26,7 @@ import { readAutomation } from "./automation.service";
 import { readSeoSettings } from "./settings.service";
 import { autoPublishSeoDraft } from "./publishing.service";
 import { createSeoDraft, saveSeoBrief, saveSeoDraftContent } from "./studio.service";
+import { loadLinkCandidates, loadResearch } from "./research.service";
 
 /** The audit/authorship identity for unattended work: the oldest active administrator. */
 export async function systemActorId() {
@@ -96,7 +98,7 @@ export async function generateArticleForKeyword(
 
   const keyword = await db.seoKeyword.findUnique({
     where: { id: keywordId },
-    include: { exam: { select: { name: true } }, articleDraft: { include: { post: { select: { status: true, content: true } } } } },
+    include: { exam: { select: { name: true, slug: true } }, articleDraft: { include: { post: { select: { status: true, content: true } } } } },
   });
   if (!keyword || keyword.archived) throw new NonRetryableError("Anahtar kelime bulunamadı ya da arşivde.");
   const existing = keyword.articleDraft;
@@ -114,12 +116,14 @@ export async function generateArticleForKeyword(
   }
 
   // ---- one paid call, guarded by the budget ledger ----
-  const [brand, titles] = await Promise.all([
+  const [brand, titles, candidates, research] = await Promise.all([
     readBrand(),
     db.blogPost.findMany({ select: { title: true }, orderBy: { createdAt: "desc" }, take: 150 }),
+    loadLinkCandidates(keyword),
+    loadResearch(keyword),
   ]);
   const system = systemPrompt(brand, keyword.exam?.name ?? null);
-  const user = userPrompt({ keyword: keyword.keyword, intent: keyword.intent, languageCode: keyword.languageCode }, titles.map((t) => t.title));
+  const user = userPrompt({ keyword: keyword.keyword, intent: keyword.intent, languageCode: keyword.languageCode }, titles.map((t) => t.title), { candidates, research });
   const estimate = reserveUsd(system.length + user.length, ARTICLE_MAX_TOKENS, config.pricing);
   let reservation;
   try {
@@ -153,7 +157,8 @@ export async function generateArticleForKeyword(
   const slug = await uniqueSlug(article.title);
   const post = draftContentSchema.safeParse({ title: article.title, slug, excerpt: article.excerpt, content: article.content, seoTitle: article.seoTitle, seoDescription: article.seoDescription });
   if (!post.success) throw new NonRetryableError(`Yazı alanları geçersiz: ${post.error.issues[0]?.path.join(".")} ${post.error.issues[0]?.message}`);
-  const brief = buildStudioBrief(parsed.data, keyword, article.title);
+  const { links, cta } = selectLinks(parsed.data, candidates); // only pages that were offered, validated against the live database
+  const brief = buildStudioBrief(parsed.data, keyword, article.title, cta);
   const problems = briefIssues(brief);
   if (problems.length) throw new NonRetryableError(`Brief eksik: ${problems.join(" ")}`);
 
@@ -164,12 +169,14 @@ export async function generateArticleForKeyword(
   draft = await db.seoArticleDraft.findUniqueOrThrow({ where: { id: draftId }, include: { post: { select: { updatedAt: true } } } });
   await withLock(() => saveSeoDraftContent(actor, { id: draftId, revision: briefSaved.revision, postUpdatedAt: draft.post.updatedAt.toISOString(), post: post.data }));
 
+  // Saving the text clears approvals, so record the chosen related pages afterwards; the gate re-checks every one before publishing.
+  if (links.length) await db.seoArticleDraft.update({ where: { id: draftId }, data: { approvedLinks: links } });
   const assessment = assess(post.data, brief, settings.minimumQualityScore);
   await db.seoActivityLog.create({
     data: {
       actorId: actor,
       action: "AUTOPILOT_GENERATED",
-      details: { draftId, keywordId, score: assessment.score, words: assessment.wordCount, costUsd: Number(spent.toFixed(4)), model: settings.model, promptVersion: PROMPT_VERSION, reasons: assessment.reasons },
+      details: { draftId, keywordId, score: assessment.score, words: assessment.wordCount, links: links.length, cta: Boolean(cta), candidates: candidates.length, searchQueries: research.queries.length, competitorTitles: research.competitorTitles.length, costUsd: Number(spent.toFixed(4)), model: settings.model, promptVersion: PROMPT_VERSION, reasons: assessment.reasons },
     },
   });
 

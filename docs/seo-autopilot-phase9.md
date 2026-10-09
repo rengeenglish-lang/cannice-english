@@ -22,11 +22,23 @@ switches on the Otomasyon page (**Otomatik makale üretimi** and **Puanı geçen
 - **Bulk keyword import** on Anahtar kelimeler: `anahtar kelime | amaç | sınav | not` per line (max 60), validated like the single form.
 - **Article text format**: plain text with optional `## Başlık` lines and `- ` lists; the public article page renders those two and leaves everything else as paragraphs.
 
+## Links to courses and books, covers, and search data (Phase 9b)
+- **Related pages and a call to action.** The prompt offers up to 10 real, currently published pages (books and packages, exam pages, topic pages, blog posts,
+  a few tool pages), ranked by exam match and words in common, each re-validated against the live database (`research.service.ts`). The model may only choose
+  from that list (`selectLinks` drops anything else); a call to action must be a product, exam or topic page and may not mention prices, discounts or
+  promises. The article text never contains links. The chosen pages are stored as the draft's approved links and brief CTA, so the existing publish gate
+  re-checks them, and the public article page resolves them again when it renders (a page that disappears simply stops being shown).
+- **Cover image.** `/blog/<slug>/cover` renders a 1200x630 PNG on demand (ink-navy and gold, headline, exam label) with Geist (`lib/fonts`), cached by the CDN.
+  Used as the article image, the Open Graph/Twitter image and in the JSON-LD; an article's own `coverImageUrl` still wins. No image storage is needed.
+- **Search data.** The latest Search Console `QUERIES` snapshot (queries sharing at least half of the keyword's words, most-seen first), competitor topic titles
+  and recorded results (`SeoSerpResult`) are added to the prompt as ideas only: the model must not quote the numbers or copy competitor titles. Empty data adds nothing.
+- Photographs/illustrations inside articles are still not generated (it would need an image provider, an extra key and per-image cost).
+
 ## Limits (be honest about them)
 - The checklist score is editorial hygiene, not accuracy, originality or ranking. Exam rules, scores and dates must still be checked by a person; the prompt
   forbids inventing them, and the brief records what an editor should verify (`sources`).
 - No search-volume, difficulty or competitor data feeds topic choice; keywords come from the owner's list.
-- No images, internal-link insertion or CTA links are generated yet (`ctaItemId` stays empty; articles are plain text).
+- Articles are plain text; related pages and the call to action appear in blocks under the article, not inside the text.
 - Daily cron: runs at most two jobs per invocation; a generation takes about a minute.
 
 ## Tests
