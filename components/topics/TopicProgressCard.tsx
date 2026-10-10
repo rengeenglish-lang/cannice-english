@@ -2,7 +2,7 @@ import { BarChart3 } from "lucide-react";
 import { ProgressRing } from "@/components/topics/ProgressRing";
 
 const CARD =
-  "relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(7,27,52,.07)]";
+  "relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(12,46,30,.07)]";
 
 export function TopicProgressCard({
   percent,

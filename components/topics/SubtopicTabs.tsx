@@ -37,7 +37,7 @@ export function SubtopicTabs({
             onClick={() => onSelect(lesson.id)}
             className={`inline-flex items-center gap-2 rounded-xl px-5 py-3 text-base font-bold transition ${
               active
-                ? "bg-[color:var(--accent)] text-white shadow-[0_10px_24px_rgba(217,161,46,.3)]"
+                ? "bg-[color:var(--accent)] text-white shadow-[0_10px_24px_rgba(19,138,67,.3)]"
                 : "text-slate-700 hover:bg-blue-50 hover:text-[color:var(--accent-strong)]"
             }`}
           >

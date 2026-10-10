@@ -29,7 +29,7 @@ export async function AvailabilityHome() {
   return (
     <section
       id="group-availability"
-      className="mx-auto my-16 w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-[2rem] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)] sm:w-[calc(100%-48px)] sm:p-10 lg:w-[calc(100%-64px)]"
+      className="mx-auto my-16 w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-[2rem] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)] sm:w-[calc(100%-48px)] sm:p-10 lg:w-[calc(100%-64px)]"
       aria-labelledby="availability-title"
     >
       <AvailabilityRefresh />
