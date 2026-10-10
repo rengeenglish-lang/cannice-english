@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Netfener N, transparent, for dark backgrounds. -->
+  <g stroke-linejoin="round" stroke-width="2"><polygon points="10,15.6 34,49.4 34,56 10,66" fill="#34c46e" stroke="#34c46e"/><polygon points="66,4 90,4 90,22 66,32" fill="#67d392" stroke="#67d392"/><polygon points="10,72 34,62 34,96 10,96" fill="#ffffff" stroke="#ffffff"/><polygon points="66,38 90,28 90,80.4 66,46.6" fill="#ffffff" stroke="#ffffff" opacity="0.82"/><polygon points="10,10 36,10 90,86 64,86" fill="#ffffff" stroke="#ffffff"/></g>
+</svg>

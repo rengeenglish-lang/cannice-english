@@ -41,7 +41,7 @@ export default async function GroupLessonsPage({
       </PageHero>
       <nav
         aria-label="Sınav türü"
-        className="grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgba(12,46,30,.07)] sm:grid-cols-5"
+        className="grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] sm:grid-cols-5"
       >
         {GROUP_EXAM_FILTERS.map((value) => (
           <Link

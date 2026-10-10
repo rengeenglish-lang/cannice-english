@@ -19,13 +19,13 @@ export default async function YokdilHubPage() {
     <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)]">
       <ExamSectionMenu examName="YÖKDİL" slug="yokdil" examFamily="TRANSLATION_GRAMMAR" />
       <main className="min-w-0 bg-white">
-      <section className="relative overflow-hidden bg-[#071b34] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(52,196,110,.3),transparent_38%)]" /><div className="relative mx-auto w-full max-w-[1320px] px-4 py-20 sm:px-6 lg:px-8"><span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-blue-100">Üç alan · Tek hedef</span><h1 className="mt-6 max-w-4xl text-4xl font-black tracking-[-.03em] sm:text-6xl">YÖKDİL alanını seç, hazırlığını özelleştir.</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">Sosyal, Sağlık ve Fen Bilimleri için farklılaşan terminoloji ve metin yapılarıyla yalnızca kendi sınavına odaklan.</p></div></section>
+      <section className="relative overflow-hidden bg-[#071b34] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgb(var(--glow-rgb)/.3),transparent_38%)]" /><div className="relative mx-auto w-full max-w-[1320px] px-4 py-20 sm:px-6 lg:px-8"><span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-blue-100">Üç alan · Tek hedef</span><h1 className="mt-6 max-w-4xl text-4xl font-black tracking-[-.03em] sm:text-6xl">YÖKDİL alanını seç, hazırlığını özelleştir.</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-slate-300">Sosyal, Sağlık ve Fen Bilimleri için farklılaşan terminoloji ve metin yapılarıyla yalnızca kendi sınavına odaklan.</p></div></section>
       <section id="exam-sections" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-16 sm:px-6 lg:px-8"><div className="mb-8"><p className="eyebrow">YÖKDİL branşları</p><h2 className="mt-2 text-3xl font-black">Hazırlanacağın alanı seç</h2></div><div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         {branches.map((branch) => (
           <Link
             key={branch.id}
             href={`/exams/${branch.slug}`}
-            className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.08)] transition hover:-translate-y-1"
+            className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.08)] transition hover:-translate-y-1"
           >
             <span className="grid size-12 place-items-center rounded-2xl text-white" style={{ background: EXAM_META[branch.code].solid }}><BookOpenCheck /></span>
             <h2 className="text-xl font-black text-[color:var(--foreground)]">

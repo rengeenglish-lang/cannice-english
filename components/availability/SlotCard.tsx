@@ -112,7 +112,7 @@ export function SlotCard({
   }
 
   return (
-    <article className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)]">
+    <article className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)]">
       {body}
       <Link href={`/group-lessons/${slot.id}`} className="primary-button mt-5 w-full">
         {!a.canEnroll
