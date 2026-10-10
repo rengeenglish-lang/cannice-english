@@ -25,7 +25,7 @@ export default async function StudyPlanPage() {
   }
 
   const roadmap = await getRoadmap(user.id, goal.id);
-  const recommendations = await recommendationsForTopics(user.id, roadmap.map((r) => r.topicId));
+  const recommendations = await recommendationsForTopics(user.id, roadmap.map((r) => r.topicId), goal.examTypeId);
   const recsByTopic = new Map(recommendations.map((r) => [r.topicId, r]));
 
   const historyRows = await db.diagnosticTopicResult.findMany({

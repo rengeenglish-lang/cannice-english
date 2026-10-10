@@ -74,6 +74,9 @@ export async function buildCatalog(profile: CoachingProfileRow, user: { id: stri
 
   for (const type of config.taskTypes) {
     let hasContent = false;
+    // Practice for this type exists on the site (even if this student's plan doesn't unlock it).
+    // Only when it doesn't is the self-study fallback flagged as a gap ("Sitede henüz içerik yok").
+    let practiceOnSite = false;
     for (const slug of type.lessonSlugs ?? []) {
       const topic = topics.find((x) => x.slug === slug);
       if (!topic || usedTopicIds.has(topic.id)) continue;
@@ -101,6 +104,7 @@ export async function buildCatalog(profile: CoachingProfileRow, user: { id: stri
       const topic = diagTopics.find((x) => x.slug === slug);
       if (!topic) continue;
       hasContent = true;
+      practiceOnSite = true;
       if (!canPractice) {
         lockedContent ||= !access.can("PRACTICE_QUESTIONS");
         continue;
@@ -117,14 +121,38 @@ export async function buildCatalog(profile: CoachingProfileRow, user: { id: stri
         isGap: false,
       });
     }
+    if (type.skill === "time" && diagTopics.length) {
+      // Time management is trained by a timed, mixed set from Pratik Bankası (the same drill as the
+      // "Süreli pratik: Karma" exam-day task), so the task has real practice behind it.
+      hasContent = true;
+      practiceOnSite = true;
+      if (canPractice) {
+        activities.push({
+          taskTypeKey: type.key,
+          skill: "time",
+          kind: "TIMED_PRACTICE",
+          mode: "practice",
+          title: `${t.task.kinds.TIMED_PRACTICE}: ${type.name}`,
+          detail: pickLocale(profile.locale, type.selfStudy),
+          refType: "DIAGNOSTIC_TOPIC",
+          refId: "KARMA",
+          minutes: type.minutes,
+          isGap: false,
+        });
+      } else {
+        lockedContent ||= !access.can("PRACTICE_QUESTIONS");
+      }
+    }
     if (type.toolHref) {
       hasContent = true;
+      practiceOnSite = true;
       activities.push({ taskTypeKey: type.key, skill: type.skill, kind: "SPEAKING", mode: "practice", title: `${t.task.kinds.SPEAKING}: ${type.name}`, detail: pickLocale(profile.locale, type.selfStudy), href: type.toolHref, refType: "TOOL", refId: type.key, minutes: type.minutes, isGap: false });
     }
     const hasPractice = activities.some((a) => a.taskTypeKey === type.key && a.mode === "practice");
     if (!hasPractice) {
-      // No practice on the site for this type (or none unlocked): an editable self-study task.
-      activities.push({ taskTypeKey: type.key, skill: type.skill, kind: GAP_KIND[type.skill] ?? "CUSTOM", mode: "practice", title: type.name, detail: pickLocale(profile.locale, type.selfStudy), minutes: type.minutes, isGap: true });
+      // No practice on the site for this type (or none unlocked): an editable self-study task. It is a
+      // gap only when the site really has nothing; locked practice is shown via `lockedContent`.
+      activities.push({ taskTypeKey: type.key, skill: type.skill, kind: GAP_KIND[type.skill] ?? "CUSTOM", mode: "practice", title: type.name, detail: pickLocale(profile.locale, type.selfStudy), minutes: type.minutes, isGap: !practiceOnSite });
     }
     if (!hasContent) gaps.push(type);
   }
@@ -162,7 +190,7 @@ export async function buildCatalog(profile: CoachingProfileRow, user: { id: stri
     timedPractice = { taskTypeKey: "timed", skill: config.skills.includes("reading") ? "reading" : config.skills[0], kind: "TIMED_PRACTICE", mode: "practice", title: `${t.task.kinds.TIMED_PRACTICE}: Karma`, detail: t.locale === "en" ? "Mixed questions — time yourself as in the exam." : "Karma sorular — sınavdaki gibi süre tutarak çöz.", refType: "DIAGNOSTIC_TOPIC", refId: "KARMA", minutes: 20, isGap: false };
   } else {
     const strategy = config.taskTypes.find((x) => x.skill === "time");
-    if (strategy) timedPractice = { taskTypeKey: strategy.key, skill: "time", kind: "TIMED_PRACTICE", mode: "practice", title: strategy.name, detail: pickLocale(profile.locale, strategy.selfStudy), minutes: strategy.minutes, isGap: true };
+    if (strategy) timedPractice = { taskTypeKey: strategy.key, skill: "time", kind: "TIMED_PRACTICE", mode: "practice", title: strategy.name, detail: pickLocale(profile.locale, strategy.selfStudy), minutes: strategy.minutes, isGap: diagTopics.length === 0 };
   }
 
   return {

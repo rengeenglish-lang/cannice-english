@@ -25,7 +25,7 @@ export async function getResultsForAttempt(attemptId: string, userId: string) {
       })
     : null;
 
-  const recommendations = await recommendationsForTopics(userId, weakResults.map((r) => r.topicId));
+  const recommendations = await recommendationsForTopics(userId, weakResults.map((r) => r.topicId), attempt.examTypeId);
   const recommendationsByTopic = new Map(recommendations.map((r) => [r.topicId, r]));
 
   const total = attempt.questionOrder.length;

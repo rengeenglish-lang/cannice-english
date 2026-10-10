@@ -35,18 +35,25 @@ export async function listRecentMistakes(userId: string) {
   for (const f of fixedLater) if (!fixedAt.has(f.questionId) || fixedAt.get(f.questionId)! < f.answeredAt) fixedAt.set(f.questionId, f.answeredAt);
   const open = latest.filter((r) => !(fixedAt.get(r.questionId) && fixedAt.get(r.questionId)! > r.answeredAt));
 
-  const topicIds = [...new Set(open.map((r) => r.question.topicId))];
-  const [recs, examTopics] = await Promise.all([
-    recommendationsForTopics(userId, topicIds),
+  // Recommendations per exam: YDS and YÖKDİL share diagnostic topics, so each mistake must only
+  // point at lessons of the exam it was made in.
+  const examIds = [...new Set(open.map((r) => r.attempt.examTypeId))];
+  const [recsPerExam, examTopics] = await Promise.all([
+    Promise.all(
+      examIds.map(async (examTypeId) => {
+        const ids = [...new Set(open.filter((r) => r.attempt.examTypeId === examTypeId).map((r) => r.question.topicId))];
+        return (await recommendationsForTopics(userId, ids, examTypeId)).map((rec) => [`${examTypeId}:${rec.topicId}`, rec] as const);
+      }),
+    ),
     db.examTopic.findMany({
       where: { examTypeId: { in: [...new Set(open.map((r) => r.attempt.examTypeId))] } },
       select: { slug: true, name: true, examTypeId: true },
     }),
   ]);
-  const recsByTopic = new Map(recs.map((r) => [r.topicId, r]));
+  const recsByExamTopic = new Map(recsPerExam.flat());
 
   return open.map((r) => {
-    const rec = recsByTopic.get(r.question.topicId);
+    const rec = recsByExamTopic.get(`${r.attempt.examTypeId}:${r.question.topicId}`);
     const exam = r.attempt.examType;
     let konu: { href: string; label: string } | null = null;
     const tagged = rec?.free.find((f) => f.examSlug === exam.slug) ?? rec?.free[0];
