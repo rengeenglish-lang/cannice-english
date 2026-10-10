@@ -350,6 +350,7 @@ model User {
   coachingNotifications CoachingNotificationLog[]
   lexiconWords          LexiconWordState[]
   lexiconTests          LexiconSetTest[]
+  writingFeedback       WritingFeedback[]
   sentMessages          TeacherMessage[]          @relation("MessageStudent")
   answeredMessages      TeacherMessage[]          @relation("MessageResponder")
   studyGoals            StudyGoal[]
@@ -1938,4 +1939,34 @@ model SeoSerpResult {
   @@unique([keywordId, rank])
   @@index([domain])
   @@map("seo_serp_results")
+}
+
+/**
+ * Yazma ve Çeviri Geri Bildirimi: one AI-graded writing or translation answer. `kind` is a
+ * WRITING_FEEDBACK_KINDS key (lib/writing-feedback.ts); `result` holds the validated feedback JSON.
+ * PENDING rows reserve their estimated cost against the monthly AI cap until the call finishes;
+ * FAILED rows count against neither the cap nor the student's monthly allowance.
+ */
+model WritingFeedback {
+  id           String    @id @default(cuid())
+  userId       String
+  kind         String
+  taskPrompt   String
+  answer       String
+  status       String    @default("PENDING")
+  result       Json?
+  errorMessage String?
+  model        String
+  estimatedUsd Decimal   @db.Decimal(10, 5)
+  actualUsd    Decimal?  @db.Decimal(10, 5)
+  inputTokens  Int?
+  outputTokens Int?
+  createdAt    DateTime  @default(now())
+  completedAt  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([createdAt, status])
+  @@map("writing_feedback")
 }

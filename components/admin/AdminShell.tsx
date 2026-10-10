@@ -26,6 +26,7 @@ import {
   Target,
   Compass,
   Layers,
+  PenLine,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -53,6 +54,7 @@ function learningNav(examFamily: ExamFamily | null) {
     { href: "/dashboard/hedeflerim", label: "Hedef Geçmişim", icon: Target },
     { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
     { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
+    { href: "/dashboard/yazma-geri-bildirim", label: "Yazma geri bildirimi", icon: PenLine },
     ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
     { href: "/kaynaklar", label: "Kaynaklar", icon: ShoppingBag },
     { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
