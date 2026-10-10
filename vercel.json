@@ -18,6 +18,10 @@
     {
       "path": "/api/cron/seo-jobs",
       "schedule": "5 */3 * * *"
+    },
+    {
+      "path": "/api/cron/coaching-email",
+      "schedule": "20 * * * *"
     }
   ]
 }

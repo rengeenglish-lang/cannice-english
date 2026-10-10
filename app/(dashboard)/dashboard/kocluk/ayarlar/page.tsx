@@ -4,6 +4,7 @@ import { ShieldCheck } from "lucide-react";
 import { loadCoaching } from "@/server/services/coaching/context";
 import { recentDeliveries } from "@/server/services/coaching/followups.service";
 import { SettingsForm } from "@/components/coaching/SettingsForm";
+import { emailConfigured } from "@/server/email/send";
 import { ActionButton } from "@/components/coaching/ActionButton";
 import { deleteCoachingDataAction, setCoachingEnabledAction } from "@/app/actions/coaching";
 import { redirect } from "next/navigation";
@@ -37,7 +38,8 @@ export default async function CoachingSettingsPage() {
       <SettingsForm
         locale={locale}
         pausedLabel={paused ? s.pausedUntil(paused) : null}
-        initial={{ notifyInApp: profile.notifyInApp, frequency: profile.frequency === "LOW" ? "LOW" : "NORMAL", quietStart: profile.quietStart, quietEnd: profile.quietEnd, reminderTime: profile.reminderTime, timezone: profile.timezone, locale: profile.locale === "en" ? "en" : "tr" }}
+        emailAvailable={emailConfigured()}
+        initial={{ notifyInApp: profile.notifyInApp, notifyEmail: profile.notifyEmail, frequency: profile.frequency === "LOW" ? "LOW" : "NORMAL", quietStart: profile.quietStart, quietEnd: profile.quietEnd, reminderTime: profile.reminderTime, timezone: profile.timezone, locale: profile.locale === "en" ? "en" : "tr" }}
       />
 
       <section className="dashboard-panel" aria-labelledby="deliveries">
@@ -47,7 +49,7 @@ export default async function CoachingSettingsPage() {
           <ul className="mt-3 divide-y divide-[color:var(--border)] text-sm">
             {deliveries.map((d) => (
               <li key={d.id} className="flex flex-wrap justify-between gap-2 py-2">
-                <span>{s.kinds[d.kind] ?? d.kind}</span>
+                <span>{s.kinds[d.kind] ?? d.kind}{d.channel === "EMAIL" ? ` · ${s.emailChannel}` : ""}</span>
                 <span className="text-xs text-[color:var(--muted)]">{when(d.createdAt)} · {s.statuses[d.status] ?? d.status}</span>
               </li>
             ))}
