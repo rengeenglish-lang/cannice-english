@@ -143,7 +143,7 @@ export function FlashcardDeck({ level, words, initialStates, testHref, levelHref
                 className={`lex-card h-full cursor-pointer ${flipped ? "is-flipped" : ""}`}
               >
                 {/* front */}
-                <div className="lex-face flex flex-col items-center justify-center border-2 border-[color:var(--accent)] bg-[color:var(--surface)] p-6 text-center shadow-[0_18px_40px_rgba(22,27,38,.12)]">
+                <div className="lex-face flex flex-col items-center justify-center border-2 border-[color:var(--accent)] bg-[color:var(--surface)] p-6 text-center shadow-[0_18px_40px_rgba(12,46,30,.12)]">
                   <span className="absolute left-5 top-5 rounded-full bg-[color:var(--accent-soft)] px-3 py-1 text-xs font-bold text-[color:var(--accent-strong)]">{level}</span>
                   <span className="absolute right-5 top-5 text-xs font-semibold text-[color:var(--muted)]">{POS_LABELS[card.pos] ?? card.pos}</span>
                   <p lang="en" className="text-4xl font-bold tracking-tight text-[color:var(--foreground)] sm:text-5xl">{card.word}</p>
@@ -160,7 +160,7 @@ export function FlashcardDeck({ level, words, initialStates, testHref, levelHref
                   <p className="absolute bottom-5 text-xs text-[color:var(--muted)]">Çevirmek için dokun · kaydırarak geç</p>
                 </div>
                 {/* back */}
-                <div className="lex-face lex-back flex flex-col overflow-y-auto bg-[color:var(--night)] p-6 text-white shadow-[0_18px_40px_rgba(22,27,38,.25)]">
+                <div className="lex-face lex-back flex flex-col overflow-y-auto bg-[color:var(--night)] p-6 text-white shadow-[0_18px_40px_rgba(12,46,30,.25)]">
                   <p className="text-xs font-bold uppercase tracking-widest text-[color:var(--gold)]">{POS_LABELS[card.pos] ?? card.pos}</p>
                   <p className="mt-2 text-3xl font-bold leading-tight">{card.tr}</p>
                   <div className="mt-5 rounded-2xl bg-white/[.06] p-4">

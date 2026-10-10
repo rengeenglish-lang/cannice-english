@@ -17,20 +17,20 @@ export function coverFontSize(title: string) {
 type El = { type: string; props: { style?: Record<string, string | number>; children?: unknown } };
 const el = (type: string, style: Record<string, string | number>, children?: unknown): El => ({ type, props: { style, children } });
 
-/** Branded 1200x630 article cover in Netfener's ink-navy and gold: wordmark, exam label and the headline. */
+/** Branded 1200x630 article cover in Netfener's deep green and white: wordmark, exam label and the headline. */
 export async function renderCover(input: { title: string; label: string }) {
   const tree = el("div", {
     width: WIDTH, height: HEIGHT, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "64px 80px",
-    backgroundImage: "linear-gradient(135deg, #0f131c, #243052)", color: "#ffffff", fontFamily: "Geist", position: "relative",
+    backgroundImage: "linear-gradient(135deg, #0b4d2c, #138a43)", color: "#ffffff", fontFamily: "Geist", position: "relative",
   }, [
-    el("div", { position: "absolute", top: -160, right: -120, width: 520, height: 520, borderRadius: 260, background: "#f2c14e", opacity: 0.09 }),
-    el("div", { position: "absolute", left: 0, top: 0, bottom: 0, width: 14, background: "#f2c14e" }),
+    el("div", { position: "absolute", top: -160, right: -120, width: 520, height: 520, borderRadius: 260, background: "#ffffff", opacity: 0.08 }),
+    el("div", { position: "absolute", left: 0, top: 0, bottom: 0, width: 14, background: "#a7f0c2" }),
     el("div", { display: "flex", alignItems: "center", justifyContent: "space-between" }, [
-      el("div", { fontSize: 34, letterSpacing: 6, color: "#f2c14e" }, "NETFENER"),
+      el("div", { fontSize: 34, letterSpacing: 6, color: "#a7f0c2" }, "NETFENER"),
     ]),
     el("div", { display: "flex", fontSize: coverFontSize(input.title), lineHeight: 1.12, letterSpacing: -1.5, maxWidth: 1040, lineClamp: 4 }, input.title),
     el("div", { display: "flex" }, [
-      el("div", { display: "flex", fontSize: 26, letterSpacing: 2, padding: "10px 24px", borderRadius: 999, background: "#f2c14e", color: "#161b26" }, input.label),
+      el("div", { display: "flex", fontSize: 26, letterSpacing: 2, padding: "10px 24px", borderRadius: 999, background: "#ffffff", color: "#0b4d2c" }, input.label),
     ]),
   ]);
   const font = await loadFont();

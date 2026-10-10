@@ -36,7 +36,7 @@ const MEMBER_NOTE = "Ücretsiz üyelikle";
 function ProductCard({ product, isGroup = false }: { product: HomeProduct; isGroup?: boolean }) {
   const href = product.category === "BOOK" ? `/books/${product.slug}` : `/packages/${product.slug}`;
   const monthly = isGroup && isMonthlyBilledCategory(product.category);
-  return <article className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(7,27,52,.07)]">
+  return <article className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)]">
     <p className="text-xs font-bold text-slate-500">{product.examType?.name ?? "İngilizce"}</p>
     <h3 className="mt-2 text-xl font-black tracking-tight">{product.title}</h3>
     <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">{product.shortDescription || product.description || "Sınav hazırlığını destekleyen çalışma kaynağı."}</p>
@@ -51,7 +51,7 @@ export function MaterialsHome({ products, groups = [], testimonials = [], isSign
   const levelTestHref = memberHref("/seviye-tespit", isSignedIn);
   return <main id="main-content" className="bg-white text-[color:var(--foreground)]">
     <section className="relative overflow-hidden bg-[#071b34] text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(242,193,78,.32),transparent_32%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(52,196,110,.32),transparent_32%)]" />
       <div className="relative mx-auto grid w-full max-w-[1320px] items-center gap-12 px-4 py-14 sm:px-6 lg:min-h-[650px] lg:grid-cols-[1.1fr_.9fr] lg:px-8 lg:py-24">
         <div>
           <p className="text-xs font-extrabold uppercase tracking-[.18em] text-blue-200">{PLATFORM_EXAMS.map((exam) => exam.name).join(" • ")}</p>
@@ -70,7 +70,7 @@ export function MaterialsHome({ products, groups = [], testimonials = [], isSign
       </div>
     </section>
 
-    <section id="sinavini-sec" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="text-center"><p className="eyebrow">Beş sınav · tek platform</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Hangi sınava hazırlanıyorsun?</h2><p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-600">Sınavını seç; o sınava ait öğrenme, pratik, ders ve materyal yollarını birlikte gör.</p></div><div className="mt-9 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-5">{PLATFORM_EXAMS.map(({slug,name,description,color,soft,icon:Icon})=><Link key={slug} href={`/exams/${slug}`} className="exam-card group rounded-3xl border border-slate-200 p-4 shadow-[0_12px_35px_rgba(7,27,52,.07)] transition last:col-span-2 hover:-translate-y-1 sm:p-6 lg:last:col-span-1" style={{background:soft}}><span className="grid size-10 place-items-center rounded-2xl text-white sm:size-12" style={{background:color}}><Icon/></span><h3 className="mt-4 text-xl font-black sm:mt-6 sm:text-2xl">{name}</h3><p className="mt-2 hidden text-sm leading-6 text-slate-600 sm:block">{description}</p><span className="mt-3 inline-flex items-center gap-2 text-sm font-extrabold sm:mt-5" style={{color}}><span className="sr-only sm:not-sr-only">Sınav alanına gir</span><ArrowRight size={17} aria-hidden="true" className="transition group-hover:translate-x-1"/></span></Link>)}</div></section>
+    <section id="sinavini-sec" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="text-center"><p className="eyebrow">Beş sınav · tek platform</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Hangi sınava hazırlanıyorsun?</h2><p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-600">Sınavını seç; o sınava ait öğrenme, pratik, ders ve materyal yollarını birlikte gör.</p></div><div className="mt-9 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-5">{PLATFORM_EXAMS.map(({slug,name,description,color,soft,icon:Icon})=><Link key={slug} href={`/exams/${slug}`} className="exam-card group rounded-3xl border border-slate-200 p-4 shadow-[0_12px_35px_rgba(12,46,30,.07)] transition last:col-span-2 hover:-translate-y-1 sm:p-6 lg:last:col-span-1" style={{background:soft}}><span className="grid size-10 place-items-center rounded-2xl text-white sm:size-12" style={{background:color}}><Icon/></span><h3 className="mt-4 text-xl font-black sm:mt-6 sm:text-2xl">{name}</h3><p className="mt-2 hidden text-sm leading-6 text-slate-600 sm:block">{description}</p><span className="mt-3 inline-flex items-center gap-2 text-sm font-extrabold sm:mt-5" style={{color}}><span className="sr-only sm:not-sr-only">Sınav alanına gir</span><ArrowRight size={17} aria-hidden="true" className="transition group-hover:translate-x-1"/></span></Link>)}</div></section>
 
     <TestimonialsSection testimonials={testimonials} className="pb-14 sm:pb-16" />
 

@@ -32,7 +32,7 @@ export default async function DemoLessonPage({ params }: Props) {
         <h1 className="page-title">{lesson.title}</h1>
       </PageHero>
       {embedUrl ? (
-        <div className="mt-8 aspect-video overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_1px_2px_rgba(22,25,43,.05),0_16px_36px_rgba(24,36,73,.08)]">
+        <div className="mt-8 aspect-video overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-[0_1px_2px_rgba(12,46,30,.05),0_16px_36px_rgba(24,36,73,.08)]">
           <iframe
             src={embedUrl}
             title={lesson.title}
