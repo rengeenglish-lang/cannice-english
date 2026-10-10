@@ -5,9 +5,9 @@ import { coachingCopy } from "@/lib/coaching/i18n";
 import { TIMEZONE_OPTIONS } from "@/lib/coaching/time";
 import { updateSettingsAction } from "@/app/actions/coaching";
 
-type Value = { notifyInApp: boolean; frequency: "NORMAL" | "LOW"; quietStart: string; quietEnd: string; reminderTime: string; timezone: string; locale: "tr" | "en" };
+type Value = { notifyInApp: boolean; notifyEmail: boolean; frequency: "NORMAL" | "LOW"; quietStart: string; quietEnd: string; reminderTime: string; timezone: string; locale: "tr" | "en" };
 
-export function SettingsForm({ locale, initial, pausedLabel }: { locale: string; initial: Value; pausedLabel: string | null }) {
+export function SettingsForm({ locale, initial, pausedLabel, emailAvailable }: { locale: string; initial: Value; pausedLabel: string | null; emailAvailable: boolean }) {
   const t = coachingCopy(locale);
   const s = t.settings;
   const router = useRouter();
@@ -23,7 +23,8 @@ export function SettingsForm({ locale, initial, pausedLabel }: { locale: string;
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
-          const res = await updateSettingsAction({ ...v, pauseDays: Number(pause) });
+          const { notifyEmail, ...rest } = v;
+          const res = await updateSettingsAction({ ...rest, ...(emailAvailable ? { notifyEmail } : {}), pauseDays: Number(pause) });
           setStatus(res.ok ? "saved" : "error");
           if (res.ok) { setPause("-1"); router.refresh(); }
         });
@@ -35,11 +36,18 @@ export function SettingsForm({ locale, initial, pausedLabel }: { locale: string;
         {s.inApp}
       </label>
       <div>
-        <label className="flex items-center gap-3 text-sm font-bold text-[color:var(--muted)]">
-          <input type="checkbox" className="size-5" checked={false} disabled aria-describedby="email-note" />
-          {s.email}
-        </label>
-        <p id="email-note" className="mt-1 text-xs text-[color:var(--muted)]">{s.emailUnavailable}</p>
+        {emailAvailable ? (
+          <label className="flex items-center gap-3 text-sm font-bold">
+            <input type="checkbox" className="size-5" checked={v.notifyEmail} onChange={(e) => setV({ ...v, notifyEmail: e.target.checked })} aria-describedby="email-note" />
+            {s.email}
+          </label>
+        ) : (
+          <label className="flex items-center gap-3 text-sm font-bold text-[color:var(--muted)]">
+            <input type="checkbox" className="size-5" checked={false} disabled aria-describedby="email-note" />
+            {s.email}
+          </label>
+        )}
+        <p id="email-note" className="mt-1 text-xs text-[color:var(--muted)]">{emailAvailable ? s.emailHelp : s.emailUnavailable}</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={label}>
