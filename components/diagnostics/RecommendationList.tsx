@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Lock } from "lucide-react";
 import type { TopicRecommendations } from "@/lib/diagnostics/recommendations";
 
 export function RecommendationList({ recs }: { recs: TopicRecommendations | undefined }) {
@@ -9,13 +10,20 @@ export function RecommendationList({ recs }: { recs: TopicRecommendations | unde
     <div className="space-y-4">
       {recs.free.length > 0 ? (
         <div>
-          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[color:var(--success)]">Ücretsiz</p>
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[color:var(--accent-strong)]">Konu Anlatımı</p>
           <ul className="space-y-2">
             {recs.free.map((r) => (
-              <li key={r.id}>
+              <li key={r.id} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <Link href={`/konu-anlatim?exam=${r.examSlug}&topic=${r.topicSlug}`} className="text-sm font-semibold text-[color:var(--accent-strong)] hover:underline">
                   {r.title}
                 </Link>
+                {r.access === "preview" ? (
+                  <span className="rounded-full bg-[color:var(--success-soft)] px-2 py-0.5 text-[11px] font-bold text-[color:var(--success)]">Ücretsiz önizleme</span>
+                ) : r.access === "plan" ? (
+                  <Link href="/planlar" className="inline-flex items-center gap-1 rounded-full bg-[color:var(--canvas)] px-2 py-0.5 text-[11px] font-bold text-[color:var(--muted)] hover:text-[color:var(--foreground)]">
+                    <Lock size={11} aria-hidden="true" /> Plana dahil
+                  </Link>
+                ) : null}
               </li>
             ))}
           </ul>
