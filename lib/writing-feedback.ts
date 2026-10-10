@@ -5,10 +5,10 @@
  */
 import { z } from "zod";
 import type { PlanTierCode } from "@/lib/plans";
+import { HAIKU_MODEL, HAIKU_PRICING, haikuCostUsd, haikuReserveUsd, monthlyCapFromEnv } from "@/lib/ai-haiku";
 
-export const WRITING_FEEDBACK_MODEL = "claude-haiku-5-5";
-/** Claude Haiku 5.5 list prices (USD per million tokens) for prompts up to 100K tokens. */
-export const WRITING_FEEDBACK_PRICING = { inputUsdPerMTok: 0.1, outputUsdPerMTok: 0.5 };
+export const WRITING_FEEDBACK_MODEL = HAIKU_MODEL;
+export const WRITING_FEEDBACK_PRICING = HAIKU_PRICING;
 /** Room for the feedback JSON plus the model's thinking, which is billed as output. */
 export const WRITING_FEEDBACK_MAX_TOKENS = 8000;
 /** Site-wide monthly spending cap when WRITING_AI_MONTHLY_USD is not set. */
@@ -244,18 +244,10 @@ export function parseFeedbackResult(kindKey: WritingKindKey, raw: unknown): Writ
 
 // ---------- cost ----------
 
-export const costUsd = (inputTokens: number, outputTokens: number) =>
-  (inputTokens * WRITING_FEEDBACK_PRICING.inputUsdPerMTok + outputTokens * WRITING_FEEDBACK_PRICING.outputUsdPerMTok) / 1_000_000;
+export const costUsd = haikuCostUsd;
 
-/** Worst-case cost reserved before the call: generous input estimate (Turkish ≈ 2.2 chars/token) plus the full output budget. */
-export function reserveUsd(systemPrompt: string, userMessage: string): number {
-  const inputTokens = Math.ceil((systemPrompt.length + userMessage.length) / 2.2) + 1200; // + tool schema
-  return Math.ceil(costUsd(inputTokens, WRITING_FEEDBACK_MAX_TOKENS) * 100_000) / 100_000;
-}
+/** Worst-case cost reserved before the call (the extra 1200 input tokens cover the tool schema). */
+export const reserveUsd = (systemPrompt: string, userMessage: string) =>
+  haikuReserveUsd(systemPrompt.length + userMessage.length, 1200, WRITING_FEEDBACK_MAX_TOKENS);
 
-export function monthlyCapUsd(env: Record<string, string | undefined>): number {
-  const raw = env.WRITING_AI_MONTHLY_USD;
-  if (raw === undefined || raw.trim() === "") return DEFAULT_MONTHLY_CAP_USD;
-  const n = Number(raw);
-  return Number.isFinite(n) && n >= 0 ? n : DEFAULT_MONTHLY_CAP_USD;
-}
+export const monthlyCapUsd = (env: Record<string, string | undefined>) => monthlyCapFromEnv(env.WRITING_AI_MONTHLY_USD, DEFAULT_MONTHLY_CAP_USD);

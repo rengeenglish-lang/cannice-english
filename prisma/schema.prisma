@@ -351,6 +351,7 @@ model User {
   lexiconWords          LexiconWordState[]
   lexiconTests          LexiconSetTest[]
   writingFeedback       WritingFeedback[]
+  mistakeExplanationViews MistakeExplanationView[]
   sentMessages          TeacherMessage[]          @relation("MessageStudent")
   answeredMessages      TeacherMessage[]          @relation("MessageResponder")
   studyGoals            StudyGoal[]
@@ -1014,6 +1015,7 @@ model DiagnosticQuestion {
   @@index([examTypeId])
   @@index([examTypeId, mockSetNumber])
   @@map("diagnostic_questions")
+  mistakeExplanations MistakeExplanation[]
 }
 
 model DiagnosticAttempt {
@@ -1969,4 +1971,51 @@ model WritingFeedback {
   @@index([userId, createdAt])
   @@index([createdAt, status])
   @@map("writing_feedback")
+}
+
+/**
+ * Hatalarım "Neden yanlış yaptım?": an AI explanation of one wrong option of one question, shared by
+ * every student who picks that option, so it is generated (and paid for) once. `answer` is the
+ * chosen option index as stored in DiagnosticResponse.answerRaw. `result` holds the validated
+ * explanation JSON (lib/mistake-explain.ts). PENDING rows reserve their estimated cost against the
+ * monthly cap until the call finishes.
+ */
+model MistakeExplanation {
+  id           String    @id @default(cuid())
+  questionId   String
+  answer       String
+  status       String    @default("PENDING")
+  result       Json?
+  errorMessage String?
+  model        String
+  estimatedUsd Decimal   @db.Decimal(10, 5)
+  actualUsd    Decimal?  @db.Decimal(10, 5)
+  inputTokens  Int?
+  outputTokens Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  completedAt  DateTime?
+
+  question DiagnosticQuestion       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  views    MistakeExplanationView[]
+
+  @@unique([questionId, answer])
+  @@index([createdAt, status])
+  @@map("mistake_explanations")
+}
+
+/** One student opening an explanation. `charged` = this request generated it (counts against the daily allowance). */
+model MistakeExplanationView {
+  id            String   @id @default(cuid())
+  userId        String
+  explanationId String
+  charged       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  explanation MistakeExplanation @relation(fields: [explanationId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([explanationId])
+  @@map("mistake_explanation_views")
 }
