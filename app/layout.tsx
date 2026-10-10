@@ -15,7 +15,7 @@ const bodyFont = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-body
  * visitors never see a white flash, and the colour-switcher palette, so a chosen colour never flashes
  * green first. Kept tiny and dependency-free; ThemeToggle and PaletteSwitcher update them later.
  */
-const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}d.dataset.theme=t;var p=localStorage.getItem("palette");if(p==="blue"||p==="purple"||p==="orange"||p==="red")d.dataset.palette=p}catch(e){d.dataset.theme="light"}})()`;
+const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}d.dataset.theme=t;var p=localStorage.getItem("palette");if(["blue","purple","orange","red","white","black"].indexOf(p)>=0)d.dataset.palette=p}catch(e){d.dataset.theme="light"}})()`;
 
 const title = "Netfener — IELTS, TOEFL, PTE, YDS ve YÖKDİL Online Dersler";
 const description = "Tek öğretmenle, kayıtlı ve canlı derslerle IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanın.";
