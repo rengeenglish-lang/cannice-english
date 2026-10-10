@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Netfener Reel</title>
+<style>
+  :root { --navy:#071B34; --blue:#4162DA; --gold:#f2c14e; --ok:#22c08a; --bad:#ef4b5f; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { width:1080px; height:1920px; background:#000; overflow:hidden; font-family:Inter,"Inter Display",sans-serif; }
+  #stage { position:absolute; inset:0; width:1080px; height:1920px; overflow:hidden; background:linear-gradient(180deg,#0a2447,#071B34); color:#fff; }
+  .abs { position:absolute; }
+  .layer { position:absolute; left:0; width:1080px; opacity:0; }
+  .card { background:#fff; color:#0b1b33; border-radius:36px; box-shadow:0 24px 60px rgba(0,0,0,.35); }
+  .chip { display:inline-block; font-weight:700; border-radius:999px; padding:14px 28px; font-size:34px; }
+
+  /* top (chaos) */
+  #top { position:absolute; left:0; top:0; width:1080px; height:960px; background:linear-gradient(180deg,#2a2c33,#1c1e24); overflow:hidden; z-index:5; }
+  #top .grain { position:absolute; inset:0; background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px); }
+  .label { position:absolute; left:60px; top:50px; font-size:36px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:12px 26px; border-radius:999px; opacity:0; }
+  #topLabel { background:rgba(239,75,95,.18); color:#ff8795; border:2px solid rgba(239,75,95,.5); }
+  #botLabel { left:60px; top:1105px; background:rgba(242,193,78,.16); color:var(--gold); border:2px solid rgba(242,193,78,.55); z-index:6; }
+  .tab { position:absolute; height:70px; border-radius:18px 18px 0 0; background:#3a3d47; color:#c9ccd6; font-size:26px; padding:0 22px; display:flex; align-items:center; white-space:nowrap; border:2px solid #4a4e5b; }
+  .junk { position:absolute; width:520px; padding:26px 30px; background:#32353f; color:#e5e7ee; border-radius:22px; font-size:32px; font-weight:600; border:2px solid #474b58; }
+  .junk small { display:block; margin-top:6px; font-size:24px; color:#9aa0b0; font-weight:500; }
+  .bubble { position:absolute; background:#ef4b5f; color:#fff; border-radius:28px; padding:22px 34px; font-size:44px; font-weight:800; }
+  .qcard { position:absolute; left:140px; top:190px; width:800px; padding:40px; background:#32353f; border-radius:32px; border:2px solid #474b58; }
+  .qcard .q { font-size:36px; color:#e5e7ee; line-height:1.4; }
+  .qcard .wrong { margin-top:26px; font-size:34px; font-weight:800; color:#ff8795; }
+  .xrow { position:absolute; left:140px; top:560px; display:flex; gap:26px; }
+  .xbadge { width:130px; height:130px; border-radius:36px; background:rgba(239,75,95,.16); border:3px solid var(--bad); color:var(--bad); font-size:84px; font-weight:900; display:flex; align-items:center; justify-content:center; opacity:0; }
+  #clock { position:absolute; left:50%; top:230px; transform:translateX(-50%); font-size:210px; font-weight:800; color:#ff8795; letter-spacing:.02em; text-shadow:0 0 50px rgba(239,75,95,.4); }
+
+  /* bottom scenes (absolute on stage) */
+  .tcard { position:absolute; left:90px; width:900px; }
+  .ring { position:absolute; }
+  .tag { display:inline-block; font-size:32px; font-weight:700; padding:12px 24px; border-radius:999px; margin:6px 10px 6px 0; }
+  .tag.y { background:#fff3cf; color:#8a5a00; } .tag.r { background:#ffe0e4; color:#b4233a; }
+  .btn { display:inline-block; font-size:38px; font-weight:800; padding:26px 44px; border-radius:26px; background:var(--blue); color:#fff; }
+  .avatar { width:150px; height:150px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:60px; font-weight:800; color:#fff; border:6px solid #fff; }
+
+  /* subtitle band */
+  #sub { position:absolute; left:50%; top:930px; transform:translate(-50%,0); width:980px; text-align:center; z-index:9; background:rgba(7,27,52,.92); border:3px solid var(--gold); border-radius:34px; padding:22px 38px; font-size:46px; font-weight:800; line-height:1.2; opacity:0; box-shadow:0 12px 40px rgba(0,0,0,.45); }
+  #divider { position:absolute; left:0; top:958px; width:1080px; height:4px; background:var(--gold); z-index:8; }
+
+  /* report */
+  .bar { position:absolute; bottom:0; width:22px; border-radius:10px 10px 0 0; background:linear-gradient(180deg,#7f98ff,#4162DA); }
+  .stat { position:absolute; width:440px; height:300px; padding:36px; }
+  .stat .n { font-size:130px; font-weight:900; color:var(--blue); line-height:1; }
+  .stat .l { margin-top:14px; font-size:36px; font-weight:700; color:#42526b; }
+
+  /* end */
+  .exam { display:inline-block; font-size:38px; font-weight:800; padding:16px 26px; border-radius:22px; background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.25); margin:8px; opacity:0; }
+  #cta { display:inline-block; font-size:48px; font-weight:900; padding:40px 48px; white-space:nowrap; border-radius:40px; background:var(--gold); color:#071B34; box-shadow:0 0 0 0 rgba(242,193,78,.6); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ============ BOTTOM (plan) scenes ============ -->
+  <div id="botBG" class="abs" style="left:0;top:960px;width:1080px;height:960px;background:radial-gradient(900px 700px at 70% 30%,#173a74,#071B34)"></div>
+  <div id="botLabel" class="label">Planlı ilerleme</div>
+
+  <!-- P1: placement test -->
+  <div id="p1" class="layer" style="top:1180px;">
+    <div class="tcard card" style="padding:44px 50px;height:700px;">
+      <div style="font-size:34px;font-weight:700;color:#5a6b86">Seviye Tespit · Ücretsiz</div>
+      <div style="font-size:50px;font-weight:900;margin-top:8px">Sonucun hazır</div>
+      <div id="ringBox" style="position:absolute;left:50px;top:190px;width:340px;height:340px;">
+        <svg viewBox="0 0 120 120" width="340" height="340"><circle cx="60" cy="60" r="50" fill="none" stroke="#e6ebf7" stroke-width="12"/><circle id="ringArc" cx="60" cy="60" r="50" fill="none" stroke="#4162DA" stroke-width="12" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)"/></svg>
+        <div id="cefr" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:130px;font-weight:900;color:#071B34;transform:scale(0)">B2</div>
+      </div>
+      <div style="position:absolute;left:430px;top:200px;width:430px;">
+        <div style="font-size:30px;font-weight:700;color:#5a6b86;margin-bottom:12px">Eksik konular</div>
+        <div id="tags"><span class="tag r">Cloze Test</span><span class="tag y">Phrasal Verbs</span><span class="tag y">Reading</span><span class="tag r">Paragraph Completion</span></div>
+      </div>
+      <div style="position:absolute;left:50px;bottom:40px;font-size:26px;color:#7a89a3">CEFR · tahmini gösterge</div>
+    </div>
+  </div>
+
+  <!-- P2: Hatalarim -->
+  <div id="p2" class="layer" style="top:1180px;">
+    <div class="tcard card" style="padding:44px 50px;height:700px;">
+      <div style="font-size:34px;font-weight:700;color:#5a6b86">Hatalarım</div>
+      <div style="font-size:38px;font-weight:700;margin-top:14px;line-height:1.35">Despite the rain, the match ____ as planned.</div>
+      <div style="margin-top:26px;display:flex;gap:20px;">
+        <div style="flex:1;padding:22px;border-radius:22px;background:#ffe0e4;color:#b4233a;font-size:32px;font-weight:800">Senin cevabın<br><span style="font-size:42px">was cancelled</span></div>
+        <div style="flex:1;padding:22px;border-radius:22px;background:#d9f7ec;color:#0f7a56;font-size:32px;font-weight:800">Doğru cevap<br><span style="font-size:42px">went ahead</span></div>
+      </div>
+      <div style="margin-top:22px;font-size:28px;color:#5a6b86;line-height:1.4">“Despite” kalıbı olumsuz sonuç beklentisini bozar; “went ahead” = gerçekleşti.</div>
+      <div id="btn2" class="btn" style="position:absolute;left:50px;bottom:44px;">Konu anlatımı: Cloze Test →</div>
+      <div id="tap2" style="position:absolute;width:90px;height:90px;border-radius:50%;background:rgba(242,193,78,.55);border:4px solid var(--gold);opacity:0"></div>
+      <div id="done2" style="position:absolute;right:50px;bottom:44px;width:110px;height:110px;border-radius:50%;background:var(--ok);color:#fff;font-size:70px;font-weight:900;display:flex;align-items:center;justify-content:center;transform:scale(0)">✓</div>
+    </div>
+  </div>
+
+  <!-- P3: live lesson -->
+  <div id="p3" class="layer" style="top:1180px;">
+    <div class="tcard card" style="padding:44px 50px;height:700px;">
+      <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:34px;font-weight:700;color:#5a6b86">Canlı Derslerim</div><div style="font-size:28px;font-weight:800;color:#0f7a56;background:#d9f7ec;padding:10px 22px;border-radius:999px">● Canlı</div></div>
+      <div style="display:flex;gap:26px;margin-top:34px">
+        <div class="avatar" style="background:#4162DA">E</div><div class="avatar" style="background:#e0a93a">M</div><div class="avatar" style="background:#22c08a">A</div><div class="avatar" style="background:#8a5cf6">Ö</div>
+      </div>
+      <div id="msg1" style="margin-top:34px;margin-left:0;max-width:600px;padding:22px 30px;border-radius:26px 26px 26px 6px;background:#eaf0ff;font-size:34px;font-weight:600;color:#0b1b33;opacity:0">Hocam bu soruyu anlamadım 🙋</div>
+      <div id="msg2" style="margin-top:20px;margin-left:200px;max-width:600px;padding:22px 30px;border-radius:26px 26px 6px 26px;background:var(--blue);font-size:34px;font-weight:600;color:#fff;opacity:0">Hemen bakalım, adım adım gidelim 👍</div>
+      <div class="btn" style="position:absolute;left:50px;bottom:44px;">Derse Katıl</div>
+    </div>
+  </div>
+
+  <!-- ============ TOP (chaos) ============ -->
+  <div id="top">
+    <div class="grain"></div>
+    <div id="topLabel" class="label">Rastgele çalışma</div>
+    <!-- C1 tabs + junk -->
+    <div id="c1" class="layer" style="top:0;height:960px;">
+      <div id="tabs"></div>
+      <div class="junk" id="j1" style="left:70px;top:230px;">PDF_son_FINAL(3).pdf<small>Bu hangi seviye?</small></div>
+      <div class="junk" id="j2" style="left:480px;top:400px;">“10 ipucuyla IELTS”<small>YouTube · 14 dk</small></div>
+      <div class="junk" id="j3" style="left:120px;top:590px;">Forum: “bence cevap B”<small>kaynağı belirsiz</small></div>
+      <div class="bubble" id="b1" style="left:560px;top:690px;">Hangisi doğru? 😵</div>
+    </div>
+    <!-- C2 repeated mistakes -->
+    <div id="c2" class="layer" style="top:0;height:960px;">
+      <div class="qcard"><div class="q">Despite the rain, the match ____ as planned.</div><div class="wrong">✗ was cancelled</div></div>
+      <div class="xrow"><div class="xbadge" id="x1">✗</div><div class="xbadge" id="x2">✗</div><div class="xbadge" id="x3">✗</div></div>
+      <div class="bubble" id="b2" style="left:360px;top:760px;font-size:40px;">Yine aynı hata… 😩</div>
+    </div>
+    <!-- C3 night alone -->
+    <div id="c3" class="layer" style="top:0;height:960px;">
+      <div id="clock">02:00</div>
+      <div class="bubble" style="left:150px;top:520px;background:#3a3d47;color:#e5e7ee;font-size:42px;">Takıldım… kime soracağım?</div>
+      <div style="position:absolute;left:0;width:1080px;top:700px;text-align:center;font-size:36px;color:#8f95a6;font-weight:600">Cevap veren yok 📵</div>
+    </div>
+  </div>
+  <div id="divider"></div>
+  <div id="sub"></div>
+
+  <!-- ============ REPORT (full) ============ -->
+  <div id="report" class="layer" style="top:0;height:1920px;background:radial-gradient(1100px 900px at 80% 10%,#1d4590,#071B34);z-index:10;">
+    <div style="position:absolute;left:70px;top:90px;font-size:42px;font-weight:800;color:var(--gold)">Netfener · İlerleme Raporu</div>
+    <div class="card stat" style="left:70px;top:210px"><div class="n" id="n1">%0</div><div class="l">Doğruluk oranı</div></div>
+    <div class="card stat" style="left:570px;top:210px"><div class="n" id="n2" style="color:#0f7a56">0</div><div class="l">Çözülen deneme</div></div>
+    <div class="card" style="position:absolute;left:70px;top:560px;width:940px;height:700px;padding:44px 50px;">
+      <div style="font-size:36px;font-weight:800;color:#42526b">Son 30 gün · site ziyareti</div>
+      <div id="bars" style="position:absolute;left:50px;right:50px;bottom:50px;height:500px;"></div>
+    </div>
+    <div style="position:absolute;left:70px;top:1330px;width:940px;font-size:30px;color:#9fb4dc;line-height:1.4">Örnek ekran görüntüsüdür. Seviye tespit sonuçları tahmini göstergedir.</div>
+  </div>
+
+  <!-- ============ END CARD ============ -->
+  <div id="end" class="layer" style="top:0;height:1920px;background:radial-gradient(1000px 900px at 50% 28%,#173a74,#071B34 70%);z-index:12;text-align:center;">
+    <div id="beamL" class="abs" style="left:-100px;top:350px;width:560px;height:200px;background:linear-gradient(90deg,rgba(255,217,120,0),rgba(255,217,120,.55));clip-path:polygon(0 40%,100% 0,100% 100%,0 60%);"></div>
+    <div id="beamR" class="abs" style="left:620px;top:350px;width:560px;height:200px;background:linear-gradient(270deg,rgba(255,217,120,0),rgba(255,217,120,.55));clip-path:polygon(0 0,100% 40%,100% 60%,0 100%);"></div>
+    <img id="logo" src="../../../public/netfener-logo.svg" class="abs" style="left:390px;top:260px;width:300px;height:300px;border-radius:70px;transform:scale(0)">
+    <div id="wm" class="abs" style="left:0;width:1080px;top:600px;font-size:100px;font-weight:900;color:var(--gold);letter-spacing:-.01em">Netfener</div>
+    <div id="tagline" class="abs" style="left:60px;width:960px;top:760px;font-size:78px;font-weight:900;line-height:1.1">Fark şans değil,<br>plan.</div>
+    <div id="exams" class="abs" style="left:40px;width:1000px;top:1060px;"><span class="exam">IELTS</span><span class="exam">TOEFL</span><span class="exam">PTE</span><span class="exam">YDS</span><span class="exam">YÖKDİL</span></div>
+    <div class="abs" style="left:0;width:1080px;top:1340px;"><div id="cta">Ücretsiz seviye tespitine başla →</div></div>
+    <div id="url" class="abs" style="left:0;width:1080px;top:1620px;font-size:46px;font-weight:700;color:#9fb4dc">netfener.com</div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const ease = x => 1-Math.pow(1-clamp(x),3);
+const back = x => { x=clamp(x); const c=1.70158; return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2); };
+const win = (t,a,b,f=.35) => clamp((t-a)/f)*clamp((b-t)/f);
+const prog = (t,a,d) => clamp((t-a)/d);
+const lerp = (a,b,p) => a+(b-a)*p;
+
+// build dynamic bits
+const tabNames = ["IELTS tips","PDF indir","forum","YDS 2019","çeviri","reddit","deneme?","YouTube","quizlet","TOEFL","not.txt"];
+tabNames.forEach((n,i)=>{ const d=document.createElement('div'); d.className='tab'; d.id='tab'+i; d.textContent=n; d.style.left=(30+(i%4)*255)+'px'; d.style.top=(120+Math.floor(i/4)*80)+'px'; d.style.width='240px'; $('tabs').appendChild(d); });
+const barH = []; for(let i=0;i<30;i++){ const d=document.createElement('div'); d.className='bar'; d.id='bar'+i; d.style.left=(i*30.6)+'px'; $('bars').appendChild(d); barH.push(70+Math.round(Math.abs(Math.sin(i*1.3))*120 + i*10)); }
+
+const SUBS = [
+ [0.3,2.2,"Aynı hedef. İki farklı hafta."],
+ [2.4,6.0,"Biri rastgele çalışıyor.<br>Diğeri önce seviyesini ölçüyor."],
+ [6.4,10.0,"Biri aynı hatayı tekrarlıyor.<br>Diğeri hatalarından öğreniyor."],
+ [10.4,14.0,"Biri tek başına.<br>Diğeri öğretmenine hemen soruyor."],
+];
+
+function render(t){
+  // ---- subtitle
+  let s = SUBS.find(x=>t>=x[0]&&t<x[1]);
+  const sub=$('sub');
+  if(s){ if(sub.dataset.k!==String(s[0])){sub.innerHTML=s[2];sub.dataset.k=s[0];} const o=win(t,s[0],s[1],.25); sub.style.opacity=o; sub.style.transform=`translate(-50%,${(1-o)*14}px)`; } else sub.style.opacity=0;
+
+  // ---- top fade/slide out for report
+  const topOut = ease(prog(t,14.0,.8));
+  $('top').style.transform=`translateY(${-960*topOut}px)`;
+  $('divider').style.opacity = 1-topOut;
+  $('divider').style.transform=`translateY(${-960*topOut}px)`;
+  $('sub').style.opacity = parseFloat(sub.style.opacity||0)*(1-topOut);
+
+  // labels
+  $('topLabel').style.opacity = win(t,0.3,14.0,.4);
+  $('botLabel').style.opacity = win(t,0.3,14.0,.4)*(1-topOut);
+  $('botLabel').style.transform=`translateY(${-0*topOut}px)`;
+
+  // ---- C1 (0-6): tabs + junk
+  const c1=$('c1'); c1.style.opacity=win(t,0,6.0,.35);
+  tabNames.forEach((n,i)=>{ const e=$('tab'+i); const p=back(prog(t,0.15+i*0.12,.35)); e.style.transform=`translateY(${(1-p)*-160}px) rotate(${Math.sin(t*3+i)*0.8}deg)`; e.style.opacity=clamp(p*3); });
+  [['j1',2.2],['j2',2.7],['j3',3.2]].forEach(([id,a],i)=>{ const e=$(id); const p=back(prog(t,a,.4)); e.style.opacity=clamp(p*3); e.style.transform=`translate(${Math.sin(t*2.2+i*2)*10}px,${Math.cos(t*2.7+i)*10+(1-p)*120}px) rotate(${Math.sin(t*1.7+i)*2.2}deg) scale(${.85+.15*p})`; });
+  $('b1').style.opacity=clamp(prog(t,4.2,.3)*3); $('b1').style.transform=`scale(${back(prog(t,4.2,.5))}) rotate(${Math.sin(t*5)*3}deg)`;
+
+  // ---- C2 (6-10)
+  $('c2').style.opacity=win(t,6.0,10.0,.35);
+  $('c2').style.transform=`translateX(${(1-ease(prog(t,6.0,.45)))*80}px)`;
+  [7.0,8.0,9.0].forEach((a,i)=>{ const e=$('x'+(i+1)); const p=back(prog(t,a,.35)); e.style.opacity=clamp(p*3); e.style.transform=`scale(${p})`; });
+  $('b2').style.opacity=clamp(prog(t,8.6,.3)*3); $('b2').style.transform=`scale(${back(prog(t,8.6,.5))})`;
+
+  // ---- C3 (10-14)
+  $('c3').style.opacity=win(t,10.0,14.0,.35);
+  $('c3').style.transform=`translateX(${(1-ease(prog(t,10.0,.45)))*80}px)`;
+  $('clock').style.opacity = (Math.floor(t*2)%2===0)?1:.75;
+
+  // ---- P1 (2-6): placement
+  const p1=$('p1'); p1.style.opacity=win(t,2.0,6.0,.35)*(1-topOut);
+  p1.style.transform=`translateY(${(1-ease(prog(t,2.0,.5)))*140}px)`;
+  const rp=ease(prog(t,2.6,1.3)); $('ringArc').style.strokeDashoffset = 314*(1-0.7*rp);
+  $('cefr').style.transform=`scale(${back(prog(t,3.5,.6))})`;
+  const tgs=$('tags').children; for(let i=0;i<tgs.length;i++){ const p=back(prog(t,4.0+i*.25,.35)); tgs[i].style.opacity=clamp(p*3); tgs[i].style.transform=`scale(${p})`; }
+
+  // ---- P2 (6-10): hatalarim
+  const p2=$('p2'); p2.style.opacity=win(t,6.0,10.0,.35)*(1-topOut);
+  p2.style.transform=`translateY(${(1-ease(prog(t,6.0,.5)))*140}px)`;
+  const tp=prog(t,8.3,.6); const tap=$('tap2');
+  tap.style.opacity = (t>8.1&&t<9.3)?1:0; tap.style.left=lerp(400,200,ease(tp))+'px'; tap.style.top=lerp(560,578,ease(tp))+'px';
+  tap.style.transform=`scale(${t>8.8?lerp(1,.7,clamp((t-8.8)/.15)):1})`;
+  $('btn2').style.background = t>8.9 ? '#0f7a56' : '#4162DA';
+  $('done2').style.transform=`scale(${back(prog(t,9.0,.45))})`;
+
+  // ---- P3 (10-14): live
+  const p3=$('p3'); p3.style.opacity=win(t,10.0,14.0,.35)*(1-topOut);
+  p3.style.transform=`translateY(${(1-ease(prog(t,10.0,.5)))*140}px)`;
+  const m1=back(prog(t,11.0,.4)), m2=back(prog(t,12.2,.4));
+  $('msg1').style.opacity=clamp(m1*3); $('msg1').style.transform=`scale(${m1})`; $('msg1').style.transformOrigin='left bottom';
+  $('msg2').style.opacity=clamp(m2*3); $('msg2').style.transform=`scale(${m2})`; $('msg2').style.transformOrigin='right bottom';
+
+  // bottom bg stays until report
+  $('botBG').style.opacity = 1-topOut;
+  $('botLabel').style.opacity = win(t,0.3,14.0,.4)*(1-topOut);
+
+  // ---- REPORT (14.4-17.2)
+  const rep=$('report'); rep.style.opacity = clamp(prog(t,14.3,.5))*clamp((17.3-t)/.3);
+  $('n1').textContent='%'+Math.round(lerp(41,68,ease(prog(t,14.9,1.6))));
+  $('n2').textContent=Math.round(lerp(0,12,ease(prog(t,14.9,1.6))));
+  for(let i=0;i<30;i++){ const p=ease(prog(t,14.8+i*0.04,.7)); $('bar'+i).style.height = (barH[i]*p)+'px'; }
+  // report subtitle line
+  if(t>=14.5&&t<17.3){ sub.innerHTML="Her adımını gör."; sub.style.opacity=win(t,14.5,17.3,.25); sub.style.top='1480px'; sub.style.zIndex=11; } else { sub.style.top='930px'; sub.style.zIndex=9; }
+
+  // ---- END (17-20)
+  const end=$('end'); end.style.opacity = clamp(prog(t,17.0,.4));
+  $('logo').style.transform=`scale(${back(prog(t,17.2,.6))})`;
+  const beam=ease(prog(t,17.7,.7)); $('beamL').style.opacity=beam; $('beamR').style.opacity=beam;
+  $('wm').style.opacity=ease(prog(t,17.6,.4)); $('wm').style.transform=`translateY(${(1-ease(prog(t,17.6,.4)))*30}px)`;
+  $('tagline').style.opacity=ease(prog(t,17.9,.4)); $('tagline').style.transform=`translateY(${(1-ease(prog(t,17.9,.4)))*30}px)`;
+  Array.from($('exams').children).forEach((e,i)=>{ const p=back(prog(t,18.2+i*.12,.35)); e.style.opacity=clamp(p*3); e.style.transform=`scale(${p})`; });
+  const cp=back(prog(t,18.9,.5)); $('cta').style.transform=`scale(${cp*(1+0.03*Math.sin(t*8))})`; $('cta').style.opacity=clamp(cp*3);
+  $('url').style.opacity=ease(prog(t,19.3,.4));
+}
+window.render = render; render(0);
+</script>
+</body>
+</html>
