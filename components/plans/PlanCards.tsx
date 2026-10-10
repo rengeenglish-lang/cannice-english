@@ -41,7 +41,7 @@ export function PlanCards({
         return (
           <article
             key={tier}
-            className={`relative flex h-full flex-col rounded-3xl border bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)] ${
+            className={`relative flex h-full flex-col rounded-3xl border bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] ${
               isCurrent ? "border-2 border-emerald-500" : featured ? "border-2 border-[color:var(--brand)]" : "border-slate-200"
             }`}
           >

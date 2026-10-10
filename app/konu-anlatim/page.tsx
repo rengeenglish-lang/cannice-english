@@ -58,7 +58,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
             <Link
               key={subject.slug}
               href={`/konu-anlatim?exam=${subject.slug}`}
-              className="group flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)] transition hover:-translate-y-1 hover:border-blue-300"
+              className="group flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] transition hover:-translate-y-1 hover:border-blue-300"
             >
               <h2 className="text-xl font-black text-slate-900">{subject.name}</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">{subject.copy}</p>
@@ -150,7 +150,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
         </div>
       ) : (
         <>
-          <details className="relative mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgba(12,46,30,.07)] sm:p-6">
+          <details className="relative mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] sm:p-6">
             <summary className="cursor-pointer list-none">
               <span className="text-lg font-extrabold tracking-[-.01em] text-slate-900">
                 {activeExam?.name} Soru Dağılımı

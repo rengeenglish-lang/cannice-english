@@ -5,7 +5,7 @@ export function EbookPitchPanel({ title, pitch }: { title: string; pitch: EbookP
   return (
     <section
       aria-label={`${title} hakkında`}
-      className="relative mt-10 overflow-hidden rounded-[24px] bg-[color:var(--brand)] text-white shadow-[0_18px_50px_rgba(12,46,30,.18)]"
+      className="relative mt-10 overflow-hidden rounded-[24px] bg-[color:var(--brand)] text-white shadow-[0_18px_50px_rgb(var(--shadow-rgb)/.18)]"
     >
       <span aria-hidden className="absolute inset-x-0 top-0 h-1.5 bg-[color:var(--accent)]" />
       <span

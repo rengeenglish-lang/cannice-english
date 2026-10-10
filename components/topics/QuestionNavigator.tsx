@@ -26,7 +26,7 @@ export function QuestionNavigator({
         type="button"
         onClick={onNext}
         disabled={index >= total - 1}
-        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-5 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgba(19,138,67,.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-40"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-5 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgb(var(--accent-rgb)/.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-40"
       >
         Sonraki Soru →
       </button>

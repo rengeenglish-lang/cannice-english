@@ -16,7 +16,7 @@ export function AdminSlotCardButton({ slotId, children }: { slotId: string; chil
       <button
         type="button"
         onClick={() => dialog.openSlot(slotId)}
-        className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 text-left shadow-[0_12px_35px_rgba(12,46,30,.07)] transition hover:border-blue-300 hover:shadow-lg"
+        className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 text-left shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] transition hover:border-blue-300 hover:shadow-lg"
       >
         {children}
       </button>
@@ -25,7 +25,7 @@ export function AdminSlotCardButton({ slotId, children }: { slotId: string; chil
 
   // No dialog provider in the tree — fall back to the old direct-navigation behavior.
   return (
-    <Link href={`/admin/group-availability/${slotId}`} className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(12,46,30,.07)]">
+    <Link href={`/admin/group-availability/${slotId}`} className="flex min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)]">
       {children}
     </Link>
   );
