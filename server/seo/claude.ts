@@ -15,7 +15,8 @@ export function claudeConfig(): ClaudeConfig | null {
 }
 
 export type ClaudeToolCall = {
-  tool: { name: string; description: string; input_schema: unknown };
+  /** `strict: true` makes the API guarantee the tool input matches input_schema exactly. */
+  tool: { name: string; description: string; input_schema: unknown; strict?: boolean };
   system: string;
   user: string;
   model: string;
@@ -45,6 +46,9 @@ export class ClaudeApiError extends Error {
   }
 }
 
+/** The model declined the request (stop_reason "refusal"); retrying the same input won't help. */
+export class ClaudeRefusalError extends Error {}
+
 export async function callClaudeTool(config: ClaudeConfig, call: ClaudeToolCall): Promise<ClaudeResult> {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -61,6 +65,7 @@ export async function callClaudeTool(config: ClaudeConfig, call: ClaudeToolCall)
     usage?: { input_tokens?: number; output_tokens?: number };
     stop_reason?: string | null;
   };
+  if (data.stop_reason === "refusal") throw new ClaudeRefusalError("Claude bu isteği yanıtlamadı (refusal)");
   const block = data.content?.find((b) => b.type === "tool_use" && b.name === call.tool.name);
   if (!block) throw new Error("Claude araç sonucu döndürmedi");
   if (data.stop_reason === "max_tokens") throw new Error("Claude çıktısı yarıda kesildi (max_tokens)");
