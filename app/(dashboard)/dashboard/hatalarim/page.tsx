@@ -3,8 +3,13 @@ import Link from "next/link";
 import { BookOpen, CheckCircle2, Package, XCircle } from "lucide-react";
 import { getAuthContext } from "@/server/auth/context";
 import { listRecentMistakes, MISTAKE_WINDOW_DAYS } from "@/server/services/mistakes.service";
+import { mistakeExplainConfigured } from "@/server/services/mistake-explain.service";
+import { MistakeExplainer } from "@/components/diagnostics/MistakeExplainer";
+import { optionIndex } from "@/lib/mistake-explain";
 
 export const metadata: Metadata = { title: "Hatalarım" };
+// "Neden yanlış yaptım?" generates an explanation inside a server action on this page.
+export const maxDuration = 60;
 
 const LETTERS = ["A", "B", "C", "D", "E"];
 
@@ -19,6 +24,7 @@ export default async function MistakesPage() {
   const user = await getAuthContext();
   if (!user) return null;
   const mistakes = await listRecentMistakes(user.id);
+  const canExplain = mistakeExplainConfigured();
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
@@ -72,6 +78,10 @@ export default async function MistakesPage() {
                 <p className="text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Açıklama</p>
                 <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{m.explanation ?? "Bu soru için açıklama yakında eklenecek."}</p>
               </div>
+
+              {canExplain && optionIndex(m.studentAnswer, m.options.length) !== null && optionIndex(m.correctAnswer, m.options.length) !== null ? (
+                <MistakeExplainer responseId={m.id} />
+              ) : null}
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {m.konu ? (
