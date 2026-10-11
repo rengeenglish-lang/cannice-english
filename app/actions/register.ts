@@ -8,6 +8,8 @@ import { recordRegistrationAttribution } from "@/server/services/seo/conversions
 import { registerSchema } from "@/lib/validation/auth";
 import { sendWelcomeVerification } from "@/server/services/account-email.service";
 import { recordTermsAcceptance, setMarketingConsents } from "@/server/services/consent.service";
+import { applyReferral, REFERRAL_COOKIE } from "@/server/services/referrals.service";
+import { cookies } from "next/headers";
 
 export type RegisterFormState = { status: "idle" | "error"; message?: string };
 
@@ -39,6 +41,10 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
     { marketingEmail: formData.get("marketingEmail") === "on", marketingSms: formData.get("marketingSms") === "on", marketingPhone: formData.get("marketingPhone") === "on" },
     "REGISTER",
   );
+  // Signed up through a friend's invite link: link the accounts and give the welcome coupon.
+  const store = await cookies();
+  await applyReferral(user.id, String(formData.get("ref") || store.get(REFERRAL_COOKIE)?.value || "")).catch((e) => console.error("[referral] apply failed", e));
+  store.delete(REFERRAL_COOKIE);
   // Welcome + verification link. Never blocks signup; the dashboard offers a resend.
   await sendWelcomeVerification(user).catch(() => undefined);
 

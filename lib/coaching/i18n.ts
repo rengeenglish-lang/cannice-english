@@ -44,6 +44,7 @@ const tr = {
     performance: "Performans",
     checkin: "Haftalık değerlendirme",
     reports: "Raporlar",
+    achievements: "Başarılar",
     settings: "Ayarlar",
   },
   // Landing & onboarding
@@ -458,7 +459,7 @@ const en: CoachingCopy = {
   none: "None yet",
   notEnoughData: "There isn't enough data to show this yet.",
   skills: "Skills",
-  sections: { dashboard: "Coaching", plan: "Weekly plan", vocab: "Vocabulary review", notebook: "Mistake notebook", performance: "Performance", checkin: "Weekly check-in", reports: "Reports", settings: "Settings" },
+  sections: { dashboard: "Coaching", plan: "Weekly plan", vocab: "Vocabulary review", notebook: "Mistake notebook", performance: "Performance", checkin: "Weekly check-in", reports: "Reports", achievements: "Achievements", settings: "Settings" },
   start: "Start coaching",
   signInToStart: "Sign in to start",
   whatYouGet: ["A weekly plan for your exam and target score", "Daily tasks that show what to study", "Vocabulary review and a personal mistake notebook", "Weekly progress reports and reminders"],

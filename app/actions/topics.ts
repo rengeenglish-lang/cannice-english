@@ -5,12 +5,15 @@ import { redirect } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
 import { toggleTopicLessonProgress, saveTopicNote } from "@/server/services/topics.service";
 import { recordTopicStudy } from "@/server/services/skill-analysis.service";
+import { syncCertificates } from "@/server/services/certificates.service";
 
 export async function toggleTopicLessonProgressAction(topicLessonId: string) {
   const user = await getAuthContext();
   if (!user) redirect("/sign-in");
 
   await toggleTopicLessonProgress(user.id, topicLessonId);
+  // Ticking the last lesson of a track issues its certificate (and notifies the student).
+  await syncCertificates(user.id).catch((e) => console.error("[certificates] sync failed", e));
   revalidatePath("/konu-anlatim");
 }
 

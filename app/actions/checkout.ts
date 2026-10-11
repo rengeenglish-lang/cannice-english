@@ -85,7 +85,7 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   let couponCode: string | null = null;
 
   if (rawCouponCode) {
-    const result = await validateCouponForOrder(rawCouponCode, subtotal);
+    const result = await validateCouponForOrder(rawCouponCode, subtotal, session?.user?.id);
     if (!result.ok) return { status: "error" as const, message: result.message };
     discountTotal = result.discount;
     appliedCouponId = result.coupon.id;

@@ -75,9 +75,10 @@ export type CouponFormState = { status: "idle" | "error"; message?: string };
 export async function applyCartCouponAction(_state: CouponFormState, formData: FormData): Promise<CouponFormState> {
   const code = String(formData.get("couponCode") ?? "").trim().toUpperCase();
   if (!code) return { status: "error", message: "Lütfen bir kupon kodu gir." };
-  const cart = await findCart(await currentUserId());
+  const userId = await currentUserId();
+  const cart = await findCart(userId);
   const subtotal = (cart?.items ?? []).reduce((sum, i) => sum + Number(i.product.salePrice) * i.quantity, 0);
-  const result = await validateCouponForOrder(code, subtotal);
+  const result = await validateCouponForOrder(code, subtotal, userId);
   if (!result.ok) return { status: "error", message: result.message };
   (await cookies()).set(CART_COUPON_COOKIE, result.coupon.code, { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 7, path: "/" });
   refreshCart();

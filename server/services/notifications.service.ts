@@ -1,5 +1,7 @@
 import "server-only";
+import { after } from "next/server";
 import { db } from "@/server/db";
+import { pushToUser } from "@/server/push/web-push";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import type { NotificationCategory } from "@/lib/generated/prisma/enums";
 
@@ -20,15 +22,35 @@ export type NotificationInput = {
 
 type Client = Prisma.TransactionClient | typeof db;
 
-/** Sends (or, with a key, replaces) one in-app notification. Usable inside a transaction. */
-export function notify(userId: string, input: NotificationInput, client: Client = db) {
+/**
+ * Sends (or, with a key, replaces) one in-app notification, and the same message to the user's
+ * phone/desktop if they turned push notifications on. Inside a transaction (`client` given) only
+ * the in-app note is written; the caller pushes after commit with pushNotification().
+ */
+export async function notify(userId: string, input: NotificationInput, client: Client = db) {
   const data = { title: input.title, body: input.body ?? null, href: input.href ?? null, category: input.category ?? "SYSTEM" };
-  if (!input.key) return client.notification.create({ data: { userId, ...data } });
-  return client.notification.upsert({
-    where: { userId_dedupeKey: { userId, dedupeKey: input.key } },
-    create: { userId, dedupeKey: input.key, ...data },
-    update: { ...data, isRead: false, archivedAt: null, createdAt: new Date() },
-  });
+  const note = input.key
+    ? await client.notification.upsert({
+        where: { userId_dedupeKey: { userId, dedupeKey: input.key } },
+        create: { userId, dedupeKey: input.key, ...data },
+        update: { ...data, isRead: false, archivedAt: null, createdAt: new Date() },
+      })
+    : await client.notification.create({ data: { userId, ...data } });
+  if (client === db) pushNotification(userId, input);
+  return note;
+}
+
+/**
+ * Push delivery never delays or breaks the action that caused it: during a request it runs after
+ * the response; elsewhere (cron, tests) it runs in the background.
+ */
+export function pushNotification(userId: string, input: NotificationInput) {
+  const send = () => pushToUser(userId, { title: input.title, body: input.body, url: input.href, tag: input.key }).catch(() => 0);
+  try {
+    after(send);
+  } catch {
+    void send();
+  }
 }
 
 /**

@@ -6,12 +6,13 @@ import { MARKETING_CHANNELS, MARKETING_CONSENT_TEXT } from "@/lib/consent";
 
 const initialState: RegisterFormState = { status: "idle" };
 
-export function RegisterForm({next, src}: {next?: string; src?: string}) {
+export function RegisterForm({next, src, referral}: {next?: string; src?: string; referral?: string}) {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
   return (
     <form action={formAction} className="panel space-y-4">
 <input type="hidden" name="next" value={next || ""} />
 <input type="hidden" name="src" value={src || ""} />
+<input type="hidden" name="ref" value={referral || ""} />
       <div>
         <label className="label" htmlFor="name">Adın Soyadın</label>
         <input id="name" name="name" required className="auth-input" />

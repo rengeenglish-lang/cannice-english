@@ -14,6 +14,7 @@ export default async function CoachingLayout({ children }: { children: React.Rea
     { href: `${BASE}/performans`, label: t.sections.performance },
     { href: `${BASE}/degerlendirme`, label: t.sections.checkin },
     { href: `${BASE}/raporlar`, label: t.sections.reports },
+    { href: `${BASE}/basarilar`, label: t.sections.achievements },
     { href: `${BASE}/ayarlar`, label: t.sections.settings },
   ];
   return (

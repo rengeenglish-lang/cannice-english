@@ -43,6 +43,8 @@ import {
   Scale,
   Bell,
   FileText,
+  Award,
+  Gift,
   type LucideIcon,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
@@ -71,6 +73,7 @@ function learningNav(examFamily: ExamFamily | null) {
     { href: "/dashboard/hedeflerim", label: "Hedef Geçmişim", icon: Target },
     { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
     { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
+    { href: "/dashboard/sertifikalarim", label: "Sertifikalarım", icon: Award },
     { href: "/dashboard/yazma-geri-bildirim", label: "Yazma geri bildirimi", icon: PenLine },
     ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
     { href: "/kaynaklar", label: "Kaynaklar", icon: ShoppingBag },
@@ -83,6 +86,7 @@ const ACCOUNT = [
   { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
   { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
   { href: "/dashboard/favoriler", label: "Favorilerim", icon: Heart },
+  { href: "/dashboard/davet", label: "Arkadaşını davet et", icon: Gift },
   { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
   { href: "/yardim", label: "Yardım Masası", icon: HelpCircle },
 ];
