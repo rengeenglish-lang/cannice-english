@@ -42,19 +42,11 @@ function seeded<T>(items: T[], seed: number): T[] {
   return out;
 }
 
-const LIGHTHOUSE = (size: number, beam = "#d9a52b", body = "#ffffff", stripe = "#14243a") => `
-<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true">
-  <g stroke="${beam}" stroke-width="2.4" stroke-linecap="round">
-    <path d="M8 18 L22 23"/><path d="M8 28 L22 26"/><path d="M56 18 L42 23"/><path d="M56 28 L42 26"/>
-  </g>
-  <path d="M32 6 l2 3h-4z" fill="${body}"/>
-  <rect x="26" y="15" width="12" height="9" rx="1.5" fill="${beam}"/>
-  <path d="M25 13h14l-2-3H27z" fill="${body}"/>
-  <path d="M26.5 24h11l3 32h-17z" fill="${body}"/>
-  <path d="M27.4 33h9.4l.9 8H26.5z" fill="${stripe}"/>
-  <path d="M30 49h4v7h-4z" fill="${stripe}"/>
-  <rect x="21" y="56" width="22" height="3.5" rx="1" fill="${body}"/>
-</svg>`;
+/** The Netfener N (public/netfener-logo*.svg): white strokes for dark backgrounds, navy for light ones. */
+const LOGO = (size: number, onDark = true) => {
+  const [g1, g2, main] = onDark ? ["#34c46e", "#67d392", "#ffffff"] : ["#138a43", "#42a169", "#10291c"];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true"><g stroke-linejoin="round" stroke-width="2"><polygon points="10,15.6 34,49.4 34,56 10,66" fill="${g1}" stroke="${g1}"/><polygon points="66,4 90,4 90,22 66,32" fill="${g2}" stroke="${g2}"/><polygon points="10,72 34,62 34,96 10,96" fill="${main}" stroke="${main}"/><polygon points="66,38 90,28 90,80.4 66,46.6" fill="${main}" stroke="${main}" opacity="0.82"/><polygon points="10,10 36,10 90,86 64,86" fill="${main}" stroke="${main}"/></g></svg>`;
+};
 
 type Page = { kind: string; html: string };
 const pages: Page[] = [];
@@ -62,7 +54,7 @@ const add = (kind: string, html: string) => pages.push({ kind, html });
 
 const band = (eyebrow: string, title: string, right: string, logo = false) => `
 <header class="band">
-  ${logo ? `<div class="band-logo">${LIGHTHOUSE(46)}</div>` : ""}
+  ${logo ? `<div class="band-logo">${LOGO(46)}</div>` : ""}
   <div class="band-text"><p class="band-eyebrow">${eyebrow}</p><h1 class="band-title">${title}</h1></div>
   <p class="band-right">${right}</p>
 </header>`;
@@ -88,7 +80,7 @@ const TOTAL_QUESTIONS = UNITS.reduce((n, u) => n + u.questions.length, 0);
 add("cover", `
 <div class="cover">
   <div class="cover-panel">
-    <div class="cover-top">${LIGHTHOUSE(70)}<p class="cover-brand"><span></span>NETFENER<span></span></p></div>
+    <div class="cover-top">${LOGO(70)}<p class="cover-brand"><span></span>NETFENER<span></span></p></div>
     <h1 class="cover-title"><span>THE ULTIMATE</span><span class="gold">PHRASAL VERBS</span><span>GUIDE</span></h1>
     <p class="cover-exam"><span></span>YDS &amp; YÖKDİL<span></span></p>
     <p class="cover-tag">MEANING · SYNONYM · CONTEXT · EXAM DECISIONS</p>
@@ -117,7 +109,7 @@ add("title", `
 add("copyright", `
 <div class="copyright">
   <div class="cr-block">
-    ${LIGHTHOUSE(56, "#d9a52b", "#14243a", "#ffffff")}
+    ${LOGO(56, false)}
     <p class="cr-title">${TITLE} · YDS &amp; YÖKDİL</p>
     <p>Sınavda en sık karşılaşılan ${TOTAL_VERBS} phrasal verb — ${UNITS.length} tematik ünite</p>
     <p>© 2026 Netfener. Tüm hakları saklıdır. Bu yayının hiçbir bölümü yayıncının yazılı izni olmadan çoğaltılamaz, dağıtılamaz veya elektronik ortamda paylaşılamaz.</p>
@@ -347,7 +339,7 @@ ${footer(ip)}`);
 
 add("back", `
 <div class="back">
-  ${LIGHTHOUSE(84)}
+  ${LOGO(84)}
   <p class="cover-brand light"><span></span>NETFENER<span></span></p>
   <h1 class="back-title">THE ULTIMATE <span class="gold">PHRASAL VERBS</span> GUIDE</h1>
   <p class="back-tag">MEANING · SYNONYM · CONTEXT · EXAM DECISIONS</p>
