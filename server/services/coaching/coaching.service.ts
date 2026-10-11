@@ -35,10 +35,10 @@ export async function refreshCoaching(user: User, now = new Date()): Promise<Coa
 }
 
 /** Refresh + follow-ups for one student; used after page responses (`after()`) and by the cron. */
-export async function refreshAndNotify(user: User, now = new Date()) {
+export async function refreshAndNotify(user: User, now = new Date(), opts: { email?: boolean } = {}) {
   const profile = await refreshCoaching(user, now);
-  if (!profile || !profile.enabled) return { sent: 0 };
-  return runFollowUps(user.id, todayKeyFor(profile, now), now);
+  if (!profile || !profile.enabled) return { sent: 0, emailed: 0 };
+  return runFollowUps(user.id, todayKeyFor(profile, now), now, opts);
 }
 
 /**
@@ -54,17 +54,44 @@ export async function runCoachingCron(now = new Date(), limit = 500, budgetMs = 
     take: limit,
   });
   let sent = 0;
+  let emailed = 0;
   let failed = 0;
   let processed = 0;
   for (const p of profiles) {
     if (Date.now() - started > budgetMs) break;
     processed += 1;
     try {
-      sent += (await refreshAndNotify(p.user, now)).sent;
+      const r = await refreshAndNotify(p.user, now, { email: true });
+      sent += r.sent;
+      emailed += r.emailed;
     } catch (e) {
       failed += 1;
       console.error("coaching cron failed for a student", e);
     }
   }
-  return { students: processed, remaining: profiles.length - processed, sent, failed };
+  return { students: processed, remaining: profiles.length - processed, sent, emailed, failed };
+}
+
+/**
+ * Hourly cron for students who turned on email: delivers the time-sensitive emails (the study-time
+ * reminder around each student's chosen reminder time, the weekly report once it exists) without
+ * re-planning — the daily cron and page visits keep plans fresh.
+ */
+export async function runCoachingEmailCron(now = new Date(), limit = 1000, budgetMs = 50_000) {
+  const started = Date.now();
+  const profiles = await db.coachingProfile.findMany({ where: { enabled: true, notifyEmail: true }, select: { userId: true, timezone: true }, take: limit });
+  let emailed = 0;
+  let failed = 0;
+  let processed = 0;
+  for (const p of profiles) {
+    if (Date.now() - started > budgetMs) break;
+    processed += 1;
+    try {
+      emailed += (await runFollowUps(p.userId, todayKeyFor(p, now), now, { email: true })).emailed;
+    } catch (e) {
+      failed += 1;
+      console.error("coaching email cron failed for a student", e);
+    }
+  }
+  return { students: processed, remaining: profiles.length - processed, emailed, failed };
 }

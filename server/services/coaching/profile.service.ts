@@ -103,6 +103,8 @@ export async function saveOnboarding(userId: string, raw: OnboardingInput): Prom
 
 const settingsSchema = z.object({
   notifyInApp: z.boolean(),
+  /** Omitted when email delivery isn't configured, so the stored choice is kept. */
+  notifyEmail: z.boolean().optional(),
   frequency: z.enum(["NORMAL", "LOW"]),
   quietStart: z.string().refine(isValidHHMM),
   quietEnd: z.string().refine(isValidHHMM),
@@ -121,6 +123,7 @@ export async function updateCoachingSettings(userId: string, raw: z.input<typeof
     where: { userId },
     data: {
       notifyInApp: input.notifyInApp,
+      ...(input.notifyEmail === undefined ? {} : { notifyEmail: input.notifyEmail }),
       frequency: input.frequency,
       quietStart: input.quietStart,
       quietEnd: input.quietEnd,

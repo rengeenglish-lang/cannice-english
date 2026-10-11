@@ -7,6 +7,9 @@ import { addDays, dayKeyToDate, isoWeekday, localDayRange, localTime, minutesOfD
 import { countDueVocab } from "@/server/services/coaching/vocab.service";
 import { countDueMistakes } from "@/server/services/coaching/notebook.service";
 import type { CoachingProfileRow } from "@/server/services/coaching/profile.service";
+import { decideEmails, renderReminderEmail, renderWeeklyReportEmail, unsubscribeToken, type WeeklyReportSummary } from "@/lib/coaching/email";
+import { emailConfigured, sendEmail } from "@/server/email/send";
+import { getSiteUrl } from "@/server/env";
 
 const DASH = "/dashboard/kocluk";
 /** Non-essential reminders per local day, so a burst of due items never becomes a burst of notifications. */
@@ -126,30 +129,36 @@ export async function buildCandidates(profile: CoachingProfileRow, todayKey: str
 }
 
 /**
- * Sends due follow-ups for one student. Preferences are re-read from the database right before
- * delivery (the caller's copy may be stale), each reminder is written together with its delivery
- * log in one transaction, and the log's unique (userId, dedupeKey) index makes concurrent runs —
- * a page visit and the daily cron at the same moment — deliver it only once.
+ * Sends due follow-ups for one student: in-app first, then — only from the crons (`opts.email`), never
+ * during a page visit — the email channel, if the student opted in and email is configured. Preferences are re-read from the database right before delivery
+ * (the caller's copy may be stale), and the log's unique (userId, dedupeKey) index makes
+ * concurrent runs — a page visit and a cron at the same moment — deliver each reminder only once.
  */
-export async function runFollowUps(userId: string, todayKey: string, now = new Date()) {
+export async function runFollowUps(userId: string, todayKey: string, now = new Date(), opts: { email?: boolean } = {}) {
   const profile = await db.coachingProfile.findUnique({ where: { userId } });
-  if (!profile || !profile.enabled) return { sent: 0 };
+  if (!profile || !profile.enabled) return { sent: 0, emailed: 0 };
   const ignored = await ignoredInARow(userId);
   const candidates = await buildCandidates(profile, todayKey, now, ignored);
-  if (!candidates.length) return { sent: 0 };
+  if (!candidates.length) return { sent: 0, emailed: 0 };
+  const sent = await deliverInApp(profile, candidates, todayKey, now, ignored);
+  const emailed = opts.email ? await deliverEmails(profile, candidates, todayKey, now) : 0;
+  return { sent, emailed };
+}
 
+async function deliverInApp(profile: CoachingProfileRow, candidates: FollowUpCandidate[], todayKey: string, now: Date, ignored: number) {
+  const userId = profile.userId;
   const already = await db.coachingNotificationLog.findMany({ where: { userId, dedupeKey: { in: candidates.map((c) => c.dedupeKey) } }, select: { dedupeKey: true } });
   const done = new Set(already.map((a) => a.dedupeKey));
   const fresh = candidates.filter((c) => !done.has(c.dedupeKey));
-  if (!fresh.length) return { sent: 0 };
+  if (!fresh.length) return 0;
 
   // Re-check preferences at the moment of sending.
   const prefs = await db.coachingProfile.findUnique({ where: { userId }, select: { enabled: true, notifyInApp: true, frequency: true, pausedUntil: true, quietStart: true, quietEnd: true, timezone: true } });
-  if (!prefs) return { sent: 0 };
+  if (!prefs) return 0;
   const decisions = decideFollowUps(fresh, prefs, now, ignored);
 
   const { start } = localDayRange(todayKey, profile.timezone);
-  let sentToday = await db.coachingNotificationLog.count({ where: { userId, status: "SENT", createdAt: { gte: start } } });
+  let sentToday = await db.coachingNotificationLog.count({ where: { userId, channel: "IN_APP", status: "SENT", createdAt: { gte: start } } });
   let sent = 0;
   for (const d of decisions) {
     if (d.action === "DEFER") continue;
@@ -172,7 +181,78 @@ export async function runFollowUps(userId: string, todayKey: string, now = new D
       if ((e as { code?: string }).code !== "P2002") throw e;
     }
   }
-  return { sent };
+  return sent;
+}
+
+const emailKey = (dedupeKey: string) => `email:${dedupeKey}`;
+
+/**
+ * The email channel. Each email is claimed first with a SENDING log row (its unique key stops a
+ * concurrent run sending it twice), then sent; the row ends as SENT or FAILED. A failed email is
+ * not retried, so a provider hiccup never turns into a duplicate later.
+ */
+async function deliverEmails(profile: CoachingProfileRow, candidates: FollowUpCandidate[], todayKey: string, now: Date) {
+  const secret = process.env.AUTH_SECRET;
+  if (!emailConfigured() || !secret) return 0;
+  const userId = profile.userId;
+  const prefs = await db.coachingProfile.findUnique({
+    where: { userId },
+    select: { enabled: true, notifyEmail: true, frequency: true, pausedUntil: true, quietStart: true, quietEnd: true, timezone: true, locale: true, user: { select: { email: true } } },
+  });
+  if (!prefs?.notifyEmail || !prefs.user.email) return 0;
+
+  const already = await db.coachingNotificationLog.findMany({ where: { userId, dedupeKey: { in: candidates.map((c) => emailKey(c.dedupeKey)) } }, select: { dedupeKey: true } });
+  const done = new Set(already.map((a) => a.dedupeKey));
+  const fresh = candidates.filter((c) => !done.has(emailKey(c.dedupeKey)));
+  if (!fresh.length) return 0;
+
+  const { start, end } = localDayRange(todayKey, profile.timezone);
+  const nonEssentialToday = await db.coachingNotificationLog.count({
+    where: { userId, channel: "EMAIL", status: { in: ["SENDING", "SENT"] }, createdAt: { gte: start }, kind: { notIn: [...ESSENTIAL] } },
+  });
+  const decisions = decideEmails(fresh, prefs, now, nonEssentialToday);
+  if (!decisions.some((d) => d.action === "SEND")) return 0;
+
+  const siteUrl = getSiteUrl().replace(/\/$/, "");
+  const unsubscribeUrl = `${siteUrl}/api/email/unsubscribe?t=${encodeURIComponent(unsubscribeToken(userId, secret))}`;
+  let emailed = 0;
+  for (const d of decisions) {
+    if (d.action !== "SEND") continue;
+    const c = d.candidate;
+    let content;
+    if (c.kind === "SESSION_SOON") {
+      // Only nudge when nothing has been done yet today.
+      const [doneToday, open] = await Promise.all([
+        db.studyTask.count({ where: { userId, status: "DONE", completedAt: { gte: start, lt: end } } }),
+        db.studyTask.findMany({ where: { userId, date: dayKeyToDate(todayKey), status: "PLANNED" }, orderBy: { position: "asc" }, select: { title: true, minutes: true } }),
+      ]);
+      if (doneToday > 0 || !open.length) continue;
+      content = renderReminderEmail({ locale: prefs.locale, candidate: c, tasks: open, siteUrl, unsubscribeUrl });
+    } else if (c.kind === "WEEKLY_REPORT") {
+      const report = await db.coachingReport.findFirst({ where: { id: c.dedupeKey.replace(/^report:/, ""), userId } });
+      if (!report) continue;
+      content = renderWeeklyReportEmail({ locale: prefs.locale, report: report.data as unknown as WeeklyReportSummary, reportHref: c.href, siteUrl, unsubscribeUrl });
+    } else {
+      content = renderReminderEmail({ locale: prefs.locale, candidate: c, siteUrl, unsubscribeUrl });
+    }
+
+    let logId: string;
+    try {
+      logId = (await db.coachingNotificationLog.create({ data: { userId, kind: c.kind, dedupeKey: emailKey(c.dedupeKey), channel: "EMAIL", status: "SENDING" } })).id;
+    } catch (e) {
+      if ((e as { code?: string }).code === "P2002") continue; // another run claimed it
+      throw e;
+    }
+    try {
+      await sendEmail({ to: prefs.user.email, ...content, unsubscribeUrl, tag: c.kind });
+      await db.coachingNotificationLog.update({ where: { id: logId }, data: { status: "SENT" } });
+      emailed += 1;
+    } catch (e) {
+      await db.coachingNotificationLog.update({ where: { id: logId }, data: { status: "FAILED" } });
+      console.error("coaching email failed", logId, e instanceof Error ? e.message : e);
+    }
+  }
+  return emailed;
 }
 
 export function recentDeliveries(userId: string, take = 20) {
