@@ -23,3 +23,21 @@ export async function getTryToUsdRate() {
 export function convertTryToUsd(tryAmount: number, rate: number) {
   return Math.max(0.5, Math.round(tryAmount * rate * 100) / 100);
 }
+
+const SPEAKING_CLUB_KEYS = { url: "speaking_club_url", schedule: "speaking_club_schedule", note: "speaking_club_note" } as const;
+
+/** Speaking Club: the meeting link and the schedule students see, set in Yönetim → Speaking Club. */
+export async function getSpeakingClub() {
+  const rows = await db.appSetting.findMany({ where: { key: { in: Object.values(SPEAKING_CLUB_KEYS) } } });
+  const get = (key: string) => rows.find((r) => r.key === key)?.value?.trim() || "";
+  const url = get(SPEAKING_CLUB_KEYS.url);
+  return { url: /^https:\/\//i.test(url) ? url : "", schedule: get(SPEAKING_CLUB_KEYS.schedule), note: get(SPEAKING_CLUB_KEYS.note) };
+}
+
+export async function saveSpeakingClub(input: { url: string; schedule: string; note: string }) {
+  await Promise.all([
+    setSetting(SPEAKING_CLUB_KEYS.url, input.url),
+    setSetting(SPEAKING_CLUB_KEYS.schedule, input.schedule),
+    setSetting(SPEAKING_CLUB_KEYS.note, input.note),
+  ]);
+}
