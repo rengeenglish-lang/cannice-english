@@ -152,6 +152,7 @@ test("order emails: havale instructions once, paid confirmation once (guests too
     assert.equal(sentTo(guestEmail).filter((m) => /Ödemen alındı/.test(m.subject)).length, 1);
     assert.equal(await sendOrderPaid(card.id), false);
   } finally {
+    await db.invoice.deleteMany({ where: { orderId: { in: [havale.id, card.id] } } });
     await db.order.deleteMany({ where: { id: { in: [havale.id, card.id] } } });
     await db.emailLog.deleteMany({ where: { key: { in: [`order-awaiting:${havale.id}`, `order-paid:${havale.id}`, `order-paid:${card.id}`] } } });
     await db.product.delete({ where: { id: product.id } });
