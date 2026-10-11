@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
 import { toggleTopicLessonProgress, saveTopicNote } from "@/server/services/topics.service";
+import { recordTopicStudy } from "@/server/services/skill-analysis.service";
 
 export async function toggleTopicLessonProgressAction(topicLessonId: string) {
   const user = await getAuthContext();
@@ -22,4 +23,11 @@ export async function saveTopicNoteAction(examTopicId: string, content: string):
   await saveTopicNote(user.id, examTopicId, content.slice(0, 4000));
   revalidatePath("/konu-anlatim");
   return { status: "success" };
+}
+
+/** Reading timer on Konu Anlatımı: reports active seconds on a topic. Guests aren't tracked. */
+export async function recordTopicStudyAction(examTopicId: string, seconds: number): Promise<void> {
+  const user = await getAuthContext();
+  if (!user || typeof examTopicId !== "string" || !examTopicId || examTopicId.length > 64) return;
+  await recordTopicStudy(user.id, examTopicId, Number(seconds));
 }

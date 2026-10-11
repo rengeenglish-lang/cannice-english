@@ -8,6 +8,7 @@ import { PracticeResults } from "@/components/diagnostics/PracticeResults";
 import { logEvent } from "@/lib/diagnostics/analytics";
 import { ATTEMPT_KIND_RESULT_TITLES } from "@/lib/diagnostics/attempt-kind-labels";
 import { cefrFromPercentage } from "@/lib/diagnostics/cefr";
+import { skillAnalysis } from "@/server/services/skill-analysis.service";
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
@@ -56,6 +57,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
   await logEvent("results_viewed", user.id, { attemptId, kind: attemptPreview.kind });
 
   const { attempt, topPriority, recommendationsByTopic, overall } = results;
+  const skills = await skillAnalysis(user.id, attempt.examTypeId, attempt.examType.slug, attempt.topicResults.map((r) => r.topic));
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
@@ -69,6 +71,7 @@ export default async function DiagnosticResultsPage({ params }: { params: Promis
         kind={attempt.kind === "MOCK_EXAM" ? "MOCK_EXAM" : "FULL_DIAGNOSTIC"}
         mockSetNumber={attempt.mockSetNumber}
         overall={overall}
+        skills={skills}
         cefr={attempt.kind === "FULL_DIAGNOSTIC" && attempt.examFamily === "ACADEMIC_SKILLS" ? cefrFromPercentage(overall.percentage) : null}
       />
     </main>

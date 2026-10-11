@@ -243,6 +243,7 @@ model ExamTopic {
   notes          TopicNote[]
   savedBy        SavedExamTopic[]
   studyGoalItems StudyGoalItem[]
+  studyTimes     TopicStudyTime[]
 
   @@unique([examTypeId, slug])
   @@index([examTypeId])
@@ -298,6 +299,26 @@ model TopicLessonProgress {
   @@map("topic_lesson_progresses")
 }
 
+/**
+ * Active reading time a student spent on a Konu Anlatımı topic: only seconds with the tab visible
+ * and the student active are counted, and the server caps each report by the time since the last
+ * one, so leaving a tab open doesn't add hours. Shown as "Çalıştığım süre" in Beceri Analizi.
+ */
+model TopicStudyTime {
+  id          String   @id @default(cuid())
+  userId      String
+  examTopicId String
+  seconds     Int      @default(0)
+  lastPingAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic ExamTopic @relation(fields: [examTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examTopicId])
+  @@map("topic_study_times")
+}
+
 // ====================================================================
 // IDENTITY & ACCESS
 // ====================================================================
@@ -325,6 +346,7 @@ model User {
   enrollments           Enrollment[]
   blogPosts             BlogPost[]
   topicLessonProgresses TopicLessonProgress[]
+  topicStudyTimes       TopicStudyTime[]
   topicNotes            TopicNote[]
   groupBookings         GroupLessonEnrollment[]
   instructedSessions    LiveSession[]             @relation("SessionInstructor")
@@ -1581,7 +1603,7 @@ model CoachingFeedback {
   id                String   @id @default(cuid())
   userId            String
   /**
-   * "ADVICE" (report unhelpful advice) | "REPORT" (report survey)
+   * "ADVICE" (report unhelpful advice) | "REPORT" (report survey) | "SUGGESTION" (free-form idea)
    */
   kind              String
   refId             String?
@@ -1592,6 +1614,10 @@ model CoachingFeedback {
    */
   reminderFrequency String?
   message           String?
+  /**
+   * Set when an admin marks the suggestion as handled in Yönetim → Gelen Koçluk Önerileri.
+   */
+  handledAt         DateTime?
   createdAt         DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

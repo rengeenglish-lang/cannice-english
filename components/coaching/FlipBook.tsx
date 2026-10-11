@@ -27,10 +27,11 @@ export function FlipBook({ locale, title, titleId, variant, unit, pages }: {
 }) {
   const t = coachingCopy(locale).book;
   const [index, setIndex] = useState(() => Math.max(pages.length - 1, 0));
-  const [turn, setTurn] = useState<"next" | "prev" | null>(null);
+  const [turn, setTurn] = useState<{ dir: "next" | "prev"; from: number; id: number } | null>(null);
   const [searched, setSearched] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
   const touchX = useRef<number | null>(null);
+  const turns = useRef(0);
 
   if (!pages.length) return null;
   // A deleted entry can remove the page being read.
@@ -40,11 +41,28 @@ export function FlipBook({ locale, title, titleId, variant, unit, pages }: {
   const days = new Map<string, number>();
   for (const p of pages) days.set(p.day, (days.get(p.day) ?? 0) + p.count);
 
+  const renderPage = (i: number, extra: string, key: number) => {
+    const p = pages[i];
+    return (
+      <article key={key} className={`flip-page ${variant === "book" ? "flip-bound" : "flip-notebook"} ${extra}`} aria-live={extra.includes("leaf") ? undefined : "polite"} onAnimationEnd={extra ? () => setTurn(null) : undefined}>
+        <header className="flip-page-head flex items-baseline justify-between gap-3">
+          <h3 className="text-lg font-extrabold capitalize">
+            {formatBookDay(p.day, locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+            {p.part > 1 ? <span className="ml-1 text-sm font-semibold normal-case text-[color:var(--muted)]">{t.continued}</span> : null}
+          </h3>
+          <span className="shrink-0 text-xs font-bold text-[color:var(--muted)]">{countLabel(p.count)}</span>
+        </header>
+        {p.content}
+        <footer className="mt-4 text-center text-xs font-bold text-[color:var(--muted)]">{t.page(i + 1, pages.length)}</footer>
+      </article>
+    );
+  };
+
   const go = (to: number) => {
     const next = Math.max(0, Math.min(pages.length - 1, to));
     setNotice(null);
     if (next === current) return;
-    setTurn(next > current ? "next" : "prev");
+    setTurn({ dir: next > current ? "next" : "prev", from: current, id: ++turns.current });
     setIndex(next);
   };
   const search = (day: string) => {
@@ -94,17 +112,16 @@ export function FlipBook({ locale, title, titleId, variant, unit, pages }: {
           if (Math.abs(dx) > 60) go(dx < 0 ? current + 1 : current - 1);
         }}
       >
-        <article key={current} className={`flip-page ${variant === "book" ? "flip-bound" : "flip-notebook"} ${turn ? `flip-turn-${turn}` : ""}`} aria-live="polite">
-          <header className="flip-page-head flex items-baseline justify-between gap-3">
-            <h3 className="text-lg font-extrabold capitalize">
-              {formatBookDay(page.day, locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-              {page.part > 1 ? <span className="ml-1 text-sm font-semibold normal-case text-[color:var(--muted)]">{t.continued}</span> : null}
-            </h3>
-            <span className="shrink-0 text-xs font-bold text-[color:var(--muted)]">{countLabel(page.count)}</span>
-          </header>
-          {page.content}
-          <footer className="mt-4 text-center text-xs font-bold text-[color:var(--muted)]">{t.page(current + 1, pages.length)}</footer>
-        </article>
+        {/* Forward: the current page lifts at its right edge and turns over to the left, showing the
+            next page underneath. Back: the previous page turns back from the left onto the stack. */}
+        <div className="flip-stage">
+          {renderPage(current, turn?.dir === "prev" ? `flip-leaf flip-leaf-in` : "", turn?.dir === "prev" ? turn.id : current)}
+          {turn?.dir === "next" && turn.from < pages.length ? (
+            <div className="flip-leaf flip-leaf-out" key={turn.id} aria-hidden="true" inert onAnimationEnd={() => setTurn(null)}>
+              {renderPage(turn.from, "", turn.id)}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <nav className="mt-4 flex items-center justify-center gap-2" aria-label={t.contents}>

@@ -32,6 +32,7 @@ import {
 import { addStudentCard, deleteCard, reviewCard } from "@/server/services/coaching/vocab.service";
 import { addManualMistake, deleteMistake, retryNotebookQuestion, updateMistakeNote } from "@/server/services/coaching/notebook.service";
 import { reportUnhelpfulAdvice, saveCheckIn, saveReportSurvey } from "@/server/services/coaching/checkin.service";
+import { submitSuggestion } from "@/server/services/coaching/suggestions.service";
 
 const BASE = "/dashboard/kocluk";
 const DAY_KEY = /^\d{4}-\d{2}-\d{2}$/;
@@ -251,4 +252,10 @@ export async function reportAdviceAction(refId: string, message?: string): Promi
   const user = await student();
   await reportUnhelpfulAdvice(user.id, refId, message);
   return { ok: true };
+}
+
+export async function suggestCoachingAction(message: string): Promise<{ ok: boolean; reason?: "EMPTY" | "LIMIT" }> {
+  const user = await student();
+  if (typeof message !== "string") return { ok: false, reason: "EMPTY" };
+  return submitSuggestion(user.id, message);
 }
