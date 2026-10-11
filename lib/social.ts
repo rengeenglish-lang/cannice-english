@@ -11,7 +11,7 @@ export const SUPPORT_EMAIL = "destek@netfener.com";
  * WhatsApp number for the floating "WhatsApp'tan yaz" button, in international format without
  * "+" or spaces (e.g. "905321234567"). Empty hides the button.
  */
-export const WHATSAPP_NUMBER = "";
+export const WHATSAPP_NUMBER = "905052644511";
 export const WHATSAPP_GREETING = "Merhaba, Netfener hakkında bilgi almak istiyorum.";
 
 /** wa.me link with a prefilled message; `page` tells us where the visitor wrote from. */
