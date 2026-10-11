@@ -46,6 +46,7 @@ import {
   Award,
   Gift,
   type LucideIcon,
+  Hourglass,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -62,6 +63,7 @@ type Role = "STUDENT" | "TEACHER" | "ADMIN";
 function learningNav(examFamily: ExamFamily | null) {
   return [
     { href: "/dashboard", label: "Çalışma alanım", icon: Home },
+    { href: "/dashboard/sinavlarim", label: "Sınavlarım", icon: Hourglass },
     { href: "/dashboard/kocluk", label: "Ücretsiz Koçluk", icon: Compass },
     { href: "/dashboard/kelime-motoru", label: "Kelime Motoru", icon: Layers },
     { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },

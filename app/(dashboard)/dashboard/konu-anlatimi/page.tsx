@@ -8,6 +8,9 @@ import { savedTopicIdsForUser } from "@/server/services/saved-topics.service";
 import { getPlanAccess } from "@/server/services/plans.service";
 import { addSavedTopicAction } from "@/app/actions/saved-topics";
 import { konuAnlatimHref } from "@/lib/konu-links";
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
+import { OutsideInterestsNotice } from "@/components/exam-interests/OutsideInterestsNotice";
 
 export const metadata: Metadata = { title: "Konu Seçimi" };
 
@@ -19,12 +22,15 @@ export default async function TopicSelectionPage({ searchParams }: { searchParam
   const user = await getAuthContext();
   if (!user) return null;
   const { exam } = await searchParams;
-  const [exams, activeExam, saved, access] = await Promise.all([
+  const { allowed, interests } = await viewerExamAccess();
+  if (exam && !canOpenExam(allowed, exam)) return <OutsideInterestsNotice interests={interests} />;
+  const [allExams, activeExam, saved, access] = await Promise.all([
     listExamTypes(),
     exam ? getExamTypeBySlug(exam) : Promise.resolve(null),
     savedTopicIdsForUser(user.id),
     getPlanAccess(user),
   ]);
+  const exams = allExams.filter((e) => canOpenExam(allowed, e.slug));
   const topics = activeExam ? await listExamTopicsWithLessons(activeExam.id) : [];
 
   return (

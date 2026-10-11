@@ -10,6 +10,9 @@ import { ChevronDown, Heart, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
 import { Logo } from "@/components/brand/Logo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { getAuthContext } from "@/server/auth/context";
+import { examCountdownBar } from "@/server/services/exam-interests.service";
+import { ExamCountdownBar } from "@/components/exam-interests/ExamCountdownBar";
 
 const NAV_LINKS = [
   { href: "/exams", label: "Sınavlar" },
@@ -33,6 +36,9 @@ export async function Navbar() {
   const favoriteCount = (await favoriteProductIds(userId).catch(() => new Set<string>())).size;
   // Every signed-in page view counts toward İlerleme Raporu → Site Ziyaret Sıklığı.
   if (userId) after(() => recordVisit(userId));
+  // Learners who picked their exams see a countdown to each one on every page.
+  const viewer = userId ? await getAuthContext() : null;
+  const bar = viewer?.role === "STUDENT" ? await examCountdownBar(viewer.id).catch(() => null) : null;
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -136,6 +142,7 @@ export async function Navbar() {
           />
         </div>
       </div>
+      {bar?.items.length ? <ExamCountdownBar items={bar.items} initialDays={bar.initialDays} /> : null}
     </header>
   );
 }

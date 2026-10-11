@@ -1,3 +1,6 @@
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
+import { OutsideInterestsNotice } from "@/components/exam-interests/OutsideInterestsNotice";
 import { NetfenerEbooks } from "@/components/resources/NetfenerEbooks";
 import { getEbookOffers } from "@/server/services/ebooks.service";
 import { netfenerEbooksForExam } from "@/lib/netfener-ebooks";
@@ -23,6 +26,14 @@ export default async function ResourceListPage({ params }: Props) {
   const type = RESOURCE_TYPES.find((t) => t.slug === tur);
   const exam = RESOURCE_EXAMS.find((e) => e.slug === sinav);
   if (!type || !exam) notFound();
+  const { allowed, interests } = await viewerExamAccess();
+  if (!canOpenExam(allowed, exam.slug)) {
+    return (
+      <main className="inner-page mx-auto w-full max-w-[1100px] px-4 py-14 sm:px-6 lg:px-8">
+        <OutsideInterestsNotice interests={interests} examName={exam.label.replace(" Kaynakları", "")} />
+      </main>
+    );
+  }
   const user = await getAuthContext();
   const access = await getPlanAccess(user);
   const items = await listResources(type.slug, exam.slug, user, access);

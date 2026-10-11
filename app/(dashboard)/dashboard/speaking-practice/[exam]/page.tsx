@@ -1,3 +1,6 @@
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
+import { OutsideInterestsNotice } from "@/components/exam-interests/OutsideInterestsNotice";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -15,5 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SpeakingPracticePage({ params }: Props) {
   const { exam } = await params;
   if (!isSpeakingExam(exam)) notFound();
+  const { allowed, interests } = await viewerExamAccess();
+  if (!canOpenExam(allowed, exam)) return <OutsideInterestsNotice interests={interests} examName={SPEAKING_EXAMS[exam].name} />;
   return <div><Link href="/dashboard/speaking-practice" className="ghost-button mb-4 -ml-4"><ArrowLeft size={18} /> Sınav seçimine dön</Link><SpeakingPractice exam={exam} /></div>;
 }

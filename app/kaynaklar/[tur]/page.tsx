@@ -1,3 +1,5 @@
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
 import { NetfenerEbooks } from "@/components/resources/NetfenerEbooks";
 import { getAuthContext } from "@/server/auth/context";
 import { getEbookOffers, getBundleOffers } from "@/server/services/ebooks.service";
@@ -22,6 +24,7 @@ export default async function ResourceTypePage({ params }: Props) {
   const user = tur === "e-kitaplar" ? await getAuthContext() : null;
   const offers = tur === "e-kitaplar" ? await getEbookOffers(user?.id) : {};
   const bundles = tur === "e-kitaplar" ? await getBundleOffers() : {};
+  const { allowed } = await viewerExamAccess();
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
       <Link href="/kaynaklar" className="ghost-button mb-4 -ml-4">← Kaynaklar</Link>
@@ -33,7 +36,7 @@ export default async function ResourceTypePage({ params }: Props) {
       {tur === "e-kitaplar" ? <NetfenerEbooks signedIn={Boolean(user)} offers={offers} /> : null}
       {tur === "e-kitaplar" ? <EbookBundles offers={bundles} signedIn={Boolean(user)} /> : null}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {RESOURCE_EXAMS.map((exam) => (
+        {RESOURCE_EXAMS.filter((exam) => canOpenExam(allowed, exam.slug)).map((exam) => (
           <Link key={exam.slug} href={`/kaynaklar/${type.slug}/${exam.slug}`} className="panel text-lg font-extrabold transition hover:-translate-y-1 hover:border-[color:var(--brand)]">
             {exam.label}
           </Link>
