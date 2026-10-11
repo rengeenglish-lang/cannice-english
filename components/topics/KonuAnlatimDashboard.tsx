@@ -6,7 +6,6 @@ import {
   toggleTopicLessonProgressAction,
   saveTopicNoteAction,
 } from "@/app/actions/topics";
-import { pickStudyQuote } from "@/lib/study-quotes";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
 import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
 import { hasStrategyBoxes } from "@/components/topics/parseStrategyBoxes";
@@ -16,16 +15,13 @@ import {
 } from "@/components/topics/parseGlossaryEntries";
 import { StudyContent } from "@/components/topics/StudyContent";
 import { ContentAccordion } from "@/components/topics/ContentAccordion";
-import { TopicSidebar } from "@/components/topics/TopicSidebar";
-import { TopicHero } from "@/components/topics/TopicHero";
 import { useStudyTimer } from "@/components/topics/useStudyTimer";
-import { SubtopicTabs } from "@/components/topics/SubtopicTabs";
+import { pickStudyQuote } from "@/lib/study-quotes";
+import { CourseNav, stepLabel } from "@/components/topics/CourseNav";
+import { TopicSummaryStrip } from "@/components/topics/TopicSummaryStrip";
+import { ChevronLeft, ChevronRight, ListTree } from "lucide-react";
 import { QuestionCard } from "@/components/topics/QuestionCard";
 import { QuestionNavigator } from "@/components/topics/QuestionNavigator";
-import { TopicProgressCard } from "@/components/topics/TopicProgressCard";
-import { TopicInfoCard } from "@/components/topics/TopicInfoCard";
-import { StudentNotesCard } from "@/components/topics/StudentNotesCard";
-import { MotivationCard } from "@/components/topics/MotivationCard";
 
 type Lesson = {
   id: string;
@@ -99,6 +95,13 @@ export function KonuAnlatimDashboard({
     "idle",
   );
   const [pending, startTransition] = useTransition();
+  const [navOpen, setNavOpen] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  // Every lesson in reading order; a topic without lessons is one step of its own.
+  const steps = useMemo(
+    () => topics.flatMap((topic) => (topic.lessons.length ? topic.lessons.map((l) => ({ topic, lessonId: l.id as string | undefined })) : [{ topic, lessonId: undefined }])),
+    [topics],
+  );
 
   const hasCategories = topics.some((topic) => topic.category);
   const groups = useMemo(() => {
@@ -147,15 +150,6 @@ export function KonuAnlatimDashboard({
   const topicCompleted = (topic: Topic) =>
     topic.lessons.length > 0 &&
     topic.lessons.every((lesson) => completedIds.has(lesson.id));
-  const topicPercent = (topic: Topic) =>
-    topic.lessons.length > 0
-      ? Math.round(
-          (topic.lessons.filter((lesson) => completedIds.has(lesson.id))
-            .length /
-            topic.lessons.length) *
-            100,
-        )
-      : 0;
   const completedTopicCount = topics.filter(topicCompleted).length;
   const totalLessons = topics.reduce(
     (sum, topic) => sum + topic.lessons.length,
@@ -170,15 +164,11 @@ export function KonuAnlatimDashboard({
   const overallPercent =
     totalLessons > 0 ? Math.round((totalCompleted / totalLessons) * 100) : 0;
 
-  const selectTopic = (topic: Topic) => {
+  const selectLesson = (topic: Topic, lessonId: string | undefined) => {
+    if (topic.id !== selectedTopicId) setNoteStatus("idle");
     setSelectedTopicId(topic.id);
-    setSelectedLessonId(topic.lessons[0]?.id);
-    setNoteStatus("idle");
-  };
-
-  const goToTopic = (offset: number) => {
-    const next = topics[topicIndex + offset];
-    if (next) selectTopic(next);
+    setSelectedLessonId(lessonId ?? topic.lessons[0]?.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleToggle = (lessonId: string) => {
@@ -216,35 +206,103 @@ export function KonuAnlatimDashboard({
     selectedTopic.name,
   ];
 
+  const lessonIndex = selectedLesson ? selectedTopic.lessons.findIndex((l) => l.id === selectedLesson.id) : -1;
+  const doneInTopic = selectedTopic.lessons.filter((l) => completedIds.has(l.id)).length;
+  const stepIndex = steps.findIndex((st) => st.topic.id === selectedTopic.id && (st.lessonId ?? null) === (selectedLesson?.id ?? null));
+  const goStep = (offset: number) => {
+    const st = steps[stepIndex + offset];
+    if (st) selectLesson(st.topic, st.lessonId);
+  };
+  const isLockedTopic = locked.has(selectedTopic.id);
+  const heading = isLockedTopic || !selectedLesson ? selectedTopic.name : stepLabel(selectedLesson.title, selectedTopic.name);
+
+  const nav = (
+    <CourseNav
+      examName={examName}
+      topics={topics}
+      groups={groups}
+      selectedTopicId={selectedTopicId}
+      selectedLessonId={selectedLesson?.id}
+      completedIds={completedIds}
+      locked={locked}
+      completedTopicCount={completedTopicCount}
+      onSelectLesson={(topic, lessonId) => {
+        selectLesson(topic, lessonId);
+        setMobileNavOpen(false);
+      }}
+    />
+  );
+
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)] 2xl:grid-cols-[280px_minmax(0,1fr)_300px] xl:gap-8">
-      <TopicSidebar
-        examName={examName}
-        topics={topics}
-        groups={groups}
-        selectedTopicId={selectedTopicId}
-        completedTopicCount={completedTopicCount}
-        topicCompleted={topicCompleted}
-        topicPercent={topicPercent}
-        onSelect={selectTopic}
-      />
+    <div className={`course-layout ${navOpen ? "" : "course-layout-collapsed"}`}>
+      {navOpen ? <aside className="course-sidebar hidden lg:block">{nav}</aside> : null}
 
-      <div className="order-1 min-w-0 lg:order-2">
-        <TopicHero
-          index={topicIndex}
-          breadcrumb={breadcrumb}
-          name={selectedTopic.name}
-          description={selectedTopic.description}
-        />
+      <div className="min-w-0">
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setNavOpen((v) => !v)}
+            className="hidden size-9 place-items-center rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--accent)] transition hover:border-[color:var(--accent)] lg:grid"
+            aria-label={navOpen ? "Konu listesini gizle" : "Konu listesini göster"}
+            aria-expanded={navOpen}
+          >
+            {navOpen ? <ChevronLeft size={18} aria-hidden="true" /> : <ChevronRight size={18} aria-hidden="true" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-md border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2 text-sm font-bold lg:hidden"
+            aria-expanded={mobileNavOpen}
+          >
+            <ListTree size={16} aria-hidden="true" /> Konular ve adımlar
+          </button>
+          <div className="min-w-0 basis-full lg:flex-1 lg:basis-auto">
+            <TopicSummaryStrip
+              percent={overallPercent}
+              completedTopicCount={completedTopicCount}
+              totalTopics={topics.length}
+              durationMinutes={selectedTopic.lessons.reduce((sum, lesson) => sum + (lesson.durationMinutes ?? 0), 0)}
+              questionCount={selectedTopic.questionCount}
+              skillsTested={selectedTopic.skillsTested}
+              difficulty={selectedTopic.difficulty}
+              isSignedIn={isSignedIn}
+              note={notes[selectedTopic.id] ?? ""}
+              noteStatus={noteStatus}
+              onNoteChange={(value) => {
+                setNotes((prev) => ({ ...prev, [selectedTopic.id]: value }));
+                setNoteStatus("idle");
+              }}
+              onNoteSave={handleSaveNote}
+            />
+          </div>
+        </div>
+        {mobileNavOpen ? <div className="course-sidebar mb-5 lg:hidden">{nav}</div> : null}
 
-        <SubtopicTabs
-          lessons={selectedTopic.lessons}
-          topicName={selectedTopic.name}
-          selectedLessonId={selectedLessonId}
-          onSelect={setSelectedLessonId}
-        />
+        <article className="mx-auto max-w-[760px]">
+          <div className="flex items-center justify-between gap-3 border-b border-[color:var(--border)] pb-3">
+            <span className="rounded border border-[color:var(--border)] bg-[color:var(--canvas)] px-2 py-1 text-xs font-extrabold text-[color:var(--foreground)]">
+              {topicIndex + 1}
+              {lessonIndex >= 0 ? `.${lessonIndex + 1}` : ""}
+            </span>
+            <span className="text-right text-sm font-semibold text-[color:var(--muted)]">
+              Konu {topicIndex + 1}&apos;de {doneInTopic} / {selectedTopic.lessons.length} adımı tamamladın
+            </span>
+          </div>
 
-        <div className="mt-5">
+          <p className="mt-8 flex flex-wrap items-center gap-1.5 text-sm font-semibold text-[color:var(--muted)]">
+            {breadcrumb.map((crumb, i) => (
+              <span key={crumb} className="flex items-center gap-1.5">
+                {i > 0 ? <span aria-hidden="true">›</span> : null}
+                {crumb}
+              </span>
+            ))}
+          </p>
+          <h1 className="mt-2 text-3xl font-extrabold leading-tight tracking-[-.02em] text-[color:var(--foreground)] sm:text-[42px]">{heading}</h1>
+          {lessonIndex <= 0 && selectedTopic.description ? (
+            <p className="mt-4 whitespace-pre-line text-lg leading-8 text-[color:var(--muted)]">{selectedTopic.description}</p>
+          ) : null}
+
+          <div className="mt-8">
           {locked.has(selectedTopic.id) ? (
             <div className={`${CARD} text-center`}>
               <p className="text-3xl" aria-hidden="true">🔒</p>
@@ -265,11 +323,6 @@ export function KonuAnlatimDashboard({
             </div>
           ) : selectedLesson ? (
             <>
-              {selectedTopic.lessons.length === 1 ? (
-                <h2 className="mb-3 text-2xl font-extrabold text-slate-900">
-                  {selectedLesson.title}
-                </h2>
-              ) : null}
               {selectedLesson.videoUrl ? (
                 <div className="mb-5 aspect-video overflow-hidden rounded-2xl bg-black">
                   <video
@@ -322,31 +375,6 @@ export function KonuAnlatimDashboard({
                 </div>
               )}
 
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4">
-                {isSignedIn ? (
-                  <button
-                    type="button"
-                    disabled={pending}
-                    onClick={() => handleToggle(selectedLesson.id)}
-                    className={
-                      completedIds.has(selectedLesson.id)
-                        ? "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-emerald-500 bg-emerald-50 px-6 py-2.5 text-base font-bold text-emerald-700 transition hover:bg-emerald-100"
-                        : "inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgb(var(--accent-rgb)/.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)] disabled:translate-y-0 disabled:opacity-60"
-                    }
-                  >
-                    {completedIds.has(selectedLesson.id)
-                      ? "Tamamlandı ✓"
-                      : "Tamamlandı Olarak İşaretle"}
-                  </button>
-                ) : (
-                  <Link
-                    href="/sign-in"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--accent)] px-6 py-2.5 text-base font-bold text-white shadow-[0_10px_24px_rgb(var(--accent-rgb)/.3)] transition hover:-translate-y-0.5 hover:bg-[color:var(--accent-strong)]"
-                  >
-                    Giriş yapıp ilerlemeyi kaydet
-                  </Link>
-                )}
-              </div>
             </>
           ) : (
             <div className={CARD}>
@@ -355,55 +383,51 @@ export function KonuAnlatimDashboard({
               </p>
             </div>
           )}
-        </div>
+          </div>
 
-        <div className="mt-5 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={() => goToTopic(-1)}
-            disabled={topicIndex <= 0}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-2.5 text-base font-bold text-slate-700 transition hover:border-blue-400 hover:text-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            ← Önceki Konu
-          </button>
-          <button
-            type="button"
-            onClick={() => goToTopic(1)}
-            disabled={topicIndex >= topics.length - 1}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-slate-300 bg-white px-5 py-2.5 text-base font-bold text-slate-700 transition hover:border-blue-400 hover:text-[color:var(--accent-strong)] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Sonraki Konu →
-          </button>
-        </div>
+          <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border)] pt-6">
+            <button
+              type="button"
+              onClick={() => goStep(-1)}
+              disabled={stepIndex <= 0}
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-base font-bold text-[color:var(--accent)] transition hover:underline disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <ChevronLeft size={18} aria-hidden="true" /> Önceki adım
+            </button>
+            <div className="flex flex-wrap items-center gap-3">
+              {selectedLesson && !isLockedTopic ? (
+                isSignedIn ? (
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => handleToggle(selectedLesson.id)}
+                    className={
+                      completedIds.has(selectedLesson.id)
+                        ? "inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-emerald-500 bg-emerald-50 px-5 py-2 text-base font-bold text-emerald-700 transition hover:bg-emerald-100"
+                        : "inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-[color:var(--accent)] px-5 py-2 text-base font-bold text-[color:var(--accent)] transition hover:bg-[color:var(--accent-soft)] disabled:opacity-60"
+                    }
+                  >
+                    {completedIds.has(selectedLesson.id) ? "Tamamlandı ✓" : "Tamamlandı olarak işaretle"}
+                  </button>
+                ) : (
+                  <Link href="/sign-in" className="text-sm font-bold text-[color:var(--accent)] underline-offset-2 hover:underline">
+                    Giriş yapıp ilerlemeyi kaydet
+                  </Link>
+                )
+              ) : null}
+              <button
+                type="button"
+                onClick={() => goStep(1)}
+                disabled={stepIndex < 0 || stepIndex >= steps.length - 1}
+                className="primary-button disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Sonraki adım <ChevronRight size={18} aria-hidden="true" />
+              </button>
+            </div>
+          </footer>
+          <p className="mt-8 text-center text-sm italic text-[color:var(--muted)]">&ldquo;{pickStudyQuote(topicIndex)}&rdquo; <span className="not-italic font-bold">— Can Nice</span></p>
+        </article>
       </div>
-
-      <aside className="order-3 h-fit space-y-4 lg:col-start-2 2xl:col-start-auto 2xl:sticky 2xl:top-24">
-        <TopicProgressCard
-          percent={overallPercent}
-          completedTopicCount={completedTopicCount}
-          totalTopics={topics.length}
-        />
-        <TopicInfoCard
-          durationMinutes={selectedTopic.lessons.reduce(
-            (sum, lesson) => sum + (lesson.durationMinutes ?? 0),
-            0,
-          )}
-          questionCount={selectedTopic.questionCount}
-          skillsTested={selectedTopic.skillsTested}
-          difficulty={selectedTopic.difficulty}
-        />
-        <StudentNotesCard
-          isSignedIn={isSignedIn}
-          value={notes[selectedTopic.id] ?? ""}
-          status={noteStatus}
-          onChange={(value) => {
-            setNotes((prev) => ({ ...prev, [selectedTopic.id]: value }));
-            setNoteStatus("idle");
-          }}
-          onSave={handleSaveNote}
-        />
-        <MotivationCard quote={pickStudyQuote(topicIndex)} />
-      </aside>
     </div>
   );
 }

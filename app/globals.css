@@ -1066,3 +1066,13 @@ a {
   .skill-table td { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.75rem; }
   .skill-table td::before { content: attr(data-label); flex: 0 0 9.5rem; font-size: 0.75rem; font-weight: 700; color: var(--muted); }
 }
+
+/* Konu Anlatımı: course outline on the left (collapsible), the lesson in a centred column. */
+.course-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+@media (min-width: 1024px) {
+  .course-layout { grid-template-columns: 300px minmax(0, 1fr); gap: 2rem; }
+  .course-layout.course-layout-collapsed { grid-template-columns: minmax(0, 1fr); }
+  .course-layout > .course-sidebar { position: sticky; top: 6rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
+}
+.course-sidebar { border: 1px solid var(--border); border-radius: 0.75rem; background: var(--surface); }
+.course-nav section:last-child { border-bottom: 0; }

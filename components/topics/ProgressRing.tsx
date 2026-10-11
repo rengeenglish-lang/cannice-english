@@ -1,5 +1,5 @@
-export function ProgressRing({ percent, size = 88 }: { percent: number; size?: number }) {
-  const stroke = 8;
+export function ProgressRing({ percent, size = 88, compact = false }: { percent: number; size?: number; compact?: boolean }) {
+  const stroke = compact ? 5 : 8;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percent / 100) * circumference;
@@ -20,7 +20,7 @@ export function ProgressRing({ percent, size = 88 }: { percent: number; size?: n
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
         style={{ transition: "stroke-dashoffset 0.3s ease" }}
       />
-      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" className="fill-slate-900 text-xl font-extrabold">
+      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" className={`fill-slate-900 font-extrabold ${compact ? "text-[11px]" : "text-xl"}`}>
         %{percent}
       </text>
     </svg>
