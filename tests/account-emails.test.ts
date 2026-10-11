@@ -194,8 +194,15 @@ test("cron: lesson reminders per window and abandoned-cart reminder with opt-out
     assert.ok(sentTo(enrolled.email).find((m) => m.subject.startsWith("Dersin birazdan"))!.text.includes("https://meet.example/b"));
     assert.ok(!sentTo(enrolled.email).find((m) => m.subject.startsWith("Yarın"))!.text.includes("https://meet.example/a"), "the join link waits for the last reminder");
     assert.deepEqual(subjects(outsider.email), []);
-    assert.deepEqual(subjects(shopper.email), ["Sepetinde seni bekleyenler var"]);
+    // Cart reminders are in-app only for now (İYS): no email, one notification, not repeated.
+    assert.deepEqual(subjects(shopper.email), []);
     assert.deepEqual(subjects(optedOut.email), []);
+    const cartNotes = await db.notification.findMany({ where: { userId: shopper.id, category: "CART" } });
+    assert.equal(cartNotes.length, 1);
+    assert.equal(cartNotes[0].href, "/cart");
+    // Lesson reminders reach the notification centre too; the later one replaced the earlier.
+    const lessonNotes = await db.notification.findMany({ where: { userId: enrolled.id, category: "LESSON" }, orderBy: { title: "asc" } });
+    assert.deepEqual(lessonNotes.map((n) => n.title), ["Dersin birazdan başlıyor: Gramer", "Yarın dersin var: Okuma"]);
     void tomorrow;
   } finally {
     const ids = [enrolled, booked, outsider, shopper, optedOut].map((u) => u.id);
@@ -203,7 +210,7 @@ test("cron: lesson reminders per window and abandoned-cart reminder with opt-out
     await db.liveSession.deleteMany({ where: { courseId } });
     await db.enrollment.deleteMany({ where: { courseId } });
     await db.cart.deleteMany({ where: { userId: { in: ids } } });
-    await db.emailLog.deleteMany({ where: { to: { in: [enrolled, booked, outsider, shopper, optedOut].map((u) => u.email) } } });
+    await db.emailLog.deleteMany({ where: { to: { in: [...[enrolled, booked, outsider, shopper, optedOut].map((u) => u.email), ...ids] } } });
     await db.product.delete({ where: { id: product.id } });
     await db.user.deleteMany({ where: { id: { in: ids } } });
   }

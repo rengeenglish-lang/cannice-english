@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import { createNotification } from "@/server/services/notifications.service";
+import { notify, withdrawNotification } from "@/server/services/notifications.service";
 import { grantPlanForOrderItem } from "@/server/services/plans.service";
 import { enrollGroupSlotAndSeries } from "@/server/services/group-availability.service";
 import { isMonthlyBilledCategory, nextPaidThrough } from "@/lib/billing";
@@ -52,15 +52,16 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
     });
     // Idempotent: a PayPal capture retry or a double click in the admin panel must not grant a
     // second plan period or push a group lesson's paidThrough forward twice.
-    if (order.status === "PAID") return { enrolled: 0, skippedGuest: !order.userId, userId: null, slotBookings: [] };
+    if (order.status === "PAID") return { enrolled: 0, skippedGuest: !order.userId, userId: null, slotBookings: [], renewed: [] as string[] };
 
     await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
     await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date(), ...(opts?.providerRef ? { providerRef: opts.providerRef } : {}) } });
 
-    if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null, slotBookings: [] };
+    if (!order.userId) return { enrolled: 0, skippedGuest: true, userId: null, slotBookings: [], renewed: [] as string[] };
 
     let enrolled = 0;
     const slotBookings: string[] = [];
+    const renewed: string[] = [];
     for (const item of order.items) {
       if (item.product.category === "PLAN") {
         await grantPlanForOrderItem(tx, order.userId, item, item.product);
@@ -82,14 +83,19 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
         create: { userId: order.userId, courseId: course.id, orderItemId: item.id, status: "ACTIVE", ...billing },
       });
       if (enrollment) enrolled += 1;
+      if (isMonthlyBilledCategory(item.product.category)) renewed.push(enrollment.id);
       if (item.groupSlotId) slotBookings.push(item.groupSlotId);
     }
 
-    return { enrolled, skippedGuest: false, userId: order.userId, slotBookings };
+    return { enrolled, skippedGuest: false, userId: order.userId, slotBookings, renewed };
   });
 
+  // The admins' "havale bekliyor" note is done with, paid by card or approved.
+  await withdrawNotification(`admin-transfer:${orderId}`);
   if (result.userId) {
-    await createNotification(result.userId, { title: "Ödemeniz onaylandı", body: "Siparişiniz onaylandı, dersleriniz hesabınızda hazır.", href: "/dashboard/orders" });
+    // Replaces this order's "havale bekleniyor" note; a renewed group's "ödeme zamanı" note goes.
+    await notify(result.userId, { category: "PURCHASE", key: `order:${orderId}`, title: "Ödemeniz onaylandı", body: "Siparişiniz onaylandı, satın aldıklarınız hesabınızda hazır.", href: "/dashboard/orders" });
+    for (const enrollmentId of result.renewed) await withdrawNotification(`renewal:${enrollmentId}`, result.userId);
     // "Gruba Katıl" purchases book their chosen group straight away, so it shows up in Canlı
     // Derslerim without a second confirmation step. A seat can fill up between checkout and a
     // manual (havale) approval, in which case the student is told to pick another time.
@@ -97,7 +103,9 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
       try {
         await enrollGroupSlotAndSeries(slotId, result.userId);
       } catch (error) {
-        await createNotification(result.userId, {
+        await notify(result.userId, {
+          category: "LESSON",
+          key: `group-booking:${slotId}`,
           title: "Grup dersi kaydınız tamamlanamadı",
           body: `${error instanceof Error ? error.message : "Seçtiğiniz grup artık müsait değil."} Ödemeniz geçerli; lütfen haftalık takvimden başka bir saat seçin.`,
           href: "/group-lessons",
@@ -118,8 +126,9 @@ export async function markOrderCancelled(orderId: string) {
     throw new Error("Sadece ödeme bekleyen siparişler iptal edilebilir.");
   }
   const updated = await db.order.update({ where: { id: orderId }, data: { status: "CANCELLED" } });
+  await withdrawNotification(`admin-transfer:${orderId}`);
   if (order.userId) {
-    await createNotification(order.userId, { title: "Siparişiniz iptal edildi", href: "/dashboard/orders" });
+    await notify(order.userId, { category: "PURCHASE", key: `order:${orderId}`, title: "Siparişiniz iptal edildi", href: "/dashboard/orders" });
   }
   return updated;
 }
@@ -145,6 +154,6 @@ export async function markOrderRefunded(orderId: string) {
   });
 
   if (order.userId) {
-    await createNotification(order.userId, { title: "Siparişiniz iade edildi", href: "/dashboard/orders" });
+    await notify(order.userId, { category: "PURCHASE", key: `order:${orderId}`, title: "Siparişiniz iade edildi", href: "/dashboard/orders" });
   }
 }

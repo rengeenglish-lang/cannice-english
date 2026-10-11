@@ -9,6 +9,7 @@ import { db } from "@/server/db";
 import { refreshAndNotify } from "@/server/services/coaching/coaching.service";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { emailConfigured } from "@/server/email/send";
+import { countUnreadNotifications } from "@/server/services/notifications.service";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getAuthContext();
@@ -16,6 +17,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // Lazily sends any due "ödeme zamanı geldi" notice before the page renders, so it is already in
   // the student's notifications (the daily cron covers students who don't log in).
   const [goal] = await Promise.all([getActiveGoal(user.id), syncBillingNotices(user.id).catch(() => 0)]);
+  const unreadCount = await countUnreadNotifications(user.id).catch(() => 0);
   const examFamily = goal ? examFamilyForCode(goal.examType.code) : null;
   // Coaching follow-ups run after the response is sent, so they never slow a page down. The
   // daily cron covers students who don't visit; the delivery log's unique key stops duplicates.
@@ -27,7 +29,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // Students only: staff accounts are created by hand, and without email set up there is no link to send.
   const showVerify = user.role === "STUDENT" && !user.emailVerifiedAt && emailConfigured();
   return (
-    <DashboardShell role={user.role} examFamily={examFamily}>
+    <DashboardShell role={user.role} examFamily={examFamily} unreadCount={unreadCount}>
       {showVerify ? <VerifyEmailBanner email={user.email} /> : null}
       {children}
     </DashboardShell>

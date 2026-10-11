@@ -1,5 +1,7 @@
 "use server";
 
+import { notify, notifyAdmins, withdrawNotification } from "@/server/services/notifications.service";
+import { formatTRY } from "@/lib/pricing";
 import { sendOrderAwaitingTransfer } from "@/server/services/transactional-email.service";
 import { acceptCheckoutConsents } from "@/lib/checkout-consent";
 import { getPublishedLegalContent } from "@/server/services/legal-content.service";
@@ -122,8 +124,16 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   });
 
   if (appliedCouponId) await redeemCoupon(appliedCouponId);
-  // Havale/EFT: the payment details by email too. Never blocks the order.
-  if (paymentMethod === "MANUAL") await sendOrderAwaitingTransfer(order.id).catch(() => false);
+  // Havale/EFT: the payment details by email too, a note in the student's notifications and one
+  // for admins to approve. None of these ever blocks the order.
+  if (paymentMethod === "MANUAL") {
+    await sendOrderAwaitingTransfer(order.id).catch(() => false);
+    if (order.userId) {
+      await notify(order.userId, { category: "PURCHASE", key: `order:${order.id}`, title: "Siparişin alındı, havale bekleniyor", body: "Ödemen doğrulandığında erişimin açılır ve sana haber veririz.", href: `/checkout/received?order=${order.id}` }).catch(() => null);
+    }
+    await notifyAdmins({ key: `admin-transfer:${order.id}`, title: "Onay bekleyen havale", body: `${formatTRY(total)} tutarında yeni bir havale/EFT siparişi var.`, href: `/admin/orders/${order.id}` }).catch(() => 0);
+  }
+  if (order.userId) await withdrawNotification("cart", order.userId).catch(() => null);
   await db.cartItem.deleteMany({ where: { cartId: cart.id } });
   (await cookies()).delete(CART_COUPON_COOKIE);
 
