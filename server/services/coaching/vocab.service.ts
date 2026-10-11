@@ -76,7 +76,7 @@ export async function reviewCard(userId: string, cardId: string, knewIt: boolean
   const next = reviewVocab({ box: card.box, reviews: card.reviews, lapses: card.lapses }, knewIt, now);
   return db.vocabCard.update({
     where: { id: card.id },
-    data: { box: next.box, reviews: next.reviews, lapses: next.lapses, dueAt: next.dueAt, lastReviewedAt: now, masteredAt: next.mastered ? now : null },
+    data: { box: next.box, reviews: next.reviews, lapses: next.lapses, dueAt: next.dueAt, lastReviewedAt: now, ...(knewIt ? {} : { lastLapseAt: now }), masteredAt: next.mastered ? now : null },
   });
 }
 

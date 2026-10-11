@@ -699,6 +699,54 @@ a {
   .lex-in-right, .lex-in-left, .lex-pop { animation: none; }
 }
 
+/* Day-by-day books (Kelime destem, hata defteri): stacked page edges, ruled lines and a page turn. */
+.flip-book { perspective: 1600px; outline: none; border-radius: 1.25rem; }
+.flip-book:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
+.flip-page {
+  position: relative;
+  min-height: 22rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  box-shadow: 3px 3px 0 -1px var(--surface), 3px 3px 0 0 var(--border), 6px 6px 0 -1px var(--surface), 6px 6px 0 0 var(--border);
+  transform-origin: left center;
+}
+.flip-page-head { padding-bottom: 0.5rem; border-bottom: 2px solid color-mix(in srgb, var(--brand) 30%, transparent); }
+/* Bound book: a spine shadow on the left. */
+.flip-page.flip-bound {
+  padding: 1.25rem 1.25rem 1rem 2.25rem;
+  border-radius: 0.5rem 1.25rem 1.25rem 0.5rem;
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--foreground) 12%, transparent), transparent 1.5rem);
+}
+.flip-lines { margin-top: 0.5rem; }
+.flip-lines > li { padding: 0.65rem 0; border-bottom: 1px dashed var(--border); }
+/* Spiral notebook: punched holes, a red margin line and ruled lines every 2rem. */
+.flip-page.flip-notebook {
+  --rule: 2rem;
+  padding: 1rem 1.25rem 1rem 3.5rem;
+  border-radius: 0.75rem;
+  line-height: var(--rule);
+  background-image:
+    radial-gradient(circle at 1rem 50%, var(--canvas) 0.38rem, color-mix(in srgb, var(--foreground) 25%, transparent) 0.42rem, transparent 0.5rem),
+    linear-gradient(90deg, transparent 2.6rem, color-mix(in srgb, #e11d48 45%, transparent) 2.6rem, color-mix(in srgb, #e11d48 45%, transparent) calc(2.6rem + 1px), transparent calc(2.6rem + 1px)),
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(var(--rule) - 1px), color-mix(in srgb, var(--accent) 22%, transparent) calc(var(--rule) - 1px), color-mix(in srgb, var(--accent) 22%, transparent) var(--rule));
+  background-size: 2rem 2rem, auto, auto;
+  background-repeat: repeat-y, no-repeat, repeat;
+  background-position: 0 0, 0 0, 0 0.6rem;
+}
+/* Every line of text sits on a rule, whatever size it is. */
+.flip-notebook :where(h3, p, li, a, span, footer) { line-height: var(--rule); }
+.flip-notebook .flip-page-head { border-bottom: 0; padding-bottom: 0; }
+.flip-notebook .flip-page-head + * { margin-top: 0; }
+.flip-notebook footer { margin-top: 0; }
+.flip-notebook .flip-entries > li + li { margin-top: var(--rule); }
+@keyframes flip-turn-next { from { opacity: 0.2; transform: rotateY(-70deg); } to { opacity: 1; transform: none; } }
+@keyframes flip-turn-prev { from { opacity: 0.2; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+.flip-turn-next { animation: flip-turn-next 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.flip-turn-prev { animation: flip-turn-prev 0.35s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .flip-turn-next, .flip-turn-prev { animation: none; }
+}
+
 /* ------------------------------------------------------------------------------------------
  * Beyaz palette: the always-dark sections (heroes, flashcard backs, exam menus) are white, so their
  * white text turns dark. Buttons and anything with its own background keep their colours.

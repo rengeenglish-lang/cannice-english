@@ -1511,6 +1511,10 @@ model VocabCard {
   reviews        Int       @default(0)
   lapses         Int       @default(0)
   lastReviewedAt DateTime?
+  /**
+   * When the student last answered "Bilemedim"; dates the card's page in the hata defteri.
+   */
+  lastLapseAt    DateTime?
   masteredAt     DateTime?
   createdAt      DateTime  @default(now())
 

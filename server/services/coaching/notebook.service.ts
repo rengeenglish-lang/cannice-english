@@ -3,6 +3,8 @@ import { db } from "@/server/db";
 import { gradeAutoAnswer, isAutoGraded } from "@/lib/diagnostics/grading";
 import { retryMistake } from "@/lib/coaching/srs";
 import { KONU_SLUG_CANDIDATES, konuAnlatimHref } from "@/lib/konu-links";
+import { wordById } from "@/lib/vocabulary/content";
+import { WRITING_FEEDBACK_KINDS } from "@/lib/writing-feedback";
 
 const DAY = 86_400_000;
 
@@ -33,8 +35,8 @@ export function countDueMistakes(userId: string, now = new Date()) {
   return db.mistakeEntry.count({ where: { userId, masteredAt: null, questionId: { not: null }, dueAt: { lte: now } } });
 }
 
-export async function listNotebook(userId: string) {
-  const entries = await db.mistakeEntry.findMany({ where: { userId }, orderBy: [{ masteredAt: { sort: "asc", nulls: "first" } }, { timesWrong: "desc" }, { lastWrongAt: "desc" }], take: 200 });
+export async function listNotebook(userId: string, take = 200) {
+  const entries = await db.mistakeEntry.findMany({ where: { userId }, orderBy: [{ masteredAt: { sort: "asc", nulls: "first" } }, { timesWrong: "desc" }, { lastWrongAt: "desc" }], take });
   const questionIds = entries.map((e) => e.questionId).filter((id): id is string => Boolean(id));
   const questions = questionIds.length
     ? await db.diagnosticQuestion.findMany({ where: { id: { in: questionIds } }, include: { topic: true, examType: true } })
@@ -104,4 +106,64 @@ export async function recurringMistakeTopics(userId: string, limit = 5) {
   const counts = new Map<string, number>();
   for (const r of rows) for (const tag of r.topicTags) counts.set(tag, (counts.get(tag) ?? 0) + r.timesWrong);
   return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit).map(([tag, times]) => ({ tag, times }));
+}
+
+type NotebookRow = Awaited<ReturnType<typeof listNotebook>>[number];
+type WritingMistake = { original: string; correction: string; explanation: string };
+
+/** One line of the hata defteri timeline, dated by when the mistake happened. */
+export type NotebookItem =
+  | { kind: "ENTRY"; key: string; at: Date; manual: boolean; entry: NotebookRow["entry"]; question: NotebookRow["question"] }
+  | { kind: "VOCAB"; key: string; at: Date; card: { id: string; term: string; meaning: string; lapses: number; masteredAt: Date | null } }
+  | { kind: "LEXICON"; key: string; at: Date; level: string; setNumber: number; score: number; total: number; words: { word: string; tr: string }[] }
+  | { kind: "WRITING"; key: string; at: Date; feedbackId: string; taskName: string; mistakes: WritingMistake[] };
+
+function writingMistakes(result: unknown): WritingMistake[] {
+  const list = (result as { mistakes?: unknown } | null)?.mistakes;
+  if (!Array.isArray(list)) return [];
+  return list.filter((m): m is WritingMistake => Boolean(m) && typeof m.original === "string" && typeof m.correction === "string" && typeof m.explanation === "string");
+}
+
+/**
+ * Every mistake the student made anywhere on the site, oldest first: wrong answers (practice, level
+ * and mock exams) and their own notes, vocabulary cards they couldn't recall, words missed in Kelime
+ * Motoru set tests, and the errors AI writing feedback found.
+ */
+export async function notebookTimeline(userId: string): Promise<NotebookItem[]> {
+  const [rows, cards, tests, writing] = await Promise.all([
+    listNotebook(userId, 1000),
+    db.vocabCard.findMany({ where: { userId, lapses: { gt: 0 } }, take: 1000 }),
+    db.lexiconSetTest.findMany({ where: { userId, NOT: { wrongWordIds: { isEmpty: true } } }, orderBy: { createdAt: "desc" }, take: 300 }),
+    db.writingFeedback.findMany({ where: { userId, status: "DONE" }, orderBy: { createdAt: "desc" }, take: 200, select: { id: true, kind: true, result: true, createdAt: true } }),
+  ]);
+  const items: NotebookItem[] = [
+    ...rows.map((r) => {
+      const manual = r.entry.source === "MANUAL";
+      return { ...r, kind: "ENTRY" as const, manual, key: `m:${r.entry.id}`, at: manual ? r.entry.createdAt : r.entry.lastWrongAt };
+    }),
+    // Cards missed before lastLapseAt existed fall back to their last review.
+    ...cards.flatMap((c) => {
+      const at = c.lastLapseAt ?? c.lastReviewedAt;
+      return at ? [{ kind: "VOCAB" as const, key: `v:${c.id}`, at, card: c }] : [];
+    }),
+    ...tests.map((tst) => ({
+      kind: "LEXICON" as const,
+      key: `l:${tst.id}`,
+      at: tst.createdAt,
+      level: tst.level,
+      setNumber: tst.setNumber,
+      score: tst.score,
+      total: tst.total,
+      words: tst.wrongWordIds.flatMap((id) => {
+        const w = wordById(id);
+        return w ? [{ word: w.word, tr: w.tr }] : [];
+      }),
+    })),
+    ...writing.flatMap((w) => {
+      const mistakes = writingMistakes(w.result);
+      const kind = WRITING_FEEDBACK_KINDS[w.kind as keyof typeof WRITING_FEEDBACK_KINDS];
+      return mistakes.length ? [{ kind: "WRITING" as const, key: `w:${w.id}`, at: w.createdAt, feedbackId: w.id, taskName: kind?.name ?? w.kind, mistakes }] : [];
+    }),
+  ];
+  return items.sort((a, b) => a.at.getTime() - b.at.getTime() || a.key.localeCompare(b.key));
 }
