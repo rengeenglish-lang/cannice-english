@@ -1,13 +1,13 @@
 import "server-only";
+import { SUPPORT_EMAIL } from "@/lib/social";
 
 /**
  * Transactional email through Resend's HTTP API (https://resend.com/docs/api-reference/emails/send-email).
  * Off unless RESEND_API_KEY and EMAIL_FROM are set; the sending domain in EMAIL_FROM must be
  * verified in Resend (SPF/DKIM DNS records), or Resend rejects the message.
- * Replies go to the support inbox (EMAIL_REPLY_TO, default destek@netfener.com), not the sender.
+ * Replies go to the support inbox (EMAIL_REPLY_TO, default SUPPORT_EMAIL), not the sender.
  */
 const API_URL = "https://api.resend.com/emails";
-const DEFAULT_REPLY_TO = "destek@netfener.com";
 
 export const emailConfigured = () => Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 
@@ -35,7 +35,7 @@ export async function sendEmail(email: OutgoingEmail): Promise<{ id: string | nu
     body: JSON.stringify({
       from,
       to: [email.to],
-      reply_to: process.env.EMAIL_REPLY_TO || DEFAULT_REPLY_TO,
+      reply_to: process.env.EMAIL_REPLY_TO || SUPPORT_EMAIL,
       subject: email.subject,
       html: email.html,
       text: email.text,
