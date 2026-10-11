@@ -27,7 +27,7 @@ export default async function PayOrderPage({ params }: Props) {
     <main className="inner-page mx-auto w-full max-w-[700px] px-4 py-14 sm:px-6 lg:px-8">
       <PageHero>
         <p className="eyebrow">Ödeme</p>
-        <h1 className="page-title">PayPal ile Öde</h1>
+        <h1 className="page-title">Kartla Öde</h1>
       </PageHero>
       <div className="panel mt-8">
         <p className="text-sm font-bold text-slate-500">Sipariş No: {order.id}</p>
@@ -48,7 +48,7 @@ export default async function PayOrderPage({ params }: Props) {
         {clientId ? (
           <PaypalCheckoutButton orderId={order.id} clientId={clientId} />
         ) : (
-          <p className="text-sm font-semibold text-[color:var(--danger)]">PayPal ödeme sistemi henüz yapılandırılmadı.</p>
+          <p className="text-sm font-semibold text-[color:var(--danger)]">Kartla ödeme şu anda kullanılamıyor. Lütfen banka havalesi ile sipariş ver veya bize yaz.</p>
         )}
       </div>
     </main>
