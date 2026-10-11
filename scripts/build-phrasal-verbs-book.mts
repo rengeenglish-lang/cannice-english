@@ -1,7 +1,7 @@
 /**
  * Builds "The Ultimate Phrasal Verbs Guide (YDS & YÖKDİL)" from content/phrasal-verbs into
  *   content/ebooks/netfener-phrasal-verbs.pdf           (the book, private)
- *   public/ebooks/phrasal-verbs.jpg                     (cover)
+ *   public/ebooks/covers/phrasal-verbs.jpg              (cover)
  *   public/ebooks/previews/phrasal-verbs-{1..10}.jpg    (preview pages) and phrasal-verbs.pdf
  * in the same visual system as the other Netfener books (navy band, gold rule, cream page).
  *
@@ -12,6 +12,9 @@ import path from "node:path";
 import { chromium } from "playwright";
 import { UNITS } from "../content/phrasal-verbs/index";
 import type { PhrasalVerb, Unit } from "../content/phrasal-verbs/types";
+import { COVER_CSS, backCoverHtml, coverHtml, findCover } from "./ebook-covers/designs";
+
+const COVER = findCover("phrasal-verbs")!;
 
 const ROOT = process.cwd();
 const SLUG = "phrasal-verbs";
@@ -77,23 +80,8 @@ const TOTAL_VERBS = UNITS.reduce((n, u) => n + u.verbs.length, 0);
 const TOTAL_QUESTIONS = UNITS.reduce((n, u) => n + u.questions.length, 0);
 
 // ---------- front matter ----------
-add("cover", `
-<div class="cover">
-  <div class="cover-panel">
-    <div class="cover-top">${LOGO(70)}<p class="cover-brand"><span></span>NETFENER<span></span></p></div>
-    <h1 class="cover-title"><span>THE ULTIMATE</span><span class="gold">PHRASAL VERBS</span><span>GUIDE</span></h1>
-    <p class="cover-exam"><span></span>YDS &amp; YÖKDİL<span></span></p>
-    <p class="cover-tag">MEANING · SYNONYM · CONTEXT · EXAM DECISIONS</p>
-    <div class="cover-cloud">
-      <span style="left:8%;top:12%">carry out</span><span class="b" style="left:52%;top:4%">bring about</span>
-      <span style="left:62%;top:30%">rule out</span><span class="b" style="left:14%;top:38%">account for</span>
-      <span style="left:40%;top:58%">set up</span><span style="left:4%;top:72%">put off</span>
-      <span class="b" style="left:58%;top:76%">point out</span><span style="left:30%;top:88%">deal with</span>
-    </div>
-    <p class="cover-count">${TOTAL_VERBS} phrasal verb · ${UNITS.length} ünite · ${TOTAL_QUESTIONS} özgün soru</p>
-  </div>
-  <p class="cover-site"><span></span>netfener.com<span></span></p>
-</div>`);
+// The series cover design is shared with the other books (scripts/ebook-covers/designs.ts).
+add("cover", coverHtml(COVER));
 
 add("title", `
 <div class="titlepage">
@@ -337,20 +325,10 @@ ${footer(ip)}`);
   ip++;
 }
 
-add("back", `
-<div class="back">
-  ${LOGO(84)}
-  <p class="cover-brand light"><span></span>NETFENER<span></span></p>
-  <h1 class="back-title">THE ULTIMATE <span class="gold">PHRASAL VERBS</span> GUIDE</h1>
-  <p class="back-tag">MEANING · SYNONYM · CONTEXT · EXAM DECISIONS</p>
-  <p class="back-text">Phrasal verb'ü ezberlemek yetmez; sınavda onun akademik eşini tanıyıp cümlenin istediği yapıyı seçebilmen gerekir. Bu kitap YDS ve YÖKDİL'de en sık karşına çıkan ${TOTAL_VERBS} phrasal verb'ü ${UNITS.length} tematik ünitede, her biri anlam, eş, örnek cümle ve özgün soruyla öğretir.</p>
-  <div class="back-stats"><div><b>${TOTAL_VERBS}</b><span>phrasal verb</span></div><div><b>${UNITS.length}</b><span>tematik ünite</span></div><div><b>${TOTAL_QUESTIONS}</b><span>özgün soru</span></div></div>
-  <p class="back-list">Akademik eşler · Ayrılabilirlik işaretleri · Edatların mantığı · Cloze testleri · Eş anlam eşleştirme · Çeldirici analizli sorular · Alfabetik dizin</p>
-  <p class="back-site">netfener.com</p>
-</div>`);
+add("back", backCoverHtml(COVER));
 
 // ---------- styles ----------
-const CSS = `
+const CSS = COVER_CSS + `
 @page { size: A4; margin: 0; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root { --navy:#14243a; --navy2:#1c3247; --gold:#d9a52b; --teal:#1f8a80; --teal-d:#1d3b45; --cream:#f5f0e6; --ink:#1b2a3a; --muted:#5f6b78; --line:#e3dccd; }
@@ -517,6 +495,7 @@ const PREVIEW_PAGES = [1, 2, 3, 4, 7, unitStart[0], unitStart[0] + 1, unitStart[
 async function main() {
   const out = (...p: string[]) => path.join(ROOT, ...p);
   await mkdir(out("public/ebooks/previews"), { recursive: true });
+  await mkdir(out("public/ebooks/covers"), { recursive: true });
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   const ctx = await browser.newContext({ viewport: { width: 794, height: 1123 }, deviceScaleFactor: 1.25 });
   const page = await ctx.newPage();
@@ -545,7 +524,7 @@ async function main() {
   for (const [i, n] of [[0, 1], ...PREVIEW_PAGES.map((n, k) => [k + 1, n] as const)] as const) {
     await shot.setContent(`<!doctype html><html><head><meta charset="utf-8"><style>${CSS} body{margin:0}</style></head><body>${`<div class="page page-${pages[n - 1].kind}">${pages[n - 1].html}</div>`}</body></html>`, { waitUntil: "load" });
     const jpeg = await shot.screenshot({ type: "jpeg", quality: 82, clip: { x: 0, y: 0, width: 794, height: 1123 }, scale: "device" });
-    await writeFile(i === 0 ? out("public/ebooks/phrasal-verbs.jpg") : out(`public/ebooks/previews/${SLUG}-${i}.jpg`), jpeg);
+    await writeFile(i === 0 ? out("public/ebooks/covers/phrasal-verbs.jpg") : out(`public/ebooks/previews/${SLUG}-${i}.jpg`), jpeg);
   }
   const previewHtml = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><style>${CSS}</style></head><body>${PREVIEW_PAGES.map((n) => `<div class="page page-${pages[n - 1].kind}">${pages[n - 1].html}</div>`).join("")}</body></html>`;
   await page.setContent(previewHtml, { waitUntil: "load" });
