@@ -41,6 +41,7 @@ import {
   Search,
   Quote,
   Scale,
+  Bell,
   type LucideIcon,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
@@ -75,7 +76,9 @@ function learningNav(examFamily: ExamFamily | null) {
     { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
   ];
 }
+const NOTIFICATIONS_HREF = "/dashboard/notifications";
 const ACCOUNT = [
+  { href: NOTIFICATIONS_HREF, label: "Bildirimlerim", icon: Bell },
   { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
   { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
   { href: "/dashboard/favoriler", label: "Favorilerim", icon: Heart },
@@ -89,6 +92,7 @@ const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon:
     items: [
       { href: "/admin", label: "Genel bakış", icon: LayoutDashboard },
       { href: "/admin/analitik", label: "Analitik", icon: BarChart3 },
+      { href: NOTIFICATIONS_HREF, label: "Bildirimler", icon: Bell },
     ],
   },
   {
@@ -143,13 +147,24 @@ const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon:
   },
 ];
 
+function UnreadBadge({ href, count }: { href: string; count: number }) {
+  if (href !== NOTIFICATIONS_HREF || count <= 0) return null;
+  return (
+    <span className="ml-auto rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-slate-900" aria-label={`${count} yeni bildirim`}>
+      {count > 99 ? "99+" : count}
+    </span>
+  );
+}
+
 function SidebarContent({
   role,
   examFamily,
+  unreadCount,
   onNavigate,
 }: {
   role: Role;
   examFamily: ExamFamily | null;
+  unreadCount: number;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
@@ -201,6 +216,7 @@ function SidebarContent({
                 >
                   <Icon size={18} aria-hidden="true" />
                   {label}
+                  <UnreadBadge href={href} count={unreadCount} />
                 </Link>
               ))}
             </div>
@@ -235,6 +251,7 @@ function SidebarContent({
                         >
                           <Icon size={17} aria-hidden="true" />
                           {label}
+                          <UnreadBadge href={href} count={unreadCount} />
                         </Link>
                       ))}
                     </div>
@@ -259,10 +276,12 @@ function SidebarContent({
 export function DashboardShell({
   role,
   examFamily = null,
+  unreadCount = 0,
   children,
 }: {
   role: Role;
   examFamily?: ExamFamily | null;
+  unreadCount?: number;
   children: React.ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -273,7 +292,7 @@ export function DashboardShell({
   return (
     <div className="dashboard-frame lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="dashboard-sidebar hidden p-4 lg:flex">
-        <SidebarContent role={role} examFamily={examFamily} />
+        <SidebarContent role={role} examFamily={examFamily} unreadCount={unreadCount} />
       </aside>
       <dialog
         ref={dialog}
@@ -293,7 +312,7 @@ export function DashboardShell({
           >
             <X size={22} />
           </button>
-          <SidebarContent role={role} examFamily={examFamily} onNavigate={close} />
+          <SidebarContent role={role} examFamily={examFamily} unreadCount={unreadCount} onNavigate={close} />
         </div>
       </dialog>
       <div className="flex min-w-0 flex-col">

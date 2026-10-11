@@ -391,18 +391,40 @@ model User {
  * is currently the only way a student learns that an order/payment status changed or a Writing
  * submission was graded, short of checking the relevant page themselves.
  */
+/// What a notification is about. PURCHASE ones are kept; the rest are cleared after 30 days.
+enum NotificationCategory {
+  PURCHASE
+  PAYMENT
+  LESSON
+  CART
+  COACHING
+  MESSAGE
+  RESULT
+  ACCOUNT
+  ADMIN
+  SYSTEM
+}
+
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  title     String
-  body      String?
-  href      String?
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         String               @id @default(cuid())
+  userId     String
+  category   NotificationCategory @default(SYSTEM)
+  /// Notifications about the same thing share a key; a newer one replaces the older instead of
+  /// stacking up (e.g. "order:<id>" goes from "havale bekleniyor" to "ödeme onaylandı").
+  dedupeKey  String?
+  title      String
+  body       String?
+  href       String?
+  /// "Tamamlandı" in the notification centre.
+  isRead     Boolean              @default(false)
+  archivedAt DateTime?
+  createdAt  DateTime             @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, dedupeKey])
   @@index([userId, isRead, createdAt])
+  @@index([createdAt])
   @@map("notifications")
 }
 

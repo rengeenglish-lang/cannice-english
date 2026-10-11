@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import { createNotification } from "@/server/services/notifications.service";
+import { notify } from "@/server/services/notifications.service";
 
 /**
  * Sends the one-time "ödeme zamanı geldi" notification for every monthly group-lesson enrollment
@@ -28,7 +28,9 @@ export async function syncBillingNotices(userId?: string) {
       data: { renewalNoticeSentAt: now },
     });
     if (claimed.count === 0) continue;
-    await createNotification(enrollment.userId, {
+    await notify(enrollment.userId, {
+      category: "PAYMENT",
+      key: `renewal:${enrollment.id}`,
       title: "Canlı ders ödemenin zamanı geldi",
       body: `${enrollment.course.product.title} için bir aylık ödeme dönemin doldu. Derslerine kesintisiz devam etmek için 1 gün içinde ödemeni yap; aksi hâlde canlı ders erişimin durdurulur.`,
       href: "/dashboard/live-sessions",

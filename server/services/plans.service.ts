@@ -13,7 +13,7 @@ import {
   type PlanTierCode,
 } from "@/lib/plans";
 import { nextPaidThrough } from "@/lib/billing";
-import { createNotification } from "@/server/services/notifications.service";
+import { notify } from "@/server/services/notifications.service";
 
 export type ActivePlan = { subscriptionId: string; tier: PlanTierCode; startsAt: Date; expiresAt: Date };
 
@@ -115,7 +115,9 @@ export async function claimPerkForCourse(userId: string, courseId: string) {
       create: { userId, courseId, status: "ACTIVE", paidThrough },
     });
   });
-  await createNotification(userId, {
+  await notify(userId, {
+    category: "PURCHASE",
+    key: `plan-perk:${courseId}`,
     title: "Uzman plan hakkın kullanıldı",
     body: "Canlı dersin 1 ay boyunca ücretsiz olarak Canlı Derslerim bölümünde.",
     href: "/dashboard/live-sessions",

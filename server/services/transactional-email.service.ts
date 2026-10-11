@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { getSiteUrl } from "@/server/env";
 import { emailConfigured } from "@/server/email/send";
 import { sendOnce } from "@/server/email/transactional";
+import { notifyOnce, purgeOldNotifications } from "@/server/services/notifications.service";
 import { billingState } from "@/lib/billing";
 import { cartUnsubscribeToken } from "@/lib/auth/tokens";
 import {
@@ -54,13 +55,20 @@ export async function sendOrderPaid(orderId: string) {
   return sendOnce(`order-paid:${orderId}`, "ORDER_PAID", loaded.to, content);
 }
 
-// ---------- hourly cron: class reminders + abandoned carts ----------
+// ---------- hourly cron: class reminders, abandoned carts, housekeeping ----------
 
 const HOUR = 60 * 60 * 1000;
 
 /**
+ * Abandoned-cart emails count as commercial messages (İYS), so they stay off until that is sorted;
+ * the reminder goes to the student's notifications instead. Flip to true to email it as well.
+ */
+const CART_REMINDER_EMAIL = false;
+
+/**
  * Two reminders per live lesson and student: the day before (lesson 12–26 h away) and shortly
- * before (lesson within 2 h). The log key makes each one go out once however often the cron runs.
+ * before (lesson within 2 h), each as a notification (the later one replaces the earlier) and, when
+ * email is set up, an email. Log keys make each go out once however often the cron runs.
  * Students are those with an active, paid-up enrollment in the course plus anyone booked into
  * that group slot; cancelled lessons are skipped.
  */
@@ -81,6 +89,7 @@ async function sendSessionReminders(now: Date) {
       bookings: { where: { status: "ACTIVE" }, select: { student: { select: { id: true, name: true, email: true, isActive: true } } } },
     },
   });
+  const emailOn = emailConfigured();
   let sent = 0;
   for (const s of sessions) {
     const untilStart = s.startsAt.getTime() - now.getTime();
@@ -92,7 +101,17 @@ async function sendSessionReminders(now: Date) {
     }
     for (const b of s.bookings) if (b.student.isActive) students.set(b.student.id, b.student);
     const title = s.title || s.course.product.title;
+    const window = soon ? "soon" : "day";
     for (const [userId, student] of students) {
+      const noted = await notifyOnce(`session-${window}:${s.id}:${userId}`, userId, {
+        category: "LESSON",
+        key: `session:${s.id}`,
+        title: soon ? `Dersin birazdan başlıyor: ${title}` : `Yarın dersin var: ${title}`,
+        body: `${lessonTime(s.startsAt)} (Türkiye saati)`,
+        href: "/dashboard/live-sessions",
+      });
+      if (noted) sent += 1;
+      if (!emailOn) continue;
       const content = renderSessionReminderEmail({
         name: student.name,
         title,
@@ -102,34 +121,38 @@ async function sendSessionReminders(now: Date) {
         meetingUrl: soon ? s.meetingUrl : null,
         siteUrl: site(),
       });
-      if (await sendOnce(`session-${soon ? "soon" : "day"}:${s.id}:${userId}`, soon ? "SESSION_SOON" : "SESSION_DAY", student.email, content)) sent += 1;
+      await sendOnce(`session-${window}:${s.id}:${userId}`, soon ? "SESSION_SOON" : "SESSION_DAY", student.email, content);
     }
   }
   return sent;
 }
 
+const lessonTime = (date: Date) =>
+  new Intl.DateTimeFormat("tr-TR", { timeZone: "Europe/Istanbul", weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }).format(date);
+
 /**
  * One reminder per abandoned cart: a signed-in student's cart whose last addition was 3 h to 3 days
  * ago, with no order placed since. Adding to the cart afterwards counts as a new abandonment (the
- * key holds the last activity), so a student is reminded at most once per cart state.
+ * key holds the last activity), so a student is reminded at most once per cart state. It goes to
+ * notifications (one "cart" note, replaced each time, withdrawn on checkout); see
+ * CART_REMINDER_EMAIL for the email.
  */
 async function sendCartReminders(now: Date) {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret) return 0;
   const carts = await db.cart.findMany({
     where: {
       userId: { not: null },
       items: { some: { createdAt: { gte: new Date(now.getTime() - 72 * HOUR) } } },
-      user: { isActive: true, cartReminderOptOut: false },
+      user: { isActive: true },
     },
     select: {
       id: true,
       updatedAt: true,
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, cartReminderOptOut: true } },
       items: { select: { createdAt: true, unitPriceSnapshot: true, quantity: true, product: { select: { title: true } } } },
     },
     take: 200,
   });
+  const secret = process.env.AUTH_SECRET;
   let sent = 0;
   for (const cart of carts) {
     if (!cart.user) continue;
@@ -138,6 +161,16 @@ async function sendCartReminders(now: Date) {
     if (now.getTime() - lastActivity.getTime() < 3 * HOUR) continue;
     const ordered = await db.order.count({ where: { userId: cart.user.id, createdAt: { gte: lastActivity } } });
     if (ordered) continue;
+    const count = cart.items.length;
+    const noted = await notifyOnce(`cart:${cart.id}:${lastActivity.toISOString()}`, cart.user.id, {
+      category: "CART",
+      key: "cart",
+      title: "Sepetinde seni bekleyenler var",
+      body: count === 1 ? `${cart.items[0].product.title} hâlâ sepetinde.` : `${count} ürün hâlâ sepetinde.`,
+      href: "/cart",
+    });
+    if (noted) sent += 1;
+    if (!CART_REMINDER_EMAIL || !emailConfigured() || !secret || cart.user.cartReminderOptOut) continue;
     const unsubscribeUrl = `${site()}/api/email/cart-unsubscribe?t=${encodeURIComponent(cartUnsubscribeToken(cart.user.id, secret))}`;
     const content = renderCartReminderEmail({
       name: cart.user.name,
@@ -145,14 +178,15 @@ async function sendCartReminders(now: Date) {
       siteUrl: site(),
       unsubscribeUrl,
     });
-    if (await sendOnce(`cart:${cart.id}:${lastActivity.toISOString()}`, "CART_REMINDER", cart.user.email, content, { unsubscribeUrl })) sent += 1;
+    await sendOnce(`cart:${cart.id}:${lastActivity.toISOString()}`, "CART_REMINDER", cart.user.email, content, { unsubscribeUrl });
   }
   return sent;
 }
 
+/** Hourly: lesson and cart reminders, then clear notifications older than 30 days (not purchases). */
 export async function runTransactionalEmailCron(now = new Date()) {
-  if (!emailConfigured()) return { skipped: "email not configured" };
   const sessionReminders = await sendSessionReminders(now);
   const cartReminders = await sendCartReminders(now);
-  return { sessionReminders, cartReminders };
+  const purged = (await purgeOldNotifications(now)).count;
+  return { sessionReminders, cartReminders, purgedNotifications: purged };
 }

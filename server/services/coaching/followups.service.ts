@@ -1,4 +1,5 @@
 import "server-only";
+import { notify } from "@/server/services/notifications.service";
 import { db } from "@/server/db";
 import { decideFollowUps, ESSENTIAL, IGNORE_THRESHOLD, type FollowUpCandidate } from "@/lib/coaching/followups";
 import { coachingCopy, pick } from "@/lib/coaching/i18n";
@@ -171,7 +172,8 @@ async function deliverInApp(profile: CoachingProfileRow, candidates: FollowUpCan
     try {
       await db.$transaction(async (tx) => {
         const log = await tx.coachingNotificationLog.create({ data: { userId, kind: d.candidate.kind, dedupeKey: d.candidate.dedupeKey, channel: "IN_APP", status: "SENT" } });
-        const note = await tx.notification.create({ data: { userId, title: d.candidate.title, body: d.candidate.body ?? null, href: d.candidate.href } });
+        // One live note per reminder kind: today's study reminder replaces yesterday's.
+        const note = await notify(userId, { category: "COACHING", key: `coaching:${d.candidate.kind}`, title: d.candidate.title, body: d.candidate.body ?? null, href: d.candidate.href }, tx);
         await tx.coachingNotificationLog.update({ where: { id: log.id }, data: { notificationId: note.id } });
       });
       sent += 1;

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import { createNotification } from "@/server/services/notifications.service";
+import { notify } from "@/server/services/notifications.service";
 
 export async function sendTeacherMessage(studentId: string, body: string, courseId: string | null) {
   if (courseId) {
@@ -16,7 +16,7 @@ export async function sendTeacherMessage(studentId: string, body: string, course
     ? instructorIds
     : (await db.user.findMany({ where: { role: "ADMIN", isActive: true }, select: { id: true } })).map((u) => u.id);
   for (const id of recipients) {
-    await createNotification(id, { title: "Yeni öğrenci mesajı", body: body.slice(0, 140), href: "/admin/mesajlar" });
+    await notify(id, { category: "MESSAGE", key: "staff-messages", title: "Yeni öğrenci mesajı", body: body.slice(0, 140), href: "/admin/mesajlar" });
   }
   return message;
 }
@@ -46,6 +46,6 @@ export async function replyToTeacherMessage(messageId: string, staffId: string, 
     where: { id: messageId },
     data: { reply, repliedById: staffId, repliedAt: new Date() },
   });
-  await createNotification(message.studentId, { title: "Öğretmenin mesajını yanıtladı", body: reply.slice(0, 140), href: "/dashboard/mesajlar" });
+  await notify(message.studentId, { category: "MESSAGE", key: "message-replies", title: "Öğretmenin mesajını yanıtladı", body: reply.slice(0, 140), href: "/dashboard/mesajlar" });
   return message;
 }
