@@ -114,7 +114,7 @@ function stamp(doc: mupdf.PDFDocument, pageIndex: number, ops: string) {
 
 /** Word pages carry the book title in their dark header (unit intro pages have "ÜNİTE" there instead). */
 function hasTitleHeader(page: mupdf.Page) {
-  return page.search("KELİMENİN İZİNİ SÜR").some((quads) => quads.some((q) => Math.min(q[1], q[3], q[5], q[7]) < 90));
+  return page.search("KELİMENİN İZİNİ SÜR", undefined).some((quads) => quads.some((q) => Math.min(q[1], q[3], q[5], q[7]) < 90));
 }
 
 async function fix(path: string) {
