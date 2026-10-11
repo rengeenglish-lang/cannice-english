@@ -700,7 +700,8 @@ a {
 }
 
 /* Day-by-day books (Kelime destem, hata defteri): stacked page edges, ruled lines and a page turn. */
-.flip-book { perspective: 1600px; outline: none; border-radius: 1.25rem; }
+.flip-book { outline: none; border-radius: 1.25rem; }
+.flip-stage { position: relative; perspective: 2000px; }
 .flip-book:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
 .flip-page {
   position: relative;
@@ -739,12 +740,24 @@ a {
 .flip-notebook .flip-page-head + * { margin-top: 0; }
 .flip-notebook footer { margin-top: 0; }
 .flip-notebook .flip-entries > li + li { margin-top: var(--rule); }
-@keyframes flip-turn-next { from { opacity: 0.2; transform: rotateY(-70deg); } to { opacity: 1; transform: none; } }
-@keyframes flip-turn-prev { from { opacity: 0.2; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
-.flip-turn-next { animation: flip-turn-next 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.flip-turn-prev { animation: flip-turn-prev 0.35s ease-out; }
+/* Page turns pivot on the spine (left edge): forward, the old page swings from the right over to
+   the left; back, the previous page swings in from the left onto the stack. */
+.flip-leaf { transform-origin: left center; backface-visibility: hidden; }
+.flip-leaf-out { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; animation: flip-leaf-out 0.6s cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.flip-leaf-out > .flip-page { height: 100%; }
+.flip-leaf-in { animation: flip-leaf-in 0.6s cubic-bezier(0.45, 0.05, 0.35, 1); }
+@keyframes flip-leaf-out {
+  from { transform: rotateY(0deg); box-shadow: 0 0 0 rgb(0 0 0 / 0); }
+  50% { box-shadow: -18px 0 30px rgb(0 0 0 / 0.18); }
+  to { transform: rotateY(-180deg); box-shadow: 0 0 0 rgb(0 0 0 / 0); }
+}
+@keyframes flip-leaf-in {
+  from { transform: rotateY(-180deg); }
+  to { transform: rotateY(0deg); }
+}
 @media (prefers-reduced-motion: reduce) {
-  .flip-turn-next, .flip-turn-prev { animation: none; }
+  .flip-leaf-out { display: none; }
+  .flip-leaf-in { animation: none; }
 }
 
 /* ------------------------------------------------------------------------------------------
@@ -1041,4 +1054,15 @@ a {
   --gold-soft: #e5e5e5;
   --accent-rgb: 244 244 245;
   --glow-rgb: 244 244 245;
+}
+
+/* Beceri Analizi: a table on wide screens, one card per skill on phones. */
+@media (max-width: 639px) {
+  .skill-table { min-width: 0; }
+  .skill-table thead { display: none; }
+  .skill-table, .skill-table tbody, .skill-table tr, .skill-table th, .skill-table td { display: block; width: 100%; }
+  .skill-table tr { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+  .skill-table th, .skill-table td { border: 0; padding: 0.2rem 0; }
+  .skill-table td { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.75rem; }
+  .skill-table td::before { content: attr(data-label); flex: 0 0 9.5rem; font-size: 0.75rem; font-weight: 700; color: var(--muted); }
 }

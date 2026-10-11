@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SuggestionForm } from "@/components/coaching/SuggestionForm";
 import { ArrowRight, BookMarked, CalendarClock, CheckCircle2, ClipboardCheck, FileText, Lightbulb, NotebookPen, Target, TriangleAlert } from "lucide-react";
 import { db } from "@/server/db";
 import { loadCoaching } from "@/server/services/coaching/context";
@@ -276,6 +277,8 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
             {config.contentNote ? <p className="text-[color:var(--muted)]">{pick(locale, config.contentNote)}</p> : null}
           </section>
         ) : null}
+
+        <SuggestionForm copy={{ ...t.suggest, send: t.send }} />
 
         <p className="text-xs text-[color:var(--muted)]">
           {t.dash.studyGoalsLink} <Link href="/dashboard/hedeflerim" className="font-bold underline">{t.dash.studyGoalsLabel}</Link>

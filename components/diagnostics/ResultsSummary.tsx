@@ -4,6 +4,8 @@ import type { TopicRecommendations } from "@/lib/diagnostics/recommendations";
 import { startMasteryCheckAction } from "@/app/actions/diagnostic-attempt";
 import { SeverityBadge } from "@/components/diagnostics/SeverityBadge";
 import { RecommendationList } from "@/components/diagnostics/RecommendationList";
+import { formatStudyMinutes, recommendedMinutes } from "@/lib/diagnostics/skill-analysis";
+import type { SkillRow } from "@/server/services/skill-analysis.service";
 
 export function ResultsSummary({
   examName,
@@ -16,11 +18,12 @@ export function ResultsSummary({
   mockSetNumber,
   overall,
   cefr,
+  skills,
 }: {
   examName: string;
   targetScoreRaw: string;
   targetDate: string | null;
-  topicResults: { topicId: string; topic: { name: string }; accuracy: number; severity: DiagnosticSeverity }[];
+  topicResults: { topicId: string; topic: { name: string; estimatedMinutes: number | null }; accuracy: number; severity: DiagnosticSeverity }[];
   topPriority: { topicId: string; topic: { name: string; description: string | null } } | null;
   recommendationsByTopic: Map<string, TopicRecommendations>;
   kind?: "FULL_DIAGNOSTIC" | "MOCK_EXAM";
@@ -28,6 +31,8 @@ export function ResultsSummary({
   overall?: { total: number; correct: number; incorrect: number; pendingReview: number; unanswered: number; percentage: number };
   /** Indicative CEFR band — only for IELTS/TOEFL/PTE level tests. */
   cefr?: string | null;
+  /** Beceri Analizi columns per topic: Konu Anlatımı link, questions solved, reading time. */
+  skills?: Map<string, SkillRow>;
 }) {
   const isMockExam = kind === "MOCK_EXAM";
   return (
@@ -79,19 +84,62 @@ export function ResultsSummary({
         <p className="text-center text-sm font-semibold text-[color:var(--success)]">Tebrikler — belirgin bir zayıf noktan görünmüyor!</p>
       ) : null}
 
-      <section className="dashboard-panel">
-        <h2 className="section-title !text-lg">Beceri Analizi</h2>
-        <ul className="mt-4 divide-y divide-[color:var(--border)]">
-          {topicResults.map((r) => (
-            <li key={r.topicId} className="flex flex-wrap items-center justify-between gap-3 py-3">
-              <span className="text-sm font-bold">{r.topic.name}</span>
-              <span className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-[color:var(--muted)]">%{Math.round(r.accuracy * 100)}</span>
-                <SeverityBadge severity={r.severity} />
-              </span>
-            </li>
-          ))}
-        </ul>
+      <section className="dashboard-panel" aria-labelledby="skill-analysis">
+        <h2 id="skill-analysis" className="section-title !text-lg">Beceri Analizi</h2>
+        <div className="mt-4 overflow-x-auto">
+          <table className="dashboard-table skill-table">
+            <thead>
+              <tr>
+                <th scope="col">Beceri Analizi</th>
+                <th scope="col">Önerilen çalışma süresi</th>
+                <th scope="col">Kendimi test ettim</th>
+                <th scope="col">Çalıştığım süre</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topicResults.map((r) => {
+                const skill = skills?.get(r.topicId);
+                const recommended = recommendedMinutes(r.topic.estimatedMinutes, r.severity);
+                const studied = skill?.studiedMinutes ?? 0;
+                const progress = recommended ? Math.min(100, Math.round((studied / recommended) * 100)) : 0;
+                return (
+                  <tr key={r.topicId}>
+                    <th scope="row" className="text-left">
+                      {skill?.lessonHref ? (
+                        <Link href={skill.lessonHref} className="font-bold text-[color:var(--accent)] hover:underline" title={skill.lessonLabel ? `Konu anlatımı: ${skill.lessonLabel}` : undefined}>
+                          {r.topic.name} <span aria-hidden="true">→</span>
+                        </Link>
+                      ) : (
+                        <span className="font-bold text-[color:var(--foreground)]">{r.topic.name}</span>
+                      )}
+                      <span className="mt-1 flex flex-wrap items-center gap-2 font-normal">
+                        <span className="text-xs font-semibold text-[color:var(--muted)]">%{Math.round(r.accuracy * 100)}</span>
+                        <SeverityBadge severity={r.severity} />
+                      </span>
+                    </th>
+                    <td data-label="Önerilen çalışma süresi" className="whitespace-nowrap font-semibold">{recommended ? formatStudyMinutes(recommended) : "—"}</td>
+                    <td data-label="Kendimi test ettim" className="whitespace-nowrap">
+                      <span className="font-semibold">{skill?.questionsSolved ?? 0} soru</span>
+                      {skill?.questionsSolved ? <span className="block text-xs text-[color:var(--muted)]">{skill.questionsCorrect} doğru</span> : null}
+                    </td>
+                    <td data-label="Çalıştığım süre" className="whitespace-nowrap">
+                      <span className="font-semibold">{formatStudyMinutes(studied)}</span>
+                      {recommended ? (
+                        <span className="mt-1 block h-1.5 w-24 overflow-hidden rounded-full bg-[color:var(--border)]" role="img" aria-label={`Önerilen sürenin %${progress}'i`}>
+                          <span className="block h-full rounded-full bg-[color:var(--accent)]" style={{ width: `${progress}%` }} />
+                        </span>
+                      ) : null}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs leading-5 text-[color:var(--muted)]">
+          Beceri adına tıklayınca ilgili konu anlatımı açılır. <strong>Kendimi test ettim</strong>: sitede bu beceriden çözdüğün tüm sorular.{" "}
+          <strong>Çalıştığım süre</strong>: bu becerinin konu anlatımı açıkken aktif olarak geçirdiğin süre (sekme arka plandayken veya uzun süre hareketsiz kaldığında sayılmaz).
+        </p>
       </section>
 
       <div className="text-center">

@@ -18,6 +18,7 @@ import { StudyContent } from "@/components/topics/StudyContent";
 import { ContentAccordion } from "@/components/topics/ContentAccordion";
 import { TopicSidebar } from "@/components/topics/TopicSidebar";
 import { TopicHero } from "@/components/topics/TopicHero";
+import { useStudyTimer } from "@/components/topics/useStudyTimer";
 import { SubtopicTabs } from "@/components/topics/SubtopicTabs";
 import { QuestionCard } from "@/components/topics/QuestionCard";
 import { QuestionNavigator } from "@/components/topics/QuestionNavigator";
@@ -78,6 +79,8 @@ export function KonuAnlatimDashboard({
   const initialTopic = topics.find((topic) => topic.id === initialTopicId) ?? topics[0];
   const locked = useMemo(() => new Set(lockedTopicIds), [lockedTopicIds]);
   const [selectedTopicId, setSelectedTopicId] = useState(initialTopic?.id);
+  // Reading time for Beceri Analizi; only for signed-in students on topics they can read.
+  useStudyTimer(selectedTopicId, isSignedIn && !!selectedTopicId && !locked.has(selectedTopicId));
   const [selectedLessonId, setSelectedLessonId] = useState(
     initialTopic?.lessons[0]?.id,
   );
