@@ -1075,4 +1075,7 @@ a {
   .course-layout > .course-sidebar { position: sticky; top: 6rem; max-height: calc(100vh - 7rem); overflow-y: auto; }
 }
 .course-sidebar { border: 1px solid var(--border); border-radius: 0.75rem; background: var(--surface); }
+/* Konu anlatımı prose, after FutureLearn's step pages: regular-weight body text at a calm reading size. */
+.study-prose { font-size: 1.125rem; font-weight: 400; line-height: 1.7; color: #1f2937; }
+@media (min-width: 640px) { .study-prose { font-size: 1.1875rem; } }
 .course-nav section:last-child { border-bottom: 0; }

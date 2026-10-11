@@ -39,14 +39,14 @@ export function StrategyBox({ boxType, content }: { boxType: StrategyBoxType; co
   const lines = content.split("\n").map((line) => line.trim()).filter(Boolean);
 
   return (
-    <div className={`overflow-hidden rounded-2xl border-2 ${meta.border} ${meta.bodyBg} shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)]`}>
+    <div className={`overflow-hidden rounded-lg border-2 ${meta.border} ${meta.bodyBg}`}>
       <div className={`flex items-center justify-center gap-2 border-b-2 ${meta.border} ${meta.headerBg} px-4 py-2.5`}>
         <Icon className={`size-5 ${meta.headerText}`} />
         <span className={`text-sm font-black uppercase tracking-wider ${meta.headerText}`}>
           ► {meta.label} ◄
         </span>
       </div>
-      <div className="space-y-2.5 px-5 py-4 text-lg font-semibold leading-8 text-slate-800 sm:text-xl sm:leading-9">
+      <div className="study-prose space-y-3 px-6 py-5 sm:px-8">
         {lines.map((line, index) => {
           const isBullet = /^[•●]/.test(line);
           const clean = line.replace(/^[•●]\s*/, "");

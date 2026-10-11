@@ -7,7 +7,7 @@ export function HighlightedText({ text }: { text: string }) {
   const parts = text.split(/("[^"\n]{1,65}"|“[^”\n]{1,65}”|tamamen farklı bir anlam|nesne almaz|mutlaka bir nesne ister|her zaman particle'dan sonra|bir formül değildir|ortalama \d+ soru)/g);
   return parts.map((part, index) =>
     index % 2 ? (
-      <strong key={index} className="font-bold underline decoration-indigo-300 decoration-2 underline-offset-4">
+      <strong key={index} className="font-bold text-slate-950">
         {part}
       </strong>
     ) : part,
@@ -25,7 +25,7 @@ function EmphasizedText({ text }: { text: string }) {
     if (label.trim().split(/\s+/).length > 8 || !/\p{L}/u.test(label)) continue;
     const start = match.index + match[1].length;
     nodes.push(<HighlightedText key={`text-${cursor}`} text={text.slice(cursor, start)} />);
-    nodes.push(<strong key={`label-${start}`} className="font-black text-slate-950" style={{ WebkitTextStroke: "0.3px currentColor" }}>{label}:</strong>);
+    nodes.push(<strong key={`label-${start}`} className="font-bold text-slate-950">{label}:</strong>);
     cursor = start + label.length + 1;
   }
   nodes.push(<HighlightedText key={`text-${cursor}`} text={text.slice(cursor)} />);
@@ -41,7 +41,7 @@ function GlossaryEntry({ text }: { text: string }) {
   }
   return (
     <>
-      <strong className="font-black text-slate-950" style={{ WebkitTextStroke: "0.3px currentColor" }}>
+      <strong className="font-bold text-slate-950">
         {heading[1]}
       </strong>
       {heading[2]}
@@ -54,7 +54,7 @@ export function StudyContent({ text, glossary = false }: { text: string; glossar
   // Keep glossary entries and their examples together; sentence bullets are for explanations.
   const blocks = text.split(/\n\s*\n/).filter((block) => block.trim());
   return (
-    <div className="space-y-5 text-lg font-medium leading-8 text-slate-800 sm:text-xl sm:leading-9">
+    <div className="study-prose space-y-6">
       {blocks.map((block, blockIndex) => {
         if (glossary) {
           return <p key={blockIndex} className="whitespace-pre-line"><GlossaryEntry text={block} /></p>;
@@ -66,9 +66,9 @@ export function StudyContent({ text, glossary = false }: { text: string; glossar
           return /^[•●]/.test(line.trim()) ? [clean] : Array.from(sentences.segment(clean), ({ segment }) => segment.trim()).filter(Boolean);
         });
         return (
-          <ul key={blockIndex} className="list-disc space-y-4 pl-6 marker:text-indigo-500">
+          <ul key={blockIndex} className="list-disc space-y-3 pl-6 marker:text-slate-500">
             {points.map((point, index) => (
-              <li key={index} className="pl-2"><EmphasizedText text={point} /></li>
+              <li key={index} className="pl-1.5"><EmphasizedText text={point} /></li>
             ))}
           </ul>
         );
