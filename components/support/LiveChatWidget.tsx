@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { openCookiePreferences, useCookieConsent } from "@/components/consent/cookie-consent-store";
 
 type TawkApi = {
   onLoad?: () => void;
@@ -37,9 +38,18 @@ export const isLiveChatConfigured = Boolean(PROPERTY_ID && WIDGET_ID);
  */
 export function LiveChatWidget() {
   const pathname = usePathname();
+  // Tawk.to sets its own cookies, so it only loads after "İşlevsel çerezler" is allowed.
+  const allowed = useCookieConsent()?.functional === true;
 
   useEffect(() => {
-    if (!isLiveChatConfigured || document.getElementById("tawk-script")) return;
+    if (!allowed) {
+      window.Tawk_API?.hideWidget?.(); // consent withdrawn after loading: at least take it off screen
+      return;
+    }
+    if (!isLiveChatConfigured || document.getElementById("tawk-script")) {
+      window.Tawk_API?.showWidget?.();
+      return;
+    }
     window.Tawk_API = window.Tawk_API ?? {};
     window.Tawk_LoadStart = new Date();
     const script = document.createElement("script");
@@ -49,21 +59,32 @@ export function LiveChatWidget() {
     script.charset = "UTF-8";
     script.setAttribute("crossorigin", "*");
     document.body.appendChild(script);
-  }, []);
+  }, [allowed]);
 
   useEffect(() => {
     const api = window.Tawk_API;
-    if (!api) return;
+    if (!api || !allowed) return;
     const apply = () => (hiddenOn(pathname) ? api.hideWidget?.() : api.showWidget?.());
     if (api.hideWidget) apply();
     else api.onLoad = apply;
-  }, [pathname]);
+  }, [pathname, allowed]);
 
   return null;
 }
 
-/** Opens the chat window from a button (Yardım Masası page); falls back to e-mail when chat isn't set up. */
+/**
+ * Opens the chat window from a button (Yardım Masası page); falls back to e-mail when chat isn't
+ * set up, and asks for the functional-cookie permission when the visitor hasn't given it.
+ */
 export function OpenLiveChatButton({ fallbackEmail, className }: { fallbackEmail: string; className?: string }) {
+  const allowed = useCookieConsent()?.functional === true;
+  if (isLiveChatConfigured && !allowed) {
+    return (
+      <button type="button" className={className} onClick={openCookiePreferences} title="Canlı destek, işlevsel çerezlere izin verildiğinde açılır.">
+        Canlı destek için çerez izni ver
+      </button>
+    );
+  }
   if (!isLiveChatConfigured) {
     return (
       <a href={`mailto:${fallbackEmail}`} className={className}>

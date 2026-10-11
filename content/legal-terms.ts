@@ -25,4 +25,5 @@ export const LEGAL_DOCS: Record<string, LegalDoc> = {
   "gizlilik-sozlesmesi": NETFENER_LEGAL_DOCS["gizlilik-sozlesmesi"],
   "aydinlatma-metni": NETFENER_LEGAL_DOCS["aydinlatma-metni"],
   "acik-riza-metni": NETFENER_LEGAL_DOCS["acik-riza-metni"],
+  "cerez-politikasi": NETFENER_LEGAL_DOCS["cerez-politikasi"],
 };

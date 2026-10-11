@@ -22,7 +22,7 @@ test("company details fill the texts; missing ones show as gaps and keep TASLAK"
 
 test("the KVKK text keeps its gaps until retention periods and the transfer mechanism are decided", () => {
   assert.ok(hasLegalGaps(fillLegalDoc(NETFENER_LEGAL_DOCS["aydinlatma-metni"], full)));
-  for (const key of ["uyelik-sozlesmesi", "gizlilik-sozlesmesi", "acik-riza-metni"]) assert.ok(!hasLegalGaps(fillLegalDoc(NETFENER_LEGAL_DOCS[key], full)), key);
+  for (const key of ["uyelik-sozlesmesi", "gizlilik-sozlesmesi", "acik-riza-metni", "cerez-politikasi"]) assert.ok(!hasLegalGaps(fillLegalDoc(NETFENER_LEGAL_DOCS[key], full)), key);
 });
 
 test("every text passes the legal editor's validation, so it can be edited and republished", () => {

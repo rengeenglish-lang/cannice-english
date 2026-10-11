@@ -340,10 +340,17 @@ model User {
   emailVerifiedAt    DateTime?
   /// One-click opt-out from abandoned-cart reminders (the only non-essential transactional email).
   cartReminderOptOut Boolean   @default(false)
+  /// When the user accepted the Üyelik Sözleşmesi (sign-up box, or first Google sign-in).
+  termsAcceptedAt    DateTime?
+  /// Ticari elektronik ileti permissions (Açık Rıza Metni A), each given separately; never pre-ticked.
+  marketingEmail     Boolean   @default(false)
+  marketingSms       Boolean   @default(false)
+  marketingPhone     Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
   authTokens            AuthToken[]
+  consentLogs           ConsentLog[]
   seoActivityLogs       SeoActivityLog[]
   seoAttribution        SeoAttribution?
   orders                Order[]
@@ -2179,4 +2186,24 @@ model DriveFolder {
   createdAt DateTime @default(now())
 
   @@map("drive_folders")
+}
+
+/// Proof of consent: every acceptance, grant and withdrawal, with the wording version shown.
+model ConsentLog {
+  id          String   @id @default(cuid())
+  userId      String
+  /// "TERMS" | "MARKETING_EMAIL" | "MARKETING_SMS" | "MARKETING_PHONE"
+  kind        String
+  granted     Boolean
+  textVersion String
+  /// "REGISTER" | "GOOGLE" | "PROFILE"
+  source      String
+  ip          String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind, createdAt])
+  @@map("consent_logs")
 }

@@ -8,6 +8,7 @@ import { validateCanonicalUrl } from "@/server/env";
 import { authConfig } from "@/auth.config";
 import { isGoogleConfigured, resolveGoogleUser } from "@/server/auth/google";
 import { sendGoogleWelcome } from "@/server/services/account-email.service";
+import { recordTermsAcceptance } from "@/server/services/consent.service";
 
 validateCanonicalUrl();
 
@@ -29,7 +30,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       });
       if (!resolved.ok) return false;
       user.id = resolved.userId; // the session id must be the Netfener user id, never Google's subject
-      if (resolved.created) await sendGoogleWelcome(resolved.userId).catch(() => undefined);
+      if (resolved.created) {
+        await recordTermsAcceptance(resolved.userId, "GOOGLE").catch(() => undefined);
+        await sendGoogleWelcome(resolved.userId).catch(() => undefined);
+      }
       return true;
     },
   },
