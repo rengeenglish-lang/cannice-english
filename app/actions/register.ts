@@ -10,6 +10,8 @@ import { sendWelcomeVerification } from "@/server/services/account-email.service
 import { recordTermsAcceptance, setMarketingConsents } from "@/server/services/consent.service";
 import { applyReferral, REFERRAL_COOKIE } from "@/server/services/referrals.service";
 import { cookies } from "next/headers";
+import { INTEREST_EXAMS, MAX_EXAM_INTERESTS } from "@/lib/exam-interests";
+import { setExamInterests } from "@/server/services/exam-interests.service";
 
 export type RegisterFormState = { status: "idle" | "error"; message?: string };
 
@@ -23,6 +25,9 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
   if (!parsed.success) return { status: "error", message: "Lütfen bilgilerini kontrol et." };
   if (formData.get("terms") !== "on") return { status: "error", message: "Devam etmek için Üyelik Sözleşmesi'ni kabul etmelisin." };
 
+  const exams = INTEREST_EXAMS.filter((e) => formData.get(`exam-${e.code}`) === "on").map((e) => ({ code: e.code }));
+  if (exams.length > MAX_EXAM_INTERESTS) return { status: "error", message: `En fazla ${MAX_EXAM_INTERESTS} sınav seçebilirsin.` };
+
   const email = parsed.data.email.trim().toLowerCase();
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) return { status: "error", message: "Bu e-posta adresi zaten kayıtlı." };
@@ -32,6 +37,8 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
     data: { name: parsed.data.name, email, phone: parsed.data.phone, password, role: "STUDENT" },
   });
 
+  // The exams picked on the form start the countdown bar and filter study material right away.
+  if (exams.length) await setExamInterests(user.id, exams).catch((e) => console.error("[exam-interests] save failed", e));
   // First-touch attribution to the article whose register link was used. Never blocks signup.
   await recordRegistrationAttribution(user.id, formData.get("src")).catch(() => undefined);
   // Proof of the sign-up boxes: the required agreement and each optional marketing channel.
