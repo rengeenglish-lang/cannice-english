@@ -1,10 +1,7 @@
-/**
- * Social media profile links shown in the footer. Placeholders — replace with the real
- * Netfener profile URLs.
- */
+/** Netfener's social media profiles, linked from the footer. */
 export const SOCIAL_LINKS = {
-  facebook: "https://www.facebook.com/canniceenglish",
-  instagram: "https://www.instagram.com/canniceenglish",
+  facebook: "https://www.facebook.com/profile.php?id=61583837323529",
+  instagram: "https://www.instagram.com/net.fener/",
 } as const;
 
 /** Support address used by Yardım Masası and the policies; also the Reply-To on site emails. */
