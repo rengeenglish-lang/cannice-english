@@ -4,6 +4,7 @@ import { lessonDate, lessonTime } from "@/lib/availability";
 import { PrepJourney } from "./PrepJourney";
 import { TodayWidget } from "./TodayWidget";
 import { CoachingWidget } from "./CoachingWidget";
+import { SpeakingClubButton } from "./SpeakingClubButton";
 
 type ResumeCourse = { id: string; nextLesson: { id: string; title: string } | null } | null;
 type NextLesson = { title: string; startsAt: string } | null;
@@ -22,6 +23,7 @@ export function LearningDashboard({
   upcomingSessionCount,
   resumeCourse,
   nextLesson,
+  speakingClub,
 }: {
   name: string;
   userId: string;
@@ -30,6 +32,7 @@ export function LearningDashboard({
   upcomingSessionCount: number;
   resumeCourse: ResumeCourse;
   nextLesson: NextLesson;
+  speakingClub: { url: string; schedule: string; note: string };
 }) {
   return (
     <div className="space-y-7">
@@ -43,13 +46,16 @@ export function LearningDashboard({
               : "Çalışma alanınıza hoş geldiniz. Konuları keşfedin, hedefinize uygun bir başlangıç yapın."}
           </p>
         </div>
-        <Link
-          href={resumeCourse?.nextLesson ? `/dashboard/courses/${resumeCourse.id}#lesson-${resumeCourse.nextLesson.id}` : "/konu-anlatim"}
-          className="primary-button shrink-0"
-        >
-          {resumeCourse ? "Çalışmaya devam et" : "Öğrenmeye başla"}
-          <ArrowRight size={18} aria-hidden="true" />
-        </Link>
+        <div className="flex shrink-0 flex-wrap gap-3">
+          <SpeakingClubButton club={speakingClub} />
+          <Link
+            href={resumeCourse?.nextLesson ? `/dashboard/courses/${resumeCourse.id}#lesson-${resumeCourse.nextLesson.id}` : "/konu-anlatim"}
+            className="primary-button shrink-0"
+          >
+            {resumeCourse ? "Çalışmaya devam et" : "Öğrenmeye başla"}
+            <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
       </header>
 
       <div className="grid gap-4 sm:grid-cols-3">

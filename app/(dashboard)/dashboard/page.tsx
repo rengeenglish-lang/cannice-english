@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { listEnrollmentsForUser } from "@/server/services/learning.service";
 import { summarizeLearning } from "@/lib/learning-overview";
 import { LearningDashboard } from "@/components/dashboard/LearningDashboard";
+import { getSpeakingClub } from "@/server/services/settings.service";
 
 export const metadata: Metadata = { title: "Çalışma Alanım" };
 
@@ -11,7 +12,7 @@ export default async function StudentDashboardPage() {
   const user = await getAuthContext();
   if (!user) return null;
 
-  const [enrollments, groupBookings] = await Promise.all([
+  const [enrollments, groupBookings, speakingClub] = await Promise.all([
     listEnrollmentsForUser(user.id),
     db.groupLessonEnrollment.findMany({
       where: { studentId: user.id, status: "ACTIVE", slot: { cancelled: false, endsAt: { gte: new Date() } } },
@@ -19,6 +20,7 @@ export default async function StudentDashboardPage() {
       orderBy: { slot: { startsAt: "asc" } },
       take: 1,
     }),
+    getSpeakingClub(),
   ]);
 
   const courses = enrollments.map((e) => ({
@@ -44,6 +46,7 @@ export default async function StudentDashboardPage() {
       resumeCourse={resumeCourse}
       nextLesson={nextLesson ? { title: nextLesson.title, startsAt: nextLesson.startsAt.toISOString() } : null}
       userId={user.id}
+      speakingClub={speakingClub}
     />
   );
 }

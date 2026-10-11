@@ -86,6 +86,7 @@ const STAFF = [
   ["/admin/leads", "Gelen talepler"],
   ["/admin/mesajlar", "Öğrenci mesajları"],
   ["/admin/kocluk/oneriler", "Koçluk: Gelen Koçluk Önerileri"],
+  ["/admin/speaking-club", "Speaking Club"],
   ["/admin/kaynaklar", "Kaynaklar"],
   ["/admin/settings", "Ödeme Ayarları"],
   ["/admin/legal", "Hukuki Belgeler"],
