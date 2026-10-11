@@ -10,16 +10,16 @@ import { NETFENER_BUNDLES, bundlesContainingEbook, bundleBooks, findNetfenerBund
 import { EBOOK_EDITIONS, editionSlug, slugsGranting, findNetfenerEdition } from "../lib/netfener-ebook-editions";
 
 test("catalogue files exist and match the supported exam groups", async () => {
-  assert.equal(NETFENER_EBOOKS.length, 7);
+  assert.equal(NETFENER_EBOOKS.length, 8);
   for (const book of NETFENER_EBOOKS) {
     const pdf = await fs.readFile(path.join(process.cwd(), "content/ebooks", book.filename));
     assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
     await fs.access(path.join(process.cwd(), "public", book.cover));
   }
-  assert.equal(netfenerEbooksForExam("yokdil-saglik-bilimleri").length, 5);
-  assert.deepEqual(netfenerEbooksForExam("yds").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2"]);
-  assert.deepEqual(netfenerEbooksForExam("yokdil-fen-bilimleri").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-fen"]);
-  assert.deepEqual(netfenerEbooksForExam("yokdil-sosyal-bilimler").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-sosyal"]);
+  assert.equal(netfenerEbooksForExam("yokdil-saglik-bilimleri").length, 6);
+  assert.deepEqual(netfenerEbooksForExam("yds").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2"]);
+  assert.deepEqual(netfenerEbooksForExam("yokdil-fen-bilimleri").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-fen"]);
+  assert.deepEqual(netfenerEbooksForExam("yokdil-sosyal-bilimler").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-sosyal"]);
   assert.equal(netfenerEbooksForExam("ielts").length, 0);
   assert.equal(findNetfenerEbook("../../secret"), undefined);
 });
