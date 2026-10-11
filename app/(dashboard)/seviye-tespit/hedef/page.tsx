@@ -3,13 +3,16 @@ import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { GoalWizard } from "@/components/diagnostics/GoalWizard";
 import { logEvent } from "@/lib/diagnostics/analytics";
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
 
 export const metadata: Metadata = { title: "Hedefini Belirle" };
 
 export default async function GoalPage() {
   const user = await getAuthContext();
   if (!user) return null;
-  const exams = await db.examType.findMany({ where: { active: true }, orderBy: { displayOrder: "asc" } });
+  const { allowed } = await viewerExamAccess();
+  const exams = (await db.examType.findMany({ where: { active: true }, orderBy: { displayOrder: "asc" } })).filter((e) => canOpenExam(allowed, e.slug));
   await logEvent("goal_started", user.id);
 
   return (

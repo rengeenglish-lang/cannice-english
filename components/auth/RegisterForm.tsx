@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { registerAction, type RegisterFormState } from "@/app/actions/register";
 import { MARKETING_CHANNELS, MARKETING_CONSENT_TEXT } from "@/lib/consent";
+import { RegisterExamPicker } from "@/components/exam-interests/RegisterExamPicker";
 
 const initialState: RegisterFormState = { status: "idle" };
 
@@ -29,6 +30,7 @@ export function RegisterForm({next, src, referral}: {next?: string; src?: string
         <label className="label" htmlFor="password">Şifre</label>
         <input id="password" name="password" type="password" required minLength={8} className="auth-input" />
       </div>
+      <RegisterExamPicker />
       <div className="space-y-3 rounded-lg border border-[color:var(--border)] p-3 text-sm">
         <label className="flex items-start gap-2">
           <input type="checkbox" name="terms" required className="mt-1 size-4 shrink-0" />

@@ -11,6 +11,8 @@ import { syncEngagement } from "@/server/services/engagement.service";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { emailConfigured } from "@/server/email/send";
 import { countUnreadNotifications } from "@/server/services/notifications.service";
+import { getExamInterests } from "@/server/services/exam-interests.service";
+import { ChooseExamsBanner } from "@/components/exam-interests/ChooseExamsBanner";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getAuthContext();
@@ -30,10 +32,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   });
 
   // Students only: staff accounts are created by hand, and without email set up there is no link to send.
+  const needsExams = user.role === "STUDENT" && (await getExamInterests(user.id).catch(() => [{}])).length === 0;
   const showVerify = user.role === "STUDENT" && !user.emailVerifiedAt && emailConfigured();
   return (
     <DashboardShell role={user.role} examFamily={examFamily} unreadCount={unreadCount}>
       {showVerify ? <VerifyEmailBanner email={user.email} /> : null}
+      {needsExams ? <ChooseExamsBanner /> : null}
       {children}
     </DashboardShell>
   );

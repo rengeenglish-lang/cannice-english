@@ -324,18 +324,18 @@ model TopicStudyTime {
 // ====================================================================
 
 model User {
-  id             String    @id @default(cuid())
-  email          String    @unique
-  password       String?
-  name           String
-  phone          String?
-  nationalId     String?
-  birthDate      DateTime?
-  occupation     String?
-  educationLevel String?
-  role           UserRole  @default(STUDENT)
-  image          String?
-  isActive       Boolean   @default(true)
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  password           String?
+  name               String
+  phone              String?
+  nationalId         String?
+  birthDate          DateTime?
+  occupation         String?
+  educationLevel     String?
+  role               UserRole  @default(STUDENT)
+  image              String?
+  isActive           Boolean   @default(true)
   /// Set when the user proved they own the address (verification link, password reset or Google).
   emailVerifiedAt    DateTime?
   /// One-click opt-out from abandoned-cart reminders (the only non-essential transactional email).
@@ -353,52 +353,53 @@ model User {
   referredById       String?
   /// Set once the referrer has been rewarded for this user's first paid order.
   referralRewardedAt DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
-  authTokens            AuthToken[]
-  consentLogs           ConsentLog[]
-  certificates          Certificate[]
-  badges                UserBadge[]
-  pushSubscriptions     PushSubscription[]
-  seoActivityLogs       SeoActivityLog[]
-  seoAttribution        SeoAttribution?
-  orders                Order[]
-  cart                  Cart?
-  enrollments           Enrollment[]
-  blogPosts             BlogPost[]
-  topicLessonProgresses TopicLessonProgress[]
-  topicStudyTimes       TopicStudyTime[]
-  topicNotes            TopicNote[]
-  groupBookings         GroupLessonEnrollment[]
-  instructedSessions    LiveSession[]             @relation("SessionInstructor")
-  examGoals             ExamGoal[]
-  diagnosticAttempts    DiagnosticAttempt[]
-  studyRoadmapItems     StudyRoadmapItem[]
-  analyticsEvents       AnalyticsEvent[]
-  notifications         Notification[]
-  reviews               Review[]
-  planSubscriptions     PlanSubscription[]
-  savedExamTopics       SavedExamTopic[]
-  visits                UserVisit[]
-  favorites             FavoriteProduct[]
-  coachingProfile       CoachingProfile?
-  studyPlanWeeks        StudyPlanWeek[]
-  studyTasks            StudyTask[]
-  planProposals         PlanProposal[]
-  vocabCards            VocabCard[]
-  mistakeEntries        MistakeEntry[]
-  coachingCheckIns      CoachingCheckIn[]
-  coachingFeedback      CoachingFeedback[]
-  coachingReports       CoachingReport[]
-  coachingNotifications CoachingNotificationLog[]
-  lexiconWords          LexiconWordState[]
-  lexiconTests          LexiconSetTest[]
-  writingFeedback       WritingFeedback[]
+  authTokens              AuthToken[]
+  consentLogs             ConsentLog[]
+  certificates            Certificate[]
+  badges                  UserBadge[]
+  pushSubscriptions       PushSubscription[]
+  examInterests           UserExamInterest[]
+  seoActivityLogs         SeoActivityLog[]
+  seoAttribution          SeoAttribution?
+  orders                  Order[]
+  cart                    Cart?
+  enrollments             Enrollment[]
+  blogPosts               BlogPost[]
+  topicLessonProgresses   TopicLessonProgress[]
+  topicStudyTimes         TopicStudyTime[]
+  topicNotes              TopicNote[]
+  groupBookings           GroupLessonEnrollment[]
+  instructedSessions      LiveSession[]             @relation("SessionInstructor")
+  examGoals               ExamGoal[]
+  diagnosticAttempts      DiagnosticAttempt[]
+  studyRoadmapItems       StudyRoadmapItem[]
+  analyticsEvents         AnalyticsEvent[]
+  notifications           Notification[]
+  reviews                 Review[]
+  planSubscriptions       PlanSubscription[]
+  savedExamTopics         SavedExamTopic[]
+  visits                  UserVisit[]
+  favorites               FavoriteProduct[]
+  coachingProfile         CoachingProfile?
+  studyPlanWeeks          StudyPlanWeek[]
+  studyTasks              StudyTask[]
+  planProposals           PlanProposal[]
+  vocabCards              VocabCard[]
+  mistakeEntries          MistakeEntry[]
+  coachingCheckIns        CoachingCheckIn[]
+  coachingFeedback        CoachingFeedback[]
+  coachingReports         CoachingReport[]
+  coachingNotifications   CoachingNotificationLog[]
+  lexiconWords            LexiconWordState[]
+  lexiconTests            LexiconSetTest[]
+  writingFeedback         WritingFeedback[]
   mistakeExplanationViews MistakeExplanationView[]
-  sentMessages          TeacherMessage[]          @relation("MessageStudent")
-  answeredMessages      TeacherMessage[]          @relation("MessageResponder")
-  studyGoals            StudyGoal[]
+  sentMessages            TeacherMessage[]          @relation("MessageStudent")
+  answeredMessages        TeacherMessage[]          @relation("MessageResponder")
+  studyGoals              StudyGoal[]
 
   @@map("users")
 }
@@ -840,25 +841,25 @@ model BlogCategory {
 }
 
 model BlogPost {
-  seoDraft SeoArticleDraft?
-  slugRedirects SeoSlugRedirect[]
-  seoDays SeoArticleDay[]
+  seoDraft        SeoArticleDraft?
+  slugRedirects   SeoSlugRedirect[]
+  seoDays         SeoArticleDay[]
   seoAttributions SeoAttribution[]
-  id             String         @id @default(cuid())
-  title          String
-  slug           String         @unique
-  excerpt        String
-  content        String
-  coverImageUrl  String?
-  authorId       String
-  categoryId     String?
-  tags           String[]       @default([])
-  status         BlogPostStatus @default(DRAFT)
-  publishedAt    DateTime?
-  seoTitle       String?
-  seoDescription String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id              String            @id @default(cuid())
+  title           String
+  slug            String            @unique
+  excerpt         String
+  content         String
+  coverImageUrl   String?
+  authorId        String
+  categoryId      String?
+  tags            String[]          @default([])
+  status          BlogPostStatus    @default(DRAFT)
+  publishedAt     DateTime?
+  seoTitle        String?
+  seoDescription  String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
   author   User          @relation(fields: [authorId], references: [id])
   category BlogCategory? @relation(fields: [categoryId], references: [id])
@@ -1077,15 +1078,15 @@ model DiagnosticQuestion {
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
 
-  examType  ExamType?            @relation(fields: [examTypeId], references: [id])
-  topic     DiagnosticTopic      @relation("PrimaryTopic", fields: [topicId], references: [id], onDelete: Restrict)
-  responses DiagnosticResponse[]
+  examType            ExamType?            @relation(fields: [examTypeId], references: [id])
+  topic               DiagnosticTopic      @relation("PrimaryTopic", fields: [topicId], references: [id], onDelete: Restrict)
+  responses           DiagnosticResponse[]
+  mistakeExplanations MistakeExplanation[]
 
   @@index([examFamily, topicId, isActive])
   @@index([examTypeId])
   @@index([examTypeId, mockSetNumber])
   @@map("diagnostic_questions")
-  mistakeExplanations MistakeExplanation[]
 }
 
 model DiagnosticAttempt {
@@ -1648,7 +1649,7 @@ model CoachingCheckIn {
 }
 
 model CoachingFeedback {
-  id                String   @id @default(cuid())
+  id                String    @id @default(cuid())
   userId            String
   /**
    * "ADVICE" (report unhelpful advice) | "REPORT" (report survey) | "SUGGESTION" (free-form idea)
@@ -1666,7 +1667,7 @@ model CoachingFeedback {
    * Set when an admin marks the suggestion as handled in Yönetim → Gelen Koçluk Önerileri.
    */
   handledAt         DateTime?
-  createdAt         DateTime @default(now())
+  createdAt         DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1764,8 +1765,8 @@ model LexiconSetTest {
 
 // SEO inventory is derived from existing content, not a second publishing system.
 model SeoContentItem {
-  id              String   @id @default(cuid())
-  sourceKey       String   @unique
+  id              String    @id @default(cuid())
+  sourceKey       String    @unique
   sourceType      String
   sourceId        String
   url             String
@@ -1783,7 +1784,7 @@ model SeoContentItem {
   publishedAt     DateTime?
   sourceUpdatedAt DateTime?
   scannedAt       DateTime
-  available       Boolean  @default(true)
+  available       Boolean   @default(true)
 
   @@index([url])
   @@index([available, sourceType])
@@ -1807,9 +1808,9 @@ model SeoActivityLog {
 
 // Phase 2 research records. Unknown demand is NULL, never fabricated.
 model SeoKeyword {
-  articleDraft SeoArticleDraft?
-  serpResults SeoSerpResult[]
-  id              String    @id @default(cuid())
+  articleDraft    SeoArticleDraft?
+  serpResults     SeoSerpResult[]
+  id              String           @id @default(cuid())
   keyword         String
   normalized      String
   languageCode    String
@@ -1820,10 +1821,10 @@ model SeoKeyword {
   monthlySearches Int?
   demandSource    String?
   demandCheckedAt DateTime?
-  archived        Boolean   @default(false)
-  revision        Int       @default(0)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  archived        Boolean          @default(false)
+  revision        Int              @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   exam ExamType? @relation(fields: [examId], references: [id], onDelete: SetNull)
 
@@ -1833,84 +1834,88 @@ model SeoKeyword {
   @@map("seo_keywords")
 }
 
-
 // Workflow metadata only: article text remains in the existing BlogPost.
 model SeoArticleDraft {
-  approvedLinks Json @default("[]")
-  id String @id @default(cuid())
-  keywordId String @unique
-  postId String @unique
-  brief Json
-  briefReady Boolean @default(false)
-  revision Int @default(0)
-  reviewedHash String?
-  reviewedAt DateTime?
-  approvedHash String?
-  approvedAt DateTime?
-  approvedById String?
-  scheduledFor DateTime?
+  approvedLinks Json                @default("[]")
+  id            String              @id @default(cuid())
+  keywordId     String              @unique
+  postId        String              @unique
+  brief         Json
+  briefReady    Boolean             @default(false)
+  revision      Int                 @default(0)
+  reviewedHash  String?
+  reviewedAt    DateTime?
+  approvedHash  String?
+  approvedAt    DateTime?
+  approvedById  String?
+  scheduledFor  DateTime?
   scheduleError String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  keyword SeoKeyword @relation(fields: [keywordId], references: [id], onDelete: Restrict)
-  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  versions SeoArticleVersion[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  keyword       SeoKeyword          @relation(fields: [keywordId], references: [id], onDelete: Restrict)
+  post          BlogPost            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  versions      SeoArticleVersion[]
+
   @@index([updatedAt])
   @@index([scheduledFor])
   @@map("seo_article_drafts")
 }
 
 model SeoArticleVersion {
-  id String @id @default(cuid())
-  draftId String
-  version Int
-  reason String
-  snapshot Json
-  score Int?
-  actorId String?
-  createdAt DateTime @default(now())
-  draft SeoArticleDraft @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  id        String          @id @default(cuid())
+  draftId   String
+  version   Int
+  reason    String
+  snapshot  Json
+  score     Int?
+  actorId   String?
+  createdAt DateTime        @default(now())
+  draft     SeoArticleDraft @relation(fields: [draftId], references: [id], onDelete: Cascade)
+
   @@unique([draftId, version])
   @@map("seo_article_versions")
 }
 
 model SeoSlugRedirect {
-  id String @id @default(cuid())
-  fromSlug String @unique
-  postId String
+  id        String   @id @default(cuid())
+  fromSlug  String   @unique
+  postId    String
   createdAt DateTime @default(now())
-  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
   @@index([postId])
   @@map("seo_slug_redirects")
 }
 
 // Phase 5: immutable-per-period Search Console performance snapshots (API sync or manual CSV import).
 model SeoSearchSnapshot {
-  id String @id @default(cuid())
-  periodStart DateTime @db.Date
-  periodEnd DateTime @db.Date
-  kind String
-  source String
-  rowCount Int
-  droppedRows Int @default(0)
+  id           String         @id @default(cuid())
+  periodStart  DateTime       @db.Date
+  periodEnd    DateTime       @db.Date
+  kind         String
+  source       String
+  rowCount     Int
+  droppedRows  Int            @default(0)
   importedById String?
-  createdAt DateTime @default(now())
-  rows SeoSearchRow[]
+  createdAt    DateTime       @default(now())
+  rows         SeoSearchRow[]
+
   @@unique([kind, periodStart, periodEnd])
   @@index([kind, periodEnd])
   @@map("seo_search_snapshots")
 }
 
 model SeoSearchRow {
-  id String @id @default(cuid())
-  snapshotId String
-  page String @default("")
-  query String @default("")
-  clicks Int
+  id          String            @id @default(cuid())
+  snapshotId  String
+  page        String            @default("")
+  query       String            @default("")
+  clicks      Int
   impressions Int
-  ctr Float
-  position Float
-  snapshot SeoSearchSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  ctr         Float
+  position    Float
+  snapshot    SeoSearchSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
   @@unique([snapshotId, page, query])
   @@index([snapshotId, page])
   @@map("seo_search_rows")
@@ -1918,63 +1923,67 @@ model SeoSearchRow {
 
 // Phase 6: cookie-free, aggregate article traffic. No visitor identifier is stored.
 model SeoArticleDay {
-  id String @id @default(cuid())
-  postId String
-  day DateTime @db.Date
-  organicViews Int @default(0)
-  otherViews Int @default(0)
-  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  postId       String
+  day          DateTime @db.Date
+  organicViews Int      @default(0)
+  otherViews   Int      @default(0)
+  post         BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
   @@unique([postId, day])
   @@map("seo_article_days")
 }
 
 // First-touch link between a new account and the article whose register link it used.
 model SeoAttribution {
-  id String @id @default(cuid())
-  userId String @unique
-  postId String?
-  slug String
-  createdAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post BlogPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  postId    String?
+  slug      String
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      BlogPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+
   @@index([postId, createdAt])
   @@map("seo_attributions")
 }
 
 // Phase 7: durable background jobs (claimed with SKIP LOCKED, retried with backoff) and AI spend ledger.
 model SeoJob {
-  id String @id @default(cuid())
-  type String
-  status String @default("QUEUED")
-  dedupeKey String @unique
-  payload Json
-  runAt DateTime
-  attempts Int @default(0)
-  maxAttempts Int @default(3)
-  lockedAt DateTime?
-  finishedAt DateTime?
-  lastError String?
-  result Json?
-  createdAt DateTime @default(now())
+  id          String    @id @default(cuid())
+  type        String
+  status      String    @default("QUEUED")
+  dedupeKey   String    @unique
+  payload     Json
+  runAt       DateTime
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  lockedAt    DateTime?
+  finishedAt  DateTime?
+  lastError   String?
+  result      Json?
+  createdAt   DateTime  @default(now())
+
   @@index([status, runAt])
   @@map("seo_jobs")
 }
 
 model SeoAiUsage {
-  id String @id @default(cuid())
-  month String
-  provider String
-  model String
-  operation String
-  status String @default("RESERVED")
-  estimatedUsd Decimal @db.Decimal(10, 4)
-  actualUsd Decimal? @db.Decimal(10, 4)
-  inputTokens Int?
+  id           String    @id @default(cuid())
+  month        String
+  provider     String
+  model        String
+  operation    String
+  status       String    @default("RESERVED")
+  estimatedUsd Decimal   @db.Decimal(10, 4)
+  actualUsd    Decimal?  @db.Decimal(10, 4)
+  inputTokens  Int?
   outputTokens Int?
-  draftId String?
-  actorId String?
-  createdAt DateTime @default(now())
-  settledAt DateTime?
+  draftId      String?
+  actorId      String?
+  createdAt    DateTime  @default(now())
+  settledAt    DateTime?
+
   @@index([month, status])
   @@index([createdAt])
   @@map("seo_ai_usage")
@@ -1982,40 +1991,43 @@ model SeoAiUsage {
 
 // Phase 8: competitor strategy data. Only titles/URLs/domains an admin entered or imported; no scraped article text.
 model SeoCompetitor {
-  id String @id @default(cuid())
-  name String
-  domain String @unique
-  notes String @default("")
-  active Boolean @default(true)
-  createdAt DateTime @default(now())
-  topics SeoCompetitorTopic[]
+  id          String               @id @default(cuid())
+  name        String
+  domain      String               @unique
+  notes       String               @default("")
+  active      Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  topics      SeoCompetitorTopic[]
   serpResults SeoSerpResult[]
+
   @@map("seo_competitors")
 }
 
 model SeoCompetitorTopic {
-  id String @id @default(cuid())
+  id           String        @id @default(cuid())
   competitorId String
-  title String
-  normalized String
-  url String?
-  createdAt DateTime @default(now())
-  competitor SeoCompetitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  title        String
+  normalized   String
+  url          String?
+  createdAt    DateTime      @default(now())
+  competitor   SeoCompetitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
   @@unique([competitorId, normalized])
   @@map("seo_competitor_topics")
 }
 
 model SeoSerpResult {
-  id String @id @default(cuid())
-  keywordId String
-  rank Int
-  domain String
-  title String
-  url String
+  id           String         @id @default(cuid())
+  keywordId    String
+  rank         Int
+  domain       String
+  title        String
+  url          String
   competitorId String?
-  createdAt DateTime @default(now())
-  keyword SeoKeyword @relation(fields: [keywordId], references: [id], onDelete: Cascade)
-  competitor SeoCompetitor? @relation(fields: [competitorId], references: [id], onDelete: SetNull)
+  createdAt    DateTime       @default(now())
+  keyword      SeoKeyword     @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+  competitor   SeoCompetitor? @relation(fields: [competitorId], references: [id], onDelete: SetNull)
+
   @@unique([keywordId, rank])
   @@index([domain])
   @@map("seo_serp_results")
@@ -2082,7 +2094,9 @@ model MistakeExplanation {
   @@map("mistake_explanations")
 }
 
-/** One student opening an explanation. `charged` = this request generated it (counts against the daily allowance). */
+/**
+ * One student opening an explanation. `charged` = this request generated it (counts against the daily allowance).
+ */
 model MistakeExplanationView {
   id            String   @id @default(cuid())
   userId        String
@@ -2272,4 +2286,21 @@ model PushSubscription {
 
   @@index([userId])
   @@map("push_subscriptions")
+}
+
+/// The exams a learner is preparing for (at most two, enforced in exam-interests.service). They
+/// pick the countdowns shown across the site and limit exam-specific study material to these exams.
+model UserExamInterest {
+  id        String    @id @default(cuid())
+  userId    String
+  examCode  ExamCode
+  /// The learner's own exam date, e.g. a booked IELTS session; ÖSYM exams fall back to the calendar.
+  examDate  DateTime? @db.Date
+  position  Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examCode])
+  @@map("user_exam_interests")
 }

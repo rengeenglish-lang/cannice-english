@@ -14,6 +14,9 @@ import { getAuthContext } from "@/server/auth/context";
 import { getPlanAccess } from "@/server/services/plans.service";
 import { KonuAnlatimDashboard } from "@/components/topics/KonuAnlatimDashboard";
 import { ArrowRight, Lock } from "lucide-react";
+import { viewerExamAccess } from "@/server/services/exam-access";
+import { canOpenExam } from "@/lib/exam-interests";
+import { OutsideInterestsNotice } from "@/components/exam-interests/OutsideInterestsNotice";
 
 export const metadata: Metadata = { title: "Konu Anlatım" };
 
@@ -42,6 +45,9 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   const user = await getAuthContext();
   const access = await getPlanAccess(user);
   const hasAccess = access.can("KONU_ANLATIMI");
+  // Learners see only the exams they chose in Sınavlarım (everyone else sees all seven).
+  const { allowed, interests } = await viewerExamAccess();
+  const subjects = SUBJECTS.filter((s) => canOpenExam(allowed, s.slug));
 
   if (!exam) {
     return (
@@ -54,7 +60,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
           </p>
         </PageHero>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {SUBJECTS.map((subject) => (
+          {subjects.map((subject) => (
             <Link
               key={subject.slug}
               href={`/konu-anlatim?exam=${subject.slug}`}
@@ -80,6 +86,13 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   }
 
   const examSlug = exam;
+  if (!canOpenExam(allowed, examSlug)) {
+    return (
+      <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
+        <OutsideInterestsNotice interests={interests} examName={SUBJECTS.find((s) => s.slug === examSlug)?.name} />
+      </main>
+    );
+  }
   const [exams, activeExam] = await Promise.all([
     listExamTypes(),
     getExamTypeBySlug(examSlug),
@@ -123,7 +136,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
       </PageHero>
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <Link href="/konu-anlatim" className="rounded-full px-3 py-2 text-sm font-bold text-slate-500 hover:text-blue-700">← Tüm sınavlar</Link>
-        {exams.map((item) => (
+        {exams.filter((item) => canOpenExam(allowed, item.slug)).map((item) => (
           <Link
             key={item.id}
             href={`/konu-anlatim?exam=${item.slug}`}
