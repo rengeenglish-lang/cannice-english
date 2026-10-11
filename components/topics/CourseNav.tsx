@@ -11,6 +11,14 @@ const CATEGORY_LABEL: Record<string, string> = {
   LISTENING: "Dinleme",
 };
 
+/** Mid-tone band per skill: brighter than the site's dark green, still dark enough for white text. */
+const CATEGORY_COLOR: Record<string, string> = {
+  SPEAKING: "#c2571a",
+  WRITING: "#7a52c7",
+  READING: "#2f6fd0",
+  LISTENING: "#0f8a7e",
+};
+
 /** "Konuya Giriş" rather than "Tense – Konuya Giriş": the topic name is already the section title. */
 export function stepLabel(title: string, topicName: string): string {
   const stripped = title.startsWith(`${topicName} – `) ? title.slice(topicName.length + 3) : title;
@@ -64,7 +72,10 @@ export function CourseNav<T extends Topic>({
       {groups.map((group) => (
         <div key={group.category ?? "all"}>
           {group.category ? (
-            <p className="bg-[color:var(--canvas)] px-5 pb-1 pt-4 text-[11px] font-extrabold uppercase tracking-widest text-[color:var(--muted)]">
+            <p
+              className="px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white"
+              style={{ backgroundColor: CATEGORY_COLOR[group.category] ?? "var(--accent)" }}
+            >
               {CATEGORY_LABEL[group.category] ?? group.category}
             </p>
           ) : null}

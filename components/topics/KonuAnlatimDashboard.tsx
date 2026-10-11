@@ -50,8 +50,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   LISTENING: "Dinleme",
 };
 
-const CARD =
-  "relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)]";
+const CARD = "relative overflow-hidden rounded-lg border border-slate-200 bg-white px-6 py-6 sm:px-8 sm:py-7";
 
 export function KonuAnlatimDashboard({
   examName,
@@ -278,7 +277,7 @@ export function KonuAnlatimDashboard({
         </div>
         {mobileNavOpen ? <div className="course-sidebar mb-5 lg:hidden">{nav}</div> : null}
 
-        <article className="mx-auto max-w-[760px]">
+        <article className="mx-auto max-w-[960px]">
           <div className="flex items-center justify-between gap-3 border-b border-[color:var(--border)] pb-3">
             <span className="rounded border border-[color:var(--border)] bg-[color:var(--canvas)] px-2 py-1 text-xs font-extrabold text-[color:var(--foreground)]">
               {topicIndex + 1}

@@ -23,13 +23,13 @@ export function ContentAccordion({
         return (
           <div
             key={section.title}
-            className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,.04),0_10px_24px_rgba(15,23,42,.06)]"
+            className="overflow-hidden rounded-lg border border-slate-200 bg-white"
           >
             <button
               type="button"
               onClick={() => setOpenIndex(open ? -1 : index)}
               aria-expanded={open}
-              className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left text-lg font-extrabold text-slate-900 transition hover:bg-blue-50/60 sm:text-xl"
+              className="flex w-full items-center justify-between gap-3 px-6 py-5 text-left text-xl font-bold text-slate-950 transition hover:bg-slate-50 sm:px-8"
             >
               {section.title}
               <ChevronDown
@@ -37,7 +37,7 @@ export function ContentAccordion({
               />
             </button>
             {open ? (
-              <div className="space-y-4 border-t border-slate-100 px-5 py-5">
+              <div className="space-y-6 border-t border-slate-200 px-6 py-6 sm:px-8 sm:py-7">
                 {hasStrategyBoxes(section.body) ? (
                   parseStrategyBoxes(section.body).map((segment, segmentIndex) =>
                     segment.kind === "box" ? (

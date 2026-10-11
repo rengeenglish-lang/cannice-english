@@ -27,6 +27,21 @@ import {
   Compass,
   Layers,
   PenLine,
+  ChevronDown,
+  LayoutDashboard,
+  BarChart3,
+  Users,
+  Inbox,
+  FileCheck2,
+  Sparkles,
+  ClipboardList,
+  Package,
+  TicketPercent,
+  Newspaper,
+  Search,
+  Quote,
+  Scale,
+  type LucideIcon,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -67,29 +82,65 @@ const ACCOUNT = [
   { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
   { href: "/yardim", label: "Yardım Masası", icon: HelpCircle },
 ];
-const STAFF = [
-  ["/admin", "Genel bakış"],
-  ["/admin/analitik", "Analitik"],
-  ["/admin/students", "Öğrenciler"],
-  ["/admin/orders", "Siparişler"],
-  ["/admin/coupons", "Kuponlar"],
-  ["/admin/products", "Ürünler"],
-  ["/admin/group-availability", "Grup uygunluğu"],
-  ["/admin/konu-anlatim", "Konu anlatımı"],
-  ["/admin/diagnostik/konular", "Seviye tespit konuları"],
-  ["/admin/diagnostik/sorular", "Seviye tespit soruları"],
-  ["/admin/diagnostik/degerlendirmeler", "Seviye tespit değerlendirmeleri"],
-  ["/admin/testimonials", "Katılımcı görüşleri"],
-  ["/admin/blog", "Blog"],
-  ["/admin/seo", "SEO Autopilot"],
-  ["/admin/submissions", "Değerlendirmeler"],
-  ["/admin/leads", "Gelen talepler"],
-  ["/admin/mesajlar", "Öğrenci mesajları"],
-  ["/admin/kocluk/oneriler", "Koçluk: Gelen Koçluk Önerileri"],
-  ["/admin/speaking-club", "Speaking Club"],
-  ["/admin/kaynaklar", "Kaynaklar"],
-  ["/admin/settings", "Ödeme Ayarları"],
-  ["/admin/legal", "Hukuki Belgeler"],
+/** Admin pages grouped by job; `adminOnly` pages are hidden from teachers. */
+const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon: LucideIcon; adminOnly?: boolean }[] }[] = [
+  {
+    label: "GENEL",
+    items: [
+      { href: "/admin", label: "Genel bakış", icon: LayoutDashboard },
+      { href: "/admin/analitik", label: "Analitik", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "ÖĞRENCİLER",
+    items: [
+      { href: "/admin/students", label: "Öğrenciler", icon: Users },
+      { href: "/admin/mesajlar", label: "Öğrenci mesajları", icon: MessageCircle },
+      { href: "/admin/leads", label: "Gelen talepler", icon: Inbox },
+      { href: "/admin/submissions", label: "Deneme değerlendirmeleri", icon: FileCheck2 },
+    ],
+  },
+  {
+    label: "KOÇLUK VE CANLI DERS",
+    items: [
+      { href: "/admin/kocluk/oneriler", label: "Gelen koçluk önerileri", icon: Sparkles, adminOnly: true },
+      { href: "/admin/speaking-club", label: "Speaking Club", icon: Mic2, adminOnly: true },
+      { href: "/admin/group-availability", label: "Grup uygunluğu", icon: CalendarDays, adminOnly: true },
+    ],
+  },
+  {
+    label: "İÇERİK",
+    items: [
+      { href: "/admin/konu-anlatim", label: "Konu anlatımı", icon: Library },
+      { href: "/admin/diagnostik/konular", label: "Seviye tespit: konular", icon: ClipboardCheck },
+      { href: "/admin/diagnostik/sorular", label: "Seviye tespit: sorular", icon: ListChecks },
+      { href: "/admin/diagnostik/degerlendirmeler", label: "Seviye tespit: sonuçlar", icon: ClipboardList },
+      { href: "/admin/kaynaklar", label: "Kaynaklar", icon: BookOpen },
+    ],
+  },
+  {
+    label: "SATIŞ",
+    items: [
+      { href: "/admin/orders", label: "Siparişler", icon: ShoppingBag },
+      { href: "/admin/products", label: "Ürünler", icon: Package },
+      { href: "/admin/coupons", label: "Kuponlar", icon: TicketPercent },
+    ],
+  },
+  {
+    label: "PAZARLAMA",
+    items: [
+      { href: "/admin/blog", label: "Blog", icon: Newspaper },
+      { href: "/admin/seo", label: "SEO Autopilot", icon: Search, adminOnly: true },
+      { href: "/admin/testimonials", label: "Katılımcı görüşleri", icon: Quote },
+    ],
+  },
+  {
+    label: "AYARLAR",
+    items: [
+      { href: "/admin/settings", label: "Ödeme ayarları", icon: Settings },
+      { href: "/admin/legal", label: "Hukuki belgeler", icon: Scale, adminOnly: true },
+    ],
+  },
 ];
 
 function SidebarContent({
@@ -103,6 +154,15 @@ function SidebarContent({
 }) {
   const pathname = usePathname();
   const isAdmin = role === "ADMIN";
+  // Staff groups start open; a group holding the current page cannot be collapsed.
+  const [closedGroups, setClosedGroups] = useState<Set<string>>(() => new Set());
+  const toggleGroup = (label: string) =>
+    setClosedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      return next;
+    });
   const active = (href: string) =>
     !href.includes("#") &&
     (pathname === href ||
@@ -118,7 +178,7 @@ function SidebarContent({
       >
         <Logo size={40} tone="dark" subtitle={isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"} />
       </Link>
-      <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className="space-y-6">
+      <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className={isAdmin ? "space-y-4" : "space-y-6"}>
         {(isAdmin ? [] : [
           { label: "ÖĞRENME", items: learningNav(examFamily) },
           { label: "HESABINIZ", items: ACCOUNT },
@@ -146,28 +206,43 @@ function SidebarContent({
             </div>
           </div>
         ))}
-        {role !== "STUDENT" ? (
-          <div>
-            <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
-              YÖNETİM
-            </p>
-            {STAFF.filter(([href]) => role === "ADMIN" || !["/admin/group-availability", "/admin/legal", "/admin/seo", "/admin/kocluk/oneriler", "/admin/speaking-club"].includes(href)).map(([href, label]) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={onNavigate}
-                aria-current={active(href) ? "page" : undefined}
-                className={
-                  "dashboard-nav-item " +
-                  (active(href) ? "dashboard-nav-item-active" : "")
-                }
-              >
-                <Settings size={17} aria-hidden="true" />
-                {label}
-              </Link>
-            ))}
-          </div>
-        ) : null}
+        {role !== "STUDENT"
+          ? STAFF_GROUPS.map((group) => {
+              const items = group.items.filter((item) => role === "ADMIN" || !item.adminOnly);
+              if (!items.length) return null;
+              const hasActive = items.some((item) => active(item.href));
+              const open = hasActive || !closedGroups.has(group.label);
+              return (
+                <div key={group.label}>
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group.label)}
+                    aria-expanded={open}
+                    className="mb-1 flex w-full items-center justify-between rounded-md px-3 py-1 text-[10px] font-bold tracking-widest text-blue-200/80 transition hover:text-white"
+                  >
+                    {group.label}
+                    <ChevronDown size={14} aria-hidden="true" className={`transition-transform ${open ? "" : "-rotate-90"}`} />
+                  </button>
+                  {open ? (
+                    <div className="space-y-0.5">
+                      {items.map(({ href, label, icon: Icon }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={onNavigate}
+                          aria-current={active(href) ? "page" : undefined}
+                          className={"dashboard-nav-item " + (active(href) ? "dashboard-nav-item-active" : "")}
+                        >
+                          <Icon size={17} aria-hidden="true" />
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })
+          : null}
       </nav>
       <form
         action={signOutAction}
