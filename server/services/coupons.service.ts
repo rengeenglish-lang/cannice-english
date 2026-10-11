@@ -54,9 +54,11 @@ export type CouponValidationResult =
   | { ok: true; coupon: { id: string; code: string; type: "PERCENT" | "FIXED"; value: number }; discount: number }
   | { ok: false; message: string };
 
-export async function validateCouponForOrder(code: string, subtotal: number): Promise<CouponValidationResult> {
+export async function validateCouponForOrder(code: string, subtotal: number, userId?: string | null): Promise<CouponValidationResult> {
   const coupon = await db.coupon.findUnique({ where: { code: code.trim().toUpperCase() } });
   if (!coupon || !coupon.isActive) return { ok: false, message: "Kupon kodu geçersiz." };
+  // Personal coupons (davet indirimleri) belong to one account.
+  if (coupon.ownerUserId && coupon.ownerUserId !== userId) return { ok: false, message: userId ? "Bu kupon başka bir hesaba ait." : "Bu kişisel kuponu kullanmak için giriş yapmalısın." };
   if (coupon.expiresAt && coupon.expiresAt < new Date()) return { ok: false, message: "Bu kuponun süresi doldu." };
   if (coupon.maxRedemptions && coupon.redemptionCount >= coupon.maxRedemptions) return { ok: false, message: "Bu kuponun kullanım limiti doldu." };
   if (coupon.minOrderAmount && subtotal < Number(coupon.minOrderAmount)) {

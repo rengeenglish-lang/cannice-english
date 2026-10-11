@@ -346,11 +346,21 @@ model User {
   marketingEmail     Boolean   @default(false)
   marketingSms       Boolean   @default(false)
   marketingPhone     Boolean   @default(false)
+  /// Show "Ayşe Y." on the weekly leaderboard instead of "Netfener öğrencisi" (opt-in).
+  leaderboardOptIn   Boolean   @default(false)
+  /// Personal invite code (netfener.com/register?ref=CODE), created the first time it is needed.
+  referralCode       String?   @unique
+  referredById       String?
+  /// Set once the referrer has been rewarded for this user's first paid order.
+  referralRewardedAt DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
   authTokens            AuthToken[]
   consentLogs           ConsentLog[]
+  certificates          Certificate[]
+  badges                UserBadge[]
+  pushSubscriptions     PushSubscription[]
   seoActivityLogs       SeoActivityLog[]
   seoAttribution        SeoAttribution?
   orders                Order[]
@@ -753,8 +763,11 @@ model Coupon {
   maxRedemptions  Int?
   redemptionCount Int        @default(0)
   expiresAt       DateTime?
+  /// Personal coupons (referral rewards) can only be used by this user.
+  ownerUserId     String?
   createdAt       DateTime   @default(now())
 
+  @@index([ownerUserId])
   @@map("coupons")
 }
 
@@ -2206,4 +2219,57 @@ model ConsentLog {
 
   @@index([userId, kind, createdAt])
   @@map("consent_logs")
+}
+
+// ====================================================================
+// ENGAGEMENT: certificates, badges, push, referrals
+// ====================================================================
+
+/// A completion certificate. `code` is the public verification id (netfener.com/sertifika/<code>).
+model Certificate {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  userId        String
+  /// "TOPICS" (an exam's whole Konu Anlatımı track) | "COURSE"
+  kind          String
+  /// Exam type slug for TOPICS, course id for COURSE.
+  refKey        String
+  title         String
+  recipientName String
+  lessonCount   Int
+  issuedAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, refKey])
+  @@map("certificates")
+}
+
+/// A badge earned once (see lib/engagement.ts for the list).
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeKey String
+  earnedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeKey])
+  @@map("user_badges")
+}
+
+/// A browser/phone that accepted push notifications (Web Push).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }

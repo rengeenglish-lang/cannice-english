@@ -1,5 +1,5 @@
 import "server-only";
-import { notify } from "@/server/services/notifications.service";
+import { notify, pushNotification } from "@/server/services/notifications.service";
 import { db } from "@/server/db";
 import { decideFollowUps, ESSENTIAL, IGNORE_THRESHOLD, type FollowUpCandidate } from "@/lib/coaching/followups";
 import { coachingCopy, pick } from "@/lib/coaching/i18n";
@@ -176,6 +176,7 @@ async function deliverInApp(profile: CoachingProfileRow, candidates: FollowUpCan
         const note = await notify(userId, { category: "COACHING", key: `coaching:${d.candidate.kind}`, title: d.candidate.title, body: d.candidate.body ?? null, href: d.candidate.href }, tx);
         await tx.coachingNotificationLog.update({ where: { id: log.id }, data: { notificationId: note.id } });
       });
+      pushNotification(userId, { title: d.candidate.title, body: d.candidate.body ?? null, href: d.candidate.href, key: `coaching:${d.candidate.kind}` });
       sent += 1;
       sentToday += 1;
     } catch (e) {

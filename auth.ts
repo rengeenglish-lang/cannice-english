@@ -9,6 +9,8 @@ import { authConfig } from "@/auth.config";
 import { isGoogleConfigured, resolveGoogleUser } from "@/server/auth/google";
 import { sendGoogleWelcome } from "@/server/services/account-email.service";
 import { recordTermsAcceptance } from "@/server/services/consent.service";
+import { applyReferral, REFERRAL_COOKIE } from "@/server/services/referrals.service";
+import { cookies } from "next/headers";
 
 validateCanonicalUrl();
 
@@ -32,6 +34,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       user.id = resolved.userId; // the session id must be the Netfener user id, never Google's subject
       if (resolved.created) {
         await recordTermsAcceptance(resolved.userId, "GOOGLE").catch(() => undefined);
+        // A Google sign-up that started from an invite link (the code waits in a cookie).
+        const ref = (await cookies()).get(REFERRAL_COOKIE)?.value;
+        if (ref) await applyReferral(resolved.userId, ref).catch(() => null);
         await sendGoogleWelcome(resolved.userId).catch(() => undefined);
       }
       return true;

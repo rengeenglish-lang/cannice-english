@@ -8,6 +8,7 @@ import { NETFENER_EBOOKS } from "@/lib/netfener-ebooks";
 import { editionSlug } from "@/lib/netfener-ebook-editions";
 import { sendOrderPaid } from "@/server/services/transactional-email.service";
 import { issueInvoiceForOrder, syncInvoiceToDrive, voidInvoiceForOrder } from "@/server/services/invoices.service";
+import { rewardReferrer } from "@/server/services/referrals.service";
 
 export function listOrders() {
   return db.order.findMany({
@@ -121,6 +122,8 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
     return null;
   });
   if (invoice?.driveDirty) await syncInvoiceToDrive(invoice.id).catch(() => false);
+  // An invited student's first paid order earns the inviter their coupon (once).
+  await rewardReferrer(orderId).catch((e) => console.error("[referral] reward failed", e));
   // Confirmation + receipt link, guests included. Keyed per order, so a capture retry or a second
   // approval click doesn't send it twice; an email failure never undoes the payment.
   await sendOrderPaid(orderId).catch(() => false);

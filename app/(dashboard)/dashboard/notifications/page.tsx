@@ -6,6 +6,7 @@ import { AccountHeader } from "@/components/dashboard/AccountHeader";
 import { AccountTabs } from "@/components/dashboard/AccountTabs";
 import { NotificationRow } from "@/components/dashboard/NotificationRow";
 import { NotificationBulkActions } from "@/components/dashboard/NotificationBulkActions";
+import { PushToggle } from "@/components/push/PushToggle";
 
 export const metadata: Metadata = { title: "Bildirimlerim" };
 
@@ -23,7 +24,11 @@ export default async function NotificationsPage({ searchParams }: { searchParams
       <AccountHeader name={user.name} email={user.email} activeTabLabel="Bildirim Ayarlarım" />
       <AccountTabs active="Bildirim Ayarlarım" />
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-8">
+        <PushToggle />
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1">
           <Link href="/dashboard/notifications" className={tab(!archived)}>Gelen</Link>
           <Link href="/dashboard/notifications?arsiv=1" className={tab(archived)}>Arşiv</Link>

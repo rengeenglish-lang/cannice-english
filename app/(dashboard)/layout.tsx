@@ -7,6 +7,7 @@ import { examFamilyForCode } from "@/lib/diagnostics/exam-family";
 import { syncBillingNotices } from "@/server/services/billing.service";
 import { db } from "@/server/db";
 import { refreshAndNotify } from "@/server/services/coaching/coaching.service";
+import { syncEngagement } from "@/server/services/engagement.service";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { emailConfigured } from "@/server/email/send";
 import { countUnreadNotifications } from "@/server/services/notifications.service";
@@ -24,6 +25,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   after(async () => {
     const coaching = await db.coachingProfile.findUnique({ where: { userId: user.id }, select: { enabled: true } });
     if (coaching?.enabled) await refreshAndNotify(user).catch((e) => console.error("coaching follow-ups failed", e));
+    // New badges are announced as soon as they are earned, not only when Başarılar is opened.
+    if (user.role === "STUDENT") await syncEngagement(user.id).catch((e) => console.error("badge sync failed", e));
   });
 
   // Students only: staff accounts are created by hand, and without email set up there is no link to send.

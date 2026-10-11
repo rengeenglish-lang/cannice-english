@@ -5,17 +5,25 @@ import type { Metadata } from "next";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { isGoogleConfigured } from "@/server/auth/google";
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { cookies } from "next/headers";
+import { REFERRAL_COOKIE, REFERRAL_PERCENT, isReferralCode } from "@/server/services/referrals.service";
 
 export const metadata: Metadata = { title: "Hesap Oluştur" };
 
-export default async function RegisterPage({searchParams}: {searchParams: Promise<{next?: string; src?: string}>}) {
+export default async function RegisterPage({searchParams}: {searchParams: Promise<{next?: string; src?: string; ref?: string}>}) {
 const params = await searchParams;
 const next = safeNextPath(params.next);
 const src = parseSource(params.src) ? params.src : undefined;
+const ref = isReferralCode(params.ref?.toUpperCase()) ? params.ref!.toUpperCase() : (await cookies()).get(REFERRAL_COOKIE)?.value;
   return (
     <div>
       <p className="eyebrow text-center">Öğrenme Yolculuğuna Başla</p>
       <h1 className="page-title text-center">Hesabını Oluştur</h1>
+      {isReferralCode(ref) ? (
+        <p className="mt-3 rounded-lg bg-emerald-50 px-4 py-2 text-center text-sm font-semibold text-emerald-800">
+          Bir arkadaşın seni davet etti: üye olunca ilk siparişinde %{REFERRAL_PERCENT} indirim kazanırsın.
+        </p>
+      ) : null}
       <div className="mt-6 space-y-4">
         {isGoogleConfigured() ? (
           <div>
@@ -25,7 +33,7 @@ const src = parseSource(params.src) ? params.src : undefined;
             </p>
           </div>
         ) : null}
-        <RegisterForm next={next} src={src} />
+        <RegisterForm next={next} src={src} referral={isReferralCode(ref) ? ref : undefined} />
       </div>
       <p className="mt-4 text-center text-sm text-slate-500">
         Zaten üye misin?{" "}
