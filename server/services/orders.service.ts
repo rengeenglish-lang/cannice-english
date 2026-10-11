@@ -6,6 +6,7 @@ import { enrollGroupSlotAndSeries } from "@/server/services/group-availability.s
 import { isMonthlyBilledCategory, nextPaidThrough } from "@/lib/billing";
 import { NETFENER_EBOOKS } from "@/lib/netfener-ebooks";
 import { editionSlug } from "@/lib/netfener-ebook-editions";
+import { sendOrderPaid } from "@/server/services/transactional-email.service";
 
 export function listOrders() {
   return db.order.findMany({
@@ -104,6 +105,9 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
       }
     }
   }
+  // Confirmation + receipt link, guests included. Keyed per order, so a capture retry or a second
+  // approval click doesn't send it twice; an email failure never undoes the payment.
+  await sendOrderPaid(orderId).catch(() => false);
   return result;
 }
 

@@ -7,6 +7,8 @@ import { examFamilyForCode } from "@/lib/diagnostics/exam-family";
 import { syncBillingNotices } from "@/server/services/billing.service";
 import { db } from "@/server/db";
 import { refreshAndNotify } from "@/server/services/coaching/coaching.service";
+import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
+import { emailConfigured } from "@/server/email/send";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getAuthContext();
@@ -22,5 +24,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
     if (coaching?.enabled) await refreshAndNotify(user).catch((e) => console.error("coaching follow-ups failed", e));
   });
 
-  return <DashboardShell role={user.role} examFamily={examFamily}>{children}</DashboardShell>;
+  // Students only: staff accounts are created by hand, and without email set up there is no link to send.
+  const showVerify = user.role === "STUDENT" && !user.emailVerifiedAt && emailConfigured();
+  return (
+    <DashboardShell role={user.role} examFamily={examFamily}>
+      {showVerify ? <VerifyEmailBanner email={user.email} /> : null}
+      {children}
+    </DashboardShell>
+  );
 }

@@ -6,6 +6,7 @@ import { db } from "@/server/db";
 import { hashPassword } from "@/server/auth/password";
 import { recordRegistrationAttribution } from "@/server/services/seo/conversions.service";
 import { registerSchema } from "@/lib/validation/auth";
+import { sendWelcomeVerification } from "@/server/services/account-email.service";
 
 export type RegisterFormState = { status: "idle" | "error"; message?: string };
 
@@ -29,6 +30,8 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
 
   // First-touch attribution to the article whose register link was used. Never blocks signup.
   await recordRegistrationAttribution(user.id, formData.get("src")).catch(() => undefined);
+  // Welcome + verification link. Never blocks signup; the dashboard offers a resend.
+  await sendWelcomeVerification(user).catch(() => undefined);
 
   const next = safeNextPath(formData.get("next"));
 redirect(`/sign-in?registered=1${next ? `&next=${encodeURIComponent(next)}` : ""}`);

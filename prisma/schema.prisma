@@ -336,9 +336,14 @@ model User {
   role           UserRole  @default(STUDENT)
   image          String?
   isActive       Boolean   @default(true)
+  /// Set when the user proved they own the address (verification link, password reset or Google).
+  emailVerifiedAt    DateTime?
+  /// One-click opt-out from abandoned-cart reminders (the only non-essential transactional email).
+  cartReminderOptOut Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  authTokens            AuthToken[]
   seoActivityLogs       SeoActivityLog[]
   seoAttribution        SeoAttribution?
   orders                Order[]
@@ -2048,4 +2053,42 @@ model MistakeExplanationView {
   @@index([userId, createdAt])
   @@index([explanationId])
   @@map("mistake_explanation_views")
+}
+
+// ====================================================================
+// ACCOUNT EMAILS
+// ====================================================================
+
+enum AuthTokenKind {
+  PASSWORD_RESET
+  EMAIL_VERIFY
+}
+
+/// Single-use links sent by email. Only the SHA-256 of the token is stored.
+model AuthToken {
+  id        String        @id @default(cuid())
+  userId    String
+  kind      AuthTokenKind
+  tokenHash String        @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind, createdAt])
+  @@map("auth_tokens")
+}
+
+/// One row per transactional email sent, keyed so the same email is never sent twice
+/// (e.g. "order-paid:<orderId>", "session-day:<sessionId>:<userId>").
+model EmailLog {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  kind      String
+  to        String
+  createdAt DateTime @default(now())
+
+  @@index([kind, createdAt])
+  @@map("email_logs")
 }

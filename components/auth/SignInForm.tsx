@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { signInAction, type SignInFormState } from "@/app/actions/sign-in";
 
@@ -15,8 +16,11 @@ export function SignInForm({next}: {next?: string}) {
         <input id="email" name="email" type="email" required className="auth-input" />
       </div>
       <div>
-        <label className="label" htmlFor="password">Şifre</label>
-        <input id="password" name="password" type="password" required className="auth-input" />
+        <div className="flex items-baseline justify-between gap-3">
+          <label className="label" htmlFor="password">Şifre</label>
+          <Link href="/sifremi-unuttum" className="text-xs font-bold text-[color:var(--brand)] hover:underline">Şifremi unuttum</Link>
+        </div>
+        <input id="password" name="password" type="password" required autoComplete="current-password" className="auth-input" />
       </div>
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       <button type="submit" disabled={pending} className="primary-button w-full justify-center">

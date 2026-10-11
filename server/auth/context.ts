@@ -20,6 +20,7 @@ export const getAuthContext = cache(async () => {
       birthDate: true,
       occupation: true,
       educationLevel: true,
+      emailVerifiedAt: true,
     },
   });
   if (!user || !user.isActive) return null;
