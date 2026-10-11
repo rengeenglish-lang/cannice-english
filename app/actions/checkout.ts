@@ -1,5 +1,6 @@
 "use server";
 
+import { sendOrderAwaitingTransfer } from "@/server/services/transactional-email.service";
 import { acceptCheckoutConsents } from "@/lib/checkout-consent";
 import { getPublishedLegalContent } from "@/server/services/legal-content.service";
 import { getCheckoutConsentRequirements } from "@/server/services/checkout-consent.service";
@@ -121,6 +122,8 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   });
 
   if (appliedCouponId) await redeemCoupon(appliedCouponId);
+  // Havale/EFT: the payment details by email too. Never blocks the order.
+  if (paymentMethod === "MANUAL") await sendOrderAwaitingTransfer(order.id).catch(() => false);
   await db.cartItem.deleteMany({ where: { cartId: cart.id } });
   (await cookies()).delete(CART_COUPON_COOKIE);
 

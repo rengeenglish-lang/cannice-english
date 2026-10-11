@@ -87,6 +87,7 @@ async function runCheckout(items: { slug: string; price: number; book?: { format
     if (name === "@/lib/cart") return { CART_COUPON_COOKIE: "coupon" };
     if (name === "@/lib/pricing") return { FLAT_SHIPPING_TRY };
     if (name === "@/server/services/coupons.service") return { validateCouponForOrder: async () => ({ ok: false, message: "yok" }), redeemCoupon: async () => {} };
+    if (name === "@/server/services/transactional-email.service") return { sendOrderAwaitingTransfer: async () => false };
     if (name === "@/server/db") return { db: {
       order: { create: async ({ data }: { data: Record<string, unknown> }) => { created = data; return { id: "order-1" }; } },
       cartItem: { deleteMany: async () => {} },
