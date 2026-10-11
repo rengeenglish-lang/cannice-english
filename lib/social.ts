@@ -7,5 +7,5 @@ export const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/canniceenglish",
 } as const;
 
-/** Placeholder support address used by Yardım Masası and the policies — replace with the real one. */
-export const SUPPORT_EMAIL = "destek@canniceenglish.com";
+/** Support address used by Yardım Masası and the policies; also the Reply-To on site emails. */
+export const SUPPORT_EMAIL = "destek@netfener.com";
