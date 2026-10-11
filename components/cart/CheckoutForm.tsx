@@ -5,6 +5,7 @@ import { CHECKOUT_ORDER_BUTTON, type ConsentConfiguration, type ConsentRequireme
 import { useActionState, useState } from "react";
 import { placeOrderAction, type CheckoutFormState } from "@/app/actions/checkout";
 import { formatTRY } from "@/lib/pricing";
+import { BankTransferDetails } from "@/components/checkout/BankTransferDetails";
 
 const initialState: CheckoutFormState = { status: "idle" };
 
@@ -36,7 +37,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements,
             className={`rounded-xl border p-4 text-left transition ${paymentMethod === "MANUAL" ? "border-[color:var(--brand)] bg-[color:var(--brand-soft)]" : "border-[color:var(--border)]"}`}
           >
             <span className="block font-bold text-[color:var(--foreground)]">Banka Havalesi</span>
-            <span className="mt-1 block text-xs text-[color:var(--muted)]">Ekibimiz sizinle iletişime geçer.</span>
+            <span className="mt-1 block text-xs text-[color:var(--muted)]">IBAN&apos;a havale veya EFT ile öde.</span>
           </button>
         </div>
       </div>
@@ -103,9 +104,7 @@ export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements,
         <input id="couponCode" name="couponCode" placeholder="PASS25" defaultValue={defaultCoupon} className="auth-input uppercase" />
       </div>
       {paymentMethod === "MANUAL" ? (
-        <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--brand-soft)] p-4 text-sm text-[color:var(--brand)]">
-          Siparişin &ldquo;ödeme bekleniyor&rdquo; durumunda oluşturulacak ve ekibimiz banka havalesi bilgileri için seninle iletişime geçecek.
-        </p>
+        <BankTransferDetails />
       ) : null}
       <CheckoutConsents requirements={consentRequirements} pending={pending} documentsDraft={documentsDraft} configuration={consentConfiguration} />
       {state.status === "error" ? <p role="alert" className="rounded-xl border border-[color:var(--danger)] p-3 text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}

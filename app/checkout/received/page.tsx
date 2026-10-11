@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
 import { formatTRY } from "@/lib/pricing";
+import { BankTransferDetails } from "@/components/checkout/BankTransferDetails";
 
 export const metadata: Metadata = { title: "Siparişin Alındı" };
 
@@ -13,7 +14,7 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
   const order = orderId
     ? await db.order.findUnique({
         where: { id: orderId },
-        include: { items: true },
+        include: { items: true, payment: true },
       })
     : null;
 
@@ -25,9 +26,16 @@ export default async function OrderReceivedPage({ searchParams }: Props) {
         <p className="page-copy mx-auto">
           {order?.status === "PAID"
             ? "Ödemen onaylandı, derslerin hesabında hazır."
-            : "Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek."}
+            : order?.payment?.provider === "MANUAL"
+              ? "Ödemeyi aşağıdaki IBAN'a havale veya EFT ile yapabilirsin. Ödemen doğrulandığında erişimin açılır."
+              : "Ekibimiz ödeme adımlarını tamamlamak için sizinle en kısa sürede iletişime geçecek."}
         </p>
       </PageHero>
+      {order && order.status !== "PAID" && order.payment?.provider === "MANUAL" ? (
+        <div className="mt-8">
+          <BankTransferDetails orderId={order.id} />
+        </div>
+      ) : null}
       {order ? (
         <div className="panel mt-8 text-left">
           <p className="text-sm font-bold text-slate-500">
