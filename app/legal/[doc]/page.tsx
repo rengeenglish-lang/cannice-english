@@ -29,11 +29,33 @@ export default async function LegalDocPage({ params }: Props) {
       {entry.sections?.map((section) => (
         <section key={section.heading} id={section.id} className="mt-8 scroll-mt-28 rounded-xl target:ring-2 target:ring-[color:var(--brand)] target:ring-offset-4">
           <h2 className="text-xl font-extrabold text-slate-900">{section.heading}</h2>
-          {section.paragraphs.map((paragraph, i) => (
-            <p key={i} className="mt-3 text-base leading-7 text-slate-600">{paragraph}</p>
-          ))}
+          <LegalParagraphs paragraphs={section.paragraphs} />
         </section>
       ))}
     </main>
+  );
+}
+
+/** "• " lines become a list, "> " lines a quoted consent text, everything else a paragraph. */
+function LegalParagraphs({ paragraphs }: { paragraphs: string[] }) {
+  const blocks: ({ kind: "list"; items: string[] } | { kind: "quote" | "p"; text: string })[] = [];
+  for (const paragraph of paragraphs) {
+    if (paragraph.startsWith("• ")) {
+      const last = blocks.at(-1);
+      if (last?.kind === "list") last.items.push(paragraph.slice(2));
+      else blocks.push({ kind: "list", items: [paragraph.slice(2)] });
+    } else if (paragraph.startsWith("> ")) blocks.push({ kind: "quote", text: paragraph.slice(2) });
+    else blocks.push({ kind: "p", text: paragraph });
+  }
+  return blocks.map((block, i) =>
+    block.kind === "list" ? (
+      <ul key={i} className="mt-3 list-disc space-y-1.5 pl-6 text-base leading-7 text-slate-600 marker:text-slate-400">
+        {block.items.map((item, j) => <li key={j}>{item}</li>)}
+      </ul>
+    ) : block.kind === "quote" ? (
+      <blockquote key={i} className="mt-3 border-l-4 border-[color:var(--brand)] bg-[color:var(--canvas)] px-4 py-3 text-base leading-7 text-slate-700">{block.text}</blockquote>
+    ) : (
+      <p key={i} className="mt-3 text-base leading-7 text-slate-600">{block.text}</p>
+    ),
   );
 }

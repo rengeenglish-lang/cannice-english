@@ -4,6 +4,9 @@ import { cache } from "react";
 import { z } from "zod";
 import { db, type TransactionClient } from "@/server/db";
 import { CHECKOUT_CONSENT_VERSION } from "@/lib/checkout-consent";
+import { fillLegalDoc, hasLegalGaps, type LegalValues } from "@/lib/legal-placeholders";
+import { getInvoiceSettings } from "@/server/services/invoices.service";
+import { SUPPORT_EMAIL } from "@/lib/social";
 import { LEGAL_CONTENT_KEY, initialLegalBundle, resolveLegalDocuments, validateLegalDocument, consentWordingSchema, type LegalBundle } from "@/lib/legal-content";
 
 async function requireAdmin(actorId: string, client: TransactionClient = db) {
@@ -14,9 +17,24 @@ async function readBundle(client: TransactionClient = db): Promise<LegalBundle> 
   const row = await client.appSetting.findUnique({ where: { key: LEGAL_CONTENT_KEY } });
   return row ? JSON.parse(row.value) as LegalBundle : initialLegalBundle();
 }
+/** Company details for the {{TOKENS}} in legal texts: Yönetim → Faturalar, plus the support address. */
+async function legalValues(): Promise<LegalValues> {
+  const { seller } = await getInvoiceSettings();
+  const address = [seller.address, seller.country].map((s) => s.trim()).filter(Boolean).join(", ");
+  return { UNVAN: seller.name, KRA_PIN: seller.taxId, ADRES: seller.address.trim() ? address : "", EPOSTA: SUPPORT_EMAIL, TELEFON: seller.phone, TR_KDV: seller.trVatNumber };
+}
+
 export const getPublishedLegalContent = cache(async () => {
   const bundle = await readBundle();
-  const documents = resolveLegalDocuments(bundle);
+  const values = await legalValues();
+  // Pages, checkout snapshots and the consent version all see the filled text; a document with
+  // details still missing keeps its TASLAK badge.
+  const documents = Object.fromEntries(
+    Object.entries(resolveLegalDocuments(bundle)).map(([key, doc]) => {
+      const filled = fillLegalDoc(doc, values);
+      return [key, hasLegalGaps(filled) ? { ...filled, draft: true } : filled];
+    }),
+  );
   const text = bundle.wording.published;
   const version = createHash("sha256").update(JSON.stringify({ baseVersion: CHECKOUT_CONSENT_VERSION, documents, text })).digest("hex");
   return { documents, configuration: { version, text } };
