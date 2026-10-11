@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { requireStaff } from "@/server/auth/context";
+import { getAuthContext, requireStaff } from "@/server/auth/context";
 import { saveSpeakingClub, setSetting, TRY_USD_RATE_KEY } from "@/server/services/settings.service";
 
 export type UpdateRateState = { status: "idle" | "error" | "success"; message?: string };
@@ -17,8 +17,10 @@ export async function updateTryUsdRateAction(_prev: UpdateRateState, formData: F
 
 export type SpeakingClubState = { status: "idle" | "error" | "success"; message?: string };
 
+/** Only admins set the Speaking Club meeting link; students only ever see it as the "Derse Katıl" button. */
 export async function updateSpeakingClubAction(_prev: SpeakingClubState, formData: FormData): Promise<SpeakingClubState> {
-  await requireStaff();
+  const actor = await getAuthContext();
+  if (!actor || actor.role !== "ADMIN") return { status: "error", message: "Yönetici oturumu gerekli." };
   const url = String(formData.get("url") ?? "").trim();
   const schedule = String(formData.get("schedule") ?? "").trim().slice(0, 200);
   const note = String(formData.get("note") ?? "").trim().slice(0, 600);
