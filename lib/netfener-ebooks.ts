@@ -21,6 +21,16 @@ export const NETFENER_EBOOKS = [
     exams: ["yds", "yokdil-fen-bilimleri", "yokdil-sosyal-bilimler", "yokdil-saglik-bilimleri"],
   },
   {
+    slug: "phrasal-verbs",
+    title: "The Ultimate Phrasal Verbs Guide",
+    subtitle: "YDS ve YÖKDİL · 480 Phrasal Verb",
+    description: "30 tematik ünite ve 480 phrasal verb ile; her yapı için Türkçe anlam, sınav şıklarında çıkan akademik eş (carry out = conduct), ayrılabilirlik, özgün örnek cümle ve çevirisi, ayrıca bağlam içinde okuma, cloze, eş anlam eşleştirme ve çeldirici analizli 120 özgün soru.",
+    pages: 223,
+    cover: "/ebooks/phrasal-verbs.jpg",
+    filename: "netfener-phrasal-verbs.pdf",
+    exams: ["yds", "yokdil-fen-bilimleri", "yokdil-sosyal-bilimler", "yokdil-saglik-bilimleri"],
+  },
+  {
     slug: "paragrafin-isigini-yak",
     title: "Paragrafın Işığını Yak 1",
     subtitle: "Cilt 1 · Akademik Paragraf",

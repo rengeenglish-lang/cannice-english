@@ -84,6 +84,47 @@ export const NETFENER_EBOOK_PITCH: Record<string, EbookPitch> = {
     closing: "Kelime listesi ezberleyip sınavda yine yanlış biçimi işaretleyenler için hazırlandı.",
   },
 
+  "phrasal-verbs": {
+    lead: "The Ultimate Phrasal Verbs Guide, YDS ve YÖKDİL'de en sık karşılaşılan 480 phrasal verb'ü tek tek ezberletmek yerine anlamı, akademik eşi ve sınavdaki bağlamıyla öğretir. Sınav çoğu zaman phrasal verb'ün tek kelimelik karşılığını şıklara koyar; bu kitap ikisini aynı anda tanımanı sağlar.",
+    facts: [
+      { label: "Sayfa", value: "223" },
+      { label: "Phrasal verb", value: "480" },
+      { label: "Ünite", value: "30" },
+      { label: "Özgün soru", value: "120" },
+    ],
+    sections: [
+      {
+        title: "Her yapı, akademik eşiyle birlikte",
+        body: "Her phrasal verb'ün yanında sınav şıklarında karşına çıkan tek kelimelik akademik eşi yer alır: carry out = conduct, put off = postpone, rule out = exclude, bring about = cause. Türkçe anlam, ayrılabilirlik işareti ve özgün bir örnek cümle ile çevirisi her yapıyı tamamlar.",
+      },
+      {
+        title: "Otuz tematik ünite, akademik metnin sırası",
+        body: "Üniteler alfabetik değil, akademik metinlerin anlattığı işlere göre dizilir. Böylece her ünite, bir paragrafta birlikte görülen yapıları bir arada öğretir:",
+        bullets: [
+          "Başlatmak ve Kurmak — set up, embark on, draw up, put forward",
+          "Neden ve Sonuç — bring about, result in, stem from, account for",
+          "Araştırmak ve İncelemek — look into, go through, figure out, rule out",
+          "Sağlık ve Beden — come down with, fight off, pull through, flare up",
+          "Bilim, Deney ve Veri — try out, factor in, cancel out, bear out",
+          "Akademik Metinlerin Bağlayıcı Fiilleri — allow for, call for, amount to",
+        ],
+      },
+      {
+        title: "Edatın mantığı",
+        body: "Kitap bir 'Edatların Mantığı' bölümüyle açılır ve her ünitede edatın anlama kattığı yönü ayrıca gösterir: up tamamlar ve artırır, out ortaya çıkarır ya da dışarıda bırakır, off ayırır ya da başlatır. Hiç görmediğin bir yapının anlamını bağlamdan tahmin etmeyi bu pusula sağlar.",
+      },
+      {
+        title: "Her ünitede okuma, cloze ve sınav",
+        body: "Her ünite yedi sayfadır: açılış, dört yapı sayfası, bir 'In Action' sayfası ve bir 'Sınavda Karar Anı' sayfası. In Action sayfasında yapıları özgün bir akademik paragrafta okur, şıklara bakmadan cloze testini çözer ve yapıları akademik eşleriyle eşleştirirsin. Son sayfadaki dört YDS/YÖKDİL tarzı soru, cevap gerekçesi ve çeldirici analiziyle gelir.",
+      },
+      {
+        title: "Alfabetik dizinle başvuru kitabı",
+        body: "Kitabın sonundaki alfabetik dizin 480 yapının her birini ünite ve sayfa numarasıyla gösterir. Okurken karşına çıkan bir phrasal verb'ü saniyeler içinde bulur, anlamını, eşini ve örnek cümlesini tekrar edebilirsin.",
+      },
+    ],
+    closing: "Phrasal verb'leri tanıyan ama sınavda akademik eşini görünce tereddüt edenler için yazıldı.",
+  },
+
   "paragrafin-isigini-yak": {
     lead: "Paragrafın Işığını Yak 1, YDS ve YÖKDİL'in okuma bölümünde paragrafı doğru okumayı ve doğru şıkkı gerekçesiyle seçmeyi öğretir. Sınav her cümleyi çevirmeni değil, yazarın iddiasını taşıyan cümleyi bulmanı ister.",
     facts: [
