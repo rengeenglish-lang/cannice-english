@@ -120,7 +120,7 @@ export default async function OrderReceiptPage({ params }: Props) {
         </div>
 
         <p className="mt-6 text-center text-xs text-[color:var(--muted)]">
-          Bu belge, resmi bir e-fatura/e-arşiv fatura değildir. Ödeme durumu:{" "}
+          Bu sayfa sipariş özetidir; faturanız ödeme onaylandığında Siparişlerim sayfasından indirilebilir. Ödeme durumu:{" "}
           {order.payment?.status === "SUCCEEDED" ? "Ödendi" : "Beklemede"}.
         </p>
       </div>

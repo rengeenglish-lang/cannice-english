@@ -7,6 +7,7 @@ import { isMonthlyBilledCategory, nextPaidThrough } from "@/lib/billing";
 import { NETFENER_EBOOKS } from "@/lib/netfener-ebooks";
 import { editionSlug } from "@/lib/netfener-ebook-editions";
 import { sendOrderPaid } from "@/server/services/transactional-email.service";
+import { issueInvoiceForOrder, syncInvoiceToDrive, voidInvoiceForOrder } from "@/server/services/invoices.service";
 
 export function listOrders() {
   return db.order.findMany({
@@ -113,6 +114,13 @@ export async function markOrderPaid(orderId: string, opts?: { providerRef?: stri
       }
     }
   }
+  // The invoice (once per order), archived to Drive right away when it is connected; the hourly
+  // job retries anything that didn't make it. Neither ever undoes the payment.
+  const invoice = await issueInvoiceForOrder(orderId).catch((e) => {
+    console.error("[invoice] issue failed", e);
+    return null;
+  });
+  if (invoice?.driveDirty) await syncInvoiceToDrive(invoice.id).catch(() => false);
   // Confirmation + receipt link, guests included. Keyed per order, so a capture retry or a second
   // approval click doesn't send it twice; an email failure never undoes the payment.
   await sendOrderPaid(orderId).catch(() => false);
@@ -153,6 +161,9 @@ export async function markOrderRefunded(orderId: string) {
     return order;
   });
 
+  await voidInvoiceForOrder(orderId);
+  const voided = await db.invoice.findUnique({ where: { orderId }, select: { id: true } });
+  if (voided) await syncInvoiceToDrive(voided.id).catch(() => false);
   if (order.userId) {
     await notify(order.userId, { category: "PURCHASE", key: `order:${orderId}`, title: "Siparişiniz iade edildi", href: "/dashboard/orders" });
   }

@@ -4,6 +4,7 @@ import { getSiteUrl } from "@/server/env";
 import { emailConfigured } from "@/server/email/send";
 import { sendOnce } from "@/server/email/transactional";
 import { notifyOnce, purgeOldNotifications } from "@/server/services/notifications.service";
+import { syncDirtyInvoices } from "@/server/services/invoices.service";
 import { billingState } from "@/lib/billing";
 import { cartUnsubscribeToken } from "@/lib/auth/tokens";
 import {
@@ -188,5 +189,7 @@ export async function runTransactionalEmailCron(now = new Date()) {
   const sessionReminders = await sendSessionReminders(now);
   const cartReminders = await sendCartReminders(now);
   const purged = (await purgeOldNotifications(now)).count;
-  return { sessionReminders, cartReminders, purgedNotifications: purged };
+  // Invoices that haven't reached Google Drive yet (new, changed, or a failed upload).
+  const invoicesArchived = await syncDirtyInvoices().catch(() => 0);
+  return { sessionReminders, cartReminders, purgedNotifications: purged, invoicesArchived };
 }

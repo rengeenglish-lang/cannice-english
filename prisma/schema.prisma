@@ -724,6 +724,7 @@ model Order {
   user    User?       @relation(fields: [userId], references: [id])
   items   OrderItem[]
   payment Payment?
+  invoice Invoice?
 
   @@map("orders")
 }
@@ -2113,4 +2114,69 @@ model EmailLog {
 
   @@index([kind, createdAt])
   @@map("email_logs")
+}
+
+// ====================================================================
+// INVOICES (in-house; archived to Google Drive)
+// ====================================================================
+
+enum InvoiceStatus {
+  ISSUED
+  VOID
+}
+
+/// One invoice per paid order. Everything printed on it is snapshotted here, so the PDF can be
+/// rebuilt identically at any time; the Drive copy is the archive.
+model Invoice {
+  id            String        @id @default(cuid())
+  /// "NF-2026-000001": sequential per calendar year, never reused.
+  number        String        @unique
+  orderId       String        @unique
+  userId        String?
+  status        InvoiceStatus @default(ISSUED)
+  issuedAt      DateTime      @default(now())
+  voidedAt      DateTime?
+  currency      String        @default("TRY")
+  subtotal      Decimal       @db.Decimal(12, 2)
+  discountTotal Decimal       @default(0) @db.Decimal(12, 2)
+  shippingTotal Decimal       @default(0) @db.Decimal(12, 2)
+  total         Decimal       @db.Decimal(12, 2)
+  /// Tax included in the total (0 when the invoice shows no tax line).
+  taxRate       Decimal       @default(0) @db.Decimal(5, 2)
+  taxAmount     Decimal       @default(0) @db.Decimal(12, 2)
+  paymentMethod String
+  seller        Json
+  buyer         Json
+  items         Json
+  /// Control/invoice number from KRA eTIMS, entered by staff when the invoice is also filed there.
+  etimsNumber   String?
+  driveFileId   String?
+  driveSyncedAt DateTime?
+  /// True when the Drive copy is missing or out of date (e.g. after voiding); the hourly job retries.
+  driveDirty    Boolean       @default(true)
+  driveError    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([userId, issuedAt])
+  @@index([driveDirty])
+  @@map("invoices")
+}
+
+model InvoiceSequence {
+  year Int @id
+  last Int @default(0)
+
+  @@map("invoice_sequences")
+}
+
+/// Google Drive folders the site created: "root" and one per customer ("customer:<email>").
+model DriveFolder {
+  key       String   @id
+  folderId  String
+  createdAt DateTime @default(now())
+
+  @@map("drive_folders")
 }

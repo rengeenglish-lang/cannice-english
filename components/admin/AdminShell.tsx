@@ -42,6 +42,7 @@ import {
   Quote,
   Scale,
   Bell,
+  FileText,
   type LucideIcon,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
@@ -128,6 +129,7 @@ const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon:
       { href: "/admin/orders", label: "Siparişler", icon: ShoppingBag },
       { href: "/admin/products", label: "Ürünler", icon: Package },
       { href: "/admin/coupons", label: "Kuponlar", icon: TicketPercent },
+      { href: "/admin/faturalar", label: "Faturalar", icon: FileText, adminOnly: true },
     ],
   },
   {

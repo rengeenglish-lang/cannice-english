@@ -21,7 +21,7 @@ export default async function OrdersPage() {
   const orders = await db.order.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
-    include: { items: true },
+    include: { items: true, invoice: { select: { id: true, number: true, status: true } } },
   });
 
   return (
@@ -39,6 +39,11 @@ export default async function OrdersPage() {
                 </div>
                 <div className="flex items-center justify-between gap-4 sm:justify-end">
                   <strong className="text-sm">{formatTRY(String(order.total))}</strong>
+                  {order.invoice ? (
+                    <a href={`/api/invoices/${order.invoice.id}`} target="_blank" rel="noreferrer" className="ghost-button text-xs" title={order.invoice.number}>
+                      {order.invoice.status === "VOID" ? "Fatura (iptal)" : "Faturayı indir"}
+                    </a>
+                  ) : null}
                   <Link href={`/orders/${order.id}/receipt`} className="ghost-button text-xs">
                     Siparişi görüntüle
                   </Link>
