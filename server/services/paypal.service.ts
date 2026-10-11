@@ -26,6 +26,8 @@ export async function createPaypalOrder(usdAmount: string, referenceId: string) 
     body: JSON.stringify({
       intent: "CAPTURE",
       purchase_units: [{ reference_id: referenceId, amount: { currency_code: "USD", value: usdAmount } }],
+      // Delivery addresses are collected in our own checkout, so PayPal shouldn't ask for one.
+      application_context: { brand_name: "Netfener", shipping_preference: "NO_SHIPPING" },
     }),
     cache: "no-store",
   });
