@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/nav/Navbar";
 import { Footer } from "@/components/nav/Footer";
 import { LiveChatWidget } from "@/components/support/LiveChatWidget";
+import { CookieBanner } from "@/components/consent/CookieBanner";
 import { PaletteSwitcher } from "@/components/theme/PaletteSwitcher";
 import { getSiteUrl } from "@/server/env";
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <LiveChatWidget />
+        <CookieBanner />
         <PaletteSwitcher />
       </body>
     </html>

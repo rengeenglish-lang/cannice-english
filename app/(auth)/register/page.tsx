@@ -17,7 +17,14 @@ const src = parseSource(params.src) ? params.src : undefined;
       <p className="eyebrow text-center">Öğrenme Yolculuğuna Başla</p>
       <h1 className="page-title text-center">Hesabını Oluştur</h1>
       <div className="mt-6 space-y-4">
-        {isGoogleConfigured() ? <GoogleButton next={next} src={src} label="Google ile üye ol" /> : null}
+        {isGoogleConfigured() ? (
+          <div>
+            <GoogleButton next={next} src={src} label="Google ile üye ol" />
+            <p className="mt-2 text-center text-xs text-[color:var(--muted)]">
+              Google ile devam ederek <Link href="/legal/uyelik-sozlesmesi" className="underline">Üyelik Sözleşmesi</Link>&apos;ni kabul etmiş olursun.
+            </p>
+          </div>
+        ) : null}
         <RegisterForm next={next} src={src} />
       </div>
       <p className="mt-4 text-center text-sm text-slate-500">

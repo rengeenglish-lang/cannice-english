@@ -4,12 +4,15 @@ import { AccountHeader } from "@/components/dashboard/AccountHeader";
 import { AccountTabs } from "@/components/dashboard/AccountTabs";
 import { ProfileForm } from "@/components/dashboard/ProfileForm";
 import { PasswordForm } from "@/components/dashboard/PasswordForm";
+import { MarketingPreferencesForm } from "@/components/consent/MarketingPreferencesForm";
+import { db } from "@/server/db";
 
 export const metadata: Metadata = { title: "Hesabım" };
 
 export default async function ProfilePage() {
   const user = await getAuthContext();
   if (!user) return null;
+  const prefs = await db.user.findUnique({ where: { id: user.id }, select: { marketingEmail: true, marketingSms: true, marketingPhone: true } });
 
   return (
     <div>
@@ -33,6 +36,7 @@ export default async function ProfilePage() {
           educationLevel={user.educationLevel ?? ""}
         />
         <PasswordForm />
+        <MarketingPreferencesForm values={prefs ?? { marketingEmail: false, marketingSms: false, marketingPhone: false }} />
       </div>
     </div>
   );

@@ -362,4 +362,46 @@ export const NETFENER_LEGAL_DOCS: Record<string, LegalDoc> = {
       { heading: "Rızanın Geri Çekilmesi", paragraphs: ["İlgili kişi, açık rızasını kullanıcı hesabındaki tercihlerden veya {{EPOSTA}} adresine başvurarak geleceğe etkili şekilde geri çekebilir. Geri çekme öncesindeki hukuka uygun işlemler etkilenmez. Rızanın geri çekilmesi, rızaya bağlı olmayan temel üyelik ve satın alma hizmetlerini engellemez."] },
     ],
   },
+
+  "cerez-politikasi": {
+    title: "Çerez Politikası",
+    updatedAt: UPDATED,
+    draft: false,
+    body: "Bu politika, netfener.com'da hangi çerezlerin ve benzeri teknolojilerin neden kullanıldığını ve tercihlerini nasıl yönetebileceğini açıklar. Zorunlu olmayan çerezler yalnızca izin verdiğinde çalışır; tercihini sayfanın altındaki “Çerez tercihleri” bağlantısından istediğin zaman değiştirebilirsin.",
+    sections: [
+      {
+        heading: "1. Zorunlu çerezler (her zaman açık)",
+        paragraphs: [
+          "Sitenin çalışması için gereklidir; kapatılamaz.",
+          "• authjs.session-token, authjs.csrf-token, authjs.callback-url: oturum açma ve form güvenliği (oturum süresince, en fazla 8 saat).",
+          "• cannice_cart_token: üye girişi yapmadan oluşturulan sepetin hatırlanması (30 gün).",
+          "• cannice_cart_coupon: sepete uygulanan indirim kodu (7 gün).",
+          "• selected-group-slot: seçilen grup dersi saatinin ödeme adımına taşınması (7 gün).",
+          "• nf_cookie_consent: çerez tercihinin kendisi (6 ay).",
+          "Tema (açık/koyu) ve renk tercihi gibi seçimler çerezle değil, tarayıcının yerel depolamasında yalnızca senin cihazında tutulur.",
+        ],
+      },
+      {
+        heading: "2. İşlevsel çerezler (izinle)",
+        paragraphs: [
+          "• Tawk.to canlı destek: sohbet penceresinin çalışması ve sohbet geçmişinin hatırlanması için Tawk.to'nun kendi çerezleri (ör. TawkConnectionTime, twk_uuid_*, __tawkuuid; süreleri oturumdan birkaç aya kadar değişir).",
+          "Bu izni vermezsen sohbet penceresi yüklenmez; Yardım Masası'ndan bize e-postayla ulaşabilirsin.",
+        ],
+      },
+      {
+        heading: "3. Analitik ve pazarlama çerezleri (izinle)",
+        paragraphs: [
+          "Netfener şu anda üçüncü taraf analitik, reklam veya yeniden pazarlama çerezi kullanmamaktadır. Bu tür bir araç eklenirse bu sayfa güncellenir ve araç yalnızca ilgili izni vermişsen çalışır.",
+          "Giriş yapmış öğrenciler için İlerleme Raporu'ndaki site ziyaret sıklığı, çerez kullanılmadan hesabına bağlı olarak sunucu tarafında hesaplanır.",
+        ],
+      },
+      {
+        heading: "4. Tercihlerini yönetme",
+        paragraphs: [
+          "Çerez tercihini sayfanın altındaki “Çerez tercihleri” bağlantısından istediğin zaman değiştirebilirsin; “Tümünü reddet” ve “Tümünü kabul et” seçenekleri eşit şekilde sunulur. Tarayıcı ayarlarından çerezleri silebilir veya engelleyebilirsin; zorunlu çerezleri engellemek oturum açma ve sepet gibi özelliklerin çalışmamasına yol açar.",
+          "Sorular için: {{EPOSTA}}.",
+        ],
+      },
+    ],
+  },
 };

@@ -2,13 +2,15 @@ import Link from "next/link";
 import { PLATFORM_EXAMS } from "@/lib/platform";
 import { SOCIAL_LINKS } from "@/lib/social";
 import { Logo } from "@/components/brand/Logo";
+import { CookiePreferencesLink } from "@/components/consent/CookieBanner";
 
 const LEGAL_LINKS = [
   { doc: "iade-politikasi", name: "İade Politikası" },
   { doc: "kullanim-kosullari", name: "Kullanım Koşulları" },
   { doc: "mesafeli-satis-sozlesmesi", name: "Mesafeli Satış Sözleşmesi" },
   { doc: "uyelik-sozlesmesi", name: "Üyelik Sözleşmesi" },
-  { doc: "gizlilik-sozlesmesi", name: "Gizlilik Sözleşmesi" },
+  { doc: "gizlilik-sozlesmesi", name: "Gizlilik Politikası" },
+  { doc: "cerez-politikasi", name: "Çerez Politikası" },
   { doc: "aydinlatma-metni", name: "Aydınlatma Metni" },
   { doc: "acik-riza-metni", name: "Açık Rıza Metni" },
 ];
@@ -75,6 +77,7 @@ export function Footer() {
             {LEGAL_LINKS.map((legal) => (
               <li key={legal.doc}><Link href={`/legal/${legal.doc}`} className="transition hover:text-white">{legal.name}</Link></li>
             ))}
+            <li><CookiePreferencesLink className="text-left transition hover:text-white" /></li>
           </ul>
         </div>
       </div>

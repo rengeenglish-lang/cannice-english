@@ -7,6 +7,7 @@ import { hashPassword } from "@/server/auth/password";
 import { recordRegistrationAttribution } from "@/server/services/seo/conversions.service";
 import { registerSchema } from "@/lib/validation/auth";
 import { sendWelcomeVerification } from "@/server/services/account-email.service";
+import { recordTermsAcceptance, setMarketingConsents } from "@/server/services/consent.service";
 
 export type RegisterFormState = { status: "idle" | "error"; message?: string };
 
@@ -18,6 +19,7 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
     password: formData.get("password"),
   });
   if (!parsed.success) return { status: "error", message: "Lütfen bilgilerini kontrol et." };
+  if (formData.get("terms") !== "on") return { status: "error", message: "Devam etmek için Üyelik Sözleşmesi'ni kabul etmelisin." };
 
   const email = parsed.data.email.trim().toLowerCase();
   const existing = await db.user.findUnique({ where: { email } });
@@ -30,6 +32,13 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
 
   // First-touch attribution to the article whose register link was used. Never blocks signup.
   await recordRegistrationAttribution(user.id, formData.get("src")).catch(() => undefined);
+  // Proof of the sign-up boxes: the required agreement and each optional marketing channel.
+  await recordTermsAcceptance(user.id, "REGISTER");
+  await setMarketingConsents(
+    user.id,
+    { marketingEmail: formData.get("marketingEmail") === "on", marketingSms: formData.get("marketingSms") === "on", marketingPhone: formData.get("marketingPhone") === "on" },
+    "REGISTER",
+  );
   // Welcome + verification link. Never blocks signup; the dashboard offers a resend.
   await sendWelcomeVerification(user).catch(() => undefined);
 
