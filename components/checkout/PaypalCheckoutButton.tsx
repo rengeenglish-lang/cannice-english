@@ -57,7 +57,7 @@ export function PaypalCheckoutButton({ orderId, clientId }: { orderId: string; c
   return (
     <div>
       <Script
-        src={`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture&components=buttons&enable-funding=card&disable-funding=paylater,venmo,credit`}
+        src={`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture&components=buttons&enable-funding=card&disable-funding=paylater,venmo,credit&locale=tr_TR`}
         onReady={() => {
           setReady(true);
           renderButtons();
