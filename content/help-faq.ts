@@ -72,7 +72,7 @@ export const HELP_FAQ: FaqCategory[] = [
     items: [
       {
         q: "Hangi ödeme yöntemlerini kullanabilirim?",
-        a: "PayPal (PayPal hesabınız veya banka/kredi kartınızla) ve banka havalesi ile ödeme yapabilirsiniz. Fiyatlar Türk lirası olarak ve KDV dahil gösterilir. PayPal ödemelerinde tutar, gösterilen TL fiyatın güncel kur üzerinden ABD doları karşılığı olarak tahsil edilir; bankanız ayrıca kur farkı veya işlem ücreti yansıtabilir.",
+        a: "Kredi/banka kartı ve banka havalesi ile ödeme yapabilirsiniz. Kart ödemeleri güvenli ödeme altyapımız üzerinden işlenir; kart bilgileriniz bizim sistemlerimizde saklanmaz. Fiyatlar Türk lirası olarak ve KDV dahil gösterilir. Kart ödemelerinde tutar, gösterilen TL fiyatın güncel kur üzerinden ABD doları karşılığı olarak tahsil edilir; bankanız ayrıca kur farkı veya işlem ücreti yansıtabilir.",
       },
       {
         q: "Banka havalesiyle ödeme nasıl işliyor?",
@@ -110,7 +110,7 @@ export const HELP_FAQ: FaqCategory[] = [
       },
       {
         q: "Param ne zaman ve nasıl iade edilir?",
-        a: "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde, ödemeyi yaptığınız yöntemle yapılır: PayPal ödemeleri PayPal hesabınıza/kartınıza, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İnceleme ve onay bu süreyi yeniden başlatmaz. Tam iadede ilgili plan, ders veya ürüne erişiminiz kapatılır; yalnızca gerçekleştirilmeyen canlı derslere ilişkin kısmi iadede kalan derslere erişiminiz devam eder.",
+        a: "İade koşullarını karşılayan tüm başvurularda iadeler, talebin bize ulaştığı tarihten itibaren en geç 7 takvim günü içinde, ödemeyi yaptığınız yöntemle yapılır: kart ödemeleri ödemeyi yaptığınız karta, havale ödemeleri bildirdiğiniz IBAN'a gönderilir. İnceleme ve onay bu süreyi yeniden başlatmaz. Tam iadede ilgili plan, ders veya ürüne erişiminiz kapatılır; yalnızca gerçekleştirilmeyen canlı derslere ilişkin kısmi iadede kalan derslere erişiminiz devam eder.",
       },
       {
         q: "Canlı grup dersi ödemem iade edilir mi?",
@@ -188,7 +188,7 @@ export const HELP_FAQ: FaqCategory[] = [
       },
       {
         q: "Ödeme yaptım ama erişimim açılmadı.",
-        a: "PayPal ödemelerinde erişim anında açılır; havale ödemelerinde ödemenin onaylanması gerekir. Siparişlerim sayfasında siparişinizin durumunu kontrol edin; “Ödendi” görünmesine rağmen erişiminiz yoksa sipariş numaranızla bize yazın.",
+        a: "Kart ödemelerinde erişim anında açılır; havale ödemelerinde ödemenin onaylanması gerekir. Siparişlerim sayfasında siparişinizin durumunu kontrol edin; “Ödendi” görünmesine rağmen erişiminiz yoksa sipariş numaranızla bize yazın.",
       },
       {
         q: "Bildirimleri nereden görebilirim?",

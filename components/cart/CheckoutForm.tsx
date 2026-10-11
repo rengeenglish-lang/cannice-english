@@ -25,8 +25,8 @@ export function CheckoutForm({ isGuest, defaultCoupon = "", consentRequirements,
             disabled={pending}
             className={`rounded-xl border p-4 text-left transition ${paymentMethod === "PAYPAL" ? "border-[color:var(--brand)] bg-[color:var(--brand-soft)]" : "border-[color:var(--border)]"}`}
           >
-            <span className="block font-bold text-[color:var(--foreground)]">PayPal ile Öde</span>
-            <span className="mt-1 block text-xs text-[color:var(--muted)]">Kart veya PayPal hesabınla anında öde.</span>
+            <span className="block font-bold text-[color:var(--foreground)]">Kredi / Banka Kartı</span>
+            <span className="mt-1 block text-xs text-[color:var(--muted)]">Kartınla güvenle ve anında öde.</span>
           </button>
           <button
             type="button"
