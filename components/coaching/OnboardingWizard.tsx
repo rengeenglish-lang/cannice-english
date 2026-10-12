@@ -5,6 +5,11 @@ import Link from "next/link";
 import { coachingCopy, pick } from "@/lib/coaching/i18n";
 import { PATHWAYS, PATHWAY_CODES, SKILL_LABELS, parseScore, type CoachingPathwayCode } from "@/lib/coaching/exams";
 import { saveOnboardingAction } from "@/app/actions/coaching";
+import { upcomingOfficialExams, type InterestCode } from "@/lib/exam-interests";
+import { dayKey } from "@/lib/engagement";
+
+/** Coaching pathways whose dates come from the ÖSYM calendar (YÖKDİL dates are the same for every field). */
+const OSYM_CODE: Partial<Record<CoachingPathwayCode, InterestCode>> = { YDS: "YDS", YOKDIL: "YOKDIL_SOSYAL" };
 
 export type OnboardingInitial = {
   pathway: CoachingPathwayCode | null;
@@ -174,6 +179,7 @@ export function OnboardingWizard({ locale, initial, isEdit, minorKnown }: { loca
               <input type="date" className="auth-input mt-2 max-w-xs" value={v.examDate} onChange={(e) => set("examDate", e.target.value)} />
               <span className={`${help} block`}>{o.examDateHelp}</span>
             </label>
+            <OfficialDatePicker pathway={v.pathway!} value={v.examDate} locale={locale} onPick={(d) => set("examDate", d)} copy={o} />
           </>
         ) : null}
 
@@ -296,5 +302,36 @@ export function OnboardingWizard({ locale, initial, isEdit, minorKnown }: { loca
         </div>
       </form>
     </section>
+  );
+}
+
+/** Nearest ÖSYM sessions for YDS/YÖKDİL as one-tap choices that fill the exam-date field. */
+function OfficialDatePicker({ pathway, value, locale, onPick, copy }: { pathway: CoachingPathwayCode; value: string; locale: string; onPick: (date: string) => void; copy: { officialDates: string; noFixedDate: string; calendarPending: string } }) {
+  const code = OSYM_CODE[pathway];
+  if (!code) return <p className="text-xs text-[color:var(--muted)]">{copy.noFixedDate}</p>;
+  const exams = upcomingOfficialExams(code, dayKey(new Date()));
+  if (!exams.length) return <p className="text-xs text-[color:var(--muted)]">{copy.calendarPending}</p>;
+  const fmt = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  return (
+    <div>
+      <p className="text-xs font-bold text-[color:var(--muted)]">{copy.officialDates}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {exams.map((e) => {
+          const on = value === e.examDate;
+          return (
+            <button
+              key={e.name}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onPick(e.examDate)}
+              className={`rounded-xl border px-3 py-2 text-left text-sm transition ${on ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white" : "border-[color:var(--border)] hover:border-[color:var(--brand)]"}`}
+            >
+              <span className="block font-bold">{e.name}</span>
+              <span className={`block text-xs ${on ? "text-white/90" : "text-[color:var(--muted)]"}`}>{fmt.format(new Date(`${e.examDate}T00:00:00Z`))}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
