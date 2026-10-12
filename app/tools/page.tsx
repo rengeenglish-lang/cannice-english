@@ -6,9 +6,9 @@ export const metadata: Metadata = { title: "Faydalı Araçlar" };
 
 const TOOLS = [
   {
-    href: "/tools/dictionary",
-    title: "Sözlük",
-    description: "Sınavlara özel kelime ve terimler.",
+    href: "/sozluk",
+    title: "Netfener Sözlük",
+    description: "İngilizce–Türkçe / Türkçe–İngilizce sözlük: phrasal verb'ler, akademik ve alan terimleri, telaffuz.",
   },
   {
     href: "/tools/score-calculator",
