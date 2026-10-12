@@ -3,7 +3,6 @@ import { db } from "@/server/db";
 import { listGroupSlots } from "@/server/services/group-availability.service";
 import { weekRange, localDate, lessonTime, DEFAULT_CAPACITY } from "@/lib/availability";
 import { WeekView } from "@/components/availability/WeekView";
-import { DemoSlotsForm } from "@/components/availability/AdminSlotActions";
 import { AvailabilityRefresh } from "@/components/availability/AvailabilityRefresh";
 import { AdminSlotDialogProvider, type SlotDetailData } from "@/components/availability/AdminSlotDialogProvider";
 export const dynamic = "force-dynamic";
@@ -56,8 +55,6 @@ export default async function GroupAdminPage({
         instructorId: slot.instructorId ?? undefined,
         adminNotes: slot.adminNotes ?? undefined,
         meetingUrl: slot.meetingUrl ?? undefined,
-        displayedOccupancy: slot.displayedOccupancy ?? undefined,
-        useDisplayedOccupancy: slot.useDisplayedOccupancy,
         enrollmentOpen: slot.enrollmentOpen,
         recurringSeriesId: slot.recurringSeriesId ?? undefined,
       },
@@ -90,9 +87,6 @@ export default async function GroupAdminPage({
         </Link>
       </div>
       <p className="mt-2 text-sm text-slate-500">Bir dersi yönetmek için karta tıklayın.</p>
-      <DemoSlotsForm
-        courses={courses.map((c) => ({ id: c.id, title: c.product.title }))}
-      />
       <WeekView week={week} slots={slots} admin />
     </AdminSlotDialogProvider>
   );

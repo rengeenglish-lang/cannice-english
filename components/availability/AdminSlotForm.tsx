@@ -4,11 +4,7 @@ import {
   saveSlotAction,
   type AvailabilityFormState,
 } from "@/app/actions/group-availability";
-import {
-  DEFAULT_CAPACITY,
-  occupancyStatus,
-  STATUS_LABELS,
-} from "@/lib/availability";
+import { DEFAULT_CAPACITY, occupancyStatus, STATUS_LABELS } from "@/lib/availability";
 export type SlotFormValues = {
   id?: string;
   title: string;
@@ -20,8 +16,6 @@ export type SlotFormValues = {
   instructorId?: string;
   adminNotes?: string;
   meetingUrl?: string;
-  displayedOccupancy?: number;
-  useDisplayedOccupancy: boolean;
   enrollmentOpen: boolean;
   recurringSeriesId?: string;
 };
@@ -41,13 +35,7 @@ export function AdminSlotForm({
     {} as AvailabilityFormState,
   );
   const [capacity, setCapacity] = useState(slot.capacity || DEFAULT_CAPACITY),
-    [simulated, setSimulated] = useState(slot.useDisplayedOccupancy),
-    [display, setDisplay] = useState(slot.displayedOccupancy ?? 0),
     [repeat, setRepeat] = useState(false);
-  const count = Math.min(
-    capacity,
-    Math.max(actual, simulated ? display : actual),
-  );
   return (
     <form
       action={action}
@@ -150,50 +138,12 @@ export function AdminSlotForm({
         />{" "}
         Kayıt açık (doluluk otomatik hesaplanır)
       </label>
-      <fieldset className="space-y-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <legend className="px-2 font-bold">Gösterim / demo doluluğu</legend>
-        <p>
-          Gerçek öğrenci kaydı: <strong>{actual}</strong>
-        </p>
-        <label className="flex min-h-11 items-center gap-3">
-          <input
-            type="checkbox"
-            name="useDisplayedOccupancy"
-            checked={simulated}
-            onChange={(e) => setSimulated(e.target.checked)}
-          />{" "}
-          Demo doluluğu kullan
-        </label>
-        <label className="label">
-          Gösterilecek doluluk
-          <input
-            className="auth-input"
-            name="displayedOccupancy"
-            type="number"
-            min={0}
-            max={capacity}
-            value={display}
-            onChange={(e) => setDisplay(Number(e.target.value))}
-          />
-        </label>
-        {simulated && (
-          <p className="text-xs font-extrabold text-amber-900">
-            SIMULATED OCCUPANCY
-          </p>
-        )}
-        <p className="text-sm">
-          Doluluk önizlemesi:{" "}
-          <strong>
-            {STATUS_LABELS[occupancyStatus(count, Math.max(1, capacity))]} ·{" "}
-            {count} / {capacity}
-          </strong>
-        </p>
-        <p className="text-sm">
-          Demo sayıları öğrenci, ödeme veya katılım kaydı oluşturmaz; gerçek
-          kontenjanı azaltmaz. Demo kullanımını kapatarak gerçek kayıtlara
-          dönebilirsiniz.
-        </p>
-      </fieldset>
+      <p className="text-sm text-slate-600">
+        Doluluk her zaman gerçek kayıtlardan hesaplanır:{" "}
+        <strong>
+          {STATUS_LABELS[occupancyStatus(actual, Math.max(1, capacity))]} · {actual} / {capacity}
+        </strong>
+      </p>
       {!slot.id && (
         <fieldset className="space-y-3">
           <label className="flex min-h-11 items-center gap-3 font-semibold">

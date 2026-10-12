@@ -8,7 +8,6 @@ import {
   manageGroupSlot,
   enrollGroupSlot,
   cancelGroupBooking,
-  createDemoGroupSlots,
   getGroupSlot,
 } from "@/server/services/group-availability.service";
 import { z } from "zod";
@@ -41,8 +40,6 @@ export async function saveSlotAction(
       {
         ...Object.fromEntries(form),
         enrollmentOpen: form.get("enrollmentOpen") === "on",
-        useDisplayedOccupancy: form.get("useDisplayedOccupancy") === "on",
-        displayedOccupancy: form.get("displayedOccupancy") || undefined,
       },
       id,
       form.get("scope") === "future",
@@ -85,19 +82,6 @@ export async function manageSlotAction(
   // admin can click straight into (consistent with managing everything from the list's dialog).
   if (op.data === "delete" || op.data === "duplicate") redirect("/admin/group-availability");
   return { success: "Ders güncellendi." };
-}
-export async function demoSlotsAction(
-  _state: AvailabilityFormState,
-  form: FormData,
-): Promise<AvailabilityFormState> {
-  await requireAdmin();
-  try {
-    await createDemoGroupSlots(String(form.get("courseId") || ""));
-  } catch {
-    return { error: "Bir ders paketi seçin." };
-  }
-  refresh();
-  return { success: "Demo dersler hazır. Gerçek öğrenci kaydı oluşturulmadı." };
 }
 export async function bookSlotAction(
   id: string,

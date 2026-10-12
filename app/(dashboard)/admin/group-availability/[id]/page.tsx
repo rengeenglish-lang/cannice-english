@@ -77,8 +77,6 @@ export default async function EditGroupSlotPage({
           instructorId: slot.instructorId ?? undefined,
           adminNotes: slot.adminNotes ?? undefined,
           meetingUrl: slot.meetingUrl ?? undefined,
-          displayedOccupancy: slot.displayedOccupancy ?? undefined,
-          useDisplayedOccupancy: slot.useDisplayedOccupancy,
           enrollmentOpen: slot.enrollmentOpen,
           recurringSeriesId: slot.recurringSeriesId ?? undefined,
         }}

@@ -75,15 +75,10 @@ export default async function GroupLessonPage({
             dakika
           </p>
           <p className="mt-5 font-bold">
-            {a.actual} / {a.capacity} gerçek kayıt · {a.remaining} gerçek yer
-            kaldı
+            {a.actual
+              ? `${a.actual} / ${a.capacity} öğrenci kayıtlı · ${a.remaining} yer kaldı`
+              : `Henüz kayıt yok · ${a.capacity} kişilik grup`}
           </p>
-          {a.simulated && (
-            <p className="mt-3 text-sm text-slate-600">
-              Karttaki doluluk demo amaçlıdır. Kaydın yukarıdaki gerçek
-              kontenjana göre alınır.
-            </p>
-          )}
           {enrolled ? (
             <>
               <p className="mt-4 font-bold text-emerald-700">

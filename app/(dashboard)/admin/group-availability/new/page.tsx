@@ -25,7 +25,6 @@ export default async function NewGroupSlotPage() {
             time: "18:00",
             duration: 60,
             capacity: DEFAULT_CAPACITY,
-            useDisplayedOccupancy: false,
             enrollmentOpen: true,
           }}
           courses={courses.map((c) => ({ id: c.id, title: c.product.title }))}
