@@ -1,26 +1,33 @@
 "use client";
 import { useActionState } from "react";
-import { updateSpeakingClubAction, type SpeakingClubState } from "@/app/actions/admin-settings";
+import { saveSpeakingClubRoomsAction, type RoomsFormState } from "@/app/actions/speaking-club";
 
-const initialState: SpeakingClubState = { status: "idle" };
+type Room = { key: "A" | "B" | "C"; name: string; bands: string; url: string; schedule: string };
 
-export function SpeakingClubForm({ current }: { current: { url: string; schedule: string; note: string } }) {
-  const [state, formAction, pending] = useActionState(updateSpeakingClubAction, initialState);
+/** The three level rooms (ELEMENTARY A, INTERMEDIATE B, ADVANCED C) and a shared note. */
+export function SpeakingClubForm({ rooms, note, counts }: { rooms: Room[]; note: string; counts: Record<string, number> }) {
+  const [state, formAction, pending] = useActionState(saveSpeakingClubRoomsAction, { status: "idle" } as RoomsFormState);
   return (
-    <form action={formAction} className="panel max-w-xl space-y-4">
-      <div>
-        <label className="label" htmlFor="sc-url">Toplantı bağlantısı</label>
-        <input id="sc-url" name="url" type="url" defaultValue={current.url} className="auth-input" placeholder="https://zoom.us/j/… veya https://meet.google.com/…" />
-        <p className="mt-2 text-xs text-[color:var(--muted)]">Öğrenciler &quot;Derse Katıl&quot;a bastığında bu bağlantı yeni sekmede açılır. Boş bırakırsan buton &quot;yakında&quot; olarak görünür.</p>
-      </div>
-      <div>
-        <label className="label" htmlFor="sc-schedule">Gün ve saat</label>
-        <input id="sc-schedule" name="schedule" defaultValue={current.schedule} maxLength={200} className="auth-input" placeholder="Her Salı ve Perşembe 20:00 – 21:00" />
-      </div>
-      <div>
-        <label className="label" htmlFor="sc-note">Öğrencilere not (isteğe bağlı)</label>
-        <textarea id="sc-note" name="note" defaultValue={current.note} maxLength={600} rows={3} className="auth-input" placeholder="Kamera ve mikrofonunu hazırla; her oturumda bir konu üzerine konuşuyoruz." />
-      </div>
+    <form action={formAction} className="max-w-2xl space-y-5">
+      {rooms.map((r) => (
+        <fieldset key={r.key} className="panel space-y-3">
+          <legend className="text-lg font-extrabold">
+            {r.name} <span className="text-sm font-normal text-[color:var(--muted)]">({r.bands} · {counts[r.key] ?? 0} öğrenci)</span>
+          </legend>
+          <label className="label block">
+            Toplantı bağlantısı
+            <input name={`url_${r.key}`} type="url" defaultValue={r.url} className="auth-input mt-1" placeholder="https://meet.jit.si/… veya Zoom/Meet bağlantısı" />
+          </label>
+          <label className="label block">
+            Gün ve saat
+            <input name={`schedule_${r.key}`} defaultValue={r.schedule} maxLength={200} className="auth-input mt-1" placeholder="Her Cuma 21:00" />
+          </label>
+        </fieldset>
+      ))}
+      <label className="label block">
+        Tüm gruplara not (isteğe bağlı)
+        <textarea name="note" defaultValue={note} maxLength={600} rows={3} className="auth-input mt-1" placeholder="Kamera ve mikrofonunu hazırla; her oturumda bir konu üzerine konuşuyoruz." />
+      </label>
       {state.status === "error" ? <p role="alert" className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       {state.status === "success" ? <p role="status" className="text-sm font-semibold text-[color:var(--success)]">{state.message}</p> : null}
       <button type="submit" disabled={pending} className="primary-button">{pending ? "Kaydediliyor…" : "Kaydet"}</button>

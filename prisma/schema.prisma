@@ -402,6 +402,7 @@ model User {
   sentMessages            TeacherMessage[]          @relation("MessageStudent")
   answeredMessages        TeacherMessage[]          @relation("MessageResponder")
   studyGoals              StudyGoal[]
+  englishPlacements       EnglishPlacement[]
 
   @@map("users")
 }
@@ -2353,4 +2354,22 @@ model SiteReview {
   @@index([status, featured, createdAt])
   @@index([userId])
   @@map("site_reviews")
+}
+
+/// Result of the general English placement test (Speaking Club grouping). The latest one counts.
+model EnglishPlacement {
+  id        String   @id @default(cuid())
+  userId    String
+  /// CEFR band A1–C2 from the test.
+  cefr      String
+  correct   Int
+  total     Int
+  /// { questionId: chosenIndex } — kept so a result can be explained or re-scored.
+  answers   Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("english_placements")
 }
