@@ -8,6 +8,7 @@ import { suggestAdjustment } from "@/lib/coaching/adapt";
 import { coachingCopy } from "@/lib/coaching/i18n";
 import { addDays, dateToDayKey, dayKey, dayKeyToDate, daysBetween, isoWeekday, localDayRange, weekStartOf } from "@/lib/coaching/time";
 import type { SkillKey } from "@/lib/coaching/exams";
+import { weeklyNewWords } from "@/lib/coaching/workload";
 import { buildCatalog } from "@/server/services/coaching/catalog.service";
 import { examPerformance, weakSkillsFrom } from "@/server/services/coaching/insights.service";
 import { countDueMistakes, recurringMistakeTopics } from "@/server/services/coaching/notebook.service";
@@ -15,7 +16,10 @@ import { ensureVocabIntake, hasSiteVocabulary } from "@/server/services/coaching
 import type { CoachingProfileRow } from "@/server/services/coaching/profile.service";
 
 type User = { id: string; role: string };
-type Basis = { generated: boolean; dailyMinutes: number; studyDays: number[]; focus: string[] };
+type Basis = { generated: boolean; dailyMinutes: number; studyDays: number[]; focus: string[]; v?: number };
+
+/** Bumped when the planner changes enough that this week's untouched tasks should be re-planned. */
+const PLANNER_VERSION = 2;
 
 export const VOCAB_HREF = "/dashboard/kocluk/kelime";
 export const NOTEBOOK_HREF = "/dashboard/kocluk/defter/tekrar";
@@ -55,7 +59,8 @@ async function planTasks(profile: CoachingProfileRow, user: User, weekStartKey: 
     timedPractice: catalog.timedPractice,
     daysUntilExam: examDateKey ? daysBetween(fromDay, examDateKey) : null,
     weekIndex: firstWeek,
-    copy: { vocabTitle: t.task.vocabTitle, vocabDetail: t.task.vocabDetail, mistakeTitle: t.task.mistakeTitle, mistakeDetail: t.task.mistakeDetail },
+    newWordsPerWeek: weeklyNewWords(profile.studyDays.length * profile.dailyMinutes),
+    copy: { vocabTitle: t.task.vocabTitle, vocabDetail: t.task.vocabDetail, mistakeTitle: t.task.mistakeTitle, mistakeDetail: t.task.mistakeDetail, mockReviewTitle: t.task.mockReviewTitle, mockReviewDetail: t.task.mockReviewDetail },
   });
 
   // Offer the free level test on the first planned day until the student has taken one.
@@ -78,7 +83,7 @@ async function planTasks(profile: CoachingProfileRow, user: User, weekStartKey: 
       }
     }
   }
-  return { tasks, basis: { generated: true, dailyMinutes: profile.dailyMinutes, studyDays: profile.studyDays, focus } satisfies Basis };
+  return { tasks, basis: { generated: true, dailyMinutes: profile.dailyMinutes, studyDays: profile.studyDays, focus, v: PLANNER_VERSION } satisfies Basis };
 }
 
 function taskRows(tasks: PlannedTask[], weekId: string, userId: string) {
@@ -97,13 +102,31 @@ function taskRows(tasks: PlannedTask[], weekId: string, userId: string) {
     isGap: x.isGap,
     minutes: x.minutes,
     busyMinutes: x.busyMinutes,
+    targetCount: x.targetCount ?? null,
+    unit: x.unit ?? null,
   }));
 }
 
 /** Creates the week's plan the first time it's needed (lazily, from any coaching page or the cron). */
 export async function ensureWeekPlan(profile: CoachingProfileRow, user: User, weekStartKey: string, todayKey: string) {
   const existing = await db.studyPlanWeek.findUnique({ where: { userId_weekStart: { userId: profile.userId, weekStart: dayKeyToDate(weekStartKey) } } });
-  if (existing && (existing.basis as Basis | null)?.generated) return existing;
+  const basis0 = existing?.basis as Basis | null | undefined;
+  if (existing && basis0?.generated) {
+    // A week planned by an older planner: re-plan its untouched remaining days once (done and
+    // student-edited tasks stay), so current students get the volume-based plan straight away.
+    if ((basis0.v ?? 1) < PLANNER_VERSION && weekStartKey === weekStartOf(todayKey)) {
+      // Claim the upgrade under a row lock so two concurrent page loads don't both re-plan.
+      const claimed = await db.$transaction(async (tx) => {
+        const [row] = await tx.$queryRaw<{ basis: Basis | null }[]>`SELECT basis FROM study_plan_weeks WHERE id = ${existing.id} FOR UPDATE`;
+        if ((row?.basis?.v ?? 1) >= PLANNER_VERSION) return false;
+        await tx.studyPlanWeek.update({ where: { id: existing.id }, data: { basis: { ...row!.basis!, v: PLANNER_VERSION } } });
+        return true;
+      });
+      if (claimed) await regenerateRemaining(profile, user, todayKey);
+      return (await db.studyPlanWeek.findUnique({ where: { id: existing.id } }))!;
+    }
+    return existing;
+  }
   await ensureVocabIntake(profile, dayKeyToDate(weekStartKey));
   const fromDay = todayKey > weekStartKey ? todayKey : weekStartKey;
   const { tasks, basis } = await planTasks(profile, user, weekStartKey, fromDay);

@@ -1525,6 +1525,14 @@ model StudyTask {
    * Shorter "busy day" version; null = skipped on a busy day.
    */
   busyMinutes     Int?
+  /**
+   * Volume target set by the plan (e.g. 25 words, 40 questions); null for time-only tasks.
+   */
+  targetCount     Int?
+  /**
+   * "WORDS" | "QUESTIONS" | "MOCK" | "TEXT"
+   */
+  unit            String?
   status          StudyTaskStatus @default(PLANNED)
   /**
    * "BUSY" | "STUDENT" | "MISSED"
