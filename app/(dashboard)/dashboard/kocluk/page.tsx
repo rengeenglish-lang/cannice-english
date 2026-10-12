@@ -13,7 +13,8 @@ import { recentWeeklyReport } from "@/server/services/coaching/reports.service";
 import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
 import { dateToDayKey, daysBetween, weekStartOf } from "@/lib/coaching/time";
 import { pick } from "@/lib/coaching/i18n";
-import { SKILL_LABELS, versionOf, type SkillKey } from "@/lib/coaching/exams";
+import { parseScore, SKILL_LABELS, versionOf, type SkillKey } from "@/lib/coaching/exams";
+import { assessWorkload, NORM_SOURCES } from "@/lib/coaching/workload";
 import { TaskRow } from "@/components/coaching/TaskRow";
 import { ActionButton, ReportAdviceButton } from "@/components/coaching/ActionButton";
 import { busyDayAction, decideProposalAction, setCoachingEnabledAction, startTaskAction } from "@/app/actions/coaching";
@@ -101,6 +102,29 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
   const goalMismatch = Boolean(examType && goal && goal.examTypeId !== examType.id);
   const todayMinutes = todayOpen.reduce((n, x) => n + x.minutes, 0);
 
+  // Volume goals — what coaches actually count: words, questions, mocks, writing and hours.
+  const volumes = new Map<string, { done: number; total: number }>();
+  for (const x of counted) {
+    if (!x.unit || !x.targetCount) continue;
+    const v = volumes.get(x.unit) ?? { done: 0, total: 0 };
+    v.total += x.targetCount;
+    if (x.status === "DONE") v.done += x.targetCount;
+    volumes.set(x.unit, v);
+  }
+  const plannedMinutes = counted.reduce((n, x) => n + x.minutes, 0);
+  const doneMinutes = counted.filter((x) => x.status === "DONE").reduce((n, x) => n + (x.selfMinutes ?? x.minutes), 0);
+  const workload = assessWorkload({
+    pathway: config,
+    studyDays: profile.studyDays.length,
+    dailyMinutes: profile.dailyMinutes,
+    currentLevel: profile.currentLevel,
+    measuredCefr: level?.cefr ?? null,
+    targetScore: parseScore(profile.targetScore, config.overall),
+    recentScore: parseScore(profile.recentScore, config.overall),
+    daysUntilExam: daysLeft,
+  });
+  const hours = (m: number) => Math.round((m / 60) * 10) / 10;
+
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="space-y-6">
@@ -184,6 +208,23 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
           </div>
           <p className="mt-2 text-sm font-semibold text-[color:var(--muted)]">{t.dash.weekProgress(weekDone, counted.length)}</p>
           <progress className="learning-progress mt-2 w-full" value={weekDone} max={Math.max(1, counted.length)} aria-label={t.dash.weekProgress(weekDone, counted.length)} />
+          {volumes.size || plannedMinutes ? (
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {(["WORDS", "QUESTIONS", "MOCK", "TEXT"] as const).filter((u) => volumes.has(u)).map((u) => {
+                const v = volumes.get(u)!;
+                return (
+                  <li key={u} className="rounded-xl border border-[color:var(--border-strong)] bg-[color:var(--brand-soft)] p-3">
+                    <div className="flex justify-between text-sm font-bold"><span>{t.dash.volumes[u]}</span><span>{v.done}/{v.total}</span></div>
+                    <progress className="learning-progress mt-2 w-full" value={v.done} max={v.total} aria-label={`${t.dash.volumes[u]} ${v.done}/${v.total}`} />
+                  </li>
+                );
+              })}
+              <li className="rounded-xl border border-[color:var(--border-strong)] bg-[color:var(--brand-soft)] p-3">
+                <div className="flex justify-between text-sm font-bold"><span>{t.dash.volumes.MINUTES}</span><span>{t.dash.hours(hours(doneMinutes), hours(plannedMinutes))}</span></div>
+                <progress className="learning-progress mt-2 w-full" value={Math.min(doneMinutes, plannedMinutes)} max={Math.max(1, plannedMinutes)} aria-label={t.dash.volumes.MINUTES} />
+              </li>
+            </ul>
+          ) : null}
           {bySkill.size ? (
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {[...bySkill.entries()].map(([skill, s]) => (
@@ -195,6 +236,40 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
             </ul>
           ) : null}
           <p className="mt-4 text-xs text-[color:var(--muted)]">{t.plan.mixNote}</p>
+        </section>
+
+        {/* Reality check — hours the target needs vs the time the plan has */}
+        <section aria-labelledby="realism-title" className={`dashboard-panel ${workload.feasibility === "UNREALISTIC" || workload.belowSeriousMinimum ? "border-2 border-amber-300" : ""}`}>
+          <h2 id="realism-title" className="section-title !text-lg">{t.dash.realism.title}</h2>
+          <ul className="mt-3 space-y-2 text-sm leading-6">
+            {workload.hoursNeeded !== null ? (
+              <li>
+                {workload.hoursBasis === "CEFR" && workload.currentCefr && workload.target ? t.dash.realism.cefrHours(workload.hoursNeeded, workload.currentCefr, workload.target.cefr) : t.dash.realism.bandHours(workload.hoursNeeded)}
+                {workload.hoursBasis === "CEFR" && workload.target?.approximate ? <span className="block text-xs text-[color:var(--muted)]">{t.dash.realism.approx}</span> : null}
+              </li>
+            ) : (
+              <li className="text-[color:var(--muted)]">{t.dash.realism.unknown}</li>
+            )}
+            {workload.netGap ? <li>{config.code === "YDT" ? t.dash.realism.netGapRaw(workload.netGap) : t.dash.realism.netGap(workload.netGap)}</li> : null}
+            {workload.neededWeeklyMinutes !== null ? <li>{t.dash.realism.weekly(hours(workload.neededWeeklyMinutes), hours(workload.plannedWeeklyMinutes))}</li> : null}
+            {workload.feasibility !== "UNKNOWN" ? (
+              <li className={`font-bold ${workload.feasibility === "OK" ? "text-emerald-700" : "text-amber-800"}`}>{t.dash.realism.verdict[workload.feasibility]}</li>
+            ) : null}
+            {workload.belowSeriousMinimum ? <li className="font-semibold text-amber-800">{t.dash.realism.belowMin}</li> : null}
+            {workload.recommendedDailyMinutes && workload.recommendedDailyMinutes > profile.dailyMinutes ? <li className="font-bold">{t.dash.realism.recommend(workload.recommendedDailyMinutes)}</li> : null}
+            <li>{t.dash.realism.phase[workload.phase]}</li>
+            <li>{t.dash.realism.words(workload.newWordsPerWeek)}</li>
+          </ul>
+          <Link href="/dashboard/kocluk/baslangic" className="mt-3 inline-block text-sm font-bold text-[color:var(--accent)]">{t.dash.realism.edit} →</Link>
+          <p className="mt-3 text-xs leading-5 text-[color:var(--muted)]">
+            {t.dash.realism.basis}{" "}
+            {NORM_SOURCES.map((src, i) => (
+              <span key={src.url}>
+                {i ? " · " : ""}
+                <a href={src.url} target="_blank" rel="noopener noreferrer" className="underline">{src.label}</a>
+              </span>
+            ))}
+          </p>
         </section>
       </div>
 

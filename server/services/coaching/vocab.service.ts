@@ -1,10 +1,8 @@
 import "server-only";
 import { db } from "@/server/db";
 import { reviewVocab } from "@/lib/coaching/srs";
+import { weeklyNewWords } from "@/lib/coaching/workload";
 import type { CoachingProfileRow } from "@/server/services/coaching/profile.service";
-
-/** New site words introduced per week — enough to keep the deck growing without flooding reviews. */
-export const WEEKLY_NEW_WORDS = 10;
 
 type SourceEntry = { term: string; meaning: string; example: string | null; ref: string };
 
@@ -31,9 +29,13 @@ async function siteVocabulary(examSlug: string): Promise<SourceEntry[]> {
   return out;
 }
 
-/** Adds this week's new site words (up to WEEKLY_NEW_WORDS) from where the student left off. */
+/**
+ * Adds this week's new site words from where the student left off — the coaching norm of up to 140
+ * a week (scaled down for short study weeks, see lib/coaching/workload.ts).
+ */
 export async function ensureVocabIntake(profile: CoachingProfileRow, weekStart: Date) {
   if (!profile.contentExamSlug) return 0;
+  const WEEKLY_NEW_WORDS = weeklyNewWords(profile.studyDays.length * profile.dailyMinutes);
   const addedThisWeek = await db.vocabCard.count({ where: { userId: profile.userId, source: "SITE", createdAt: { gte: weekStart } } });
   if (addedThisWeek >= WEEKLY_NEW_WORDS) return 0;
   const source = await siteVocabulary(profile.contentExamSlug);

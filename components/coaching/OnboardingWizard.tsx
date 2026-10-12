@@ -29,7 +29,7 @@ export type OnboardingInitial = {
   guardianConsent: boolean;
 };
 
-const MINUTE_OPTIONS = [15, 20, 30, 45, 60, 90, 120, 180];
+const MINUTE_OPTIONS = [15, 20, 30, 45, 60, 90, 120, 150, 180, 240];
 const TOTAL = 5;
 
 export function OnboardingWizard({ locale, initial, isEdit, minorKnown }: { locale: string; initial: OnboardingInitial; isEdit: boolean; minorKnown: boolean }) {

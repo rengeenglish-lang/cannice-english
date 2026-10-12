@@ -5,9 +5,10 @@ import { generateWeekPlan, type CatalogActivity, type PlannerInput } from "../li
 import { reviewVocab, retryMistake } from "../lib/coaching/srs";
 import { decideFollowUps, type DeliveryPrefs, type FollowUpCandidate } from "../lib/coaching/followups";
 import { suggestAdjustment } from "../lib/coaching/adapt";
+import { assessWorkload, examPhase, mocksThisWeek, weeklyNewWords } from "../lib/coaching/workload";
 import { addDays, dayKey, inQuietHours, isoWeekday, localTime, weekStartOf } from "../lib/coaching/time";
 
-const copy = { vocabTitle: "Kelime", vocabDetail: "", mistakeTitle: "Hata", mistakeDetail: "" };
+const copy = { vocabTitle: "Kelime", vocabDetail: "", mistakeTitle: "Hata", mistakeDetail: "", mockReviewTitle: "Deneme analizi", mockReviewDetail: "" };
 
 function activitiesFor(code: keyof typeof PATHWAYS): CatalogActivity[] {
   return PATHWAYS[code].taskTypes.flatMap((t) => [
@@ -31,6 +32,7 @@ function input(code: keyof typeof PATHWAYS, over: Partial<PlannerInput> = {}): P
     timedPractice: null,
     daysUntilExam: 30,
     weekIndex: 0,
+    newWordsPerWeek: 140,
     copy,
     ...over,
   };
@@ -103,6 +105,55 @@ test("mid-week onboarding plans only from today; 7-day students get a light Sund
   assert.ok(tasks.every((t) => t.date >= "2026-09-24"));
   const sunday = tasks.filter((t) => t.date === "2026-09-27");
   assert.ok(sunday.length > 0 && sunday.every((t) => t.kind === "VOCAB_REVIEW" || t.kind === "MISTAKE_REVIEW"));
+});
+
+test("plans carry coach-style volumes: daily words, questions at exam pace, mock + analysis", () => {
+  const tasks = generateWeekPlan(input("YDS", { dailyMinutes: 120, mock: { taskTypeKey: "mock", skill: "time", kind: "MOCK", mode: "practice", title: "YDS Deneme", minutes: 180, isGap: false } }));
+  const vocab = tasks.filter((t) => t.kind === "VOCAB_REVIEW");
+  assert.ok(vocab.every((t) => t.unit === "WORDS" && t.targetCount === 28), "140 words over 5 study days");
+  const practice = tasks.filter((t) => t.kind === "PRACTICE");
+  assert.ok(practice.length && practice.every((t) => t.unit === "QUESTIONS" && (t.targetCount ?? 0) >= 5));
+  const grammar = practice.find((t) => t.skill === "grammar" && t.minutes === 30);
+  assert.equal(grammar?.targetCount, 20, "grammar at 1.5 min a question");
+  const mocks = tasks.filter((t) => t.kind === "MOCK");
+  assert.equal(mocks.length, 1, "6–8 weeks out: one full mock a week");
+  assert.equal(mocks[0].unit, "MOCK");
+  const analysis = tasks.find((t) => t.title === "Deneme analizi");
+  assert.ok(analysis && analysis.date > mocks[0].date && analysis.minutes === 60, "an hour of analysis on the next study day");
+  const weekQuestions = practice.reduce((n, t) => n + (t.targetCount ?? 0), 0);
+  assert.ok(weekQuestions >= 100, `only ${weekQuestions} questions planned`);
+});
+
+test("mock cadence follows the exam phase", () => {
+  assert.equal(examPhase(null), "FOUNDATION");
+  assert.equal(examPhase(90), "FOUNDATION");
+  assert.equal(examPhase(42), "BUILD");
+  assert.equal(examPhase(14), "FINAL");
+  assert.deepEqual([0, 1, 2, 3].map((w) => mocksThisWeek("FOUNDATION", w)), [1, 0, 1, 0]);
+  assert.equal(mocksThisWeek("FINAL", 1), 2);
+  const final = generateWeekPlan(input("YDS", { daysUntilExam: 10, dailyMinutes: 90, mock: { taskTypeKey: "mock", skill: "time", kind: "MOCK", mode: "practice", title: "YDS Deneme", minutes: 180, isGap: false } }));
+  const mockDates = final.filter((t) => t.kind === "MOCK").map((t) => t.date);
+  assert.equal(mockDates.length, 2, "last 3 weeks: two mocks");
+  assert.equal(final.filter((t) => t.title === "Deneme analizi").length, 2);
+});
+
+test("workload check: hours from CEFR / IELTS gaps, weekly need vs plan, ÖSYM net gap", () => {
+  assert.equal(weeklyNewWords(5 * 60), 140);
+  assert.equal(weeklyNewWords(3 * 30), 50, "short weeks still get the minimum");
+  const yds = assessWorkload({ pathway: PATHWAYS.YDS, studyDays: 5, dailyMinutes: 30, currentLevel: "B1", targetScore: 75, recentScore: 55, daysUntilExam: 70 });
+  assert.deepEqual(yds.target, { cefr: "B2", approximate: true });
+  assert.equal(yds.hoursNeeded, 200);
+  assert.equal(yds.neededWeeklyMinutes, 1200, "200 h over 10 weeks");
+  assert.equal(yds.feasibility, "UNREALISTIC", "150 min a week vs 1200 needed");
+  assert.equal(yds.recommendedDailyMinutes, 240);
+  assert.equal(yds.netGap, 16);
+  assert.equal(yds.belowSeriousMinimum, true);
+  const ielts = assessWorkload({ pathway: PATHWAYS.IELTS, studyDays: 6, dailyMinutes: 120, currentLevel: null, targetScore: 7, recentScore: 6.5, daysUntilExam: 84 });
+  assert.equal(ielts.hoursNeeded, 80);
+  assert.equal(ielts.feasibility, "OK", "720 min a week vs 400 needed");
+  const unknown = assessWorkload({ pathway: PATHWAYS.YDS, studyDays: 5, dailyMinutes: 90, currentLevel: null, targetScore: 70, recentScore: null, daysUntilExam: null });
+  assert.equal(unknown.feasibility, "UNKNOWN");
+  assert.equal(unknown.recommendedDailyMinutes, null);
 });
 
 test("vocabulary is never mastered on a single correct answer", () => {

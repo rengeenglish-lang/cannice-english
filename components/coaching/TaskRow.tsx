@@ -23,6 +23,8 @@ export type TaskView = {
   href: string | null;
   isGap: boolean;
   minutes: number;
+  targetCount: number | null;
+  unit: string | null;
   status: "PLANNED" | "DONE" | "SKIPPED";
   completion: string | null;
   skipReason: string | null;
@@ -58,6 +60,7 @@ export function TaskRow({ task, locale, todayKey, editable = false, dayOptions =
             ) : null}
           </div>
           <p className={`mt-1 font-bold leading-6 ${done ? "text-emerald-900" : "text-[color:var(--foreground)]"}`}>{task.title}</p>
+          {task.targetCount && task.unit ? <p className="mt-1 inline-block rounded-full bg-[color:var(--brand-soft)] px-2.5 py-0.5 text-xs font-extrabold text-[color:var(--accent)]">{t.task.target(task.targetCount, task.unit)}</p> : null}
           {task.detail ? <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">{task.detail}</p> : null}
           {task.isGap ? (
             <p className="mt-2 flex items-start gap-1.5 text-xs leading-5 text-amber-900">

@@ -13,6 +13,8 @@ type TaskRowData = {
   refType: string | null;
   isGap: boolean;
   minutes: number;
+  targetCount?: number | null;
+  unit?: string | null;
   status: string;
   completion: string | null;
   skipReason: string | null;
@@ -31,6 +33,8 @@ export function toTaskView(task: TaskRowData): TaskView {
     href: task.href,
     isGap: task.isGap,
     minutes: task.minutes,
+    targetCount: task.targetCount ?? null,
+    unit: task.unit ?? null,
     status: task.status as TaskView["status"],
     completion: task.completion,
     skipReason: task.skipReason,
