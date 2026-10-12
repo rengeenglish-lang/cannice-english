@@ -34,6 +34,11 @@ export function nextOfficialExam(code: InterestCode, todayKey: string, exams = E
   return [...exams].sort((a, b) => a.examDate.localeCompare(b.examDate)).find((e) => matchesInterest(code, e) && e.examDate >= todayKey);
 }
 
+/** The next few ÖSYM sessions for this exam (for date pickers), soonest first. */
+export function upcomingOfficialExams(code: InterestCode, todayKey: string, limit = 4, exams = EXAM_CALENDAR) {
+  return [...exams].sort((a, b) => a.examDate.localeCompare(b.examDate)).filter((e) => matchesInterest(code, e) && e.examDate >= todayKey).slice(0, limit);
+}
+
 export type Countdown =
   | { code: InterestCode; label: string; state: "DATE"; examName: string; dateKey: string; target: string; source: "OSYM" | "PERSONAL" }
   /** ÖSYM exam with nothing left on the published calendar. */

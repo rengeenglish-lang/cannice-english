@@ -2,7 +2,7 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { db } from "../server/db";
-import { allowedExamSlugs, canOpenExam, countdownFor, nextOfficialExam, parseInterests } from "../lib/exam-interests";
+import { allowedExamSlugs, canOpenExam, countdownFor, nextOfficialExam, parseInterests, upcomingOfficialExams } from "../lib/exam-interests";
 import { examCountdowns, getExamInterests, setExamInterests } from "../server/services/exam-interests.service";
 
 const url = new URL(process.env.DATABASE_URL!);
@@ -16,6 +16,16 @@ test("YDS learners count down to the next paper YDS or English e-YDS; YÖKDİL t
   assert.equal(nextOfficialExam("YOKDIL_SAGLIK", "2026-03-01")?.name, "2026-YÖKDİL/1");
   assert.equal(nextOfficialExam("YOKDIL_FEN", "2026-10-11"), undefined, "no YÖKDİL left in 2026");
   assert.equal(nextOfficialExam("IELTS", "2026-10-11"), undefined);
+});
+
+test("date picker offers the next ÖSYM sessions soonest first, none once the calendar runs out", () => {
+  const yds = upcomingOfficialExams("YDS", "2026-10-12");
+  assert.ok(yds.length > 0 && yds.length <= 4);
+  assert.equal(yds[0].name, nextOfficialExam("YDS", "2026-10-12")?.name);
+  assert.deepEqual(yds.map((e) => e.examDate), [...yds.map((e) => e.examDate)].sort());
+  assert.ok(yds.every((e) => e.examDate >= "2026-10-12"));
+  assert.equal(upcomingOfficialExams("YDS", "2026-10-12", 2).length, Math.min(2, yds.length));
+  assert.equal(upcomingOfficialExams("YDS", "2099-01-01").length, 0);
 });
 
 test("countdowns: own date wins, ÖSYM fallback, waiting for the new calendar, IELTS needs a date", () => {
