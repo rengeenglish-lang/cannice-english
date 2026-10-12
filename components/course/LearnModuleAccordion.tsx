@@ -1,4 +1,5 @@
 "use client";
+import { lessonVideoSrc } from "@/lib/lesson-video";
 import { useState, useTransition } from "react";
 import { CheckCircle2, PlayCircle, ChevronDown } from "lucide-react";
 import { toggleLessonProgressAction } from "@/app/actions/learning";
@@ -108,7 +109,7 @@ export function LearnModuleAccordion({
                       <video
                         controls
                         preload="metadata"
-                        src={lesson.videoUrl}
+                        src={lessonVideoSrc("ders", lesson.id, lesson.videoUrl) ?? undefined}
                         aria-label={lesson.title}
                         className="aspect-video w-full rounded-xl bg-black"
                       />

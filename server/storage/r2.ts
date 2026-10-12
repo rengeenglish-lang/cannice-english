@@ -39,7 +39,8 @@ async function presign(bucket: R2Bucket, key: string, method: string, expiresSec
   const url = objectUrl(bucket, key);
   url.searchParams.set("X-Amz-Expires", String(expiresSec));
   for (const [k, v] of Object.entries(query ?? {})) url.searchParams.set(k, v);
-  const signed = await r2().sign(url.toString(), { method, headers, aws: { signQuery: true } });
+  // allHeaders: the Content-Type of an upload is part of the signature, so the type checked here is the type stored.
+  const signed = await r2().sign(url.toString(), { method, headers, aws: { signQuery: true, allHeaders: Boolean(headers) } });
   return signed.url;
 }
 
