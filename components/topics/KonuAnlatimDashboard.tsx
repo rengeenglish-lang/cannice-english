@@ -1,4 +1,5 @@
 "use client";
+import { lessonVideoSrc } from "@/lib/lesson-video";
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
@@ -325,7 +326,7 @@ export function KonuAnlatimDashboard({
               {selectedLesson.videoUrl ? (
                 <div className="mb-5 aspect-video overflow-hidden rounded-2xl bg-black">
                   <video
-                    src={selectedLesson.videoUrl}
+                    src={lessonVideoSrc("konu", selectedLesson.id, selectedLesson.videoUrl) ?? undefined}
                     controls
                     className="size-full"
                   />

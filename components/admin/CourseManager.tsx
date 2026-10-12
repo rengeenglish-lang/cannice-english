@@ -1,9 +1,10 @@
+import { LessonVideoUpload } from "@/components/admin/LessonVideoUpload";
 import {
   addModuleAction, deleteModuleAction, addLessonAction, deleteLessonAction,
   addLiveSessionAction, deleteLiveSessionAction,
 } from "@/app/actions/admin-products";
 
-type Lesson = { id: string; title: string; durationMinutes: number | null; isPreviewable: boolean };
+type Lesson = { id: string; title: string; durationMinutes: number | null; isPreviewable: boolean; videoUrl: string | null };
 type Module = { id: string; title: string; lessons: Lesson[] };
 type LiveSession = { id: string; title: string; cohortLabel: string | null; startsAt: Date; endsAt: Date };
 
@@ -12,7 +13,9 @@ export function CourseManager({
   courseId,
   modules,
   liveSessions,
+  uploadsAvailable = false,
 }: {
+  uploadsAvailable?: boolean;
   productId: string;
   courseId: string;
   modules: Module[];
@@ -37,11 +40,14 @@ export function CourseManager({
                 </div>
                 <ul className="mt-3 space-y-1">
                   {module.lessons.map((lesson) => (
-                    <li key={lesson.id} className="flex items-center justify-between gap-2 rounded-xl bg-[color:var(--canvas)] px-3 py-2 text-sm">
-                      <span>{lesson.title}{lesson.durationMinutes ? ` · ${lesson.durationMinutes} dk` : ""}{lesson.isPreviewable ? " · Örnek Ders" : ""}</span>
-                      <form action={deleteLessonAction.bind(null, productId, lesson.id)}>
-                        <button type="submit" className="text-xs font-bold text-[color:var(--danger)]">Sil</button>
-                      </form>
+                    <li key={lesson.id} className="space-y-2 rounded-xl bg-[color:var(--canvas)] px-3 py-2 text-sm">
+                      <div className="flex items-center justify-between gap-2">
+                        <span>{lesson.title}{lesson.durationMinutes ? ` · ${lesson.durationMinutes} dk` : ""}{lesson.isPreviewable ? " · Örnek Ders" : ""}</span>
+                        <form action={deleteLessonAction.bind(null, productId, lesson.id)}>
+                          <button type="submit" className="text-xs font-bold text-[color:var(--danger)]">Sil</button>
+                        </form>
+                      </div>
+                      <LessonVideoUpload kind="ders" lessonId={lesson.id} videoUrl={lesson.videoUrl} available={uploadsAvailable} />
                     </li>
                   ))}
                 </ul>

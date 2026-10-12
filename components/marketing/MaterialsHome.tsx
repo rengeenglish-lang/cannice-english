@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, Check, FileText, GraduationCap, LineChart, Play, Sparkles, Users } from "lucide-react";
-import type { listHomepageProducts, listTestimonials } from "@/server/services/catalog.service";
+import type { listHomepageProducts } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
 import { isMonthlyBilledCategory } from "@/lib/billing";
 import { PLATFORM_EXAMS } from "@/lib/platform";
 import { StudySample } from "./StudySample";
-import { TestimonialsSection } from "./TestimonialsSection";
+import { SiteReviewsSection } from "@/components/site-reviews/SiteReviewsSection";
+import type { PublicReview } from "@/components/site-reviews/SiteReviewCard";
 import { AvailabilityHome } from "@/components/availability/AvailabilityHome";
 
 type HomeProduct = Awaited<ReturnType<typeof listHomepageProducts>>[number];
-type HomeTestimonial = Awaited<ReturnType<typeof listTestimonials>>[number];
 
 /** Member-only destinations: logged-out visitors go through registration and land on the target afterwards. */
 function memberHref(href: string, isSignedIn: boolean) {
@@ -47,7 +47,7 @@ function ProductCard({ product, isGroup = false }: { product: HomeProduct; isGro
   </article>;
 }
 
-export function MaterialsHome({ products, groups = [], testimonials = [], isSignedIn = false }: { products: HomeProduct[]; groups?: HomeProduct[]; testimonials?: HomeTestimonial[]; isSignedIn?: boolean }) {
+export function MaterialsHome({ products, groups = [], reviews = [], isSignedIn = false }: { products: HomeProduct[]; groups?: HomeProduct[]; reviews?: PublicReview[]; isSignedIn?: boolean }) {
   const levelTestHref = memberHref("/seviye-tespit", isSignedIn);
   return <main id="main-content" className="bg-white text-[color:var(--foreground)]">
     <section className="relative overflow-hidden bg-[#071b34] text-white">
@@ -72,7 +72,7 @@ export function MaterialsHome({ products, groups = [], testimonials = [], isSign
 
     <section id="sinavini-sec" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="text-center"><p className="eyebrow">Beş sınav · tek platform</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Hangi sınava hazırlanıyorsun?</h2><p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-600">Sınavını seç; o sınava ait öğrenme, pratik, ders ve materyal yollarını birlikte gör.</p></div><div className="mt-9 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-5">{PLATFORM_EXAMS.map(({slug,name,description,color,soft,icon:Icon})=><Link key={slug} href={`/exams/${slug}`} className="exam-card group rounded-3xl border border-slate-200 p-4 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] transition last:col-span-2 hover:-translate-y-1 sm:p-6 lg:last:col-span-1" style={{background:soft}}><span className="grid size-10 place-items-center rounded-2xl text-white sm:size-12" style={{background:color}}><Icon/></span><h3 className="mt-4 text-xl font-black sm:mt-6 sm:text-2xl">{name}</h3><p className="mt-2 hidden text-sm leading-6 text-slate-600 sm:block">{description}</p><span className="mt-3 inline-flex items-center gap-2 text-sm font-extrabold sm:mt-5" style={{color}}><span className="sr-only sm:not-sr-only">Sınav alanına gir</span><ArrowRight size={17} aria-hidden="true" className="transition group-hover:translate-x-1"/></span></Link>)}</div></section>
 
-    <TestimonialsSection testimonials={testimonials} className="pb-14 sm:pb-16" />
+    <SiteReviewsSection reviews={reviews} className="pb-14 sm:pb-16" />
 
     <section className="bg-slate-50"><div className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">{PILLARS.map(({label,title,copy,href,membersOnly,icon:Icon,badge})=>{const gated = membersOnly && !isSignedIn; const tag = gated ? MEMBER_NOTE.toLocaleUpperCase("tr-TR") : badge; return <Link key={label} href={membersOnly ? memberHref(href, isSignedIn) : href} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 sm:p-6"><div className="flex flex-wrap items-center justify-between gap-2"><span className="grid size-10 place-items-center rounded-2xl bg-blue-50 text-blue-700 sm:size-11"><Icon/></span>{tag ? <span className="hidden whitespace-nowrap rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-black tracking-wide text-emerald-700 sm:inline-block">{tag}</span> : null}</div><p className="mt-5 text-xs font-extrabold tracking-widest text-blue-700 sm:mt-6">{label}</p><h3 className="mt-2 text-lg font-black sm:text-xl">{title}</h3>{tag ? <p className="mt-1 text-xs font-bold text-emerald-700 sm:hidden">{gated ? MEMBER_NOTE : "İlk konu ücretsiz"}</p> : null}<p className="mt-3 hidden text-sm leading-6 text-slate-600 sm:block">{copy}</p></Link>;})}</div></div></section>
 

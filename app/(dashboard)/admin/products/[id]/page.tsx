@@ -5,6 +5,7 @@ import { getProductForEdit } from "@/server/services/admin-products.service";
 import { updateProductAction } from "@/app/actions/admin-products";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { CourseManager } from "@/components/admin/CourseManager";
+import { lessonUploadsAvailable } from "@/server/services/lesson-video.service";
 
 export const metadata: Metadata = { title: "Ürünü Düzenle" };
 
@@ -29,6 +30,7 @@ export default async function EditProductPage({ params }: Props) {
             courseId={product.course.id}
             modules={product.course.modules}
             liveSessions={product.course.liveSessions}
+            uploadsAvailable={lessonUploadsAvailable()}
           />
         </div>
       ) : null}

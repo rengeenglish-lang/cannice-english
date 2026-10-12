@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { createLessonAction, updateLessonAction, deleteLessonAction } from "@/app/actions/admin-topics";
 import type { AdminFormState } from "@/app/actions/admin-testimonials";
+import { LessonVideoUpload } from "@/components/admin/LessonVideoUpload";
+import { isStoredVideo } from "@/lib/lesson-video";
 
 const initialState: AdminFormState = { status: "idle" };
 
@@ -28,10 +30,18 @@ function LessonFields({ lesson }: { lesson?: Lesson }) {
           <label className="label">Süre (dakika)</label>
           <input name="durationMinutes" type="number" min={0} defaultValue={lesson?.durationMinutes ?? ""} className="auth-input" />
         </div>
-        <div>
-          <label className="label">Video URL (opsiyonel)</label>
-          <input name="videoUrl" defaultValue={lesson?.videoUrl ?? ""} className="auth-input" />
-        </div>
+        {isStoredVideo(lesson?.videoUrl) ? (
+          <div>
+            <label className="label">Video</label>
+            <input type="hidden" name="videoUrl" value={lesson.videoUrl ?? ""} />
+            <p className="text-sm text-[color:var(--muted)]">Netfener deposundaki video kullanılıyor (aşağıdan değiştirebilirsiniz).</p>
+          </div>
+        ) : (
+          <div>
+            <label className="label">Video URL (opsiyonel)</label>
+            <input name="videoUrl" defaultValue={lesson?.videoUrl ?? ""} className="auth-input" />
+          </div>
+        )}
       </div>
       <div>
         <label className="label">Ders İçeriği</label>
@@ -46,7 +56,7 @@ function LessonFields({ lesson }: { lesson?: Lesson }) {
   );
 }
 
-function LessonEditor({ examSlug, topicId, lesson }: { examSlug: string; topicId: string; lesson: Lesson }) {
+function LessonEditor({ examSlug, topicId, lesson, uploadsAvailable }: { examSlug: string; topicId: string; lesson: Lesson; uploadsAvailable: boolean }) {
   const boundUpdate = updateLessonAction.bind(null, examSlug, topicId, lesson.id);
   const [state, formAction, pending] = useActionState(boundUpdate, initialState);
 
@@ -56,6 +66,7 @@ function LessonEditor({ examSlug, topicId, lesson }: { examSlug: string; topicId
         {lesson.position + 1}. {lesson.title}
         {lesson.durationMinutes ? <span className="ml-2 text-xs font-semibold text-[color:var(--muted)]">{lesson.durationMinutes} dk</span> : null}
       </summary>
+      <div className="mt-4"><LessonVideoUpload kind="konu" lessonId={lesson.id} videoUrl={lesson.videoUrl} available={uploadsAvailable} /></div>
       <form action={formAction} className="mt-4 space-y-3">
         <LessonFields lesson={lesson} />
         {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
@@ -71,7 +82,7 @@ function LessonEditor({ examSlug, topicId, lesson }: { examSlug: string; topicId
   );
 }
 
-export function TopicLessonManager({ examSlug, topicId, lessons }: { examSlug: string; topicId: string; lessons: Lesson[] }) {
+export function TopicLessonManager({ examSlug, topicId, lessons, uploadsAvailable = false }: { examSlug: string; topicId: string; lessons: Lesson[]; uploadsAvailable?: boolean }) {
   const addAction = createLessonAction.bind(null, examSlug, topicId);
 
   return (
@@ -79,7 +90,7 @@ export function TopicLessonManager({ examSlug, topicId, lessons }: { examSlug: s
       <h2 className="section-title text-lg">Dersler</h2>
       <div className="mt-4 space-y-3">
         {lessons.map((lesson) => (
-          <LessonEditor key={lesson.id} examSlug={examSlug} topicId={topicId} lesson={lesson} />
+          <LessonEditor key={lesson.id} examSlug={examSlug} topicId={topicId} lesson={lesson} uploadsAvailable={uploadsAvailable} />
         ))}
         {lessons.length === 0 ? <p className="text-sm text-slate-400">Henüz bu konuya ders eklenmedi.</p> : null}
       </div>

@@ -48,7 +48,8 @@ export default async function CartPage({ searchParams }: Props) {
   const productSavings = listTotal - subtotal;
 
   const couponCode = (await cookies()).get(CART_COUPON_COOKIE)?.value ?? null;
-  const coupon = couponCode && items.length ? await validateCouponForOrder(couponCode, subtotal) : null;
+  const couponLines = items.map((i) => ({ category: i.product.category, unitPrice: Number(i.unitPriceSnapshot), quantity: i.quantity }));
+  const coupon = couponCode && items.length ? await validateCouponForOrder(couponCode, subtotal, user?.id, couponLines) : null;
   const couponDiscount = coupon?.ok ? coupon.discount : 0;
   // A printed book in the basket adds one flat shipping fee, shown here rather than sprung at the end.
   const shippingTotal = shippingTotalFor(items.map((item) => item.product));

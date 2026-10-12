@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isAcceptableVideoField } from "@/lib/lesson-video";
 
 export const testimonialSchema = z.object({
   studentName: z.string().trim().min(2).max(120),
@@ -76,7 +77,7 @@ export const lessonSchema = z.object({
   title: z.string().trim().min(2).max(160),
   durationMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
   isPreviewable: z.coerce.boolean().default(false),
-  videoUrl: z.string().trim().url().optional().or(z.literal("")),
+  videoUrl: z.string().trim().refine(isAcceptableVideoField, "Geçerli bir video bağlantısı girin.").optional(),
   description: z.string().trim().max(500).optional().or(z.literal("")),
 });
 
@@ -97,7 +98,7 @@ export const examTopicSchema = z.object({
 export const topicLessonSchema = z.object({
   title: z.string().trim().min(2).max(200),
   durationMinutes: z.coerce.number().int().min(0).optional().or(z.literal("")),
-  videoUrl: z.string().trim().url().optional().or(z.literal("")),
+  videoUrl: z.string().trim().refine(isAcceptableVideoField, "Geçerli bir video bağlantısı girin.").optional(),
   contentBody: z.string().trim().max(60000).optional().or(z.literal("")),
   diagnosticTopicSlugs: z.string().trim().max(500).optional().or(z.literal("")),
 });

@@ -5,6 +5,7 @@ import { getTopicForEdit } from "@/server/services/admin-topics.service";
 import { updateTopicAction } from "@/app/actions/admin-topics";
 import { TopicForm } from "@/components/admin/TopicForm";
 import { TopicLessonManager } from "@/components/admin/TopicLessonManager";
+import { lessonUploadsAvailable } from "@/server/services/lesson-video.service";
 
 type Props = { params: Promise<{ examSlug: string; topicId: string }> };
 
@@ -28,7 +29,7 @@ export default async function EditTopicPage({ params }: Props) {
       <h1 className="page-title">{topic.name}</h1>
       <div className="mt-8 max-w-3xl">
         <TopicForm topic={topic} action={updateTopicAction.bind(null, examSlug, topicId)} />
-        <TopicLessonManager examSlug={examSlug} topicId={topicId} lessons={topic.lessons} />
+        <TopicLessonManager examSlug={examSlug} topicId={topicId} lessons={topic.lessons} uploadsAvailable={lessonUploadsAvailable()} />
       </div>
     </div>
   );

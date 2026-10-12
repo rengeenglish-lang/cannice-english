@@ -78,7 +78,8 @@ export async function applyCartCouponAction(_state: CouponFormState, formData: F
   const userId = await currentUserId();
   const cart = await findCart(userId);
   const subtotal = (cart?.items ?? []).reduce((sum, i) => sum + Number(i.product.salePrice) * i.quantity, 0);
-  const result = await validateCouponForOrder(code, subtotal, userId);
+  const lines = (cart?.items ?? []).map((i) => ({ category: i.product.category, unitPrice: Number(i.product.salePrice), quantity: i.quantity }));
+  const result = await validateCouponForOrder(code, subtotal, userId, lines);
   if (!result.ok) return { status: "error", message: result.message };
   (await cookies()).set(CART_COUPON_COOKIE, result.coupon.code, { httpOnly: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 7, path: "/" });
   refreshCart();
