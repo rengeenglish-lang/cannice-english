@@ -2,6 +2,11 @@ import "server-only";
 import { db } from "@/server/db";
 import { couponSchema } from "@/lib/validation/admin-coupons";
 import type { z } from "zod";
+import { scopedDiscount } from "@/lib/site-reviews";
+
+/** One cart/order line, for coupons that only apply to one product category (e.g. review rewards → a plan). */
+export type CouponLine = { category: string; unitPrice: number; quantity: number };
+const CATEGORY_LABEL: Record<string, string> = { PLAN: "planlarda" };
 
 export function listCouponsForAdmin() {
   return db.coupon.findMany({ orderBy: { createdAt: "desc" } });
@@ -54,7 +59,7 @@ export type CouponValidationResult =
   | { ok: true; coupon: { id: string; code: string; type: "PERCENT" | "FIXED"; value: number }; discount: number }
   | { ok: false; message: string };
 
-export async function validateCouponForOrder(code: string, subtotal: number, userId?: string | null): Promise<CouponValidationResult> {
+export async function validateCouponForOrder(code: string, subtotal: number, userId?: string | null, lines: CouponLine[] = []): Promise<CouponValidationResult> {
   const coupon = await db.coupon.findUnique({ where: { code: code.trim().toUpperCase() } });
   if (!coupon || !coupon.isActive) return { ok: false, message: "Kupon kodu geçersiz." };
   // Personal coupons (davet indirimleri) belong to one account.
@@ -63,6 +68,13 @@ export async function validateCouponForOrder(code: string, subtotal: number, use
   if (coupon.maxRedemptions && coupon.redemptionCount >= coupon.maxRedemptions) return { ok: false, message: "Bu kuponun kullanım limiti doldu." };
   if (coupon.minOrderAmount && subtotal < Number(coupon.minOrderAmount)) {
     return { ok: false, message: `Bu kupon en az ${Number(coupon.minOrderAmount)} TL'lik siparişlerde geçerli.` };
+  }
+  if (coupon.appliesTo) {
+    const units = lines.filter((l) => l.category === coupon.appliesTo && l.quantity > 0);
+    if (!units.length) return { ok: false, message: `Bu kupon yalnızca ${CATEGORY_LABEL[coupon.appliesTo] ?? "belirli ürünlerde"} geçerli. Sepetine bir plan ekle.` };
+    const best = Math.max(...units.map((u) => u.unitPrice));
+    const discount = coupon.type === "PERCENT" ? scopedDiscount(Number(coupon.value), units, coupon.appliesTo) : Math.min(Number(coupon.value), best);
+    return { ok: true, coupon: { id: coupon.id, code: coupon.code, type: coupon.type, value: Number(coupon.value) }, discount };
   }
   const discount = coupon.type === "PERCENT" ? Math.round(subtotal * (Number(coupon.value) / 100) * 100) / 100 : Math.min(Number(coupon.value), subtotal);
   return { ok: true, coupon: { id: coupon.id, code: coupon.code, type: coupon.type, value: Number(coupon.value) }, discount };

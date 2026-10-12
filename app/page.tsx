@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { MaterialsHome } from "@/components/marketing/MaterialsHome";
-import {
-  listHomepageProducts,
-  listHomepageGroups,
-  listTestimonials,
-} from "@/server/services/catalog.service";
+import { listHomepageProducts, listHomepageGroups } from "@/server/services/catalog.service";
+import { listPublishedSiteReviews } from "@/server/services/site-reviews.service";
 
 export const metadata: Metadata = {
   title: {
@@ -16,20 +13,18 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [products, groups, featured, session] = await Promise.all([
+  // Only real, approved reviews are shown (featured first); three fill one row of the grid.
+  const [products, groups, reviews, session] = await Promise.all([
     listHomepageProducts(),
     listHomepageGroups(),
-    listTestimonials(true),
+    listPublishedSiteReviews(3),
     auth(),
   ]);
-  // Fall back to any published testimonials so the section still shows before an admin features some;
-  // three fill exactly one row of the homepage grid.
-  const testimonials = (featured.length ? featured : await listTestimonials()).slice(0, 3);
   return (
     <MaterialsHome
       products={products}
       groups={groups}
-      testimonials={testimonials}
+      reviews={reviews}
       isSignedIn={Boolean(session?.user)}
     />
   );

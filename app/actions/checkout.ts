@@ -18,6 +18,7 @@ import { CART_COUPON_COOKIE } from "@/lib/cart";
 import { guestCheckoutSchema } from "@/lib/validation/checkout";
 import { shippingAddressSchema, shippingTotalFor } from "@/lib/shipping";
 import { validateCouponForOrder, redeemCoupon } from "@/server/services/coupons.service";
+import { markOrderPaid } from "@/server/services/orders.service";
 
 export type CheckoutFormState = { status: "idle" | "error"; message?: string };
 
@@ -85,7 +86,8 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   let couponCode: string | null = null;
 
   if (rawCouponCode) {
-    const result = await validateCouponForOrder(rawCouponCode, subtotal, session?.user?.id);
+    const lines = cart.items.map((item) => ({ category: item.product.category, unitPrice: Number(item.unitPriceSnapshot), quantity: item.quantity }));
+    const result = await validateCouponForOrder(rawCouponCode, subtotal, session?.user?.id, lines);
     if (!result.ok) return { status: "error" as const, message: result.message };
     discountTotal = result.discount;
     appliedCouponId = result.coupon.id;
@@ -124,6 +126,14 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
   });
 
   if (appliedCouponId) await redeemCoupon(appliedCouponId);
+  // Fully covered by a coupon (e.g. a 100% review reward): nothing to pay, so access opens now
+  // instead of waiting for an admin to approve a 0 TL havale.
+  if (total === 0 && order.userId) {
+    await markOrderPaid(order.id, { providerRef: `coupon:${couponCode ?? "free"}` });
+    await db.cartItem.deleteMany({ where: { cartId: cart.id } });
+    (await cookies()).delete(CART_COUPON_COOKIE);
+    redirect(`/checkout/received?order=${order.id}`);
+  }
   // Havale/EFT: the payment details by email too, a note in the student's notifications and one
   // for admins to approve. None of these ever blocks the order.
   if (paymentMethod === "MANUAL") {

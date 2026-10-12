@@ -47,6 +47,7 @@ import {
   Gift,
   type LucideIcon,
   Hourglass,
+  Star,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
@@ -108,6 +109,7 @@ const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon:
       { href: "/admin/students", label: "Öğrenciler", icon: Users },
       { href: "/admin/mesajlar", label: "Öğrenci mesajları", icon: MessageCircle },
       { href: "/admin/leads", label: "Gelen talepler", icon: Inbox },
+      { href: "/admin/yorumlar", label: "Öğrenci yorumları", icon: Star, adminOnly: true },
       { href: "/admin/submissions", label: "Deneme değerlendirmeleri", icon: FileCheck2 },
     ],
   },
