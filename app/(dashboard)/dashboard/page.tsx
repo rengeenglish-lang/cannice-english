@@ -4,7 +4,8 @@ import { db } from "@/server/db";
 import { listEnrollmentsForUser } from "@/server/services/learning.service";
 import { summarizeLearning } from "@/lib/learning-overview";
 import { LearningDashboard } from "@/components/dashboard/LearningDashboard";
-import { getSpeakingClub } from "@/server/services/settings.service";
+import { getSpeakingClubRooms, speakingLevel } from "@/server/services/speaking-club.service";
+import { clubGroupName } from "@/lib/speaking-club";
 
 export const metadata: Metadata = { title: "Çalışma Alanım" };
 
@@ -12,7 +13,7 @@ export default async function StudentDashboardPage() {
   const user = await getAuthContext();
   if (!user) return null;
 
-  const [enrollments, groupBookings, speakingClub] = await Promise.all([
+  const [enrollments, groupBookings, { rooms, note }, level] = await Promise.all([
     listEnrollmentsForUser(user.id),
     db.groupLessonEnrollment.findMany({
       where: { studentId: user.id, status: "ACTIVE", slot: { cancelled: false, endsAt: { gte: new Date() } } },
@@ -20,8 +21,12 @@ export default async function StudentDashboardPage() {
       orderBy: { slot: { startsAt: "asc" } },
       take: 1,
     }),
-    getSpeakingClub(),
+    getSpeakingClubRooms(),
+    speakingLevel(user.id),
   ]);
+  // Speaking Club: the learner's level room, or null until their level is known (placement test).
+  const room = level ? rooms.find((r) => r.key === level.group)! : null;
+  const speakingClub = { note, level: level && room ? { cefr: level.cefr, groupName: clubGroupName(level.group), url: room.url, schedule: room.schedule } : null };
 
   const courses = enrollments.map((e) => ({
     id: e.courseId,

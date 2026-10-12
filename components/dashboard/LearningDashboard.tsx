@@ -4,7 +4,7 @@ import { lessonDate, lessonTime } from "@/lib/availability";
 import { PrepJourney } from "./PrepJourney";
 import { TodayWidget } from "./TodayWidget";
 import { CoachingWidget } from "./CoachingWidget";
-import { SpeakingClubButton } from "./SpeakingClubButton";
+import { SpeakingClubButton, type SpeakingClubInfo } from "./SpeakingClubButton";
 
 type ResumeCourse = { id: string; nextLesson: { id: string; title: string } | null } | null;
 type NextLesson = { title: string; startsAt: string } | null;
@@ -32,7 +32,7 @@ export function LearningDashboard({
   upcomingSessionCount: number;
   resumeCourse: ResumeCourse;
   nextLesson: NextLesson;
-  speakingClub: { url: string; schedule: string; note: string };
+  speakingClub: SpeakingClubInfo;
 }) {
   return (
     <div className="space-y-7">

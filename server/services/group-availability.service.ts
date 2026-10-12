@@ -8,6 +8,7 @@ import {
   LESSON_TIMEZONE,
 } from "@/lib/availability";
 import { z } from "zod";
+import { newMeetingUrl } from "@/lib/meeting";
 import { enrollmentGrantsAccess } from "@/lib/diagnostics/access";
 import { billingState } from "@/lib/billing";
 const include = {
@@ -165,7 +166,6 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
     enrollmentOpen: input.enrollmentOpen,
     instructorId: input.instructorId || null,
     adminNotes: input.adminNotes || null,
-    meetingUrl: input.meetingUrl || null,
     // Retired "display occupancy" override: saving a lesson clears any old value.
     displayedOccupancy: null,
     useDisplayedOccupancy: false,
@@ -210,6 +210,8 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
             where: { id: slotId },
             data: {
               ...fields,
+              // A pasted link applies to every edited lesson; otherwise each keeps (or gets) its own room.
+              meetingUrl: input.meetingUrl || slot.meetingUrl || newMeetingUrl(input.title, start),
               startsAt: start,
               endsAt: new Date(start.getTime() + input.duration * 60000),
             },
@@ -242,6 +244,7 @@ export async function saveGroupSlot(raw: unknown, id?: string, future = false) {
         const slot = await tx.liveSession.create({
           data: {
             ...fields,
+            meetingUrl: input.meetingUrl || newMeetingUrl(input.title, start),
             courseId: input.courseId,
             startsAt: start,
             endsAt: new Date(start.getTime() + input.duration * 60000),
@@ -282,7 +285,8 @@ export async function manageGroupSlot(
           enrollmentOpen: false,
           instructorId: slot.instructorId,
           adminNotes: slot.adminNotes,
-          meetingUrl: slot.meetingUrl,
+          // A copy is a different lesson, so it gets its own room unless a custom link was set.
+          meetingUrl: slot.meetingUrl && !slot.meetingUrl.startsWith("https://meet.jit.si/netfener-") ? slot.meetingUrl : newMeetingUrl(slot.title, addDays(slot.startsAt, 7)),
         },
       });
       return copy.id;

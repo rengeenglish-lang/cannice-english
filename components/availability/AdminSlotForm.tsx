@@ -186,7 +186,7 @@ export function AdminSlotForm({
         </label>
       )}
       <label className="label">
-        Canlı ders bağlantısı (Zoom, Meet vb. — https ile başlamalı)
+        Canlı ders bağlantısı (boş bırakırsanız her derse otomatik ayrı bir Jitsi odası açılır; Zoom/Meet bağlantısı da yapıştırabilirsiniz)
         <input
           name="meetingUrl"
           type="url"
