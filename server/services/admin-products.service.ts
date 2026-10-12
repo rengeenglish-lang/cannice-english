@@ -1,4 +1,5 @@
 import "server-only";
+import { newMeetingUrl } from "@/lib/meeting";
 import { db } from "@/server/db";
 import { productSchema, moduleSchema, lessonSchema, liveSessionSchema } from "@/lib/validation/admin";
 import { resolveDiagnosticTopicIds } from "@/server/services/diagnostic-topic-lookup.service";
@@ -172,7 +173,7 @@ export async function addLiveSession(courseId: string, raw: Record<string, unkno
       cohortLabel: input.cohortLabel || null,
       startsAt: new Date(input.startsAt),
       endsAt: new Date(input.endsAt),
-      meetingUrl: input.meetingUrl || null,
+      meetingUrl: input.meetingUrl || newMeetingUrl(input.title, new Date(input.startsAt)),
       capacity: input.capacity ? Number(input.capacity) : null,
     },
   });

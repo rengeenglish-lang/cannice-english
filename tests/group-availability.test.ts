@@ -198,6 +198,9 @@ test("database booking and admin lifecycle", async () => {
       orderBy: { startsAt: "asc" },
     });
     assert.equal(occurrences.length, 4);
+    const rooms = occurrences.map((o) => o.meetingUrl);
+    assert.ok(rooms.every((r) => r?.startsWith("https://meet.jit.si/netfener-weekly-")), "each lesson gets a Jitsi room");
+    assert.equal(new Set(rooms).size, 4, "and no two lessons share one");
     assert.equal(
       occurrences[1].startsAt.getTime() - occurrences[0].startsAt.getTime(),
       7 * 86400000,
