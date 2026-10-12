@@ -3,14 +3,17 @@ import { randomBytes } from "node:crypto";
 import { db } from "@/server/db";
 import { getSetting, setSetting } from "@/server/services/settings.service";
 import { notify, notifyAdmins } from "@/server/services/notifications.service";
-import { headObject, presignDownload, presignUpload, r2Configured, deleteObject } from "@/server/storage/r2";
+import { headObject, presignDownload, presignUpload, r2Configured, deleteObject, getObjectRange } from "@/server/storage/r2";
 import {
   REVIEW_MAX_CHARS,
   REVIEW_MIN_CHARS,
   REWARD_VALID_DAYS,
   VIDEO_MAX_BYTES,
   VIDEO_TYPES,
+  VIDEO_MAX_SECONDS,
   VIDEO_USAGE_CONSENT_TEXT,
+  exceedsVideoLimit,
+  mp4DurationSeconds,
   normaliseVideoLink,
   rewardBlocker,
   rewardPercentFor,
@@ -49,7 +52,22 @@ export type SubmitReviewInput = {
   videoKey?: string | null;
   videoLink?: string | null;
   usageConsent?: boolean;
+  /** Length measured in the browser; used only when the file itself doesn't say (e.g. WebM). */
+  videoSeconds?: number | null;
+  /** For shared links, whose length can't be read: the learner confirms it is within the limit. */
+  confirmsMaxLength?: boolean;
 };
+
+const TOO_LONG = `Video yorum en fazla ${VIDEO_MAX_SECONDS} saniye olabilir. Lütfen videonu kısaltıp tekrar yükle.`;
+
+/** Reads the MP4 header from R2 (start, then end of the file); null when it isn't an MP4. */
+async function storedVideoSeconds(key: string) {
+  for (const range of ["bytes=0-1048575", "bytes=-4194304"]) {
+    const seconds = mp4DurationSeconds(await getObjectRange("reviews", key, range));
+    if (seconds !== null) return seconds;
+  }
+  return null;
+}
 
 function rewardCode() {
   return `YORUM-${randomBytes(4).toString("hex").toUpperCase()}`;
@@ -71,6 +89,7 @@ export async function submitSiteReview(user: { id: string; emailVerifiedAt: Date
 
   let videoKey: string | null = null;
   let videoUrl: string | null = null;
+  let videoSeconds: number | null = null;
   if (input.kind === "VIDEO") {
     if (!input.usageConsent) throw new Error("Video yorum için yayın iznini onaylamalısın.");
     if (input.videoKey) {
@@ -81,10 +100,17 @@ export async function submitSiteReview(user: { id: string; emailVerifiedAt: Date
         await deleteObject("reviews", input.videoKey).catch(() => undefined);
         throw new Error("Video en fazla 200 MB olabilir.");
       }
+      const seconds = (await storedVideoSeconds(input.videoKey).catch(() => null)) ?? (Number.isFinite(input.videoSeconds) ? Number(input.videoSeconds) : null);
+      if (seconds === null || exceedsVideoLimit(seconds)) {
+        await deleteObject("reviews", input.videoKey).catch(() => undefined);
+        throw new Error(seconds === null ? "Videonun süresi okunamadı; lütfen MP4 olarak tekrar yükle." : TOO_LONG);
+      }
       videoKey = input.videoKey;
+      videoSeconds = Math.round(seconds);
     } else if (input.videoLink) {
       videoUrl = normaliseVideoLink(input.videoLink);
       if (!videoUrl) throw new Error("YouTube, Instagram, TikTok veya Google Drive bağlantısı paylaş.");
+      if (!input.confirmsMaxLength) throw new Error(`Videonun ${VIDEO_MAX_SECONDS} saniyeyi geçmediğini onaylamalısın.`);
     } else throw new Error("Bir video yükle ya da video bağlantısı paylaş.");
   }
 
@@ -121,6 +147,7 @@ export async function submitSiteReview(user: { id: string; emailVerifiedAt: Date
         body,
         videoKey,
         videoUrl,
+        videoSeconds,
         usageConsentText: input.kind === "VIDEO" ? VIDEO_USAGE_CONSENT_TEXT : null,
         usageConsentAt: input.kind === "VIDEO" ? new Date() : null,
         rewardCouponId: coupon?.id ?? null,

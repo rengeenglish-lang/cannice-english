@@ -10,7 +10,9 @@ import {
   REWARD_PERCENT,
   TEXT_REWARD_MIN_CHARS,
   VIDEO_MAX_BYTES,
+  VIDEO_MAX_SECONDS,
   VIDEO_TYPES,
+  exceedsVideoLimit,
   VIDEO_USAGE_CONSENT_TEXT,
   type ReviewKind,
 } from "@/lib/site-reviews";
@@ -25,6 +27,23 @@ const EXAMS = [
   ["TOEFL", "TOEFL"],
   ["PTE", "PTE"],
 ] as const;
+
+/** Length of a local video file in seconds, or null when the browser can't tell. */
+function readDuration(file: File) {
+  return new Promise<number | null>((resolve) => {
+    const video = document.createElement("video");
+    const url = URL.createObjectURL(file);
+    const done = (v: number | null) => {
+      URL.revokeObjectURL(url);
+      resolve(v);
+    };
+    video.preload = "metadata";
+    video.onloadedmetadata = () => done(Number.isFinite(video.duration) ? video.duration : null);
+    video.onerror = () => done(null);
+    setTimeout(() => done(null), 15000);
+    video.src = url;
+  });
+}
 
 /** PUT straight to R2 with progress (fetch has no upload progress). */
 function uploadWithProgress(url: string, file: File, onProgress: (pct: number) => void) {
@@ -58,6 +77,7 @@ export function SiteReviewForm({
   const [body, setBody] = useState("");
   const [videoMode, setVideoMode] = useState<"upload" | "link">(uploadsAvailable ? "upload" : "link");
   const [videoKey, setVideoKey] = useState("");
+  const [videoSeconds, setVideoSeconds] = useState<number | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -71,6 +91,12 @@ export function SiteReviewForm({
     if (!file) return;
     if (!(VIDEO_TYPES as readonly string[]).includes(file.type)) return setUploadError("Yalnızca MP4 veya WebM video yükleyebilirsin. iPhone'da Ayarlar → Kamera → Formatlar → \"En Uyumlu\" seçeneğini kullan.");
     if (file.size > VIDEO_MAX_BYTES) return setUploadError("Video en fazla 200 MB olabilir. Daha kısa ya da 720p bir kayıt dene.");
+    const seconds = await readDuration(file);
+    if (seconds !== null && exceedsVideoLimit(seconds)) {
+      if (fileRef.current) fileRef.current.value = "";
+      return setUploadError(`Bu video ${Math.round(seconds)} saniye. Video yorum en fazla ${VIDEO_MAX_SECONDS} saniye olabilir; lütfen kısaltıp tekrar yükle.`);
+    }
+    setVideoSeconds(seconds === null ? null : Math.round(seconds));
     const ticket = await requestReviewUploadAction(file.type, file.size);
     if (!ticket.ok) return setUploadError(ticket.message);
     try {
@@ -106,6 +132,7 @@ export function SiteReviewForm({
       <input type="hidden" name="kind" value={kind} />
       <input type="hidden" name="rating" value={rating} />
       <input type="hidden" name="videoKey" value={videoKey} />
+      <input type="hidden" name="videoSeconds" value={videoSeconds ?? ""} />
 
       <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Yorum türü">
         {(["TEXT", "VIDEO"] as const).map((k) => (
@@ -123,7 +150,7 @@ export function SiteReviewForm({
             </span>
             {promotionOn ? (
               <span className="mt-1 block text-xs text-[color:var(--muted)]">
-                {rewarded[k] ? "Ödülünü aldın" : k === "TEXT" ? `%${REWARD_PERCENT.TEXT} plan indirimi (en az ${TEXT_REWARD_MIN_CHARS} karakter)` : `%${REWARD_PERCENT.VIDEO} plan indirimi — plan ücretsiz`}
+                {rewarded[k] ? "Ödülünü aldın" : k === "TEXT" ? `%${REWARD_PERCENT.TEXT} plan indirimi (en az ${TEXT_REWARD_MIN_CHARS} karakter)` : `%${REWARD_PERCENT.VIDEO} plan indirimi — en fazla ${VIDEO_MAX_SECONDS} saniye`}
               </span>
             ) : null}
           </button>
@@ -162,6 +189,7 @@ export function SiteReviewForm({
 
       {kind === "VIDEO" ? (
         <div className="space-y-3 rounded-2xl border border-[color:var(--border)] p-4">
+          <p className="rounded-xl bg-amber-50 p-2 text-sm font-bold text-amber-900">⏱ Video yorum en fazla {VIDEO_MAX_SECONDS} saniye olmalıdır. Daha uzun videolar kabul edilmez.</p>
           {uploadsAvailable ? (
             <div className="flex gap-2 text-sm">
               <button type="button" onClick={() => setVideoMode("upload")} className={`rounded-full px-3 py-1 font-bold ${videoMode === "upload" ? "bg-[color:var(--brand)] text-white" : "border border-[color:var(--border)]"}`}>Video yükle</button>
@@ -171,7 +199,7 @@ export function SiteReviewForm({
           {videoMode === "upload" ? (
             <div>
               <label className="flex cursor-pointer items-center gap-2 text-sm font-bold">
-                <Upload size={16} aria-hidden="true" /> MP4 veya WebM, en fazla 200 MB (1–3 dakika idealdir)
+                <Upload size={16} aria-hidden="true" /> MP4 veya WebM · en fazla {VIDEO_MAX_SECONDS} saniye · en fazla 200 MB
                 <input ref={fileRef} type="file" accept="video/mp4,video/webm" className="sr-only" onChange={(e) => onFile(e.target.files?.[0])} />
               </label>
               {progress !== null ? (
@@ -179,16 +207,22 @@ export function SiteReviewForm({
                   <div className="h-2 overflow-hidden rounded-full bg-slate-100" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
                     <div className="h-full rounded-full bg-[color:var(--brand)] transition-all" style={{ width: `${progress}%` }} />
                   </div>
-                  <p className="mt-1 text-xs text-[color:var(--muted)]">{videoKey ? "Video yüklendi ✓" : `Yükleniyor… %${progress}`}</p>
+                  <p className="mt-1 text-xs text-[color:var(--muted)]">{videoKey ? `Video yüklendi ✓${videoSeconds ? ` (${videoSeconds} sn)` : ""}` : `Yükleniyor… %${progress}`}</p>
                 </div>
               ) : null}
               {uploadError ? <p className="mt-2 text-sm font-semibold text-[color:var(--danger)]">{uploadError}</p> : null}
             </div>
           ) : (
-            <label className="label">
-              Video bağlantısı (YouTube — liste dışı olabilir —, Instagram, TikTok veya Google Drive)
-              <input name="videoLink" type="url" placeholder="https://youtu.be/…" className="auth-input mt-1" />
-            </label>
+            <div className="space-y-2">
+              <label className="label">
+                Video bağlantısı (YouTube — liste dışı olabilir —, Instagram, TikTok veya Google Drive)
+                <input name="videoLink" type="url" placeholder="https://youtu.be/…" className="auth-input mt-1" />
+              </label>
+              <label className="flex items-start gap-2 text-xs font-semibold">
+                <input type="checkbox" name="confirmsMaxLength" required className="mt-0.5 size-4 shrink-0" />
+                <span>Videom {VIDEO_MAX_SECONDS} saniyeyi geçmiyor. Daha uzun videolar yayınlanmaz ve bağlı ödül iptal edilir.</span>
+              </label>
+            </div>
           )}
           <label className="flex items-start gap-2 text-xs leading-5">
             <input type="checkbox" name="usageConsent" required className="mt-0.5 size-4 shrink-0" />

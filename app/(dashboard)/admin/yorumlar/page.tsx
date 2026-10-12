@@ -7,7 +7,7 @@ import { db } from "@/server/db";
 import { listSiteReviewsForAdmin, reviewPromotionOn, videoUploadsAvailable } from "@/server/services/site-reviews.service";
 import { ReviewVideo } from "@/components/site-reviews/SiteReviewCard";
 import { PromotionToggle, ReviewModeration } from "@/components/site-reviews/AdminReviewActions";
-import { REWARD_PERCENT, TEXT_REWARD_MIN_CHARS } from "@/lib/site-reviews";
+import { REWARD_PERCENT, TEXT_REWARD_MIN_CHARS, VIDEO_MAX_SECONDS } from "@/lib/site-reviews";
 
 export const metadata: Metadata = { title: "Yorumlar" };
 
@@ -42,7 +42,7 @@ export default async function AdminReviewsPage({ searchParams }: { searchParams:
         <div className="text-sm">
           <p className="font-extrabold">Ödüllü yorum kampanyası: {promotionOn ? <span className="text-emerald-700">AÇIK</span> : <span className="text-[color:var(--muted)]">KAPALI</span>}</p>
           <p className="mt-1 text-[color:var(--muted)]">
-            Açıkken: en az {TEXT_REWARD_MIN_CHARS} karakterlik yazılı yorum → %{REWARD_PERCENT.TEXT}, yayın izinli video yorum → %{REWARD_PERCENT.VIDEO} plan kuponu (kişiye özel, tek kullanım, 90 gün). Kupon gönderimde verilir; reddedilen yorumun kullanılmamış kuponu iptal olur.
+            Açıkken: en az {TEXT_REWARD_MIN_CHARS} karakterlik yazılı yorum → %{REWARD_PERCENT.TEXT}, yayın izinli, en fazla {VIDEO_MAX_SECONDS} saniyelik video yorum → %{REWARD_PERCENT.VIDEO} plan kuponu (kişiye özel, tek kullanım, 90 gün). Kupon gönderimde verilir; reddedilen yorumun kullanılmamış kuponu iptal olur.
           </p>
           {!videoUploadsAvailable() ? <p className="mt-1 text-amber-700">Video yükleme bu ortamda kapalı (R2 ayarları yok); öğrenciler bağlantı paylaşabilir.</p> : null}
         </div>
@@ -86,7 +86,9 @@ export default async function AdminReviewsPage({ searchParams }: { searchParams:
               {r.kind === "VIDEO" ? <ReviewVideo review={r} /> : null}
               {r.body ? <p className="whitespace-pre-line text-sm">{r.body}</p> : null}
               {r.kind === "VIDEO" ? (
-                <p className="text-xs text-[color:var(--muted)]">Yayın izni: {r.usageConsentAt ? `verildi (${r.usageConsentAt.toLocaleString("tr-TR")})` : "yok"}</p>
+                <p className="text-xs text-[color:var(--muted)]">
+                  Süre: {r.videoSeconds !== null ? `${r.videoSeconds} sn` : `bağlantı — ${VIDEO_MAX_SECONDS} saniyeyi geçmediğini kontrol edin`} · Yayın izni: {r.usageConsentAt ? `verildi (${r.usageConsentAt.toLocaleString("tr-TR")})` : "yok"}
+                </p>
               ) : null}
               <p className="text-xs">
                 Ödül:{" "}

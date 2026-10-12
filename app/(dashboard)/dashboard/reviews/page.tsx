@@ -40,7 +40,7 @@ export default async function ReviewsPage() {
           <h2 className="text-xl font-extrabold">Netfener hakkında yorum yaz</h2>
           {promotionOn ? (
             <p className="mt-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900">
-              🎁 <strong>Kampanya:</strong> kapsamlı yazılı yorumuna <strong>%{REWARD_PERCENT.TEXT}</strong>, video yorumuna <strong>%{REWARD_PERCENT.VIDEO}</strong> plan indirimi. Kupon yorumu gönderdiğin anda hesabına tanımlanır.
+              🎁 <strong>Kampanya:</strong> kapsamlı yazılı yorumuna <strong>%{REWARD_PERCENT.TEXT}</strong>, en fazla 90 saniyelik video yorumuna <strong>%{REWARD_PERCENT.VIDEO}</strong> plan indirimi. Kupon yorumu gönderdiğin anda hesabına tanımlanır.
             </p>
           ) : (
             <p className="mt-1 text-sm text-[color:var(--muted)]">Deneyimini paylaş; yorumun incelendikten sonra sitede yayınlanır.</p>

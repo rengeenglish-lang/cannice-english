@@ -40,6 +40,8 @@ export async function submitSiteReviewAction(_prev: SiteReviewFormState, form: F
       videoKey: String(form.get("videoKey") ?? "") || null,
       videoLink: String(form.get("videoLink") ?? "") || null,
       usageConsent: form.get("usageConsent") === "on",
+      videoSeconds: Number(form.get("videoSeconds")) || null,
+      confirmsMaxLength: form.get("confirmsMaxLength") === "on",
     });
     revalidatePath("/dashboard/reviews");
     revalidatePath("/admin/yorumlar");

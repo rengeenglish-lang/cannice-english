@@ -2334,6 +2334,8 @@ model SiteReview {
   /// Uploaded video in the R2 reviews bucket, or a YouTube/Instagram/TikTok/Drive link.
   videoKey         String?
   videoUrl         String?
+  /// Length of an uploaded video in seconds (max 90), as read from the file.
+  videoSeconds     Int?
   /// Exact wording the learner agreed to for showing their video on the site, and when.
   usageConsentText String?
   usageConsentAt   DateTime?

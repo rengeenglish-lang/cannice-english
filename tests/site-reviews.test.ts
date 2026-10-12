@@ -51,8 +51,9 @@ test("submitting, rewarding, coupon scope, moderation and withdrawal", async () 
     assert.equal(again.coupon, null, "one text reward per learner");
 
     await assert.rejects(submitSiteReview(user, { kind: "VIDEO", rating: 5, displayName: "Yorum Y.", body: "", videoLink: "https://youtu.be/dQw4w9WgXcQ" }), /yayın iznini/);
-    await assert.rejects(submitSiteReview(user, { kind: "VIDEO", rating: 5, displayName: "Yorum Y.", body: "", videoLink: "https://evil.example/v", usageConsent: true }), /bağlantısı/);
-    const video = await submitSiteReview(user, { kind: "VIDEO", rating: 2, displayName: "Yorum Y.", body: "", videoLink: "https://youtu.be/dQw4w9WgXcQ", usageConsent: true });
+    await assert.rejects(submitSiteReview(user, { kind: "VIDEO", rating: 5, displayName: "Yorum Y.", body: "", videoLink: "https://evil.example/v", usageConsent: true, confirmsMaxLength: true }), /bağlantısı/);
+    await assert.rejects(submitSiteReview(user, { kind: "VIDEO", rating: 5, displayName: "Yorum Y.", body: "", videoLink: "https://youtu.be/dQw4w9WgXcQ", usageConsent: true }), /90 saniye/, "links need the length confirmation");
+    const video = await submitSiteReview(user, { kind: "VIDEO", rating: 2, displayName: "Yorum Y.", body: "", videoLink: "https://youtu.be/dQw4w9WgXcQ", usageConsent: true, confirmsMaxLength: true });
     assert.equal(video.percent, 100, "a low rating earns the same reward");
     assert.ok(video.review.usageConsentAt && video.review.usageConsentText);
 

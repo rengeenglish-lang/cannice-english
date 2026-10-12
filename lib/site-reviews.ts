@@ -19,6 +19,9 @@ export const REWARD_PERCENT: Record<ReviewKind, number> = { TEXT: 50, VIDEO: 100
 export const REWARD_VALID_DAYS = 90;
 
 export const VIDEO_MAX_BYTES = 200 * 1024 * 1024;
+/** Hard limit: a video review may be at most 90 seconds long (half a second of slack for encoders). */
+export const VIDEO_MAX_SECONDS = 90;
+export const exceedsVideoLimit = (seconds: number) => seconds > VIDEO_MAX_SECONDS + 0.5;
 /** What R2 stores is played as-is, so only formats every browser plays are accepted. */
 export const VIDEO_TYPES = ["video/mp4", "video/webm"] as const;
 
@@ -80,4 +83,23 @@ export function defaultDisplayName(name: string) {
 export function scopedDiscount(percent: number, units: { category: string; unitPrice: number }[], category: string) {
   const best = Math.max(0, ...units.filter((u) => u.category === category).map((u) => u.unitPrice));
   return Math.round(best * (percent / 100) * 100) / 100;
+}
+
+/**
+ * Duration of an MP4/MOV from its "mvhd" box, found in a chunk of the file (the box sits at the
+ * start of web-optimised files and at the end of most phone recordings). Null when not in `buf`.
+ */
+export function mp4DurationSeconds(buf: Uint8Array): number | null {
+  for (let i = 4; i + 32 <= buf.length; i++) {
+    if (buf[i] !== 0x6d || buf[i + 1] !== 0x76 || buf[i + 2] !== 0x68 || buf[i + 3] !== 0x64) continue; // "mvhd"
+    // A real box header: its 4-byte size (just before the type) is that of an mvhd box (108 or 120 bytes).
+    const boxSize = new DataView(buf.buffer, buf.byteOffset + i - 4, 4).getUint32(0);
+    if (boxSize < 100 || boxSize > 140) continue;
+    const view = new DataView(buf.buffer, buf.byteOffset + i + 4);
+    const version = view.getUint8(0);
+    const timescale = version === 1 ? view.getUint32(20) : view.getUint32(12);
+    const duration = version === 1 ? Number(view.getBigUint64(24)) : view.getUint32(16);
+    if (timescale > 0 && duration >= 0) return duration / timescale;
+  }
+  return null;
 }

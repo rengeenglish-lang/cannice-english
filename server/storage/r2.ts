@@ -62,6 +62,13 @@ export async function headObject(bucket: R2Bucket, key: string) {
   return { size: Number(res.headers.get("content-length") ?? 0), contentType: res.headers.get("content-type") ?? "" };
 }
 
+/** A byte range of an object ("bytes=0-1048575" or "bytes=-2097152" for the last 2 MB). */
+export async function getObjectRange(bucket: R2Bucket, key: string, range: string) {
+  const res = await r2().fetch(objectUrl(bucket, key).toString(), { headers: { range } });
+  if (!res.ok) throw new Error(`R2 GET ${res.status}`);
+  return new Uint8Array(await res.arrayBuffer());
+}
+
 export async function deleteObject(bucket: R2Bucket, key: string) {
   const res = await r2().fetch(objectUrl(bucket, key).toString(), { method: "DELETE" });
   if (!res.ok && res.status !== 404) throw new Error(`R2 DELETE ${res.status}`);
