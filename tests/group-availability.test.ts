@@ -19,7 +19,6 @@ import {
   enrollGroupSlot,
   cancelGroupBooking,
   manageGroupSlot,
-  createDemoGroupSlots,
   listGroupSlots,
 } from "../server/services/group-availability.service";
 import {
@@ -52,11 +51,10 @@ test("thresholds, proportional capacity, demo occupancy, timezone and safe retur
     enrollmentOpen: true,
     cancelled: false,
     startsAt: addDays(new Date(), 1),
-    displayedOccupancy: 10,
-    useDisplayedOccupancy: true,
   };
   assert.equal(availability(slot, 2).remaining, 8);
-  assert.equal(availability(slot, 2).status, "FULL");
+  assert.equal(availability(slot, 2).status, "AVAILABLE", "status follows real bookings only");
+  assert.equal(availability(slot, 9).status, "ALMOST_FULL");
   assert.equal(availability(slot, 2).canEnroll, true);
   assert.equal(availability({ ...slot, cancelled: true }, 2).canEnroll, false);
   assert.equal(
@@ -132,8 +130,6 @@ test("database booking and admin lifecycle", async () => {
     time: "18:00",
     duration: 60,
     capacity: 10,
-    useDisplayedOccupancy: true,
-    displayedOccupancy: 10,
     enrollmentOpen: true,
   };
   const id = await saveGroupSlot(base);
@@ -165,7 +161,7 @@ test("database booking and admin lifecycle", async () => {
       "retry is idempotent",
     );
     await assert.rejects(
-      saveGroupSlot({ ...base, capacity: 9, displayedOccupancy: 9 }, id),
+      saveGroupSlot({ ...base, capacity: 9 }, id),
       /gerçek öğrenci/,
     );
     await cancelGroupBooking(id, users[0].id);
@@ -239,24 +235,14 @@ test("database booking and admin lifecycle", async () => {
     assert.equal((await getGroupSlot(copy))!.availability.actual, 0);
     await manageGroupSlot(copy, "delete");
     assert.equal(await getGroupSlot(copy), null);
-    await saveGroupSlot({ ...base, useDisplayedOccupancy: false }, recurrence);
-    assert.equal((await getGroupSlot(recurrence))!.availability.displayed, 0);
+    await db.liveSession.update({ where: { id: recurrence }, data: { useDisplayedOccupancy: true, displayedOccupancy: 8 } });
+    assert.equal((await getGroupSlot(recurrence))!.availability.status, "AVAILABLE", "a leftover display override is ignored");
+    await saveGroupSlot(base, recurrence);
+    assert.equal((await db.liveSession.findUniqueOrThrow({ where: { id: recurrence } })).useDisplayedOccupancy, false, "saving clears it");
     const range = weekRange(base.date);
     assert.ok(
       (await listGroupSlots(range.start, range.end)).some((s) => s.id === id),
     );
-    const before = await db.groupLessonEnrollment.count();
-    await createDemoGroupSlots(courseId);
-    await createDemoGroupSlots(courseId);
-    const demos = await db.liveSession.findMany({
-      where: { recurringSeriesId: "availability-demo" },
-      orderBy: { startsAt: "asc" },
-    });
-    assert.deepEqual(
-      demos.map((s) => s.displayedOccupancy),
-      [0, 2, 4, 7, 8, 9, 10],
-    );
-    assert.equal(await db.groupLessonEnrollment.count(), before);
   } finally {
     const slots = await db.liveSession.findMany({ where: { courseId } });
     await db.groupLessonEnrollment.deleteMany({

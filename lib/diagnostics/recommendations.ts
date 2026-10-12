@@ -42,7 +42,7 @@ export type GroupLessonRecommendation = {
   title: string;
   startsAt: string;
   status: string;
-  displayRemaining: number;
+  remaining: number;
   capacity: number;
   productSlug: string;
   hasAccess: boolean;
@@ -147,7 +147,7 @@ export async function recommendationsForTopics(userId: string | null, topicIds: 
           title: slot.title,
           startsAt: slot.startsAt.toISOString(),
           status: a.status,
-          displayRemaining: a.displayRemaining,
+          remaining: a.remaining,
           capacity: a.capacity,
           productSlug: product.slug,
           hasAccess: enrolledCourseIds.has(slot.courseId),

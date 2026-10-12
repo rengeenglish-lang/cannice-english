@@ -2,7 +2,6 @@
 import { useActionState } from "react";
 import {
   manageSlotAction,
-  demoSlotsAction,
   type AvailabilityFormState,
 } from "@/app/actions/group-availability";
 export function AdminSlotActions({ id }: { id: string }) {
@@ -49,46 +48,5 @@ export function AdminSlotActions({ id }: { id: string }) {
         </p>
       )}
     </form>
-  );
-}
-export function DemoSlotsForm({
-  courses,
-}: {
-  courses: { id: string; title: string }[];
-}) {
-  const [state, action, pending] = useActionState(
-    demoSlotsAction,
-    {} as AvailabilityFormState,
-  );
-  return (
-    <details className="my-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
-      <summary className="cursor-pointer font-bold">
-        Demo doluluklarını oluştur (0, 2, 4, 7, 8, 9, 10)
-      </summary>
-      <form action={action} className="mt-4 space-y-3">
-        <p className="text-sm">
-          Önümüzdeki 7 güne demo dersler ekler. Gerçek öğrenci veya ödeme
-          oluşturmaz. Aynı demo serisini çoğaltmaz.
-        </p>
-        <label className="label">
-          Demo ders paketi
-          <select name="courseId" className="auth-input" required>
-            {courses.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.title}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          disabled={pending || !courses.length}
-          className="secondary-button"
-        >
-          {pending ? "Oluşturuluyor…" : "Demo dersleri oluştur"}
-        </button>
-        {state.error && <p role="alert">{state.error}</p>}
-        {state.success && <p role="status">{state.success}</p>}
-      </form>
-    </details>
   );
 }

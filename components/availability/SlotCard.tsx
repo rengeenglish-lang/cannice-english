@@ -62,21 +62,22 @@ export function SlotCard({
         {STATUS_LABELS[a.status]}
       </span>
       <p className="mt-4 text-sm font-semibold">
-        {a.displayed} / {a.capacity}{" "}
-        {a.simulated ? "gösterim doluluğu" : "öğrenci kayıtlı"}
+        {a.actual
+          ? `${a.actual} / ${a.capacity} öğrenci kayıtlı`
+          : `Henüz kayıt yok · ${a.capacity} kişilik grup`}
       </p>
       <div
         role="progressbar"
         aria-label="Grup doluluğu"
         aria-valuemin={0}
         aria-valuemax={a.capacity}
-        aria-valuenow={a.displayed}
+        aria-valuenow={a.actual}
         className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"
       >
         <div
           className={`h-full rounded-full ${bars[a.status]}`}
           style={{
-            width: `${Math.min(100, (a.displayed / a.capacity) * 100)}%`,
+            width: `${Math.min(100, (a.actual / a.capacity) * 100)}%`,
           }}
         />
       </div>
@@ -87,18 +88,12 @@ export function SlotCard({
           ? "Bu ders iptal edildi"
           : a.status === "CLOSED"
             ? "Kayıt alınmıyor"
-            : a.displayRemaining
-              ? `${a.status === "ALMOST_FULL" ? "Son " : ""}${a.displayRemaining} yer ${a.simulated ? "gösteriliyor" : "kaldı"}`
-              : a.simulated
-                ? "Demo görünümde boş yer yok"
-                : "Boş yer kalmadı"}
+            : !a.remaining
+              ? "Boş yer kalmadı"
+              : a.actual
+                ? `${a.status === "ALMOST_FULL" ? "Son " : ""}${a.remaining} yer kaldı`
+                : "İlk katılan sen ol"}
       </p>
-      {a.simulated && (
-        <p className="mt-2 text-xs leading-5 text-slate-500">
-          {admin ? "SIMULATED OCCUPANCY · " : "Demo görünüm · "}Gerçek kayıt:{" "}
-          {a.actual}. Demo sayıları gerçek kontenjanı azaltmaz.
-        </p>
-      )}
     </>
   );
 
@@ -117,9 +112,7 @@ export function SlotCard({
       <Link href={`/group-lessons/${slot.id}`} className="primary-button mt-5 w-full">
         {!a.canEnroll
           ? "Başka saat seç"
-          : a.simulated && a.status === "FULL"
-            ? "Gerçek uygunluğu gör"
-            : a.status === "ALMOST_FULL"
+          : a.status === "ALMOST_FULL"
               ? "Yerini ayır"
               : "Gruba katıl"}
       </Link>

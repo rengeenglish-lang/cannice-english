@@ -34,19 +34,12 @@ export function availability(
     enrollmentOpen: boolean;
     cancelled: boolean;
     startsAt: Date;
-    displayedOccupancy: number | null;
-    useDisplayedOccupancy: boolean;
   },
   actual: number,
   now = new Date(),
 ) {
+  // Occupancy is always the real number of bookings; there is no "display" override any more.
   const capacity = slot.capacity ?? DEFAULT_CAPACITY;
-  const simulated =
-    slot.useDisplayedOccupancy && slot.displayedOccupancy !== null;
-  const displayed = Math.min(
-    capacity,
-    Math.max(actual, simulated ? slot.displayedOccupancy! : actual),
-  );
   const override = slot.cancelled
     ? "CANCELLED"
     : !slot.enrollmentOpen || slot.startsAt <= now
@@ -55,12 +48,8 @@ export function availability(
   return {
     capacity,
     actual,
-    displayed,
-    simulated,
     remaining: Math.max(0, capacity - actual),
-    displayRemaining: Math.max(0, capacity - displayed),
-    status: override ?? occupancyStatus(displayed, capacity),
-    actualStatus: override ?? occupancyStatus(actual, capacity),
+    status: override ?? occupancyStatus(actual, capacity),
     canEnroll: !override && actual < capacity,
   };
 }
