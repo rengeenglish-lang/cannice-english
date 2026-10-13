@@ -7,6 +7,8 @@ import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
 import { getRoadmap, getTodayItem } from "@/server/services/study-roadmap.service";
 import { getAttemptHistory, getLevelTestHistory, getSkillBreakdown } from "@/server/services/diagnostic-results.service";
 import { ProgressDonut } from "@/components/progress/ProgressDonut";
+import { ReportView, type ReportData, type WeekPoint } from "@/components/progress/ReportView";
+import { weekStartKey } from "@/lib/engagement";
 import { PRACTICE_SECTIONS } from "@/lib/practice-sections";
 import { getPurchasedMaterials } from "@/server/services/learning.service";
 import { getPlanAccess } from "@/server/services/plans.service";
@@ -341,7 +343,7 @@ async function GeneralSection({
   counts: Record<SectionKey, number | null>;
 }) {
   const [responses, todayItem, breakdown] = await Promise.all([
-    db.diagnosticResponse.findMany({ where: { attempt: { userId } }, select: { isCorrect: true } }),
+    db.diagnosticResponse.findMany({ where: { attempt: { userId } }, select: { isCorrect: true, answeredAt: true } }),
     goal ? getTodayItem(userId, goal.id) : null,
     getSkillBreakdown(userId),
   ]);
@@ -351,30 +353,48 @@ async function GeneralSection({
   const completed = roadmap.filter((r) => r.status === "COMPLETED").length;
   const overallProgress = roadmap.length ? Math.round((completed / roadmap.length) * 100) : 0;
   const weakTopics = roadmap.filter((item) => item.status !== "COMPLETED");
+  const reportData: ReportData = {
+    planProgress: goal ? overallProgress : null,
+    accuracy: overallAccuracy,
+    answered: totalAnswered,
+    activities: [
+      { label: "Okunan Konu Anlatımı", value: counts.okunan ?? 0 },
+      { label: "Seviye Tespit", value: counts.seviye ?? 0 },
+      { label: "Deneme", value: counts.denemeler ?? 0 },
+      { label: "Pratik Seti", value: counts.pratik ?? 0 },
+      { label: "Değerlendirilen Ödev", value: counts.odevler ?? 0 },
+    ],
+    weeks: weeklyAnswers(responses),
+  };
 
   return (
     <div className="mt-4 space-y-6">
       <p className="text-sm text-[color:var(--muted)]">Planın: <strong className="text-[color:var(--foreground)]">{planLabel}</strong></p>
       <ProgressDonut sections={PRACTICE_SECTIONS.map((s) => ({ key: s.key, label: s.label, counts: breakdown[s.key] }))} />
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {[
-          { value: goal ? `%${overallProgress}` : "—", label: "Hazırlık Planı İlerlemesi" },
-          { value: totalAnswered, label: "Çözülen Soru" },
-          { value: `%${overallAccuracy}`, label: "Ortalama Doğruluk" },
-          { value: counts.okunan ?? 0, label: "Okunan Konu Anlatımı" },
-          { value: counts.seviye ?? 0, label: "Seviye Tespit" },
-          { value: counts.denemeler ?? 0, label: "Deneme" },
-          { value: counts.pratik ?? 0, label: "Pratik Seti" },
-          { value: counts.odevler ?? 0, label: "Değerlendirilen Ödev" },
-        ].map((stat) => (
-          <div key={stat.label} className="learning-stat">
-            <div>
-              <strong>{stat.value}</strong>
-              <span>{stat.label}</span>
+      <ReportView
+        data={reportData}
+        numbers={
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {[
+                { value: goal ? `%${overallProgress}` : "—", label: "Hazırlık Planı İlerlemesi" },
+                { value: totalAnswered, label: "Çözülen Soru" },
+                { value: `%${overallAccuracy}`, label: "Ortalama Doğruluk" },
+                { value: counts.okunan ?? 0, label: "Okunan Konu Anlatımı" },
+                { value: counts.seviye ?? 0, label: "Seviye Tespit" },
+                { value: counts.denemeler ?? 0, label: "Deneme" },
+                { value: counts.pratik ?? 0, label: "Pratik Seti" },
+                { value: counts.odevler ?? 0, label: "Değerlendirilen Ödev" },
+              ].map((stat) => (
+                <div key={stat.label} className="learning-stat">
+                  <div>
+                    <strong>{stat.value}</strong>
+                    <span>{stat.label}</span>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        ))}
-      </div>
+        }
+      />
       {!goal ? (
         <p className="text-sm">
           Kişisel hazırlık planını görmek için <Link href="/seviye-tespit/hedef" className="font-bold underline">hedefini belirle</Link>.
@@ -402,6 +422,34 @@ async function GeneralSection({
       ) : null}
     </div>
   );
+}
+
+const WEEKS_SHOWN = 8;
+
+/** Answered questions per Istanbul week (Monday start), oldest → newest, the last WEEKS_SHOWN weeks. */
+function weeklyAnswers(responses: { isCorrect: boolean | null; answeredAt: Date }[]): WeekPoint[] {
+  const thisWeek = weekStartKey(new Date());
+  const shift = (key: string, days: number) => {
+    const d = new Date(`${key}T12:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+  const starts = Array.from({ length: WEEKS_SHOWN }, (_, i) => shift(thisWeek, -7 * (WEEKS_SHOWN - 1 - i)));
+  const byWeek = new Map(starts.map((k) => [k, { correct: 0, wrong: 0 }]));
+  for (const r of responses) {
+    if (r.isCorrect === null) continue;
+    const bucket = byWeek.get(weekStartKey(r.answeredAt));
+    if (!bucket) continue;
+    if (r.isCorrect) bucket.correct += 1;
+    else bucket.wrong += 1;
+  }
+  const fmt = (key: string, opts: Intl.DateTimeFormatOptions) => new Date(`${key}T12:00:00Z`).toLocaleDateString("tr-TR", { timeZone: "UTC", ...opts });
+  return starts.map((k, i) => ({
+    day: fmt(k, { day: "numeric" }),
+    month: i === 0 || k.slice(5, 7) !== starts[i - 1].slice(5, 7) ? fmt(k, { month: "short" }) : null,
+    range: `${fmt(k, { day: "numeric", month: "short" })} – ${fmt(shift(k, 6), { day: "numeric", month: "short" })}`,
+    ...byWeek.get(k)!,
+  }));
 }
 
 async function VisitSection({ userId }: { userId: string }) {
