@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { Check, ChevronLeft, Palette } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Palette } from "lucide-react";
 import { LOGO_N } from "@/components/brand/Logo";
 
 /**
@@ -63,21 +62,16 @@ function applyPalette(id: PaletteId) {
   applyFavicon(id);
 }
 
-/** Timed exam screens stay distraction-free, as with the live chat bubble. */
-function hiddenOn(pathname: string) {
-  return pathname.startsWith("/dashboard/sinav");
-}
-
 /**
- * Floating colour switcher on the left edge. Picking a swatch recolours the whole site, the logo's
- * accent wedges and the browser-tab icon; the arrow tucks it away into a small tab (the default on phones). Both
- * choices are remembered on this device only.
+ * Site colour picker in the top bar, next to the light/dark toggle: one small button showing the
+ * current colour; a click opens a little menu of swatches. Picking one recolours the whole site,
+ * the logo's accent wedges and the browser-tab icon, remembered on this device only. It used to
+ * float on the left edge over the page; here it never covers content.
  */
-export function PaletteSwitcher() {
-  const pathname = usePathname();
+export function PaletteSwitcher({ className = "" }: { className?: string }) {
   const [palette, setPalette] = useState<PaletteId>(DEFAULT);
-  const [open, setOpen] = useState(true);
-  const [ready, setReady] = useState(false);
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -86,19 +80,29 @@ export function PaletteSwitcher() {
         setPalette(saved as PaletteId); // eslint-disable-line react-hooks/set-state-in-effect -- reading the device-only preference after hydration
         applyFavicon(saved as PaletteId);
       }
+      localStorage.removeItem("palette-switcher"); // the old floating panel's show/hide setting
     } catch {}
-    // Open by default on wider screens; on phones it starts tucked away so it never covers the page.
-    let shown: string | null = null;
-    try { shown = localStorage.getItem("palette-switcher"); } catch {}
-    setOpen(shown ? shown === "shown" : matchMedia("(min-width: 640px)").matches);
-    setReady(true);
     // Next.js re-inserts its static icon links after load and on navigation; keep them on the palette.
     const observer = new MutationObserver(() => applyFavicon(currentPalette));
     observer.observe(document.head, { childList: true, subtree: true });
     return () => observer.disconnect();
   }, []);
 
-  if (!ready || hiddenOn(pathname)) return null;
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   function choose(id: PaletteId) {
     setPalette(id);
@@ -109,62 +113,55 @@ export function PaletteSwitcher() {
     } catch {}
   }
 
-  function toggle(next: boolean) {
-    setOpen(next);
-    try {
-      localStorage.setItem("palette-switcher", next ? "shown" : "hidden");
-    } catch {}
-  }
-
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => toggle(true)}
-        aria-label="Renk seçiciyi göster"
-        title="Site rengi"
-        className="fixed left-0 top-1/2 z-40 flex h-11 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--accent-strong)] shadow-[var(--shadow-md)] transition hover:w-10 focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-soft)]"
-      >
-        <Palette size={17} aria-hidden="true" />
-      </button>
-    );
-  }
-
+  const current = PALETTES.find((p) => p.id === palette)!;
   return (
-    <div
-      role="group"
-      aria-label="Site rengi"
-      className="fixed left-2 top-1/2 z-40 flex -translate-y-1/2 flex-col items-center gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-1.5 shadow-[var(--shadow-md)] sm:left-3"
-    >
-      <span className="flex size-7 items-center justify-center text-[color:var(--accent-strong)]" title="Site rengi">
-        <Palette size={16} aria-hidden="true" />
-      </span>
-      {PALETTES.map((p) => {
-        const active = p.id === palette;
-        return (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => choose(p.id)}
-            aria-label={`Renk: ${p.name}`}
-            aria-pressed={active}
-            title={p.name}
-            className={`flex size-7 items-center justify-center rounded-full transition hover:scale-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-soft)] ${active ? "ring-2 ring-[color:var(--foreground)] ring-offset-2 ring-offset-[color:var(--surface)]" : ""}`}
-            style={{ backgroundColor: p.swatch, border: p.id === "white" ? "1.5px solid #a1a1aa" : undefined }}
-          >
-            {active ? <Check size={14} strokeWidth={3} className={p.id === "white" ? "text-zinc-900" : "text-white"} aria-hidden="true" /> : null}
-          </button>
-        );
-      })}
+    <div ref={rootRef} className={`relative ${className}`}>
       <button
         type="button"
-        onClick={() => toggle(false)}
-        aria-label="Renk seçiciyi gizle"
-        title="Gizle"
-        className="flex size-7 items-center justify-center rounded-full text-[color:var(--muted)] transition hover:bg-[color:var(--canvas)] hover:text-[color:var(--foreground)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-soft)]"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-label={`Site rengi: ${current.name}`}
+        title="Site rengi"
+        className="flex h-10 w-10 items-center justify-center rounded-full text-[color:var(--muted)] transition hover:bg-[color:var(--canvas)] hover:text-[color:var(--accent-strong)] focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-soft)]"
       >
-        <ChevronLeft size={16} aria-hidden="true" />
+        <span className="relative">
+          <Palette size={18} aria-hidden="true" />
+          <span
+            className="absolute -bottom-0.5 -right-1 size-2.5 rounded-full ring-2 ring-[color:var(--surface)]"
+            style={{ backgroundColor: current.swatch, boxShadow: current.id === "white" ? "inset 0 0 0 1px #a1a1aa" : undefined }}
+            aria-hidden="true"
+          />
+        </span>
       </button>
+      {open ? (
+        <div
+          role="group"
+          aria-label="Site rengi"
+          className="absolute right-0 top-full z-50 mt-2 w-max rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] p-3 shadow-[var(--shadow-md)]"
+        >
+          <p className="mb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--muted)]">Site rengi</p>
+          <div className="grid grid-cols-7 gap-2">
+            {PALETTES.map((p) => {
+              const active = p.id === palette;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => choose(p.id)}
+                  aria-label={`Renk: ${p.name}`}
+                  aria-pressed={active}
+                  title={p.name}
+                  className={`flex size-7 items-center justify-center rounded-full transition hover:scale-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-soft)] ${active ? "ring-2 ring-[color:var(--foreground)] ring-offset-2 ring-offset-[color:var(--surface)]" : ""}`}
+                  style={{ backgroundColor: p.swatch, border: p.id === "white" ? "1.5px solid #a1a1aa" : undefined }}
+                >
+                  {active ? <Check size={14} strokeWidth={3} className={p.id === "white" ? "text-zinc-900" : "text-white"} aria-hidden="true" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

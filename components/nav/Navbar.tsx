@@ -10,6 +10,7 @@ import { ChevronDown, Heart, ShoppingCart } from "lucide-react";
 import { PLATFORM_EXAMS, examGroupHref, examLearningHref, examMaterialHref } from "@/lib/platform";
 import { Logo } from "@/components/brand/Logo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { PaletteSwitcher } from "@/components/theme/PaletteSwitcher";
 import { getAuthContext } from "@/server/auth/context";
 import { examCountdownBar } from "@/server/services/exam-interests.service";
 import { ExamCountdownBar } from "@/components/exam-interests/ExamCountdownBar";
@@ -74,6 +75,7 @@ export async function Navbar() {
           ))}
         </nav>
         <div className="hidden shrink-0 items-center gap-2 xl:flex">
+          <PaletteSwitcher />
           <ThemeToggle />
           <Link
             href="/dashboard/favoriler"
@@ -132,6 +134,7 @@ export async function Navbar() {
           )}
         </div>
         <div className="flex items-center gap-1 xl:hidden">
+          <PaletteSwitcher />
           <ThemeToggle />
           <MobileNavToggle
             links={NAV_LINKS}
