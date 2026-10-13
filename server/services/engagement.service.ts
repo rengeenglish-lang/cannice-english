@@ -26,7 +26,7 @@ async function activityDays(userId: string, now: Date) {
 }
 
 async function badgeStats(userId: string, bestStreak: number): Promise<BadgeStats> {
-  const [tasksDone, topicLessons, courseLessons, vocabMastered, mistakesMastered, testsDone, certificates] = await Promise.all([
+  const [tasksDone, topicLessons, courseLessons, vocabMastered, mistakesMastered, testsDone, certificates, coaching, checkIns, mockTests, writingDone, setTests, highScoreTests, perfectWeeks] = await Promise.all([
     db.studyTask.count({ where: { userId, status: "DONE" } }),
     db.topicLessonProgress.count({ where: { userId, completedAt: { not: null } } }),
     db.lessonProgress.count({ where: { enrollment: { userId }, completedAt: { not: null } } }),
@@ -34,8 +34,65 @@ async function badgeStats(userId: string, bestStreak: number): Promise<BadgeStat
     db.mistakeEntry.count({ where: { userId, masteredAt: { not: null } } }),
     db.diagnosticAttempt.count({ where: { userId, status: "COMPLETED" } }),
     db.certificate.count({ where: { userId } }),
+    db.coachingProfile.count({ where: { userId } }),
+    db.coachingCheckIn.count({ where: { userId } }),
+    db.diagnosticAttempt.count({ where: { userId, status: "COMPLETED", kind: "MOCK_EXAM" } }),
+    db.writingFeedback.count({ where: { userId, status: "DONE" } }),
+    db.lexiconSetTest.findMany({ where: { userId }, select: { score: true, total: true } }),
+    countHighScoreTests(userId),
+    countPerfectWeeks(userId),
   ]);
-  return { bestStreak, tasksDone, lessonsDone: topicLessons + courseLessons, vocabMastered, mistakesMastered, testsDone, certificates };
+  return {
+    bestStreak,
+    tasksDone,
+    lessonsDone: topicLessons + courseLessons,
+    vocabMastered,
+    mistakesMastered,
+    testsDone,
+    certificates,
+    coachingStarted: coaching > 0 ? 1 : 0,
+    checkIns,
+    highScoreTests,
+    perfectWeeks,
+    mockTests,
+    writingDone,
+    setTestsPassed: setTests.filter((t) => t.total > 0 && t.score / t.total >= 0.8).length,
+  };
+}
+
+/** Finished tests (any kind) with at least 10 graded answers, 90%+ of them correct. */
+async function countHighScoreTests(userId: string) {
+  const rows = await db.diagnosticResponse.groupBy({
+    by: ["attemptId", "isCorrect"],
+    where: { isCorrect: { not: null }, attempt: { userId, status: "COMPLETED" } },
+    _count: { _all: true },
+  });
+  const perAttempt = new Map<string, { total: number; correct: number }>();
+  for (const r of rows) {
+    const a = perAttempt.get(r.attemptId) ?? { total: 0, correct: 0 };
+    a.total += r._count._all;
+    if (r.isCorrect) a.correct += r._count._all;
+    perAttempt.set(r.attemptId, a);
+  }
+  return [...perAttempt.values()].filter((a) => a.total >= 10 && a.correct / a.total >= 0.9).length;
+}
+
+/** Plan weeks with 5+ tasks that all ended DONE; tasks skipped as "Bugün yoğunum" don't count against it. */
+async function countPerfectWeeks(userId: string) {
+  const rows = await db.studyTask.groupBy({
+    by: ["weekId", "status"],
+    // skipReason is null for almost every task, and SQL's NOT (x = 'BUSY') drops nulls: spell both.
+    where: { userId, OR: [{ skipReason: null }, { skipReason: { not: "BUSY" } }] },
+    _count: { _all: true },
+  });
+  const perWeek = new Map<string, { total: number; done: number }>();
+  for (const r of rows) {
+    const w = perWeek.get(r.weekId) ?? { total: 0, done: 0 };
+    w.total += r._count._all;
+    if (r.status === "DONE") w.done += r._count._all;
+    perWeek.set(r.weekId, w);
+  }
+  return [...perWeek.values()].filter((w) => w.total >= 5 && w.done === w.total).length;
 }
 
 /**

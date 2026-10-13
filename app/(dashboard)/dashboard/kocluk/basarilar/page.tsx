@@ -3,7 +3,14 @@ import { Flame, Trophy } from "lucide-react";
 import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { syncEngagement, weeklyLeaderboard } from "@/server/services/engagement.service";
-import { BADGES, POINTS } from "@/lib/engagement";
+import { BADGES, BADGE_TIERS, POINTS, type BadgeTier } from "@/lib/engagement";
+
+const TIER_STYLE: Record<BadgeTier, { frame: string; medal: string; earned: string }> = {
+  BRONZE: { frame: "border-orange-200 bg-orange-50/50", medal: "bg-orange-100 text-orange-800", earned: "border-orange-300" },
+  SILVER: { frame: "border-slate-300 bg-slate-50/70", medal: "bg-slate-200 text-slate-700", earned: "border-slate-400" },
+  GOLD: { frame: "border-amber-300 bg-amber-50/60", medal: "bg-amber-100 text-amber-800", earned: "border-amber-400" },
+  PLATINUM: { frame: "border-cyan-300 bg-cyan-50/50", medal: "bg-cyan-100 text-cyan-800", earned: "border-cyan-400" },
+};
 import { setLeaderboardOptInAction } from "@/app/actions/engagement";
 
 export const metadata: Metadata = { title: "Başarılar" };
@@ -43,26 +50,54 @@ export default async function AchievementsPage() {
 
       <section>
         <h2 className="section-title !text-lg">Rozetler</h2>
-        <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {BADGES.map((b) => {
-            const when = earned.get(b.key);
-            const [have, goal] = b.progress(stats);
+        <p className="mt-1 text-sm text-[color:var(--muted)]">Bronzdan Platine dört seviye. Her rozet sitedeki gerçek çalışmandan otomatik gelir.</p>
+        <div className="mt-4 space-y-6">
+          {BADGE_TIERS.map((t) => {
+            const list = BADGES.filter((b) => b.tier === t.tier);
+            const got = list.filter((b) => earned.has(b.key)).length;
+            const style = TIER_STYLE[t.tier];
             return (
-              <li key={b.key} className={`dashboard-panel flex gap-3 ${when ? "" : "opacity-70"}`}>
-                <span className={`grid size-12 shrink-0 place-items-center rounded-full text-2xl ${when ? "bg-amber-100" : "bg-slate-100 grayscale"}`} aria-hidden="true">{b.emoji}</span>
-                <div className="min-w-0">
-                  <p className="font-extrabold">{b.title}</p>
-                  <p className="text-xs text-[color:var(--muted)]">{b.description}</p>
-                  {when ? (
-                    <p className="mt-1 text-xs font-bold text-emerald-700">Kazanıldı · {when.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul" })}</p>
-                  ) : (
-                    <p className="mt-1 text-xs font-semibold text-[color:var(--muted)]">{have}/{goal}</p>
-                  )}
+              <div key={t.tier} className={`rounded-3xl border p-4 sm:p-5 ${style.frame}`}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className={`grid size-10 place-items-center rounded-full text-sm font-black ${style.medal}`} aria-hidden="true">{t.name.charAt(0)}</span>
+                    <div>
+                      <h3 className="text-lg font-extrabold">{t.name}</h3>
+                      <p className="text-xs text-[color:var(--muted)]">{t.blurb}</p>
+                    </div>
+                  </div>
+                  <div className="min-w-[9rem] text-right">
+                    <p className="text-sm font-bold">{got}/{list.length} rozet</p>
+                    <progress className="learning-progress mt-1 w-full" value={got} max={list.length} aria-label={`${t.name}: ${got}/${list.length}`} />
+                  </div>
                 </div>
-              </li>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {list.map((b) => {
+                    const when = earned.get(b.key);
+                    const [have, goal] = b.progress(stats);
+                    return (
+                      <li key={b.key} className={`flex gap-3 rounded-2xl border bg-[color:var(--surface)] p-3 ${when ? style.earned : "border-[color:var(--border)] opacity-75"}`}>
+                        <span className={`grid size-11 shrink-0 place-items-center rounded-full text-xl ${when ? style.medal : "bg-slate-100 grayscale"}`} aria-hidden="true">{b.emoji}</span>
+                        <div className="min-w-0">
+                          <p className="font-extrabold leading-tight">{b.title}</p>
+                          <p className="mt-0.5 text-xs text-[color:var(--muted)]">{b.description}</p>
+                          {when ? (
+                            <p className="mt-1 text-xs font-bold text-emerald-700">Kazanıldı · {when.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul" })}</p>
+                          ) : (
+                            <>
+                              <progress className="learning-progress mt-1.5 w-full" value={have} max={goal} aria-label={`${b.title}: ${have}/${goal}`} />
+                              <p className="mt-0.5 text-[11px] font-semibold text-[color:var(--muted)]">{have}/{goal}</p>
+                            </>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             );
           })}
-        </ul>
+        </div>
       </section>
 
       <section>

@@ -61,12 +61,44 @@ export function leaderboardName(name: string, optIn: boolean) {
   return last ? `${first} ${last.charAt(0).toLocaleUpperCase("tr-TR")}.` : first;
 }
 
-export type BadgeStats = { bestStreak: number; tasksDone: number; lessonsDone: number; vocabMastered: number; mistakesMastered: number; testsDone: number; certificates: number };
+export type BadgeStats = {
+  bestStreak: number;
+  tasksDone: number;
+  lessonsDone: number;
+  vocabMastered: number;
+  mistakesMastered: number;
+  testsDone: number;
+  certificates: number;
+  /** 1 once the student has set up Ücretsiz Koçluk. */
+  coachingStarted: number;
+  /** Weekly check-ins ("Bu haftayı nasıl geçirdin?") submitted. */
+  checkIns: number;
+  /** Finished practice / mock / level tests with at least 10 answers and 90%+ correct. */
+  highScoreTests: number;
+  /** Plan weeks with at least 5 tasks where every task was done (busy-day skips don't count). */
+  perfectWeeks: number;
+  /** Full mock exams (Deneme Sınavı) finished. */
+  mockTests: number;
+  /** Writing / translation pieces that got AI feedback. */
+  writingDone: number;
+  /** Kelime Motoru set tests passed with 80%+. */
+  setTestsPassed: number;
+};
 
-export type Badge = { key: string; title: string; description: string; emoji: string; earned: (s: BadgeStats) => boolean; progress: (s: BadgeStats) => [number, number] };
+/** Bronz → Gümüş → Altın → Platin: getting started, building habits, sustained work, mastery. */
+export type BadgeTier = "BRONZE" | "SILVER" | "GOLD" | "PLATINUM";
+export const BADGE_TIERS: { tier: BadgeTier; name: string; blurb: string }[] = [
+  { tier: "BRONZE", name: "Bronz", blurb: "İlk adımlar: planını kur, başla." },
+  { tier: "SILVER", name: "Gümüş", blurb: "Alışkanlık: düzenli çalış, doğru çöz." },
+  { tier: "GOLD", name: "Altın", blurb: "İstikrar: haftalarca ve denemelerle devam et." },
+  { tier: "PLATINUM", name: "Platin", blurb: "Ustalık: sınava tam hazır ol." },
+];
 
-const badge = (key: string, emoji: string, title: string, description: string, stat: keyof BadgeStats, goal: number): Badge => ({
+export type Badge = { key: string; tier: BadgeTier; title: string; description: string; emoji: string; earned: (s: BadgeStats) => boolean; progress: (s: BadgeStats) => [number, number] };
+
+const badge = (key: string, tier: BadgeTier, emoji: string, title: string, description: string, stat: keyof BadgeStats, goal: number): Badge => ({
   key,
+  tier,
   emoji,
   title,
   description,
@@ -74,19 +106,39 @@ const badge = (key: string, emoji: string, title: string, description: string, s
   progress: (s) => [Math.min(s[stat], goal), goal],
 });
 
+/** Every badge is earned from recorded activity — nothing is self-declared. Keys never change (they are stored). */
 export const BADGES: Badge[] = [
-  badge("first-task", "🚀", "İlk Adım", "Koçluk planından ilk görevini tamamla.", "tasksDone", 1),
-  badge("streak-3", "🔥", "Isınma Turu", "3 gün üst üste çalış.", "bestStreak", 3),
-  badge("streak-7", "🔥", "Bir Haftalık Seri", "7 gün üst üste çalış.", "bestStreak", 7),
-  badge("streak-30", "🏆", "Bir Ay Durmadan", "30 gün üst üste çalış.", "bestStreak", 30),
-  badge("tasks-50", "✅", "Plan Ustası", "50 koçluk görevi tamamla.", "tasksDone", 50),
-  badge("lessons-10", "📘", "Konu Avcısı", "10 Konu Anlatımı dersi bitir.", "lessonsDone", 10),
-  badge("lessons-50", "📚", "Konu Uzmanı", "50 Konu Anlatımı dersi bitir.", "lessonsDone", 50),
-  badge("vocab-50", "🧠", "Kelime Toplayıcı", "50 kelimeyi kalıcı öğren.", "vocabMastered", 50),
-  badge("vocab-250", "💎", "Kelime Hazinesi", "250 kelimeyi kalıcı öğren.", "vocabMastered", 250),
-  badge("mistakes-20", "🛠️", "Hatasından Öğrenen", "Hata defterinden 20 soruyu kalıcı çöz.", "mistakesMastered", 20),
-  badge("first-test", "📝", "İlk Deneme", "İlk seviye tespit veya deneme sınavını bitir.", "testsDone", 1),
-  badge("certificate", "🎓", "Sertifikalı", "İlk sertifikanı kazan.", "certificates", 1),
+  // Bronz — getting started
+  badge("coaching-start", "BRONZE", "🧭", "Yola Çıkan", "Ücretsiz Koçluk planını oluştur.", "coachingStarted", 1),
+  badge("first-task", "BRONZE", "🚀", "İlk Adım", "Koçluk planından ilk görevini tamamla.", "tasksDone", 1),
+  badge("first-checkin", "BRONZE", "🧱", "Temel Atan", "İlk haftalık değerlendirmeni doldur.", "checkIns", 1),
+  badge("first-test", "BRONZE", "📝", "İlk Deneme", "İlk seviye tespit veya deneme sınavını bitir.", "testsDone", 1),
+  badge("streak-3", "BRONZE", "🔥", "Isınma Turu", "3 gün üst üste çalış.", "bestStreak", 3),
+  badge("lessons-10", "BRONZE", "📘", "Konu Avcısı", "10 Konu Anlatımı dersi bitir.", "lessonsDone", 10),
+  badge("vocab-50", "BRONZE", "🧠", "Kelime Toplayıcı", "50 kelimeyi kalıcı öğren.", "vocabMastered", 50),
+  badge("set-test-1", "BRONZE", "🎯", "Set Bitiren", "Kelime Motoru'nda bir set testini %80+ ile geç.", "setTestsPassed", 1),
+  // Gümüş — habits
+  badge("streak-7", "SILVER", "🔥", "Bir Haftalık Seri", "7 gün üst üste çalış.", "bestStreak", 7),
+  badge("streak-14", "SILVER", "🔥", "İki Haftalık Seri", "14 gün üst üste çalış.", "bestStreak", 14),
+  badge("perfect-week", "SILVER", "📅", "Tam Hafta", "Bir haftanın bütün koçluk görevlerini bitir (en az 5 görev).", "perfectWeeks", 1),
+  badge("quiz-master", "SILVER", "⭐", "Soru Ustası", "Bir pratik veya deneme sınavında %90+ başarı (en az 10 soru).", "highScoreTests", 1),
+  badge("tasks-50", "SILVER", "✅", "Plan Ustası", "50 koçluk görevi tamamla.", "tasksDone", 50),
+  badge("vocab-250", "SILVER", "💎", "Kelime Hazinesi", "250 kelimeyi kalıcı öğren.", "vocabMastered", 250),
+  badge("mistakes-20", "SILVER", "🛠️", "Hatasından Öğrenen", "Hata defterinden 20 soruyu kalıcı çöz.", "mistakesMastered", 20),
+  badge("writing-5", "SILVER", "✍️", "Kalemi Güçlü", "5 yazma veya çeviri çalışmana geri bildirim al.", "writingDone", 5),
+  // Altın — sustained work
+  badge("streak-30", "GOLD", "🏆", "Bir Ay Durmadan", "30 gün üst üste çalış.", "bestStreak", 30),
+  badge("perfect-weeks-4", "GOLD", "🗓️", "Disiplin Abidesi", "4 haftanın bütün koçluk görevlerini bitir.", "perfectWeeks", 4),
+  badge("mocks-5", "GOLD", "⚔️", "Deneme Savaşçısı", "5 tam deneme sınavı bitir.", "mockTests", 5),
+  badge("quiz-master-5", "GOLD", "🏹", "Keskin Nişancı", "5 sınavda %90+ başarı yakala.", "highScoreTests", 5),
+  badge("lessons-50", "GOLD", "📚", "Konu Uzmanı", "50 Konu Anlatımı dersi bitir.", "lessonsDone", 50),
+  badge("vocab-500", "GOLD", "💠", "Kelime Ustası", "500 kelimeyi kalıcı öğren.", "vocabMastered", 500),
+  badge("certificate", "GOLD", "🎓", "Sertifikalı", "İlk sertifikanı kazan.", "certificates", 1),
+  // Platin — mastery
+  badge("mocks-10", "PLATINUM", "🏁", "Sınava Hazır", "10 tam deneme sınavı bitir.", "mockTests", 10),
+  badge("streak-100", "PLATINUM", "👑", "Yüz Günlük Seri", "100 gün üst üste çalış.", "bestStreak", 100),
+  badge("tasks-300", "PLATINUM", "🏅", "Plan Efsanesi", "300 koçluk görevi tamamla.", "tasksDone", 300),
+  badge("vocab-1000", "PLATINUM", "🌟", "Kelime Efsanesi", "1000 kelimeyi kalıcı öğren.", "vocabMastered", 1000),
 ];
 
 export function earnedBadges(stats: BadgeStats) {
