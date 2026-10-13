@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { BookOpen, CalendarDays, CheckCircle2, ClipboardCheck, FileCheck2, LayoutDashboard, ListChecks, Package, Target, Timer } from "lucide-react";
 import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
 import { getActiveGoal } from "@/server/services/diagnostic-goals.service";
@@ -19,18 +20,27 @@ import { PERIOD_LABEL } from "@/lib/study-goal-periods";
 export const metadata: Metadata = { title: "İlerleme Raporu" };
 
 const SECTIONS = [
-  { key: "genel", label: "Genel İlerleme" },
-  { key: "konular", label: "Tamamlanan Konular" },
-  { key: "odevler", label: "Tamamlanan Ödevler" },
-  { key: "seviye", label: "Çözülen Seviye Tespit Sınavları" },
-  { key: "denemeler", label: "Çözülen Denemeler" },
-  { key: "pratik", label: "Çözülen Pratik Sorular" },
-  { key: "okunan", label: "Okunan Konu Anlatımları" },
-  { key: "materyaller", label: "Alınan Ek Materyaller" },
-  { key: "ziyaret", label: "Site Ziyaret Sıklığı" },
-  { key: "hedefler", label: "Kaçırılan Hedefler" },
+  { key: "genel", label: "Genel İlerleme", icon: LayoutDashboard },
+  { key: "konular", label: "Tamamlanan Konular", icon: CheckCircle2 },
+  { key: "okunan", label: "Okunan Konu Anlatımları", icon: BookOpen },
+  { key: "odevler", label: "Tamamlanan Ödevler", icon: FileCheck2 },
+  { key: "seviye", label: "Çözülen Seviye Tespit Sınavları", icon: ClipboardCheck },
+  { key: "denemeler", label: "Çözülen Denemeler", icon: Timer },
+  { key: "pratik", label: "Çözülen Pratik Sorular", icon: ListChecks },
+  { key: "materyaller", label: "Alınan Ek Materyaller", icon: Package },
+  { key: "ziyaret", label: "Site Ziyaret Sıklığı", icon: CalendarDays },
+  { key: "hedefler", label: "Kaçırılan Hedefler", icon: Target },
 ] as const;
 type SectionKey = (typeof SECTIONS)[number]["key"];
+
+/** Sidebar groups, in the order a student reads their report. */
+const SECTION_GROUPS: { label: string | null; keys: SectionKey[] }[] = [
+  { label: null, keys: ["genel"] },
+  { label: "Öğrendiklerim", keys: ["konular", "okunan", "odevler"] },
+  { label: "Sınavlar ve sorular", keys: ["seviye", "denemeler", "pratik"] },
+  { label: "Düzen ve hedefler", keys: ["ziyaret", "hedefler", "materyaller"] },
+];
+const sectionOf = (key: SectionKey) => SECTIONS.find((s) => s.key === key)!;
 
 const dateTR = (d: Date | null | undefined) => (d ? d.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul" }) : "—");
 
@@ -97,27 +107,29 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
   };
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
       <p className="eyebrow">{goal?.examType.name ?? "Tüm çalışmaların"}</p>
       <h1 className="page-title">İlerleme Raporu</h1>
 
-      <nav aria-label="Rapor bölümleri" className="mt-6 flex flex-wrap gap-2">
-        {SECTIONS.map((s) => (
-          <Link
-            key={s.key}
-            href={`/dashboard/progress?bolum=${s.key}`}
-            aria-current={s.key === active ? "page" : undefined}
-            className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
-              s.key === active ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white" : "border-[color:var(--border-strong)] bg-white text-slate-600 hover:border-[color:var(--brand)]"
-            }`}
-          >
-            {s.label}
-            {counts[s.key] !== null ? <span className="ml-1.5 opacity-75">({counts[s.key]})</span> : null}
-          </Link>
-        ))}
-      </nav>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_272px]">
+        {/* Phones and tablets: one swipeable row of sections above the report. */}
+        <nav aria-label="Rapor bölümleri" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:hidden">
+          {SECTIONS.map((s) => (
+            <Link
+              key={s.key}
+              href={`/dashboard/progress?bolum=${s.key}`}
+              aria-current={s.key === active ? "page" : undefined}
+              className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold transition ${
+                s.key === active ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white" : "border-[color:var(--border-strong)] bg-[color:var(--surface)] text-slate-600 hover:border-[color:var(--brand)]"
+              }`}
+            >
+              {s.label}
+              {counts[s.key] !== null ? <span className="ml-1.5 opacity-75">({counts[s.key]})</span> : null}
+            </Link>
+          ))}
+        </nav>
 
-      <section className="dashboard-panel mt-6" aria-labelledby="report-section">
+      <section className="dashboard-panel min-w-0" aria-labelledby="report-section">
         <h2 id="report-section" className="section-title !text-lg">{SECTIONS.find((s) => s.key === active)!.label}</h2>
         {active === "genel" ? <GeneralSection userId={user.id} goal={goal} roadmap={roadmap} planLabel={access.plan ? `${PLAN_NAMES[access.plan.tier]} · ${dateTR(access.plan.expiresAt)} tarihine kadar` : "Aktif plan yok"} counts={counts} /> : null}
 
@@ -274,6 +286,43 @@ export default async function ProgressReportPage({ searchParams }: { searchParam
           </div>
         ) : null}
       </section>
+
+        {/* Desktop: a right sidebar, grouped, that stays in view while the report scrolls. */}
+        <aside className="hidden lg:block">
+          <nav aria-label="Rapor bölümleri" className="dashboard-panel sticky top-24 !p-3">
+            {SECTION_GROUPS.map((group) => (
+              <div key={group.label ?? "genel"} className={group.label ? "mt-3 border-t border-[color:var(--border)] pt-3" : ""}>
+                {group.label ? <p className="px-3 pb-1.5 text-[11px] font-black uppercase tracking-wide text-[color:var(--muted)]">{group.label}</p> : null}
+                <ul className="space-y-0.5">
+                  {group.keys.map((key) => {
+                    const s = sectionOf(key);
+                    const Icon = s.icon;
+                    const on = key === active;
+                    const n = counts[key];
+                    return (
+                      <li key={key}>
+                        <Link
+                          href={`/dashboard/progress?bolum=${key}`}
+                          aria-current={on ? "page" : undefined}
+                          className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-bold transition ${
+                            on ? "bg-[color:var(--brand)] text-white" : "text-slate-600 hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--foreground)]"
+                          }`}
+                        >
+                          <Icon size={17} aria-hidden="true" className="shrink-0" />
+                          <span className="min-w-0 flex-1 leading-5">{s.label}</span>
+                          {n !== null ? (
+                            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-black ${on ? "bg-white/20 text-white" : n ? "bg-[color:var(--brand-soft)] text-[color:var(--accent-strong)]" : "bg-slate-100 text-slate-500"}`}>{n}</span>
+                          ) : null}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        </aside>
+      </div>
     </main>
   );
 }
