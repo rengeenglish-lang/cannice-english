@@ -82,7 +82,9 @@ const SINGLE_QUANTITY_CATEGORIES = new Set(["PLAN", "PREP_GROUP"]);
 
 export async function addToCart(productId: string, userId?: string, opts: { groupSlotId?: string } = {}) {
   const cart = await getOrCreateCart(userId);
-  const product = await db.product.findUniqueOrThrow({ where: { id: productId } });
+  const product = await db.product.findUniqueOrThrow({ where: { id: productId }, include: { course: true } });
+  // Membership and structured programmes are sold through their own seat-aware checkout.
+  if (!product.isPublished || product.course?.curriculumKey || product.slug === "platform-premium-subscription") throw new Error("Bu ürün sepet üzerinden alınamaz.");
   const single = SINGLE_QUANTITY_CATEGORIES.has(product.category);
   return db.cartItem.upsert({
     where: { cartId_productId: { cartId: cart.id, productId } },

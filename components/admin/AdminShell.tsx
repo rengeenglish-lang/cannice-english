@@ -48,12 +48,14 @@ import {
   type LucideIcon,
   Hourglass,
   Star,
+  Wallet,
+  GraduationCap,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/sign-out";
 import type { ExamFamily } from "@/lib/generated/prisma/enums";
 import { Logo } from "@/components/brand/Logo";
 
-type Role = "STUDENT" | "TEACHER" | "ADMIN";
+type Role = "STUDENT" | "TEACHER" | "ADMIN" | "SUPER_ADMIN";
 
 /**
  * The learning journey (Seviye Tespit → Deneme → Pratik → İlerleme → Hatalarım) is always shown:
@@ -129,12 +131,14 @@ const STAFF_GROUPS: { label: string; items: { href: string; label: string; icon:
       { href: "/admin/diagnostik/sorular", label: "Seviye tespit: sorular", icon: ListChecks },
       { href: "/admin/diagnostik/degerlendirmeler", label: "Seviye tespit: sonuçlar", icon: ClipboardList },
       { href: "/admin/kaynaklar", label: "Kaynaklar", icon: BookOpen },
+      { href: "/admin/curricula", label: "250 saatlik programlar", icon: GraduationCap, adminOnly: true },
     ],
   },
   {
     label: "SATIŞ",
     items: [
-      { href: "/admin/orders", label: "Siparişler", icon: ShoppingBag },
+      { href: "/admin/orders", label: "Siparişler", icon: ShoppingBag, adminOnly: true },
+      { href: "/admin/commerce", label: "Üyelik satışları", icon: Wallet, adminOnly: true },
       { href: "/admin/products", label: "Ürünler", icon: Package },
       { href: "/admin/coupons", label: "Kuponlar", icon: TicketPercent },
       { href: "/admin/faturalar", label: "Faturalar", icon: FileText, adminOnly: true },
@@ -178,7 +182,7 @@ function SidebarContent({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const isAdmin = role === "ADMIN";
+  const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
   // Staff groups start open; a group holding the current page cannot be collapsed.
   const [closedGroups, setClosedGroups] = useState<Set<string>>(() => new Set());
   const toggleGroup = (label: string) =>
@@ -234,7 +238,7 @@ function SidebarContent({
         ))}
         {role !== "STUDENT"
           ? STAFF_GROUPS.map((group) => {
-              const items = group.items.filter((item) => role === "ADMIN" || !item.adminOnly);
+              const items = group.items.filter((item) => role === "ADMIN" || role === "SUPER_ADMIN" || !item.adminOnly);
               if (!items.length) return null;
               const hasActive = items.some((item) => active(item.href));
               const open = hasActive || !closedGroups.has(group.label);
@@ -297,7 +301,7 @@ export function DashboardShell({
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const close = () => dialog.current?.close();
-  const isAdmin = role === "ADMIN";
+  const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
   const menuLabel = isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü";
   return (
     <div className="dashboard-frame lg:grid-cols-[260px_minmax(0,1fr)]">

@@ -46,6 +46,9 @@ export async function placeOrderAction(_prev: CheckoutFormState, formData: FormD
     };
   } catch (error) { return { status: "error", message: error instanceof Error ? error.message : "Sipariş onaylarını kontrol edin." }; }
 
+  const blocked = await db.product.count({ where: { id: { in: cart.items.map((item) => item.productId) }, OR: [{ isPublished: false }, { course: { curriculumKey: { not: null } } }, { slug: "platform-premium-subscription" }] } });
+  if (blocked) return { status: "error", message: "Sepetinizde satışa uygun olmayan ürün var. Programlar için üyelik ödeme akışını kullanın." };
+
   let guest: { guestName: string; guestEmail: string; guestPhone: string } | null = null;
   if (!session?.user?.id) {
     // Plans and group lessons attach to a student account (Canlı Derslerim, plan access), which

@@ -16,6 +16,7 @@ enum UserRole {
   STUDENT
   TEACHER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum ExamCode {
@@ -91,6 +92,7 @@ enum EnrollmentStatus {
 }
 
 enum OrderStatus {
+  PAYMENT_REVIEW
   PENDING
   AWAITING_PAYMENT
   PAID
@@ -277,8 +279,9 @@ model TopicLesson {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  topic      ExamTopic             @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  progresses TopicLessonProgress[]
+  topic                ExamTopic             @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  progresses           TopicLessonProgress[]
+  curriculumActivities CurriculumActivity[]
 
   @@index([topicId])
   @@index([diagnosticTopicIds], type: Gin)
@@ -403,6 +406,13 @@ model User {
   answeredMessages        TeacherMessage[]          @relation("MessageResponder")
   studyGoals              StudyGoal[]
   englishPlacements       EnglishPlacement[]
+  accessGrants            AccessGrant[]
+  subscriptions           MembershipSubscription[]
+  auditEvents             CommercialAudit[]
+  cohortMemberships       CohortEnrollment[]
+  cohortWaitlists         CohortWaitlist[]
+  teachingCohorts         ProgrammeCohort[]         @relation("CohortTeacher")
+  verifiedActivities      ActivityCompletion[]      @relation("ActivityVerifier")
 
   @@map("users")
 }
@@ -518,18 +528,23 @@ model Product {
 }
 
 model Course {
-  id              String               @id @default(cuid())
-  productId       String               @unique
-  deliveryFormat  CourseDeliveryFormat @default(HYBRID)
-  syllabusSummary String?
+  id                      String               @id @default(cuid())
+  productId               String               @unique
+  deliveryFormat          CourseDeliveryFormat @default(HYBRID)
+  syllabusSummary         String?
   /**
    * Konuşma kulübü groups — the only courses the Uzman plan's SPEAKING_CLUB perk can be claimed on.
    */
-  isSpeakingClub  Boolean              @default(false)
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  isSpeakingClub          Boolean              @default(false)
+  curriculumKey           String?              @unique
+  curriculumTargetMinutes Int?
+  curriculumPublishedAt   DateTime?
+  examFormatVerifiedAt    DateTime?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
 
-  product      Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product      Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cohorts      ProgrammeCohort[]
   modules      CourseModule[]
   liveSessions LiveSession[]
   enrollments  Enrollment[]
@@ -540,14 +555,17 @@ model Course {
 }
 
 model CourseModule {
-  id        String   @id @default(cuid())
-  courseId  String
-  title     String
-  position  Int
-  createdAt DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  courseId    String
+  title       String
+  position    Int
+  createdAt   DateTime @default(now())
 
-  course  Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons RecordedLesson[]
+  course          Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons         RecordedLesson[]
+  units           CurriculumUnit[]
+  durationBudgets ModuleDurationBudget[]
 
   @@unique([courseId, position])
   @@map("course_modules")
@@ -556,6 +574,7 @@ model CourseModule {
 model RecordedLesson {
   id              String  @id @default(cuid())
   moduleId        String
+  unitId          String?
   title           String
   position        Int
   videoUrl        String?
@@ -563,10 +582,13 @@ model RecordedLesson {
   isPreviewable   Boolean @default(false)
   description     String?
 
-  module           CourseModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  module           CourseModule         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   lessonProgresses LessonProgress[]
+  unit             CurriculumUnit?      @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  activities       CurriculumActivity[]
 
   @@unique([moduleId, position])
+  @@index([unitId])
   @@map("recorded_lessons")
 }
 
@@ -595,8 +617,12 @@ model LiveSession {
   instructor            User?                   @relation("SessionInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
   recurringSeries       GroupLessonSeries?      @relation(fields: [recurringSeriesId], references: [id], onDelete: SetNull)
   bookings              GroupLessonEnrollment[]
+  cohortId              String?
+  cohort                ProgrammeCohort?        @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  activityCompletions   ActivityCompletion[]
   course                Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  @@index([cohortId], map: "live_sessions_cohort_id_idx")
   @@index([startsAt, availabilityEnabled])
   @@index([recurringSeriesId])
   @@index([courseId])
@@ -641,11 +667,12 @@ model Enrollment {
    */
   renewalNoticeSentAt DateTime?
 
-  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course           Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  orderItem        OrderItem?           @relation(fields: [orderItemId], references: [id])
-  lessonProgresses LessonProgress[]
-  submissions      PracticeSubmission[]
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course              Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  orderItem           OrderItem?           @relation(fields: [orderItemId], references: [id])
+  lessonProgresses    LessonProgress[]
+  submissions         PracticeSubmission[]
+  activityCompletions ActivityCompletion[]
 
   @@unique([userId, courseId])
   @@map("enrollments")
@@ -667,7 +694,8 @@ model PracticeSubmission {
   submittedAt     DateTime         @default(now())
   reviewedAt      DateTime?
 
-  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollment         Enrollment          @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  activityCompletion ActivityCompletion?
 
   @@map("practice_submissions")
 }
@@ -723,24 +751,27 @@ model CartItem {
 }
 
 model Order {
-  id              String      @id @default(cuid())
+  id              String           @id @default(cuid())
   userId          String?
   guestName       String?
   guestEmail      String?
   guestPhone      String?
-  status          OrderStatus @default(PENDING)
-  subtotal        Decimal     @db.Decimal(12, 2)
-  discountTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  status          OrderStatus      @default(PENDING)
+  subtotal        Decimal          @db.Decimal(12, 2)
+  discountTotal   Decimal          @default(0) @db.Decimal(12, 2)
   /// One flat fee per order that holds a printed book; zero for digital-only orders.
-  shippingTotal   Decimal     @default(0) @db.Decimal(12, 2)
+  shippingTotal   Decimal          @default(0) @db.Decimal(12, 2)
   /// Where the printed books go. Absent on digital-only orders, and never guessed.
   shippingAddress Json?
-  total           Decimal     @db.Decimal(12, 2)
-  currency        String      @default("TRY")
+  total           Decimal          @db.Decimal(12, 2)
+  currency        String           @default("TRY")
   checkoutConsent Json?
+  commercialKind  CommercialKind?
+  checkoutKey     String?          @unique
+  reservation     SeatReservation?
   couponCode      String?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   user    User?       @relation(fields: [userId], references: [id])
   items   OrderItem[]
@@ -778,20 +809,31 @@ model Coupon {
 }
 
 model OrderItem {
-  id            String  @id @default(cuid())
-  orderId       String
-  productId     String
-  titleSnapshot String
-  unitPrice     Decimal @db.Decimal(12, 2)
-  quantity      Int     @default(1)
-  lineTotal     Decimal @db.Decimal(12, 2)
-  groupSlotId   String?
+  id              String           @id @default(cuid())
+  orderId         String
+  productId       String
+  purchaseType    PurchaseType     @default(LEGACY)
+  billingInterval BillingInterval?
+  cohortId        String?
+  cohort          ProgrammeCohort? @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  periodStartsAt  DateTime?
+  paidThrough     DateTime?
+  accessExpiresAt DateTime?
+  titleSnapshot   String
+  unitPrice       Decimal          @db.Decimal(12, 2)
+  quantity        Int              @default(1)
+  lineTotal       Decimal          @db.Decimal(12, 2)
+  groupSlotId     String?
 
-  order            Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product          Product           @relation(fields: [productId], references: [id])
+  order            Order                   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product          Product                 @relation(fields: [productId], references: [id])
   enrollment       Enrollment?
   planSubscription PlanSubscription?
+  accessGrants     AccessGrant[]
+  cohortEnrollment CohortEnrollment?
+  subscription     MembershipSubscription?
 
+  @@index([cohortId])
   @@map("order_items")
 }
 
@@ -931,6 +973,8 @@ model FreeResource {
   createdAt     DateTime      @default(now())
 
   examType ExamType? @relation(fields: [examTypeId], references: [id])
+
+  curriculumActivities CurriculumActivity[]
 
   @@map("free_resources")
 }
@@ -2380,4 +2424,341 @@ model EnglishPlacement {
 
   @@index([userId, createdAt])
   @@map("english_placements")
+}
+
+// Commercial foundation. Amounts are integer kuruş; payment periods never define curriculum length.
+enum BillingInterval {
+  MONTHLY
+  QUARTERLY
+  SIX_MONTH
+  ANNUAL
+}
+
+enum CommercialKind {
+  PREMIUM
+  GROUP
+}
+
+enum ToolAccessPolicy {
+  FREE
+  PREMIUM
+  GROUP_INCLUDED
+  SEPARATE_PURCHASE
+}
+
+enum Capability {
+  FREE_CONTENT
+  PREMIUM_SIMULATIONS
+  QUESTION_BANK
+  PERFORMANCE_ANALYTICS
+  STUDY_TOOLS
+  DIGITAL_RESOURCES
+  HOMEWORK
+  TEACHER_FEEDBACK
+  GROUP_LESSONS
+  GROUP_FULL_ACCESS
+}
+
+model CommercialPrice {
+  id              String          @id @default(cuid())
+  kind            CommercialKind
+  interval        BillingInterval
+  amountMinor     Int
+  currency        String          @default("TRY")
+  active          Boolean         @default(true)
+  checkoutEnabled Boolean         @default(false)
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([kind, interval])
+  @@map("commercial_prices")
+}
+
+model LearningTool {
+  key     String           @id
+  name    String
+  policy  ToolAccessPolicy @default(SEPARATE_PURCHASE)
+  enabled Boolean          @default(false)
+
+  @@map("learning_tools")
+}
+
+model MembershipSubscription {
+  id          String          @id @default(cuid())
+  userId      String
+  orderItemId String          @unique
+  interval    BillingInterval
+  startsAt    DateTime
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  user        User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  orderItem   OrderItem       @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+
+  @@index([userId, expiresAt])
+  @@map("membership_subscriptions")
+}
+
+model AccessGrant {
+  id          String     @id @default(cuid())
+  userId      String
+  orderItemId String
+  capability  Capability
+  startsAt    DateTime
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Restrict)
+  orderItem   OrderItem  @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+
+  @@unique([orderItemId, capability])
+  @@index([userId, expiresAt])
+  @@map("access_grants")
+}
+
+model CommercialAudit {
+  id        String   @id @default(cuid())
+  actorId   String
+  action    String
+  targetId  String
+  details   Json
+  createdAt DateTime @default(now())
+  actor     User     @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([targetId, createdAt])
+  @@map("commercial_audit")
+}
+
+// Structured programmes extend existing courses and lessons; billing is independent.
+enum CurriculumActivityType {
+  LIVE_INSTRUCTION
+  GUIDED_PRACTICE
+  EXAM_SIMULATION
+  INDEPENDENT_STUDY
+  REVIEW_ASSESSMENT
+}
+
+model ModuleDurationBudget {
+  id       String                 @id @default(cuid())
+  moduleId String
+  type     CurriculumActivityType
+  minutes  Int
+  module   CourseModule           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, type])
+  @@map("module_duration_budgets")
+}
+
+model CurriculumUnit {
+  id        String           @id @default(cuid())
+  moduleId  String
+  title     String
+  objective String
+  position  Int
+  module    CourseModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessons   RecordedLesson[]
+
+  @@unique([moduleId, position])
+  @@map("curriculum_units")
+}
+
+model CurriculumActivity {
+  id                 String                 @id @default(cuid())
+  lessonId           String
+  title              String
+  position           Int
+  type               CurriculumActivityType
+  durationMinutes    Int
+  instructions       String
+  completionCriteria String
+  topicLessonId      String?
+  freeResourceId     String?
+  // Identifies a verified server-side simulation adapter; empty until one exists.
+  simulationKey      String?
+  lesson             RecordedLesson         @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  topicLesson        TopicLesson?           @relation(fields: [topicLessonId], references: [id], onDelete: Restrict)
+  freeResource       FreeResource?          @relation(fields: [freeResourceId], references: [id], onDelete: Restrict)
+  assessment         ActivityAssessment?
+  prerequisites      ActivityPrerequisite[] @relation("ActivityPrerequisites")
+  dependents         ActivityPrerequisite[] @relation("ActivityDependents")
+  completions        ActivityCompletion[]
+
+  @@unique([lessonId, position])
+  @@index([topicLessonId])
+  @@index([freeResourceId])
+  @@map("curriculum_activities")
+}
+
+model ActivityAssessment {
+  id           String             @id @default(cuid())
+  activityId   String             @unique
+  rubric       String
+  minimumScore Int?
+  activity     CurriculumActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@map("activity_assessments")
+}
+
+model ActivityPrerequisite {
+  activityId     String
+  prerequisiteId String
+  activity       CurriculumActivity @relation("ActivityPrerequisites", fields: [activityId], references: [id], onDelete: Cascade)
+  prerequisite   CurriculumActivity @relation("ActivityDependents", fields: [prerequisiteId], references: [id], onDelete: Restrict)
+
+  @@id([activityId, prerequisiteId])
+  @@index([prerequisiteId])
+  @@map("activity_prerequisites")
+}
+
+model ActivityCompletion {
+  id              String              @id @default(cuid())
+  enrollmentId    String
+  activityId      String
+  verifiedById    String
+  completedAt     DateTime            @default(now())
+  // Immutable credit snapshot, never client-supplied or derived from calendar time.
+  creditedMinutes Int
+  evidenceNote    String
+  submissionId    String?             @unique
+  liveSessionId   String?
+  revokedAt       DateTime?
+  enrollment      Enrollment          @relation(fields: [enrollmentId], references: [id], onDelete: Restrict)
+  activity        CurriculumActivity  @relation(fields: [activityId], references: [id], onDelete: Restrict)
+  verifiedBy      User                @relation("ActivityVerifier", fields: [verifiedById], references: [id], onDelete: Restrict)
+  submission      PracticeSubmission? @relation(fields: [submissionId], references: [id], onDelete: Restrict)
+  liveSession     LiveSession?        @relation(fields: [liveSessionId], references: [id], onDelete: Restrict)
+
+  @@unique([enrollmentId, activityId])
+  @@unique([enrollmentId, liveSessionId])
+  @@index([activityId])
+  @@index([verifiedById])
+  @@map("activity_completions")
+}
+
+enum CohortStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  CANCELLED
+  ARCHIVED
+}
+
+enum CohortEnrollmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum CohortWaitlistStatus {
+  WAITING
+  ENROLLED
+  CANCELLED
+}
+
+model ProgrammeCohort {
+  id              String             @id @default(cuid())
+  courseId        String
+  teacherId       String
+  title           String
+  startsAt        DateTime
+  expectedEndsAt  DateTime
+  timezone        String             @default("Europe/Istanbul")
+  minimumCapacity Int                @default(5)
+  maximumCapacity Int                @default(10)
+  graceDays       Int                @default(0)
+  seatHoldMinutes Int                @default(1440)
+  salesEnabled    Boolean            @default(false)
+  orderItems      OrderItem[]
+  reservations    SeatReservation[]
+  status          CohortStatus       @default(DRAFT)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  course          Course             @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  teacher         User               @relation("CohortTeacher", fields: [teacherId], references: [id], onDelete: Restrict)
+  schedule        CohortSchedule[]
+  enrollments     CohortEnrollment[]
+  waitlist        CohortWaitlist[]
+  sessions        LiveSession[]
+  events          CohortEvent[]
+
+  @@index([courseId, status, startsAt])
+  @@index([teacherId, status])
+  @@map("programme_cohorts")
+}
+
+model CohortSchedule {
+  id          String          @id @default(cuid())
+  cohortId    String
+  weekday     Int
+  startMinute Int
+  endMinute   Int
+  cohort      ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+
+  @@unique([cohortId, weekday, startMinute])
+  @@map("cohort_schedules")
+}
+
+model CohortEnrollment {
+  id          String                 @id @default(cuid())
+  cohortId    String
+  studentId   String
+  orderItemId String?                @unique
+  status      CohortEnrollmentStatus @default(PENDING)
+  requestedAt DateTime               @default(now())
+  confirmedAt DateTime?
+  cancelledAt DateTime?
+  cohort      ProgrammeCohort        @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  student     User                   @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  orderItem   OrderItem?             @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+
+  @@unique([cohortId, studentId])
+  @@index([cohortId, status])
+  @@index([studentId, status])
+  @@map("cohort_enrollments")
+}
+
+model CohortWaitlist {
+  id        String               @id @default(cuid())
+  cohortId  String
+  studentId String
+  status    CohortWaitlistStatus @default(WAITING)
+  joinedAt  DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  cohort    ProgrammeCohort      @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+  student   User                 @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  @@unique([cohortId, studentId])
+  @@index([cohortId, status, joinedAt])
+  @@map("cohort_waitlists")
+}
+
+// Durable event handoff for the notification phase; no message is sent or student charged here.
+model CohortEvent {
+  id          String          @id @default(cuid())
+  cohortId    String
+  type        String
+  createdAt   DateTime        @default(now())
+  processedAt DateTime?
+  cohort      ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+
+  @@index([processedAt, createdAt])
+  @@map("cohort_events")
+}
+
+enum PurchaseType {
+  LEGACY
+  PREMIUM_SUBSCRIPTION
+  GROUP_PROGRAM
+  DIGITAL_PRODUCT
+}
+
+model SeatReservation {
+  id         String          @id @default(cuid())
+  orderId    String          @unique
+  cohortId   String
+  expiresAt  DateTime
+  releasedAt DateTime?
+  createdAt  DateTime        @default(now())
+  order      Order           @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  cohort     ProgrammeCohort @relation(fields: [cohortId], references: [id], onDelete: Restrict)
+
+  @@index([cohortId, releasedAt, expiresAt])
+  @@map("seat_reservations")
 }

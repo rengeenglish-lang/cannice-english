@@ -93,6 +93,7 @@ async function runCheckout(items: { slug: string; price: number; book?: { format
     if (name === "@/server/db") return { db: {
       order: { create: async ({ data }: { data: Record<string, unknown> }) => { created = data; return { id: "order-1" }; } },
       cartItem: { deleteMany: async () => {} },
+      product: { count: async () => 0 },
     } };
     if (name === "next/headers") return { cookies: async () => ({ delete: () => {} }) };
     if (name === "next/navigation") return { redirect: (to: string) => { throw new Error(`REDIRECT:${to}`); } };
