@@ -4,7 +4,7 @@
  *   public/ebooks/previews/<slug>-1.jpg preview page 1
  *   page 1 of content/ebooks/<book>.pdf and of public/ebooks/previews/<slug>.pdf (vector), and the
  *   last page too for books whose last page is a back cover.
- * The phrasal verbs guide is skipped: its own generator renders the same design.
+ * The phrasal verbs guide and the YDS deneme sets are skipped: their own generators render the same design.
  *
  *   npx tsx scripts/build-ebook-covers.mts
  */
@@ -36,7 +36,7 @@ async function main() {
   };
 
   for (const design of COVERS) {
-    if (design.slug === "phrasal-verbs") continue;
+    if (design.slug === "phrasal-verbs" || design.slug.startsWith("yds-denemeleri")) continue;
     const book = NETFENER_EBOOKS.find((b) => b.slug === design.slug);
     if (!book) throw new Error(`No catalogue entry for ${design.slug}`);
     const front = await render(coverHtml(design));

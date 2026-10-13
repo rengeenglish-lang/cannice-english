@@ -136,6 +136,34 @@ const phrasalArt = (a: string) => {
     .join(""));
 };
 
+/** A filled answer sheet, a 180-minute stopwatch and the set's test numbers (Özgün YDS Denemeleri). */
+const denemeArt = (first: number) => (a: string) => {
+  const rows = Array.from({ length: 10 }, (_, r) => {
+    const y = 78 + r * 27;
+    const pick = first === 1 ? (r * 3 + 2) % 5 : (r * 2 + 4) % 5;
+    return `<text x="44" y="${y + 5}" text-anchor="end" font-family="Liberation Sans" font-weight="700" font-size="12" fill="rgba(255,255,255,.6)">${r + 1}</text>${[0, 1, 2, 3, 4]
+      .map((c) => `<circle cx="${66 + c * 34}" cy="${y}" r="10" fill="${c === pick ? a : "none"}" stroke="${c === pick ? a : "rgba(255,255,255,.45)"}" stroke-width="1.6"/>${c === pick ? "" : `<text x="${66 + c * 34}" y="${y + 4}" text-anchor="middle" font-family="Liberation Sans" font-size="10" fill="rgba(255,255,255,.5)">${"ABCDE"[c]}</text>`}`)
+      .join("")}`;
+  }).join("");
+  const ticks = Array.from({ length: 12 }, (_, i) => {
+    const t = (i * Math.PI) / 6;
+    return `<line x1="${400 + Math.sin(t) * 78}" y1="${150 - Math.cos(t) * 78}" x2="${400 + Math.sin(t) * (i % 3 ? 70 : 64)}" y2="${150 - Math.cos(t) * (i % 3 ? 70 : 64)}" stroke="${i % 3 ? "rgba(255,255,255,.5)" : a}" stroke-width="${i % 3 ? 2 : 4}" stroke-linecap="round"/>`;
+  }).join("");
+  return svg(`
+  <g transform="rotate(-4 150 190)">
+    <rect x="16" y="24" width="228" height="336" rx="16" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+    <text x="130" y="54" text-anchor="middle" font-family="Liberation Sans" font-weight="700" font-size="12" letter-spacing="3" fill="${a}">CEVAP KÂĞIDI</text>
+    ${rows}
+  </g>
+  <rect x="384" y="40" width="32" height="18" rx="5" fill="${a}"/>
+  <circle cx="400" cy="150" r="88" fill="rgba(255,255,255,.06)" stroke="${a}" stroke-width="6"/>
+  ${ticks}
+  <path d="M400 150 L400 92" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M400 150 L446 172" stroke="${a}" stroke-width="5" stroke-linecap="round"/><circle cx="400" cy="150" r="8" fill="#fff"/>
+  <text x="400" y="212" text-anchor="middle" font-family="Liberation Serif" font-weight="700" font-size="26" fill="#fff">180'</text>
+  ${[0, 1, 2, 3, 4].map((i) => `<g transform="translate(${290 + i * 46},282)"><rect width="38" height="52" rx="8" fill="${i === 0 ? a : "rgba(255,255,255,.08)"}" stroke="${a}" stroke-width="1.6"/><text x="19" y="20" text-anchor="middle" font-family="Liberation Sans" font-weight="700" font-size="6.6" letter-spacing=".3" fill="${i === 0 ? "#0d2418" : "rgba(255,255,255,.7)"}">DENEME</text><text x="19" y="44" text-anchor="middle" font-family="Liberation Serif" font-weight="700" font-size="20" fill="${i === 0 ? "#0d2418" : "#fff"}">${first + i}</text></g>`).join("")}
+  <text x="400" y="368" text-anchor="middle" font-family="Liberation Sans" font-weight="700" font-size="12" letter-spacing="3" fill="rgba(255,255,255,.65)">80 SORU · 180 DAKİKA</text>`);
+};
+
 export const COVERS: CoverDesign[] = [
   { slug: "cumlenin-icini-gor", title: ["CÜMLENİN", "İÇİNİ GÖR"], exam: "YDS & YÖKDİL", subtitle: "YDS ve YÖKDİL Grameri · Örüntü Tanıma ve Sınav Stratejisi", tagline: "SENTENCE X-RAY · PATTERNS · EXAM STRATEGY", accent: "#f2c14e", facts: ["17 modül", "9 adım", "144 sayfa"], art: sentenceArt },
   {
@@ -151,6 +179,14 @@ export const COVERS: CoverDesign[] = [
   { slug: "yokdil-saglik", title: ["YÖKDİL", "SAĞLIK BİLİMLERİ"], exam: "YÖKDİL SAĞLIK", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "MEDICAL TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#ff8f80", facts: ["201 özgün soru", "80 soruluk deneme", "89 sayfa"], art: healthArt },
   { slug: "yokdil-fen", title: ["YÖKDİL", "FEN BİLİMLERİ"], exam: "YÖKDİL FEN", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "SCIENTIFIC TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#7cc8ff", facts: ["155 özgün soru", "80 soruluk deneme", "100 sayfa"], art: scienceArt },
   { slug: "yokdil-sosyal", title: ["YÖKDİL", "SOSYAL BİLİMLER"], exam: "YÖKDİL SOSYAL", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "SOCIAL TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#f6b76b", facts: ["139 özgün soru", "80 soruluk deneme", "96 sayfa"], art: socialArt },
+  {
+    slug: "yds-denemeleri-set-1", title: ["ÖZGÜN YDS", "DENEMELERİ"], exam: "YDS · SET 1", subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 1–5", tagline: "80 SORU · 180 DAKİKA · TÜRKÇE ÇÖZÜMLÜ", accent: "#ffb15c", facts: ["5 tam deneme", "400 özgün soru", "Her soruya çözüm"], art: denemeArt(1),
+    back: { blurb: "Sınav gününden önce sınavı defalarca yaşa. Bu set, YDS'nin soru sırasını ve süresini birebir izleyen, tamamı Netfener için yazılmış beş tam deneme içerir: kelime, dil bilgisi, cloze, cümle tamamlama, çeviri, okuma, diyalog, yakın anlam, paragraf tamamlama ve anlam bütünlüğü.", stats: [["5", "tam deneme"], ["400", "özgün soru"], ["80", "soru / 180 dk"]], list: "Her deneme için optik cevap kâğıdı · Cevap anahtarları · Puan ve net takip tablosu · Her soru için Türkçe çözüm ve çeldirici açıklaması" },
+  },
+  {
+    slug: "yds-denemeleri-set-2", title: ["ÖZGÜN YDS", "DENEMELERİ"], exam: "YDS · SET 2", subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 6–10", tagline: "80 SORU · 180 DAKİKA · TÜRKÇE ÇÖZÜMLÜ", accent: "#c9a8ff", facts: ["5 tam deneme", "400 özgün soru", "Her soruya çözüm"], art: denemeArt(6),
+    back: { blurb: "Set 1'in devamı: yine YDS'nin soru sırasını ve süresini birebir izleyen, tamamı Netfener için yazılmış beş yeni tam deneme. Okuma parçaları bilimden tarihe, psikolojiden ekonomiye uzanır; her soru Türkçe çözüm ve çeldirici açıklamasıyla gelir.", stats: [["5", "tam deneme"], ["400", "özgün soru"], ["80", "soru / 180 dk"]], list: "Her deneme için optik cevap kâğıdı · Cevap anahtarları · Puan ve net takip tablosu · Her soru için Türkçe çözüm ve çeldirici açıklaması" },
+  },
 ];
 
 export const COVER_CSS = `

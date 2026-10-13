@@ -80,6 +80,26 @@ export const NETFENER_EBOOKS = [
     filename: "netfener-yokdil-sosyal.pdf",
     exams: ["yokdil-sosyal-bilimler"],
   },
+  {
+    slug: "yds-denemeleri-set-1",
+    title: "Özgün YDS Denemeleri Set 1",
+    subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 1–5",
+    description: "YDS'nin soru sırasını ve süresini birebir izleyen, tamamı Netfener için yazılmış 5 tam deneme: 400 özgün soru, her deneme için cevap kâğıdı, cevap anahtarları, net ve puan takip tablosu ve her soru için Türkçe çözüm.",
+    pages: 86,
+    cover: "/ebooks/covers/yds-denemeleri-set-1.jpg",
+    filename: "netfener-yds-denemeleri-set-1.pdf",
+    exams: ["yds"],
+  },
+  {
+    slug: "yds-denemeleri-set-2",
+    title: "Özgün YDS Denemeleri Set 2",
+    subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 6–10",
+    description: "Set 1'in devamı: YDS formatında 5 yeni tam deneme ve 400 özgün soru. Bilimden tarihe, psikolojiden ekonomiye okuma parçaları; cevap kâğıtları, cevap anahtarları ve her soru için Türkçe çözüm.",
+    pages: 83,
+    cover: "/ebooks/covers/yds-denemeleri-set-2.jpg",
+    filename: "netfener-yds-denemeleri-set-2.pdf",
+    exams: ["yds"],
+  },
 ] as const;
 
 export type NetfenerEbook = (typeof NETFENER_EBOOKS)[number];

@@ -2,7 +2,9 @@ import { viewerExamAccess } from "@/server/services/exam-access";
 import { canOpenExam } from "@/lib/exam-interests";
 import { OutsideInterestsNotice } from "@/components/exam-interests/OutsideInterestsNotice";
 import { NetfenerEbooks } from "@/components/resources/NetfenerEbooks";
-import { getEbookOffers } from "@/server/services/ebooks.service";
+import { getBundleOffers, getEbookOffers } from "@/server/services/ebooks.service";
+import { DenemeSetShowcase } from "@/components/resources/DenemeSetShowcase";
+import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { netfenerEbooksForExam } from "@/lib/netfener-ebooks";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -37,7 +39,12 @@ export default async function ResourceListPage({ params }: Props) {
   const user = await getAuthContext();
   const access = await getPlanAccess(user);
   const items = await listResources(type.slug, exam.slug, user, access);
-  const bundledBooks = type.slug === "e-kitaplar" ? netfenerEbooksForExam(exam.slug) : [];
+  // PDF Denemeler for YDS also sells the two "Özgün YDS Denemeleri" books.
+  const denemeSets = type.slug === "pdf-denemeler" && exam.slug === "yds";
+  const bundledBooks = type.slug === "e-kitaplar"
+    ? netfenerEbooksForExam(exam.slug)
+    : denemeSets ? ["yds-denemeleri-set-1", "yds-denemeleri-set-2"].map((slug) => findNetfenerEbook(slug)!) : [];
+  const bundleOffers = denemeSets ? await getBundleOffers() : {};
   const offers = bundledBooks.length ? await getEbookOffers(user?.id) : {};
   const needsLogin = type.slug === "kayitli-kaynaklar" && !user;
 
@@ -48,6 +55,7 @@ export default async function ResourceListPage({ params }: Props) {
         <p className="eyebrow">{type.label}</p>
         <h1 className="page-title">{exam.label}</h1>
       </PageHero>
+      {denemeSets ? <DenemeSetShowcase offer={bundleOffers["set-yds-10-deneme"]} /> : null}
       <NetfenerEbooks books={bundledBooks} signedIn={Boolean(user)} offers={offers} />
       {needsLogin ? (
         <div className="panel mt-8 text-center">
