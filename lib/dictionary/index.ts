@@ -222,19 +222,32 @@ export function suggest(query: string, limit = 8) {
   return [...new Map(scored.sort((a, b) => a.d - b.d || a.term.length - b.term.length).map((s) => [s.term, s])).keys()].slice(0, limit);
 }
 
-/** Autocomplete: headwords and Turkish terms starting with what's typed (accent-insensitive). */
+/**
+ * Autocomplete: headwords and Turkish terms starting with what's typed (accent-insensitive).
+ * Turkish letters in the prefix ("teş") mean a Turkish search, so Turkish terms come first.
+ */
 export function complete(prefix: string, limit = 8) {
   const idx = dictionary();
   const p = fold(prefix);
   if (!p) return [];
+  const turkishFirst = /[çğıöşüÇĞİÖŞÜ]/.test(prefix);
+  const exact = normalise(prefix);
+  const pick = (keys: string[], lang: "en" | "tr", out: { term: string; lang: "en" | "tr" }[]) => {
+    // Exact-spelling matches before accent-folded ones ("teş" → teşhis before tesis).
+    const hits = keys.filter((term) => fold(term).startsWith(p));
+    hits.sort((a, b) => Number(!a.startsWith(exact)) - Number(!b.startsWith(exact)));
+    for (const term of hits) {
+      if (out.length >= limit) break;
+      if (!out.some((o) => o.term === term)) out.push({ term, lang });
+    }
+  };
   const out: { term: string; lang: "en" | "tr" }[] = [];
-  for (const term of idx.enKeys) {
-    if (fold(term).startsWith(p)) out.push({ term, lang: "en" });
-    if (out.length >= limit) return out;
-  }
-  for (const term of idx.trKeys) {
-    if (fold(term).startsWith(p) && !out.some((o) => o.term === term)) out.push({ term, lang: "tr" });
-    if (out.length >= limit) break;
+  if (turkishFirst) {
+    pick(idx.trKeys, "tr", out);
+    pick(idx.enKeys, "en", out);
+  } else {
+    pick(idx.enKeys, "en", out);
+    pick(idx.trKeys, "tr", out);
   }
   return out;
 }

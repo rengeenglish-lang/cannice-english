@@ -46,6 +46,9 @@ test("typos get suggestions; autocomplete matches prefixes", () => {
   assert.ok(suggest("hypotesis").includes("hypothesis"));
   assert.ok(complete("hypo").some((c) => c.term === "hypothesis"));
   assert.ok(complete("öğren").some((c) => c.lang === "tr"));
+  assert.equal(complete("teş")[0].lang, "tr", "Turkish letters put Turkish terms first");
+  assert.ok(complete("teş").some((c) => c.term.startsWith("teşhis")));
+  assert.equal(complete("tes")[0].lang, "en");
   assert.equal(editDistance("kitten", "sitting", 3), 3);
 });
 
