@@ -48,6 +48,7 @@ import {
   type LucideIcon,
   Hourglass,
   Star,
+  Languages,
   Wallet,
   GraduationCap,
 } from "lucide-react";
@@ -57,42 +58,90 @@ import { Logo } from "@/components/brand/Logo";
 
 type Role = "STUDENT" | "TEACHER" | "ADMIN" | "SUPER_ADMIN";
 
+type NavItem = { href: string; label: string; icon: LucideIcon };
+type StudentGroup = { key: string; label: string; hint: string; items: NavItem[]; startClosed?: boolean };
+
 /**
- * The learning journey (Seviye Tespit → Deneme → Pratik → İlerleme → Hatalarım) is always shown:
- * each page handles a missing goal or plan itself (goal prompt / plan cards), so hiding the
- * links would only hide the way in. Konuşma pratiği only applies to IELTS/TOEFL-style exams, so it
- * is dropped once the student's goal is a YDS/YÖKDİL one.
+ * The student menu follows the study journey in numbered steps — start (plan + exams), learn,
+ * practise, track progress — then tools and the account. Every page handles a missing goal or plan
+ * itself, so nothing is hidden for being "too early"; Konuşma pratiği only applies to
+ * IELTS/TOEFL-style exams, so it is dropped once the student's goal is a YDS/YÖKDİL one.
  */
-function learningNav(examFamily: ExamFamily | null) {
+function studentNav(examFamily: ExamFamily | null): StudentGroup[] {
   return [
-    { href: "/dashboard", label: "Çalışma alanım", icon: Home },
-    { href: "/dashboard/sinavlarim", label: "Sınavlarım", icon: Hourglass },
-    { href: "/dashboard/kocluk", label: "Ücretsiz Koçluk", icon: Compass },
-    { href: "/dashboard/kelime-motoru", label: "Kelime Motoru", icon: Layers },
-    { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
-    { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
-    { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },
-    { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
-    { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
-    { href: "/dashboard/practice", label: "Pratik Bankası", icon: ListChecks },
-    { href: "/dashboard/hedeflerim", label: "Hedef Geçmişim", icon: Target },
-    { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
-    { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
-    { href: "/dashboard/sertifikalarim", label: "Sertifikalarım", icon: Award },
-    { href: "/dashboard/yazma-geri-bildirim", label: "Yazma geri bildirimi", icon: PenLine },
-    ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
-    { href: "/kaynaklar", label: "Kaynaklar", icon: ShoppingBag },
-    { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
+    {
+      key: "start",
+      label: "1 · BAŞLA",
+      hint: "Sınavını seç, planını kur",
+      items: [
+        { href: "/dashboard", label: "Çalışma alanım", icon: Home },
+        { href: "/dashboard/sinavlarim", label: "Sınavlarım", icon: Hourglass },
+        { href: "/seviye-tespit", label: "Seviye Tespit", icon: ClipboardCheck },
+        { href: "/dashboard/kocluk", label: "Ücretsiz Koçluk", icon: Compass },
+      ],
+    },
+    {
+      key: "learn",
+      label: "2 · ÖĞREN",
+      hint: "Konular, dersler ve kelimeler",
+      items: [
+        { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },
+        { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
+        { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
+        { href: "/dashboard/kelime-motoru", label: "Kelime Motoru", icon: Layers },
+      ],
+    },
+    {
+      key: "practice",
+      label: "3 · PRATİK YAP",
+      hint: "Soru çöz, deneme çöz, konuş, yaz",
+      items: [
+        { href: "/dashboard/practice", label: "Pratik Bankası", icon: ListChecks },
+        { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
+        ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
+        { href: "/dashboard/speaking-club", label: "Speaking Club", icon: Users },
+        { href: "/dashboard/yazma-geri-bildirim", label: "Yazma geri bildirimi", icon: PenLine },
+      ],
+    },
+    {
+      key: "progress",
+      label: "4 · İLERLEMEM",
+      hint: "Nerede olduğunu gör, hatalarından öğren",
+      items: [
+        { href: "/dashboard/progress", label: "İlerleme Raporu", icon: TrendingUp },
+        { href: "/dashboard/hatalarim", label: "Hatalarım", icon: History },
+        { href: "/dashboard/hedeflerim", label: "Hedef Geçmişim", icon: Target },
+        { href: "/dashboard/sertifikalarim", label: "Sertifikalarım", icon: Award },
+      ],
+    },
+    {
+      key: "tools",
+      label: "ARAÇLAR",
+      hint: "Sözlük, kaynaklar, puan hesaplama",
+      startClosed: true,
+      items: [
+        { href: "/sozluk", label: "Sözlük", icon: Languages },
+        { href: "/kaynaklar", label: "Kaynaklar", icon: ShoppingBag },
+        { href: "/tools/score-calculator", label: "Puan hesaplama", icon: Calculator },
+      ],
+    },
+    {
+      key: "account",
+      label: "HESABIM",
+      hint: "Bildirimler, mesajlar, siparişler",
+      startClosed: true,
+      items: ACCOUNT,
+    },
   ];
 }
 const NOTIFICATIONS_HREF = "/dashboard/notifications";
-const ACCOUNT = [
+const ACCOUNT: NavItem[] = [
   { href: NOTIFICATIONS_HREF, label: "Bildirimlerim", icon: Bell },
-  { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
+  { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
   { href: "/dashboard/orders", label: "Siparişlerim", icon: ShoppingBag },
   { href: "/dashboard/favoriler", label: "Favorilerim", icon: Heart },
   { href: "/dashboard/davet", label: "Arkadaşını davet et", icon: Gift },
-  { href: "/dashboard/mesajlar", label: "Mesajlarım", icon: MessageCircle },
+  { href: "/dashboard/profile", label: "Hesap bilgilerim", icon: UserRound },
   { href: "/yardim", label: "Yardım Masası", icon: HelpCircle },
 ];
 /** Admin pages grouped by job; `adminOnly` pages are hidden from teachers. */
@@ -192,6 +241,24 @@ function SidebarContent({
       else next.add(label);
       return next;
     });
+  // Student groups: steps 1–4 start open, Araçlar / Hesabım start folded; the reader's choice wins.
+  const [closedStudent, setClosedStudent] = useState<Set<string>>(() => new Set());
+  const [openedStudent, setOpenedStudent] = useState<Set<string>>(() => new Set());
+  const toggleStudent = (key: string, isOpen: boolean) => {
+    const add = (set: Set<string>) => new Set(set).add(key);
+    const remove = (set: Set<string>) => {
+      const next = new Set(set);
+      next.delete(key);
+      return next;
+    };
+    if (isOpen) {
+      setClosedStudent(add);
+      setOpenedStudent(remove);
+    } else {
+      setClosedStudent(remove);
+      setOpenedStudent(add);
+    }
+  };
   const active = (href: string) =>
     !href.includes("#") &&
     (pathname === href ||
@@ -207,35 +274,54 @@ function SidebarContent({
       >
         <Logo size={40} tone="dark" subtitle={isAdmin ? "Yönetim paneli" : "Öğrenme alanınız"} />
       </Link>
-      <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className={isAdmin ? "space-y-4" : "space-y-6"}>
-        {(isAdmin ? [] : [
-          { label: "ÖĞRENME", items: learningNav(examFamily) },
-          { label: "HESABINIZ", items: ACCOUNT },
-        ]).map((group) => (
-          <div key={group.label}>
-            <p className="mb-2 px-3 text-[10px] font-bold tracking-widest text-blue-200/80">
-              {group.label}
-            </p>
-            <div className="space-y-1">
-              {group.items.map(({ href, label, icon: Icon }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={onNavigate}
-                  aria-current={active(href) ? "page" : undefined}
-                  className={
-                    "dashboard-nav-item " +
-                    (active(href) ? "dashboard-nav-item-active" : "")
-                  }
-                >
-                  <Icon size={18} aria-hidden="true" />
-                  {label}
-                  <UnreadBadge href={href} count={unreadCount} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+      <nav aria-label={isAdmin ? "Yönetim menüsü" : "Öğrenci menüsü"} className={isAdmin ? "space-y-4" : "space-y-3"}>
+        {isAdmin
+          ? null
+          : studentNav(examFamily).map((group) => {
+              const hasActive = group.items.some((item) => active(item.href));
+              const open = hasActive || (closedStudent.has(group.key) ? false : !group.startClosed || openedStudent.has(group.key));
+              const unreadHere = group.items.some((item) => item.href === NOTIFICATIONS_HREF) && unreadCount > 0;
+              return (
+                <div key={group.key}>
+                  <button
+                    type="button"
+                    onClick={() => toggleStudent(group.key, open)}
+                    aria-expanded={open}
+                    className="flex w-full items-start justify-between gap-2 rounded-md px-3 py-1 text-left transition hover:bg-white/5"
+                  >
+                    <span>
+                      <span className="block text-[11px] font-extrabold tracking-widest text-blue-100">{group.label}</span>
+                      <span className="block text-[11px] font-medium leading-4 text-blue-200/70">{group.hint}</span>
+                    </span>
+                    <span className="mt-0.5 flex shrink-0 items-center gap-1.5">
+                      {!open && unreadHere ? (
+                        <span className="rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-slate-900" aria-label={`${unreadCount} yeni bildirim`}>
+                          {unreadCount > 99 ? "99+" : unreadCount}
+                        </span>
+                      ) : null}
+                      <ChevronDown size={14} aria-hidden="true" className={`text-blue-200/80 transition-transform ${open ? "" : "-rotate-90"}`} />
+                    </span>
+                  </button>
+                  {open ? (
+                    <div className="mt-1 space-y-1">
+                      {group.items.map(({ href, label, icon: Icon }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={onNavigate}
+                          aria-current={active(href) ? "page" : undefined}
+                          className={"dashboard-nav-item " + (active(href) ? "dashboard-nav-item-active" : "")}
+                        >
+                          <Icon size={18} aria-hidden="true" />
+                          {label}
+                          <UnreadBadge href={href} count={unreadCount} />
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
         {role !== "STUDENT"
           ? STAFF_GROUPS.map((group) => {
               const items = group.items.filter((item) => role === "ADMIN" || role === "SUPER_ADMIN" || !item.adminOnly);
