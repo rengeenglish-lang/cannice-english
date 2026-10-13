@@ -20,7 +20,7 @@ export const HELP_FAQ: FaqCategory[] = [
       },
       {
         q: "Şifremi unuttum, ne yapmalıyım?",
-        a: "Yardım Masası üzerinden canlı destekle ya da e-postayla bize kayıtlı e-posta adresinizi iletin. Hesabın size ait olduğunu doğruladıktan sonra şifrenizi yenilemenize yardımcı oluyoruz.",
+        a: "Giriş sayfasındaki “Şifremi unuttum” bağlantısına tıklayın ve kayıtlı e-posta adresinizi yazın. Size bir şifre yenileme bağlantısı gönderiyoruz; bağlantı 1 saat geçerlidir. E-posta gelmezse spam klasörünü kontrol edin ya da canlı destekten bize yazın.",
       },
       {
         q: "Neden oturumum kapandı?",
