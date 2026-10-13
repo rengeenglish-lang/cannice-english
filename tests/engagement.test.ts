@@ -2,7 +2,19 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { db } from "../server/db";
-import { computeStreak, earnedBadges, leaderboardName, weekStartKey, weeklyPoints } from "../lib/engagement";
+import { BADGES, BADGE_TIERS, computeStreak, earnedBadges, leaderboardName, weekStartKey, weeklyPoints, type BadgeStats } from "../lib/engagement";
+
+const NONE: BadgeStats = { bestStreak: 0, tasksDone: 0, lessonsDone: 0, vocabMastered: 0, mistakesMastered: 0, testsDone: 0, certificates: 0, coachingStarted: 0, checkIns: 0, highScoreTests: 0, perfectWeeks: 0, mockTests: 0, writingDone: 0, setTestsPassed: 0 };
+
+test("badges come in four tiers, every tier has badges, keys are unique", () => {
+  assert.equal(new Set(BADGES.map((b) => b.key)).size, BADGES.length);
+  for (const t of BADGE_TIERS) assert.ok(BADGES.filter((b) => b.tier === t.tier).length >= 4, t.name);
+  assert.deepEqual(earnedBadges(NONE), []);
+  assert.deepEqual(earnedBadges({ ...NONE, coachingStarted: 1, checkIns: 1, setTestsPassed: 1 }), ["coaching-start", "first-checkin", "set-test-1"]);
+  assert.deepEqual(earnedBadges({ ...NONE, perfectWeeks: 4, highScoreTests: 5, mockTests: 10 }), ["perfect-week", "quiz-master", "perfect-weeks-4", "mocks-5", "quiz-master-5", "mocks-10"]);
+  const mocks = BADGES.find((b) => b.key === "mocks-10")!;
+  assert.deepEqual(mocks.progress({ ...NONE, mockTests: 3 }), [3, 10]);
+});
 import { renderCertificateHtml, linkedInAddUrl } from "../lib/certificates/render";
 import { syncCertificates, certificatePdf } from "../server/services/certificates.service";
 import { syncEngagement, weeklyLeaderboard } from "../server/services/engagement.service";
@@ -33,7 +45,7 @@ test("weeks start Monday in Istanbul; names on the board are opt-in", () => {
   assert.equal(leaderboardName("ali içten", true), "ali İ.");
   assert.equal(leaderboardName("Ayşe Yılmaz", false), "Netfener öğrencisi");
   assert.equal(weeklyPoints({ tasks: 2, lessons: 3, tests: 1, mistakes: 4, vocab: 10 }), 20 + 15 + 20 + 8 + 10);
-  assert.deepEqual(earnedBadges({ bestStreak: 7, tasksDone: 1, lessonsDone: 10, vocabMastered: 0, mistakesMastered: 0, testsDone: 0, certificates: 0 }), ["first-task", "streak-3", "streak-7", "lessons-10"]);
+  assert.deepEqual(earnedBadges({ ...NONE, bestStreak: 7, tasksDone: 1, lessonsDone: 10 }), ["first-task", "streak-3", "lessons-10", "streak-7"]);
 });
 
 test("certificate HTML and LinkedIn link carry the right details", () => {
