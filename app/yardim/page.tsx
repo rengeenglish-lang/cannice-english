@@ -4,6 +4,7 @@ import { LifeBuoy, Mail, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/ui/PageHero";
 import { OpenLiveChatButton } from "@/components/support/LiveChatWidget";
 import { HELP_FAQ } from "@/content/help-faq";
+import { HelpGallery } from "@/components/support/HelpGallery";
 import { SUPPORT_EMAIL } from "@/lib/social";
 
 export const metadata: Metadata = {
@@ -41,32 +42,7 @@ export default function HelpDeskPage() {
         </div>
       </div>
 
-      <nav aria-label="SSS kategorileri" className="mt-10 flex flex-wrap gap-2">
-        {HELP_FAQ.map((category) => (
-          <a key={category.key} href={`#${category.key}`} className="rounded-full border border-[color:var(--border-strong)] bg-white px-4 py-2 text-sm font-bold text-slate-600 hover:border-[color:var(--brand)]">
-            {category.title}
-          </a>
-        ))}
-      </nav>
-
-      <div className="mt-8 space-y-10">
-        {HELP_FAQ.map((category) => (
-          <section key={category.key} id={category.key} className="scroll-mt-24" aria-labelledby={`${category.key}-title`}>
-            <h2 id={`${category.key}-title`} className="section-title !text-xl">{category.title}</h2>
-            <div className="mt-4 space-y-3">
-              {category.items.map((item) => (
-                <details key={item.q} className="panel group">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-5 font-bold">
-                    {item.q}
-                    <span className="text-xl text-[color:var(--accent)] transition group-open:rotate-45" aria-hidden="true">+</span>
-                  </summary>
-                  <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">{item.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      <HelpGallery categories={HELP_FAQ} />
 
       <p className="mt-10 text-sm leading-7 text-[color:var(--muted)]">
         Ayrıntılı koşullar için <Link href="/legal/iade-politikasi" className="font-bold underline">İade Politikası</Link>,{" "}
