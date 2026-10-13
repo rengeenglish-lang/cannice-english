@@ -1,4 +1,5 @@
 import "server-only";
+import { approveCommercialOrder } from "./commercial-checkout.service";
 import { db } from "@/server/db";
 import { notify, withdrawNotification } from "@/server/services/notifications.service";
 import { grantPlanForOrderItem } from "@/server/services/plans.service";
@@ -10,7 +11,8 @@ import { sendOrderPaid } from "@/server/services/transactional-email.service";
 import { issueInvoiceForOrder, syncInvoiceToDrive, voidInvoiceForOrder } from "@/server/services/invoices.service";
 import { rewardReferrer } from "@/server/services/referrals.service";
 
-export function listOrders() {
+export async function listOrders(actorId: string) {
+  await assertAdministrator(actorId);
   return db.order.findMany({
     orderBy: { createdAt: "desc" },
     include: { items: true, payment: true, user: { select: { name: true, email: true } } },
@@ -46,16 +48,43 @@ export function listPrintOrders() {
   });
 }
 
-export async function markOrderPaid(orderId: string, opts?: { providerRef?: string }) {
+async function assertAdministrator(actorId: string) {
+  const actor = await db.user.findUnique({ where: { id: actorId } });
+  if (!actor?.isActive || !["ADMIN", "SUPER_ADMIN"].includes(actor.role)) throw new Error("Ödeme yönetimi için yönetici yetkisi gerekiyor.");
+}
+
+/**
+ * Marks an order paid and delivers what was bought. Called by PayPal capture and free (100%
+ * coupon) checkouts without an actor, and by the admin panel with `actorId` — admin approvals
+ * are administrator-only and audited. Membership / programme orders (commercialKind) go through
+ * their own seat-aware approval instead.
+ */
+export async function markOrderPaid(orderId: string, opts?: { providerRef?: string; actorId?: string }) {
+  if (opts?.actorId) await assertAdministrator(opts.actorId);
+  const selected = await db.order.findUniqueOrThrow({ where: { id: orderId }, select: { commercialKind: true } });
+  if (selected.commercialKind) {
+    if (!opts?.actorId) throw new Error("Üyelik ve program ödemeleri yalnızca yönetici onayıyla tamamlanır.");
+    return approveCommercialOrder(orderId, opts.actorId);
+  }
   const result = await db.$transaction(async (tx) => {
+    // Row lock: two approvals (or a capture retry and a click) can't both deliver the order.
+    await tx.$queryRaw`SELECT id FROM orders WHERE id = ${orderId} FOR UPDATE`;
     const order = await tx.order.findUniqueOrThrow({
       where: { id: orderId },
-      include: { items: { include: { product: { include: { course: true } } } } },
+      include: { payment: true, items: { include: { product: { include: { course: true } } } } },
     });
     // Idempotent: a PayPal capture retry or a double click in the admin panel must not grant a
     // second plan period or push a group lesson's paidThrough forward twice.
-    if (order.status === "PAID") return { enrolled: 0, skippedGuest: !order.userId, userId: null, slotBookings: [], renewed: [] as string[] };
+    if (order.status === "PAID") {
+      // A paid order whose payment was later refunded or reversed is not re-approved silently.
+      if (order.payment && order.payment.status !== "SUCCEEDED") throw new Error("Sipariş ödeme onayı için uygun değil.");
+      return { enrolled: 0, skippedGuest: !order.userId, userId: null, slotBookings: [], renewed: [] as string[] };
+    }
 
+    // Only an open order can be paid; a cancelled, failed or refunded one needs a new order.
+    if (order.status !== "AWAITING_PAYMENT" && order.status !== "PENDING") throw new Error("Sipariş ödeme onayı için uygun değil.");
+    if (order.items.some((item) => item.product.course?.curriculumKey || item.product.slug === "platform-premium-subscription")) throw new Error("Bu ürün için üyelik ödeme akışı gerekli.");
+    if (opts?.actorId) await tx.commercialAudit.create({ data: { actorId: opts.actorId, action: "PAYMENT_APPROVED", targetId: order.id, details: { amount: order.total.toString(), currency: order.currency } } });
     await tx.order.update({ where: { id: order.id }, data: { status: "PAID" } });
     await tx.payment.update({ where: { orderId: order.id }, data: { status: "SUCCEEDED", paidAt: new Date(), ...(opts?.providerRef ? { providerRef: opts.providerRef } : {}) } });
 

@@ -1,0 +1,593 @@
+{
+  "status": "ACADEMIC_PLAN_APPROVED",
+  "unit": "hours",
+  "categories": [
+    "Canlı öğretim",
+    "Rehberli uygulama",
+    "Simülasyon",
+    "Yapılandırılmış bağımsız çalışma",
+    "Tekrar / değerlendirme"
+  ],
+  "programmes": [
+    {
+      "name": "IELTS",
+      "modules": [
+        {
+          "title": "Başlangıç değerlendirmesi, akademik dil ve çalışma yöntemi",
+          "scope": "Seviye profili; hedef belirleme; akademik kelime defteri; dil bilgisi ve çalışma planı.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 5,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 7,
+            "Tekrar / değerlendirme": 2
+          }
+        },
+        {
+          "title": "Listening",
+          "scope": "Ana fikir, ayrıntı, harita/plan, eşleştirme ve boşluk doldurma; dinleme sonrası transkript incelemesi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 8,
+            "Tekrar / değerlendirme": 2
+          }
+        },
+        {
+          "title": "Academic Reading",
+          "scope": "Skimming/scanning; headings; True/False/Not Given; matching; çıkarım ve zaman yönetimi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Writing Task 1",
+          "scope": "Grafik, tablo, süreç ve harita; overview; veri seçimi ve karşılaştırma; taslak ve yeniden yazım.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Writing Task 2",
+          "scope": "Soru analizi; tez, paragraf ve kanıt; tutarlılık; dil doğruluğu; öğretmen geribildirimiyle revizyon; iki ek 90 dakikalık yeniden yazım–değerlendirme çalışması.",
+          "hours": {
+            "Canlı öğretim": 14,
+            "Rehberli uygulama": 13,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 9,
+            "Tekrar / değerlendirme": 9
+          }
+        },
+        {
+          "title": "Speaking Parts 1–3",
+          "scope": "Kısa yanıt, uzun konuşma ve tartışma; akıcılık, anlaşılabilirlik, örneklendirme; kayıt ve öz değerlendirme.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 7,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Süreli sınav hazırlığı ve kapanış",
+          "scope": "Bölüm denemeleri, bütünleşik deneme döngüleri, hata analizi, bireysel son tekrar ve çıkış değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 8,
+            "Rehberli uygulama": 6,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "TOEFL",
+      "modules": [
+        {
+          "title": "Akademik dil ve başlangıç profili",
+          "scope": "Başlangıç değerlendirmesi; akademik kelime, cümle yapıları, not tutma ve haftalık plan; 60 dakikalık bireysel başlangıç değerlendirmesi incelemesi.",
+          "hours": {
+            "Canlı öğretim": 8,
+            "Rehberli uygulama": 7,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 7,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Reading",
+          "scope": "Akademik ve günlük bağlamlarda okuma, anlam ilişkileri, kelime ve zaman yönetimi; görev eşlemesi yayın öncesi doğrulanacak.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Listening ve not tutma",
+          "scope": "Konuşma/ders akışını izleme; ana fikir, detay, işlev ve çıkarım; notlardan anlamı yeniden kurma.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Speaking: Listen and Repeat",
+          "scope": "Depodaki yedi tekrar görevi akışı; ses grupları, bellek, vurgu, anlaşılabilirlik ve kayıt karşılaştırması.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Speaking: Take an Interview",
+          "scope": "Depodaki dört mülakat sorusu akışı; deneyim, görüş, gerekçe ve örnek; süreli yanıt ve geribildirim.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 8,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Writing ve kaynaklardan yararlanma",
+          "scope": "Akademik yazma, cümle kurma, kısa iletişim ve gerekçelendirme; güncel görev eşlemesi ayrıca onaylanacak.",
+          "hours": {
+            "Canlı öğretim": 14,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 6
+          }
+        },
+        {
+          "title": "Sınav döngüleri ve son hazırlık",
+          "scope": "Bölüm denemeleri; mevcut güncel görevlerle bütünleşik pratik; hata günlüğü ve çıkış değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 5,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "YDS",
+      "modules": [
+        {
+          "title": "Başlangıç, gramer ve cümle çözümleme",
+          "scope": "Zamanlar, modals, passive, clauses, bağlaçlar, yapı ve anlam ilişkileri.",
+          "hours": {
+            "Canlı öğretim": 18,
+            "Rehberli uygulama": 14,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 13,
+            "Tekrar / değerlendirme": 5
+          }
+        },
+        {
+          "title": "Kelime ve akademik söz varlığı",
+          "scope": "Phrasal verbs, collocations, kelime aileleri, bağlamdan anlam; aralıklı tekrar ve kelime testleri.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 12,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Cloze test ve cümle tamamlama",
+          "scope": "Bağlam, bağlaç ve referans takibi; çeldirici analizi; süreli soru kümeleri.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 5,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Çeviri ve yakın anlam",
+          "scope": "Türkçe–İngilizce/İngilizce–Türkçe anlam eşlemesi; kapsam, olumsuzluk, nicelik ve yeniden ifade.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Paragraf, diyalog ve bütünlük",
+          "scope": "Paragraf/diyalog tamamlama, ilgisiz cümle, cohesion ve konu akışı.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Okuduğunu anlama",
+          "scope": "Ana fikir, ayrıntı, çıkarım, referans, yazar tutumu; soru sıralama ve süre yönetimi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 4,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Denemeler ve son tekrar",
+          "scope": "Onaylı YDS formatında tam/bölüm denemeleri, hata sınıflandırma, hedefli tekrar ve çıkış değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 4,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 3,
+            "Tekrar / değerlendirme": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "PTE",
+      "modules": [
+        {
+          "title": "Başlangıç, dil temeli ve dijital sınav becerileri",
+          "scope": "Seviye profili, kelime, yapı, yönerge okuma ve çalışma planı.",
+          "hours": {
+            "Canlı öğretim": 8,
+            "Rehberli uygulama": 7,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 7,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Speaking: akıcılık ve anlaşılabilirlik",
+          "scope": "Sesli okuma, tekrar, görsel anlatım ve sözlü özetleme pratiği; kayıt ve öğretmen geribildirimi; beş adet 60 dakikalık atanmış telaffuz ve kayıt karşılaştırma çalışması.",
+          "hours": {
+            "Canlı öğretim": 14,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 15,
+            "Tekrar / değerlendirme": 6
+          }
+        },
+        {
+          "title": "Writing",
+          "scope": "Özetleme, fikir geliştirme, yapı, doğruluk ve süreli yazma; yeniden yazım.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 11,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 7,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Reading",
+          "scope": "Kelime, cohesion, paragraf sıralama, boşluk doldurma ve okuduğunu anlama.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 9,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Listening",
+          "scope": "Ana fikir/ayrıntı, not tutma, dikte ve dinlenen bilgiyi yazılı/sözlü aktarma.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 3,
+            "Yapılandırılmış bağımsız çalışma": 9,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Bütünleşik beceriler ve strateji",
+          "scope": "Bir beceriden diğerine bilgi aktarımı; görev bazlı zaman yönetimi; bireysel zayıf alan çalışması.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Süreli pratik ve final",
+          "scope": "Onaylanacak PTE görev bankası ile bölüm/tam deneme döngüleri ve gelişim değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 5,
+            "Simülasyon": 10,
+            "Yapılandırılmış bağımsız çalışma": 5,
+            "Tekrar / değerlendirme": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "YÖKDİL Fen",
+      "modules": [
+        {
+          "title": "Ortak dil bilgisi ve başlangıç",
+          "scope": "Cümle çözümleme, tense, passive, clauses, bağlaçlar; başlangıç değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 16,
+            "Rehberli uygulama": 13,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 12,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Akademik ve alana özgü kelime",
+          "scope": "Ortak akademik söz varlığı; deney, ölçüm, enerji, çevre, malzeme ve bilimsel yöntem; bağlam ve kelime aileleri.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 16,
+            "Tekrar / değerlendirme": 5
+          }
+        },
+        {
+          "title": "Cloze test ve cümle tamamlama",
+          "scope": "Bağlam, bağlaç ve yapı seçimi; alana özgü soru kümeleri.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 5,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Çeviri ve anlam aktarımı",
+          "scope": "İki yönlü çeviri, anlam kapsamı ve yeniden ifade; restatement bir destek becerisidir, doğrulanmamış ayrı sınav bölümü olarak sunulmaz.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Paragraf tamamlama ve bütünlük",
+          "scope": "Bağdaşıklık, referans takibi, geçişler ve konu dışı cümle; görev kapsamı yayın öncesi kontrol edilir.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Alana özgü okuma",
+          "scope": "Deney raporları, neden–sonuç ve bilimsel bulgular; ana fikir, ayrıntı, çıkarım ve metin analizi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 4,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Süreli denemeler ve final",
+          "scope": "Fen alanı soru bankasıyla tam/bölüm denemeleri, hata analizi ve son tekrar.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 4,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 3,
+            "Tekrar / değerlendirme": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "YÖKDİL Sağlık",
+      "modules": [
+        {
+          "title": "Ortak dil bilgisi ve başlangıç",
+          "scope": "Cümle çözümleme, tense, passive, clauses, bağlaçlar; başlangıç değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 16,
+            "Rehberli uygulama": 13,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 12,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Akademik ve alana özgü kelime",
+          "scope": "Ortak akademik söz varlığı; anatomi, fizyoloji, hastalık, korunma, araştırma ve halk sağlığı; bağlam ve kelime aileleri.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 16,
+            "Tekrar / değerlendirme": 5
+          }
+        },
+        {
+          "title": "Cloze test ve cümle tamamlama",
+          "scope": "Bağlam, bağlaç ve yapı seçimi; alana özgü soru kümeleri.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 5,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Çeviri ve anlam aktarımı",
+          "scope": "İki yönlü çeviri, anlam kapsamı ve yeniden ifade; restatement bir destek becerisidir, doğrulanmamış ayrı sınav bölümü olarak sunulmaz.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Paragraf tamamlama ve bütünlük",
+          "scope": "Bağdaşıklık, referans takibi, geçişler ve konu dışı cümle; görev kapsamı yayın öncesi kontrol edilir.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Alana özgü okuma",
+          "scope": "Sağlık araştırmaları, müdahale–sonuç ilişkileri ve bulgular; ana fikir, ayrıntı, çıkarım ve metin analizi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 4,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Süreli denemeler ve final",
+          "scope": "Sağlık alanı soru bankasıyla tam/bölüm denemeleri, hata analizi ve son tekrar.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 4,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 3,
+            "Tekrar / değerlendirme": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "YÖKDİL Sosyal",
+      "modules": [
+        {
+          "title": "Ortak dil bilgisi ve başlangıç",
+          "scope": "Cümle çözümleme, tense, passive, clauses, bağlaçlar; başlangıç değerlendirmesi.",
+          "hours": {
+            "Canlı öğretim": 16,
+            "Rehberli uygulama": 13,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 12,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Akademik ve alana özgü kelime",
+          "scope": "Ortak akademik söz varlığı; eğitim, psikoloji, sosyoloji, ekonomi, tarih ve toplumsal değişim; bağlam ve kelime aileleri.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 12,
+            "Simülasyon": 0,
+            "Yapılandırılmış bağımsız çalışma": 16,
+            "Tekrar / değerlendirme": 5
+          }
+        },
+        {
+          "title": "Cloze test ve cümle tamamlama",
+          "scope": "Bağlam, bağlaç ve yapı seçimi; alana özgü soru kümeleri.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 5,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Çeviri ve anlam aktarımı",
+          "scope": "İki yönlü çeviri, anlam kapsamı ve yeniden ifade; restatement bir destek becerisidir, doğrulanmamış ayrı sınav bölümü olarak sunulmaz.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Paragraf tamamlama ve bütünlük",
+          "scope": "Bağdaşıklık, referans takibi, geçişler ve konu dışı cümle; görev kapsamı yayın öncesi kontrol edilir.",
+          "hours": {
+            "Canlı öğretim": 10,
+            "Rehberli uygulama": 9,
+            "Simülasyon": 2,
+            "Yapılandırılmış bağımsız çalışma": 6,
+            "Tekrar / değerlendirme": 3
+          }
+        },
+        {
+          "title": "Alana özgü okuma",
+          "scope": "Sosyal bilim araştırmaları, görüşler, karşılaştırmalar ve toplumsal süreçler; ana fikir, ayrıntı, çıkarım ve metin analizi.",
+          "hours": {
+            "Canlı öğretim": 12,
+            "Rehberli uygulama": 10,
+            "Simülasyon": 4,
+            "Yapılandırılmış bağımsız çalışma": 10,
+            "Tekrar / değerlendirme": 4
+          }
+        },
+        {
+          "title": "Süreli denemeler ve final",
+          "scope": "Sosyal alanı soru bankasıyla tam/bölüm denemeleri, hata analizi ve son tekrar.",
+          "hours": {
+            "Canlı öğretim": 6,
+            "Rehberli uygulama": 4,
+            "Simülasyon": 12,
+            "Yapılandırılmış bağımsız çalışma": 3,
+            "Tekrar / değerlendirme": 5
+          }
+        }
+      ]
+    }
+  ],
+  "approval": {
+    "approvedBy": "user",
+    "scope": "All seven programme module plans and hour allocations, as written",
+    "publicationStatus": "UNPUBLISHED",
+    "remainingGate": "Detailed activity/resource/assessment mapping and implementation verification"
+  }
+}
