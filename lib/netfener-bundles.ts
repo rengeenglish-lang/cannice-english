@@ -52,12 +52,22 @@ export const NETFENER_BUNDLES = [
     books: ["yokdil-sosyal", "kelimenin-izini-sur", "paragrafin-isigini-yak"],
   },
   {
+    slug: "set-yds-10-deneme",
+    title: "10 Özgün YDS Denemesi",
+    subtitle: "YDS Denemeleri Set 1 + Set 2",
+    description:
+      "YDS formatında 10 tam deneme, 800 özgün soru: iki setin tamamı, her deneme için cevap kâğıdı, cevap anahtarları ve her soru için Türkçe çözüm.",
+    books: ["yds-denemeleri-set-1", "yds-denemeleri-set-2"],
+  },
+  {
     slug: "set-netfener-kutuphanesi",
     title: "Netfener Kütüphanesi",
     subtitle: "Yedi kitabın tamamı",
     description:
       "Netfener'in bütün e-kitapları: gramer, kelime, iki ciltlik paragraf serisi ve üç YÖKDİL alan kitabı. Toplam 945 sayfa.",
-    books: NETFENER_EBOOKS.map((book) => book.slug),
+    // The deneme sets came later and are sold on their own (and as set-yds-10-deneme); adding
+    // them here would change what an already-priced bundle contains.
+    books: NETFENER_EBOOKS.filter((book) => !book.slug.startsWith("yds-denemeleri")).map((book) => book.slug),
   },
 ] as const;
 

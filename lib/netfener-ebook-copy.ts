@@ -313,6 +313,75 @@ export const NETFENER_EBOOK_PITCH: Record<string, EbookPitch> = {
     ],
     closing: "Sosyal bilimler alanında YÖKDİL'e hazırlananlar için, dil çalışmasıyla sınav pratiğini aynı kitapta birleştirir.",
   },
+
+  "yds-denemeleri-set-1": {
+    lead: "Özgün YDS Denemeleri Set 1, sınav gününden önce sınavı defalarca yaşaman için hazırlandı. Beş tam deneme YDS'nin soru türlerini, sırasını ve süresini birebir izler; kitaptaki her cümle, her okuma parçası ve her soru Netfener için yazıldı.",
+    facts: [
+      { label: "Sayfa", value: "86" },
+      { label: "Tam deneme", value: "5" },
+      { label: "Özgün soru", value: "400" },
+      { label: "Süre", value: "180 dk / deneme" },
+    ],
+    sections: [
+      {
+        title: "Sınavın kendisi gibi: 80 soru, 180 dakika",
+        body: "Her deneme YDS'nin soru türlerini gerçek sınavdaki sırayla verir. Açılış sayfasındaki tablo, hangi bölüme kaç dakika ayırman gerektiğini gösterir; testi tek oturumda çözüp cevaplarını ayrı bir cevap kâğıdına işaretlersin.",
+        bullets: [
+          "1–6 kelime ve phrasal verb · 7–16 dil bilgisi · 17–26 iki cloze metni",
+          "27–36 cümle tamamlama · 37–42 İngilizce ⇄ Türkçe çeviri",
+          "43–62 beş okuma parçası, her birine dört soru",
+          "63–67 diyalog · 68–71 yakın anlam · 72–75 paragraf tamamlama · 76–80 anlam bütünlüğü",
+        ],
+      },
+      {
+        title: "Tamamen özgün 400 soru",
+        body: "Sorular ÖSYM sınavlarından ya da başka yayınlardan alınmadı. Okuma parçaları uyku biliminden kentsel bahçelere, ahtapotların zekâsından Rosetta Taşı'na uzanır; kelime ve dil bilgisi soruları sınavda en sık sınanan yapıları ölçer.",
+      },
+      {
+        title: "Her sorunun neden'i Türkçe",
+        body: "Kitabın son bölümü 400 sorunun tamamını tek tek açıklar: doğru seçeneğin hangi ipucuna dayandığı ve en güçlü çeldiricinin neden yanlış olduğu. Yanlış yaptığın soruyu çözümü okuduktan sonra yeniden çözmek, bir sonraki denemede aynı hatayı yapmamanı sağlar.",
+      },
+      {
+        title: "Cevap kâğıdı, anahtar ve puan takibi",
+        body: "Her denemenin sonunda optik form düzeninde bir cevap kâğıdı, kitabın sonunda beş denemenin cevap anahtarları ve bölüm bölüm net takip tablosu bulunur. Puanını ÖSYM kuralıyla (her doğru 1,25 puan, yanlış götürmez) hesaplayıp denemeden denemeye ilerlemeni görürsün.",
+      },
+    ],
+    closing: "YDS'ye girmeden önce süreyi, soru sırasını ve kendi zayıf bölümünü tanımak isteyenler için.",
+  },
+  "yds-denemeleri-set-2": {
+    lead: "Özgün YDS Denemeleri Set 2, Set 1'in kaldığı yerden devam eder: YDS'nin soru sırasını ve süresini birebir izleyen beş yeni tam deneme. Kitaptaki her cümle, her okuma parçası ve her soru Netfener için yazıldı; ilk setle hiçbir soru ya da metin tekrar etmez.",
+    facts: [
+      { label: "Sayfa", value: "83" },
+      { label: "Tam deneme", value: "5" },
+      { label: "Özgün soru", value: "400" },
+      { label: "Süre", value: "180 dk / deneme" },
+    ],
+    sections: [
+      {
+        title: "Sınavın kendisi gibi: 80 soru, 180 dakika",
+        body: "Her deneme YDS'nin soru türlerini gerçek sınavdaki sırayla verir. Açılış sayfasındaki tablo, hangi bölüme kaç dakika ayırman gerektiğini gösterir; testi tek oturumda çözüp cevaplarını ayrı bir cevap kâğıdına işaretlersin.",
+        bullets: [
+          "1–6 kelime ve phrasal verb · 7–16 dil bilgisi · 17–26 iki cloze metni",
+          "27–36 cümle tamamlama · 37–42 İngilizce ⇄ Türkçe çeviri",
+          "43–62 beş okuma parçası, her birine dört soru",
+          "63–67 diyalog · 68–71 yakın anlam · 72–75 paragraf tamamlama · 76–80 anlam bütünlüğü",
+        ],
+      },
+      {
+        title: "Beş yeni deneme, yeni metinler",
+        body: "Okuma parçaları tohum bankalarından tuzdan arındırmaya, kriptobiyozdan Süveyş Kanalı'na, Mars keşif araçlarından konteyner taşımacılığına uzanır. Kelime, dil bilgisi ve cümle tamamlama soruları Set 1'deki yapıları farklı bağlamlarda yeniden sınar.",
+      },
+      {
+        title: "Her sorunun neden'i Türkçe",
+        body: "Kitabın son bölümü 400 sorunun tamamını tek tek açıklar: doğru seçeneğin hangi ipucuna dayandığı ve en güçlü çeldiricinin neden yanlış olduğu. Yanlış yaptığın soruyu çözümü okuduktan sonra yeniden çözmek, bir sonraki denemede aynı hatayı yapmamanı sağlar.",
+      },
+      {
+        title: "Cevap kâğıdı, anahtar ve puan takibi",
+        body: "Her denemenin sonunda optik form düzeninde bir cevap kâğıdı, kitabın sonunda beş denemenin cevap anahtarları ve bölüm bölüm net takip tablosu bulunur. Puanını ÖSYM kuralıyla (her doğru 1,25 puan, yanlış götürmez) hesaplayıp denemeden denemeye ilerlemeni görürsün.",
+      },
+    ],
+    closing: "Set 1'i bitirip sınav temposunu korumak ya da puanını bir üst seviyeye taşımak isteyenler için.",
+  },
 };
 
 export function findEbookPitch(slug: string): EbookPitch | undefined {

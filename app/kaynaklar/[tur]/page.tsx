@@ -4,6 +4,7 @@ import { NetfenerEbooks } from "@/components/resources/NetfenerEbooks";
 import { getAuthContext } from "@/server/auth/context";
 import { getEbookOffers, getBundleOffers } from "@/server/services/ebooks.service";
 import { EbookBundles } from "@/components/resources/EbookBundles";
+import { DenemeSetShowcase } from "@/components/resources/DenemeSetShowcase";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -23,7 +24,7 @@ export default async function ResourceTypePage({ params }: Props) {
   if (!type) notFound();
   const user = tur === "e-kitaplar" ? await getAuthContext() : null;
   const offers = tur === "e-kitaplar" ? await getEbookOffers(user?.id) : {};
-  const bundles = tur === "e-kitaplar" ? await getBundleOffers() : {};
+  const bundles = tur === "e-kitaplar" || tur === "pdf-denemeler" ? await getBundleOffers() : {};
   const { allowed } = await viewerExamAccess();
   return (
     <main className="inner-page mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 lg:px-8">
@@ -35,6 +36,7 @@ export default async function ResourceTypePage({ params }: Props) {
       </PageHero>
       {tur === "e-kitaplar" ? <NetfenerEbooks signedIn={Boolean(user)} offers={offers} /> : null}
       {tur === "e-kitaplar" ? <EbookBundles offers={bundles} signedIn={Boolean(user)} /> : null}
+      {tur === "pdf-denemeler" && canOpenExam(allowed, "yds") ? <DenemeSetShowcase offer={bundles["set-yds-10-deneme"]} /> : null}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {RESOURCE_EXAMS.filter((exam) => canOpenExam(allowed, exam.slug)).map((exam) => (
           <Link key={exam.slug} href={`/kaynaklar/${type.slug}/${exam.slug}`} className="panel text-lg font-extrabold transition hover:-translate-y-1 hover:border-[color:var(--brand)]">
