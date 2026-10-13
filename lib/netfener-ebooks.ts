@@ -81,6 +81,16 @@ export const NETFENER_EBOOKS = [
     exams: ["yokdil-sosyal-bilimler"],
   },
   {
+    slug: "prepositions-master-class",
+    title: "Prepositions Master Class",
+    subtitle: "YDS · YÖKDİL · IELTS · TOEFL · 567 Kalıp",
+    description: "İngilizcedeki edatların tamamı 30 ünitede: yer, zaman ve mantık edatları, sıfat, fiil ve isimlerin istediği bağımlı edatlar, sabit öbekler ve sınav tuzakları. 567 kalıp, 300 boşluk doldurma, çeldirici analizli 120 sınav sorusu ve 40 soruluk final testi.",
+    pages: 133,
+    cover: "/ebooks/covers/prepositions-master-class.jpg",
+    filename: "netfener-prepositions-master-class.pdf",
+    exams: ["yds", "yokdil-fen-bilimleri", "yokdil-sosyal-bilimler", "yokdil-saglik-bilimleri", "ielts", "toefl"],
+  },
+  {
     slug: "yds-denemeleri-set-1",
     title: "Özgün YDS Denemeleri Set 1",
     subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 1–5",

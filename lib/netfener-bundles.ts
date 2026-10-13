@@ -65,9 +65,18 @@ export const NETFENER_BUNDLES = [
     subtitle: "Yedi kitabın tamamı",
     description:
       "Netfener'in bütün e-kitapları: gramer, kelime, iki ciltlik paragraf serisi ve üç YÖKDİL alan kitabı. Toplam 945 sayfa.",
-    // The deneme sets came later and are sold on their own (and as set-yds-10-deneme); adding
-    // them here would change what an already-priced bundle contains.
-    books: NETFENER_EBOOKS.filter((book) => !book.slug.startsWith("yds-denemeleri")).map((book) => book.slug),
+    // The books the library was priced with. Later books (the prepositions book, the deneme
+    // sets) are sold on their own; adding them here would change an already-priced bundle.
+    books: [
+      "cumlenin-icini-gor",
+      "kelimenin-izini-sur",
+      "phrasal-verbs",
+      "paragrafin-isigini-yak",
+      "paragrafin-isigini-yak-cilt-2",
+      "yokdil-saglik",
+      "yokdil-fen",
+      "yokdil-sosyal",
+    ],
   },
 ] as const;
 

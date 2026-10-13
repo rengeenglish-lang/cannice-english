@@ -164,6 +164,26 @@ const denemeArt = (first: number) => (a: string) => {
   <text x="400" y="368" text-anchor="middle" font-family="Liberation Sans" font-weight="700" font-size="12" letter-spacing="3" fill="rgba(255,255,255,.65)">80 SORU · 180 DAKİKA</text>`);
 };
 
+/** A cube with a ball placed on, in, under, beside it; arrows through, around and over it. */
+const prepositionArt = (a: string) =>
+  svg(`
+  <defs><marker id="pa" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="${a}"/></marker></defs>
+  <ellipse cx="260" cy="205" rx="215" ry="62" fill="none" stroke="${a}" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#pa)"/>
+  <g transform="translate(260,200)">
+    <polygon points="0,-110 95,-60 0,-10 -95,-60" fill="rgba(255,255,255,.14)" stroke="#fff" stroke-width="2"/>
+    <polygon points="-95,-60 0,-10 0,100 -95,50" fill="rgba(255,255,255,.06)" stroke="#fff" stroke-width="2"/>
+    <polygon points="95,-60 0,-10 0,100 95,50" fill="rgba(255,255,255,.1)" stroke="#fff" stroke-width="2"/>
+    <circle cx="0" cy="-118" r="16" fill="${a}"/>
+    <circle cx="-42" cy="38" r="13" fill="none" stroke="${a}" stroke-width="3" stroke-dasharray="4 4"/>
+    <circle cx="0" cy="138" r="14" fill="${a}" opacity=".85"/>
+    <circle cx="140" cy="60" r="14" fill="${a}" opacity=".85"/>
+  </g>
+  <path d="M40 330 L470 300" stroke="${a}" stroke-width="3" marker-end="url(#pa)"/>
+  <path d="M90 70 C 170 -10, 350 -10, 430 70" fill="none" stroke="${a}" stroke-width="3" marker-end="url(#pa)"/>
+  ${[["ON", 300, 70], ["OVER", 260, 22], ["IN", 218, 282], ["UNDER", 316, 352], ["BESIDE", 452, 262], ["THROUGH", 70, 352], ["AROUND", 470, 175]]
+    .map(([t, x, y]) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="Liberation Sans" font-weight="700" font-size="14" letter-spacing="2" fill="#fff">${t}</text>`)
+    .join("")}`);
+
 export const COVERS: CoverDesign[] = [
   { slug: "cumlenin-icini-gor", title: ["CÜMLENİN", "İÇİNİ GÖR"], exam: "YDS & YÖKDİL", subtitle: "YDS ve YÖKDİL Grameri · Örüntü Tanıma ve Sınav Stratejisi", tagline: "SENTENCE X-RAY · PATTERNS · EXAM STRATEGY", accent: "#f2c14e", facts: ["17 modül", "9 adım", "144 sayfa"], art: sentenceArt },
   {
@@ -179,6 +199,10 @@ export const COVERS: CoverDesign[] = [
   { slug: "yokdil-saglik", title: ["YÖKDİL", "SAĞLIK BİLİMLERİ"], exam: "YÖKDİL SAĞLIK", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "MEDICAL TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#ff8f80", facts: ["201 özgün soru", "80 soruluk deneme", "89 sayfa"], art: healthArt },
   { slug: "yokdil-fen", title: ["YÖKDİL", "FEN BİLİMLERİ"], exam: "YÖKDİL FEN", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "SCIENTIFIC TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#7cc8ff", facts: ["155 özgün soru", "80 soruluk deneme", "100 sayfa"], art: scienceArt },
   { slug: "yokdil-sosyal", title: ["YÖKDİL", "SOSYAL BİLİMLER"], exam: "YÖKDİL SOSYAL", subtitle: "Akademik Dil ve Sınav Uygulamaları", tagline: "SOCIAL TEXTS · VOCABULARY · FULL MOCK EXAM", accent: "#f6b76b", facts: ["139 özgün soru", "80 soruluk deneme", "96 sayfa"], art: socialArt },
+  {
+    slug: "prepositions-master-class", title: ["PREPOSITIONS", "MASTER CLASS"], exam: "YDS · YÖKDİL · IELTS · TOEFL", subtitle: "Edatların tamamı: yer, zaman, mantık, kalıplar ve sınav tuzakları", tagline: "PLACE · TIME · LOGIC · PATTERNS · EXAM TRAPS", accent: "#ff8ac2", facts: ["567 kalıp", "30 ünite", "160 özgün soru"], art: prepositionArt,
+    back: { blurb: "Edatlar İngilizcenin en küçük kelimeleri ama en çok puan kaybettirenleri. Bu kitap yer, zaman ve mantık edatlarından sıfat, fiil ve isimlerin istediği bağımlı edatlara, sabit öbeklerden sınavın en klasik tuzaklarına kadar 567 kalıbı 30 ünitede, her biri Türkçe açıklama ve özgün örnek cümleyle öğretir.", stats: [["567", "kalıp"], ["30", "ünite"], ["160", "özgün soru"]], list: "Ünite başına karıştırılan ikililer · 300 boşluk doldurma · Çeldirici analizli sınav soruları · 40 soruluk final testi · Alfabetik dizin" },
+  },
   {
     slug: "yds-denemeleri-set-1", title: ["ÖZGÜN YDS", "DENEMELERİ"], exam: "YDS · SET 1", subtitle: "Gerçek sınav formatında 5 tam deneme · Deneme 1–5", tagline: "80 SORU · 180 DAKİKA · TÜRKÇE ÇÖZÜMLÜ", accent: "#ffb15c", facts: ["5 tam deneme", "400 özgün soru", "Her soruya çözüm"], art: denemeArt(1),
     back: { blurb: "Sınav gününden önce sınavı defalarca yaşa. Bu set, YDS'nin soru sırasını ve süresini birebir izleyen, tamamı Netfener için yazılmış beş tam deneme içerir: kelime, dil bilgisi, cloze, cümle tamamlama, çeviri, okuma, diyalog, yakın anlam, paragraf tamamlama ve anlam bütünlüğü.", stats: [["5", "tam deneme"], ["400", "özgün soru"], ["80", "soru / 180 dk"]], list: "Her deneme için optik cevap kâğıdı · Cevap anahtarları · Puan ve net takip tablosu · Her soru için Türkçe çözüm ve çeldirici açıklaması" },
