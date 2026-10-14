@@ -7,8 +7,15 @@
 import type { Deneme, Q } from "../content/yds-denemeler/types";
 
 const only = process.argv.slice(2).map(Number);
+import { readdirSync } from "node:fs";
+
+const available = readdirSync(new URL("../content/yds-denemeler/", import.meta.url))
+  .map((f) => /^deneme-(\d+)\.ts$/.exec(f)?.[1])
+  .filter((x): x is string => Boolean(x))
+  .map(Number)
+  .sort((a, b) => a - b);
 const mods = await Promise.all(
-  Array.from({ length: 10 }, (_, i) => i + 1)
+  available
     .filter((n) => !only.length || only.includes(n))
     .map(async (n) => {
       const id = String(n).padStart(2, "0");
