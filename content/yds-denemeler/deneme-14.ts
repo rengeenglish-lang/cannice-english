@@ -24,9 +24,9 @@ export const DENEME_14: Deneme = {
       "Bütün ormanda yalnızca üç bitki bulunması türün çok 'nadir' (rare) olduğunu gösterir. 'widespread' (yaygın) tersidir; 'vigorous' (gürbüz), 'fragrant' (güzel kokulu) ve 'resilient' (dayanıklı) sayının azlığını açıklamaz.",
     ],
     [
-      "The government has ---- plans to build a new motorway through the national park after strong protests from local residents.",
+      "The city council has ---- its proposal for a second airport runway after strong protests from people living nearby.",
       ["shelved", "implemented", "accelerated", "approved", "extended"],
-      "Yerel halkın güçlü protestolarından sonra planların 'rafa kaldırıldığı, askıya alındığı' (shelved) anlaşılır. 'implemented' (uygulamaya koydu), 'accelerated', 'approved' ve 'extended' protestoların beklenen sonucuyla çelişir.",
+      "Yakında yaşayanların güçlü protestolarından sonra önerinin 'rafa kaldırıldığı, askıya alındığı' (shelved) anlaşılır. 'implemented' (uygulamaya koydu), 'accelerated', 'approved' ve 'extended' protestoların beklenen sonucuyla çelişir.",
     ],
     [
       "The teacher asked the students to ---- any words they did not know in the dictionary before the next lesson.",
@@ -36,9 +36,9 @@ export const DENEME_14: Deneme = {
   ],
   grammar: [
     [
-      "Under no circumstances ---- to enter the laboratory without wearing protective clothing.",
+      "Under no circumstances ---- to feed the animals in the safari park, because human food can make them seriously ill.",
       ["are visitors allowed", "visitors are allowed", "visitors allowed", "do visitors allow", "have visitors been allowing"],
-      "'Under no circumstances' olumsuz bir ifade olarak cümle başında devrik yapı ister: yardımcı fiil + özne. Ziyaretçiler izin verilen kişiler olduğu için edilgen 'are visitors allowed' doğrudur. 'do visitors allow' etken anlam verir.",
+      "'Under no circumstances' olumsuz bir ifade olarak cümle başında devrik yapı ister: yardımcı fiil + özne. Ziyaretçiler (hayvanları beslemesine) izin verilen kişiler olduğu için edilgen 'are visitors allowed' doğrudur. 'do visitors allow' etken anlam verir.",
     ],
     [
       "The documents ---- by the time the auditors arrived, so there was no evidence of the missing money.",
@@ -174,15 +174,15 @@ export const DENEME_14: Deneme = {
       "'No matter how hard she tried' (ne kadar uğraşırsa uğraşsın) çabaya rağmen başarısızlık bekler: pasaportunu nereye bıraktığını hatırlayamaması. 'always managed to finish' başarıyı anlatır ve kalıpla çelişir.",
     ],
     [
-      "----, the hikers decided to turn back before reaching the summit.",
+      "----, the climbers decided to spend an extra night at the base camp.",
       [
-        "Seeing dark clouds gathering over the mountain",
-        "Although the weather was perfectly clear all morning",
-        "Unless they wanted to reach the summit before dark",
-        "So that they could enjoy the view from the top",
-        "Even if they had brought plenty of food and water",
+        "Hearing that a storm was approaching the upper slopes",
+        "Although the forecast promised clear skies for several days",
+        "Unless they wanted to reach the top before the others",
+        "So that they could see the sunrise from the summit",
+        "Even if they had carried far too little food with them",
       ],
-      "Yürüyüşçülerin zirveye varmadan dönmesinin mantıklı nedeni dağın üzerinde kara bulutların toplanmasıdır; kısaltılmış zarf cümlesi 'Seeing ...' bunu verir. Açık hava ve manzara amacı dönme kararıyla çelişir.",
+      "Dağcıların ana kampta bir gece daha kalmaya karar vermesinin mantıklı nedeni üst yamaçlara bir fırtınanın yaklaştığını duymalarıdır; kısaltılmış zarf cümlesi 'Hearing that ...' bunu verir. Açık hava ve gün doğumu amacı kararla çelişir.",
     ],
     [
       "The novel has been translated into more than forty languages ----.",
@@ -683,15 +683,15 @@ export const DENEME_14: Deneme = {
   ],
   paragraph: [
     [
-      "Archaeologists excavating ancient Egyptian tombs have found pots of honey that are thousands of years old and still perfectly edible. ---- Its sugar content is so high, and its water content so low, that bacteria and fungi cannot survive in it. In addition, bees add an enzyme that produces small amounts of hydrogen peroxide, which further protects the honey from microbes.",
+      "In 1912, a book dealer named Wilfrid Voynich bought a strange handwritten volume that had been kept for centuries in an Italian college. ---- Despite more than a hundred years of effort by code-breakers, linguists and computer scientists, nobody has managed to read a single sentence of it. Some researchers believe it is an elaborate hoax, while others are convinced that it records a real but forgotten language.",
       [
-        "Honey owes this remarkable resistance to decay to its unusual chemistry.",
-        "Ancient Egyptians also used honey to treat wounds and burns.",
-        "Beekeeping is one of the oldest forms of agriculture in the world.",
-        "Many people today prefer honey to sugar because it tastes sweeter.",
-        "Some tombs also contained jewellery, furniture and paintings.",
+        "Its pages were filled with drawings of unknown plants and with text in an alphabet found nowhere else.",
+        "Italian colleges in the Middle Ages often owned large collections of books.",
+        "Voynich later moved to the United States and opened a bookshop in New York.",
+        "Many medieval manuscripts were written on parchment made from animal skin.",
+        "Code-breaking played an important role in both world wars.",
       ],
-      "Boşluktan önce bin yıllık balın hâlâ yenebilir olduğu, sonra yüksek şeker ve düşük su oranının mikropları engellediği anlatılır; boşluğa balın bozulmaya karşı direncini kimyasına bağlayan geçiş cümlesi gelmelidir. 'Its sugar content' ifadesindeki 'Its' de bala gönderme yapar.",
+      "Boşluktan sonraki 'nobody has managed to read a single sentence of it' cümlesi kitabın okunamaz olduğunu söyler; boşluğa kitabın bilinmeyen bitki çizimleri ve hiçbir yerde görülmeyen bir alfabeyle dolu olduğunu tanıtan cümle gelmelidir.",
     ],
     [
       "The city of Venice is built on more than a hundred small islands in a shallow lagoon. ---- These wooden supports have survived for centuries because they are completely surrounded by water and mud, which keep out the oxygen that would otherwise allow them to rot.",
@@ -744,7 +744,7 @@ export const DENEME_14: Deneme = {
         "Fast fashion has made clothing cheaper and more accessible than ever before.",
         "Cotton was one of the most important crops in the history of world trade.",
         "However, the environmental costs of producing so many garments are enormous.",
-        "The industry uses vast amounts of water and is responsible for a significant share of global carbon emissions.",
+        "The industry uses vast amounts of water and produces a large proportion of the world's greenhouse gases.",
         "Moreover, millions of tonnes of clothing are thrown away each year, much of it after being worn only a few times.",
       ],
       odd: 1,
@@ -755,11 +755,11 @@ export const DENEME_14: Deneme = {
         "Many people experience a drop in energy in the early afternoon.",
         "This is often blamed on a heavy lunch, but the main cause is actually the body's internal clock.",
         "Our natural rhythm includes a dip in alertness about seven or eight hours after we wake up.",
-        "Breakfast is often described as the most important meal of the day.",
+        "Many office workers drink several cups of coffee before midday.",
         "Some companies now allow employees to take short naps after lunch to counter this effect.",
       ],
       odd: 3,
-      why: "Parça öğleden sonraki enerji düşüşünü ve nedenini anlatır. Kahvaltının günün en önemli öğünü olarak tanımlandığını söyleyen IV. cümle bu konudan sapar.",
+      why: "Parça öğleden sonraki enerji düşüşünü ve nedenini anlatır. Pek çok ofis çalışanının öğleden önce birkaç fincan kahve içtiğini söyleyen IV. cümle bu konudan sapar.",
     },
     {
       sentences: [

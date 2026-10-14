@@ -152,15 +152,15 @@ export const DENEME_12: Deneme = {
   ],
   completion: [
     [
-      "If people were more aware of how much food is wasted every year, ----.",
+      "If more drivers realised how much fuel is wasted by engines left running while parked, ----.",
       [
-        "they might think twice before throwing away leftovers",
-        "they had already reduced the amount they threw away",
-        "supermarkets will lower the price of fresh vegetables",
-        "food waste would have fallen dramatically last year",
-        "farmers produce more food than the world needs",
+        "they might switch off their engines instead of waiting with them on",
+        "they had already bought electric cars before the new law was passed",
+        "petrol stations will lower their prices for all drivers next month",
+        "fuel consumption would have fallen sharply during the previous winter",
+        "car manufacturers produce more efficient engines every single year",
       ],
-      "İkinci tip koşul (If + were) ana cümlede 'would/might + yalın fiil' ister: 'they might think twice'. 'had already reduced' ve 'will lower' zaman uyumunu bozar; 'would have fallen' üçüncü tip koşula aittir.",
+      "İkinci tip koşul (If + realised) ana cümlede 'would/might + yalın fiil' ister: 'they might switch off their engines'. 'had already bought' ve 'will lower' zaman uyumunu bozar; 'would have fallen' üçüncü tip koşula aittir.",
     ],
     [
       "Although the ancient city was rediscovered in the nineteenth century, ----.",
@@ -624,28 +624,28 @@ export const DENEME_12: Deneme = {
       "Hakan 'Kimse o saatlerde uzun süre çalışamaz' der; demek ki Sevgi çok uzun saatler çalıştığından söz etmiştir. Tatil, iyi uyku ya da izin Hakan'ın tavsiyesiyle uyuşmaz.",
     ],
     [
-      "Teacher: Your essay has some excellent ideas, but the structure needs work.\nStudent: What do you mean exactly?\nTeacher: ----\nStudent: That's helpful. I'll make an outline before I start writing next time.",
+      "Coach: Your serve has improved a lot, but your footwork still needs attention.\nPlayer: What do you mean exactly?\nCoach: ----\nPlayer: That makes sense. I'll practise moving my feet into position before each shot.",
       [
-        "Your arguments are scattered, so the reader can't easily follow how one point leads to the next.",
-        "You used far too many difficult words that the average reader might not be able to understand.",
-        "Your handwriting was very difficult to read in some places.",
-        "You handed it in two days after the deadline.",
-        "You should read more books by famous authors.",
+        "You're often standing still when the ball arrives, so you end up stretching for it.",
+        "Your racket is probably a little too heavy for someone of your height and build.",
+        "You should drink more water during long matches, especially in the summer heat.",
+        "You arrived late for the last two training sessions without telling anyone.",
+        "You ought to watch more professional matches on television in your free time.",
       ],
-      "Öğrencinin 'bir dahaki sefere yazmaya başlamadan önce taslak çıkaracağım' cevabı sorunun yapıyla, yani argümanların dağınık olmasıyla ilgili olduğunu gösterir. Kelime seçimi, el yazısı ya da teslim tarihi taslakla çözülmez.",
+      "Oyuncunun 'Her vuruştan önce ayaklarımı pozisyona getirmeyi çalışacağım' cevabı sorunun ayak hareketleriyle, yani topun gelişinde hareketsiz kalmakla ilgili olduğunu gösterir. Raket, su ya da gecikme bu çözümle ilgisizdir.",
     ],
   ],
   restatement: [
     [
-      "The museum is so popular that visitors are advised to book their tickets at least a week in advance.",
+      "The restaurant is so busy at weekends that diners are advised to reserve a table several days ahead.",
       [
-        "Because so many people visit the museum, it is recommended that tickets be booked a week or more beforehand.",
-        "Visitors who book their tickets a week or more in advance pay considerably less to enter the museum.",
-        "The museum has become popular since it started selling tickets in advance.",
-        "Although the museum is popular, tickets can usually be bought on the day of the visit.",
-        "Visitors must book a week in advance, or they will not be allowed into the museum.",
+        "Because the restaurant is crowded at weekends, booking a table a few days early is recommended.",
+        "Diners who reserve a table several days ahead pay considerably less for their meals.",
+        "The restaurant has become busy at weekends since it started taking reservations.",
+        "Although the restaurant is busy, tables are usually free on the day itself at weekends.",
+        "Diners must reserve several days ahead, or they will not be served at all.",
       ],
-      "'so ... that' yapısı neden-sonuç ilişkisi kurar: müze çok popüler olduğu için en az bir hafta önceden bilet alınması tavsiye edilir. Son seçenek tavsiyeyi zorunluluğa çevirir; diğerleri farklı ilişkiler kurar.",
+      "'so ... that' yapısı neden-sonuç ilişkisi kurar: restoran hafta sonları çok kalabalık olduğu için birkaç gün önceden yer ayırtmak tavsiye edilir. Son seçenek tavsiyeyi zorunluluğa çevirir; diğerleri farklı ilişkiler kurar.",
     ],
     [
       "No sooner had the new policy been introduced than employees began to complain about it.",
@@ -670,15 +670,15 @@ export const DENEME_12: Deneme = {
       "'unlikely ... unless more staff are hired' = 'daha fazla personel alınmazsa projenin zamanında bitmesi olası değil'. İlk seçenek 'if no additional staff are employed' ile aynı koşulu verir. Diğerleri anlamı tersine çevirir ya da zamanı değiştirir.",
     ],
     [
-      "The author's second novel was not nearly as successful as her first one.",
+      "The sequel was not nearly as well received by audiences as the original film.",
       [
-        "The author's first novel was far more successful than her second.",
-        "The author's second novel was almost as successful as her first one.",
-        "Both of the author's novels were equally successful.",
-        "The author's second novel was slightly more successful than her first.",
-        "The author's first novel was not successful at all.",
+        "Audiences liked the original film far more than its sequel.",
+        "The sequel was received almost as warmly as the original film.",
+        "Audiences enjoyed both films to exactly the same degree.",
+        "The sequel was slightly more popular with audiences than the original.",
+        "The original film was not well received by audiences at all.",
       ],
-      "'not nearly as ... as' = 'hiç de ... kadar değil'; ikinci roman ilki kadar başarılı olmaktan çok uzaktır, yani ilk roman çok daha başarılıdır. 'almost as successful' farkı küçültür; diğerleri anlamı bozar.",
+      "'not nearly as ... as' = 'hiç de ... kadar değil'; devam filmi ilk film kadar beğenilmekten çok uzaktır, yani seyirciler ilk filmi çok daha çok sevmiştir. 'almost as warmly' farkı küçültür; diğerleri anlamı bozar.",
     ],
   ],
   paragraph: [
@@ -709,7 +709,7 @@ export const DENEME_12: Deneme = {
       [
         "A player has to read notes, keep track of rhythm and coordinate both hands at once.",
         "Many famous composers started playing music at a very young age.",
-        "The piano was invented in Italy around the year 1700.",
+        "Most concert halls keep several grand pianos for the performers who visit them.",
         "Musical instruments can be very expensive to buy and maintain.",
         "Most people prefer listening to music rather than playing it.",
       ],
@@ -730,14 +730,14 @@ export const DENEME_12: Deneme = {
   irrelevant: [
     {
       sentences: [
-        "The Dead Sea, which lies between Jordan and Israel, is one of the saltiest bodies of water on Earth.",
-        "Its high salt content makes the water so dense that people can float on its surface without any effort.",
-        "Because so few organisms can survive in such salty water, it contains almost no fish or plants.",
-        "The Red Sea is a popular destination for divers because of its colourful coral reefs.",
-        "In recent decades, the level of the Dead Sea has fallen by more than a metre a year, mainly because water from the Jordan River is used for farming.",
+        "Lake Baikal in Siberia is the oldest and deepest lake on Earth, with a maximum depth of more than one and a half kilometres.",
+        "It holds roughly a fifth of the world's unfrozen fresh surface water.",
+        "Because it has been isolated for millions of years, many of its plants and animals, including a freshwater seal, are found nowhere else.",
+        "Lake Victoria, on the other hand, is the largest lake in Africa by area.",
+        "In recent decades, pollution from industry and tourism has begun to threaten this unique ecosystem.",
       ],
       odd: 3,
-      why: "Parça Lut Gölü'nün tuzluluğunu, yüzme deneyimini, canlı yokluğunu ve su seviyesinin düşmesini anlatır. Kızıldeniz'in mercan resifleriyle dalgıçları çektiğini söyleyen IV. cümle konuyu başka bir denize kaydırır.",
+      why: "Parça Baykal Gölü'nün yaşını, derinliğini, su miktarını, kendine özgü canlılarını ve karşılaştığı tehditleri anlatır. Victoria Gölü'nün Afrika'nın en büyük gölü olduğunu söyleyen IV. cümle konuyu başka bir göle kaydırır.",
     },
     {
       sentences: [

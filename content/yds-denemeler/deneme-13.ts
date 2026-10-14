@@ -46,9 +46,9 @@ export const DENEME_13: Deneme = {
       "'together with', 'as well as' gibi ifadeler özneyi çoğullaştırmaz; fiil asıl özne olan tekil 'The research team'e uyar. Olay gelecekte olduğu için şimdiki zamanlı 'is expected' doğrudur.",
     ],
     [
-      "By the end of next year, the company ---- more than a thousand electric buses to cities across Europe.",
-      ["will have delivered", "has delivered", "had delivered", "delivers", "is delivering"],
-      "'By the end of next year' gelecekte belirli bir zamana kadar tamamlanmış olacak bir eylemi anlatır; future perfect 'will have delivered' gerekir. Present perfect ve past perfect gelecek zaman ifadesiyle uyuşmaz.",
+      "By the time the book fair closes on Sunday evening, the organisers ---- more than fifty thousand visitors.",
+      ["will have welcomed", "have welcomed", "had welcomed", "welcome", "are welcoming"],
+      "'By the time + şimdiki zaman' gelecekte belirli bir ana kadar tamamlanmış olacak bir eylemi anlatır; future perfect 'will have welcomed' gerekir. Present perfect ve past perfect gelecekteki bu zaman ifadesiyle uyuşmaz.",
     ],
     [
       "It is high time the city council ---- something about the shortage of affordable housing.",
@@ -299,15 +299,15 @@ export const DENEME_13: Deneme = {
   ],
   trEn: [
     [
-      "Uzmanlar, çocukların ekran başında geçirdiği sürenin sınırlandırılması gerektiği konusunda hemfikir değil.",
+      "Uzmanlar, çocuklara harçlık verilmesinin onların parayı yönetmeyi öğrenmesine yardımcı olup olmadığı konusunda hemfikir değil.",
       [
-        "Experts do not agree on whether the amount of time children spend in front of screens should be limited.",
-        "Experts agree that the time children spend in front of screens should be strictly limited.",
-        "Experts disagree with parents who limit the time their children spend in front of screens.",
-        "According to experts, children who spend less time in front of screens are more successful.",
-        "Experts have not yet studied how much time children spend in front of screens each day.",
+        "Experts do not agree on whether giving children pocket money helps them learn how to manage money.",
+        "Experts agree that children who receive pocket money always manage their money well.",
+        "Experts disagree with parents who refuse to give their children any pocket money.",
+        "According to experts, children should earn their pocket money by doing housework.",
+        "Experts have not yet studied how much pocket money children receive each week.",
       ],
-      "'hemfikir değil' = do not agree; 'sınırlandırılması gerektiği konusunda' = on whether ... should be limited. İkinci seçenek anlamı tersine çevirir; diğerleri ebeveynler, başarı ya da araştırma eksikliği gibi cümlede olmayan bilgiler ekler.",
+      "'hemfikir değil' = do not agree; 'yardımcı olup olmadığı konusunda' = on whether ... helps. İkinci seçenek anlamı tersine çevirir; diğerleri ebeveynler, ev işi ya da araştırma eksikliği gibi cümlede olmayan bilgiler ekler.",
     ],
     [
       "Fabrikanın kapanmasıyla birlikte kasabadaki pek çok aile geçimini sağlamak için başka şehirlere taşınmak zorunda kaldı.",
@@ -579,7 +579,7 @@ export const DENEME_13: Deneme = {
       "Pınar ek otobüsler ve şehir dışında ücretsiz park yeri olacağını söyler; bu, Oğuz'un insanların oraya nasıl ulaşacağını sormuş olduğunu gösterir. Diğer seçenekler bu cevaba yol açmaz.",
     ],
     [
-      "Patient: I've been having trouble sleeping for the past few weeks.\nDoctor: ----\nPatient: Yes, quite a lot actually. I often have three or four cups of coffee in the afternoon.",
+      "Patient: I keep waking up at about three every morning and can't get back to sleep.\nDoctor: ----\nPatient: Yes, quite a lot actually. I often have three or four cups of coffee in the afternoon.",
       [
         "Do you drink much coffee or tea later in the day?",
         "How long have you been working at your current job?",
@@ -671,26 +671,26 @@ export const DENEME_13: Deneme = {
   ],
   paragraph: [
     [
-      "Octopuses, squid and cuttlefish are able to change the colour of their skin in a fraction of a second. ---- When these cells are stretched or squeezed by tiny muscles, the pigment spreads out or shrinks, changing the animal's appearance. Some species can even alter the texture of their skin to look like rocks or seaweed.",
+      "The mantis shrimp, a small crustacean that lives on coral reefs, delivers one of the fastest punches in the animal kingdom. ---- The blow is powerful enough to crack the shells of crabs and snails, and captive mantis shrimps have even been known to break the glass of their aquariums. Engineers are now studying the structure of these limbs in order to design tougher materials.",
       [
-        "They do this using thousands of special cells that contain pigment.",
-        "These animals are found in oceans all around the world.",
-        "Octopuses are considered among the most intelligent invertebrates.",
-        "Squid are an important source of food in many countries.",
-        "Cuttlefish have a hard internal shell called a cuttlebone.",
+        "It strikes its prey with a pair of club-like limbs that shoot forward at the speed of a bullet.",
+        "Coral reefs are home to about a quarter of all marine species.",
+        "Mantis shrimps are popular with collectors because of their bright colours.",
+        "Some crabs can live for more than thirty years in the wild.",
+        "Aquariums must be cleaned regularly to keep the water healthy.",
       ],
-      "Boşluktan sonraki 'these cells' ifadesi daha önce bahsedilmiş hücrelere gönderme yapar; boşluğa renk değişiminin pigment içeren binlerce özel hücreyle yapıldığını söyleyen cümle gelmelidir.",
+      "Boşluktan önce yumruğun hızından, sonra 'The blow' ve 'these limbs' ifadeleriyle darbenin gücünden ve uzuvlardan söz edilir; boşluğa avına kurşun hızında fırlayan topuz biçimli uzuvlarla vurduğunu anlatan cümle gelmelidir.",
     ],
     [
-      "For centuries, sailors relied on the stars to find their way across the open sea. ---- Without an accurate way of measuring time at sea, however, they could not easily calculate how far east or west they had travelled. This problem was finally solved in the eighteenth century, when the clockmaker John Harrison built a clock that kept accurate time even on a rolling ship.",
+      "Before the 1840s, news could travel no faster than a horse, a train or a ship could carry it. ---- When the first cable across the Atlantic was completed in 1858, Queen Victoria and the American president exchanged greetings within hours rather than weeks. The cable failed after only three weeks, however, and a lasting connection was not established until 1866.",
       [
-        "By measuring the angle of the sun or certain stars above the horizon, they could work out how far north or south they were.",
-        "Many sailors were deeply afraid of the sea monsters that often appeared on old maps of unknown waters.",
-        "The first compasses were invented in China more than a thousand years ago.",
-        "Life on board ship was extremely hard, and many sailors fell ill.",
-        "Today, ships use satellite navigation to find their position.",
+        "The electric telegraph, which sent coded signals along wires, changed this almost overnight.",
+        "Many newspapers in the nineteenth century were sold for a single penny.",
+        "Horses were also used to deliver mail between distant towns and villages.",
+        "Queen Victoria ruled Britain for more than sixty years.",
+        "Ships crossing the Atlantic often took several weeks to reach America.",
       ],
-      "Boşluktan sonraki cümle 'however' ile doğu-batı konumunu hesaplamanın zorluğunu anlatır; boşluğa kuzey-güney konumunun nasıl bulunabildiğini açıklayan, bu zıtlığı hazırlayan cümle gelmelidir.",
+      "Boşluktan önce haberlerin at ya da gemi hızıyla sınırlı olduğu, sonra Atlantik kablosuyla mesajların saatler içinde gittiği anlatılır; boşluğa bu durumu kökten değiştiren elektrikli telgrafı tanıtan cümle gelmelidir.",
     ],
     [
       "Many people believe that the best way to learn new vocabulary is to read a list of words again and again. ---- In contrast, testing yourself, for example by trying to recall the meaning of a word before checking it, leads to much stronger long-term memory. Psychologists call this the 'testing effect'.",
@@ -704,15 +704,15 @@ export const DENEME_13: Deneme = {
       "Boşluktan sonraki 'In contrast' ifadesi kendini test etmeyi başka bir yöntemle karşılaştırır; boşluğa yalnızca tekrar okumanın etkisiz olduğunu söyleyen cümle gelmelidir.",
     ],
     [
-      "The Sahara Desert has not always been dry. Around ten thousand years ago, it was covered with grasslands, lakes and rivers that supported elephants, giraffes and hippos. ---- This climate shift was caused by small, gradual changes in the Earth's orbit, which altered the amount of sunlight reaching North Africa and weakened the seasonal rains.",
+      "The Atacama Desert in northern Chile is one of the driest places on Earth; some of its weather stations have never recorded a single drop of rain. ---- In such years, seeds that have lain dormant in the soil for a decade or more sprout within days, and stretches of the desert are covered with pink, purple and yellow flowers. The event, known locally as the 'desierto florido', draws visitors from all over the country.",
       [
-        "About five thousand years ago, however, the region began to dry out rapidly, turning into the desert we know today.",
-        "Today the Sahara is the largest hot desert in the world, covering much of North Africa.",
-        "Camels were introduced to North Africa much later.",
-        "Many tourists visit the Sahara to see its famous sand dunes.",
-        "Some parts of the desert receive almost no rain at all.",
+        "Every few years, however, unusual weather in the Pacific brings a short period of rain.",
+        "The Atacama is also one of the best places in the world for observing the stars.",
+        "Copper mining is one of the most important industries in northern Chile.",
+        "Some scientists use the desert to test equipment designed for Mars.",
+        "Temperatures in the desert can fall below zero at night in winter.",
       ],
-      "Boşluktan sonraki 'This climate shift' ifadesi daha önce sözü edilmiş bir iklim değişimine gönderme yapar; boşluğa bölgenin yaklaşık beş bin yıl önce hızla kurumaya başladığını söyleyen cümle gelmelidir.",
+      "Boşluktan sonraki 'In such years' ifadesi önceden sözü edilmiş özel yıllara gönderme yapar; boşluğa birkaç yılda bir kısa bir yağış döneminin geldiğini söyleyen cümle gelmelidir. Böylece tohumların filizlenmesi açıklanır.",
     ],
   ],
   irrelevant: [

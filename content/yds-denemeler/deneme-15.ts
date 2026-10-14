@@ -253,13 +253,13 @@ export const DENEME_15: Deneme = {
     [
       "The ancient texts were written in a language ----.",
       [
-        "that no one had been able to read for more than a thousand years",
+        "that had not been spoken by anyone for over a millennium",
         "because the scholars wanted to keep them secret",
         "so archaeologists translated them in a single afternoon",
         "although they were found in a cave near the coast",
         "unless they had been copied by hand",
       ],
-      "Boşluk 'a language' ismini niteleyen bir ilgi cümlesi bekler: bin yıldan uzun süredir kimsenin okuyamadığı bir dil. Diğer seçenekler ilgi cümlesi kurmaz ya da mantıksız ilişkiler kurar.",
+      "Boşluk 'a language' ismini niteleyen bir ilgi cümlesi bekler: bin yıldan uzun süredir kimsenin konuşmadığı bir dil. Diğer seçenekler ilgi cümlesi kurmaz ya da mantıksız ilişkiler kurar.",
     ],
   ],
   enTr: [
@@ -286,15 +286,15 @@ export const DENEME_15: Deneme = {
       "'It was not until X that Y' = 'Y ancak X'te oldu'. Hanelerin çoğu televizyon almaya ancak 1960'larda gücü yetti. Diğer seçenekler zamanı, nedeni ya da konuyu değiştirir.",
     ],
     [
-      "Provided that the weather remains calm, the rocket will be launched early tomorrow morning.",
+      "Provided that the sea stays calm, the divers will begin exploring the wreck early tomorrow morning.",
       [
-        "Hava sakin kaldığı takdirde roket yarın sabah erken saatlerde fırlatılacak.",
-        "Hava ne kadar kötü olursa olsun roket yarın sabah erken fırlatılacak.",
-        "Roket yarın sabah fırlatılamadığı için hava sakinleşene kadar beklenecek.",
-        "Hava sakin olmadığı için roketin fırlatılması yarın sabaha ertelendi.",
-        "Roket yarın sabah fırlatıldığında havanın sakin olması bekleniyor.",
+        "Deniz sakin kaldığı takdirde dalgıçlar batığı yarın sabah erken saatlerde keşfetmeye başlayacak.",
+        "Deniz ne kadar dalgalı olursa olsun dalgıçlar batığı yarın sabah keşfetmeye başlayacak.",
+        "Dalgıçlar yarın sabah batığa ulaşamadığı için denizin sakinleşmesini bekleyecek.",
+        "Deniz sakin olmadığı için batığın keşfi yarın sabaha ertelendi.",
+        "Dalgıçlar batığı keşfetmeye başladığında denizin sakin olması bekleniyor.",
       ],
-      "'Provided that' = '... koşuluyla, ... takdirde'; 'will be launched' = 'fırlatılacak'. 'ne kadar kötü olursa olsun' koşulu kaldırır; erteleme ve bekleme bilgileri cümlede yoktur.",
+      "'Provided that' = '... koşuluyla, ... takdirde'; 'will begin exploring' = 'keşfetmeye başlayacak'. 'ne kadar dalgalı olursa olsun' koşulu kaldırır; erteleme ve bekleme bilgileri cümlede yoktur.",
     ],
   ],
   trEn: [
@@ -771,12 +771,12 @@ export const DENEME_15: Deneme = {
       sentences: [
         "The Japanese art of kintsugi involves repairing broken pottery with lacquer mixed with gold.",
         "Rather than hiding the cracks, the technique highlights them as part of the object's history.",
-        "Porcelain was first produced in China more than a thousand years ago.",
+        "Porcelain production began in China many centuries before it spread to Europe.",
         "The philosophy behind kintsugi suggests that damage and repair can make an object more beautiful.",
         "Today, the idea is often used as a metaphor for recovering from difficult experiences.",
       ],
       odd: 2,
-      why: "Parça Japon kintsugi sanatını, felsefesini ve bugünkü mecaz anlamını anlatır. Porselenin Çin'de ilk kez üretildiğini söyleyen III. cümle bu akışı bozar.",
+      why: "Parça Japon kintsugi sanatını, felsefesini ve bugünkü mecaz anlamını anlatır. Porselen üretiminin Çin'de başladığını söyleyen III. cümle bu akışı bozar.",
     },
     {
       sentences: [

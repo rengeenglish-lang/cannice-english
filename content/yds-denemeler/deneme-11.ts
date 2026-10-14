@@ -66,9 +66,9 @@ export const DENEME_11: Deneme = {
       "'suggest that' yapısından sonra 'subjunctive' kullanılır: özne ne olursa olsun fiilin yalın hâli gelir, yani 'prepare'. '-s' takılı ya da zaman bildiren biçimler bu yapıda kullanılmaz.",
     ],
     [
-      "---- the heavy rain, the open-air concert went ahead as planned and attracted a larger audience than expected.",
+      "---- the strong winds, the ferry left the harbour on schedule and even reached the island a little earlier than usual.",
       ["Despite", "Although", "Because of", "Since", "Unless"],
-      "Boşluktan sonra isim öbeği (the heavy rain) geldiği ve beklenmedik bir sonuç anlatıldığı için zıtlık bildiren edat 'Despite' gerekir. 'Although' ve 'Unless' cümle ister; 'Because of' ve 'Since' neden bildirir ve anlamla çelişir.",
+      "Boşluktan sonra isim öbeği (the strong winds) geldiği ve beklenmedik bir sonuç anlatıldığı için zıtlık bildiren edat 'Despite' gerekir. 'Although' ve 'Unless' cümle ister; 'Because of' ve 'Since' neden bildirir ve anlamla çelişir.",
     ],
     [
       "It is essential for young researchers to learn how ---- their findings clearly to people outside their field.",
@@ -613,7 +613,7 @@ export const DENEME_11: Deneme = {
       "Muhabirin son sorusu yalan söylemenin normal bilişsel gelişimin işareti olup olmadığını sorar; Dr. Aksoy'un yalanın bilişsel bir beceri gerektirdiğini açıklamış olması gerekir: başkalarının farklı inançları olabileceğini anlamak. Diğer seçenekler bu sonucu doğurmaz.",
     ],
     [
-      "Customer: Excuse me, I bought this jacket here last week, but the zip broke the first time I wore it.\nAssistant: I'm sorry to hear that. Do you have your receipt?\nCustomer: ----\nAssistant: That's fine. We can look up the purchase on our system using your card.",
+      "Customer: Excuse me, I bought this jacket here last week, but the zip broke the first time I wore it.\nAssistant: Oh dear, that really shouldn't happen. Have you still got the receipt?\nCustomer: ----\nAssistant: That's fine. We can look up the purchase on our system using your card.",
       [
         "I'm afraid I've lost it, but I paid by credit card.",
         "Yes, here it is. I'd like to exchange it for a different colour.",
@@ -624,9 +624,9 @@ export const DENEME_11: Deneme = {
       "Satış görevlisi 'Sorun değil, kartınızla sistemden bakabiliriz' der; demek ki müşterinin fişi yoktur ama kartla ödeme yapmıştır. 'Here it is' fişin olduğunu söyler ve kartla aramaya gerek bırakmaz.",
     ],
     [
-      "Leyla: Have you heard that the city council wants to turn the old railway station into a shopping centre?\nBurak: Yes, and I think it's a terrible idea. ----\nLeyla: I agree. A museum or a cultural centre would be a much better use of it.",
+      "Leyla: Have you heard that the city council wants to turn the old railway station into a shopping centre?\nBurak: Yes, and frankly I'm completely against it. ----\nLeyla: I agree. A museum or a cultural centre would be a much better use of it.",
       [
-        "The building is part of the city's history and deserves to be used for something more meaningful.",
+        "That station has stood there for over a century, and it deserves a more meaningful purpose than shops.",
         "We already have enough cultural centres and museums in this city.",
         "Shopping centres create a lot of jobs for local people.",
         "The railway station has been closed for more than twenty years.",
@@ -683,15 +683,15 @@ export const DENEME_11: Deneme = {
   ],
   paragraph: [
     [
-      "The Great Wall of China is often described as a single wall stretching across the country. ---- These were built by different dynasties over more than two thousand years, using whatever materials were available locally, from stone and brick to rammed earth and even reeds. Some sections were later abandoned, while others were rebuilt and extended many times.",
+      "Construction of the bell tower in Pisa began in 1173, and the building started to lean before even its third floor had been finished. ---- Work was then interrupted for almost a century because of wars, and this long pause gave the soil time to settle. Engineers today believe that, without the delay, the tower would almost certainly have collapsed.",
       [
-        "In fact, it is a network of many separate walls and fortifications.",
-        "It is one of the most popular tourist attractions in the world today.",
-        "Many visitors are surprised by how steep some sections of the wall are.",
-        "The wall can be seen from space with the naked eye, according to a popular myth.",
-        "Today, the government spends large sums of money on protecting cultural heritage.",
+        "The soft, sandy ground beneath it was simply too weak to support such a heavy structure evenly.",
+        "Pisa was one of the most powerful maritime republics in medieval Italy.",
+        "Millions of tourists now visit the tower and take photographs of it every year.",
+        "Galileo is said to have dropped balls from the tower to study falling objects.",
+        "The cathedral next to the tower is decorated with marble of several colours.",
       ],
-      "Boşluktan sonraki 'These were built by different dynasties' ifadesi çoğul bir isme gönderme yapar; boşluğa duvarın aslında birçok ayrı duvar ve tahkimattan oluşan bir ağ olduğunu söyleyen cümle gelmelidir. Turistler ya da uzaydan görünme efsanesi 'These' ile bağlanamaz.",
+      "Boşluktan önce kulenin henüz üçüncü katı bitmeden eğilmeye başladığı, sonra 'the soil' ifadesiyle zeminin oturduğu anlatılır; boşluğa eğilmenin nedenini, yani yumuşak ve kumlu zeminin ağır yapıyı eşit taşıyamadığını açıklayan cümle gelmelidir.",
     ],
     [
       "For decades, doctors advised patients with back pain to rest in bed until the pain went away. ---- Studies have shown that people who remain active, within reasonable limits, generally recover faster and are less likely to develop long-term problems. As a result, most guidelines now recommend gentle exercise and a gradual return to normal activities.",
@@ -705,15 +705,15 @@ export const DENEME_11: Deneme = {
       "Boşluktan önce eski tavsiye (yatak istirahati), sonra bu tavsiyeyle çelişen bulgular gelir. 'This advice, however, has now been largely abandoned' iki kısmı mantıksal olarak bağlar. Diğer seçenekler akışı sağlamaz.",
     ],
     [
-      "Many people believe that goldfish have a memory span of only three seconds. ---- In laboratory experiments, goldfish have been trained to push levers, respond to particular sounds and even find their way through simple mazes. Some of them have remembered what they learned for several months.",
+      "It is widely believed that bulls in a bullring are enraged by the colour of the matador's red cape. ---- In experiments, bulls charged just as readily at blue and white cloths as at red ones, as long as the cloth was moving. What really provokes the animal, it seems, is the sudden motion of the cape rather than its colour.",
       [
-        "Research, however, suggests that this popular belief is completely mistaken.",
-        "Goldfish were first kept as pets in China more than a thousand years ago.",
-        "For this reason, goldfish are usually kept in small round bowls.",
-        "Goldfish can grow much larger if they are kept in a pond.",
-        "Many children receive a goldfish as their first pet.",
+        "In reality, cattle cannot tell red apart from many other colours.",
+        "Bullfighting has been banned in several regions of Spain in recent years.",
+        "For this reason, matadors always choose capes in the brightest possible red.",
+        "Bulls used in such events are specially bred on large farms.",
+        "Many people find the tradition cruel and have protested against it.",
       ],
-      "Boşluktan sonra japon balıklarının uzun süre hatırlayabildiğini gösteren deneyler anlatılır; boşluğa yaygın inancın yanlış olduğunu söyleyen geçiş cümlesi gelmelidir. 'For this reason' inancı doğru kabul eder; diğerleri konu dışıdır.",
+      "Boşluktan önce kırmızının boğaları kızdırdığı inancı, sonra renkten bağımsız deney sonuçları gelir; boşluğa sığırların kırmızıyı diğer renklerden ayırt edemediğini söyleyen cümle gelmelidir. 'For this reason' inancı doğru kabul eder; diğerleri konu dışıdır.",
     ],
     [
       "Before the invention of the mechanical clock, most people measured time by the position of the sun. ---- In medieval Europe, for example, an 'hour' in summer could be considerably longer than an hour in winter. Only when mechanical clocks spread through towns in the fourteenth century did hours of equal length become standard.",

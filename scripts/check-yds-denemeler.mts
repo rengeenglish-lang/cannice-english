@@ -91,6 +91,33 @@ for (const d of mods) {
   }
 }
 
+// Near-copies across tests: any run of 8 identical words shared by two different denemeler.
+const shingles = new Map<string, string>();
+for (const d of mods) {
+  const texts: [string, string][] = [];
+  const add = (t: string, where: string) => texts.push([t, where]);
+  const qs = (list: Q[], tag: string) => list.forEach((q, i) => { add(q[0], `${tag} ${i + 1}`); q[1].forEach((o) => add(o, `${tag} ${i + 1}`)); });
+  qs(d.vocab, "vocab"); qs(d.grammar, "grammar"); qs(d.completion, "completion"); qs(d.enTr, "enTr"); qs(d.trEn, "trEn");
+  qs(d.dialogue, "dialogue"); qs(d.restatement, "restatement"); qs(d.paragraph, "paragraph");
+  d.cloze.forEach((c, i) => add(c.text, `cloze ${i + 1}`));
+  // Reading question stems ("It can be inferred from the passage that ----.") are generic; only their options count.
+  d.reading.forEach((r, i) => { add(r.text, `reading ${i + 1}`); r.questions.forEach((q, j) => q[1].forEach((o) => add(o, `reading ${i + 1} q${j + 1}`))); });
+  d.irrelevant.forEach((x, i) => add(x.sentences.join(" "), `irrelevant ${i + 1}`));
+  const mine = new Set<string>();
+  for (const [t, where] of texts) {
+    const w = norm(t).split(" ").filter(Boolean);
+    for (let i = 0; i + 8 <= w.length; i++) {
+      const k = w.slice(i, i + 8).join(" ");
+      if (mine.has(k)) continue;
+      mine.add(k);
+      const prev = shingles.get(k);
+      // Deneme 1–10 are already printed in the Set books; the check guards everything written after them.
+      if (prev && d.no > 10 && !prev.startsWith(`Deneme ${d.no} `)) problems.push(`Deneme ${d.no} ${where}: shares "${k}" with ${prev}`);
+      else if (!prev) shingles.set(k, `Deneme ${d.no} ${where}`);
+    }
+  }
+}
+
 if (problems.length) {
   console.error(problems.join("\n"));
   process.exit(1);
