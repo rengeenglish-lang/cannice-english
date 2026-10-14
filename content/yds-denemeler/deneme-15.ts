@@ -68,7 +68,7 @@ export const DENEME_15: Deneme = {
     [
       "The scientists could not agree on ---- the results of the experiment should be published immediately.",
       ["whether", "that", "what", "which", "if not"],
-      "'agree on whether ...' = '... olup olmadığı konusunda anlaşmak'. Bir ikilem söz konusudur: sonuçlar hemen yayımlanmalı mı, yanılmamalı mı? 'that' edattan sonra gelmez; 'what' ve 'which' yapıya uymaz.",
+      "'agree on whether ...' = '... olup olmadığı konusunda anlaşmak'. Bir ikilem söz konusudur: sonuçlar hemen yayımlanmalı mı, yayımlanmamalı mı? 'that' edattan sonra gelmez; 'what' ve 'which' yapıya uymaz.",
     ],
     [
       "---- having lived in Japan for ten years, he still finds it difficult to read newspapers in Japanese.",
