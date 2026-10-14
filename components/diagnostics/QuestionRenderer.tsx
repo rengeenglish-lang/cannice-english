@@ -1,6 +1,5 @@
 import { answerAndAdvanceAction } from "@/app/actions/diagnostic-attempt";
-
-const LETTERS = ["A", "B", "C", "D", "E"];
+import { displayOptions } from "@/lib/diagnostics/option-order";
 
 export type RunnerQuestion = {
   id: string;
@@ -58,14 +57,14 @@ export function QuestionRenderer({ attemptId, question, index, total }: { attemp
       ) : (
         <fieldset className="space-y-3">
           <legend className="sr-only">Seçenekler</legend>
-          {options.map((option, i) => (
+          {displayOptions(question.id, options).map(({ option, index: i, letter }) => (
             <label
               key={i}
               className="focus-within:border-[color:var(--accent)] flex min-h-11 cursor-pointer items-center gap-3 rounded-2xl border border-[color:var(--border)] p-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)] hover:bg-[color:var(--brand-soft)]"
             >
               <input type="radio" name="answerRaw" value={String(i)} required className="size-4 accent-[color:var(--accent)]" />
               <span className="grid size-7 shrink-0 place-items-center rounded-full border border-[color:var(--border-strong)] text-xs font-extrabold">
-                {LETTERS[i]}
+                {letter}
               </span>
               <span>{option}</span>
             </label>

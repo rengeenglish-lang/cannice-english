@@ -14,7 +14,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Despite repeated warnings from environmental groups, the factory continued to ---- toxic waste into the river.",
-    options: ["discharge", "decorate", "dismiss", "discount"],
+    options: ["discharge", "decorate", "dismiss", "discount", "disguise"],
     correctIndex: 0,
     explanation:
       "'toxic waste into the river' ifadesiyle birlikte kullanılan doğru fiil 'discharge' (boşaltmak/salmak)'tır. 'Decorate' (süslemek), 'dismiss' (görevden almak) ve 'discount' (indirim yapmak) bağlama uymaz.",
@@ -29,7 +29,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The company's ---- growth over the past five years attracted the attention of several international investors.",
-    options: ["rapid", "rapidly", "rapidity", "rapids"],
+    options: ["rapid", "rapidly", "rapidity", "rapids", "rapider"],
     correctIndex: 0,
     explanation:
       "Boşluk, ismi ('growth') niteleyen bir sıfat gerektirir; 'rapid' doğru sözcük türüdür. 'Rapidly' bir zarf, 'rapidity' bir isim, 'rapids' ise ('nehir sığlıkları' anlamında) ilgisiz bir isimdir.",
@@ -44,7 +44,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Before reaching a final verdict, the jury had to ---- all the evidence presented during the trial.",
-    options: ["weigh", "weight", "way", "wait"],
+    options: ["weigh", "weight", "way", "wait", "wade"],
     correctIndex: 0,
     explanation:
       "'weigh the evidence' (kanıtları tartmak/değerlendirmek) sabit bir collocation'dır. 'Weight' bir isim, 'way' ve 'wait' ise anlamca bağlama uymayan sesteş kelimelerdir.",
@@ -59,7 +59,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The negotiations broke ---- after neither side was willing to compromise on the price, and the meeting ended without any agreement.",
-    options: ["down", "along", "through", "back"],
+    options: ["down", "along", "through", "back", "off"],
     correctIndex: 0,
     explanation:
       "'break down' (çökmek/başarısız olmak) görüşmelerin sonuçsuz kalmasını anlatan doğru phrasal verb'dür; cümlenin sonunda anlaşmaya varılamadığı belirtilir. 'Break through' tam tersi bir anlam taşır (çığır açmak), 'along' ve 'back' bu fiille bu şekilde kullanılmaz.",
@@ -74,7 +74,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Her ---- to detail made her the ideal candidate for the position of quality control manager.",
-    options: ["attention", "intention", "attendance", "tendency"],
+    options: ["attention", "intention", "attendance", "tendency", "retention"],
     correctIndex: 0,
     explanation:
       "'attention to detail' (detaylara dikkat) sabit bir ifadedir ve kalite kontrol yöneticiliği için aranan niteliği tanımlar. Diğer isimler bu kalıpta kullanılmaz.",
@@ -89,7 +89,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The professor's argument, though ---- on the surface, contained several logical inconsistencies once examined closely.",
-    options: ["compelling", "repulsive", "arbitrary", "negligible"],
+    options: ["compelling", "repulsive", "arbitrary", "negligible", "fragile"],
     correctIndex: 0,
     explanation:
       "'though' zıtlık kurar: yüzeyde ikna edici ('compelling') görünse de yakından incelenince mantık hataları içerdiği anlatılır. Diğer seçenekler bu zıtlığı kurmaz ve bağlamla uyuşmaz.",
@@ -104,7 +104,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The government's reluctance to ---- the new regulations has drawn sharp criticism from environmental activists.",
-    options: ["enforce", "force", "reinforce", "enforcement"],
+    options: ["enforce", "force", "reinforce", "enforcement", "enforced"],
     correctIndex: 0,
     explanation:
       "'enforce regulations' (yönetmelikleri uygulamak/yürürlüğe koymak) doğru collocation'dır. 'Reinforce' (güçlendirmek) farklı bir anlam taşır, 'force' bu isimle bu şekilde kullanılmaz, 'enforcement' ise 'to' sonrası gereken fiil yerine isimdir.",
@@ -119,7 +119,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Many economists believe that the current inflation rate is merely a ---- phenomenon that will subside once supply chains stabilize.",
-    options: ["permanent", "transient", "chronic", "perpetual"],
+    options: ["permanent", "transient", "chronic", "perpetual", "negligible"],
     correctIndex: 1,
     explanation:
       "'will subside' (azalacak/geçecek) ifadesi geçici bir durumu ima eder; bu da 'transient' (geçici) ile örtüşür. 'Permanent', 'chronic' ve 'perpetual' kalıcılık anlamı taşır ve 'will subside' ile çelişir.",
@@ -141,6 +141,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Yeni politika gelecek yıl Ocak ayından itibaren yürürlüğe girecek.",
       "Yeni politika her yıl Ocak ayında gözden geçirilir.",
       "Yeni politika bu Ocak ayında yürürlükten kalkacak.",
+      "Yeni politika Ocak ayından beri tartışılıyor ama henüz yürürlüğe girmedi.",
     ],
     correctIndex: 1,
     explanation:
@@ -162,6 +163,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Sonuçlar umut verici olduğu için araştırmacılar bulgularını hemen yayımladılar.",
       "Sonuçlar umut verici olmasa da araştırmacılar ek denemelere gerek görmediler.",
       "Araştırmacılar umut verici sonuçlar elde edinceye kadar denemelerine devam edeceklerdi.",
+      "Sonuçlar umut verici olduğundan araştırmacılar yeni denemelere gerek duymadı.",
     ],
     correctIndex: 0,
     explanation:
@@ -182,6 +184,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Köprü fırtınadan önce onarılmıştı.",
       "Köprü geçen hafta fırtına yüzünden hasar gördü.",
       "Köprü gelecek hafta onarılacak.",
+      "Köprü fırtınada hasar görmesine rağmen hiç onarılmadı.",
     ],
     correctIndex: 0,
     explanation:
@@ -203,6 +206,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Komite teklifi dikkatli inceledi ve bütçe aşımını önledi.",
       "Komite teklifi incelemediği için bütçe aşımı kaçınılmazdı.",
       "Komite teklifi daha dikkatli inceleseydi, bütçe aşımını önleyecekti.",
+      "Komite teklifi dikkatle incelediği hâlde bütçe aşımı önlenemedi.",
     ],
     correctIndex: 0,
     explanation:
@@ -225,6 +229,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "The new factory provided employment for hundreds of people in the region.",
       "The new factory has provided employment for hundreds of people in the region.",
       "The new factory would have provided employment for hundreds of people in the region.",
+      "The new factory is said to have provided employment for a few people in the region.",
     ],
     correctIndex: 0,
     explanation:
@@ -245,6 +250,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Experts argue that climate change is negatively affecting agricultural production.",
       "Experts will argue that climate change negatively affects agricultural production.",
       "Experts have argued that climate change would negatively affect agricultural production.",
+      "Experts deny that climate change has any effect on agricultural production.",
     ],
     correctIndex: 1,
     explanation:
@@ -265,6 +271,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Such decisions were usually made by senior management.",
       "Such decisions are rarely made by senior management.",
       "Such decisions will usually be made by senior management.",
+      "Such decisions should never be made by senior management.",
     ],
     correctIndex: 0,
     explanation:
@@ -286,6 +293,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "If the researchers share this data earlier, the outbreak can be brought under control much faster.",
       "If the researchers shared this data earlier, the outbreak would be brought under control much faster.",
       "The researchers shared this data earlier, so the outbreak was brought under control much faster.",
+      "Although the researchers shared this data earlier, the outbreak could not be brought under control.",
     ],
     correctIndex: 0,
     explanation:
@@ -309,6 +317,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Üretim teknolojisindeki gelişmeler ve üreticiler arası rekabet",
       "Güneş enerjisine olan talebin azalması",
       "Fosil yakıt fiyatlarının düşmesi",
+      "Güneş panellerinin daha uzun ömürlü hâle gelmesi",
     ],
     correctIndex: 1,
     explanation:
@@ -330,6 +339,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Enerji depolama sorununun çözülememiş olması",
       "Üreticilerin yeterince rekabetçi olmaması",
       "Güneş panellerinin dayanıksız olması",
+      "Güneş enerjisinin hiçbir ülkede yasal olarak desteklenmemesi",
     ],
     correctIndex: 1,
     explanation:
@@ -346,7 +356,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'dramatic' kelimesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "Over the past decade, the cost of solar panel production has fallen by more than eighty percent, making solar power one of the cheapest sources of electricity in many parts of the world. This dramatic drop has been driven largely by improvements in manufacturing technology and increased competition among producers. However, experts caution that widespread adoption still depends on solving the problem of energy storage, since solar power cannot be generated at night or during cloudy weather.",
-    options: ["önemsiz", "çarpıcı/belirgin", "yavaş", "geçici"],
+    options: ["önemsiz", "çarpıcı/belirgin", "yavaş", "geçici", "tehlikeli"],
     correctIndex: 1,
     explanation:
       "'dramatic drop' ifadesi maliyetteki 'yüzde seksenden fazla' düşüşü nitelendirir; bu büyüklükte bir değişim 'çarpıcı/belirgin' anlamına gelen 'dramatic' ile örtüşür.",
@@ -367,6 +377,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Üretim maliyetleri büyük ölçüde düşmüş olsa da güneş enerjisinin yaygınlaşması hâlâ depolama sorununa bağlıdır.",
       "Enerji depolama sorunu tamamen çözülmüştür.",
       "Güneş panelleri artık gece de elektrik üretebilmektedir.",
+      "Güneş enerjisi yalnızca zengin ülkelerde kullanılabilen bir kaynaktır.",
     ],
     correctIndex: 1,
     explanation:
@@ -388,7 +399,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Archaeologists were astonished to find that the ancient city's drainage system was remarkably ---- for its time, rivaling modern engineering standards.",
-    options: ["primitive", "sophisticated", "fragile", "accidental"],
+    options: ["primitive", "sophisticated", "fragile", "accidental", "modern"],
     correctIndex: 1,
     explanation:
       "'rivaling modern engineering standards' ifadesi sistemin çok gelişmiş olduğunu gösterir; bu yüzden 'sophisticated' (gelişmiş/karmaşık) doğru seçenektir. 'Primitive' (ilkel) ve 'fragile' (kırılgan) bu övgüyle çelişir.",
@@ -403,7 +414,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The university has decided to ---- its admissions criteria in order to attract a more diverse group of applicants.",
-    options: ["revise", "resign", "reverse", "resist"],
+    options: ["revise", "resign", "reverse", "resist", "retire"],
     correctIndex: 0,
     explanation:
       "'revise' (gözden geçirmek/değiştirmek) cümledeki amaca (daha çeşitli başvuru sahipleri çekmek) uygun tek fiildir; diğerleri bağlamla uyuşmaz.",
@@ -418,7 +429,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The new algorithm can ---- patterns in massive datasets that would take a human analyst years to detect.",
-    options: ["identify", "identical", "identity", "identifiable"],
+    options: ["identify", "identical", "identity", "identifiable", "identically"],
     correctIndex: 0,
     explanation:
       "Boşluk 'can' yardımcı fiilinden sonra bir fiil kökü gerektirir; 'identify' (belirlemek/tanımlamak) doğru fiil biçimidir. Diğerleri sıfat veya isim biçimleridir.",
@@ -433,7 +444,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "City planners have proposed a new zoning law to ---- unchecked urban sprawl into the surrounding farmland.",
-    options: ["curb", "curl", "curve", "cure"],
+    options: ["curb", "curl", "curve", "cure", "curse"],
     correctIndex: 0,
     explanation:
       "'curb' (sınırlamak/dizginlemek) kentsel yayılmayı durdurma amacına uyar. Diğer seçenekler ('curl' kıvırmak, 'curve' eğri, 'cure' tedavi etmek) anlamca bağlama uymaz.",
@@ -448,7 +459,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Despite the doctor's reassurances, the patient remained ---- about the side effects of the new medication.",
-    options: ["apprehensive", "apparent", "appreciative", "indifferent"],
+    options: ["apprehensive", "apparent", "appreciative", "indifferent", "ambitious"],
     correctIndex: 0,
     explanation:
       "'Despite the doctor's reassurances' (doktorun güvence vermesine rağmen) zıtlık kurar; hastanın hâlâ endişeli olduğu anlaşılır, bu da 'apprehensive' (endişeli/çekingen) ile örtüşür. 'Indifferent' (kayıtsız) ve diğerleri bu zıtlığı karşılamaz.",
@@ -463,7 +474,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The senator's speech was widely criticized for being ---- , offering vague promises without any concrete plan of action.",
-    options: ["substantive", "hollow", "meticulous", "decisive"],
+    options: ["substantive", "hollow", "meticulous", "decisive", "extensive"],
     correctIndex: 1,
     explanation:
       "'offering vague promises without any concrete plan' ifadesi konuşmanın içerik bakımından boş olduğunu gösterir; bu da 'hollow' (içi boş/anlamsız) ile örtüşür. 'Substantive' (esaslı) ve 'meticulous' (titiz) tam tersini ifade eder.",
@@ -478,7 +489,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The two companies have agreed to ---- forces in order to compete more effectively against larger rivals.",
-    options: ["join", "attach", "connect", "widen"],
+    options: ["join", "attach", "connect", "widen", "bind"],
     correctIndex: 0,
     explanation:
       "'join forces' (güçlerini birleştirmek) sabit bir deyimdir; diğer fiiller bu isimle bu anlamda kullanılmaz.",
@@ -493,7 +504,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The committee's findings were later found to be ---- , as several key statistics had been miscalculated.",
-    options: ["flawed", "flawless", "flawlessly", "flaw"],
+    options: ["flawed", "flawless", "flawlessly", "flaw", "flawy"],
     correctIndex: 0,
     explanation:
       "'as several key statistics had been miscalculated' bulguların hatalı olduğunu açıklar; bu yüzden 'flawed' (kusurlu/hatalı) doğrudur. 'Flawless' (kusursuz) anlamca terstir, diğerleri sözcük türü olarak uymaz.",
@@ -515,6 +526,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Müze geçen yıl nadir bir ortaçağ el yazması koleksiyonunu sattı.",
       "Müze gelecek ay nadir bir ortaçağ el yazması koleksiyonu edinecek.",
       "Müzede nadir ortaçağ el yazmaları hiç bulunmuyor.",
+      "Müze nadir ortaçağ el yazmalarını yalnızca birkaç günlüğüne sergiledi.",
     ],
     correctIndex: 0,
     explanation:
@@ -536,6 +548,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Müfredatta önemli değişiklikler yapıldığı için öğrenci katılımı artmıştır.",
       "Müfredatta önemli değişiklikler yapılırsa, öğrenci katılımı azalacaktır.",
       "Müfredatta hiçbir zaman değişiklik yapılmayacağı için öğrenci katılımı sabit kalacaktır.",
+      "Müfredatta değişiklik yapılsa bile öğrenci katılımı kesinlikle artmayacaktır.",
     ],
     correctIndex: 0,
     explanation:
@@ -557,6 +570,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Rapor bağımsız bir kurul tarafından derlenecek ve sistemdeki kusurları ortaya çıkaracak.",
       "Mevcut sistemdeki kusurlar, bağımsız bir kurul tarafından giderildi.",
       "Bağımsız bir kurul, raporu henüz derlemedi.",
+      "Mevcut sistemdeki kusurları ortaya çıkaran bağımsız kurul, raporu yayımlamaktan vazgeçti.",
     ],
     correctIndex: 0,
     explanation:
@@ -578,6 +592,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Anket, departmanlar arasındaki iletişim eksikliğini gidermek için yapıldı.",
       "Anket yaygın memnuniyetsizliği ortaya çıkardı, ancak departmanlar arasında herhangi bir iletişim sorunu bulunmadı.",
       "Anket departmanlar arasındaki iletişimi incelemek amacıyla planlanmıştı ama tamamlanamadı.",
+      "Anket, departmanlar arasında iletişim sorunu olmadığını ve herkesin memnun olduğunu gösterdi.",
     ],
     correctIndex: 0,
     explanation:
@@ -600,6 +615,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "The company opened three new branches last year.",
       "The company has opened three new branches so far.",
       "The company will have opened three new branches by next year.",
+      "The company would have opened three new branches if it had planned better.",
     ],
     correctIndex: 0,
     explanation:
@@ -620,6 +636,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Someone can be declared guilty without sufficient evidence.",
       "No one was declared guilty without sufficient evidence.",
       "No one will be declared guilty without sufficient evidence.",
+      "Anyone can be declared guilty if there is enough suspicion.",
     ],
     correctIndex: 0,
     explanation:
@@ -640,6 +657,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "The management must make the decision without taking employees' feedback into account.",
       "The management should have made the decision without taking employees' feedback into account.",
       "The management could not have made the decision without taking employees' feedback into account.",
+      "The management might take employees' feedback into account before making the decision.",
     ],
     correctIndex: 0,
     explanation:
@@ -660,6 +678,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "If scientists do not develop this treatment, millions of people will lose their lives.",
       "If scientists had not developed this treatment, millions of people would lose their lives.",
       "Scientists did not develop this treatment, so millions of people lost their lives.",
+      "Scientists developed this treatment because millions of people had lost their lives.",
     ],
     correctIndex: 0,
     explanation:
@@ -683,6 +702,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Öğrenilen bilgilerin kısa süreli bellekten uzun süreli belleğe aktarılmasına yardımcı olur",
       "Beyindeki sinirsel bağlantıları tamamen siler",
       "Öğrenme sürecini tamamen durdurur",
+      "Öğrenilen bilgilerin yalnızca kısa süreli bellekte kalmasını sağlar",
     ],
     correctIndex: 1,
     explanation:
@@ -705,6 +725,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Ertesi gün hatırlama testlerinde normal uyuyanlardan belirgin şekilde daha kötü performans gösterdiler",
       "Herhangi bir performans farkı gözlenmedi",
       "Testlere katılmayı reddettiler",
+      "Uykudan yoksun bırakılmanın hatırlamayı geliştirdiğini kanıtladılar",
     ],
     correctIndex: 1,
     explanation:
@@ -721,7 +742,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'consolidating' kelimesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "Recent studies in neuroscience suggest that sleep plays a crucial role in consolidating memories formed during the day. While a person sleeps, the brain replays and strengthens neural connections associated with newly learned information, effectively transferring it from short-term to long-term storage. Researchers have found that participants who were deprived of sleep after learning a task performed significantly worse on recall tests the following day than those who slept normally. These findings suggest that adequate sleep may be just as important for learning as the initial study session itself.",
-    options: ["zayıflatmak", "pekiştirmek/sağlamlaştırmak", "unutmak", "ertelemek"],
+    options: ["zayıflatmak", "pekiştirmek/sağlamlaştırmak", "unutmak", "ertelemek", "paylaşmak"],
     correctIndex: 1,
     explanation:
       "Parça, uykunun anıları 'consolidating' sürecinde rol oynadığını ve ardından bağlantıları güçlendirdiğini ('strengthens') anlatır; bu nedenle kelime 'pekiştirmek/sağlamlaştırmak' anlamına gelir.",
@@ -742,6 +763,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Yeterli uyku, bilgilerin pekiştirilmesi açısından öğrenme süreci kadar önemli olabilir.",
       "Kısa süreli bellek, uzun süreli bellekten daha güvenilirdir.",
       "Katılımcıların tamamı uykusuzluktan etkilenmemiştir.",
+      "Uyku sırasında yeni bilgiler öğrenmek mümkündür.",
     ],
     correctIndex: 1,
     explanation:
@@ -763,7 +785,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The new employee was praised for her ability to ---- complex financial data into a clear, concise report.",
-    options: ["condense", "expand", "complicate", "duplicate"],
+    options: ["condense", "expand", "complicate", "duplicate", "inflate"],
     correctIndex: 0,
     explanation:
       "Karmaşık finansal verilerin 'clear, concise report'a (açık, öz bir rapora) dönüştürülmesi anlatılır; bu da 'condense' (özetlemek/kısaltmak) ile örtüşür. 'Expand' (genişletmek) ve 'complicate' (karmaşıklaştırmak) tam tersini ifade eder.",
@@ -778,7 +800,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The judge's ruling set a legal ---- that will influence how similar cases are handled in the future.",
-    options: ["precedent", "president", "precession", "precedence"],
+    options: ["precedent", "president", "precession", "precedence", "presidency"],
     correctIndex: 0,
     explanation:
       "'precedent' (emsal/içtihat) hukuki bağlamda gelecekteki benzer davaları etkileyecek bir karar için doğru terimdir. 'President' (başkan) ve 'precession' (yörünge sapması) anlamca uymaz; 'precedence' (öncelik) ise farklı bir kavramdır.",
@@ -793,7 +815,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Athletes must ---- to a strict training regimen if they hope to compete at an international level.",
-    options: ["adhere", "adhesive", "adherence", "adherent"],
+    options: ["adhere", "adhesive", "adherence", "adherent", "adhered"],
     correctIndex: 0,
     explanation:
       "Boşluk 'must' yardımcı fiilinden sonra bir fiil gerektirir; 'adhere (to)' (bağlı kalmak/uymak) doğru fiil biçimidir. Diğerleri sıfat veya isim biçimleridir.",
@@ -807,7 +829,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The two rival firms eventually ---- an agreement after months of tense negotiation.",
-    options: ["hammered out", "hammered down", "hammered up", "hammered into"],
+    options: ["hammered out", "hammered down", "hammered up", "hammered into", "hammered over"],
     correctIndex: 0,
     explanation:
       "'hammer out an agreement' (zorlu bir süreç sonunda anlaşmaya varmak) sabit bir deyimdir; diğer parçacıklar bu fiille bu anlamda kullanılmaz.",
@@ -822,7 +844,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The senator was accused of being ---- on the issue, changing her position depending on which audience she addressed.",
-    options: ["consistent", "inconsistent", "resistant", "persistent"],
+    options: ["consistent", "inconsistent", "resistant", "persistent", "indifferent"],
     correctIndex: 1,
     explanation:
       "'changing her position depending on which audience' ifadesi tutarsızlığı gösterir; bu da 'inconsistent' (tutarsız) ile örtüşür. 'Consistent' (tutarlı) tam tersini ifade eder.",
@@ -837,7 +859,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The finance minister's optimistic forecast turned out to be wildly ---- once the actual figures were released.",
-    options: ["accurate", "inaccurate", "precise", "exact"],
+    options: ["accurate", "inaccurate", "precise", "exact", "optimistic"],
     correctIndex: 1,
     explanation:
       "'once the actual figures were released' zıt bir sonucu ima eder; tahminin gerçek rakamlarla uyuşmadığı anlaşılır, bu da 'inaccurate' (yanlış/hatalı) ile örtüşür. 'Accurate', 'precise' ve 'exact' tam tersini ifade eder.",
@@ -852,7 +874,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Rather than addressing the root cause of the problem, the new policy merely ---- the symptoms.",
-    options: ["treats", "cures", "eliminates", "resolves"],
+    options: ["treats", "cures", "eliminates", "resolves", "removes"],
     correctIndex: 0,
     explanation:
       "'Rather than addressing the root cause' ifadesiyle kurulan zıtlık, politikanın sorunu kökünden çözmediğini, sadece belirtilerle ilgilendiğini gösterir; bu da 'treats the symptoms' (belirtileri hafifletmek) deyimiyle örtüşür. 'Cures', 'eliminates' ve 'resolves' sorunun tamamen çözüldüğünü ima eder ve cümledeki zıtlıkla çelişir.",
@@ -867,7 +889,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The committee's proposal was met with ---- opposition from local residents who feared it would disrupt the neighborhood.",
-    options: ["fervent", "faint", "feeble", "favorable"],
+    options: ["fervent", "faint", "feeble", "favorable", "fearful"],
     correctIndex: 0,
     explanation:
       "'feared it would disrupt the neighborhood' ifadesi güçlü bir tepkiyi ima eder; bu da 'fervent' (ateşli/şiddetli) ile örtüşür. 'Faint' ve 'feeble' zayıf bir tepkiyi, 'favorable' ise olumlu bir tepkiyi ifade eder ve bağlamla çelişir.",
@@ -889,6 +911,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Arkeologlar antik bir ticaret merkezi inşa etti.",
       "Arkeologlar eski kervan yolunu yeniden açacaklar.",
       "Antik ticaret merkezinin kalıntıları hiçbir zaman bulunamadı.",
+      "Arkeologlar ticaret merkezinin kalıntılarını kervan yolundan uzak bir yere taşıdı.",
     ],
     correctIndex: 0,
     explanation:
@@ -909,6 +932,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Ticaret yolları daraldıkça, yol üzerindeki şehirler yoksullaştı.",
       "Ticaret yolları genişlemeden önce, şehirler zaten zengindi.",
       "Ticaret yolları genişleyecek ve şehirler zenginleşecek.",
+      "Ticaret yolları genişlediği hâlde şehirler kültürel olarak hiç değişmedi.",
     ],
     correctIndex: 0,
     explanation:
@@ -929,6 +953,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Mallar hâlâ sadece zenginler için erişilebilir durumda.",
       "Lüks mallar, sıradan insanlar tarafından hiçbir zaman satın alınmadı.",
       "Mallar gelecekte sıradan insanlar için erişilebilir hale gelecek.",
+      "Lüks mallar zamanla daha da pahalı hâle geldi ve sıradan insanlardan uzaklaştı.",
     ],
     correctIndex: 0,
     explanation:
@@ -950,6 +975,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Tüccarlar zorlu çöl koşullarına göğüs gerdiği için kültürel alışverişler arttı.",
       "Zorlu çöl koşulları, tüccarların kültürel alışveriş yapmasını kolaylaştırdı.",
       "Tüccarlar çöl koşullarından kaçındığı için kültürel alışverişler azaldı.",
+      "Tüccarlar çöl koşullarına dayanamayınca kültürel alışverişler tamamen sona erdi.",
     ],
     correctIndex: 0,
     explanation:
@@ -972,6 +998,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Historians thought that this document dated back to the fifteenth century.",
       "Historians will think that this document dates back to the fifteenth century.",
       "Historians have thought that this document dated back to the fifteenth century.",
+      "Historians doubt that this document dates back to the fifteenth century.",
     ],
     correctIndex: 0,
     explanation:
@@ -992,6 +1019,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Thanks to its strategic location, this city was an important trade center for a century.",
       "Despite its strategic location, this city has never been an important trade center.",
       "This city will become an important trade center thanks to its strategic location.",
+      "Because of its strategic location, this city was destroyed several times over the centuries.",
     ],
     correctIndex: 0,
     explanation:
@@ -1012,6 +1040,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "The excavation work in this region was completed last summer.",
       "The excavation work in this region is being completed this summer.",
       "The excavation work in this region will be completed by next summer.",
+      "The excavation work in this region had been completed before last summer.",
     ],
     correctIndex: 0,
     explanation:
@@ -1032,6 +1061,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "If written records are not kept during that period, we know nothing about these events.",
       "If written records had not been kept during that period, we would have known nothing about these events.",
       "Written records were not kept during that period, so we know nothing about these events.",
+      "Even though written records were kept during that period, we know little about these events.",
     ],
     correctIndex: 0,
     explanation:
@@ -1055,6 +1085,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Doğu Asya'yı Akdeniz dünyasına bağlayan geniş bir ticaret yolları ağı",
       "Sadece deniz ticaret rotalarından oluşan bir sistem",
       "Yalnızca ipek taşımak için kullanılan bir güzergah",
+      "Yalnızca Çin içinde kullanılan bir nehir taşımacılığı sistemi",
     ],
     correctIndex: 1,
     explanation:
@@ -1076,6 +1107,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Kara ticaret yollarının önemini azalttı",
       "İpek Yolu'nu tamamen ortadan kaldırdı",
       "Semerkant ve Kaşgar şehirlerini büyüttü",
+      "Kara ve deniz ticaretini eşit şekilde güçlendirdi",
     ],
     correctIndex: 1,
     explanation:
@@ -1092,7 +1124,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'flourished' kelimesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "The Silk Road was not a single road but a vast network of trade routes connecting East Asia to the Mediterranean world for over a thousand years. Along with silk, merchants carried spices, precious stones, and, just as importantly, ideas, religions, and technologies from one civilization to another. Cities such as Samarkand and Kashgar flourished as bustling hubs where travelers from different cultures exchanged goods and knowledge. Although the rise of sea trade eventually diminished the importance of these overland routes, the Silk Road's legacy as one of history's greatest engines of cultural exchange endures to this day.",
-    options: ["çöktü", "gelişip zenginleşti", "terk edildi", "küçüldü"],
+    options: ["çöktü", "gelişip zenginleşti", "terk edildi", "küçüldü", "yasaklandı"],
     correctIndex: 1,
     explanation:
       "Semerkant ve Kaşgar'ın 'bustling hubs' (hareketli merkezler) olarak tanımlanmasından, bu şehirlerin 'flourished' ifadesinin olumlu bir gelişimi anlattığı anlaşılır; bu nedenle kelime 'gelişip zenginleşti' anlamına gelir.",
@@ -1113,6 +1145,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "İpek Yolu, mal ticaretinin yanı sıra fikir ve kültürlerin de yayılmasını sağlayan, tarihin en önemli kültürel etkileşim ağlarından biriydi.",
       "Deniz ticareti hiçbir zaman kara ticaretinin yerini alamamıştır.",
       "Semerkant ve Kaşgar, İpek Yolu'ndan hiç faydalanmamıştır.",
+      "İpek Yolu, deniz ticaretinin başlamasıyla birlikte daha da önem kazanmıştır.",
     ],
     correctIndex: 1,
     explanation:
@@ -1133,7 +1166,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The company's new advertising campaign was designed to ---- environmentally conscious consumers.",
-    options: ["appeal to", "appeal for", "appeal with", "appeal against"],
+    options: ["appeal to", "appeal for", "appeal with", "appeal against", "appeal on"],
     correctIndex: 0,
     explanation:
       "'appeal to (someone)' (birinin ilgisini çekmek/hoşuna gitmek) doğru edat yapısıdır; diğer edat kombinasyonları bu anlamda kullanılmaz.",
@@ -1148,7 +1181,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Despite the airline's ---- , hundreds of passengers were left stranded at the airport overnight.",
-    options: ["assurances", "assurance", "assured", "assuredly"],
+    options: ["assurances", "assurance", "assured", "assuredly", "assuring"],
     correctIndex: 0,
     explanation:
       "Boşluk 'the airline's' iyelik ekinden sonra bir isim gerektirir; 'hundreds of passengers' ile uyumlu olarak çoğul bir isim olan 'assurances' (güvenceler) doğrudur. Diğerleri sözcük türü olarak uymaz.",
@@ -1163,7 +1196,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Manufacturers are under increasing pressure to ---- their products to meet stricter environmental standards.",
-    options: ["adapt", "adopt", "adept", "adapting"],
+    options: ["adapt", "adopt", "adept", "adapting", "adoption"],
     correctIndex: 0,
     explanation:
       "'adapt' (uyarlamak) ürünleri yeni standartlara uygun hale getirme anlamına uyar. 'Adopt' (benimsemek) farklı bir anlam taşır ve bu bağlamda ürünler için kullanılmaz; 'adept' bir sıfattır.",
@@ -1178,7 +1211,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The novelist's latest work has received ---- reviews, with critics praising its originality almost unanimously.",
-    options: ["scathing", "glowing", "lukewarm", "mixed"],
+    options: ["scathing", "glowing", "lukewarm", "mixed", "predictable"],
     correctIndex: 1,
     explanation:
       "'critics praising its originality almost unanimously' olumlu bir tepkiyi gösterir; bu da 'glowing' (parlak/övgü dolu) ile örtüşür. 'Scathing' (acımasız/eleştirel) tam tersini ifade eder.",
@@ -1192,7 +1225,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "The two departments have been ---- heads over who is responsible for the budget shortfall.",
-    options: ["butting", "batting", "bidding", "beating"],
+    options: ["butting", "batting", "bidding", "beating", "breaking"],
     correctIndex: 0,
     explanation:
       "'butt heads' (fikir ayrılığına düşmek/çatışmak) sabit bir deyimdir; kimin sorumlu olduğu konusunda anlaşmazlık yaşandığını anlatır. Diğer fiiller bu isimle bu anlamda kullanılmaz.",
@@ -1206,7 +1239,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The report's conclusions were based on ---- evidence, making it difficult to draw any firm conclusions.",
-    options: ["conclusive", "inconclusive", "decisive", "compelling"],
+    options: ["conclusive", "inconclusive", "decisive", "compelling", "convincing"],
     correctIndex: 1,
     explanation:
       "'making it difficult to draw any firm conclusions' ifadesi kanıtların yetersiz/belirsiz olduğunu gösterir; bu da 'inconclusive' (sonuca varılamayan/belirsiz) ile örtüşür. 'Conclusive' ve 'decisive' tam tersini ifade eder.",
@@ -1220,7 +1253,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The startup's rapid success can be ---- to its founder's willingness to take calculated risks.",
-    options: ["attributed", "contributed", "distributed", "retributed"],
+    options: ["attributed", "contributed", "distributed", "retributed", "contributing"],
     correctIndex: 0,
     explanation:
       "'attribute X to Y' (X'i Y'ye bağlamak/atfetmek) sabit bir yapıdır ve başarının nedenini açıklamak için doğru fiildir. Diğer seçenekler bu yapıda kullanılmaz veya ('retributed' gibi) geçerli bir kelime değildir.",
@@ -1234,7 +1267,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "Critics argue that the new tax policy disproportionately ---- low-income households.",
-    options: ["benefits", "burdens", "ignores", "rewards"],
+    options: ["benefits", "burdens", "ignores", "rewards", "supports"],
     correctIndex: 1,
     explanation:
       "'disproportionately' (orantısız biçimde) ile birlikte düşük gelirli hanelerin olumsuz etkilendiği eleştirisi yapılır; bu da 'burdens' (yük getirmek) ile örtüşür. 'Benefits' ve 'rewards' olumlu bir etkiyi ifade eder ve eleştiri bağlamıyla çelişir.",
@@ -1256,6 +1289,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Deniz biyologları ahtapotların zekasıyla hiç ilgilenmedi.",
       "Deniz biyologları gelecekte ahtapotların zekasını inceleyecek.",
       "Ahtapotlar deniz biyologlarının zekasına hayran kaldı.",
+      "Deniz biyologları ahtapotların zekasının balıklardan daha düşük olduğunu kanıtladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1277,6 +1311,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Ahtapotların omurgalılar gibi merkezi bir beyin yapısı vardır, bu yüzden karmaşık problemler çözebilirler.",
       "Ahtapotlar merkezi bir beyin yapısına sahip olmadıkları için hiçbir problemi çözemezler.",
       "Omurgalılar, ahtapotlar gibi merkezi bir beyin yapısından yoksundur.",
+      "Ahtapotlar, merkezi bir beyin yapısına sahip oldukları için omurgalılardan daha zekidir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1297,6 +1332,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Ahtapotlar renk değiştiremedikleri için kamufle olamazlar.",
       "Ahtapotlar sadece tek bir arka plana karşı kamufle olabilir.",
       "Renk değiştirme yeteneği ahtapotların avlanmasını engeller.",
+      "Ahtapotlar yalnızca karanlıkta renk değiştirebilir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1318,6 +1354,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Bilim insanları ahtapotların alet kullanımını her zaman tam olarak anlamıştır.",
       "Ahtapotlar hindistan cevizi kabuklarını hiçbir zaman sığınak olarak kullanmamıştır.",
       "Bilim insanları hindistan cevizi kabuklarını sığınak olarak kullanmaya başladı.",
+      "Bilim insanları, ahtapotların alet kullandığını ilk kez bir laboratuvarda gözlemledi.",
     ],
     correctIndex: 0,
     explanation:
@@ -1340,6 +1377,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Scientists announced that this species went extinct.",
       "Scientists will announce that this species is going extinct.",
       "Scientists have announced that this species will go extinct.",
+      "Scientists denied that this species is going extinct.",
     ],
     correctIndex: 0,
     explanation:
@@ -1360,6 +1398,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "These creatures continued to survive because their natural habitats were destroyed.",
       "These creatures will continue to survive if their natural habitats are destroyed.",
       "These creatures survived even though their natural habitats were destroyed.",
+      "These creatures will die out whether or not their natural habitats are destroyed.",
     ],
     correctIndex: 0,
     explanation:
@@ -1380,6 +1419,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "This behavior is previously observed only in mammals.",
       "This behavior will have been observed only in mammals.",
       "This behavior has never been observed in mammals.",
+      "This behavior has been observed in all animals except mammals.",
     ],
     correctIndex: 0,
     explanation:
@@ -1401,6 +1441,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "If researchers discover this behavior earlier, conservation strategies can be changed much sooner.",
       "Researchers discovered this behavior earlier, so conservation strategies were changed much sooner.",
       "Had researchers discovered this behavior earlier, conservation strategies would change much sooner.",
+      "Even though researchers discovered this behavior early, conservation strategies were not changed.",
     ],
     correctIndex: 0,
     explanation:
@@ -1424,6 +1465,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Sekiz kolunun tamamına dağılmış şekilde",
       "Sadece gözlerinde",
       "Omurgasında",
+      "Kabuğunun içinde",
     ],
     correctIndex: 1,
     explanation:
@@ -1445,6 +1487,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Bulmacaları çözme, kavanoz açma ve insan yüzlerini tanıma gibi yetenekleri",
       "Sadece av avlama becerilerini",
       "Konuşma yeteneklerini",
+      "Yalnızca renk değiştirme yeteneklerini",
     ],
     correctIndex: 1,
     explanation:
@@ -1461,7 +1504,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'strikingly' kelimesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "Octopuses possess a strikingly different kind of intelligence compared to most other animals. Unlike vertebrates, whose neurons are concentrated in a single brain, roughly two-thirds of an octopus's neurons are distributed throughout its eight arms, allowing each arm to process information and make decisions with a surprising degree of independence. Laboratory experiments have shown that octopuses can solve puzzles, open jars to retrieve food, and even recognize individual human faces. Some researchers believe that studying octopus cognition could offer valuable insights into how intelligence might evolve along entirely different paths than it did in humans.",
-    options: ["belirsiz biçimde", "çarpıcı biçimde", "önemsiz biçimde", "yavaşça"],
+    options: ["belirsiz biçimde", "çarpıcı biçimde", "önemsiz biçimde", "yavaşça", "sıradan biçimde"],
     correctIndex: 1,
     explanation:
       "'strikingly different kind of intelligence' ifadesi, ahtapotların zekasının diğer hayvanlardan dikkat çekici/belirgin biçimde farklı olduğunu vurgular; bu da 'çarpıcı biçimde' anlamına gelen kullanımla örtüşür.",
@@ -1482,6 +1525,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Ahtapotların dağıtılmış sinir sistemi, zekanın insanlardakinden tamamen farklı biçimlerde gelişebileceğine dair değerli ipuçları sunabilir.",
       "Ahtapotların nöronlarının tamamı beyinlerinde toplanmıştır.",
       "Ahtapotlar hiçbir laboratuvar testini başarıyla tamamlayamamıştır.",
+      "Ahtapotların kolları, beyinlerinden bağımsız olarak hiçbir işlev göremez.",
     ],
     correctIndex: 1,
     explanation:
@@ -1502,7 +1546,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The startup managed to ---- a significant share of the market within just two years of launching.",
-    options: ["capture", "capable", "captive", "capsize"],
+    options: ["capture", "capable", "captive", "capsize", "captivate"],
     correctIndex: 0,
     explanation:
       "'capture market share' (pazar payı elde etmek) sabit bir collocation'dır; 'capture' doğru fiildir. Diğerleri farklı sözcük türleri ya da anlamca uymayan kelimelerdir.",
@@ -1516,7 +1560,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The recycling program was introduced to ---- the amount of plastic waste sent to landfills each year.",
-    options: ["reduce", "produce", "induce", "seduce"],
+    options: ["reduce", "produce", "induce", "seduce", "deduce"],
     correctIndex: 0,
     explanation:
       "Geri dönüşüm programının amacı çöp sahalarına giden plastik atık miktarını azaltmaktır; bu da 'reduce' (azaltmak) ile örtüşür. Diğer fiiller anlamca bağlama uymaz.",
@@ -1530,7 +1574,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The negotiations remained at a ---- for weeks, with neither side willing to make the first concession.",
-    options: ["standstill", "standpoint", "standard", "standby"],
+    options: ["standstill", "standpoint", "standard", "standby", "standstone"],
     correctIndex: 0,
     explanation:
       "'at a standstill' (durma noktasında/tıkanmış) ifadesi, hiçbir tarafın taviz vermeye yanaşmadığı bir durumu tanımlar; diğer seçenekler bu bağlamda kullanılmaz.",
@@ -1544,7 +1588,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The CEO's decision to relocate the factory overseas was met with ---- from labor unions.",
-    options: ["approval", "resistance", "applause", "gratitude"],
+    options: ["approval", "resistance", "applause", "gratitude", "indifference"],
     correctIndex: 1,
     explanation:
       "Fabrikanın yurt dışına taşınması kararının işçi sendikaları tarafından desteklenmesi beklenmez; 'resistance' (direniş) bu olumsuz tepkiyi doğru yansıtır. Diğer seçenekler olumlu bir tepkiyi ifade eder.",
@@ -1558,7 +1602,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The professor's lecture ---- so heavily on jargon that most first-year students struggled to follow it.",
-    options: ["relied", "relayed", "related", "released"],
+    options: ["relied", "relayed", "related", "released", "reflected"],
     correctIndex: 0,
     explanation:
       "'rely heavily on jargon' (büyük ölçüde jargona dayanmak) doğru collocation'dır; öğrencilerin dersi takip etmekte zorlanmasının nedeni budur. Diğer fiiller anlamca uymaz.",
@@ -1572,7 +1616,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "The report's authors were careful to ---- their claims with solid statistical evidence.",
-    options: ["substantiate", "subsidize", "substitute", "subordinate"],
+    options: ["substantiate", "subsidize", "substitute", "subordinate", "substantial"],
     correctIndex: 0,
     explanation:
       "'substantiate a claim' (bir iddiayı kanıtlarla desteklemek) doğru collocation'dır; raporun sağlam istatistiksel kanıtlarla desteklendiği anlatılır. Diğer fiiller farklı anlamlar taşır.",
@@ -1587,7 +1631,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Although the two proposals appeared similar at first glance, a closer look revealed ---- differences in their long-term costs.",
-    options: ["negligible", "marginal", "substantial", "minimal"],
+    options: ["negligible", "marginal", "substantial", "minimal", "identical"],
     correctIndex: 2,
     explanation:
       "'Although... appeared similar' zıtlık kurar; 'a closer look revealed' ifadesinden sonra önemli bir farkın ortaya çıktığı anlaşılır, bu da 'substantial' (önemli/büyük) ile örtüşür. 'Negligible', 'marginal' ve 'minimal' küçük/önemsiz farkları ifade eder ve zıtlıkla uyuşmaz.",
@@ -1601,7 +1645,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The company's quarterly earnings fell short of analysts' ---- , causing its stock price to drop sharply.",
-    options: ["expectations", "exceptions", "expenses", "experiences"],
+    options: ["expectations", "exceptions", "expenses", "experiences", "explanations"],
     correctIndex: 0,
     explanation:
       "'fall short of expectations' (beklentileri karşılayamamak) sabit bir ifadedir; hisse fiyatındaki düşüşün nedeni budur. Diğer kelimeler anlamca uymaz.",
@@ -1623,6 +1667,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Giderek daha az şirket, çalışanların evden çalışmasına izin veriyor.",
       "Şirketler geçmişte çalışanların evden çalışmasına izin veriyordu.",
       "Şirketler gelecekte çalışanların evden çalışmasına izin verecek.",
+      "Şirketlerin çoğu çalışanlarının evden çalışmasını tamamen yasakladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1644,6 +1689,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Uzaktan çalışma esneklik sunmadığı için profesyonel ve kişisel yaşam arasındaki sınırlar net kalır.",
       "Uzaktan çalışma sadece esneklik sunar, başka hiçbir etkisi yoktur.",
       "Uzaktan çalışma profesyonel ve kişisel yaşam arasındaki sınırları tamamen ortadan kaldırmıştır.",
+      "Uzaktan çalışma esneklik sunar ve profesyonel yaşamı kişisel yaşamdan tamamen ayırır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1664,6 +1710,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Esnek çalışma saatlerini reddeden şirketler daha yüksek çalışan memnuniyeti bildiriyor.",
       "Şirketler esnek çalışma saatlerini benimsemeyi planlıyor.",
       "Esnek çalışma saatleri çalışan memnuniyetini düşürmüştür.",
+      "Esnek çalışma saatleri çalışanların memnuniyeti üzerinde hiçbir etki yaratmadı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1685,6 +1732,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Dijital iletişim teknolojisindeki gelişmeler sayesinde büyük ölçekli uzaktan çalışma mümkün oldu.",
       "Dijital iletişim teknolojisi hâlâ yeterince gelişmediği için uzaktan çalışma mümkün değil.",
       "Büyük ölçekli uzaktan çalışma, dijital teknolojiden bağımsız olarak her zaman mümkün olmuştur.",
+      "Dijital iletişim teknolojisi geliştikçe uzaktan çalışmanın önemi azaldı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1707,6 +1755,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "The company will shift more than half of its employees to remote work next year.",
       "The company shifts more than half of its employees to remote work every year.",
       "The company has shifted more than half of its employees to remote work so far this year.",
+      "The company shifted fewer than half of its employees to remote work last year.",
     ],
     correctIndex: 0,
     explanation:
@@ -1726,6 +1775,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Employees' productivity seems to depend entirely on how often they go to the office.",
       "Employees' productivity depended on how often they went to the office.",
       "Employees will be more productive if they go to the office more often.",
+      "Employees who go to the office rarely seem to be the least productive.",
     ],
     correctIndex: 0,
     explanation:
@@ -1746,6 +1796,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "This policy change will be unanimously approved by the board of directors.",
       "This policy change was rejected by the board of directors.",
       "The board of directors is currently discussing this policy change.",
+      "This policy change was proposed by the board of directors, but it has not been voted on.",
     ],
     correctIndex: 0,
     explanation:
@@ -1766,6 +1817,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "If the company plans this transition more carefully, the decline in productivity can largely be avoided.",
       "The company planned this transition carefully, so the decline in productivity was avoided.",
       "Had the company planned this transition more carefully, the decline in productivity would largely be avoided.",
+      "Although the company planned this transition carefully, productivity still declined sharply.",
     ],
     correctIndex: 0,
     explanation:
@@ -1790,6 +1842,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Daha üretken oldular",
       "Performanslarında hiçbir değişiklik olmadı",
       "Tamamen çalışmayı bıraktılar",
+      "Tamamen ofise geri döndüler",
     ],
     correctIndex: 1,
     explanation:
@@ -1811,6 +1864,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Evde sessiz ve ayrılmış bir çalışma alanının bulunmaması",
       "Yöneticileriyle iletişim kuramamaları",
       "İnternet bağlantılarının yavaş olması",
+      "Yöneticilerinin onları sürekli denetlemesi",
     ],
     correctIndex: 1,
     explanation:
@@ -1827,7 +1881,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'contrary to' ifadesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "As remote work has become increasingly common, researchers have begun to examine its effects on employee productivity. Contrary to early fears that working from home would lead to distraction and reduced output, several large-scale studies have found that many employees are actually more productive outside the traditional office environment, partly because they save time otherwise spent commuting. However, the same studies note that remote work is not equally beneficial for everyone; employees who lack a quiet, dedicated workspace at home often report greater difficulty concentrating than their office-based colleagues.",
-    options: ["ile aynı doğrultuda", "aksine/tersine", "sayesinde", "hakkında"],
+    options: ["ile aynı doğrultuda", "aksine/tersine", "sayesinde", "hakkında", "nedeniyle"],
     correctIndex: 1,
     explanation:
       "'Contrary to early fears' ifadesindeki 'contrary to', erken dönem endişelerin gerçekleşmediğini, sonucun beklenenin tersi olduğunu belirtmek için kullanılır; bu nedenle 'aksine/tersine' anlamına gelir.",
@@ -1848,6 +1902,7 @@ export const MOCK_YDS: DiagnosticQuestionSeed[] = [
       "Uzaktan çalışma genel olarak üretkenliği artırabilir, ancak bu fayda uygun bir çalışma ortamına sahip olmayan çalışanlar için aynı ölçüde geçerli değildir.",
       "Çalışanların tamamı evde daha az üretken olmuştur.",
       "İşe gidip gelme süresi üretkenlik üzerinde hiçbir etkiye sahip değildir.",
+      "Uzaktan çalışma, işe gidip gelme süresini artırdığı için üretkenliği azaltmıştır.",
     ],
     correctIndex: 1,
     explanation:

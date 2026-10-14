@@ -2,7 +2,7 @@ import { submitBookletPageAction } from "@/app/actions/diagnostic-attempt";
 import { groupByPassage } from "@/lib/diagnostics/booklet-pagination";
 import { ExamTimer } from "@/components/diagnostics/ExamTimer";
 
-const LETTERS = ["A", "B", "C", "D", "E"];
+import { displayOptions } from "@/lib/diagnostics/option-order";
 
 export type BookletQuestion = {
   id: string;
@@ -19,11 +19,11 @@ function QuestionBlock({ question, number }: { question: BookletQuestion; number
         <span className="font-black">{number}.</span> {question.prompt}
       </p>
       <div className="mt-2 space-y-1.5">
-        {options.map((option, i) => (
+        {displayOptions(question.id, options).map(({ option, index: i, letter }) => (
           <label key={i} className="flex cursor-pointer items-start gap-2 text-sm text-[color:var(--foreground)]">
             <input type="radio" name={`answer_${question.id}`} value={String(i)} required className="mt-0.5 size-3.5 accent-[color:var(--accent)]" />
             <span>
-              <span className="font-bold">{LETTERS[i]})</span> {option}
+              <span className="font-bold">{letter})</span> {option}
             </span>
           </label>
         ))}

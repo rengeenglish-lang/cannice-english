@@ -20,7 +20,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Patients with high blood pressure are advised to ---- their salt intake to protect their cardiovascular health.",
-    options: ["reduce", "increase", "ignore", "measure"],
+    options: ["reduce", "increase", "ignore", "measure", "dissolve"],
     correctIndex: 0,
     explanation:
       "Yüksek tansiyon hastalarına tuz alımını azaltmaları önerilir; 'increase' anlamca ters, 'ignore/measure' bağlamla uyuşmaz.",
@@ -34,7 +34,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The nurse checked the patient's ---- to see how fast the heart was beating.",
-    options: ["pulse", "posture", "appetite", "reflex"],
+    options: ["pulse", "posture", "appetite", "reflex", "complexion"],
     correctIndex: 0,
     explanation:
       "Kalbin atış hızını ölçmek için nabız ('pulse') kontrol edilir; diğer seçenekler kalp atışıyla ilgili değildir.",
@@ -49,7 +49,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The cardiologist explained that a diet high in saturated fat can cause fatty deposits to ---- in the arteries.",
-    options: ["accumulate", "evaporate", "circulate", "dissolve"],
+    options: ["accumulate", "evaporate", "circulate", "dissolve", "evacuate"],
     correctIndex: 0,
     explanation:
       "Yağlı birikintilerin damarlarda 'birikmesi' 'accumulate' ile ifade edilir; 'circulate' dolaşmak anlamındadır ve birikimi değil hareketi ifade eder, 'evaporate/dissolve' bağlamla uyuşmaz.",
@@ -64,7 +64,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Despite the medication, his blood pressure remained ----, refusing to drop to a safe level.",
-    options: ["elevated", "diminished", "regulated", "balanced"],
+    options: ["elevated", "diminished", "regulated", "balanced", "fluctuating"],
     correctIndex: 0,
     explanation:
       "'Refusing to drop' ifadesi tansiyonun hâlâ yüksek ('elevated') olduğunu gösterir; diğer seçenekler düşük/dengeli bir durumu ima eder ve cümleyle çelişir.",
@@ -78,7 +78,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "A sedentary lifestyle is a significant ---- factor for coronary heart disease.",
-    options: ["risk", "safety", "recovery", "immune"],
+    options: ["risk", "safety", "recovery", "immune", "genetic"],
     correctIndex: 0,
     explanation:
       "'Risk factor' (risk faktörü) hastalık olasılığını artıran unsurlar için kullanılan standart tıbbi terimdir.",
@@ -93,7 +93,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The patient's condition began to ---- rapidly after the second heart attack, requiring immediate transfer to intensive care.",
-    options: ["deteriorate", "recuperate", "stabilize", "flourish"],
+    options: ["deteriorate", "recuperate", "stabilize", "flourish", "improvise"],
     correctIndex: 0,
     explanation:
       "Yoğun bakıma acil nakil gerekmesi durumun kötüleştiğini gösterir; 'deteriorate' (kötüleşmek) doğrudur, diğerleri iyileşme/istikrar anlamı taşır.",
@@ -108,7 +108,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Because the two drugs interact badly, prescribing them together is ---- for patients with heart conditions.",
-    options: ["contraindicated", "recommended", "subsidized", "customary"],
+    options: ["contraindicated", "recommended", "subsidized", "customary", "prescribed"],
     correctIndex: 0,
     explanation:
       "İki ilacın kötü etkileşimi nedeniyle birlikte reçetelenmesi tıbben sakıncalıdır; bu 'contraindicated' (kontrendike) ile ifade edilir.",
@@ -122,7 +122,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Public health officials launched a campaign to ---- awareness about the dangers of smoking.",
-    options: ["raise", "lower", "hide", "waste"],
+    options: ["raise", "lower", "hide", "waste", "erase"],
     correctIndex: 0,
     explanation:
       "'Raise awareness' (farkındalık yaratmak) standart bir kalıptır; diğer fiiller bu isimle birlikte kullanılmaz.",
@@ -142,6 +142,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Düşük kolesterol seviyeleri kalp hastalığı riskini azaltabilir.",
       "Yüksek kolesterol seviyeleri kalp hastalığını tamamen önler.",
       "Kalp hastalığı kolesterol seviyelerini artırabilir.",
+      "Yüksek kolesterol seviyeleri yalnızca yaşlılarda kalp hastalığına yol açar.",
     ],
     correctIndex: 0,
     explanation:
@@ -161,6 +162,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doktorlar, hipertansiyon hastalarının tansiyonlarını haftalık olarak izlemelerini önerir.",
       "Hastalar, doktorların tansiyonlarını günlük olarak izlemelerini önerir.",
       "Doktorlar, hipertansiyon hastalarının tansiyonlarını günlük olarak izlemelerini yasakladı.",
+      "Doktorlar, hipertansiyon hastalarının tansiyon ölçmeyi bırakmalarını önerir.",
     ],
     correctIndex: 0,
     explanation:
@@ -180,6 +182,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Klinik deneme, ilacın tansiyonu yükseltmedeki etkinliğini değerlendirmek için tasarlandı.",
       "Klinik deneme, ilacın yan etkilerini değerlendirmek için tasarlandı.",
       "İlaç, klinik denemenin etkinliğini değerlendirmek için tasarlandı.",
+      "Klinik deneme, ilacın tansiyonu düşürdüğünü kesin olarak kanıtladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -200,6 +203,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Salgın daha erken tespit edildi ve çok daha az hasta hastaneye yatırıldı.",
       "Salgın erken tespit edilmezse, daha fazla hasta hastaneye yatırılacak.",
       "Salgın daha erken tespit edilmeliydi çünkü çok hasta hastaneye yatırıldı.",
+      "Salgın erken tespit edildiği hâlde pek çok hasta hastaneye yatırıldı.",
     ],
     correctIndex: 0,
     explanation:
@@ -220,6 +224,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The patient recovered slowly after the surgery.",
       "The patient will recover quickly after the surgery.",
       "The patient was recovering quickly before the surgery.",
+      "The patient had to undergo a second surgery before recovering.",
     ],
     correctIndex: 0,
     explanation:
@@ -239,6 +244,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Most patients who have had a heart attack can slow down their recovery process by exercising regularly.",
       "Most patients who will have a heart attack can speed up their recovery process by exercising regularly.",
       "A few patients who have had a heart attack can speed up their recovery process by exercising regularly.",
+      "Most patients who have had a heart attack should avoid exercise during their recovery.",
     ],
     correctIndex: 0,
     explanation:
@@ -258,6 +264,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Individuals with a strong immune system are more vulnerable to infections.",
       "Individuals with a weak immune system are less vulnerable to infections.",
       "Individuals with a weak immune system are more vulnerable to diseases they already have.",
+      "Individuals with a weak immune system rarely catch infections.",
     ],
     correctIndex: 0,
     explanation:
@@ -279,6 +286,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doctors stated that if the disease had not been diagnosed early, it would not have progressed this much.",
       "Doctors stated that if the disease is not diagnosed early, it will progress this much.",
       "Doctors stated that the disease was diagnosed early and progressed this much.",
+      "Doctors stated that the disease progressed because it had been diagnosed too late.",
     ],
     correctIndex: 0,
     explanation:
@@ -296,7 +304,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     passageText:
       "Cardiovascular disease remains one of the leading causes of death worldwide, but research shows that a large proportion of cases are preventable. Risk factors such as high blood pressure, elevated cholesterol, smoking, and physical inactivity contribute significantly to the development of heart disease. Public health experts emphasize that lifestyle modifications, including regular exercise, a balanced diet low in saturated fat, and smoking cessation, can substantially lower an individual's risk. In addition, routine screening allows early detection of risk factors before they progress into serious complications, enabling doctors to intervene with medication or lifestyle counseling long before a cardiac event occurs.",
     prompt: "Parçaya göre, kalp-damar hastalıklarının önemli bir kısmı nasıl tanımlanmaktadır?",
-    options: ["Önlenebilir olarak", "Tedavi edilemez olarak", "Nadir görülen olarak", "Sadece genetik olarak"],
+    options: ["Önlenebilir olarak", "Tedavi edilemez olarak", "Nadir görülen olarak", "Sadece genetik olarak", "Bulaşıcı olarak"],
     correctIndex: 0,
     explanation:
       "Parçanın ikinci cümlesinde vakaların büyük bir kısmının 'preventable' (önlenebilir) olduğu belirtilmiştir.",
@@ -312,7 +320,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     passageText:
       "Cardiovascular disease remains one of the leading causes of death worldwide, but research shows that a large proportion of cases are preventable. Risk factors such as high blood pressure, elevated cholesterol, smoking, and physical inactivity contribute significantly to the development of heart disease. Public health experts emphasize that lifestyle modifications, including regular exercise, a balanced diet low in saturated fat, and smoking cessation, can substantially lower an individual's risk. In addition, routine screening allows early detection of risk factors before they progress into serious complications, enabling doctors to intervene with medication or lifestyle counseling long before a cardiac event occurs.",
     prompt: "Parçada kalp hastalığı riskini artıran faktörler arasında aşağıdakilerden hangisi SAYILMAMIŞTIR?",
-    options: ["Düzenli uyku eksikliği", "Yüksek tansiyon", "Sigara kullanımı", "Fiziksel hareketsizlik"],
+    options: ["Düzenli uyku eksikliği", "Yüksek tansiyon", "Sigara kullanımı", "Fiziksel hareketsizlik", "Aşırı tuz tüketimi"],
     correctIndex: 0,
     explanation:
       "Parçada risk faktörleri olarak 'high blood pressure, elevated cholesterol, smoking, and physical inactivity' sayılmıştır; uyku eksikliğinden hiç bahsedilmemiştir.",
@@ -333,6 +341,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hastalığı tamamen ortadan kaldırır",
       "Sadece ameliyat sonrası hastalarda uygulanır",
       "İlaç kullanımını tamamen gereksiz kılar",
+      "Hastaların hastanede kalış süresini uzatır",
     ],
     correctIndex: 0,
     explanation:
@@ -354,6 +363,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hastaları doğrudan ameliyata yönlendirme zorunluluğu",
       "Tüm hastalara aynı tedaviyi uygulama",
       "Taramaların tamamen ortadan kaldırılması",
+      "Hastaların tedavi masraflarını tamamen devletin karşılaması",
     ],
     correctIndex: 0,
     explanation:
@@ -373,7 +383,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The pharmacist advised the patient to take the medication with food to avoid stomach ----.",
-    options: ["upset", "surgery", "immunity", "diagnosis"],
+    options: ["upset", "surgery", "immunity", "diagnosis", "fever"],
     correctIndex: 0,
     explanation:
       "İlacın yemekle alınması mide 'rahatsızlığını' (upset) önlemek içindir; diğer seçenekler bağlamla uyuşmaz.",
@@ -388,7 +398,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "It is important to follow the prescribed ---- exactly; taking too much or too little can be dangerous.",
-    options: ["dosage", "diagnosis", "symptom", "allergy"],
+    options: ["dosage", "diagnosis", "symptom", "allergy", "prognosis"],
     correctIndex: 0,
     explanation:
       "'Dosage' (doz) 'çok fazla ya da çok az almak' ifadesiyle doğrudan ilişkilidir; diğer kelimeler doz kavramını karşılamaz.",
@@ -402,7 +412,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Common ---- of the new painkiller include drowsiness, nausea, and mild headaches.",
-    options: ["side effects", "prescriptions", "diagnoses", "immunities"],
+    options: ["side effects", "prescriptions", "diagnoses", "immunities", "vaccines"],
     correctIndex: 0,
     explanation:
       "Bir ilacın uyku hali, bulantı gibi istenmeyen etkileri 'side effects' (yan etkiler) olarak adlandırılır.",
@@ -416,7 +426,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The new antibiotic was found to be highly ---- against the bacteria causing the infection.",
-    options: ["effective", "toxic", "irrelevant", "expired"],
+    options: ["effective", "toxic", "irrelevant", "expired", "fragile"],
     correctIndex: 0,
     explanation:
       "Bir ilacın enfeksiyona karşı başarılı sonuç vermesi 'effective' (etkili) ile ifade edilir; 'toxic' zehirli, 'expired' süresi dolmuş anlamındadır ve bağlamla uyuşmaz.",
@@ -431,7 +441,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Because the virus can ---- from person to person through respiratory droplets, health officials recommended wearing masks in crowded areas.",
-    options: ["transmit", "digest", "circulate", "immunize"],
+    options: ["transmit", "digest", "circulate", "immunize", "evaporate"],
     correctIndex: 0,
     explanation:
       "Kişiden kişiye bulaşan bir virüs için 'transmit' (bulaştırmak/iletmek) doğru fiildir; diğerleri bulaşma sürecini tanımlamaz.",
@@ -446,7 +456,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Epidemiologists use statistical models to ---- how quickly a disease might spread through a population.",
-    options: ["forecast", "cure", "vaccinate", "sterilize"],
+    options: ["forecast", "cure", "vaccinate", "sterilize", "ignore"],
     correctIndex: 0,
     explanation: "İstatistiksel modellerle bir hastalığın yayılma hızını 'öngörmek/tahmin etmek' 'forecast' fiiliyle ifade edilir.",
     tags: ["saglik-vocab"],
@@ -460,7 +470,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The study found that the drug's effectiveness began to ---- once patients developed a tolerance to it.",
-    options: ["wane", "surge", "commence", "intensify"],
+    options: ["wane", "surge", "commence", "intensify", "stabilize"],
     correctIndex: 0,
     explanation:
       "Bir ilacın toleransla birlikte etkisinin azalması 'wane' (zayıflamak) ile ifade edilir; diğerleri artış veya başlangıç anlamı taşır ve bağlamla çelişir.",
@@ -475,7 +485,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "During the ---- period, an infected person may not show any symptoms yet can still spread the disease.",
-    options: ["incubation", "recovery", "consultation", "immunization"],
+    options: ["incubation", "recovery", "consultation", "immunization", "emergency"],
     correctIndex: 0,
     explanation:
       "Belirti göstermeden hastalığı taşıyabilme dönemi 'incubation period' (kuluçka dönemi) olarak adlandırılır.",
@@ -495,6 +505,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doktor, viral enfeksiyonu tedavi etmek için antibiyotik reçete etti.",
       "Hasta, bakteriyel enfeksiyonu tedavi etmek için antibiyotik istedi.",
       "Doktor, bakteriyel enfeksiyonu önlemek için antibiyotik reçete etti.",
+      "Doktor, bakteriyel enfeksiyonu tedavi etmek için antibiyotik kullanmayı yasakladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -514,6 +525,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Araştırmacılar, bazı hastaların tedaviye neden diğerlerinden daha kötü yanıt verdiğini hâlâ araştırıyor.",
       "Araştırmacılar, tüm hastaların tedaviye aynı şekilde yanıt verdiğini kanıtladı.",
       "Doktorlar, bazı hastaların tedaviye neden diğerlerinden daha iyi yanıt verdiğini hâlâ araştırıyor.",
+      "Araştırmacılar, tedavinin neden hiçbir hastada işe yaramadığını hâlâ araştırıyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -533,6 +545,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Aşılama kampanyası kırsal bölgelere ulaştığında hastalığın yayılması önemli ölçüde hızlandı.",
       "Aşılama kampanyası şehir merkezlerine ulaştığında hastalığın yayılması önemli ölçüde yavaşladı.",
       "Hastalığın yayılması yavaşladığında aşılama kampanyası kırsal bölgelere ulaştı.",
+      "Aşılama kampanyası kırsal bölgelere ulaşamadığı için hastalık hızla yayıldı.",
     ],
     correctIndex: 0,
     explanation:
@@ -553,6 +566,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Araştırmacılar, ilacın nadir ama ciddi yan etkisini klinik denemenin ilk aşamasında keşfettiler.",
       "Araştırmacılar, ilacın yaygın ve ciddi yan etkisini klinik denemenin son aşamasında keşfettiler.",
       "Araştırmacılar, klinik denemenin son aşamasında ilacın herhangi bir yan etkisi olmadığını keşfettiler.",
+      "Araştırmacılar, klinik denemeye başlamadan önce ilacın tüm yan etkilerini biliyordu.",
     ],
     correctIndex: 0,
     explanation:
@@ -573,6 +587,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The pharmacist advised taking the medication once a day.",
       "The doctor advised taking the medication twice a day.",
       "The pharmacist advised avoiding the medication twice a day.",
+      "The pharmacist advised stopping the medication after two days.",
     ],
     correctIndex: 0,
     explanation:
@@ -593,6 +608,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The use of this medication during pregnancy is highly recommended.",
       "The use of this medication after pregnancy is not recommended.",
       "This medication is not available during pregnancy.",
+      "This medication must be used during pregnancy.",
     ],
     correctIndex: 0,
     explanation:
@@ -613,6 +629,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hygiene rules must be followed to promote the spread of epidemic diseases.",
       "Hygiene rules should be avoided to prevent the spread of epidemic diseases.",
       "Epidemic diseases must be followed to prevent the spread of hygiene rules.",
+      "Hygiene rules are no longer necessary to prevent epidemic diseases.",
     ],
     correctIndex: 0,
     explanation:
@@ -633,6 +650,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The drug must go through years of clinical trials before being launched on the market.",
       "The drug might have gone through years of clinical trials before being launched on the market.",
       "The drug had gone through years of clinical trials before being launched on the market.",
+      "The drug should have been launched on the market without any clinical trials.",
     ],
     correctIndex: 0,
     explanation:
@@ -655,6 +673,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Bir hastalığın ölüm oranını",
       "Aşılanan kişi sayısını",
       "Karantina süresinin uzunluğunu",
+      "Bir salgının ne kadar süre devam edeceğini",
     ],
     correctIndex: 0,
     explanation:
@@ -676,6 +695,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Salgın hızla yayılmaya devam eder",
       "Aşılama kampanyaları durdurulur",
       "Hastalık kronik hale gelir",
+      "Hastalık daha ölümcül hâle gelir",
     ],
     correctIndex: 0,
     explanation:
@@ -697,6 +717,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "R0 değerini artırmak",
       "Sağlık sistemlerinin kapasitesini azaltmak",
       "Hastalığın kuluçka süresini uzatmak",
+      "Hastanelerdeki yatak sayısını artırmak",
     ],
     correctIndex: 0,
     explanation:
@@ -718,6 +739,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "R0 değerinin sürekli birin altında kaldığı bir durumla",
       "Aşılama oranının yüzde yüze ulaştığı bir durumla",
       "Karantina uygulamalarının tamamen kaldırıldığı bir dönemle",
+      "Aşı üretiminin hızla artırıldığı bir dönemle",
     ],
     correctIndex: 0,
     explanation:
@@ -737,7 +759,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The nurse gently ---- the patient's wound before applying a new bandage.",
-    options: ["cleaned", "diagnosed", "prescribed", "operated"],
+    options: ["cleaned", "diagnosed", "prescribed", "operated", "operated on"],
     correctIndex: 0,
     explanation:
       "Hemşirenin yeni bir bandaj uygulamadan önce yapması gereken şey yarayı 'temizlemek'tir ('cleaned'); diğer fiiller bu görevi tanımlamaz.",
@@ -751,7 +773,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Elderly patients often need extra ---- when walking to prevent falls.",
-    options: ["support", "medication", "surgery", "isolation"],
+    options: ["support", "medication", "surgery", "isolation", "entertainment"],
     correctIndex: 0,
     explanation: "Düşmeleri önlemek için yaşlı hastaların yürürken ihtiyaç duyduğu şey 'destek' ('support')'tir.",
     tags: ["saglik-vocab"],
@@ -764,7 +786,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Patients with diabetes must carefully ---- their blood sugar levels throughout the day.",
-    options: ["monitor", "ignore", "eliminate", "transmit"],
+    options: ["monitor", "ignore", "eliminate", "transmit", "exaggerate"],
     correctIndex: 0,
     explanation:
       "Diyabet hastalarının gün boyunca kan şekerini 'izlemesi' ('monitor') gerekir; diğer fiiller bu düzenli takip eylemini karşılamaz.",
@@ -778,7 +800,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The hormone insulin helps regulate the amount of glucose ---- in the bloodstream.",
-    options: ["circulating", "evaporating", "solidifying", "fermenting"],
+    options: ["circulating", "evaporating", "solidifying", "fermenting", "crystallizing"],
     correctIndex: 0,
     explanation:
       "Kan dolaşımında bulunan/glikozun 'dolaştığı' durumu tanımlamak için 'circulating' doğrudur; diğer fiiller biyolojik olarak anlamsızdır.",
@@ -792,7 +814,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Some diseases are ----, meaning they are passed down from parents to their children through genes.",
-    options: ["hereditary", "contagious", "chronic", "terminal"],
+    options: ["hereditary", "contagious", "chronic", "terminal", "infectious"],
     correctIndex: 0,
     explanation:
       "Ebeveynden çocuğa genler yoluyla geçen hastalıklar 'hereditary' (kalıtsal) olarak adlandırılır; 'contagious' bulaşıcı, 'chronic' kronik, 'terminal' ölümcül anlamındadır ve tanımla örtüşmez.",
@@ -807,7 +829,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "A mutation in a single gene can ---- an individual to a higher risk of developing the disorder.",
-    options: ["predispose", "immunize", "sedate", "anesthetize"],
+    options: ["predispose", "immunize", "sedate", "anesthetize", "cure"],
     correctIndex: 0,
     explanation: "Bir gen mutasyonunun kişiyi bir hastalığa karşı 'yatkın hale getirmesi' 'predispose' fiiliyle ifade edilir.",
     tags: ["saglik-vocab"],
@@ -821,7 +843,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The geriatric ward was designed to ---- the specific needs of elderly patients with multiple chronic conditions.",
-    options: ["accommodate", "aggravate", "dismiss", "contradict"],
+    options: ["accommodate", "aggravate", "dismiss", "contradict", "neglect"],
     correctIndex: 0,
     explanation:
       "Bir birimin yaşlı hastaların ihtiyaçlarına göre düzenlenmesi 'accommodate' (karşılamak, uyum sağlamak) ile ifade edilir; diğerleri bu anlamı taşımaz.",
@@ -835,7 +857,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "After the surgery, the patient was moved to the recovery ---- to be monitored closely.",
-    options: ["ward", "textbook", "conference", "forecast"],
+    options: ["ward", "textbook", "conference", "forecast", "gallery"],
     correctIndex: 0,
     explanation: "Ameliyat sonrası hastaların izlendiği hastane bölümü 'ward' (koğuş/servis) olarak adlandırılır.",
     tags: ["saglik-vocab"],
@@ -854,6 +876,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hemşire, doktor geldikten sonra hastanın ateşini ölçtü.",
       "Doktor, hemşire gelmeden önce hastanın ateşini ölçtü.",
       "Hemşire, doktorun ateşini ölçtü.",
+      "Hemşire, doktor gelmeden önce hastaya ilaç verdi.",
     ],
     correctIndex: 0,
     explanation:
@@ -873,6 +896,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Genç hastaların ameliyat sonrası komplikasyon yaşama olasılığı yaşlı hastalara göre daha yüksektir.",
       "Yaşlı hastaların ameliyat öncesi komplikasyon yaşama olasılığı genç hastalara göre daha yüksektir.",
       "Yaşlı hastaların ameliyat sonrası iyileşme olasılığı genç hastalara göre daha yüksektir.",
+      "Yaşlı hastalar ameliyattan sonra genç hastalardan daha hızlı iyileşir.",
     ],
     correctIndex: 0,
     explanation:
@@ -892,6 +916,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Genetik danışmanlık, ailelerin kalıtsal bir rahatsızlığı çocuklarına aktarmasını engeller.",
       "Genetik danışmanlık, çocukların kalıtsal bir rahatsızlığı ailelerine aktarma olasılığını anlamalarına yardımcı olur.",
       "Genetik danışmanlık, ailelerin bulaşıcı bir hastalığı çocuklarına aktarma olasılığını anlamalarına yardımcı olur.",
+      "Genetik danışmanlık, kalıtsal rahatsızlıkları tamamen tedavi eder.",
     ],
     correctIndex: 0,
     explanation:
@@ -912,6 +937,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Sürekli insülin tedavisi olduğu için, tip 1 diyabet hastası birçok kişi hayatta kalamadı.",
       "Sürekli insülin tedavisi olmasaydı, tip 1 diyabet hastası birçok kişi hayatta kalacaktı.",
       "Sürekli insülin tedavisi sayesinde, tip 1 diyabet hastası birçok kişi hayatta kalamayacak.",
+      "Sürekli insülin tedavisine rağmen tip 1 diyabet hastalarının çoğu hayatta kalamaz.",
     ],
     correctIndex: 0,
     explanation:
@@ -932,6 +958,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The nurse forgot to give the patient her medication on time.",
       "The nurse did not forget to give the patient her medication late.",
       "The patient did not forget to give the nurse her medication on time.",
+      "The nurse refused to give the patient any medication that day.",
     ],
     correctIndex: 0,
     explanation:
@@ -951,6 +978,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The prevalence of chronic diseases among young individuals is considerably higher compared to elderly ones.",
       "The prevalence of chronic diseases among elderly individuals is considerably lower compared to younger ones.",
       "The prevalence of acute diseases among elderly individuals is considerably higher compared to younger ones.",
+      "Chronic diseases are equally common among elderly and young individuals.",
     ],
     correctIndex: 0,
     explanation:
@@ -970,6 +998,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doctors recommend that individuals with a family history of diabetes have their blood pressure tested regularly.",
       "Doctors recommend that individuals without a family history of diabetes have their blood sugar tested regularly.",
       "Doctors require that individuals with a family history of diabetes have their blood sugar tested regularly.",
+      "Doctors recommend that individuals with diabetes stop testing their blood sugar.",
     ],
     correctIndex: 0,
     explanation:
@@ -990,6 +1019,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "If genetic testing becomes more widespread, many hereditary diseases will not be diagnosed this early.",
       "If genetic testing had become more widespread, many hereditary diseases could not have been diagnosed this early.",
       "If genetic testing had not become more widespread, many hereditary diseases could have been diagnosed this early.",
+      "Genetic testing has made it more difficult to diagnose hereditary diseases early.",
     ],
     correctIndex: 0,
     explanation:
@@ -1012,6 +1042,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Bir hastalığın hiç tedavi edilmemesi",
       "Bir hastanın hiç ilaç kullanmaması",
       "Yaşlı nüfusun azalması",
+      "Yaşlı hastaların hiç kronik hastalığının olmaması",
     ],
     correctIndex: 0,
     explanation:
@@ -1033,6 +1064,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hastane maliyetlerinin azalması",
       "Hastaların daha hızlı iyileşmesi",
       "Doktor sayısının artması",
+      "Hastaların hastanede daha az kalması",
     ],
     correctIndex: 0,
     explanation:
@@ -1054,6 +1086,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Sadece ilaç dağıtımını yapmak",
       "Hastane finansmanını yönetmek",
       "Yalnızca ameliyatlarda görev almak",
+      "Hastaların ailelerine maddi yardım sağlamak",
     ],
     correctIndex: 0,
     explanation:
@@ -1075,6 +1108,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Yaşlı hastaların hastaneye başvurmasını engellemeyi amaçlar",
       "Hemşire sayısını azaltmayı amaçlar",
       "Hastaların tedavi sürecinden habersiz kalmasını sağlamayı amaçlar",
+      "Ameliyat sonrası bakımın tamamen hastaneler dışında yapılmasını amaçlar",
     ],
     correctIndex: 0,
     explanation:
@@ -1094,7 +1128,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The doctor asked the patient to describe the exact location of the ---- to help identify the cause.",
-    options: ["pain", "vaccine", "therapy", "surgeon"],
+    options: ["pain", "vaccine", "therapy", "surgeon", "appetite"],
     correctIndex: 0,
     explanation: "Hastadan ağrının yerini tarif etmesi istenir; 'pain' (ağrı) bağlama uyan tek isimdir.",
     tags: ["saglik-vocab"],
@@ -1107,7 +1141,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Regular mammograms allow doctors to ---- breast cancer at an early, more treatable stage.",
-    options: ["detect", "cause", "spread", "worsen"],
+    options: ["detect", "cause", "spread", "worsen", "ignore"],
     correctIndex: 0,
     explanation:
       "Düzenli taramalar kanserin erken 'tespit edilmesini' ('detect') sağlar; diğer fiiller anlam olarak uyuşmaz.",
@@ -1121,7 +1155,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The tumor was found to be ----, meaning it had not spread to other parts of the body.",
-    options: ["benign", "malignant", "contagious", "chronic"],
+    options: ["benign", "malignant", "contagious", "chronic", "inflamed"],
     correctIndex: 0,
     explanation:
       "Vücudun diğer bölgelerine yayılmamış bir tümör 'benign' (iyi huylu) olarak tanımlanır; 'malignant' kötü huylu anlamına gelir ve cümledeki açıklamayla çelişir.",
@@ -1135,7 +1169,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Long-term exposure to air pollution can ---- respiratory conditions such as asthma.",
-    options: ["aggravate", "cure", "prevent", "diagnose"],
+    options: ["aggravate", "cure", "prevent", "diagnose", "alleviate"],
     correctIndex: 0,
     explanation:
       "Hava kirliliğine uzun süreli maruz kalmak solunum yolu rahatsızlıklarını 'kötüleştirir' ('aggravate'); diğer fiiller olumlu ya da alakasız bir etkiyi ifade eder.",
@@ -1149,7 +1183,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "After the stroke, the patient underwent physical ---- to regain movement in her left arm.",
-    options: ["rehabilitation", "immunization", "sterilization", "sedation"],
+    options: ["rehabilitation", "immunization", "sterilization", "sedation", "hydration"],
     correctIndex: 0,
     explanation: "İnme sonrası hareket kabiliyetini yeniden kazanmak için uygulanan süreç 'rehabilitation' (rehabilitasyon)'dur.",
     tags: ["saglik-vocab"],
@@ -1162,7 +1196,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "The neurologist explained that the disorder gradually ---- the nerve cells responsible for muscle control.",
-    options: ["degenerates", "regenerates", "sterilizes", "immunizes"],
+    options: ["degenerates", "regenerates", "sterilizes", "immunizes", "nourishes"],
     correctIndex: 0,
     explanation:
       "Bir hastalığın sinir hücrelerini zamanla 'bozması/dejenere etmesi' 'degenerate' fiiliyle ifade edilir; 'regenerate' tam tersi bir anlam (yenilenme) taşır.",
@@ -1177,7 +1211,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Because the cancer was diagnosed at an advanced stage, doctors could only offer ---- care to ease her pain.",
-    options: ["palliative", "preventive", "cosmetic", "elective"],
+    options: ["palliative", "preventive", "cosmetic", "elective", "experimental"],
     correctIndex: 0,
     explanation:
       "İyileştirici tedavi mümkün olmadığında acıyı hafifletmeye yönelik bakım 'palliative care' (palyatif bakım) olarak adlandırılır.",
@@ -1191,7 +1225,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Smoking is one of the leading ---- of lung cancer worldwide.",
-    options: ["causes", "cures", "symptoms", "remedies"],
+    options: ["causes", "cures", "symptoms", "remedies", "treatments"],
     correctIndex: 0,
     explanation: "Sigara kullanımı akciğer kanserinin başlıca 'nedenlerinden' (causes) biridir.",
     tags: ["saglik-vocab"],
@@ -1210,6 +1244,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hava kirliliği, solunum yolu hastalıklarındaki azalışla ilişkilendirilmiştir.",
       "Solunum yolu hastalıkları, hava kirliliğindeki artışla ilişkilendirilmiştir.",
       "Hava kirliliği, kalp hastalıklarındaki artışla ilişkilendirilmiştir.",
+      "Hava kirliliğinin solunum yolu hastalıklarıyla hiçbir ilgisi bulunamamıştır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1229,6 +1264,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Erken teşhis, bir hastanın kanserden kurtulma şansını önemli ölçüde azaltır.",
       "Geç teşhis, bir hastanın kanserden kurtulma şansını önemli ölçüde artırır.",
       "Erken teşhis, bir hastanın kanser olma riskini önemli ölçüde artırır.",
+      "Erken teşhis, kanser tedavisinin süresini uzatır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1248,6 +1284,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "İnme, hastayı birkaç ay boyunca net duyamaz hale getirdi.",
       "Ameliyat, hastayı birkaç ay boyunca net konuşamaz hale getirdi.",
       "İnme, hastayı birkaç yıl boyunca net konuşamaz hale getirdi.",
+      "İnme geçiren hasta birkaç ay içinde tamamen iyileşti.",
     ],
     correctIndex: 0,
     explanation:
@@ -1268,6 +1305,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Hastanın nörolojik hasarı o kadar hafifti ki doktorlar bir daha hiç yürüyemeyeceğinden şüphe duydu.",
       "Hastanın nörolojik hasarı o kadar ağırdı ki doktorlar bir daha yürüyeceğinden emindi.",
       "Doktorların nörolojik hasarı o kadar ağırdı ki hasta bir daha hiç yürüyemeyeceğinden şüphe duydu.",
+      "Hastanın nörolojik hasarı ciddi olmasına rağmen ertesi gün yürümeye başladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1288,6 +1326,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The doctor carefully examined the patient's heart X-ray.",
       "The patient carefully examined the doctor's lung X-ray.",
       "The doctor quickly examined the patient's lung X-ray.",
+      "The doctor refused to look at the patient's lung X-ray.",
     ],
     correctIndex: 0,
     explanation:
@@ -1307,6 +1346,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "A small proportion of patients undergoing cancer treatment experience severe fatigue during the process.",
       "A large proportion of patients undergoing cancer treatment experience mild fatigue during the process.",
       "A large proportion of patients who have completed cancer treatment experience severe fatigue during the process.",
+      "Patients undergoing cancer treatment rarely feel tired during the process.",
     ],
     correctIndex: 0,
     explanation:
@@ -1326,6 +1366,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The brain is considered one of the simplest organs in the body.",
       "The heart is considered one of the most complex organs in the body.",
       "The brain is considered the only complex organ in the body.",
+      "The brain is considered the largest organ in the body.",
     ],
     correctIndex: 0,
     explanation:
@@ -1346,6 +1387,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "If patients take the symptoms seriously, the diagnosis will not be delayed this much.",
       "If patients had not taken the symptoms seriously, the diagnosis would not have been delayed this much.",
       "If patients had taken the symptoms seriously, the diagnosis would have been delayed this much.",
+      "The diagnosis was delayed even though the patients took the symptoms seriously.",
     ],
     correctIndex: 0,
     explanation:
@@ -1368,6 +1410,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Sadece cilt yüzeyine",
       "Sadece mideye",
       "Sadece göz çevresine",
+      "Yalnızca burun boşluğuna",
     ],
     correctIndex: 0,
     explanation:
@@ -1389,6 +1432,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Daha fazla açık havada vakit geçirdikleri için",
       "Bağışıklık sistemleri diğer gruplardan daha güçlü olduğu için",
       "Sigara kullanım oranları daha yüksek olduğu için",
+      "Daha az açık havada bulundukları için",
     ],
     correctIndex: 0,
     explanation:
@@ -1410,6 +1454,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Tüm araçların şehir merkezine girişini tamamen yasaklar",
       "Yalnızca elektrikli araçların üretimini artırır",
       "Hastane sayısını artırır",
+      "Şehirlerdeki toplu taşıma ücretlerini düşürür",
     ],
     correctIndex: 0,
     explanation:
@@ -1431,6 +1476,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Bu bölgelerin hava kalitesi üzerinde hiçbir etkisinin olmadığını",
       "Bu bölgelerin yalnızca trafik sıkışıklığını azalttığını",
       "Bu bölgelerin hastane başvurularını artırdığını",
+      "Bu bölgelerin solunum yolu hastalıklarını tamamen ortadan kaldırdığını",
     ],
     correctIndex: 0,
     explanation:
@@ -1450,7 +1496,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The emergency room was full of patients waiting to be ---- by a doctor.",
-    options: ["examined", "invoiced", "postponed", "advertised"],
+    options: ["examined", "invoiced", "postponed", "advertised", "discharged"],
     correctIndex: 0,
     explanation:
       "Acil serviste hastaların bir doktor tarafından 'muayene edilmesi' ('examined') beklenir; diğer fiiller tıbbi bağlamla uyuşmaz.",
@@ -1464,7 +1510,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Before the operation, the surgeon washed her hands thoroughly to maintain strict ----.",
-    options: ["hygiene", "anxiety", "curiosity", "flexibility"],
+    options: ["hygiene", "anxiety", "curiosity", "flexibility", "fatigue"],
     correctIndex: 0,
     explanation:
       "Ellerin iyice yıkanması 'hijyen' (hygiene) kurallarına uymak içindir; diğer isimler bu bağlamla ilgisizdir.",
@@ -1478,7 +1524,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "The hospital adopted telemedicine so that patients in remote areas could ---- doctors without traveling long distances.",
-    options: ["consult", "operate", "sterilize", "amputate"],
+    options: ["consult", "operate", "sterilize", "amputate", "avoid"],
     correctIndex: 0,
     explanation:
       "Uzak bölgelerdeki hastaların uzun yol kat etmeden doktorlarla görüşebilmesi 'consult' (danışmak) fiiliyle ifade edilir.",
@@ -1492,7 +1538,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Mental health professionals stress that ---- depression as merely 'feeling sad' trivializes a serious medical condition.",
-    options: ["dismissing", "diagnosing", "treating", "monitoring"],
+    options: ["dismissing", "diagnosing", "treating", "monitoring", "celebrating"],
     correctIndex: 0,
     explanation:
       "Depresyonu sadece 'üzgün hissetmek' olarak 'göz ardı etmek/küçümsemek' ('dismissing') ciddi bir durumu önemsizleştirir; diğer fiiller bu olumsuz tutumu ifade etmez.",
@@ -1506,7 +1552,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Medical ethics requires doctors to obtain informed ---- from patients before performing any procedure.",
-    options: ["consent", "diagnosis", "prescription", "anesthesia"],
+    options: ["consent", "diagnosis", "prescription", "anesthesia", "criticism"],
     correctIndex: 0,
     explanation: "Bir işlemden önce hastadan alınması gereken onay 'informed consent' (bilgilendirilmiş onam) olarak adlandırılır.",
     tags: ["saglik-vocab"],
@@ -1519,7 +1565,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "The surgical team had to ---- the operation midway through when the patient's vital signs suddenly dropped.",
-    options: ["abort", "schedule", "postpone", "celebrate"],
+    options: ["abort", "schedule", "postpone", "celebrate", "accelerate"],
     correctIndex: 0,
     explanation:
       "Yaşamsal bulgularının aniden düşmesi üzerine ameliyatın yarıda 'durdurulması/iptal edilmesi' 'abort' ile ifade edilir; 'postpone' ertelemek anlamındadır ve devam eden bir işlemi yarıda kesmeyi karşılamaz.",
@@ -1533,7 +1579,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ZOR",
     prompt: "The new outbreak was eventually traced back to a single ---- event at a crowded wedding reception.",
-    options: ["super-spreader", "quarantine", "vaccination", "sterilization"],
+    options: ["super-spreader", "quarantine", "vaccination", "sterilization", "recovery"],
     correctIndex: 0,
     explanation:
       "Çok sayıda kişiye bulaşmaya neden olan tek bir olay 'super-spreader event' (süper yayıcı olay) olarak adlandırılır; diğer seçenekler bu tanıma uymaz.",
@@ -1547,7 +1593,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "Patients are asked to ---- an appointment online before visiting the outpatient clinic.",
-    options: ["book", "cancel", "forget", "deny"],
+    options: ["book", "cancel", "forget", "deny", "ignore"],
     correctIndex: 0,
     explanation: "Poliklinik ziyaretinden önce hastalardan çevrimiçi randevu 'almaları' ('book') istenir.",
     tags: ["saglik-vocab"],
@@ -1566,6 +1612,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doktorlar, herhangi bir cerrahi işlem uygulanmadan önce onay vermelidir.",
       "Hastalar, herhangi bir cerrahi işlem uygulandıktan sonra onay vermelidir.",
       "Hastalar, herhangi bir cerrahi işlem uygulanmadan önce onay almalıdır.",
+      "Hastalar, herhangi bir cerrahi işlemden önce doktorlarına ücret ödemelidir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1585,6 +1632,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Tele-tıp, uzak bölgelerdeki hastaların uzman bakımına erişimini zorlaştırdı.",
       "Tele-tıp, şehir merkezindeki hastaların uzman bakımına erişimini kolaylaştırdı.",
       "Uzman bakımı, uzak bölgelerdeki hastaların tele-tıbba erişimini kolaylaştırdı.",
+      "Tele-tıp, uzak bölgelerdeki hastaların doktorlara gitmesini zorunlu hâle getirdi.",
     ],
     correctIndex: 0,
     explanation:
@@ -1604,6 +1652,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Ruh sağlığı kliniği, anksiyete bozuklukları için yardım arayan hastaların sayısında keskin bir azalış bildirdi.",
       "Ruh sağlığı kliniği, depresyon için yardım arayan hastaların sayısında keskin bir artış bildirdi.",
       "Hastalar, anksiyete bozuklukları için yardım arayan ruh sağlığı kliniklerinin sayısında keskin bir artış bildirdi.",
+      "Ruh sağlığı kliniği, anksiyete bozukluğu olan hastaları kabul etmeyi bıraktı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1624,6 +1673,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Tek bir halk sağlığı önleminin el yıkama kadar geniş bir etkisi sıklıkla olmuştur.",
       "Hiçbir halk sağlığı önleminin el yıkama kadar geniş bir etkisi olmamıştır.",
       "Tek bir halk sağlığı önlemi, el yıkamanın etkisini nadiren artırmıştır.",
+      "El yıkama, halk sağlığı üzerinde etkisi en az olan önlemlerden biridir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1644,6 +1694,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The doctors on duty in the emergency room examined the patient later.",
       "The nurses on duty in the emergency room examined the patient immediately.",
       "The doctors on duty in the emergency room ignored the patient immediately.",
+      "The doctors on duty in the emergency room sent the patient home without examining him.",
     ],
     correctIndex: 0,
     explanation:
@@ -1663,6 +1714,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "During the pandemic, most healthcare workers experienced burnout due to short shifts.",
       "During the pandemic, a few healthcare workers experienced burnout due to long shifts.",
       "Before the pandemic, most healthcare workers experienced burnout due to long shifts.",
+      "During the pandemic, most healthcare workers were given longer holidays.",
     ],
     correctIndex: 0,
     explanation:
@@ -1682,6 +1734,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "The early signs of this disease are always noticed immediately.",
       "The late signs of this disease often go unnoticed.",
       "This disease often goes unnoticed by its early signs.",
+      "The early signs of this disease are usually more serious than the late ones.",
     ],
     correctIndex: 0,
     explanation:
@@ -1702,6 +1755,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Had the patient's relatives not been informed in time, the decision-making process would not have been this difficult.",
       "If the patient's relatives are informed in time, the decision-making process will not be this difficult.",
       "Had the patient's relatives been informed in time, the decision-making process would have been this difficult.",
+      "The patient's relatives were informed in time, but the decision was still difficult.",
     ],
     correctIndex: 0,
     explanation:
@@ -1724,6 +1778,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Doktorların maaşlarını",
       "Hastane sayısını",
       "Tıp fakültesi mezun sayısını",
+      "Hastaların ilaç kullanma ihtiyacını",
     ],
     correctIndex: 0,
     explanation:
@@ -1745,6 +1800,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Acil ameliyat gerektiren durumlarda",
       "Doğrudan fiziksel muayene gerektiren kırık teşhislerinde",
       "Yalnızca çocuk hastalarda",
+      "Yalnızca yoğun bakım gerektiren hastalarda",
     ],
     correctIndex: 0,
     explanation:
@@ -1766,6 +1822,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Tele-tıbbın her türlü tıbbi ihtiyacı tamamen karşıladığını",
       "Tele-tıbbın kırsal bölgelerdeki hastalara hiçbir fayda sağlamadığını",
       "Tele-tıbbın maliyetinin çok düşük olduğunu",
+      "Tele-tıbbın kısa sürede tamamen ortadan kalkacağını",
     ],
     correctIndex: 0,
     explanation:
@@ -1787,6 +1844,7 @@ export const MOCK_YOKDIL_SAGLIK: DiagnosticQuestionSeed[] = [
       "Şehirdeki hastaların tele-tıp hizmetlerinden tamamen men edilmesi",
       "Tüm hastaların aynı anda fayda sağlaması",
       "İnternet şirketlerinin hastane hizmetlerini devralması",
+      "Doktorların uzaktan görüşme yapmayı reddetmesi",
     ],
     correctIndex: 0,
     explanation:

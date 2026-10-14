@@ -23,6 +23,7 @@ export default async function NotebookRetryPage() {
           lesson={lesson}
           question={{
             entryId: next.entry.id,
+            questionId: next.question.id,
             prompt: next.question.prompt,
             passageText: next.question.passageText,
             audioUrl: next.question.audioUrl,

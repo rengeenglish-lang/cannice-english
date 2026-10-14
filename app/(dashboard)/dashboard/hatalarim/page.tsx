@@ -6,17 +6,16 @@ import { listRecentMistakes, MISTAKE_WINDOW_DAYS } from "@/server/services/mista
 import { mistakeExplainConfigured } from "@/server/services/mistake-explain.service";
 import { MistakeExplainer } from "@/components/diagnostics/MistakeExplainer";
 import { optionIndex } from "@/lib/mistake-explain";
+import { displayLetter, relabelExplanation } from "@/lib/diagnostics/option-order";
 
 export const metadata: Metadata = { title: "Hatalarım" };
 // "Neden yanlış yaptım?" generates an explanation inside a server action on this page.
 export const maxDuration = 60;
 
-const LETTERS = ["A", "B", "C", "D", "E"];
-
-function optionLabel(options: string[], raw: string | null) {
+function optionLabel(questionId: string, options: string[], raw: string | null) {
   if (raw === null || raw === "") return "(Boş)";
   const index = Number(raw);
-  if (Number.isInteger(index) && options[index] !== undefined) return `${LETTERS[index] ?? index + 1}) ${options[index]}`;
+  if (Number.isInteger(index) && options[index] !== undefined) return `${displayLetter(questionId, options.length, index)}) ${options[index]}`;
   return raw;
 }
 
@@ -64,19 +63,19 @@ export default async function MistakesPage() {
               <div className="mt-4 grid gap-2 text-sm">
                 <p className="flex gap-2 rounded-xl bg-rose-50 p-3 text-rose-900">
                   <XCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
-                  <span><strong>Senin cevabın:</strong> {optionLabel(m.options, m.studentAnswer)}</span>
+                  <span><strong>Senin cevabın:</strong> {optionLabel(m.questionId, m.options, m.studentAnswer)}</span>
                 </p>
                 {m.correctAnswer !== null ? (
                   <p className="flex gap-2 rounded-xl bg-emerald-50 p-3 text-emerald-900">
                     <CheckCircle2 size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
-                    <span><strong>Doğru cevap:</strong> {optionLabel(m.options, m.correctAnswer)}</span>
+                    <span><strong>Doğru cevap:</strong> {optionLabel(m.questionId, m.options, m.correctAnswer)}</span>
                   </p>
                 ) : null}
               </div>
 
               <div className="mt-4 rounded-xl border border-[color:var(--border)] p-4">
                 <p className="text-xs font-bold uppercase tracking-wide text-[color:var(--muted)]">Açıklama</p>
-                <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{m.explanation ?? "Bu soru için açıklama yakında eklenecek."}</p>
+                <p className="mt-1 whitespace-pre-wrap text-sm leading-6">{m.explanation ? relabelExplanation(m.questionId, m.options.length, m.explanation) : "Bu soru için açıklama yakında eklenecek."}</p>
               </div>
 
               {canExplain && optionIndex(m.studentAnswer, m.options.length) !== null && optionIndex(m.correctAnswer, m.options.length) !== null ? (
