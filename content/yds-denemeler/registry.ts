@@ -35,6 +35,16 @@ export const DENEME_LOADERS: Record<number, () => Promise<Deneme>> = {
   28: () => import("./deneme-28").then((m) => m.DENEME_28),
   29: () => import("./deneme-29").then((m) => m.DENEME_29),
   30: () => import("./deneme-30").then((m) => m.DENEME_30),
+  31: () => import("./deneme-31").then((m) => m.DENEME_31),
+  32: () => import("./deneme-32").then((m) => m.DENEME_32),
+  33: () => import("./deneme-33").then((m) => m.DENEME_33),
+  34: () => import("./deneme-34").then((m) => m.DENEME_34),
+  35: () => import("./deneme-35").then((m) => m.DENEME_35),
+  36: () => import("./deneme-36").then((m) => m.DENEME_36),
+  37: () => import("./deneme-37").then((m) => m.DENEME_37),
+  38: () => import("./deneme-38").then((m) => m.DENEME_38),
+  39: () => import("./deneme-39").then((m) => m.DENEME_39),
+  40: () => import("./deneme-40").then((m) => m.DENEME_40),
 };
 
 /** How many online denemeler are planned in total (released in batches of ten). */
