@@ -10,17 +10,17 @@ import { NETFENER_BUNDLES, bundlesContainingEbook, bundleBooks, findNetfenerBund
 import { EBOOK_EDITIONS, editionSlug, slugsGranting, findNetfenerEdition } from "../lib/netfener-ebook-editions";
 
 test("catalogue files exist and match the supported exam groups", async () => {
-  assert.equal(NETFENER_EBOOKS.length, 10);
+  assert.equal(NETFENER_EBOOKS.length, 11);
   for (const book of NETFENER_EBOOKS) {
     const pdf = await fs.readFile(path.join(process.cwd(), "content/ebooks", book.filename));
     assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
     await fs.access(path.join(process.cwd(), "public", book.cover));
   }
-  assert.equal(netfenerEbooksForExam("yokdil-saglik-bilimleri").length, 6);
-  assert.deepEqual(netfenerEbooksForExam("yds").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yds-denemeleri-set-1", "yds-denemeleri-set-2"]);
-  assert.deepEqual(netfenerEbooksForExam("yokdil-fen-bilimleri").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-fen"]);
-  assert.deepEqual(netfenerEbooksForExam("yokdil-sosyal-bilimler").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-sosyal"]);
-  assert.equal(netfenerEbooksForExam("ielts").length, 0);
+  assert.equal(netfenerEbooksForExam("yokdil-saglik-bilimleri").length, 7);
+  assert.deepEqual(netfenerEbooksForExam("yds").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "prepositions-master-class", "yds-denemeleri-set-1", "yds-denemeleri-set-2"]);
+  assert.deepEqual(netfenerEbooksForExam("yokdil-fen-bilimleri").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-fen", "prepositions-master-class"]);
+  assert.deepEqual(netfenerEbooksForExam("yokdil-sosyal-bilimler").map((b) => b.slug), ["cumlenin-icini-gor", "kelimenin-izini-sur", "phrasal-verbs", "paragrafin-isigini-yak", "paragrafin-isigini-yak-cilt-2", "yokdil-sosyal", "prepositions-master-class"]);
+  assert.deepEqual(netfenerEbooksForExam("ielts").map((b) => b.slug), ["prepositions-master-class"]);
   assert.equal(findNetfenerEbook("../../secret"), undefined);
 });
 

@@ -1,6 +1,6 @@
 import { answerAndAdvanceAction } from "@/app/actions/diagnostic-attempt";
 
-const LETTERS = ["A", "B", "C", "D"];
+const LETTERS = ["A", "B", "C", "D", "E"];
 
 export type RunnerQuestion = {
   id: string;

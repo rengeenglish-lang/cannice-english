@@ -314,6 +314,41 @@ export const NETFENER_EBOOK_PITCH: Record<string, EbookPitch> = {
     closing: "Sosyal bilimler alanında YÖKDİL'e hazırlananlar için, dil çalışmasıyla sınav pratiğini aynı kitapta birleştirir.",
   },
 
+  "prepositions-master-class": {
+    lead: "Prepositions Master Class, İngilizcenin en küçük ama en çok puan kaybettiren kelimelerini tek bir sistemde toplar. Türkçede çoğu edat bir ekle karşılandığı için sezgiyle seçilemez; bu kitap 567 kalıbı ezberletmek yerine her grubun ortak mantığını gösterir ve 'neden bu edat?' sorusuna cevap verir.",
+    facts: [
+      { label: "Sayfa", value: "133" },
+      { label: "Ünite", value: "30" },
+      { label: "Kalıp", value: "567" },
+      { label: "Özgün soru", value: "160" },
+    ],
+    sections: [
+      {
+        title: "Beş bölümde edatların tamamı",
+        body: "Kitap yerden başlar, zamana ve mantık ilişkilerine geçer, bağımlı edatlarla derinleşir ve sabit öbekler ile sınav tuzaklarıyla biter. Her bölüm bir öncekinin mantığı üzerine kurulur:",
+        bullets: [
+          "Yer: at/in/on, above/over/below/under, between/among, within/beyond",
+          "Hareket ve zaman: into/onto, across/through/along, for/since, by/until, prior to/following",
+          "Mantık: neden, zıtlık, ekleme ve istisna, araç, amaç, konu, karşılaştırma, koşul, ölçü",
+          "Bağımlı edatlar: sıfat + edat, fiil + edat, fiil + nesne + edat, isim + edat",
+          "Öbekler ve dil bilgisi: at risk, by no means, under way, edat + -ing, edat olan 'to'",
+        ],
+      },
+      {
+        title: "Her kalıp için anlam, not ve örnek",
+        body: "Her kalıp Türkçe anlamı, kullanım notu ve Netfener için yazılmış bir örnek cümle ile çevirisiyle verilir. Ünite açılışındaki 'İnce ayrımlar' kutusu en çok karıştırılan ikilileri tek cümleyle ayırır: by/until, since/for, beside/besides, result in/result from, familiar with/familiar to.",
+      },
+      {
+        title: "Pratik ve sınavda karar anı",
+        body: "Her ünite 10 boşluk doldurma cümlesi ve YDS/YÖKDİL tarzında 4 özgün soruyla biter. Her sorunun yanında doğru cevabın gerekçesi ve en güçlü çeldiricinin neden yanlış olduğu Türkçe açıklanır; sınavın en klasik tuzakları (discuss about, prevent to, arrive to, despite of) tek tek gösterilir.",
+      },
+      {
+        title: "Final testi ve alfabetik dizin",
+        body: "Kitabın sonundaki 40 soruluk final testi bütün bölümleri karışık sırayla sınar; cevap anahtarı ve her soru için açıklama eklenmiştir. Alfabetik dizin 567 kalıbın hangi ünite ve sayfada olduğunu gösterir, böylece kitap bir başvuru kaynağı olarak da kullanılabilir.",
+      },
+    ],
+    closing: "YDS, YÖKDİL, IELTS ve TOEFL'a hazırlanan ve edat sorularında artık tahmin etmek istemeyen herkes için.",
+  },
   "yds-denemeleri-set-1": {
     lead: "Özgün YDS Denemeleri Set 1, sınav gününden önce sınavı defalarca yaşaman için hazırlandı. Beş tam deneme YDS'nin soru türlerini, sırasını ve süresini birebir izler; kitaptaki her cümle, her okuma parçası ve her soru Netfener için yazıldı.",
     facts: [

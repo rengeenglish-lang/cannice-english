@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { startPracticeAction } from "@/app/actions/diagnostic-attempt";
 
-const LETTERS = ["A", "B", "C", "D"];
+const LETTERS = ["A", "B", "C", "D", "E"];
 
 type Item = {
   question: { id: string; questionType: string; prompt: string; options: unknown; correctAnswer: string | null; explanation: string | null };

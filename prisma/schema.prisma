@@ -175,6 +175,11 @@ enum DiagnosticAttemptStatus {
   ABANDONED
 }
 
+enum OnlineDenemeMode {
+  KLASIK
+  OPTIK
+}
+
 enum DiagnosticSeverity {
   CRITICAL
   NEEDS_IMPROVEMENT
@@ -380,6 +385,7 @@ model User {
   instructedSessions      LiveSession[]             @relation("SessionInstructor")
   examGoals               ExamGoal[]
   diagnosticAttempts      DiagnosticAttempt[]
+  onlineDenemeAttempts    OnlineDenemeAttempt[]
   studyRoadmapItems       StudyRoadmapItem[]
   analyticsEvents         AnalyticsEvent[]
   notifications           Notification[]
@@ -2761,4 +2767,57 @@ model SeatReservation {
 
   @@index([cohortId, releasedAt, expiresAt])
   @@map("seat_reservations")
+}
+
+/**
+ * One sitting of an online YDS deneme (content/yds-denemeler, Deneme 1–100). The 180-minute clock
+ * lives here: deadlineAt is fixed at start, answers saved after it are refused, and an attempt
+ * found past its deadline is finalized (locked) on the next server touch.
+ */
+model OnlineDenemeAttempt {
+  id          String                  @id @default(cuid())
+  userId      String
+  denemeNo    Int
+  mode        OnlineDenemeMode        @default(KLASIK)
+  status      DiagnosticAttemptStatus @default(IN_PROGRESS)
+  startedAt   DateTime                @default(now())
+  deadlineAt  DateTime
+  completedAt DateTime?
+  /**
+   * True when the time ran out (locked by the clock) rather than the student finishing.
+   */
+  timedOut    Boolean                 @default(false)
+  correct     Int?
+  wrong       Int?
+  blank       Int?
+  /**
+   * YDS score out of 100: correct × 1.25.
+   */
+  score       Decimal?                @db.Decimal(5, 2)
+  createdAt   DateTime                @default(now())
+
+  user    User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers OnlineDenemeAnswer[]
+
+  @@index([userId, denemeNo, status])
+  @@map("online_deneme_attempts")
+}
+
+model OnlineDenemeAnswer {
+  attemptId String
+  /**
+   * Question number 1–80.
+   */
+  n         Int
+  /**
+   * 0–4 = A–E.
+   */
+  choice    Int?
+  flagged   Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+
+  attempt OnlineDenemeAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@id([attemptId, n])
+  @@map("online_deneme_answers")
 }

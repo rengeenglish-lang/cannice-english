@@ -2,7 +2,7 @@ import { submitBookletPageAction } from "@/app/actions/diagnostic-attempt";
 import { groupByPassage } from "@/lib/diagnostics/booklet-pagination";
 import { ExamTimer } from "@/components/diagnostics/ExamTimer";
 
-const LETTERS = ["A", "B", "C", "D"];
+const LETTERS = ["A", "B", "C", "D", "E"];
 
 export type BookletQuestion = {
   id: string;
