@@ -6,7 +6,7 @@ import { CheckCircle2, Pencil, Plus, Trash2, XCircle } from "lucide-react";
 import { coachingCopy } from "@/lib/coaching/i18n";
 import { addMistakeNoteAction, deleteMistakeAction, retryMistakeAction, updateMistakeNoteAction } from "@/app/actions/coaching";
 
-const LETTERS = ["A", "B", "C", "D", "E"];
+import { displayOptions, relabelExplanation } from "@/lib/diagnostics/option-order";
 
 export function MistakeNoteEditor({ locale, id, note, tags }: { locale: string; id: string; note: string; tags: string[] }) {
   const t = coachingCopy(locale);
@@ -66,7 +66,7 @@ export function AddMistakeForm({ locale }: { locale: string }) {
   );
 }
 
-type RetryQuestion = { entryId: string; prompt: string; passageText: string | null; audioUrl: string | null; options: string[]; topic: string; timesWrong: number; streak: number };
+type RetryQuestion = { entryId: string; questionId: string; prompt: string; passageText: string | null; audioUrl: string | null; options: string[]; topic: string; timesWrong: number; streak: number };
 
 /** One notebook retry: answer, see the explanation and the related lesson, then move on. */
 export function NotebookRetry({ locale, question, lesson }: { locale: string; question: RetryQuestion; lesson: { href: string; label: string } | null }) {
@@ -91,13 +91,13 @@ export function NotebookRetry({ locale, question, lesson }: { locale: string; qu
       <p lang="en" className="whitespace-pre-line text-lg font-bold leading-8">{question.prompt}</p>
       <fieldset className="space-y-2" disabled={Boolean(result)}>
         <legend className="sr-only">{t.notebook.yourAnswer}</legend>
-        {question.options.map((option, i) => {
+        {displayOptions(question.questionId, question.options).map(({ option, index: i, letter }) => {
           const isCorrect = result && result.correctAnswer === String(i);
           const isWrongPick = result && !result.correct && answer === String(i);
           return (
             <label key={i} className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-2xl border p-3 text-sm font-semibold ${isCorrect ? "border-emerald-400 bg-emerald-50" : isWrongPick ? "border-rose-400 bg-rose-50" : "border-[color:var(--border)] hover:border-[color:var(--accent)]"}`}>
               <input type="radio" name="answer" value={String(i)} checked={answer === String(i)} onChange={() => setAnswer(String(i))} className="size-4" />
-              <span className="grid size-7 shrink-0 place-items-center rounded-full border text-xs font-extrabold">{LETTERS[i]}</span>
+              <span className="grid size-7 shrink-0 place-items-center rounded-full border text-xs font-extrabold">{letter}</span>
               <span lang="en">{option}</span>
             </label>
           );
@@ -109,7 +109,7 @@ export function NotebookRetry({ locale, question, lesson }: { locale: string; qu
             {result.correct ? <CheckCircle2 size={18} aria-hidden="true" /> : <XCircle size={18} aria-hidden="true" />}
             {result.mastered ? t.notebook.masteredNow : result.correct ? t.notebook.correct : t.notebook.wrong}
           </p>
-          {result.explanation ? <p className="mt-2 whitespace-pre-wrap leading-6 text-[color:var(--foreground)]">{result.explanation}</p> : null}
+          {result.explanation ? <p className="mt-2 whitespace-pre-wrap leading-6 text-[color:var(--foreground)]">{relabelExplanation(question.questionId, question.options.length, result.explanation)}</p> : null}
           {lesson ? <Link href={lesson.href} className="mt-3 inline-block font-bold underline">{t.notebook.lesson}: {lesson.label}</Link> : null}
         </div>
       ) : null}

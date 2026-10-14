@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, XCircle, MinusCircle } from "lucide-react";
 import { startPracticeAction } from "@/app/actions/diagnostic-attempt";
 
-const LETTERS = ["A", "B", "C", "D", "E"];
+import { displayOptions, relabelExplanation } from "@/lib/diagnostics/option-order";
 
 type Item = {
   question: { id: string; questionType: string; prompt: string; options: unknown; correctAnswer: string | null; explanation: string | null };
@@ -107,17 +107,17 @@ export function PracticeResults({
                 </div>
               ) : (
                 <ul className="mt-3 space-y-1.5 text-sm">
-                  {options.map((option, i) => (
+                  {displayOptions(question.id, options).map(({ option, index: i, letter }) => (
                     <li
                       key={i}
                       className={`rounded-lg px-3 py-2 ${i === correctIdx ? "bg-[color:var(--success-soft)] font-bold text-[color:var(--success)]" : i === chosenIdx ? "bg-[color:var(--danger-soft)] text-[color:var(--danger)]" : "text-[color:var(--muted)]"}`}
                     >
-                      {LETTERS[i]}) {option}
+                      {letter}) {option}
                     </li>
                   ))}
                 </ul>
               )}
-              {question.explanation ? <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{question.explanation}</p> : null}
+              {question.explanation ? <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{relabelExplanation(question.id, options.length, question.explanation)}</p> : null}
             </div>
           );
         })}

@@ -13,7 +13,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Unlike speed, which is a scalar quantity, ---- includes both magnitude and direction, making it essential for describing motion precisely.",
-    options: ["mass", "velocity", "density", "volume"],
+    options: ["mass", "velocity", "density", "volume", "temperature"],
     correctIndex: 1,
     explanation:
       "'Velocity' (hız vektörü) hem büyüklük hem de yön içeren bir niceliktir; cümlede bu doğrudan tanımlanmıştır. 'Mass', 'density' ve 'volume' yön kavramı içermeyen skaler niceliklerdir.",
@@ -28,7 +28,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "A ---- speeds up a chemical reaction without being consumed in the process itself.",
-    options: ["catalyst", "solvent", "residue", "compound"],
+    options: ["catalyst", "solvent", "residue", "compound", "reagent"],
     correctIndex: 0,
     explanation:
       "Bir katalizör (catalyst) tam olarak bu şekilde tanımlanır: reaksiyonu hızlandırır ama tüketilmez. 'Solvent' (çözücü), 'residue' (kalıntı) ve 'compound' (bileşik) bu özelliği taşımaz.",
@@ -43,7 +43,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Plants ---- sunlight, water, and carbon dioxide into glucose and oxygen through photosynthesis.",
-    options: ["convert", "erode", "dilute", "corrode"],
+    options: ["convert", "erode", "dilute", "corrode", "reflect"],
     correctIndex: 0,
     explanation:
       "Fotosentezde bitkiler güneş ışığını, suyu ve karbondioksiti glikoz ve oksijene 'dönüştürür' (convert). 'Erode' (aşındırmak), 'dilute' (sulandırmak) ve 'corrode' (paslandırmak) bu sürece uymaz.",
@@ -58,7 +58,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The engineer increased the wrench's arm length to produce more ---- without applying additional force.",
-    options: ["torque", "voltage", "friction", "density"],
+    options: ["torque", "voltage", "friction", "density", "pressure"],
     correctIndex: 0,
     explanation:
       "Tork (torque), kuvvet kolunun uzunluğuna bağlıdır; kol uzadıkça aynı kuvvetle daha fazla tork elde edilir. 'Voltage', 'friction' ve 'density' bu mekanik ilişkiyle ilgili değildir.",
@@ -73,7 +73,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Unlike ductile metals that bend under stress, glass is ---- and shatters instead of deforming.",
-    options: ["ductile", "brittle", "malleable", "elastic"],
+    options: ["ductile", "brittle", "malleable", "elastic", "flexible"],
     correctIndex: 1,
     explanation:
       "Cam, eğilmek yerine kırılır; bu özellik 'brittle' (kırılgan) kelimesiyle ifade edilir. 'Ductile' (çekilebilir), 'malleable' (dövülebilir) ve 'elastic' (esnek) ise eğilme/şekil değiştirme kapasitesini ima eder ve cümlenin başındaki karşılaştırmayla çelişir.",
@@ -88,7 +88,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The Earth takes approximately 365 days to complete one ---- around the Sun.",
-    options: ["orbit", "eclipse", "axis", "surface"],
+    options: ["orbit", "eclipse", "axis", "surface", "rotation"],
     correctIndex: 0,
     explanation:
       "Dünya'nın Güneş etrafındaki dönüş yolu 'orbit' (yörünge) olarak adlandırılır. 'Eclipse' (tutulma), 'axis' (eksen) ve 'surface' (yüzey) bu döngüsel hareketi tanımlamaz.",
@@ -103,7 +103,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Digestive ---- break down complex food molecules into simpler substances the body can absorb.",
-    options: ["enzymes", "tissues", "vessels", "membranes"],
+    options: ["enzymes", "tissues", "vessels", "membranes", "hormones"],
     correctIndex: 0,
     explanation:
       "Sindirim enzimleri (enzymes) karmaşık besin moleküllerini basit maddelere parçalar. 'Tissues' (dokular), 'vessels' (damarlar) ve 'membranes' (zarlar) bu parçalama işlevini görmez.",
@@ -118,7 +118,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "According to the formula, pressure is ---- to volume when temperature remains constant, meaning that as one increases, the other decreases.",
-    options: ["directly proportional", "inversely proportional", "unrelated", "equivalent"],
+    options: ["directly proportional", "inversely proportional", "unrelated", "equivalent", "unchanged"],
     correctIndex: 1,
     explanation:
       "Boyle Yasasına göre sabit sıcaklıkta basınç ve hacim ters orantılıdır ('inversely proportional'); biri artarken diğeri azalır, tıpkı cümlede tanımlandığı gibi. 'Directly proportional' aynı yönde değişimi ifade eder ve cümledeki tanımla çelişir.",
@@ -138,6 +138,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Su, deniz seviyesinde 100 santigrat derecede donar.",
       "Su, deniz seviyesinde 100 santigrat dereceye kadar ısıtılmıştı.",
       "Su, deniz seviyesinin üzerinde 100 santigrat derecede kaynayacaktır.",
+      "Su, deniz seviyesinde 100 santigrat dereceden önce buharlaşmaya başlamaz.",
     ],
     correctIndex: 0,
     explanation:
@@ -158,6 +159,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Uydu geçen hafta yörüngeye fırlatıldı.",
       "Uydu geçen hafta yörüngeye fırlatılıyor.",
       "Uydu geçen hafta yörüngeye fırlatılmış olacaktı.",
+      "Uydu geçen hafta yörüngeden Dünya'ya geri döndü.",
     ],
     correctIndex: 1,
     explanation:
@@ -177,6 +179,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bu bileşik neme maruz kalmıştı ve şiddetli bir şekilde tepki verecekti.",
       "Bu bileşik nemden korunduğunda şiddetli bir şekilde tepki verir.",
       "Bu bileşik neme maruz kalabilirdi ve şiddetli tepki vermişti.",
+      "Bu bileşik nemle karşılaştığında tamamen etkisiz hâle gelir.",
     ],
     correctIndex: 0,
     explanation:
@@ -198,6 +201,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Algoritma daha önce optimize edildiği için sistem yoğun yük altında hiç çökmedi.",
       "Algoritma optimize edilmediği için sistem yoğun yük altında çökecek.",
       "Algoritma optimize edilmeli ki sistem yoğun yük altında çökmesin.",
+      "Algoritma optimize edilmesine rağmen sistem yoğun yük altında çöktü.",
     ],
     correctIndex: 0,
     explanation:
@@ -218,6 +222,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Scientists will discover a new planet.",
       "Scientists are discovering a new planet.",
       "Scientists had discovered a new planet.",
+      "Scientists have been searching for a new planet.",
     ],
     correctIndex: 0,
     explanation:
@@ -238,6 +243,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The bridge's load-bearing capacity was carefully calculated by engineers.",
       "Engineers carefully calculate the bridge's load-bearing capacity.",
       "The bridge's load-bearing capacity will carefully calculate engineers.",
+      "The bridge's load-bearing capacity cannot be calculated by engineers.",
     ],
     correctIndex: 0,
     explanation:
@@ -257,6 +263,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "This species of bacteria could not survive at high temperatures.",
       "This species of bacteria survived at high temperatures.",
       "This species of bacteria will have survived at high temperatures.",
+      "This species of bacteria can only survive at low temperatures.",
     ],
     correctIndex: 0,
     explanation:
@@ -278,6 +285,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "If greenhouse gas emissions had not been reduced, global temperatures would have risen significantly over the next century.",
       "Unless greenhouse gas emissions were reduced, global temperatures rose significantly over the next century.",
       "Greenhouse gas emissions are not reduced because global temperatures rise significantly over the next century.",
+      "Even though greenhouse gas emissions are reduced, global temperatures will rise significantly.",
     ],
     correctIndex: 0,
     explanation:
@@ -300,6 +308,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Jeneratörün ürettiği elektrik",
       "Şaftın dönüş hızı",
       "Rüzgar çiftliğinin konumu",
+      "Kanatların ağırlığı",
     ],
     correctIndex: 0,
     explanation:
@@ -322,6 +331,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Çünkü jeneratörler yüksek hızlarda daha az yakıt tüketir.",
       "Çünkü kanatlar yüksek hızlarda daha hafif hale gelir.",
       "Çünkü mühendisler rüzgar hızını doğrudan kontrol edebilir.",
+      "Çünkü rüzgar hızı arttıkça kanatların sayısı da artar.",
     ],
     correctIndex: 0,
     explanation:
@@ -343,6 +353,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Rüzgar çiftliklerinin çevresel zararlarını tartışmak",
       "Farklı jeneratör türlerini karşılaştırmak",
       "Rüzgar enerjisinin güneş enerjisinden neden daha ucuz olduğunu kanıtlamak",
+      "Rüzgar türbinlerinin üretim maliyetini hesaplamak",
     ],
     correctIndex: 0,
     explanation:
@@ -359,7 +370,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     prompt: "Parçada geçen 'elegant' kelimesi bağlama göre en yakın olarak hangi anlama gelir?",
     passageText:
       "Wind turbines convert the kinetic energy of moving air into electricity through a simple but elegant mechanism. As wind flows over the blades, it creates a difference in air pressure that causes them to rotate. This rotational motion spins a shaft connected to a generator, which then produces electrical power. The amount of energy a turbine can generate depends heavily on wind speed, because the power available in wind increases with the cube of its speed; even a modest increase in wind velocity can dramatically boost output. For this reason, engineers carefully study local wind patterns before selecting a site for a wind farm.",
-    options: ["karmaşık", "zarif/yalın ve etkili", "pahalı", "eski"],
+    options: ["karmaşık", "zarif/yalın ve etkili", "pahalı", "eski", "gösterişli"],
     correctIndex: 1,
     explanation:
       "Parçada mekanizma 'simple but elegant' olarak nitelendiriliyor; bu bağlamda 'elegant', basit olmasına rağmen zekice tasarlanmış/yalın ve etkili anlamına gelir ve 'karmaşık' ifadesiyle zıttır.",
@@ -379,7 +390,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "A well-designed ---- can solve a complex problem in a fraction of the time a naive approach would require.",
-    options: ["algorithm", "keyboard", "monitor", "password"],
+    options: ["algorithm", "keyboard", "monitor", "password", "calculator"],
     correctIndex: 0,
     explanation:
       "Bir algoritma (algorithm), bir problemi çözmek için izlenen adım adım prosedürdür; cümledeki tanım buna uyar. 'Keyboard', 'monitor' ve 'password' donanım/güvenlik terimleri olup anlamla ilgisizdir.",
@@ -393,7 +404,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "In the equation 3x + 5 = 11, the number 3 is called the ---- of x.",
-    options: ["coefficient", "denominator", "exponent", "remainder"],
+    options: ["coefficient", "denominator", "exponent", "remainder", "quotient"],
     correctIndex: 0,
     explanation:
       "Bir değişkeni çarpan sayı 'coefficient' (katsayı) olarak adlandırılır. 'Denominator' (payda), 'exponent' (üs) ve 'remainder' (kalan) farklı matematiksel kavramlardır.",
@@ -408,7 +419,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Unlike plastic, which can persist in landfills for centuries, paper is ---- and breaks down naturally within months.",
-    options: ["biodegradable", "synthetic", "radioactive", "impermeable"],
+    options: ["biodegradable", "synthetic", "radioactive", "impermeable", "flammable"],
     correctIndex: 0,
     explanation:
       "'Biodegradable' (biyolojik olarak çözünebilen) doğada kendiliğinden ayrışabilen maddeleri ifade eder; cümledeki 'breaks down naturally' bunu doğrular. 'Synthetic' (sentetik) zıt bir özelliktir; 'radioactive' ve 'impermeable' bağlamla ilgisizdir.",
@@ -423,7 +434,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Removing a ---- wall without proper support can cause the entire structure to collapse.",
-    options: ["load-bearing", "decorative", "temporary", "transparent"],
+    options: ["load-bearing", "decorative", "temporary", "transparent", "painted"],
     correctIndex: 0,
     explanation:
       "Taşıyıcı duvar ('load-bearing wall') kaldırıldığında yapı çökebilir; cümledeki sonuç ('collapse') bunu doğrular. 'Decorative' (dekoratif), 'temporary' (geçici) ve 'transparent' (saydam) duvarlar bu riski taşımaz.",
@@ -438,7 +449,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "When the two solutions were mixed, a solid ---- formed at the bottom of the beaker almost immediately.",
-    options: ["precipitate", "vapor", "solvent", "filtrate"],
+    options: ["precipitate", "vapor", "solvent", "filtrate", "catalyst"],
     correctIndex: 0,
     explanation:
       "Bir kimyasal reaksiyon sonucu oluşan katı madde 'precipitate' (çökelti) olarak adlandırılır. 'Vapor' (buhar) katı değildir; 'solvent' (çözücü) ve 'filtrate' (süzüntü) burada oluşan katıyı tanımlamaz.",
@@ -453,7 +464,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Copper is widely used in electrical wiring because it is an excellent ---- of electricity.",
-    options: ["insulator", "conductor", "barrier", "resistor"],
+    options: ["insulator", "conductor", "barrier", "resistor", "absorber"],
     correctIndex: 1,
     explanation:
       "Bakır, elektriği iyi ileten bir madde olduğu için 'conductor' (iletken) doğru cevaptır. 'Insulator' (yalıtkan) zıt anlamlıdır; 'barrier' ve 'resistor' bağlama uymaz.",
@@ -468,7 +479,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The program will ---- through the list of values until it finds one that matches the search criteria.",
-    options: ["iterate", "erase", "compress", "duplicate"],
+    options: ["iterate", "erase", "compress", "duplicate", "evaporate"],
     correctIndex: 0,
     explanation:
       "'Iterate' (sırayla/tekrar tekrar geçmek) bir listeyi adım adım tarama sürecini tam olarak tanımlar. 'Erase' (silmek), 'compress' (sıkıştırmak) ve 'duplicate' (çoğaltmak) bu döngüsel arama sürecini tanımlamaz.",
@@ -483,7 +494,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Engineers monitored the building closely after the ground beneath it began to ----, threatening the foundation's stability.",
-    options: ["subside", "expand", "solidify", "elevate"],
+    options: ["subside", "expand", "solidify", "elevate", "vibrate"],
     correctIndex: 0,
     explanation:
       "Zeminin çökmesi/alçalması 'subside' fiiliyle ifade edilir ve temel kararlılığını tehdit eder. 'Expand' (genişlemek) ve 'elevate' (yükselmek) anlamca ters yöndedir; 'solidify' (katılaşmak) bağlamla ilgisizdir.",
@@ -503,6 +514,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Yazılım güncellemesi, önceki sürümdeki birkaç hatayı düzeltecek.",
       "Yazılım güncellemesi, önceki sürümde birkaç hata oluşturdu.",
       "Yazılım güncellemesi önceki sürümden daha yavaştı.",
+      "Yazılım güncellemesi önceki sürümdeki hataları ortaya çıkardı ama düzeltmedi.",
     ],
     correctIndex: 0,
     explanation:
@@ -522,6 +534,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Ormansızlaşma birçok tropikal bölgede toprak erozyonunu yavaşlatmıştır.",
       "Toprak erozyonu birçok tropikal bölgede ormansızlaşmayı hızlandırmıştır.",
       "Ormansızlaşma birçok tropikal bölgede toprak erozyonunu önleyecektir.",
+      "Ormansızlaşma tropikal bölgelerde toprağın daha verimli hâle gelmesini sağlamıştır.",
     ],
     correctIndex: 0,
     explanation:
@@ -542,6 +555,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Denklemdeki her değişken, formül uygulandıktan sonra tanımlanmıştır.",
       "Formül uygulanabilmeden önce denklemdeki her değişken tanımlanabilir.",
       "Denklemdeki her değişken tanımlanmasa da formül uygulanabilir.",
+      "Formül, denklemdeki değişkenler tanımlanmadan da her zaman uygulanmalıdır.",
     ],
     correctIndex: 0,
     explanation:
@@ -562,6 +576,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Sunucu yeniden başlatıldıktan sonra ancak uygulama normal şekilde çalışmaya başladı.",
       "Sunucu hiçbir zaman yeniden başlatılmadığı için uygulama çalışmaya başlamadı.",
       "Sunucu yeniden başlatılacağı için uygulama normal şekilde çalışmayacaktı.",
+      "Uygulama normal şekilde çalıştığı için sunucunun yeniden başlatılmasına gerek kalmadı.",
     ],
     correctIndex: 1,
     explanation:
@@ -582,6 +597,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Engineers will use a simulation to test the new bridge.",
       "Engineers are using a simulation to test the new bridge.",
       "Engineers had used a simulation to test the new bridge before it opened.",
+      "Engineers refused to use a simulation to test the new bridge.",
     ],
     correctIndex: 0,
     explanation:
@@ -602,6 +618,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "A large amount of heat was released during this reaction.",
       "A large amount of heat will be released during this reaction.",
       "A large amount of heat releases during this reaction itself.",
+      "A large amount of heat is absorbed during this reaction.",
     ],
     correctIndex: 0,
     explanation:
@@ -621,6 +638,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The product of two numbers is always greater than their sum.",
       "The sum of two numbers may not always be greater than their product.",
       "The product of two numbers will never be greater than their sum.",
+      "The product of two numbers is always equal to their sum.",
     ],
     correctIndex: 0,
     explanation:
@@ -642,6 +660,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "It was emphasized once by engineers that construction began before the soil survey was completed.",
       "Engineers repeatedly emphasized that construction had already begun before the soil survey was completed.",
       "It will be emphasized by engineers that construction should not begin before the soil survey is completed.",
+      "Engineers have rarely emphasized the importance of the soil survey before construction.",
     ],
     correctIndex: 0,
     explanation:
@@ -664,6 +683,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Gürültüyü (noise) ve eğitim verisine özgü ayrıntıları",
       "Test verisinin tamamını",
       "Yalnızca yeni verileri",
+      "Yalnızca eğitim verisindeki en önemli örüntüleri",
     ],
     correctIndex: 1,
     explanation:
@@ -685,6 +705,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Eğitim verisinde iyi, yeni verilerde kötü performans gösterir.",
       "Eğitim verisinde kötü, yeni verilerde iyi performans gösterir.",
       "Her iki veri setinde de aynı performansı gösterir.",
+      "Yalnızca yeni verilerde iyi performans gösterir.",
     ],
     correctIndex: 1,
     explanation:
@@ -706,6 +727,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Aşırı öğrenme sorunu ve bunu önlemenin bir yolu",
       "Veri setlerinin nasıl toplandığı",
       "Yapay zekanın tarihi gelişimi",
+      "Modellerin satış fiyatlarının nasıl belirlendiği",
     ],
     correctIndex: 1,
     explanation:
@@ -727,6 +749,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Modelin öğrendiklerini yeni/görülmemiş verilere başarıyla uygulayabilmesi",
       "Modelin eğitim süresinin kısalması",
       "Modelin veri setini küçültmesi",
+      "Modelin eğitim verisini tamamen silmesi",
     ],
     correctIndex: 1,
     explanation:
@@ -747,7 +770,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "A ---- is generally defined as a group of organisms capable of interbreeding and producing fertile offspring.",
-    options: ["species", "cell", "tissue", "organ"],
+    options: ["species", "cell", "tissue", "organ", "population"],
     correctIndex: 0,
     explanation:
       "Tür (species) tanımı tam olarak budur: birbirleriyle üreyip verimli döller üretebilen organizma grubu. 'Cell' (hücre), 'tissue' (doku) ve 'organ' farklı biyolojik organizasyon düzeyleridir.",
@@ -762,7 +785,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Over millions of years, layers of ---- accumulated at the bottom of the ancient lake, eventually forming sedimentary rock.",
-    options: ["sediment", "lava", "magma", "vapor"],
+    options: ["sediment", "lava", "magma", "vapor", "glacier"],
     correctIndex: 0,
     explanation:
       "Tortul kayaçların temel maddesi 'sediment' (tortu/çökelti)dir; cümledeki 'sedimentary rock' bunu doğrular. 'Lava' ve 'magma' volkanik, 'vapor' ise buharla ilgilidir.",
@@ -777,7 +800,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Adding more resistors in series increases the total ---- of the circuit, thereby reducing the current that flows through it.",
-    options: ["resistance", "voltage", "capacitance", "frequency"],
+    options: ["resistance", "voltage", "capacitance", "frequency", "weight"],
     correctIndex: 0,
     explanation:
       "Ohm Yasasına göre direnç (resistance) arttıkça, sabit voltajda akım azalır; cümledeki sonuç ('reducing the current') bunu doğrular. 'Voltage', 'capacitance' ve 'frequency' bu ilişkiyi doğrudan açıklamaz.",
@@ -792,7 +815,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Because the truck has far greater mass than the bicycle, it carries significantly more ---- at the same speed.",
-    options: ["momentum", "temperature", "volume", "wavelength"],
+    options: ["momentum", "temperature", "volume", "wavelength", "density"],
     correctIndex: 0,
     explanation:
       "Momentum, kütle ile hızın çarpımıdır; aynı hızda daha büyük kütleye sahip cisim daha fazla momentuma sahiptir. 'Temperature', 'volume' ve 'wavelength' bu ilişkiyle ilgili değildir.",
@@ -807,7 +830,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Repeated cycles of stress, even below the material's yield strength, can eventually cause metal ----, leading to sudden failure.",
-    options: ["fatigue", "expansion", "polish", "insulation"],
+    options: ["fatigue", "expansion", "polish", "insulation", "growth"],
     correctIndex: 0,
     explanation:
       "Metal yorulması (fatigue), tekrarlanan gerilme döngüleri sonucu malzemede biriken hasardır ve ani kırılmalara yol açabilir. 'Expansion' (genleşme), 'polish' (parlatma) ve 'insulation' (yalıtım) bu süreci tanımlamaz.",
@@ -822,7 +845,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Deforestation destroys the natural ---- of countless species, forcing them to migrate or face extinction.",
-    options: ["habitat", "molecule", "current", "compound"],
+    options: ["habitat", "molecule", "current", "compound", "climate"],
     correctIndex: 0,
     explanation:
       "Doğal yaşam alanı 'habitat' olarak adlandırılır; cümledeki 'forcing them to migrate' bunu destekler. 'Molecule', 'current' ve 'compound' bu bağlamda anlam ifade etmez.",
@@ -837,7 +860,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "---- waves generated by the earthquake were detected by monitoring stations located hundreds of kilometers from the epicenter.",
-    options: ["Seismic", "Thermal", "Acoustic", "Magnetic"],
+    options: ["Seismic", "Thermal", "Acoustic", "Magnetic", "Lunar"],
     correctIndex: 0,
     explanation:
       "Deprem tarafından üretilen dalgalar 'seismic' (sismik) dalgalar olarak adlandırılır. 'Thermal' (ısıl), 'Acoustic' (sesle ilgili) ve 'Magnetic' (manyetik) bu bağlamdaki doğru terim değildir.",
@@ -852,7 +875,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "A changing magnetic field can ---- an electric current in a nearby conductor, a principle that underlies how generators work.",
-    options: ["induce", "insulate", "erode", "dissolve"],
+    options: ["induce", "insulate", "erode", "dissolve", "reflect"],
     correctIndex: 0,
     explanation:
       "Elektromanyetik indüksiyon ilkesine göre değişen bir manyetik alan yakındaki bir iletkende akım 'indükleyebilir' (induce). 'Insulate' (yalıtmak), 'erode' (aşındırmak) ve 'dissolve' (çözünmek) bu bağlamla ilgisizdir.",
@@ -872,6 +895,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "İnsan kalbi, kanı tüm vücuttan toplar.",
       "İnsan kalbi, kanı yalnızca beyne pompalayacaktır.",
       "İnsan kalbi, geçmişte kanı tüm vücuda pompalamıştı.",
+      "İnsan kalbi, kanı yalnızca akciğerlere pompalar.",
     ],
     correctIndex: 0,
     explanation:
@@ -892,6 +916,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Yanardağ, iki asırdan fazla süredir aktifti ve beklenmedik şekilde patlayacaktı.",
       "Yanardağ, beklenmedik şekilde patladıktan sonra iki asırdan fazla süre sönmüş kaldı.",
       "Yanardağ iki asır içinde beklenen bir patlama yaşadı.",
+      "Yanardağ, iki asırdır her yıl düzenli olarak patlıyordu.",
     ],
     correctIndex: 0,
     explanation:
@@ -911,6 +936,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Mühendisler, düşük mukavemet/ağırlık oranı nedeniyle bileşen için titanyumu seçti.",
       "Mühendisler, yüksek mukavemet/ağırlık oranı nedeniyle bileşeni titanyumdan çıkardı.",
       "Mühendisler bileşen için titanyumu seçecekler çünkü mukavemet/ağırlık oranı yüksektir.",
+      "Mühendisler, titanyum çok pahalı olduğu için bileşende kullanmaktan vazgeçti.",
     ],
     correctIndex: 0,
     explanation:
@@ -932,6 +958,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Koruyucu ozon tabakası olduğu için, zararlı morötesi ışınlar Dünya yüzeyine hiç ulaşmaz.",
       "Koruyucu ozon tabakası olmadığından, zararlı morötesi ışınlar Dünya yüzeyine hiçbir zaman ulaşmamıştır.",
       "Koruyucu ozon tabakası olmasaydı, zararlı morötesi ışınlar Dünya yüzeyine hiç ulaşamazdı.",
+      "Ozon tabakası, morötesi ışınların Dünya yüzeyine ulaşmasını kolaylaştırır.",
     ],
     correctIndex: 0,
     explanation:
@@ -952,6 +979,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Plants needed sunlight to grow.",
       "Plants will need sunlight to grow.",
       "Plants do not need sunlight to grow.",
+      "Plants grow better without sunlight.",
     ],
     correctIndex: 0,
     explanation:
@@ -972,6 +1000,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The rocks in this region will be shaped by millions of years of erosion.",
       "The rocks in this region shaped millions of years of erosion.",
       "The rocks in this region were shaping millions of years of erosion.",
+      "Erosion has never affected the rocks in this region.",
     ],
     correctIndex: 0,
     explanation:
@@ -991,6 +1020,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The fault in the circuit is definitely caused by overloading.",
       "The fault in the circuit caused the overloading.",
       "The fault in the circuit could not be caused by overloading.",
+      "Overloading has been prevented by the fault in the circuit.",
     ],
     correctIndex: 0,
     explanation:
@@ -1011,6 +1041,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Until the object's speed was measured, its acceleration was known for certain.",
       "After the object's speed was measured, its acceleration could not be known for certain.",
       "Until the object's speed is measured, its acceleration cannot be known for certain.",
+      "The object's acceleration was measured before its speed was known.",
     ],
     correctIndex: 0,
     explanation:
@@ -1033,6 +1064,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bakterilerin doğal olarak azalması",
       "Yeni antibiyotiklerin keşfedilmesi",
       "Halk sağlığı yetkililerinin uyarıları",
+      "Bakterilerin antibiyotiklerden tamamen kaçınması",
     ],
     correctIndex: 0,
     explanation:
@@ -1054,6 +1086,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Direnç mutasyonu taşıyan hücreler hayatta kalıp çoğalır.",
       "Bakterilerin tamamı anında ölür.",
       "Antibiyotik etkisiz hale gelir.",
+      "Bakteriler antibiyotiği kendi besin kaynağı olarak kullanır.",
     ],
     correctIndex: 1,
     explanation:
@@ -1075,6 +1108,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Antibiyotik direncinin nasıl geliştiği ve neden ciddi bir tehdit oluşturduğu",
       "Tarımda kullanılan ilaç türleri",
       "Bakterilerin beslenme şekilleri",
+      "Antibiyotiklerin tarih boyunca nasıl keşfedildiği",
     ],
     correctIndex: 1,
     explanation:
@@ -1096,6 +1130,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Antibiyotikler artık hiçbir enfeksiyona karşı etkili değildir.",
       "Tarımda antibiyotik kullanımı tamamen yasaklanmıştır.",
       "Bakteriler antibiyotiklere karşı direnç geliştiremez.",
+      "Antibiyotik direnci yalnızca hayvanlarda görülen bir sorundur.",
     ],
     correctIndex: 0,
     explanation:
@@ -1115,7 +1150,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "KOLAY",
     prompt: "The Moon's ---- pull on the Earth is the primary cause of ocean tides.",
-    options: ["gravitational", "magnetic", "thermal", "chemical"],
+    options: ["gravitational", "magnetic", "thermal", "chemical", "electrical"],
     correctIndex: 0,
     explanation:
       "Gelgitlerin temel nedeni Ay'ın Dünya üzerindeki yerçekimsel ('gravitational') çekim kuvvetidir. 'Magnetic', 'thermal' ve 'chemical' bu olayı açıklamaz.",
@@ -1130,7 +1165,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The ---- of the two triangles' corresponding sides remained constant, confirming that the shapes were similar.",
-    options: ["ratio", "remainder", "product", "root"],
+    options: ["ratio", "remainder", "product", "root", "distance"],
     correctIndex: 0,
     explanation:
       "Benzer şekillerde karşılıklı kenarların oranı ('ratio') sabittir; bu benzerliğin tanımıdır. 'Remainder' (kalan), 'product' (çarpım) ve 'root' (kök) bu bağlama uymaz.",
@@ -1145,7 +1180,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Factories that ---- large quantities of carbon dioxide are increasingly required to install filtration systems.",
-    options: ["emit", "absorb", "recycle", "filter"],
+    options: ["emit", "absorb", "recycle", "filter", "conceal"],
     correctIndex: 0,
     explanation:
       "'Emit' (yaymak/salmak) fabrikaların gaz salımını ifade eder; cümledeki 'filtration systems' gereksinimi bunu destekler. 'Absorb' (emmek) anlamca zıttır; 'recycle' ve 'filter' bağlamla tutarsızdır.",
@@ -1160,7 +1195,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Sugar will ---- more quickly in hot water than in cold water because heat increases molecular movement.",
-    options: ["dissolve", "evaporate", "condense", "freeze"],
+    options: ["dissolve", "evaporate", "condense", "freeze", "crystallize"],
     correctIndex: 0,
     explanation:
       "Şekerin suda çözünmesi 'dissolve' fiiliyle ifade edilir ve ısıyla hızlanır. 'Evaporate' (buharlaşmak), 'condense' (yoğunlaşmak) ve 'freeze' (donmak) farklı fiziksel süreçlerdir.",
@@ -1175,7 +1210,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Astronomers use a star's ----, rather than its apparent brightness, to determine its true energy output.",
-    options: ["luminosity", "latitude", "velocity", "salinity"],
+    options: ["luminosity", "latitude", "velocity", "salinity", "diameter"],
     correctIndex: 0,
     explanation:
       "Bir yıldızın gerçek enerji çıktısı 'luminosity' (parlaklık/ışınım gücü) ile ölçülür. 'Latitude' (enlem), 'velocity' (hız) ve 'salinity' (tuzluluk) bu bağlamla ilgisizdir.",
@@ -1190,7 +1225,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Sensitive data is often ---- before being transmitted over the internet to prevent unauthorized access.",
-    options: ["encrypted", "deleted", "duplicated", "compressed"],
+    options: ["encrypted", "deleted", "duplicated", "compressed", "displayed"],
     correctIndex: 0,
     explanation:
       "Yetkisiz erişimi önlemek için verinin şifrelenmesi ('encrypted') anlatılıyor. 'Deleted' (silinmiş), 'duplicated' (çoğaltılmış) ve 'compressed' (sıkıştırılmış) güvenlik amacını karşılamaz.",
@@ -1205,7 +1240,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Without a proper ----, friction between the moving parts would cause the engine to overheat rapidly.",
-    options: ["lubricant", "insulator", "conductor", "catalyst"],
+    options: ["lubricant", "insulator", "conductor", "catalyst", "fuel"],
     correctIndex: 0,
     explanation:
       "Yağlayıcı (lubricant) hareketli parçalar arasındaki sürtünmeyi azaltır; olmadığında aşırı ısınma olur. 'Insulator' ve 'conductor' elektrikle, 'catalyst' kimyasal reaksiyonlarla ilgilidir.",
@@ -1220,7 +1255,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Governments are investing in renewable energy to ---- the effects of climate change on vulnerable coastal communities.",
-    options: ["mitigate", "intensify", "ignore", "accelerate"],
+    options: ["mitigate", "intensify", "ignore", "accelerate", "celebrate"],
     correctIndex: 0,
     explanation:
       "'Mitigate' (hafifletmek/azaltmak) yenilenebilir enerjiye yatırımın amacıyla örtüşür. 'Intensify' (yoğunlaştırmak) ve 'accelerate' (hızlandırmak) anlamca zıttır, 'ignore' (görmezden gelmek) bağlamla çelişir.",
@@ -1240,6 +1275,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Teleskop, gökbilimcilerin uzak galaksileri gözlemlemesine engel olur.",
       "Teleskop, gökbilimcilerin uzak galaksileri gözlemlemesine olanak tanıyacaktı.",
       "Teleskop, uzak galaksiler tarafından gözlemlendi.",
+      "Teleskop, gökbilimcilerin yalnızca yakındaki gezegenleri gözlemlemesine olanak tanır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1261,6 +1297,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Sonuçlar güvenilir kabul edildiği için deney kontrollü koşullar altında tekrarlandı.",
       "Deney kontrollü koşullar altında tekrarlanabilir ama sonuçlar zaten güvenilirdir.",
       "Sonuçların güvenilir kabul edilebilmesi için deneyin kontrolsüz koşullar altında tekrarlanması gerekir.",
+      "Deney bir kez yapıldığı için sonuçlar kesin olarak güvenilir kabul edilmelidir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1280,6 +1317,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bu denklem için reel sayılar kümesinde birden fazla çözüm vardır.",
       "Bu denklem için karmaşık sayılar kümesinde hiçbir çözüm yoktur.",
       "Bu denklemin reel sayılar kümesinde bir çözümü olabilir.",
+      "Bu denklemin reel sayılar kümesinde tam olarak iki çözümü vardır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1299,6 +1337,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bileşen o kadar kabaca işlenmişti ki montaja oturması için ayarlama gerekti.",
       "Bileşen hassas bir şekilde işlenecekti ve montaja kolayca oturacaktı.",
       "Bileşen montaja oturmadığı için yeniden işlenmesi gerekti.",
+      "Bileşen hassas işlenmesine rağmen montaj sırasında birçok ayarlama gerektirdi.",
     ],
     correctIndex: 0,
     explanation:
@@ -1319,6 +1358,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Stars produced light and heat through nuclear fusion in their cores.",
       "Stars will produce light and heat through nuclear fusion in their cores.",
       "Stars absorb light and heat through nuclear fusion in their cores.",
+      "Stars lose light and heat because nuclear fusion stops in their cores.",
     ],
     correctIndex: 0,
     explanation:
@@ -1340,6 +1380,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "If investments were not made in renewable energy sources, dependence on fossil fuels would continue to increase.",
       "Because investments are made in renewable energy sources, dependence on fossil fuels will decrease.",
       "Unless investments are made in renewable energy sources, dependence on fossil fuels stopped increasing.",
+      "Investing in renewable energy sources will increase dependence on fossil fuels.",
     ],
     correctIndex: 0,
     explanation:
@@ -1360,6 +1401,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "User data was encrypted after being shared with third parties.",
       "User data will never be shared with third parties.",
       "User data encrypts itself before sharing with third parties.",
+      "User data is shared with third parties without being encrypted.",
     ],
     correctIndex: 0,
     explanation:
@@ -1381,6 +1423,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "If the universe had continued to expand forever, galaxies would have moved increasingly farther apart from one another.",
       "Although the universe continues to expand forever, galaxies stay at the same distance from one another.",
       "If the universe stops expanding, galaxies will move increasingly farther apart from one another.",
+      "Even if the universe expands forever, galaxies will eventually collide with one another.",
     ],
     correctIndex: 0,
     explanation:
@@ -1403,6 +1446,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Yıldızın parlaklığındaki küçük düşüşleri",
       "Gezegenin kütlesini",
       "Teleskobun konumunu",
+      "Gezegenin yüzeyindeki dağların yüksekliğini",
     ],
     correctIndex: 1,
     explanation:
@@ -1425,6 +1469,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Engellenen ışık miktarını ve karararmanın ne sıklıkta tekrarlandığını analiz ederek",
       "Gezegenin yüzey sıcaklığını ölçerek",
       "Yıldızın kütlesini doğrudan tartarak",
+      "Gezegenin atmosferindeki gazları doğrudan örnekleyerek",
     ],
     correctIndex: 1,
     explanation:
@@ -1446,6 +1491,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Geçiş yönteminin ötegezegenleri tespit etmede nasıl kullanıldığı",
       "Teleskopların tarihsel gelişimi",
       "Güneş sisteminin yaşı",
+      "Gezegenlerin üzerinde yaşam olup olmadığı",
     ],
     correctIndex: 1,
     explanation:
@@ -1467,6 +1513,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Yörüngesi Dünya'dan bakıldığında tam kenardan hizalı olmayan gezegenler için en iyi sonucu vermez.",
       "Hiçbir zaman gezegen keşfetmemiştir.",
       "Yalnızca güneş sistemimizdeki gezegenler için geçerlidir.",
+      "Yalnızca gece gözlem yapılabildiği için sınırlı sayıda gezegen bulunabilir.",
     ],
     correctIndex: 1,
     explanation:
@@ -1487,7 +1534,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Steel is an ---- made primarily of iron and carbon, with the carbon content determining its hardness.",
-    options: ["alloy", "isotope", "enzyme", "compound"],
+    options: ["alloy", "isotope", "enzyme", "compound", "emulsion"],
     correctIndex: 0,
     explanation:
       "Alaşım (alloy), iki veya daha fazla metalin (burada demir ve karbon) karışımıdır. 'Compound' sabit oranlı kimyasal bağları ima eder ve alaşımlar için doğru terim değildir; 'isotope' ve 'enzyme' bağlamla ilgisizdir.",
@@ -1502,7 +1549,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Before construction begins, engineers must ensure the ---- is strong enough to support the entire weight of the building.",
-    options: ["foundation", "ceiling", "corridor", "facade"],
+    options: ["foundation", "ceiling", "corridor", "facade", "roof"],
     correctIndex: 0,
     explanation:
       "Temel (foundation) binanın ağırlığını taşıyan alt yapıdır. 'Ceiling' (tavan), 'corridor' (koridor) ve 'facade' (cephe) bu işlevi görmez.",
@@ -1517,7 +1564,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The cell ---- controls which substances can enter or leave the cell, acting as a selective barrier.",
-    options: ["membrane", "nucleus", "chromosome", "cytoplasm"],
+    options: ["membrane", "nucleus", "chromosome", "cytoplasm", "wall"],
     correctIndex: 0,
     explanation:
       "Hücre zarı (membrane) seçici geçirgen bir bariyer olarak madde giriş çıkışını kontrol eder. 'Nucleus' (çekirdek), 'chromosome' (kromozom) ve 'cytoplasm' (sitoplazma) bu işlevi üstlenmez.",
@@ -1532,7 +1579,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Thick layers of foam are used to ---- the walls, reducing the amount of heat that escapes during winter.",
-    options: ["insulate", "conduct", "amplify", "magnetize"],
+    options: ["insulate", "conduct", "amplify", "magnetize", "ventilate"],
     correctIndex: 0,
     explanation:
       "Yalıtmak (insulate) ısı kaybını azaltır; cümledeki sonuç ('reducing the amount of heat that escapes') bunu doğrular. 'Conduct' (iletmek) anlamca zıttır; 'amplify' ve 'magnetize' bağlamla ilgisizdir.",
@@ -1547,7 +1594,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Geologists identified more than a dozen distinct ---- in the canyon wall, each representing a different period of deposition.",
-    options: ["strata", "craters", "glaciers", "deltas"],
+    options: ["strata", "craters", "glaciers", "deltas", "fossils"],
     correctIndex: 0,
     explanation:
       "Tabakalar (strata), kanyon duvarındaki farklı çökelme dönemlerini temsil eden jeolojik katmanlardır. 'Craters' (krater), 'glaciers' (buzul) ve 'deltas' (delta) bu bağlamla ilgisizdir.",
@@ -1562,7 +1609,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The new pavement material is far more ---- than asphalt, lasting decades without significant cracking.",
-    options: ["durable", "fragile", "flammable", "transparent"],
+    options: ["durable", "fragile", "flammable", "transparent", "expensive"],
     correctIndex: 0,
     explanation:
       "Dayanıklı (durable) uzun ömürlü olmayı ifade eder; cümledeki 'lasting decades' bunu doğrular. 'Fragile' (kırılgan) anlamca zıttır; 'flammable' ve 'transparent' bağlamla ilgisizdir.",
@@ -1576,7 +1623,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     questionType: "MCQ",
     difficulty: "ORTA",
     prompt: "Diamond has an unusually high thermal ----, despite being an electrical insulator.",
-    options: ["conductivity", "opacity", "elasticity", "salinity"],
+    options: ["conductivity", "opacity", "elasticity", "salinity", "pressure"],
     correctIndex: 0,
     explanation:
       "Elmasın yüksek ısıl iletkenliği (thermal conductivity) olağandışı bir özelliğidir. 'Opacity' (matlık), 'elasticity' (esneklik) ve 'salinity' (tuzluluk) bağlamla ilgisizdir.",
@@ -1591,7 +1638,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Because the membrane is selectively ----, small molecules like water can pass through while larger ones cannot.",
-    options: ["permeable", "opaque", "rigid", "sterile"],
+    options: ["permeable", "opaque", "rigid", "sterile", "flexible"],
     correctIndex: 0,
     explanation:
       "Seçici geçirgen (selectively permeable) bir zar küçük moleküllerin geçmesine izin verir. 'Opaque' (mat/görünmez), 'rigid' (katı/esnemez) ve 'sterile' (steril) bu özelliği tanımlamaz.",
@@ -1611,6 +1658,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Beton, zamanla kürlendikçe önemli ölçüde zayıflar.",
       "Beton, kürlenmeden önce önemli ölçüde güçlüdür.",
       "Beton zamanla kürlenecek ve önemli ölçüde güçlenecekti.",
+      "Beton ilk döküldüğü anda en yüksek dayanıklılığına ulaşır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1631,6 +1679,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bazı bakteri türleri, diğer çoğu organizma için ölümcül olacak aşırı koşullarda hayatta kalamaz.",
       "Tüm bakteri türleri, diğer çoğu organizma için ölümcül olacak aşırı koşullarda hayatta kalabilir.",
       "Bazı bakteri türleri, aşırı koşullarda diğer organizmaları öldürür.",
+      "Bakteriler aşırı koşullarda hayatta kalamadığı için kolayca yok edilebilir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1650,6 +1699,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Kanyon, akan suyun amansız gücüyle birkaç yıl içinde oyulmuştur.",
       "Kanyon, milyonlarca yıl boyunca rüzgarın amansız gücüyle oyulmuştur.",
       "Kanyon, akan suyun amansız gücünü milyonlarca yıl boyunca durdurmuştur.",
+      "Kanyon, insanlar tarafından son birkaç yüzyılda kazılmıştır.",
     ],
     correctIndex: 0,
     explanation:
@@ -1671,6 +1721,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Köprünün halatları düzenli olarak denetlendiği için korozyon hiçbir zaman oluşmadı.",
       "Köprünün halatları düzenli olarak denetlenmediği için korozyon fark edilmeden yayıldı.",
       "Köprünün halatları düzenli olarak denetlenecek, böylece korozyon fark edilecekti.",
+      "Köprünün halatları hiç denetlenmediği hâlde korozyon erken fark edildi.",
     ],
     correctIndex: 0,
     explanation:
@@ -1691,6 +1742,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Engineers will test the skyscraper's resistance to wind.",
       "Engineers are testing the skyscraper's resistance to wind.",
       "Engineers tested the skyscraper's resistance to earthquakes.",
+      "Engineers designed a new skyscraper to block the wind.",
     ],
     correctIndex: 0,
     explanation:
@@ -1710,6 +1762,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "This material loses its shape when exposed to high temperatures.",
       "This material did not lose its shape when exposed to high temperatures.",
       "This material will lose its shape when exposed to low temperatures.",
+      "This material becomes stronger when exposed to high temperatures.",
     ],
     correctIndex: 0,
     explanation:
@@ -1730,6 +1783,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The structure's earthquake safety was regularly inspected every year.",
       "The structure's earthquake safety will be inspected only once.",
       "The structure's earthquake safety is rarely inspected.",
+      "The structure's earthquake safety has never been inspected.",
     ],
     correctIndex: 0,
     explanation:
@@ -1750,6 +1804,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "The immune system is a simple defense network designed to recognize and destroy pathogens that enter the body.",
       "The immune system is a complex defense network that pathogens use to enter the body.",
       "The immune system was a complex defense network designed to recognize and destroy pathogens that entered the body.",
+      "Pathogens are designed to recognize and destroy the immune system.",
     ],
     correctIndex: 0,
     explanation:
@@ -1772,6 +1827,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Bir çatlak oluşup içine su sızdığında",
       "Beton ilk döküldüğünde",
       "Çelik donatı paslandığında",
+      "Beton ilk kez boyandığında",
     ],
     correctIndex: 1,
     explanation:
@@ -1788,7 +1844,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
     prompt: "Parçaya göre, aktive olan bakteriler ne üretir?",
     passageText:
       "Researchers have developed a new type of concrete capable of repairing its own cracks without human intervention. The material contains dormant bacteria embedded within capsules that remain inactive as long as the concrete stays dry and intact. When a crack forms and water seeps in, the bacteria are activated and begin producing limestone, which gradually fills the crack from the inside. Because untreated cracks often allow water and salts to corrode the steel reinforcement within concrete structures, this self-healing property could significantly extend the lifespan of bridges, tunnels, and buildings while reducing long-term maintenance costs.",
-    options: ["Kireçtaşı (limestone)", "Çelik", "Tuz", "Su"],
+    options: ["Kireçtaşı (limestone)", "Çelik", "Tuz", "Su", "Kum"],
     correctIndex: 0,
     explanation:
       "Parçada 'begin producing limestone, which gradually fills the crack' deniyor; bakteriler kireçtaşı üretir.",
@@ -1809,6 +1865,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Çatlakları kendiliğinden onarabilen yeni bir beton türü ve faydaları",
       "Çelik donatının nasıl paslandığı",
       "Köprü inşaatının maliyeti",
+      "Bakterilerin betonu nasıl zayıflattığı",
     ],
     correctIndex: 1,
     explanation:
@@ -1830,6 +1887,7 @@ export const MOCK_YOKDIL_FEN: DiagnosticQuestionSeed[] = [
       "Kendini onaran beton, su ile hiçbir zaman temas etmemelidir.",
       "Bakteriler beton kuruduktan hemen sonra ölür.",
       "Çelik donatı artık hiçbir yapıda kullanılmamaktadır.",
+      "Kendini onaran beton yalnızca soğuk iklimlerde kullanılabilir.",
     ],
     correctIndex: 0,
     explanation:

@@ -14,7 +14,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Rising income ---- has become one of the most pressing challenges facing modern economies, as the gap between the wealthy and the poor continues to widen.",
-    options: ["inequality", "equality", "uniformity", "abundance"],
+    options: ["inequality", "equality", "uniformity", "abundance", "stability"],
     correctIndex: 0,
     explanation:
       "Cümlenin devamında zengin ve yoksul arasındaki farkın 'genişlemeye devam ettiği' belirtilir; bu, 'eşitsizlik' (inequality) anlamına gelen sözcüğü gerektirir. 'Equality' (eşitlik) bağlamla tam tersi bir anlam taşır.",
@@ -29,7 +29,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Before the merger could proceed, the two companies had to ---- an agreement on how shared resources would be divided.",
-    options: ["reach", "do", "make", "take"],
+    options: ["reach", "do", "make", "take", "give"],
     correctIndex: 0,
     explanation:
       "'Reach an agreement' (bir anlaşmaya varmak) doğru collocation'dır; 'do/make/take an agreement' İngilizcede kullanılmaz.",
@@ -44,7 +44,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The research team plans to ---- a large-scale survey to measure public attitudes toward immigration.",
-    options: ["carry out", "carry on", "carry over", "carry away"],
+    options: ["carry out", "carry on", "carry over", "carry away", "carry off"],
     correctIndex: 0,
     explanation:
       "'Carry out a survey' (bir anket yürütmek) doğru phrasal verb kullanımıdır; 'carry on' devam etmek, 'carry over' bir sonraki döneme taşımak, 'carry away' sürüklemek anlamına gelir ve bağlama uymaz.",
@@ -59,7 +59,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The government's economic ---- have been criticized for disproportionately benefiting large corporations.",
-    options: ["policy", "policies", "politics", "policing"],
+    options: ["policy", "policies", "politics", "policing", "politic"],
     correctIndex: 1,
     explanation:
       "Boşluktan sonra gelen 'have been criticized' çoğul bir özne gerektirir; bu nedenle çoğul isim olan 'policies' doğrudur. 'Policy' tekildir, 'politics' siyaset anlamına gelir, 'policing' ise polislik faaliyeti demektir.",
@@ -74,7 +74,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Despite widespread ---- from opposition parties, the new tax bill passed narrowly in parliament.",
-    options: ["backlash", "endorsement", "indifference", "consensus"],
+    options: ["backlash", "endorsement", "indifference", "consensus", "applause"],
     correctIndex: 0,
     explanation:
       "Yasanın 'güçlükle/dar farkla' geçmesi, ona karşı güçlü bir tepki olduğunu ima eder; bu nedenle 'backlash' (sert tepki) doğrudur. 'Endorsement' (destek) ve 'consensus' (uzlaşma) cümledeki zorlukla çelişir.",
@@ -89,7 +89,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Many historians argue that the revolution was not a sudden event but rather the ---- of decades of social unrest.",
-    options: ["culmination", "prevention", "coincidence", "repetition"],
+    options: ["culmination", "prevention", "coincidence", "repetition", "conclusion"],
     correctIndex: 0,
     explanation:
       "'Decades of social unrest' (on yıllarca süren toplumsal huzursuzluk) birikip bir sonuca ulaşma fikrini taşır; bu da 'culmination' (doruk noktası, sonuç) ile ifade edilir. Diğer seçenekler bu birikim fikrini karşılamaz.",
@@ -104,7 +104,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The professor's lecture on cognitive bias was so ---- that even non-specialists could follow the argument with ease.",
-    options: ["lucid", "convoluted", "esoteric", "ambiguous"],
+    options: ["lucid", "convoluted", "esoteric", "ambiguous", "tedious"],
     correctIndex: 0,
     explanation:
       "'Even non-specialists could follow... with ease' ifadesi dersin açık ve anlaşılır olduğunu gösterir; bu da 'lucid' (berrak, anlaşılır) ile örtüşür. 'Convoluted' ve 'esoteric' karmaşık/anlaşılması güç anlamına gelir ve cümleyle çelişir.",
@@ -119,7 +119,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Anthropological fieldwork often requires researchers to ---- themselves in unfamiliar cultural settings for extended periods.",
-    options: ["immerse", "isolate", "distance", "detach"],
+    options: ["immerse", "isolate", "distance", "detach", "confine"],
     correctIndex: 0,
     explanation:
       "'Immerse oneself in' (kendini bir şeyin içine tamamen vermek) alan araştırmasının doğasına uygundur. 'Isolate/distance/detach' ise araştırmacının ortamdan uzaklaşması anlamına gelir ve bağlamla çelişir.",
@@ -142,6 +142,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Rapor, yeni eğitim politikasının etkisini değerlendirmek amacıyla bakanlık tarafından hazırlanacak.",
       "Bakanlık, yeni eğitim politikasının etkisini değerlendirmek için raporu kendisi hazırladı.",
       "Rapor, yeni eğitim politikasının etkisini değerlendirmek amacıyla bakanlığa sunuldu.",
+      "Bakanlık, yeni eğitim politikasının etkilerini görmezden gelmek için raporu gizledi.",
     ],
     correctIndex: 0,
     explanation:
@@ -162,6 +163,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Eleştirmenler, reformun mevcut sosyal eşitsizlikleri azaltacağını savunuyor.",
       "Eleştirmenler, reformun geçmişte sosyal eşitsizlikleri kötüleştirdiğini savunuyor.",
       "Destekçiler, reformun sosyal eşitsizlikleri azaltacağını savunuyor.",
+      "Eleştirmenler, reformun sosyal eşitsizlikler üzerinde hiçbir etkisi olmayacağını düşünüyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -182,6 +184,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Birkaç sosyolog, sosyal medyanın insanların siyasi görüşlerini hiç etkilemediğine inanıyor.",
       "Artan sayıda sosyolog, sosyal medyanın gelecekte siyasi görüşleri değiştireceğine inanıyor.",
       "Artan sayıda gazeteci, sosyal medyanın siyasi görüşleri kökten değiştirdiğine inanıyor.",
+      "Sosyologlar, sosyal medyanın siyasi görüşler üzerindeki etkisinin giderek azaldığını düşünüyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -202,6 +205,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Mahkemenin kararı, dijital gizlilikle ilgili geçmiş davaları etkileyen bir emsal oluşturdu.",
       "Mahkeme, dijital gizlilikle ilgili gelecekteki davalar hakkında henüz bir karar vermedi.",
       "Mahkemenin kararı, dijital gizlilikle hiçbir ilgisi olmayan bir emsal oluşturdu.",
+      "Mahkemenin kararı, dijital gizlilikle ilgili davaların artık görülmeyeceği anlamına geliyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -223,6 +227,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Economists predicted that inflation had slowed down last year.",
       "Economists doubt that inflation will slow down next year.",
       "Economists predict that inflation slowed down next year.",
+      "Economists predict that inflation will rise sharply next year.",
     ],
     correctIndex: 0,
     explanation:
@@ -243,6 +248,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "This law will be criticized many times after it comes into effect.",
       "This law was criticized only once before it came into effect.",
       "This law has criticized many people since it came into effect.",
+      "This law has never been criticized since it came into effect.",
     ],
     correctIndex: 0,
     explanation:
@@ -262,6 +268,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Educators argue that standardized tests enhance students' creativity.",
       "Educators argued that standardized tests had suppressed students' creativity.",
       "Students argue that standardized tests suppress educators' creativity.",
+      "Educators argue that standardized tests should be given more often.",
     ],
     correctIndex: 0,
     explanation:
@@ -281,6 +288,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Anthropologists state that this tradition will be preserved unchanged for centuries.",
       "Anthropologists state that this tradition has changed significantly for centuries.",
       "Anthropologists doubt that this tradition has been preserved unchanged for centuries.",
+      "Anthropologists state that this tradition disappeared centuries ago.",
     ],
     correctIndex: 0,
     explanation:
@@ -304,6 +312,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Bireylerin yaşadıkları şehri sıklıkla değiştirmesi",
       "Ailelerin gelirlerini sürekli aynı düzeyde tutma becerisi",
       "Toplumdaki suç oranlarının nesiller boyu değişimi",
+      "Bir ülkenin nüfusunun yıllar içinde artması",
     ],
     correctIndex: 0,
     explanation:
@@ -326,6 +335,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Kendi eğitim düzeyiyle",
       "Yaşadığı ülkenin nüfusuyla",
       "Çalıştığı sektörün büyüklüğüyle",
+      "Yaşadığı bölgenin iklimiyle",
     ],
     correctIndex: 0,
     explanation:
@@ -348,6 +358,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Çaba, eğitim ve fırsat",
       "Doğum yeri ve etnik köken",
       "Ailenin siyasi bağlantıları",
+      "Şans ve tesadüf",
     ],
     correctIndex: 1,
     explanation:
@@ -370,6 +381,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Daha düşük oranda okuryazarlık",
       "Sosyal hareketliliğin tamamen ortadan kalkması",
       "Gelir eşitsizliğinin hızla artması",
+      "Okul sayısının azalması",
     ],
     correctIndex: 0,
     explanation:
@@ -391,7 +403,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Children who receive consistent praise for effort rather than innate ability tend to develop a more ---- mindset toward challenges.",
-    options: ["resilient", "fragile", "indifferent", "passive"],
+    options: ["resilient", "fragile", "indifferent", "passive", "competitive"],
     correctIndex: 0,
     explanation:
       "Çabaya yönelik övgü almak, çocuklarda zorluklar karşısında 'dayanıklı/esnek' (resilient) bir bakış açısı geliştirir. 'Fragile' (kırılgan) ve 'passive' (edilgen) bu olumlu gelişimle çelişir.",
@@ -406,7 +418,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The results ---- serious concerns about the reliability of standardized testing.",
-    options: ["raise", "rise", "arise", "risen"],
+    options: ["raise", "rise", "arise", "risen", "rose"],
     correctIndex: 0,
     explanation:
       "Boşluktan sonra bir nesne ('concerns') geldiği için geçişli bir fiil gerekir; bu nedenle 'raise' doğrudur. 'Rise' ve 'arise' geçişsizdir ve nesne alamaz, 'risen' ise çekimli bir fiil değildir.",
@@ -421,7 +433,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The professor's argument was so ---- that students struggled to identify its central claim.",
-    options: ["convoluted", "straightforward", "concise", "coherent"],
+    options: ["convoluted", "straightforward", "concise", "coherent", "persuasive"],
     correctIndex: 0,
     explanation:
       "Öğrencilerin 'merkezi iddiayı tespit etmekte zorlanması', argümanın karmaşık/dolambaçlı olduğunu gösterir; bu da 'convoluted' ile ifade edilir. 'Straightforward', 'concise' ve 'coherent' anlaşılır olmayı ima eder ve cümleyle çelişir.",
@@ -436,7 +448,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Teachers must ---- for the diverse learning needs of students in an inclusive classroom.",
-    options: ["account", "count", "discount", "recount"],
+    options: ["account", "count", "discount", "recount", "mount"],
     correctIndex: 0,
     explanation:
       "'Account for' (göz önünde bulundurmak, karşılamak) bağlama uyan doğru phrasal verb'dür. 'Count for', 'discount' ve 'recount' bu anlamı taşımaz.",
@@ -451,7 +463,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Early childhood experiences can have a ---- effect on personality development that persists into adulthood.",
-    options: ["lasting", "temporary", "negligible", "reversible"],
+    options: ["lasting", "temporary", "negligible", "reversible", "contagious"],
     correctIndex: 0,
     explanation:
       "'Persists into adulthood' (yetişkinliğe kadar sürer) ifadesi kalıcı bir etkiyi ('lasting') ima eder. 'Temporary' (geçici) ve 'reversible' (geri döndürülebilir) bu süreklilikle çelişir.",
@@ -466,7 +478,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Despite the setback, the students showed remarkable ----, quickly adapting their study strategies to improve their grades.",
-    options: ["resilience", "apathy", "complacency", "reluctance"],
+    options: ["resilience", "apathy", "complacency", "reluctance", "indifference"],
     correctIndex: 0,
     explanation:
       "'Quickly adapting their study strategies' (çalışma stratejilerini hızla uyarlamak) bir aksiliğe rağmen gösterilen dayanıklılığı ('resilience') ima eder. 'Apathy' (ilgisizlik) ve 'reluctance' (isteksizlik) bu hızlı uyum ile çelişir.",
@@ -481,7 +493,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The curriculum reform was designed to ---- critical thinking rather than rote memorization.",
-    options: ["foster", "discourage", "neglect", "suppress"],
+    options: ["foster", "discourage", "neglect", "suppress", "memorize"],
     correctIndex: 0,
     explanation:
       "'Rather than rote memorization' (ezber yerine) zıtlığı, eleştirel düşüncenin teşvik edilmesini ('foster') gerektirir. 'Discourage' ve 'suppress' (caydırmak, bastırmak) reformun amacıyla çelişir.",
@@ -496,7 +508,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Psychologists caution against drawing firm conclusions from a single case study, as the findings may not be ---- to the wider population.",
-    options: ["generalizable", "temporary", "coincidental", "anecdotal"],
+    options: ["generalizable", "temporary", "coincidental", "anecdotal", "consistent"],
     correctIndex: 0,
     explanation:
       "Tek bir vaka çalışmasından elde edilen bulguların geniş bir nüfusa uygulanabilirliği 'generalizable' (genellenebilir) ile ifade edilir. Diğer seçenekler bu bağlamda 'to the wider population' ile anlamlı bir birleşim oluşturmaz.",
@@ -517,6 +529,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Psikologlar, kronik stresin hafızayı geliştirdiğini tespit etmiştir.",
       "Psikologlar, kronik stresin gelecekte hafızayı bozacağını tahmin etmektedir.",
       "Psikologlar, akut stresin hafızayı bozabileceğini tespit etmiştir.",
+      "Psikologlar, kronik stresin karar verme becerileri üzerinde hiçbir etkisi olmadığını kanıtlamıştır.",
     ],
     correctIndex: 0,
     explanation:
@@ -536,6 +549,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Net beklentiler belirlemeyen öğretmenler, daha üretken bir sınıf ortamı oluşturma eğilimindedir.",
       "Net beklentiler belirleyen öğrenciler, daha üretken bir sınıf ortamı oluşturma eğilimindedir.",
       "Net beklentiler belirleyen öğretmenler, daha az üretken bir sınıf ortamı oluşturma eğilimindedir.",
+      "Öğretmenler, sınıf ortamını daha üretken hâle getirmek için beklentilerini gizlemelidir.",
     ],
     correctIndex: 0,
     explanation:
@@ -555,6 +569,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Deney, maddi teşviklerin akademik performansı kesinlikle artırdığını kanıtlamak için tasarlanmıştır.",
       "Deney, akademik performansın maddi teşvikleri nasıl etkilediğini belirlemek için tasarlanmıştır.",
       "Deney, maddi teşviklerin akademik performansı artırıp artırmayacağını gelecekte belirleyecektir.",
+      "Deney, akademik performansı artırmak için öğrencilere para dağıtmayı amaçladı.",
     ],
     correctIndex: 0,
     explanation:
@@ -574,6 +589,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Bazı eğitimciler, aşırı ev ödevinin öğrenci tükenmişliğini önlediğini savunuyor.",
       "Bazı öğrenciler, aşırı ev ödevinin eğitimci tükenmişliğine katkıda bulunduğunu savunuyor.",
       "Bazı eğitimciler, yetersiz ev ödevinin öğrenci tükenmişliğine katkıda bulunduğunu savunuyor.",
+      "Bazı eğitimciler, ev ödevinin tamamen kaldırılmasının tükenmişliği artırdığını savunuyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -595,6 +611,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Researchers will soon know that sleep deprivation negatively affects cognitive performance.",
       "Researchers have long known that sleep deprivation positively affects cognitive performance.",
       "Researchers have long doubted that sleep deprivation negatively affects cognitive performance.",
+      "Researchers have only recently started studying how sleep affects the body.",
     ],
     correctIndex: 0,
     explanation:
@@ -615,6 +632,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "This method of therapy will be proven effective, particularly in patients with anxiety disorder.",
       "This method of therapy has been proven ineffective, particularly in patients with anxiety disorder.",
       "This method of therapy has proven that patients with anxiety disorder are effective.",
+      "This method of therapy has never been tested on patients with anxiety disorders.",
     ],
     correctIndex: 0,
     explanation:
@@ -634,6 +652,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Preschool education played an important role in the development of children's social skills.",
       "Preschool education plays a minor role in the development of children's social skills.",
       "Children's social skills play an important role in the development of preschool education.",
+      "Preschool education prevents children from developing their social skills.",
     ],
     correctIndex: 0,
     explanation:
@@ -653,6 +672,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Experts agree on the effect of screen time on children.",
       "Experts did not agree on the effect of screen time on children in the past.",
       "Children do not agree on the effect of screen time on experts.",
+      "Experts have agreed to ban screen time for children.",
     ],
     correctIndex: 0,
     explanation:
@@ -676,6 +696,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "İnsanların her zaman rasyonel kararlar vermesi",
       "Ekonomik modellerin gerçek davranışı mükemmel şekilde tahmin etmesi",
       "Hastaların tıbbi prosedürleri her zaman reddetmesi",
+      "Kararların her zaman uzun vadeli sonuçlara göre verilmesi",
     ],
     correctIndex: 0,
     explanation:
@@ -698,6 +719,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "'Yüzde 10 hayatta kalma oranı' ifadesiyle",
       "'Yüzde 90 ölüm oranı' ifadesiyle",
       "Herhangi bir istatistik verilmediğinde",
+      "'Yüzde 50 başarı oranı' ifadesiyle",
     ],
     correctIndex: 0,
     explanation:
@@ -719,6 +741,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "İnsanların kararlarının sunuluş biçiminden etkilendiğini",
       "İnsanların tıbbi kararlarda her zaman duygusal davrandığını",
       "İnsanların genellikle mantıksız olduğunu",
+      "İnsanların kararlarını tamamen başkalarına bıraktığını",
     ],
     correctIndex: 0,
     explanation:
@@ -740,6 +763,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Tüm tıbbi prosedürlerin zorunlu hale getirilmesini",
       "Ekonomik modellerin tamamen terk edilmesini",
       "Hastalara istatistik verilmesinin yasaklanmasını",
+      "Tıbbi prosedürlerin maliyetinin düşürülmesini",
     ],
     correctIndex: 0,
     explanation:
@@ -761,7 +785,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The new law aims to ---- decision-making power from local governments to the central authority.",
-    options: ["transfer", "transform", "translate", "transmit"],
+    options: ["transfer", "transform", "translate", "transmit", "transcend"],
     correctIndex: 0,
     explanation:
       "'Transfer power' (yetkiyi aktarmak) bağlama uyan doğru fiildir. 'Transform' (dönüştürmek), 'translate' (çevirmek) ve 'transmit' (iletmek/yaymak) yetkinin bir yerden başka bir yere aktarılması anlamını taşımaz.",
@@ -776,7 +800,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The prosecution failed to ---- enough evidence, so the jury acquitted the defendant.",
-    options: ["present", "prevent", "pretend", "protest"],
+    options: ["present", "prevent", "pretend", "protest", "preserve"],
     correctIndex: 0,
     explanation:
       "'Present evidence' (kanıt sunmak) doğru collocation'dır; jürinin sanığı beraat ettirmesi, yeterli kanıt sunulamadığını gösterir. 'Prevent', 'pretend' ve 'protest' bu bağlamda anlamsızdır.",
@@ -791,7 +815,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The Supreme Court decided to ---- the law on the grounds that it violated constitutional rights.",
-    options: ["strike down", "strike up", "strike off", "strike out"],
+    options: ["strike down", "strike up", "strike off", "strike out", "strike through"],
     correctIndex: 0,
     explanation:
       "'Strike down a law' (bir yasayı anayasaya aykırı bularak iptal etmek) hukuki bağlamda doğru phrasal verb'dür. 'Strike up' bir ilişki/konuşma başlatmak, 'strike off' bir kayıttan silmek, 'strike out' çizmek/silmek anlamına gelir.",
@@ -806,7 +830,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The senator's ---- to the bill was based on constitutional concerns rather than political rivalry.",
-    options: ["object", "objection", "objective", "objectionable"],
+    options: ["object", "objection", "objective", "objectionable", "objected"],
     correctIndex: 1,
     explanation:
       "Boşluk 'the senator's ---- to the bill' yapısında bir isim gerektirir; doğru isim 'objection' (itiraz)dır. 'Object' fiil/isim (nesne), 'objective' amaç/hedef, 'objectionable' ise bir sıfattır.",
@@ -821,7 +845,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The treaty was ratified only after ---- negotiations that lasted nearly a decade.",
-    options: ["protracted", "brief", "informal", "unanimous"],
+    options: ["protracted", "brief", "informal", "unanimous", "hasty"],
     correctIndex: 0,
     explanation:
       "'Lasted nearly a decade' (neredeyse on yıl sürdü) ifadesi, müzakerelerin uzun sürdüğünü ('protracted') gösterir. 'Brief' (kısa) bu süreyle doğrudan çelişir.",
@@ -836,7 +860,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Authoritarian regimes often ---- dissent through censorship and the suppression of independent media.",
-    options: ["stifle", "encourage", "tolerate", "amplify"],
+    options: ["stifle", "encourage", "tolerate", "amplify", "celebrate"],
     correctIndex: 0,
     explanation:
       "Sansür ve bağımsız medyanın bastırılması, muhalefetin 'boğulduğunu/bastırıldığını' ('stifle') gösterir. 'Encourage' ve 'amplify' bu baskıyla çelişir.",
@@ -851,7 +875,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The constitution grants citizens the right to ---- petition their government without fear of retribution.",
-    options: ["freely", "free", "freeing", "freedom"],
+    options: ["freely", "free", "freeing", "freedom", "freer"],
     correctIndex: 0,
     explanation:
       "Boşluk, 'petition' fiilini niteleyen bir zarf gerektirir; doğru seçenek 'freely' (özgürce)'dir. 'Free' sıfat/fiil, 'freeing' ulaç, 'freedom' ise isimdir ve fiili niteleyemez.",
@@ -866,7 +890,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Legal scholars continue to debate whether the ruling constitutes a genuine ---- from established precedent.",
-    options: ["departure", "arrival", "continuation", "repetition"],
+    options: ["departure", "arrival", "continuation", "repetition", "reflection"],
     correctIndex: 0,
     explanation:
       "Bir kararın yerleşik içtihattan 'ayrılması/sapması' 'departure' ile ifade edilir. 'Continuation' (devamı) ve 'repetition' (tekrarı) bu sapma fikriyle çelişir.",
@@ -887,6 +911,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Anayasa ifade özgürlüğünü güvence altına almaz, ancak bu hak mutlaktır.",
       "Anayasa ifade özgürlüğünü gelecekte güvence altına alacaktır, ancak bu hak mutlak değildir.",
       "Anayasa ifade özgürlüğünü güvence altına alır ve bu hak tamamen mutlaktır.",
+      "Anayasa ifade özgürlüğünü yalnızca seçim dönemlerinde güvence altına alır.",
     ],
     correctIndex: 0,
     explanation:
@@ -907,6 +932,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Senatör, kişisel çıkar için yetkisini kötüye kullandığını itiraf etti.",
       "Senatörün, kamu yararı için yetkisini kullandığı iddia edildi.",
       "Senatör, gelecekte yetkisini kötüye kullanmakla suçlanacak.",
+      "Senatör, kişisel çıkar sağlamadığı için ödüllendirildi.",
     ],
     correctIndex: 0,
     explanation:
@@ -926,6 +952,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Mahkemenin kararı, sivil haklar gruplarından güçlü destek aldı.",
       "Mahkeme, sivil haklar gruplarının kararını güçlü bir şekilde eleştirdi.",
       "Mahkemenin kararı, gelecekte sivil haklar gruplarından eleştiri alacak.",
+      "Mahkemenin kararı, sivil haklar grupları tarafından hiç fark edilmedi.",
     ],
     correctIndex: 0,
     explanation:
@@ -945,6 +972,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Bağımsız bir yargı sayesinde, hukukun üstünlüğü tam olarak sağlanamaz.",
       "Bağımsız bir yargı olmadan, hukukun üstünlüğü kolaylıkla sağlanır.",
       "Bağımsız bir yargı olmadan, hukukun üstünlüğü geçmişte tam olarak sağlanmıştı.",
+      "Hukukun üstünlüğü, yargının bağımsız olmasını engeller.",
     ],
     correctIndex: 0,
     explanation:
@@ -967,6 +995,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "The law will be passed by the parliament with a majority vote.",
       "The law was rejected by the parliament with a majority vote.",
       "The parliament was passed by the law with a majority vote.",
+      "The law has not been discussed by the parliament yet.",
     ],
     correctIndex: 0,
     explanation:
@@ -986,6 +1015,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "The court will dismiss the case due to insufficient evidence.",
       "The court accepted the case due to insufficient evidence.",
       "The court dismissed the case due to sufficient evidence.",
+      "The court postponed the case until more evidence could be found.",
     ],
     correctIndex: 0,
     explanation:
@@ -1005,6 +1035,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Citizens will organize protests due to the government's lack of transparency.",
       "Citizens organized protests due to the government's high level of transparency.",
       "The government organized protests due to citizens' lack of transparency.",
+      "Citizens thanked the government for its transparency.",
     ],
     correctIndex: 0,
     explanation:
@@ -1024,6 +1055,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "This treaty aimed to reduce tension between the two countries in the past.",
       "This treaty aims to increase tension between the two countries.",
       "The two countries aim to reduce tension between this treaty.",
+      "This treaty has caused a war between the two countries.",
     ],
     correctIndex: 0,
     explanation:
@@ -1042,7 +1074,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     passageText:
       "The doctrine of separation of powers divides governmental authority among three branches: the legislative, the executive, and the judicial. Each branch is granted distinct responsibilities and, crucially, the ability to check the others, preventing any single branch from accumulating excessive power. In many constitutional democracies, the judiciary plays a particularly important role through judicial review, the power to assess whether laws passed by the legislature conform to the constitution. Critics of judicial review argue that it grants unelected judges disproportionate influence over policy, while supporters contend that it serves as an essential safeguard against the erosion of constitutional rights.",
     prompt: "Parçaya göre, kuvvetler ayrılığı doktrini yönetim yetkisini kaç bölüme ayırmaktadır?",
-    options: ["İki", "Üç", "Dört", "Beş"],
+    options: ["İki", "Üç", "Dört", "Beş", "Altı"],
     correctIndex: 1,
     explanation: "Parçada yönetim yetkisinin 'üç' (three) bölüme; yasama, yürütme ve yargıya ayrıldığı açıkça belirtilmiştir.",
     tags: ["sosyal-reading", "siyaset-bilimi", "detail-question"],
@@ -1062,6 +1094,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Yürütmenin yasama üzerindeki veto yetkisi",
       "Yargının kendi kararlarını denetleme süreci",
       "Vatandaşların mahkemelere doğrudan yasa önerme hakkı",
+      "Seçimlerin hangi tarihte yapılacağına karar verme süreci",
     ],
     correctIndex: 0,
     explanation:
@@ -1083,6 +1116,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Yargının hiçbir zaman yasaları değerlendirmemesi gerektiğini",
       "Anayasal hakların korunmasının gereksiz olduğunu",
       "Yürütmenin yasama üzerinde daha fazla yetkiye sahip olması gerektiğini",
+      "Yargıçların yasaları yeterince sık incelemediğini",
     ],
     correctIndex: 0,
     explanation:
@@ -1104,6 +1138,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Yürütmenin yasama üzerinde tam kontrol sağlamasını garanti etmek",
       "Yargının diğer organlardan tamamen bağımsız olmasını engellemek",
       "Vatandaşların doğrudan demokrasiyle yönetilmesini sağlamak",
+      "Yasaların daha hızlı çıkarılmasını sağlamak",
     ],
     correctIndex: 0,
     explanation:
@@ -1125,7 +1160,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Archaeological evidence suggests that early human societies were far more ---- than previously assumed, trading goods across vast distances.",
-    options: ["interconnected", "isolated", "stagnant", "uniform"],
+    options: ["interconnected", "isolated", "stagnant", "uniform", "expensive"],
     correctIndex: 0,
     explanation:
       "'Trading goods across vast distances' (geniş mesafeler boyunca mal ticareti yapmak) toplulukların birbirine 'bağlantılı' ('interconnected') olduğunu gösterir. 'Isolated' (izole) bu bulguyla doğrudan çelişir.",
@@ -1140,10 +1175,10 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Historians ---- much of the empire's decline to internal corruption rather than external invasion.",
-    options: ["attribute", "contribute", "distribute", "subscribe"],
+    options: ["attribute", "contribute", "distribute", "subscribe", "retribute"],
     correctIndex: 0,
     explanation:
-      "'Attribute A to B' (A'yı B'ye bağlamak) doğru collocation'dır; tarihçiler çöküşün nedenini iç yozlaşmaya bağlamaktadır. 'Contribute', 'distribute' ve 'subscribe' bu yapıda kullanılmaz.",
+      "'Attribute something to something' (bir şeyi bir şeye bağlamak) doğru collocation'dır; tarihçiler çöküşün nedenini iç yozlaşmaya bağlamaktadır. 'Contribute', 'distribute' ve 'subscribe' bu yapıda kullanılmaz.",
     tags: ["sosyal-vocab", "tarih", "collocation"],
     mockSetNumber: 4,
   },
@@ -1155,7 +1190,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The tribe's oral history has been ---- down through generations for over a thousand years.",
-    options: ["passed", "given", "thrown", "kept"],
+    options: ["passed", "given", "thrown", "kept", "brought"],
     correctIndex: 0,
     explanation:
       "'Pass down' (nesilden nesile aktarmak) doğru phrasal verb'dür. 'Given down', 'thrown down' ve 'kept down' bu anlamda kullanılan yapılar değildir.",
@@ -1170,7 +1205,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The ---- of the ancient city remains a subject of ongoing archaeological investigation.",
-    options: ["origin", "original", "originally", "originate"],
+    options: ["origin", "original", "originally", "originate", "originality"],
     correctIndex: 0,
     explanation:
       "Boşluk 'The ---- of the ancient city' yapısında bir isim gerektirir; doğru isim 'origin' (köken)dir. 'Original' sıfat, 'originally' zarf, 'originate' ise fiildir.",
@@ -1185,7 +1220,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The empire's rapid ---- was attributed to overextension and economic mismanagement.",
-    options: ["decline", "expansion", "prosperity", "stability"],
+    options: ["decline", "expansion", "prosperity", "stability", "renovation"],
     correctIndex: 0,
     explanation:
       "'Overextension and economic mismanagement' (aşırı yayılma ve ekonomik kötü yönetim) olumsuz nedenlerdir; bunların sonucu 'decline' (çöküş) olur. 'Expansion' (genişleme) ve 'prosperity' (refah) bu olumsuz nedenlerle çelişir.",
@@ -1200,7 +1235,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Anthropologists caution against imposing modern values when interpreting the ---- of ancient rituals.",
-    options: ["significance", "absence", "prohibition", "uniformity"],
+    options: ["significance", "absence", "prohibition", "uniformity", "cost"],
     correctIndex: 0,
     explanation:
       "Eski ritüellerin 'anlamını/önemini' ('significance') yorumlarken modern değerler dayatmaktan kaçınmak mantıklıdır. 'Absence' (yokluk) ve 'prohibition' (yasak) bağlamla uyumsuzdur.",
@@ -1215,7 +1250,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The migration patterns of early hunter-gatherer societies were largely ---- by the availability of seasonal resources.",
-    options: ["determined", "prohibited", "ignored", "dismissed"],
+    options: ["determined", "prohibited", "ignored", "dismissed", "celebrated"],
     correctIndex: 0,
     explanation:
       "Göç örüntülerinin mevsimsel kaynakların bulunabilirliği tarafından 'belirlenmesi' ('determined') mantıklı bir neden-sonuç ilişkisi kurar. 'Prohibited' (yasaklanmış) ve 'ignored' (göz ardı edilmiş) bu ilişkiyi anlamsız kılar.",
@@ -1230,7 +1265,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Despite centuries of cultural exchange, many rural communities have managed to ---- their traditional customs largely intact.",
-    options: ["preserve", "abandon", "ridicule", "forget"],
+    options: ["preserve", "abandon", "ridicule", "forget", "export"],
     correctIndex: 0,
     explanation:
       "'Largely intact' (büyük ölçüde bozulmadan) ifadesi, geleneklerin 'korunduğunu' ('preserve') gösterir. 'Abandon' (terk etmek) ve 'forget' (unutmak) bu süreklilikle çelişir.",
@@ -1251,6 +1286,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Arkeologlar yakın zamanda, erken dönem ticaret ağlarına ilişkin önceki varsayımları doğrulayan eserler keşfetti.",
       "Arkeologlar geçen yüzyılda, erken dönem ticaret ağlarına ilişkin önceki varsayımlara meydan okuyan eserler keşfetti.",
       "Arkeologlar yakın zamanda erken dönem ticaret ağları hakkında hiçbir yeni eser bulamadı.",
+      "Arkeologlar, erken dönem ticaret ağları hakkındaki eski görüşleri doğrulayan eserleri yok etti.",
     ],
     correctIndex: 0,
     explanation:
@@ -1270,6 +1306,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "İmparatorluğun yükselişi, ekonomik, askeri ve siyasi etmenlerin bir bileşiminin sonucuydu.",
       "İmparatorluğun çöküşü, yalnızca askeri yenilginin sonucuydu.",
       "İmparatorluğun çöküşü, gelecekte ekonomik, askeri ve siyasi etmenlerin bir sonucu olacaktır.",
+      "İmparatorluğun çöküşü, tek bir savaşta yenilmesiyle aniden gerçekleşti.",
     ],
     correctIndex: 0,
     explanation:
@@ -1289,6 +1326,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Antropolojik araştırmalar, akrabalık yapılarının tüm kültürlerde aynı olduğunu ortaya koymaktadır.",
       "Antropolojik araştırmalar, akrabalık yapılarının gelecekte farklılaşacağını tahmin etmektedir.",
       "Antropolojik araştırmalar, kültürlerin akrabalık yapılarından önemli ölçüde etkilendiğini ortaya koymaktadır.",
+      "Antropolojik araştırmalar, akrabalık yapılarının hiçbir kültürde önemli olmadığını göstermektedir.",
     ],
     correctIndex: 0,
     explanation:
@@ -1309,6 +1347,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "On dokuzuncu yüzyıla gelindiğinde, sanayileşme Avrupa'nın büyük bölümünün ekonomik yapısını dönüştürecek.",
       "On sekizinci yüzyıla gelindiğinde, sanayileşme Avrupa'nın büyük bölümünün ekonomik yapısını dönüştürmüştü.",
       "On dokuzuncu yüzyıla gelindiğinde, sanayileşme Avrupa'nın ekonomik yapısını hiç değiştirmemişti.",
+      "On dokuzuncu yüzyılda Avrupa'nın ekonomik yapısı sanayileşmeden hiç etkilenmedi.",
     ],
     correctIndex: 0,
     explanation:
@@ -1330,6 +1369,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Historians still agree on the authenticity of this document.",
       "Historians no longer agree on the authenticity of this document.",
       "Historians will decide on the authenticity of this document.",
+      "Historians have proved that this document is a forgery.",
     ],
     correctIndex: 0,
     explanation:
@@ -1350,6 +1390,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "This tribe will pass down its history from generation to generation through oral tradition for centuries.",
       "This tribe has lost its history from generation to generation through oral tradition for centuries.",
       "This tribe has passed down its history only once through oral tradition.",
+      "This tribe has always written down its history in books.",
     ],
     correctIndex: 0,
     explanation:
@@ -1369,6 +1410,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Colonialism temporarily altered the economic structure of many regions.",
       "Colonialism will permanently alter the economic structure of many regions.",
       "Many regions permanently altered the economic structure of colonialism.",
+      "Colonialism had no effect on the economic structure of most regions.",
     ],
     correctIndex: 0,
     explanation:
@@ -1388,6 +1430,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Nomadic communities will have to adapt quickly to their environment in order to survive.",
       "Nomadic communities had to resist quickly to their environment in order to survive.",
       "Nomadic communities did not have to adapt to their environment in order to survive.",
+      "Nomadic communities preferred to settle in cities to survive.",
     ],
     correctIndex: 0,
     explanation:
@@ -1411,6 +1454,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "On dokuzuncu yüzyılın başlarında Fransa'da",
       "On yedinci yüzyılda Amerika'da",
       "Yirminci yüzyılın başında Almanya'da",
+      "On altıncı yüzyılda İspanya'da",
     ],
     correctIndex: 0,
     explanation:
@@ -1432,6 +1476,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Daha temiz bir çevre bulmak için",
       "Hükümet zorunlu tuttuğu için",
       "Tarım arazilerinin bollaşması nedeniyle",
+      "Askerlik hizmeti için",
     ],
     correctIndex: 0,
     explanation:
@@ -1453,6 +1498,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Kısa çalışma saatleri ve yüksek ücretler",
       "Güvenli çalışma ortamları ve düşük iş yükü",
       "Sendikaların güçlü yasal korumaları",
+      "Çalışanların çoğunun evden çalışabilmesi",
     ],
     correctIndex: 0,
     explanation:
@@ -1474,6 +1520,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Fabrikaların tamamen kapatılmasına",
       "Kırsal bölgelere geri göçe",
       "Orta sınıfın tamamen ortadan kalkmasına",
+      "Kırsal nüfusun hızla artmasına",
     ],
     correctIndex: 0,
     explanation:
@@ -1495,7 +1542,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "The network was criticized for ---- a complex policy debate into a thirty-second soundbite.",
-    options: ["reducing", "expanding", "clarifying", "prolonging"],
+    options: ["reducing", "expanding", "clarifying", "prolonging", "copying"],
     correctIndex: 0,
     explanation:
       "Karmaşık bir tartışmanın otuz saniyelik bir özete indirgenmesi 'reducing' (indirgemek) ile ifade edilir. 'Expanding' (genişletmek) ve 'prolonging' (uzatmak) bu daralmayla çelişir.",
@@ -1510,7 +1557,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Journalists have an ethical obligation to ---- objectivity, even when covering controversial topics.",
-    options: ["maintain", "abandon", "dismiss", "conceal"],
+    options: ["maintain", "abandon", "dismiss", "conceal", "fabricate"],
     correctIndex: 0,
     explanation:
       "'Maintain objectivity' (tarafsızlığı korumak) gazetecilik etiğine uygun doğru collocation'dır. 'Abandon' (terk etmek) ve 'dismiss' (bir kenara atmak) bu etik yükümlülükle çelişir.",
@@ -1525,7 +1572,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The scandal ---- after a whistleblower leaked internal documents to the press.",
-    options: ["came to light", "came to terms", "came to pass", "came to a halt"],
+    options: ["came to light", "came to terms", "came to pass", "came to a halt", "came to mind"],
     correctIndex: 0,
     explanation:
       "'Come to light' (ortaya çıkmak, açığa çıkmak) bir sırrın ifşa edilmesini anlatan doğru deyimdir. 'Come to terms with' (bir şeyle barışmak), 'come to pass' (vuku bulmak) ve 'come to a halt' (durmak) bağlama uymaz.",
@@ -1540,7 +1587,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "Critics accuse certain outlets of political ----, favoring one party over another in their coverage.",
-    options: ["bias", "biased", "biasedly", "unbiased"],
+    options: ["bias", "biased", "biasedly", "unbiased", "bias-free"],
     correctIndex: 0,
     explanation:
       "'Accuse someone of political bias' (bir kanalı siyasi taraflılıkla suçlamak) yapısında bir isim gerekir; doğru isim 'bias'tır. 'Biased' bir sıfat, 'biasedly' geçerli bir sözcük değildir, 'unbiased' ise tam tersi bir anlam taşır.",
@@ -1555,7 +1602,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ORTA",
     prompt:
       "The documentary was praised for offering a ---- portrayal of the refugee crisis, avoiding both sensationalism and oversimplification.",
-    options: ["nuanced", "simplistic", "sensational", "biased"],
+    options: ["nuanced", "simplistic", "sensational", "biased", "hostile"],
     correctIndex: 0,
     explanation:
       "'Avoiding both sensationalism and oversimplification' (hem sansasyonculuktan hem aşırı basitleştirmeden kaçınmak) dengeli/incelikli bir yaklaşımı ('nuanced') gösterir. 'Simplistic' ve 'sensational' cümledeki kaçınılan özelliklerin ta kendisidir.",
@@ -1570,7 +1617,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "KOLAY",
     prompt:
       "Public relations firms are often hired to help organizations ---- their image after a controversy.",
-    options: ["restore", "damage", "ignore", "publicize"],
+    options: ["restore", "damage", "ignore", "publicize", "confuse"],
     correctIndex: 0,
     explanation:
       "Bir tartışmadan sonra imajın 'restore' (yeniden düzeltmek/onarmak) edilmesi halkla ilişkiler firmalarının temel görevidir. 'Damage' (zarar vermek) bu amaçla doğrudan çelişir.",
@@ -1585,7 +1632,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "The spread of misinformation on social media has made it increasingly difficult for the public to ---- fact from fiction.",
-    options: ["distinguish", "combine", "confuse", "resemble"],
+    options: ["distinguish", "combine", "confuse", "resemble", "remember"],
     correctIndex: 0,
     explanation:
       "'Distinguish fact from fiction' (gerçeği kurgudan ayırt etmek) doğru collocation'dır. 'Combine' (birleştirmek) ve 'confuse' (karıştırmak) zaten yanlış bilginin yarattığı sorunu tanımlar, ayırt etme yeteneğini değil.",
@@ -1600,7 +1647,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
     difficulty: "ZOR",
     prompt:
       "Effective communication requires speakers to ---- their message to the specific needs and background of their audience.",
-    options: ["tailor", "ignore", "standardize", "complicate"],
+    options: ["tailor", "ignore", "standardize", "complicate", "memorize"],
     correctIndex: 0,
     explanation:
       "'Tailor a message to an audience' (bir mesajı hedef kitleye göre uyarlamak) doğru collocation'dır. 'Standardize' (standartlaştırmak) hedef kitlenin özel ihtiyaçlarını göz ardı etme fikrini taşır ve bağlamla çelişir.",
@@ -1621,6 +1668,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Araştırmalar, sansasyonel haberlere uzun süre maruz kalmanın toplumsal kaygıyı azaltabileceğini göstermektedir.",
       "Araştırmalar, sansasyonel haberlere kısa süre maruz kalmanın toplumsal kaygıyı artırabileceğini göstermektedir.",
       "Araştırmalar, toplumsal kaygının sansasyonel haberlere maruz kalmayı artırabileceğini göstermektedir.",
+      "Araştırmalar, sansasyonel haberlerin toplumsal kaygıyı tamamen ortadan kaldırdığını gösteriyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -1640,6 +1688,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Reklamcılar, belirli tüketici demografilerini hedeflemekten giderek daha fazla kaçınıyor.",
       "Tüketiciler, belirli reklamcı demografilerini hedeflemek için giderek daha fazla veri analitiğine güveniyor.",
       "Reklamcılar, geçmişte belirli tüketici demografilerini hedeflemek için veri analitiğine güvenmişti.",
+      "Reklamcılar, tüketici verilerini kullanmayı tamamen bıraktı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1659,6 +1708,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Vatandaş gazeteciliğinin düşüşü, son dakika haberlerinin bildirilme biçimini değiştirmiştir.",
       "Vatandaş gazeteciliğinin yükselişi, son dakika haberlerinin bildirilme biçimini hiç değiştirmemiştir.",
       "Son dakika haberlerinin bildirilme biçimi, vatandaş gazeteciliğinin yükselişini değiştirmiştir.",
+      "Vatandaş gazeteciliği, son dakika haberlerinin hiç bildirilmemesine yol açtı.",
     ],
     correctIndex: 0,
     explanation:
@@ -1678,6 +1728,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Eleştirmenler, bazı haber kanallarının reytingleri değil, doğruluğu önceliklendirdiğini savunuyor.",
       "Destekçiler, bazı haber kanallarının doğruluğu değil, reytingleri önceliklendirdiğini savunuyor.",
       "Eleştirmenler, bazı haber kanallarının gelecekte reytingleri önceliklendireceğini savunuyor.",
+      "Eleştirmenler, haber kanallarının reyting kaygısı taşımadığını kabul ediyor.",
     ],
     correctIndex: 0,
     explanation:
@@ -1700,6 +1751,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Social media platforms are increasingly criticized for how they will use user data.",
       "Social media platforms are increasingly praised for how they use user data.",
       "User data is increasingly criticized for how it uses social media platforms.",
+      "Social media platforms have stopped collecting user data altogether.",
     ],
     correctIndex: 0,
     explanation:
@@ -1719,6 +1771,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Public opinion polls show that the majority of voters are satisfied with economic policies.",
       "Public opinion polls showed that the majority of voters were dissatisfied with economic policies in the past.",
       "Public opinion polls show that the minority of voters are dissatisfied with economic policies.",
+      "Public opinion polls show that voters have no interest in economic policies.",
     ],
     correctIndex: 0,
     explanation:
@@ -1738,6 +1791,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Journalists are obliged to reveal the confidentiality of their sources.",
       "Journalists were obliged to protect the confidentiality of their sources.",
       "Sources are obliged to protect the confidentiality of their journalists.",
+      "Journalists are not allowed to talk to their sources.",
     ],
     correctIndex: 0,
     explanation:
@@ -1757,6 +1811,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "This campaign aims to decrease political participation among young people.",
       "This campaign aimed to increase political participation among young people in the past.",
       "Young people aim to increase political participation among this campaign.",
+      "This campaign aims to prevent young people from voting.",
     ],
     correctIndex: 0,
     explanation:
@@ -1780,6 +1835,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Kullanıcıların internet erişimini tamamen kaybetmesini",
       "Algoritmaların tüm kullanıcılara aynı içeriği göstermesini",
       "Sosyal medya şirketlerinin kâr kaybını",
+      "Kullanıcıların sosyal medyada yalnızca reklam görmesini",
     ],
     correctIndex: 0,
     explanation:
@@ -1801,6 +1857,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Haberlerin doğruluğunu",
       "İçeriğin yayın tarihini",
       "Kullanıcının yaşadığı ülkeyi",
+      "Kullanıcıların yaşını",
     ],
     correctIndex: 0,
     explanation:
@@ -1822,6 +1879,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Siyasi kutuplaşmanın tamamen ortadan kalkmasına",
       "Kullanıcıların farklı görüşlere daha açık hale gelmesine",
       "Sosyal medya kullanımının azalmasına",
+      "Siyasi partilerin sayısının artmasına",
     ],
     correctIndex: 0,
     explanation:
@@ -1843,6 +1901,7 @@ export const MOCK_YOKDIL_SOSYAL: DiagnosticQuestionSeed[] = [
       "Algoritmaların hiçbir etkisinin olmadığını kanıtlamaları",
       "Sosyal medyanın yakın zamanda ortadan kalkacağını öngörmeleri",
       "Kutuplaşmanın yalnızca dijital medyada var olduğunu savunmaları",
+      "Algoritmaların yalnızca yaşlı kullanıcıları etkilediğini göstermeleri",
     ],
     correctIndex: 0,
     explanation:

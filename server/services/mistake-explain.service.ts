@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { getPlanAccess } from "@/server/services/plans.service";
 import { callClaudeTool, ClaudeApiError, ClaudeRefusalError } from "@/server/seo/claude";
 import { HAIKU_MODEL, HAIKU_PRICING, haikuCostUsd } from "@/lib/ai-haiku";
+import { optionOrder, relabelExplanation } from "@/lib/diagnostics/option-order";
 import {
   EXPLAIN_MAX_TOKENS,
   EXPLAIN_SYSTEM_PROMPT,
@@ -65,9 +66,19 @@ export async function explainMistake(user: User, responseId: string, call: typeo
   const cap = explainCapUsd(process.env);
   if (!apiKey || cap <= 0) throw new MistakeExplainError("Yapay zekâ açıklaması şu anda kullanılamıyor.");
 
+  // The model sees the options in the order (and with the letters) the student saw them.
+  const order = optionOrder(q.id, options.length);
   const userMessage = buildExplainUserMessage(
-    { prompt: q.prompt, passageText: q.passageText, options, correctIndex: correct, explanation: q.explanation, topicName: q.topic.name, examName: response.attempt.examType.name },
-    chosen,
+    {
+      prompt: q.prompt,
+      passageText: q.passageText,
+      options: order.map((i) => options[i]),
+      correctIndex: order.indexOf(correct),
+      explanation: q.explanation ? relabelExplanation(q.id, options.length, q.explanation) : null,
+      topicName: q.topic.name,
+      examName: response.attempt.examType.name,
+    },
+    order.indexOf(chosen),
   );
   const estimatedUsd = explainReserveUsd(userMessage);
 
