@@ -48,9 +48,13 @@ export async function getPlanAccess(user: { id: string; role: string } | null): 
 export async function remainingMockExamStarts(userId: string, access: PlanAccess): Promise<number | null> {
   if (access.can("UNLIMITED_MOCK_EXAMS")) return null;
   if (!access.plan) return 0;
-  const used = await db.diagnosticAttempt.count({
-    where: { userId, kind: "MOCK_EXAM", startedAt: { gte: access.plan.startsAt } },
-  });
+  // Online YDS denemeleri draw from the same allowance as the classic mock exams.
+  const since = { gte: access.plan.startsAt };
+  const [classic, online] = await Promise.all([
+    db.diagnosticAttempt.count({ where: { userId, kind: "MOCK_EXAM", startedAt: since } }),
+    db.onlineDenemeAttempt.count({ where: { userId, startedAt: since } }),
+  ]);
+  const used = classic + online;
   return Math.max(0, BASLANGIC_MOCK_EXAM_LIMIT - used);
 }
 

@@ -26,7 +26,7 @@ export type Irrelevant = { sentences: [string, string, string, string, string]; 
 
 /** One test in real YDS order (questions 1–80). */
 export type Deneme = {
-  /** 1–10 */
+  /** 1–100 (1–10 are also printed in the two Set books) */
   no: number;
   /** 1–6 kelime ve phrasal verb */
   vocab: [Q, Q, Q, Q, Q, Q];

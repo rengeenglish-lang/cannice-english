@@ -72,6 +72,23 @@ export default async function MockExamPage({ searchParams }: { searchParams: Pro
     );
   }
 
+  // YDS has its own A–E online denemeler (80 questions, server-timed); they replace the old 4-option sets here.
+  if (goal.examType.code === "YDS") {
+    return (
+      <main className="mx-auto w-full max-w-6xl space-y-12 px-4 py-10 sm:px-6">
+        {plans}
+        <section className="dashboard-panel mx-auto flex max-w-3xl flex-col items-start gap-4">
+          <p className="eyebrow">{goal.examType.name}</p>
+          <h2 className="section-title">Online YDS Denemeleri</h2>
+          <p className="page-copy">
+            Gerçek YDS formatında 80 soru, A–E şıklı, 180 dakika. İstersen klasik görünümde, istersen ÖSYM cevap kâğıdıyla çöz; bitirdiğin anda puanın ve çözümler açılır.
+          </p>
+          <Link href="/dashboard/yds-denemeleri" className="primary-button">Denemelere git</Link>
+        </section>
+      </main>
+    );
+  }
+
   const config = attemptConfigForExam(goal.examType.code);
   const isAcademicSkills = examFamilyForCode(goal.examType.code) === "ACADEMIC_SKILLS";
   const sets = await getMockExamSetsOverview(user.id, goal.examTypeId, examFamilyForCode(goal.examType.code));

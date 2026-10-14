@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import { getAuthContext } from "@/server/auth/context";
 import { db } from "@/server/db";
+import { finishAttempt } from "@/server/services/diagnostic-attempts.service";
 import { DiagnosticRunner } from "@/components/diagnostics/DiagnosticRunner";
 import { BookletRunner } from "@/components/diagnostics/BookletRunner";
 import { ReadingSplitRunner } from "@/components/diagnostics/ReadingSplitRunner";
@@ -13,6 +14,10 @@ import { packBookletPage } from "@/lib/diagnostics/booklet-pagination";
 import { buildPassageRuns, locateRun } from "@/lib/diagnostics/reading-passages";
 
 const SPLIT_SCREEN_EXAM_CODES = ["IELTS", "TOEFL"];
+
+function timeIsUp(startedAt: Date, limitMinutes: number) {
+  return Date.now() - startedAt.getTime() > limitMinutes * 60_000;
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ attemptId: string }> }): Promise<Metadata> {
   const { attemptId } = await params;
@@ -42,6 +47,12 @@ export default async function DiagnosticRunnerPage({ params }: { params: Promise
     canToggleView ? getExamViewMode() : Promise.resolve<Awaited<ReturnType<typeof getExamViewMode>>>("single"),
   ]);
   const timeLimitMinutes = attempt.kind === "MOCK_EXAM" ? (examType ? attemptConfigForExam(examType.code).mockExamTimeLimitMinutes : 180) : undefined;
+  // The clock is the server's: a mock exam opened after its time ran out is closed here, so a
+  // reload or a second device cannot reopen it (the browser countdown is only a display).
+  if (timeLimitMinutes && timeIsUp(attempt.startedAt, timeLimitMinutes)) {
+    await finishAttempt(attempt.id, user.id);
+    redirect(`/dashboard/sonuc/${attempt.id}`);
+  }
 
   if (viewMode === "booklet") {
     const windowIds = attempt.questionOrder.slice(attempt.currentIndex, attempt.currentIndex + 16);

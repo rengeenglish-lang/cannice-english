@@ -1,7 +1,7 @@
 import { answerAndAdvanceAction } from "@/app/actions/diagnostic-attempt";
 import { ExamTimer } from "@/components/diagnostics/ExamTimer";
 
-const LETTERS = ["A", "B", "C", "D"];
+const LETTERS = ["A", "B", "C", "D", "E"];
 
 export function ReadingSplitRunner({
   attemptId,

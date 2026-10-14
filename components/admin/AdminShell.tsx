@@ -98,6 +98,7 @@ function studentNav(examFamily: ExamFamily | null): StudentGroup[] {
       items: [
         { href: "/dashboard/practice", label: "Pratik Bankası", icon: ListChecks },
         { href: "/dashboard/mock-exam", label: "Deneme Sınavı", icon: Timer },
+        ...(examFamily === "ACADEMIC_SKILLS" ? [] : [{ href: "/dashboard/yds-denemeleri", label: "Online YDS Denemeleri", icon: ClipboardList }]),
         ...(examFamily === "TRANSLATION_GRAMMAR" ? [] : [{ href: "/dashboard/speaking-practice", label: "Konuşma pratiği", icon: Mic2 }]),
         { href: "/dashboard/speaking-club", label: "Speaking Club", icon: Users },
         { href: "/dashboard/yazma-geri-bildirim", label: "Yazma geri bildirimi", icon: PenLine },
