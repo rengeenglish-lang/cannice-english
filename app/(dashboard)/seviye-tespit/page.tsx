@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Seviye Tespit" };
 
 const ACTIONS = [
   { href: "/seviye-tespit/tekrar", title: "Tekrar Çöz", copy: "Daha önce çözdüğün bir seviye tespit sınavını aynı sorularla yeniden çöz ve gelişimini gör.", icon: RotateCcw },
-  { href: "/seviye-tespit/yeni", title: "Yeni Test", copy: "IELTS / TOEFL / PTE (CEFR seviyesiyle) veya YDS & YÖKDİL için yeni bir seviye tespit sınavına başla.", icon: PlusCircle },
+  { href: "/seviye-tespit/yeni", title: "Yeni Test", copy: "Genel İngilizce (CEFR A1–C2), IELTS / TOEFL / PTE veya YDS & YÖKDİL için yeni bir seviye tespit sınavına başla.", icon: PlusCircle },
   { href: "/seviye-tespit/sonuclar", title: "Sonuçlar ve Analiz", copy: "Tüm seviye tespit sonuçlarını, konu bazlı güçlü ve zayıf yönlerini incele.", icon: BarChart3 },
 ] as const;
 

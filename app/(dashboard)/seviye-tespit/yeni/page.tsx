@@ -37,6 +37,11 @@ export default async function NewLevelTestPage({ searchParams }: { searchParams:
         </p>
       ) : null}
       <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <section className="dashboard-panel flex flex-col">
+          <h2 className="text-xl font-extrabold">Genel İngilizce Seviye Testi</h2>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">General English · CEFR A1–C2. Günlük İngilizce dil bilgisi ve kelime becerini 30 soruyla ölç; yaklaşık 10 dakikada tahmini seviyeni öğren.</p>
+          <Link href="/seviye-tespit/genel-ingilizce" className="secondary-button mt-5 justify-between">Genel İngilizce testine başla <span aria-hidden="true">→</span></Link>
+        </section>
         {OPTIONS.map((option) => (
           <section key={option.title} className="dashboard-panel flex flex-col">
             <h2 className="text-xl font-extrabold">{option.title}</h2>
