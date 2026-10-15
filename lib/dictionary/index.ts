@@ -7,6 +7,7 @@ import type { LexiconEntry } from "@/content/vocabulary/types";
 import { UNITS } from "@/content/phrasal-verbs";
 import { DOMAIN_GLOSSARY, type DomainCode } from "@/content/dictionary/domains";
 import { CORE_WORDS } from "@/content/dictionary/core";
+import { EXTENDED_WORDS } from "@/content/dictionary/extended";
 import { editDistance, fold, headwordKey, lemmaCandidates, normalise, turkishTerms } from "@/lib/dictionary/text";
 
 /**
@@ -89,6 +90,13 @@ function build(): Index {
   CORE_WORDS.forEach(([word, pos, tr, exampleEn, exampleTr], i) =>
     entries.push({
       id: `core:${i}`, en: word, pos, tr, level: null, category: "GENERAL",
+      exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
+      key: key(word), trTerms: turkishTerms(tr),
+    }),
+  );
+  EXTENDED_WORDS.forEach(([word, pos, tr, exampleEn, exampleTr], i) =>
+    entries.push({
+      id: `extended:${i}`, en: word, pos, tr, level: null, category: "ACADEMIC",
       exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
       key: key(word), trTerms: turkishTerms(tr),
     }),
