@@ -65,6 +65,11 @@ export default async function DictionaryTermPage({ params }: Props) {
         <h1 className="text-3xl font-black tracking-tight">{headline}</h1>
         {r.en.length ? <Pronounce text={headline} /> : null}
       </header>
+      {r.en.length ? (
+        <Link href={`/thesaurus?q=${encodeURIComponent(headline)}`} className="mt-4 inline-flex items-center rounded-full border border-[color:var(--border-strong)] bg-white px-4 py-2 text-sm font-black text-[color:var(--brand)] hover:border-[color:var(--brand)]">
+          {headline} için eş ve zıt anlamlıları gör →
+        </Link>
+      ) : null}
       {r.lemma ? (
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           <strong>{r.query}</strong> kelimesi <strong>{r.lemma}</strong> kelimesinin çekimli hâli; sözlük biçimi gösteriliyor.

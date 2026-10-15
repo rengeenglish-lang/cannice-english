@@ -7,6 +7,7 @@ export const SEO_ROUTES = [
   ["/blog", "Blog", "PUBLIC", "app/blog/page.tsx"],
   ["/tools", "Araçlar", "PUBLIC", "app/tools/page.tsx"],
   ["/tools/dictionary", "Sözlük", "PUBLIC", "app/tools/dictionary/page.tsx"],
+  ["/thesaurus", "Thesaurus", "PUBLIC", "app/thesaurus/page.tsx"],
   [
     "/tools/score-calculator",
     "Puan hesaplama",

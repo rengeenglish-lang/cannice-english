@@ -34,6 +34,10 @@ export default function DictionaryHomePage() {
 
       <div className="mx-auto mt-8 max-w-3xl"><SearchBox autoFocus /></div>
 
+      <p className="mt-4 text-center text-sm font-semibold text-[color:var(--muted)]">
+        Eş veya zıt anlamlı mı arıyorsun? <Link href="/thesaurus" className="font-black text-[color:var(--accent)] hover:underline">Netfener Thesaurus&apos;u aç →</Link>
+      </p>
+
       <ul className="mx-auto mt-5 flex max-w-3xl flex-wrap justify-center gap-2">
         {POPULAR.map((t) => (
           <li key={t}><Link href={link(t)} className="rounded-full border border-[color:var(--border)] bg-white px-3 py-1.5 text-sm font-semibold hover:border-[color:var(--brand)]">{t}</Link></li>

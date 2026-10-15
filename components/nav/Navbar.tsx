@@ -23,6 +23,7 @@ const NAV_LINKS = [
   { href: "/kocluk", label: "Ücretsiz Koçluk" },
   { href: "/kaynaklar", label: "Kaynaklar" },
   { href: "/sozluk", label: "Sözlük" },
+  { href: "/thesaurus", label: "Thesaurus" },
 ];
 
 const YOKDIL_LINKS = [

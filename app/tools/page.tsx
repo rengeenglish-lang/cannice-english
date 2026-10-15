@@ -11,6 +11,11 @@ const TOOLS = [
     description: "İngilizce–Türkçe / Türkçe–İngilizce sözlük: phrasal verb'ler, akademik ve alan terimleri, telaffuz.",
   },
   {
+    href: "/thesaurus",
+    title: "Netfener Thesaurus",
+    description: "142 binden fazla İngilizce kelime için eş anlamlı, zıt anlamlı ve ilişkili kelimeler.",
+  },
+  {
     href: "/tools/score-calculator",
     title: "Puan Hesaplama",
     description: "Doğru sayına göre tahmini bant/puan aralığını gör.",

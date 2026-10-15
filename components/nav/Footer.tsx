@@ -63,6 +63,7 @@ export function Footer() {
           <p className="text-xs font-semibold uppercase tracking-[.16em] text-white/35">Faydalı Araçlar</p>
           <ul className="mt-4 space-y-2 text-sm text-white/70">
             <li><Link href="/sozluk" className="transition hover:text-white">Netfener Sözlük</Link></li>
+            <li><Link href="/thesaurus" className="transition hover:text-white">Netfener Thesaurus</Link></li>
             <li><Link href="/tools/score-calculator" className="transition hover:text-white">Puan Hesaplama</Link></li>
             <li><Link href="/tools/guidance" className="transition hover:text-white">Rehberlik Aracı</Link></li>
             <li><Link href="/tools/exam-calendar" className="transition hover:text-white">ÖSYM Sınav Takvimi</Link></li>

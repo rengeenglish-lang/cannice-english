@@ -33,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/campaigns` },
     { url: `${base}/kaynaklar` },
     { url: `${base}/sozluk` },
+    { url: `${base}/thesaurus` },
   ];
 
   // Every English headword has its own "… ne demek?" page.
