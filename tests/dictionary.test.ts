@@ -33,7 +33,7 @@ test("dictionary expansion adds 100 headwords without repeating existing words",
   assert.deepEqual(added.filter((word) => existing.has(word)), [], "expansion repeats an existing headword");
 });
 
-test("FreeDict expansion reaches 10,000 unique headwords without repetitions", () => {
+test("FreeDict expansion imports every usable unique headword without repetitions", () => {
   const normalized = (word: string) => headwordKey(word).replace(/-/g, " ").replace(/\s+/g, " ").trim();
   const existing = new Set([
     ...A1, ...A2, ...B1, ...B2, ...C1, ...CORE_WORDS, ...EXTENDED_WORDS,
@@ -42,10 +42,10 @@ test("FreeDict expansion reaches 10,000 unique headwords without repetitions", (
   for (const unit of UNITS) for (const verb of unit.verbs) existing.add(normalized(verb.pv));
 
   const added = FREEDICT_WORDS.map(([word]) => normalized(word));
-  assert.equal(FREEDICT_WORDS.length, 3491);
+  assert.equal(FREEDICT_WORDS.length, 29_225);
   assert.equal(new Set(added).size, added.length, "FreeDict subset contains duplicate headwords");
   assert.deepEqual(added.filter((word) => existing.has(word)), [], "FreeDict subset repeats an existing headword");
-  assert.equal(dictionaryStats().headwords, 10_000);
+  assert.equal(dictionaryStats().headwords, 35_734);
 });
 
 test("Turkish meanings split into searchable terms, notes in parentheses dropped", () => {

@@ -1,6 +1,6 @@
 # FreeDict English–Turkish subset
 
-`../freedict.ts` contains 3,491 English–Turkish entries selected from the
+`../freedict.ts` contains 29,225 English–Turkish entries selected from the
 **FreeDict English–Turkish Dictionary 0.3** (`eng-tur`). The source dictionary
 contains 36,589 headwords and is copyright © 1999–2017 by its contributors.
 
@@ -23,8 +23,9 @@ The source was transformed for this application as follows:
 4. At most three Turkish equivalents were retained per headword.
 5. Entries already present in the application's A1–C1, core, extended,
    phrasal-verb, or specialist dictionaries were excluded.
-6. Remaining entries were ranked by general English usage frequency and the
-   first 3,491 unique headwords were selected to bring the combined dictionary
-   to exactly 10,000 unique English headwords.
+6. All remaining unique and usable entries were retained. Together with the
+   application's native dictionary, they provide 35,734 unique English
+   headwords. Upstream duplicates, malformed rows, one-character abbreviations,
+   and entries without a usable Turkish translation were not imported.
 
 The resulting modified source is the TypeScript tuple list in `../freedict.ts`.

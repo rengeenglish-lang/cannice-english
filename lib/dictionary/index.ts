@@ -192,11 +192,15 @@ export function search(raw: string): SearchResult {
 
   let en = idx.byKey.get(k) ?? [];
   let lemma: string | null = null;
-  if (!en.length) {
+  // A broad imported dictionary may contain inflected forms as standalone rows.
+  // Prefer a native curated lemma when every exact row came from FreeDict, so
+  // searches such as "went" continue to resolve to the richer "go" entry.
+  if (!en.length || en.every((entry) => entry.id.startsWith("freedict:"))) {
     for (const c of lemmaCandidates(k)) {
       const hit = idx.byKey.get(c);
-      if (hit?.length) {
-        en = hit;
+      const curated = hit?.filter((entry) => !entry.id.startsWith("freedict:")) ?? [];
+      if (curated.length) {
+        en = curated;
         lemma = c;
         break;
       }
@@ -251,7 +255,17 @@ export function complete(prefix: string, limit = 8) {
   const pick = (keys: string[], lang: "en" | "tr", out: { term: string; lang: "en" | "tr" }[]) => {
     // Exact-spelling matches before accent-folded ones ("teş" → teşhis before tesis).
     const hits = keys.filter((term) => fold(term).startsWith(p));
-    hits.sort((a, b) => Number(!a.startsWith(exact)) - Number(!b.startsWith(exact)));
+    hits.sort((a, b) => {
+      const spelling = Number(!a.startsWith(exact)) - Number(!b.startsWith(exact));
+      if (spelling) return spelling;
+      const curated = (term: string) => {
+        const rows = lang === "en" ? idx.byKey.get(term) : idx.byTr.get(fold(term));
+        return Number(!(rows ?? []).some((entry) => !entry.id.startsWith("freedict:")));
+      };
+      const source = curated(a) - curated(b);
+      if (source) return source;
+      return a.localeCompare(b, lang === "tr" ? "tr" : "en");
+    });
     for (const term of hits) {
       if (out.length >= limit) break;
       if (!out.some((o) => o.term === term)) out.push({ term, lang });
