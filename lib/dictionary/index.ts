@@ -8,6 +8,7 @@ import { UNITS } from "@/content/phrasal-verbs";
 import { DOMAIN_GLOSSARY, type DomainCode } from "@/content/dictionary/domains";
 import { CORE_WORDS } from "@/content/dictionary/core";
 import { EXTENDED_WORDS } from "@/content/dictionary/extended";
+import { FREEDICT_WORDS } from "@/content/dictionary/freedict";
 import { editDistance, fold, headwordKey, lemmaCandidates, normalise, turkishTerms } from "@/lib/dictionary/text";
 
 /**
@@ -32,7 +33,7 @@ const CATEGORY_ORDER: DictCategory[] = ["GENERAL", "PHRASE", "PHRASAL", "ACADEMI
 
 export const POS_TR: Record<string, string> = {
   n: "isim", v: "fiil", adj: "sıfat", adv: "zarf", prep: "edat", pron: "zamir", conj: "bağlaç", det: "belirleyici",
-  num: "sayı", int: "ünlem", phr: "kalıp", pv: "phrasal verb", modal: "yardımcı fiil",
+  num: "sayı", int: "ünlem", phr: "kalıp", pv: "phrasal verb", modal: "yardımcı fiil", word: "sözcük",
 };
 
 export type DictEntry = {
@@ -98,6 +99,13 @@ function build(): Index {
     entries.push({
       id: `extended:${i}`, en: word, pos, tr, level: null, category: "ACADEMIC",
       exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
+      key: key(word), trTerms: turkishTerms(tr),
+    }),
+  );
+  FREEDICT_WORDS.forEach(([word, tr], i) =>
+    entries.push({
+      id: `freedict:${i}`, en: word, pos: word.includes(" ") ? "phr" : "word", tr, level: null, category: "GENERAL",
+      exampleEn: null, exampleTr: null, tip: null, syn: null, lexiconId: null,
       key: key(word), trTerms: turkishTerms(tr),
     }),
   );
