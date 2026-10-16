@@ -7,6 +7,8 @@ import { SearchBox } from "@/components/dictionary/SearchBox";
 import { ResultTable } from "@/components/dictionary/ResultTable";
 import { Pronounce } from "@/components/dictionary/Pronounce";
 import { dictionaryViewer } from "@/server/services/dictionary-viewer";
+import { wiktionaryDefinition } from "@/server/services/wiktionary-dictionary";
+import { WiktionaryResults } from "@/components/dictionary/WiktionaryResults";
 
 type Props = { params: Promise<{ term: string }> };
 
@@ -32,7 +34,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const q = queryFrom((await params).term);
   const r = search(q);
   const canonical = `/sozluk/${encodeURIComponent(termSlug(q))}`;
-  if (!hasResults(r)) return { title: `${q} — Netfener Sözlük`, robots: { index: false, follow: true } };
+  if (!hasResults(r)) {
+    const wiktionary = await wiktionaryDefinition(q);
+    if (!wiktionary) return { title: `${q} — Netfener Sözlük`, robots: { index: false, follow: true } };
+    const meaning = wiktionary.entries[0]?.senses[0]?.definition ?? "English definition";
+    return {
+      title: `${q} meaning and definition — Netfener Dictionary`,
+      description: `${q}: ${meaning}`.slice(0, 300),
+      alternates: { canonical },
+    };
+  }
   const first = r.en[0] ?? r.tr[0];
   const isEnglish = r.en.length > 0;
   const meaning = isEnglish ? r.en.slice(0, 3).map((e) => e.tr).join("; ") : r.tr.slice(0, 4).map((e) => e.en).join(", ");
@@ -51,7 +62,10 @@ export default async function DictionaryTermPage({ params }: Props) {
 
   const r = search(q);
   const all = [...r.en, ...r.tr, ...r.phrases, ...r.trPhrases];
-  const viewer = await dictionaryViewer(all.flatMap((e) => (e.lexiconId ? [e.lexiconId] : [])));
+  const [viewer, wiktionary] = await Promise.all([
+    dictionaryViewer(all.flatMap((e) => (e.lexiconId ? [e.lexiconId] : []))),
+    wiktionaryDefinition(r.lemma ?? r.query),
+  ]);
   const headline = r.lemma ?? r.query;
 
   return (
@@ -81,7 +95,9 @@ export default async function DictionaryTermPage({ params }: Props) {
       <ResultTable title={`"${headline}" geçen ifadeler ve phrasal verb'ler`} rows={r.phrases} direction="en-tr" signedIn={viewer.signedIn} learning={viewer.learning} />
       <ResultTable title={`Anlamında "${r.query}" geçen terimler`} rows={r.trPhrases} direction="tr-en" signedIn={viewer.signedIn} learning={viewer.learning} />
 
-      {!hasResults(r) ? (
+      {wiktionary ? <WiktionaryResults result={wiktionary} /> : null}
+
+      {!hasResults(r) && !wiktionary ? (
         <section className="mt-10 rounded-2xl border border-dashed border-[color:var(--border-strong)] p-6">
           <h2 className="text-lg font-black">&ldquo;{r.query}&rdquo; için sonuç bulunamadı</h2>
           {r.suggestions.length ? (
@@ -100,8 +116,8 @@ export default async function DictionaryTermPage({ params }: Props) {
       ) : null}
 
       <p className="mt-10 text-xs leading-5 text-[color:var(--muted)]">
-        Netfener Sözlük; Kelime Motoru (A1–C1), The Ultimate Phrasal Verbs Guide ve YÖKDİL alan sözlüklerimiz için Netfener tarafından hazırlanan anlam ve örneklerden oluşur.
-        Telaffuz, cihazının kendi sesleriyle çalınır.
+        Türkçe karşılıklar Netfener, FreeDict, Kelime Motoru (A1–C1), The Ultimate Phrasal Verbs Guide ve YÖKDİL alan sözlüklerinden gelir. İngilizce açıklamalar Wiktionary verilerini kullanan Free Dictionary API üzerinden sunulur.
+        Arama önerilerinde gerektiğinde Datamuse kullanılır. Telaffuz, cihazının kendi sesleriyle çalınır.
       </p>
     </main>
   );

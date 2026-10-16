@@ -12,6 +12,7 @@ import { DOMAIN_GLOSSARY } from "../content/dictionary/domains";
 import { EXTENDED_WORDS } from "../content/dictionary/extended";
 import { FREEDICT_WORDS } from "../content/dictionary/freedict";
 import { UNITS } from "../content/phrasal-verbs";
+import { parseWiktionaryResult } from "../lib/dictionary/wiktionary";
 
 test("the index is built from Netfener's own content", () => {
   const s = dictionaryStats();
@@ -95,4 +96,20 @@ test("slugs round-trip and word of the day is stable", () => {
   assert.equal(slugToQuery(termSlug("Take Off")), "take off");
   assert.equal(slugToQuery(encodeURIComponent(termSlug("öğrenci"))), "öğrenci");
   assert.equal(wordOfTheDay("2026-10-12").id, wordOfTheDay("2026-10-12").id);
+});
+
+test("licensed Wiktionary API responses are parsed defensively", () => {
+  const result = parseWiktionaryResult({
+    word: "serendipity",
+    entries: [{
+      partOfSpeech: "noun",
+      pronunciations: [{ type: "ipa", text: "/test/" }, { type: "audio", text: "ignored" }],
+      forms: [{ word: "serendipities", tags: ["plural"] }],
+      senses: [{ definition: "A fortunate accidental discovery.", examples: ["A useful example."], synonyms: ["chance"], antonyms: [] }],
+    }],
+    source: { url: "https://en.wiktionary.org/wiki/serendipity" },
+  });
+  assert.equal(result?.entries[0].senses[0].definition, "A fortunate accidental discovery.");
+  assert.deepEqual(result?.entries[0].pronunciations, ["/test/"]);
+  assert.equal(parseWiktionaryResult({ word: "empty", entries: [] }), null);
 });

@@ -28,7 +28,7 @@ export default function DictionaryHomePage() {
         <p className="eyebrow">Ücretsiz araç</p>
         <h1 className="page-title mt-2">Netfener Sözlük</h1>
         <p className="page-copy mx-auto mt-3 max-w-2xl">
-          İngilizce–Türkçe ve Türkçe–İngilizce. Sınav kelimeleri, phrasal verb&apos;ler ve akademik terimler; örnek cümleler ve telaffuzla.
+          İngilizce–Türkçe ve Türkçe–İngilizce. Sınav kelimeleri, phrasal verb&apos;ler ve akademik terimlerin yanında Wiktionary&apos;den geniş İngilizce tanımlar; örnek cümleler ve telaffuzla.
         </p>
       </header>
 
@@ -67,6 +67,7 @@ export default function DictionaryHomePage() {
             <li className="flex gap-2"><BookOpen size={18} className="shrink-0 text-[color:var(--accent)]" aria-hidden="true" /> <span><strong>{stats.entries.toLocaleString("tr-TR")}</strong> anlam, <strong>{stats.headwords.toLocaleString("tr-TR")}</strong> İngilizce madde, <strong>{stats.turkishTerms.toLocaleString("tr-TR")}</strong> Türkçe karşılık</span></li>
             <li className="flex gap-2"><Languages size={18} className="shrink-0 text-[color:var(--accent)]" aria-hidden="true" /> <span>İki yönlü arama; Türkçe karakter yazmadan da bulur (ogrenci → öğrenci). Çekimli hâlleri tanır (went → go, studies → study).</span></li>
             <li className="flex gap-2"><Volume2 size={18} className="shrink-0 text-[color:var(--accent)]" aria-hidden="true" /> <span>Amerikan ve İngiliz telaffuzu, her anlam için örnek cümle ve çevirisi.</span></li>
+            <li className="flex gap-2"><Sparkles size={18} className="shrink-0 text-[color:var(--accent)]" aria-hidden="true" /> <span>Yerel sözlükte olmayan sözcükler için Wiktionary açıklamaları ve Datamuse destekli yazım önerileri.</span></li>
           </ul>
           <p className="mt-4 text-xs font-black uppercase tracking-wide text-[color:var(--muted)]">Kategoriler</p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
