@@ -3,6 +3,7 @@ import { db } from "@/server/db";
 import { NETFENER_EBOOKS, findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { NETFENER_BUNDLES, bundlesContainingEbook } from "@/lib/netfener-bundles";
 import { EBOOK_EDITIONS, editionSlug, slugsGranting, type EbookEdition } from "@/lib/netfener-ebook-editions";
+import { isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
 
 /** An active plan is deliberately not an entitlement to these individually sold books. */
 export async function hasEbookAccess(userId: string, slug: string, edition: EbookEdition): Promise<boolean> {
@@ -18,6 +19,20 @@ export async function hasEbookAccess(userId: string, slug: string, edition: Eboo
 /** Entitlement to the downloadable PDF, which is what the download route guards. */
 export async function hasPurchasedEbook(userId: string, slug: string): Promise<boolean> {
   return hasEbookAccess(userId, slug, "pdf");
+}
+
+/** Online reading: open to everyone, signed in or not, while the free promotion runs; otherwise a purchase. */
+export async function canReadEbookOnline(userId: string | undefined, slug: string): Promise<boolean> {
+  if (!findNetfenerEbook(slug)) return false;
+  if (isEbookFreePromoActive()) return true;
+  return userId ? hasEbookAccess(userId, slug, "online") : false;
+}
+
+/** PDF download: any signed-in account while the free promotion runs; otherwise a purchase. Guests never. */
+export async function canDownloadEbookPdf(userId: string | undefined, slug: string): Promise<boolean> {
+  if (!userId || !findNetfenerEbook(slug)) return false;
+  if (isEbookFreePromoActive()) return true;
+  return hasPurchasedEbook(userId, slug);
 }
 
 export type EbookEditionOffer = { productId: string; price: string };

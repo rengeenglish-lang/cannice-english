@@ -8,6 +8,7 @@ import { getEbookOffers } from "@/server/services/ebooks.service";
 import { EbookPurchase } from "@/components/resources/EbookPurchase";
 import { EbookPitchPanel } from "@/components/resources/EbookPitchPanel";
 import { findEbookPitch } from "@/lib/netfener-ebook-copy";
+import { ebookFreePromoEndLabel, isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,7 +28,7 @@ export default async function EbookPreviewPage({ params }: Props) {
       <h1 className="page-title mt-3">{book.title}</h1>
       <p className="mt-3 font-semibold">{book.subtitle}</p>
       <p className="page-copy mt-3">{book.description}</p>
-      <p className="mt-4 text-sm text-[color:var(--muted)]">Tam kitap: {book.pages} sayfa. Önizleme herkese açıktır. Tam PDF için hesabınıza giriş yapmanız ve bu kitabı satın almanız gerekir.</p>
+      <p className="mt-4 text-sm text-[color:var(--muted)]">Tam kitap: {book.pages} sayfa. Önizleme herkese açıktır. {isEbookFreePromoActive() ? `${ebookFreePromoEndLabel()} tarihine kadar tüm kitap ücretsiz okunabilir; PDF indirmek için ücretsiz hesap yeterli.` : "Tam PDF için hesabınıza giriş yapmanız ve bu kitabı satın almanız gerekir."}</p>
       <div className="mt-6"><EbookPurchase book={book} signedIn={Boolean(user)} offer={offers[book.slug]} /></div>
       <a className="secondary-button mt-4" href={`/ebooks/previews/${book.slug}.pdf`} target="_blank" rel="noopener noreferrer">10 sayfalık önizlemeyi PDF olarak aç</a>
     </section>
@@ -40,7 +41,7 @@ export default async function EbookPreviewPage({ params }: Props) {
     </ol>
     <section className="panel mt-10 text-center" aria-label="Tam kitaba erişim">
       <h2 className="text-xl font-bold">Çalışmaya tam kitapla devam edin</h2>
-      <p className="my-4 text-sm text-[color:var(--muted)]">Ödeme onaylandıktan sonra tam PDF’yi hesabınızdan indirebilirsiniz.</p>
+      <p className="my-4 text-sm text-[color:var(--muted)]">{isEbookFreePromoActive() ? "Kampanya süresince tam kitap ücretsiz." : "Ödeme onaylandıktan sonra tam PDF’yi hesabınızdan indirebilirsiniz."}</p>
       <EbookPurchase book={book} signedIn={Boolean(user)} offer={offers[book.slug]} />
     </section>
   </main>;

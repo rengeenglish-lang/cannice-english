@@ -1,5 +1,5 @@
 import { getAuthContext } from "@/server/auth/context";
-import { hasEbookAccess } from "@/server/services/ebooks.service";
+import { canReadEbookOnline } from "@/server/services/ebooks.service";
 import { renderEbookPage } from "@/server/services/ebook-pages.service";
 import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 
@@ -15,8 +15,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
   if (!book) return Response.json({ error: "Kitap bulunamadı." }, { status: 404, headers: privateHeaders });
 
   const user = await getAuthContext();
-  if (!user) return Response.json({ error: "Okumak için giriş yapın." }, { status: 401, headers: privateHeaders });
-  if (!await hasEbookAccess(user.id, book.slug, "online")) {
+  if (!await canReadEbookOnline(user?.id, book.slug)) {
+    if (!user) return Response.json({ error: "Okumak için giriş yapın." }, { status: 401, headers: privateHeaders });
     return Response.json({ error: "Bu kitabı okumak için satın almanız gerekir." }, { status: 403, headers: privateHeaders });
   }
 

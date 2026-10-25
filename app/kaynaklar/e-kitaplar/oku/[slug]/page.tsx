@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { getAuthContext } from "@/server/auth/context";
-import { hasEbookAccess } from "@/server/services/ebooks.service";
+import { canReadEbookOnline } from "@/server/services/ebooks.service";
 import { ebookPageCount } from "@/server/services/ebook-pages.service";
 import { FlipBook } from "@/components/reader/FlipBook";
 
@@ -27,9 +27,10 @@ export default async function EbookReaderPage({ params }: Props) {
 
   const reader = `/kaynaklar/e-kitaplar/oku/${book.slug}`;
   const user = await getAuthContext();
-  if (!user) redirect(`/sign-in?next=${encodeURIComponent(reader)}`);
-  // Not entitled: the preview page is where the three editions are sold.
-  if (!(await hasEbookAccess(user.id, book.slug, "online"))) {
+  // While the free promotion runs anyone may read; afterwards only signed-in buyers.
+  if (!(await canReadEbookOnline(user?.id, book.slug))) {
+    if (!user) redirect(`/sign-in?next=${encodeURIComponent(reader)}`);
+    // Not entitled: the preview page is where the three editions are sold.
     redirect(`/kaynaklar/e-kitaplar/onizleme/${book.slug}`);
   }
 
