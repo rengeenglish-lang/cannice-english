@@ -60,6 +60,8 @@ type Index = {
   byKey: Map<string, DictEntry[]>;
   byTr: Map<string, DictEntry[]>;
   byWord: Map<string, DictEntry[]>;
+  /** Folded single words inside multi-word Turkish terms ("işe almak" → işe, almak): replaces a full scan per search. */
+  byTrWord: Map<string, DictEntry[]>;
   enKeys: string[];
   trKeys: string[];
 };
@@ -129,6 +131,7 @@ function build(): Index {
   const byKey = new Map<string, DictEntry[]>();
   const byTr = new Map<string, DictEntry[]>();
   const byWord = new Map<string, DictEntry[]>();
+  const byTrWord = new Map<string, DictEntry[]>();
   const push = (m: Map<string, DictEntry[]>, k: string, e: DictEntry) => {
     const list = m.get(k);
     if (!list) m.set(k, [e]);
@@ -136,7 +139,12 @@ function build(): Index {
   };
   for (const e of entries) {
     push(byKey, e.key, e);
-    for (const t of e.trTerms) push(byTr, fold(t), e);
+    for (const t of e.trTerms) {
+      const folded = fold(t);
+      push(byTr, folded, e);
+      const words = folded.split(" ");
+      if (words.length > 1) for (const w of words) push(byTrWord, w, e);
+    }
     if (e.key.includes(" ")) for (const w of e.key.split(" ")) if (w.length > 1) push(byWord, w, e);
   }
   return {
@@ -144,6 +152,7 @@ function build(): Index {
     byKey,
     byTr,
     byWord,
+    byTrWord,
     enKeys: [...byKey.keys()].sort(),
     trKeys: [...new Set(entries.flatMap((e) => e.trTerms))].sort((a, b) => a.localeCompare(b, "tr")),
   };
@@ -230,7 +239,7 @@ function searchUncached(raw: string): SearchResult {
   const fq = fold(query);
   const trPhrases =
     fq.length >= 3 && !fq.includes(" ")
-      ? idx.entries.filter((e) => !tr.includes(e) && e.trTerms.some((t) => t !== fq && fold(t).split(" ").includes(fq))).slice(0, 40)
+      ? (idx.byTrWord.get(fq) ?? []).filter((e) => !tr.includes(e)).slice(0, 40)
       : [];
 
   const result: SearchResult = {
