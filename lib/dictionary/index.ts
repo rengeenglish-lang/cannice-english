@@ -8,7 +8,6 @@ import { UNITS } from "@/content/phrasal-verbs";
 import { DOMAIN_GLOSSARY, type DomainCode } from "@/content/dictionary/domains";
 import { CORE_WORDS } from "@/content/dictionary/core";
 import { EXTENDED_WORDS } from "@/content/dictionary/extended";
-import { FREEDICT_WORDS } from "@/content/dictionary/freedict";
 import { editDistance, fold, headwordKey, lemmaCandidates, normalise, turkishTerms } from "@/lib/dictionary/text";
 
 /**
@@ -101,13 +100,6 @@ function build(): Index {
     entries.push({
       id: `extended:${i}`, en: word, pos, tr, level: null, category: "ACADEMIC",
       exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
-      key: key(word), trTerms: turkishTerms(tr),
-    }),
-  );
-  FREEDICT_WORDS.forEach(([word, tr], i) =>
-    entries.push({
-      id: `freedict:${i}`, en: word, pos: word.includes(" ") ? "phr" : "word", tr, level: null, category: "GENERAL",
-      exampleEn: null, exampleTr: null, tip: null, syn: null, lexiconId: null,
       key: key(word), trTerms: turkishTerms(tr),
     }),
   );
@@ -219,15 +211,11 @@ function searchUncached(raw: string): SearchResult {
 
   let en = idx.byKey.get(k) ?? [];
   let lemma: string | null = null;
-  // A broad imported dictionary may contain inflected forms as standalone rows.
-  // Prefer a native curated lemma when every exact row came from FreeDict, so
-  // searches such as "went" continue to resolve to the richer "go" entry.
-  if (!en.length || en.every((entry) => entry.id.startsWith("freedict:"))) {
+  if (!en.length) {
     for (const c of lemmaCandidates(k)) {
       const hit = idx.byKey.get(c);
-      const curated = hit?.filter((entry) => !entry.id.startsWith("freedict:")) ?? [];
-      if (curated.length) {
-        en = curated;
+      if (hit?.length) {
+        en = hit;
         lemma = c;
         break;
       }
@@ -285,12 +273,6 @@ export function complete(prefix: string, limit = 8) {
     hits.sort((a, b) => {
       const spelling = Number(!a.startsWith(exact)) - Number(!b.startsWith(exact));
       if (spelling) return spelling;
-      const curated = (term: string) => {
-        const rows = lang === "en" ? idx.byKey.get(term) : idx.byTr.get(fold(term));
-        return Number(!(rows ?? []).some((entry) => !entry.id.startsWith("freedict:")));
-      };
-      const source = curated(a) - curated(b);
-      if (source) return source;
       return a.localeCompare(b, lang === "tr" ? "tr" : "en");
     });
     for (const term of hits) {

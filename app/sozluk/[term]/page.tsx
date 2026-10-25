@@ -116,7 +116,7 @@ export default async function DictionaryTermPage({ params }: Props) {
       ) : null}
 
       <p className="mt-10 text-xs leading-5 text-[color:var(--muted)]">
-        Türkçe karşılıklar Netfener, FreeDict, Kelime Motoru (A1–C1), The Ultimate Phrasal Verbs Guide ve YÖKDİL alan sözlüklerinden gelir. İngilizce açıklamalar Wiktionary verilerini kullanan Free Dictionary API üzerinden sunulur.
+        Türkçe karşılıklar Netfener, Kelime Motoru (A1–C1), The Ultimate Phrasal Verbs Guide ve YÖKDİL alan sözlüklerinden gelir. İngilizce açıklamalar Wiktionary verilerini kullanan Free Dictionary API üzerinden sunulur.
         Arama önerilerinde gerektiğinde Datamuse kullanılır. Telaffuz, cihazının kendi sesleriyle çalınır.
       </p>
     </main>
