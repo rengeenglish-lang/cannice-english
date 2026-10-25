@@ -10,6 +10,7 @@ import { C1 } from "../content/vocabulary/c1";
 import { CORE_WORDS } from "../content/dictionary/core";
 import { DOMAIN_GLOSSARY } from "../content/dictionary/domains";
 import { EXTENDED_WORDS } from "../content/dictionary/extended";
+import { ACADEMIC_WORDS } from "../content/dictionary/academic";
 import { UNITS } from "../content/phrasal-verbs";
 import { parseWiktionaryResult } from "../lib/dictionary/wiktionary";
 
@@ -31,6 +32,20 @@ test("dictionary expansion adds 100 headwords without repeating existing words",
   const added = EXTENDED_WORDS.map(([word]) => normalized(word));
   assert.equal(new Set(added).size, added.length, "expansion contains duplicate headwords");
   assert.deepEqual(added.filter((word) => existing.has(word)), [], "expansion repeats an existing headword");
+});
+
+test("academic batch adds headwords without repeating existing words", () => {
+  const normalized = (word: string) => headwordKey(word).replace(/-/g, " ").replace(/\s+/g, " ").trim();
+  const existing = new Set([
+    ...A1, ...A2, ...B1, ...B2, ...C1, ...CORE_WORDS, ...EXTENDED_WORDS,
+  ].map(([word]) => normalized(word)));
+  for (const [, word] of DOMAIN_GLOSSARY) existing.add(normalized(word));
+  for (const unit of UNITS) for (const verb of unit.verbs) existing.add(normalized(verb.pv));
+
+  const added = ACADEMIC_WORDS.map(([word]) => normalized(word));
+  assert.equal(new Set(added).size, added.length, "academic batch contains duplicate headwords");
+  assert.deepEqual(added.filter((word) => existing.has(word)), [], "academic batch repeats an existing headword");
+  assert.ok(ACADEMIC_WORDS.every(([, , tr, en, trEx]) => tr && en && trEx), "every entry has a meaning and an example pair");
 });
 
 test("Turkish meanings split into searchable terms, notes in parentheses dropped", () => {
