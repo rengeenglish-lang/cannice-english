@@ -183,7 +183,25 @@ export type SearchResult = {
   suggestions: string[];
 };
 
+/**
+ * Results are a pure function of the query and the (static) dictionary, and the trPhrases scan alone is a
+ * full pass over every entry. Crawlers request each headword twice per page (metadata + render), so the
+ * answers are kept in a small in-memory cache per server instance; the cap keeps memory bounded.
+ */
+const SEARCH_CACHE_MAX = 5000;
+const searchCache = new Map<string, SearchResult>();
+
 export function search(raw: string): SearchResult {
+  const cacheKey = normalise(raw).slice(0, 80);
+  const hit = searchCache.get(cacheKey);
+  if (hit) return hit;
+  const result = searchUncached(raw);
+  if (searchCache.size >= SEARCH_CACHE_MAX) searchCache.delete(searchCache.keys().next().value as string);
+  searchCache.set(cacheKey, result);
+  return result;
+}
+
+function searchUncached(raw: string): SearchResult {
   const idx = dictionary();
   const query = normalise(raw).slice(0, 80);
   const k = key(query);
