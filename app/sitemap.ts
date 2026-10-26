@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
 import { db } from "@/server/db";
 import { getSiteUrl } from "@/server/env";
-import { allHeadwords } from "@/lib/dictionary";
-import { termSlug } from "@/lib/dictionary/text";
+import { sitemapHeadwordSlugs } from "@/lib/dictionary";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
@@ -36,8 +35,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/thesaurus` },
   ];
 
-  // Every English headword has its own "… ne demek?" page.
-  const dictionaryRoutes: MetadataRoute.Sitemap = allHeadwords().map((w) => ({ url: `${base}/sozluk/${encodeURIComponent(termSlug(w))}` }));
+  // Submit only dictionary URLs that resolve to content after slug decoding.
+  const dictionaryRoutes: MetadataRoute.Sitemap = sitemapHeadwordSlugs().map((slug) => ({ url: `${base}/sozluk/${encodeURIComponent(slug)}` }));
 
   const examRoutes: MetadataRoute.Sitemap = examTypes.map((exam) => ({ url: `${base}/exams/${exam.slug}` }));
 

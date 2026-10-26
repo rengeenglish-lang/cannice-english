@@ -13,7 +13,12 @@ import { ebookFreePromoEndLabel, isEbookFreePromoActive } from "@/lib/netfener-e
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const book = findNetfenerEbook((await params).slug);
-  return { title: book ? `${book.title} — 10 Sayfalık Önizleme` : "Kitap bulunamadı" };
+  if (!book) return { title: "Kitap bulunamadı", robots: { index: false, follow: true } };
+  return {
+    title: `${book.title} — 10 Sayfalık Önizleme`,
+    description: `${book.title}: ${book.description} İlk 10 sayfayı ücretsiz inceleyin.`,
+    alternates: { canonical: `/kaynaklar/e-kitaplar/onizleme/${book.slug}` },
+  };
 }
 export default async function EbookPreviewPage({ params }: Props) {
   const book = findNetfenerEbook((await params).slug);
