@@ -1,6 +1,7 @@
 import { PageHero } from "@/components/ui/PageHero";
 import type { Metadata } from "next";
 import { db } from "@/server/db";
+import { FollowCta } from "@/components/marketing/FollowCta";
 
 export const metadata: Metadata = { title: "Ücretsiz Kaynaklar" };
 
@@ -50,6 +51,7 @@ export default async function FreeResourcesPage() {
           <p className="text-slate-500">Kaynaklar yakında eklenecek.</p>
         ) : null}
       </div>
+      <FollowCta className="mt-10" />
     </main>
   );
 }

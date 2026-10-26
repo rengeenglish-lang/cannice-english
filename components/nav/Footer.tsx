@@ -37,6 +37,9 @@ export function Footer() {
             <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Netfener Instagram hesabı" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>
             </a>
+            <a href={SOCIAL_LINKS.telegramChannel} target="_blank" rel="noopener noreferrer" aria-label="Netfener Telegram kanalı" className="grid size-10 place-items-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M21.4 4.6 2.9 11.7c-1.3.5-1.3 1.3-.2 1.6l4.7 1.5 1.8 5.5c.2.6.4.8.9.8.4 0 .6-.2.9-.4l2.2-2.1 4.6 3.4c.8.5 1.5.2 1.7-.8l3-14.1c.3-1.2-.4-1.7-1.1-1.5zM9 14.2l9.4-5.9c.4-.3.8-.1.5.2l-7.8 7-.3 3.2-1.8-4.5z" /></svg>
+            </a>
           </div>
         </div>
         <div>

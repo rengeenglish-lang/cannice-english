@@ -2,6 +2,8 @@
 export const SOCIAL_LINKS = {
   facebook: "https://www.facebook.com/profile.php?id=61583837323529",
   instagram: "https://www.instagram.com/net.fener/",
+  telegramChannel: "https://t.me/netfener_yayin",
+  telegramGroup: "https://t.me/netfener",
 } as const;
 
 /** Support address used by Yardım Masası and the policies; also the Reply-To on site emails. */

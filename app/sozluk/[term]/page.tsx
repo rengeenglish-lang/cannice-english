@@ -9,6 +9,7 @@ import { Pronounce } from "@/components/dictionary/Pronounce";
 import { dictionaryViewer } from "@/server/services/dictionary-viewer";
 import { wiktionaryDefinition } from "@/server/services/wiktionary-dictionary";
 import { WiktionaryResults } from "@/components/dictionary/WiktionaryResults";
+import { FollowCta } from "@/components/marketing/FollowCta";
 
 type Props = { params: Promise<{ term: string }> };
 
@@ -115,7 +116,9 @@ export default async function DictionaryTermPage({ params }: Props) {
         </section>
       ) : null}
 
-      <p className="mt-10 text-xs leading-5 text-[color:var(--muted)]">
+      <FollowCta className="mt-10" />
+
+      <p className="mt-6 text-xs leading-5 text-[color:var(--muted)]">
         Türkçe karşılıklar Netfener, Kelime Motoru (A1–C1), The Ultimate Phrasal Verbs Guide ve YÖKDİL alan sözlüklerinden gelir. İngilizce açıklamalar Wiktionary verilerini kullanan Free Dictionary API üzerinden sunulur.
         Arama önerilerinde gerektiğinde Datamuse kullanılır. Telaffuz, cihazının kendi sesleriyle çalınır.
       </p>
