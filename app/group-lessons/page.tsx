@@ -10,7 +10,10 @@ import { WeekView } from "@/components/availability/WeekView";
 import { AvailabilityRefresh } from "@/components/availability/AvailabilityRefresh";
 import { PageHero } from "@/components/ui/PageHero";
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Haftalık Grup Dersleri" };
+export const metadata = {
+  title: "Haftalık Grup Dersleri",
+  alternates: { canonical: "/group-lessons" },
+};
 export default async function GroupLessonsPage({
   searchParams,
 }: {

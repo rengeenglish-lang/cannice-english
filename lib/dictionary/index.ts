@@ -10,7 +10,7 @@ import { CORE_WORDS } from "@/content/dictionary/core";
 import { EXTENDED_WORDS } from "@/content/dictionary/extended";
 import { ACADEMIC_WORDS } from "@/content/dictionary/academic";
 import { BULK_WORDS } from "@/content/dictionary/bulk";
-import { editDistance, fold, headwordKey, lemmaCandidates, normalise, turkishTerms } from "@/lib/dictionary/text";
+import { editDistance, fold, headwordKey, lemmaCandidates, normalise, slugToQuery, termSlug, turkishTerms } from "@/lib/dictionary/text";
 
 /**
  * Netfener Sözlük — an English ⇄ Turkish dictionary built only from Netfener's own content:
@@ -323,4 +323,16 @@ export function dictionaryStats() {
 /** Headwords for the sitemap and static links. */
 export function allHeadwords() {
   return dictionary().enKeys;
+}
+
+/** Only submit unique URLs whose decoded query resolves to a local English entry.
+ * Slug sanitization can remove punctuation, while the page limits queries to 80 characters.
+ * Avoid sending crawlers to empty/noindex pages or depending on the external dictionary API.
+ */
+export function sitemapHeadwordSlugs() {
+  const idx = dictionary();
+  return [...new Set(idx.enKeys.map(termSlug))].filter((slug) => {
+    const query = normalise(slugToQuery(slug)).slice(0, 80);
+    return slug.length > 0 && termSlug(query) === slug && idx.byKey.has(key(query));
+  });
 }

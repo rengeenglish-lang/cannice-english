@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { complete, dictionaryStats, search, suggest, wordOfTheDay } from "../lib/dictionary";
+import { allHeadwords, complete, dictionaryStats, search, sitemapHeadwordSlugs, suggest, wordOfTheDay } from "../lib/dictionary";
 import { editDistance, fold, headwordKey, lemmaCandidates, termSlug, slugToQuery, turkishTerms } from "../lib/dictionary/text";
 import { A1 } from "../content/vocabulary/a1";
 import { A2 } from "../content/vocabulary/a2";
@@ -126,4 +126,18 @@ test("licensed Wiktionary API responses are parsed defensively", () => {
   assert.equal(result?.entries[0].senses[0].definition, "A fortunate accidental discovery.");
   assert.deepEqual(result?.entries[0].pronunciations, ["/test/"]);
   assert.equal(parseWiktionaryResult({ word: "empty", entries: [] }), null);
+});
+
+test("sitemap dictionary URLs resolve to content and keep their canonical slug", () => {
+  const slugs = sitemapHeadwordSlugs();
+  assert.equal(new Set(slugs).size, slugs.length);
+  assert.ok(slugs.includes("camping"));
+  // Punctuation is stripped from this headword, so its old URL cannot find its entry.
+  assert.ok(allHeadwords().some((word) => termSlug(word) === "account-for-20"));
+  assert.ok(!slugs.includes("account-for-20"));
+  for (const slug of slugs) {
+    const result = search(slugToQuery(encodeURIComponent(slug)));
+    assert.ok(result.en.length > 0, `empty sitemap page: ${slug}`);
+    assert.equal(termSlug(result.query), slug, `redirecting sitemap page: ${slug}`);
+  }
 });
