@@ -9,6 +9,7 @@ import { DOMAIN_GLOSSARY, type DomainCode } from "@/content/dictionary/domains";
 import { CORE_WORDS } from "@/content/dictionary/core";
 import { EXTENDED_WORDS } from "@/content/dictionary/extended";
 import { ACADEMIC_WORDS } from "@/content/dictionary/academic";
+import { BULK_WORDS } from "@/content/dictionary/bulk";
 import { editDistance, fold, headwordKey, lemmaCandidates, normalise, turkishTerms } from "@/lib/dictionary/text";
 
 /**
@@ -107,6 +108,13 @@ function build(): Index {
   ACADEMIC_WORDS.forEach(([word, pos, tr, exampleEn, exampleTr], i) =>
     entries.push({
       id: `academic:${i}`, en: word, pos, tr, level: null, category: "ACADEMIC",
+      exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
+      key: key(word), trTerms: turkishTerms(tr),
+    }),
+  );
+  BULK_WORDS.forEach(([field, word, pos, tr, exampleEn, exampleTr], i) =>
+    entries.push({
+      id: `bulk:${i}`, en: word, pos, tr, level: null, category: field as DictCategory,
       exampleEn: exampleEn || null, exampleTr: exampleTr || null, tip: null, syn: null, lexiconId: null,
       key: key(word), trTerms: turkishTerms(tr),
     }),

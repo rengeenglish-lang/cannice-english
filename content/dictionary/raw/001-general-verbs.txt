@@ -1,0 +1,407 @@
+# CATEGORY|word|pos|Turkish|English example|Turkish example
+GENERAL|abandon|v|terk etmek, bırakmak|They abandoned the car on the road.|Arabayı yolda terk ettiler.
+GENERAL|absorb|v|emmek, özümsemek|Sponges absorb water quickly.|Süngerler suyu hızla emer.
+GENERAL|accelerate|v|hızlandırmak, hızlanmak|The car accelerated down the hill.|Araba yokuş aşağı hızlandı.
+GENERAL|accommodate|v|barındırmak; uyum sağlamak|The hotel can accommodate 300 guests.|Otel 300 misafir barındırabilir.
+GENERAL|accumulate|v|biriktirmek, birikmek|Dust accumulates on the shelves.|Raflarda toz birikir.
+GENERAL|acquire|v|edinmek, elde etmek|She acquired a great deal of experience.|Çok fazla deneyim edindi.
+GENERAL|adapt|v|uyum sağlamak, uyarlamak|Animals adapt to their surroundings.|Hayvanlar çevrelerine uyum sağlar.
+GENERAL|adhere|v|yapışmak; bağlı kalmak|All staff must adhere to the rules.|Tüm çalışanlar kurallara bağlı kalmalıdır.
+GENERAL|adjust|v|ayarlamak, uyum sağlamak|He adjusted the mirror before driving.|Sürmeden önce aynayı ayarladı.
+GENERAL|administer|v|yönetmek; uygulamak|The nurse administered the medicine.|Hemşire ilacı uyguladı.
+GENERAL|admire|v|hayran olmak, takdir etmek|I admire her courage.|Onun cesaretine hayranım.
+GENERAL|adopt|v|benimsemek; evlat edinmek|The school adopted a new method.|Okul yeni bir yöntem benimsedi.
+GENERAL|advance|v|ilerlemek, ilerletmek|Technology advances rapidly.|Teknoloji hızla ilerler.
+GENERAL|affect|v|etkilemek|The weather affected our plans.|Hava durumu planlarımızı etkiledi.
+GENERAL|aggravate|v|ağırlaştırmak, kötüleştirmek|Stress can aggravate the pain.|Stres ağrıyı ağırlaştırabilir.
+GENERAL|allocate|v|ayırmak, tahsis etmek|The city allocated funds for parks.|Şehir parklar için ödenek ayırdı.
+GENERAL|alter|v|değiştirmek|They altered the original plan.|Asıl planı değiştirdiler.
+GENERAL|amend|v|değiştirmek, düzeltmek (metin, yasa)|Parliament amended the law.|Meclis yasayı değiştirdi.
+GENERAL|analyse|v|çözümlemek, analiz etmek|Scientists analysed the samples.|Bilim insanları örnekleri analiz etti.
+GENERAL|anticipate|v|öngörmek, beklemek|We anticipate heavy traffic today.|Bugün yoğun trafik bekliyoruz.
+GENERAL|appeal|v|çekici gelmek; başvurmak, itiraz etmek|The idea appeals to young people.|Fikir gençlere çekici geliyor.
+GENERAL|append|v|eklemek, sonuna eklemek|Append the table to the report.|Tabloyu raporun sonuna ekleyin.
+GENERAL|appoint|v|atamak|The board appointed a new director.|Yönetim kurulu yeni bir müdür atadı.
+GENERAL|appreciate|v|değerini bilmek; takdir etmek|I appreciate your help.|Yardımını takdir ediyorum.
+GENERAL|approach|v|yaklaşmak; ele almak|He approached the problem calmly.|Soruna sakin biçimde yaklaştı.
+GENERAL|approve|v|onaylamak|The committee approved the budget.|Komite bütçeyi onayladı.
+GENERAL|arise|v|ortaya çıkmak, doğmak|Problems arise when plans change.|Planlar değişince sorunlar ortaya çıkar.
+GENERAL|arrange|v|düzenlemek, ayarlamak|She arranged a meeting for Monday.|Pazartesi için bir toplantı ayarladı.
+GENERAL|ascend|v|yükselmek, tırmanmak|The plane ascended through the clouds.|Uçak bulutların arasından yükseldi.
+GENERAL|assemble|v|bir araya getirmek; monte etmek|Workers assemble the parts by hand.|İşçiler parçaları elle monte eder.
+GENERAL|assert|v|ileri sürmek, iddia etmek|He asserted that he was innocent.|Masum olduğunu ileri sürdü.
+GENERAL|assess|v|değerlendirmek|Teachers assess students every term.|Öğretmenler öğrencileri her dönem değerlendirir.
+GENERAL|assign|v|görev vermek; atamak|The teacher assigned homework.|Öğretmen ödev verdi.
+GENERAL|assist|v|yardım etmek|Volunteers assisted the rescue team.|Gönüllüler kurtarma ekibine yardım etti.
+GENERAL|assume|v|varsaymak; üstlenmek|I assume you have read the report.|Raporu okuduğunuzu varsayıyorum.
+GENERAL|assure|v|güvence vermek|She assured us everything was fine.|Her şeyin yolunda olduğuna dair bize güvence verdi.
+GENERAL|attach|v|eklemek, iliştirmek|Please attach a photo to the form.|Lütfen forma bir fotoğraf ekleyin.
+GENERAL|attain|v|elde etmek, ulaşmak|She attained her goal after years.|Yıllar sonra hedefine ulaştı.
+GENERAL|attribute|v|atfetmek, bağlamak|He attributed his success to hard work.|Başarısını çok çalışmaya bağladı.
+GENERAL|authorize|v|yetki vermek|The manager authorized the payment.|Müdür ödemeye yetki verdi.
+GENERAL|bargain|v|pazarlık etmek|They bargained over the price.|Fiyat üzerinde pazarlık ettiler.
+GENERAL|bear|v|taşımak; katlanmak|I cannot bear the noise.|Gürültüye katlanamıyorum.
+GENERAL|behave|v|davranmak|The children behaved well.|Çocuklar iyi davrandı.
+GENERAL|belong|v|ait olmak|This book belongs to the library.|Bu kitap kütüphaneye aittir.
+GENERAL|bend|v|eğmek, bükmek|Bend your knees when you lift.|Kaldırırken dizlerinizi bükün.
+GENERAL|bind|v|bağlamak; zorunlu kılmak|The contract binds both sides.|Sözleşme her iki tarafı bağlar.
+GENERAL|blame|v|suçlamak|Don't blame him for the mistake.|Hata için onu suçlama.
+GENERAL|blend|v|karıştırmak, kaynaştırmak|Blend the eggs and the sugar.|Yumurtaları ve şekeri karıştırın.
+GENERAL|block|v|engellemek, tıkamak|A fallen tree blocked the road.|Devrilen bir ağaç yolu kapattı.
+GENERAL|boost|v|artırmak, güçlendirmek|Exercise boosts your energy.|Egzersiz enerjinizi artırır.
+GENERAL|border|v|sınır olmak, komşu olmak|Turkey borders eight countries.|Türkiye sekiz ülkeyle komşudur.
+GENERAL|bother|v|rahatsız etmek|Sorry to bother you.|Rahatsız ettiğim için üzgünüm.
+GENERAL|bound|v|sınırlamak; sıçramak|The river bounds the property.|Nehir arsanın sınırını oluşturur.
+GENERAL|brief|v|bilgi vermek, özetlemek|The manager briefed the staff.|Müdür personeli bilgilendirdi.
+GENERAL|broadcast|v|yayınlamak|The match was broadcast live.|Maç canlı yayınlandı.
+GENERAL|calculate|v|hesaplamak|Calculate the total cost.|Toplam maliyeti hesaplayın.
+GENERAL|cancel|v|iptal etmek|The flight was cancelled.|Uçuş iptal edildi.
+GENERAL|capture|v|ele geçirmek; yakalamak|The photo captures the mood.|Fotoğraf havayı yakalıyor.
+GENERAL|cease|v|sona ermek, durmak|The noise ceased at midnight.|Gürültü gece yarısı sona erdi.
+GENERAL|challenge|v|meydan okumak; sorgulamak|She challenged the decision.|Karara itiraz etti.
+GENERAL|characterize|v|nitelendirmek, özelliğini belirtmek|Dry summers characterize the region.|Kuru yazlar bölgenin özelliğidir.
+GENERAL|clarify|v|açıklığa kavuşturmak|Could you clarify your point?|Görüşünüzü açıklığa kavuşturabilir misiniz?
+GENERAL|classify|v|sınıflandırmak|Biologists classify plants by family.|Biyologlar bitkileri familyalara göre sınıflandırır.
+GENERAL|clash|v|çatışmak; çakışmak|The two leaders clashed over policy.|İki lider politika konusunda çatıştı.
+GENERAL|cling|v|sıkıca tutunmak|The child clung to his mother.|Çocuk annesine sıkıca tutundu.
+GENERAL|collapse|v|çökmek|The bridge collapsed in the flood.|Köprü selde çöktü.
+GENERAL|combine|v|birleştirmek|Combine the flour and the butter.|Unu ve tereyağını birleştirin.
+GENERAL|commence|v|başlamak, başlatmak|The ceremony commences at noon.|Tören öğlen başlıyor.
+GENERAL|commit|v|işlemek; bağlamak|He committed a serious crime.|Ağır bir suç işledi.
+GENERAL|communicate|v|iletişim kurmak|Dolphins communicate with sounds.|Yunuslar seslerle iletişim kurar.
+GENERAL|compare|v|karşılaştırmak|Compare the two prices.|İki fiyatı karşılaştırın.
+GENERAL|compensate|v|telafi etmek, tazmin etmek|The firm compensated the victims.|Şirket mağdurları tazmin etti.
+GENERAL|compete|v|rekabet etmek, yarışmak|Many firms compete for the contract.|Birçok firma sözleşme için rekabet ediyor.
+GENERAL|compile|v|derlemek|She compiled a list of sources.|Bir kaynak listesi derledi.
+GENERAL|complain|v|şikâyet etmek|Customers complained about the delay.|Müşteriler gecikmeden şikâyet etti.
+GENERAL|complement|v|tamamlamak|The wine complements the meal.|Şarap yemeği tamamlıyor.
+GENERAL|comply|v|uymak|All drivers must comply with the law.|Tüm sürücüler yasaya uymak zorundadır.
+GENERAL|compose|v|oluşturmak; bestelemek|Water is composed of hydrogen and oxygen.|Su hidrojen ve oksijenden oluşur.
+GENERAL|comprise|v|içermek, oluşmak|The team comprises ten members.|Takım on üyeden oluşur.
+GENERAL|conceal|v|gizlemek|He concealed the truth from them.|Gerçeği onlardan gizledi.
+GENERAL|concentrate|v|yoğunlaşmak, odaklanmak|Please concentrate on your work.|Lütfen işine odaklan.
+GENERAL|conclude|v|sonuçlandırmak; sonuca varmak|We concluded that the test was fair.|Testin adil olduğu sonucuna vardık.
+GENERAL|condemn|v|kınamak; mahkûm etmek|Leaders condemned the attack.|Liderler saldırıyı kınadı.
+GENERAL|conduct|v|yürütmek; yönetmek|They conducted a survey in schools.|Okullarda bir anket yürüttüler.
+GENERAL|confess|v|itiraf etmek|He confessed to the theft.|Hırsızlığı itiraf etti.
+GENERAL|confine|v|sınırlamak; hapsetmek|Confine your answer to two lines.|Cevabınızı iki satırla sınırlayın.
+GENERAL|confirm|v|doğrulamak, onaylamak|Please confirm your booking.|Lütfen rezervasyonunuzu onaylayın.
+GENERAL|conflict|v|çelişmek, çatışmak|His story conflicts with the facts.|Hikâyesi gerçeklerle çelişiyor.
+GENERAL|conform|v|uymak, uyum göstermek|Products must conform to safety rules.|Ürünler güvenlik kurallarına uygun olmalıdır.
+GENERAL|confront|v|yüzleşmek, karşı koymak|She confronted her fears.|Korkularıyla yüzleşti.
+GENERAL|consent|v|razı olmak, onay vermek|Parents consented to the trip.|Anne babalar geziye onay verdi.
+GENERAL|conserve|v|korumak, tasarruf etmek|We must conserve water.|Suyu korumalıyız.
+GENERAL|consist|v|oluşmak, ibaret olmak|The course consists of six units.|Kurs altı üniteden oluşur.
+GENERAL|constitute|v|oluşturmak, teşkil etmek|Women constitute half the workforce.|Kadınlar iş gücünün yarısını oluşturur.
+GENERAL|constrain|v|kısıtlamak, zorlamak|Budget limits constrain our choices.|Bütçe sınırları seçeneklerimizi kısıtlıyor.
+GENERAL|construct|v|inşa etmek|They constructed a new bridge.|Yeni bir köprü inşa ettiler.
+GENERAL|consult|v|danışmak|Consult a doctor before the trip.|Geziden önce bir doktora danışın.
+GENERAL|consume|v|tüketmek|The engine consumes little fuel.|Motor az yakıt tüketir.
+GENERAL|contain|v|içermek; kontrol altına almak|The box contains old photos.|Kutu eski fotoğraflar içeriyor.
+GENERAL|contemplate|v|düşünmek, tasarlamak|She contemplated leaving the city.|Şehirden ayrılmayı düşündü.
+GENERAL|contend|v|savaşmak; iddia etmek|He contended that the law was unfair.|Yasanın adaletsiz olduğunu savundu.
+GENERAL|contract|v|daralmak; sözleşme yapmak|Metal contracts when it cools.|Metal soğuyunca büzülür.
+GENERAL|contradict|v|çelişmek; yalanlamak|The results contradict the theory.|Sonuçlar kuramla çelişiyor.
+GENERAL|contrast|v|karşıtlık oluşturmak, kıyaslamak|The report contrasts two methods.|Rapor iki yöntemi kıyaslıyor.
+GENERAL|contribute|v|katkıda bulunmak|Everyone contributed to the project.|Herkes projeye katkıda bulundu.
+GENERAL|convert|v|dönüştürmek|Convert miles into kilometres.|Mili kilometreye dönüştürün.
+GENERAL|convey|v|iletmek, aktarmak|The letter conveys our thanks.|Mektup teşekkürlerimizi iletiyor.
+GENERAL|convince|v|ikna etmek|I convinced him to stay.|Onu kalmaya ikna ettim.
+GENERAL|cooperate|v|işbirliği yapmak|The two schools cooperate closely.|İki okul yakından işbirliği yapıyor.
+GENERAL|coordinate|v|koordine etmek|She coordinates the volunteers.|Gönüllüleri o koordine ediyor.
+GENERAL|correspond|v|karşılık gelmek; yazışmak|The map corresponds to the real area.|Harita gerçek bölgeye karşılık geliyor.
+GENERAL|crave|v|çok istemek, özlemek|Children crave attention.|Çocuklar ilgi ister.
+GENERAL|criticize|v|eleştirmek|The press criticized the decision.|Basın kararı eleştirdi.
+GENERAL|crush|v|ezmek; bastırmak|The army crushed the revolt.|Ordu ayaklanmayı bastırdı.
+GENERAL|decay|v|çürümek, bozulmak|Sugar makes teeth decay.|Şeker dişlerin çürümesine neden olur.
+GENERAL|deceive|v|aldatmak|He deceived his customers.|Müşterilerini aldattı.
+GENERAL|declare|v|ilan etmek, beyan etmek|The government declared a state of emergency.|Hükümet olağanüstü hal ilan etti.
+GENERAL|decrease|v|azalmak, azaltmak|Sales decreased last month.|Satışlar geçen ay azaldı.
+GENERAL|dedicate|v|adamak|She dedicated her life to teaching.|Hayatını öğretmenliğe adadı.
+GENERAL|defeat|v|yenmek|Our team defeated the champions.|Takımımız şampiyonları yendi.
+GENERAL|defend|v|savunmak|He defended his research.|Araştırmasını savundu.
+GENERAL|define|v|tanımlamak|Define the term in your own words.|Terimi kendi sözlerinizle tanımlayın.
+GENERAL|delay|v|ertelemek, geciktirmek|Fog delayed all flights.|Sis tüm uçuşları geciktirdi.
+GENERAL|delegate|v|yetki devretmek, görevlendirmek|A good manager delegates tasks.|İyi bir yönetici görev devreder.
+GENERAL|deliberate|v|uzun uzun düşünmek, görüşmek|The jury deliberated for two days.|Jüri iki gün görüştü.
+GENERAL|demand|v|talep etmek, istemek|Workers demanded higher wages.|İşçiler daha yüksek ücret talep etti.
+GENERAL|demonstrate|v|göstermek, kanıtlamak|The test demonstrates the effect.|Test etkiyi gösteriyor.
+GENERAL|denote|v|göstermek, ifade etmek|A red light denotes danger.|Kırmızı ışık tehlikeyi gösterir.
+GENERAL|deny|v|reddetmek, inkâr etmek|He denied the charges.|Suçlamaları reddetti.
+GENERAL|depart|v|ayrılmak, hareket etmek|The train departs at nine.|Tren dokuzda hareket eder.
+GENERAL|depict|v|betimlemek, resmetmek|The painting depicts a storm at sea.|Tablo denizde bir fırtınayı betimliyor.
+GENERAL|deploy|v|konuşlandırmak; kullanıma sokmak|The army deployed troops to the border.|Ordu sınıra asker konuşlandırdı.
+GENERAL|derive|v|türetmek; kaynaklanmak|The word derives from Latin.|Sözcük Latince kökenlidir.
+GENERAL|descend|v|inmek, alçalmak|The path descends to the lake.|Patika göle iniyor.
+GENERAL|deserve|v|hak etmek|You deserve a rest.|Dinlenmeyi hak ediyorsun.
+GENERAL|designate|v|belirlemek, atamak|The area was designated a park.|Bölge park olarak belirlendi.
+GENERAL|despise|v|hor görmek, nefret etmek|He despised dishonesty.|Sahtekârlıktan nefret ederdi.
+GENERAL|detach|v|ayırmak, çıkarmak|Detach the form along the line.|Formu çizgiden ayırın.
+GENERAL|detect|v|saptamak, fark etmek|Sensors detect smoke quickly.|Sensörler dumanı hızla saptar.
+GENERAL|determine|v|belirlemek, karar vermek|Tests determine the cause.|Testler nedeni belirler.
+GENERAL|devote|v|adamak, ayırmak|He devoted years to the project.|Projeye yıllarını verdi.
+GENERAL|diminish|v|azalmak, azaltmak|Her fear slowly diminished.|Korkusu yavaş yavaş azaldı.
+GENERAL|disappear|v|kaybolmak|The sun disappeared behind clouds.|Güneş bulutların ardında kayboldu.
+GENERAL|discard|v|atmak, elden çıkarmak|Discard the old batteries.|Eski pilleri atın.
+GENERAL|disclose|v|açıklamak, ifşa etmek|The firm disclosed its profits.|Firma kârını açıkladı.
+GENERAL|discourage|v|cesaretini kırmak; caydırmak|High prices discourage buyers.|Yüksek fiyatlar alıcıları caydırır.
+GENERAL|discriminate|v|ayrım yapmak|It is illegal to discriminate by age.|Yaşa göre ayrım yapmak yasa dışıdır.
+GENERAL|dismiss|v|işten çıkarmak; reddetmek|The company dismissed ten workers.|Şirket on işçiyi işten çıkardı.
+GENERAL|disperse|v|dağılmak, dağıtmak|The crowd dispersed quickly.|Kalabalık hızla dağıldı.
+GENERAL|display|v|sergilemek, göstermek|The museum displays old coins.|Müze eski sikkeleri sergiliyor.
+GENERAL|dispose|v|elden çıkarmak, atmak|Dispose of waste properly.|Atıkları doğru şekilde bertaraf edin.
+GENERAL|disrupt|v|aksatmak, kesintiye uğratmak|Strikes disrupted public transport.|Grevler toplu taşımayı aksattı.
+GENERAL|dissolve|v|çözünmek, eritmek|Sugar dissolves in hot water.|Şeker sıcak suda çözünür.
+GENERAL|distinguish|v|ayırt etmek|Can you distinguish the two twins?|İkizleri ayırt edebiliyor musun?
+GENERAL|distort|v|çarpıtmak, bozmak|The media distorted the facts.|Medya gerçekleri çarpıttı.
+GENERAL|distribute|v|dağıtmak|Volunteers distributed free food.|Gönüllüler ücretsiz yemek dağıttı.
+GENERAL|diverge|v|ayrılmak, farklılaşmak|The two paths diverge here.|İki yol burada ayrılıyor.
+GENERAL|divert|v|saptırmak, yönünü değiştirmek|Traffic was diverted to side streets.|Trafik yan sokaklara yönlendirildi.
+GENERAL|dominate|v|egemen olmak|One company dominates the market.|Bir şirket piyasaya egemen.
+GENERAL|donate|v|bağışlamak|She donated books to the school.|Okula kitap bağışladı.
+GENERAL|doubt|v|şüphe etmek|I doubt that he will come.|Geleceğinden şüpheliyim.
+GENERAL|drain|v|boşaltmak, süzdürmek|Drain the water from the pasta.|Makarnanın suyunu süzün.
+GENERAL|dwell|v|yaşamak, oturmak; üzerinde durmak|Don't dwell on the past.|Geçmişin üzerinde durma.
+GENERAL|eliminate|v|ortadan kaldırmak|The vaccine eliminated the disease.|Aşı hastalığı ortadan kaldırdı.
+GENERAL|emerge|v|ortaya çıkmak|New problems emerged later.|Daha sonra yeni sorunlar ortaya çıktı.
+GENERAL|emphasize|v|vurgulamak|The teacher emphasized accuracy.|Öğretmen doğruluğu vurguladı.
+GENERAL|employ|v|işe almak; kullanmak|The factory employs 500 people.|Fabrika 500 kişi çalıştırıyor.
+GENERAL|enable|v|olanak vermek, mümkün kılmak|The app enables fast payment.|Uygulama hızlı ödemeyi mümkün kılıyor.
+GENERAL|enclose|v|çevrelemek; ekinde göndermek|A wall encloses the garden.|Bir duvar bahçeyi çevreliyor.
+GENERAL|encounter|v|karşılaşmak|We encountered many difficulties.|Birçok güçlükle karşılaştık.
+GENERAL|encourage|v|cesaretlendirmek, teşvik etmek|Teachers encourage curiosity.|Öğretmenler merakı teşvik eder.
+GENERAL|endeavour|v|çaba göstermek|We endeavour to answer every email.|Her e-postayı yanıtlamak için çaba gösteriyoruz.
+GENERAL|endorse|v|onaylamak, desteklemek|The union endorsed the plan.|Sendika planı destekledi.
+GENERAL|endure|v|dayanmak, katlanmak|They endured a long winter.|Uzun bir kışa dayandılar.
+GENERAL|enforce|v|uygulatmak, yürürlüğe koymak|Police enforce the law.|Polis yasayı uygulatır.
+GENERAL|engage|v|meşgul etmek; katılmak|The teacher engaged the class.|Öğretmen sınıfı derse çekti.
+GENERAL|enhance|v|artırmak, geliştirmek|Good lighting enhances the room.|İyi aydınlatma odayı güzelleştirir.
+GENERAL|enlarge|v|büyütmek|Enlarge the photo to fit.|Fotoğrafı sığacak şekilde büyütün.
+GENERAL|ensure|v|sağlamak, güvence altına almak|Ensure that the door is locked.|Kapının kilitli olduğundan emin olun.
+GENERAL|entitle|v|hak vermek; adlandırmak|Members are entitled to a discount.|Üyeler indirim hakkına sahiptir.
+GENERAL|envisage|v|öngörmek, gözünde canlandırmak|We envisage a quick recovery.|Hızlı bir toparlanma öngörüyoruz.
+GENERAL|equip|v|donatmak|The lab is equipped with new tools.|Laboratuvar yeni aletlerle donatılmış.
+GENERAL|erupt|v|patlak vermek; püskürmek|The volcano erupted in 1980.|Yanardağ 1980'de püskürdü.
+GENERAL|establish|v|kurmak; kanıtlamak|They established a charity.|Bir hayır kurumu kurdular.
+GENERAL|estimate|v|tahmin etmek, kestirmek|Experts estimate the cost at two million.|Uzmanlar maliyeti iki milyon olarak tahmin ediyor.
+GENERAL|evacuate|v|boşaltmak, tahliye etmek|Residents were evacuated before the flood.|Sakinler selden önce tahliye edildi.
+GENERAL|evaluate|v|değerlendirmek|Evaluate the results carefully.|Sonuçları dikkatle değerlendirin.
+GENERAL|evolve|v|evrimleşmek, gelişmek|Languages evolve over time.|Diller zamanla evrimleşir.
+GENERAL|exceed|v|aşmak|Do not exceed the speed limit.|Hız sınırını aşmayın.
+GENERAL|exclude|v|dışlamak, hariç tutmak|The price excludes tax.|Fiyata vergi dahil değildir.
+GENERAL|execute|v|yerine getirmek; idam etmek|The team executed the plan well.|Ekip planı iyi uyguladı.
+GENERAL|exhibit|v|sergilemek|She exhibited her paintings in Paris.|Resimlerini Paris'te sergiledi.
+GENERAL|expand|v|genişlemek, genişletmek|The company expanded abroad.|Şirket yurt dışına açıldı.
+GENERAL|exploit|v|sömürmek; yararlanmak|Some firms exploit cheap labour.|Bazı firmalar ucuz emeği sömürür.
+GENERAL|expose|v|açığa çıkarmak, maruz bırakmak|Don't expose film to light.|Filmi ışığa maruz bırakmayın.
+GENERAL|extend|v|uzatmak, genişletmek|They extended the deadline.|Son tarihi uzattılar.
+GENERAL|extract|v|çıkarmak, özütlemek|Oil is extracted from olives.|Zeytinden yağ çıkarılır.
+GENERAL|facilitate|v|kolaylaştırmak|Technology facilitates learning.|Teknoloji öğrenmeyi kolaylaştırır.
+GENERAL|fade|v|solmak, silinmek|The colours faded in the sun.|Renkler güneşte soldu.
+GENERAL|fasten|v|bağlamak, sabitlemek|Fasten your seat belt.|Emniyet kemerinizi bağlayın.
+GENERAL|fluctuate|v|dalgalanmak|Prices fluctuate during the year.|Fiyatlar yıl boyunca dalgalanır.
+GENERAL|forbid|v|yasaklamak|The law forbids smoking here.|Yasa burada sigara içmeyi yasaklar.
+GENERAL|forecast|v|tahmin etmek|Rain is forecast for tomorrow.|Yarın için yağmur tahmin ediliyor.
+GENERAL|foresee|v|önceden görmek|Nobody foresaw the crisis.|Krizi kimse önceden görmedi.
+GENERAL|formulate|v|formüle etmek, ifade etmek|She formulated a clear plan.|Net bir plan oluşturdu.
+GENERAL|fulfil|v|yerine getirmek, gerçekleştirmek|He fulfilled his promise.|Sözünü yerine getirdi.
+GENERAL|function|v|çalışmak, işlev görmek|The machine no longer functions.|Makine artık çalışmıyor.
+GENERAL|generate|v|üretmek, meydana getirmek|Wind turbines generate power.|Rüzgâr türbinleri enerji üretir.
+GENERAL|govern|v|yönetmek|The party governs the country.|Parti ülkeyi yönetiyor.
+GENERAL|grant|v|vermek, bahşetmek|The court granted his request.|Mahkeme talebini kabul etti.
+GENERAL|guarantee|v|garanti etmek|We guarantee fast delivery.|Hızlı teslimat garanti ediyoruz.
+GENERAL|halt|v|durdurmak, durmak|Work was halted by the storm.|İş, fırtına yüzünden durduruldu.
+GENERAL|handle|v|ele almak, idare etmek|She handled the crisis well.|Krizi iyi yönetti.
+GENERAL|harm|v|zarar vermek|Smoking harms your lungs.|Sigara akciğerlerinize zarar verir.
+GENERAL|hesitate|v|tereddüt etmek|Don't hesitate to ask.|Sormaktan çekinme.
+GENERAL|highlight|v|vurgulamak, öne çıkarmak|The report highlights three problems.|Rapor üç soruna dikkat çekiyor.
+GENERAL|hinder|v|engellemek, aksatmak|Bad weather hindered the search.|Kötü hava aramayı güçleştirdi.
+GENERAL|identify|v|tanımlamak, belirlemek|Police identified the driver.|Polis sürücüyü belirledi.
+GENERAL|illustrate|v|örneklemek; resimlemek|The graph illustrates the trend.|Grafik eğilimi gösteriyor.
+GENERAL|imitate|v|taklit etmek|Parrots imitate human speech.|Papağanlar insan konuşmasını taklit eder.
+GENERAL|implement|v|uygulamak, hayata geçirmek|The city implemented a new plan.|Şehir yeni bir planı uygulamaya koydu.
+GENERAL|imply|v|ima etmek, anlamına gelmek|Silence does not imply agreement.|Sessizlik onay anlamına gelmez.
+GENERAL|impose|v|dayatmak, uygulamak (ceza, vergi)|The state imposed a new tax.|Devlet yeni bir vergi getirdi.
+GENERAL|improve|v|geliştirmek, iyileşmek|Her English has improved.|İngilizcesi gelişti.
+GENERAL|incorporate|v|dahil etmek, bünyesine katmak|The design incorporates solar panels.|Tasarım güneş panelleri içeriyor.
+GENERAL|increase|v|artmak, artırmak|Prices increased by ten percent.|Fiyatlar yüzde on arttı.
+GENERAL|indicate|v|göstermek, işaret etmek|Studies indicate a rise in cases.|Çalışmalar vakalarda artış olduğunu gösteriyor.
+GENERAL|induce|v|neden olmak; ikna etmek|The drug induces sleep.|İlaç uyku getirir.
+GENERAL|inflict|v|zarar vermek, acı vermek|The storm inflicted heavy damage.|Fırtına ağır hasara yol açtı.
+GENERAL|influence|v|etkilemek|Friends influence our choices.|Arkadaşlar seçimlerimizi etkiler.
+GENERAL|inform|v|bilgilendirmek|Please inform us of any changes.|Lütfen değişiklikleri bize bildirin.
+GENERAL|inhabit|v|oturmak, yaşamak (bir yerde)|Wolves once inhabited the forest.|Kurtlar bir zamanlar ormanda yaşardı.
+GENERAL|inherit|v|miras almak|She inherited a small farm.|Küçük bir çiftlik miras aldı.
+GENERAL|inhibit|v|engellemek, baskılamak|Cold inhibits plant growth.|Soğuk bitki büyümesini engeller.
+GENERAL|initiate|v|başlatmak|The council initiated a review.|Konsey bir inceleme başlattı.
+GENERAL|inject|v|enjekte etmek, zerk etmek|The nurse injected the vaccine.|Hemşire aşıyı yaptı.
+GENERAL|insist|v|ısrar etmek|He insisted on paying.|Ödemekte ısrar etti.
+GENERAL|inspect|v|denetlemek, incelemek|Officers inspect the ships.|Görevliler gemileri denetler.
+GENERAL|inspire|v|ilham vermek|Her story inspired many people.|Hikâyesi birçok kişiye ilham verdi.
+GENERAL|install|v|kurmak, yüklemek|He installed new software.|Yeni yazılım yükledi.
+GENERAL|instruct|v|talimat vermek; eğitmek|The guide instructed us to wait.|Rehber bekleyelim diye talimat verdi.
+GENERAL|integrate|v|bütünleştirmek, entegre etmek|The school integrates art and science.|Okul sanatı ve bilimi bütünleştiriyor.
+GENERAL|intend|v|niyet etmek, amaçlamak|I intend to apply next year.|Gelecek yıl başvurmayı düşünüyorum.
+GENERAL|interact|v|etkileşim kurmak|Children interact through play.|Çocuklar oyun yoluyla etkileşim kurar.
+GENERAL|interfere|v|karışmak, müdahale etmek|Don't interfere in their affairs.|Onların işlerine karışma.
+GENERAL|interpret|v|yorumlamak; tercüme etmek|Scientists interpret the data.|Bilim insanları verileri yorumlar.
+GENERAL|interrupt|v|sözünü kesmek, kesintiye uğratmak|Please don't interrupt me.|Lütfen sözümü kesme.
+GENERAL|intervene|v|araya girmek, müdahale etmek|Police intervened in the fight.|Polis kavgaya müdahale etti.
+GENERAL|invade|v|işgal etmek|Troops invaded the island.|Birlikler adayı işgal etti.
+GENERAL|invest|v|yatırım yapmak|They invested in new machines.|Yeni makinelere yatırım yaptılar.
+GENERAL|investigate|v|araştırmak, soruşturmak|Police are investigating the fire.|Polis yangını soruşturuyor.
+GENERAL|involve|v|içermek; dahil etmek|The job involves travelling.|İş seyahat etmeyi içeriyor.
+GENERAL|isolate|v|yalıtmak, tecrit etmek|Doctors isolated the patient.|Doktorlar hastayı izole etti.
+GENERAL|justify|v|haklı çıkarmak, gerekçelendirmek|Nothing can justify violence.|Hiçbir şey şiddeti haklı çıkaramaz.
+GENERAL|launch|v|başlatmak; piyasaya sürmek|They launched a new product.|Yeni bir ürün piyasaya sürdüler.
+GENERAL|lean|v|yaslanmak; eğilmek|He leaned against the wall.|Duvara yaslandı.
+GENERAL|link|v|bağlamak, ilişkilendirmek|Studies link sleep to memory.|Çalışmalar uykuyu hafızayla ilişkilendiriyor.
+GENERAL|locate|v|yerini bulmak; yerleştirmek|Rescuers located the missing hikers.|Kurtarıcılar kayıp yürüyüşçüleri buldu.
+GENERAL|maintain|v|sürdürmek; bakımını yapmak|Maintain a steady speed.|Sabit bir hız koruyun.
+GENERAL|manipulate|v|manipüle etmek; ustaca kullanmak|Advertisers manipulate emotions.|Reklamcılar duyguları manipüle eder.
+GENERAL|match|v|uymak, eşleşmek|The colours match perfectly.|Renkler mükemmel uyuyor.
+GENERAL|measure|v|ölçmek|Measure the length of the room.|Odanın uzunluğunu ölçün.
+GENERAL|migrate|v|göç etmek|Birds migrate south in autumn.|Kuşlar sonbaharda güneye göç eder.
+GENERAL|modify|v|değiştirmek, uyarlamak|They modified the original design.|Orijinal tasarımı değiştirdiler.
+GENERAL|monitor|v|izlemek, gözlemek|Nurses monitor the patient's heart rate.|Hemşireler hastanın kalp atışını izler.
+GENERAL|motivate|v|motive etmek|Good teachers motivate students.|İyi öğretmenler öğrencileri motive eder.
+GENERAL|neglect|v|ihmal etmek|Don't neglect your health.|Sağlığını ihmal etme.
+GENERAL|negotiate|v|müzakere etmek|The two sides negotiated for days.|İki taraf günlerce müzakere etti.
+GENERAL|neutralize|v|etkisiz hale getirmek|Baking soda neutralizes acid.|Karbonat asidi nötrler.
+GENERAL|nominate|v|aday göstermek|Three films were nominated.|Üç film aday gösterildi.
+GENERAL|notify|v|bildirmek, haber vermek|We will notify you by email.|Size e-postayla bildireceğiz.
+GENERAL|obey|v|itaat etmek|Dogs must obey simple commands.|Köpekler basit komutlara uymalı.
+GENERAL|object|v|itiraz etmek|Many residents objected to the plan.|Birçok sakin plana itiraz etti.
+GENERAL|obtain|v|elde etmek, temin etmek|You can obtain a permit online.|İzni internetten alabilirsiniz.
+GENERAL|occupy|v|işgal etmek; meşgul etmek|Students occupied the building.|Öğrenciler binayı işgal etti.
+GENERAL|occur|v|meydana gelmek|The accident occurred at night.|Kaza gece meydana geldi.
+GENERAL|offend|v|gücendirmek, kırmak|I hope I didn't offend you.|Umarım seni gücendirmedim.
+GENERAL|omit|v|atlamak, dışarıda bırakmak|Do not omit any details.|Hiçbir ayrıntıyı atlamayın.
+GENERAL|operate|v|çalıştırmak; ameliyat etmek|Surgeons operated for six hours.|Cerrahlar altı saat ameliyat yaptı.
+GENERAL|oppose|v|karşı çıkmak|Many people opposed the plan.|Birçok kişi plana karşı çıktı.
+GENERAL|oppress|v|baskı altında tutmak|The regime oppressed its critics.|Rejim eleştirmenlerini baskı altında tuttu.
+GENERAL|organize|v|düzenlemek, organize etmek|They organized a charity concert.|Bir yardım konseri düzenlediler.
+GENERAL|originate|v|ortaya çıkmak, kaynaklanmak|The custom originated in China.|Gelenek Çin'de ortaya çıktı.
+GENERAL|overcome|v|üstesinden gelmek|She overcame many obstacles.|Pek çok engelin üstesinden geldi.
+GENERAL|overlook|v|gözden kaçırmak; görmezden gelmek|Don't overlook small details.|Küçük ayrıntıları gözden kaçırma.
+GENERAL|oversee|v|denetlemek, gözetmek|A manager oversees the project.|Bir yönetici projeyi denetliyor.
+GENERAL|owe|v|borçlu olmak|I owe him a favour.|Ona bir iyilik borcum var.
+GENERAL|participate|v|katılmak|Everyone participated in the debate.|Herkes tartışmaya katıldı.
+GENERAL|penetrate|v|içine işlemek, nüfuz etmek|Light penetrates deep water.|Işık derin suya işler.
+GENERAL|perceive|v|algılamak, fark etmek|Dogs perceive sounds we cannot.|Köpekler bizim duyamadığımız sesleri algılar.
+GENERAL|perform|v|gerçekleştirmek; sahnelemek|Doctors performed the operation.|Doktorlar ameliyatı gerçekleştirdi.
+GENERAL|persist|v|ısrar etmek, sürmek|The cough persisted for weeks.|Öksürük haftalarca sürdü.
+GENERAL|persuade|v|ikna etmek|She persuaded him to apply.|Onu başvurmaya ikna etti.
+GENERAL|phase|v|aşamalandırmak|The plan will be phased in gradually.|Plan aşamalı olarak devreye girecek.
+GENERAL|plead|v|yalvarmak; savunmada bulunmak|He pleaded for mercy.|Merhamet için yalvardı.
+GENERAL|pledge|v|söz vermek, taahhüt etmek|They pledged to cut costs.|Maliyetleri düşürmeye söz verdiler.
+GENERAL|pose|v|oluşturmak (tehlike); poz vermek|Fog poses a danger to drivers.|Sis sürücüler için tehlike oluşturuyor.
+GENERAL|postpone|v|ertelemek|The match was postponed.|Maç ertelendi.
+GENERAL|predict|v|tahmin etmek, öngörmek|Nobody could predict the result.|Kimse sonucu tahmin edemedi.
+GENERAL|prefer|v|tercih etmek|I prefer tea to coffee.|Çayı kahveye tercih ederim.
+GENERAL|prescribe|v|reçete etmek; belirlemek|The doctor prescribed antibiotics.|Doktor antibiyotik yazdı.
+GENERAL|preserve|v|korumak, muhafaza etmek|Salt preserves meat.|Tuz eti korur.
+GENERAL|presume|v|varsaymak, farz etmek|I presume you have eaten.|Yemek yediğini varsayıyorum.
+GENERAL|prevail|v|üstün gelmek; yaygın olmak|Common sense prevailed in the end.|Sonunda sağduyu galip geldi.
+GENERAL|prevent|v|önlemek|Vaccines prevent many diseases.|Aşılar birçok hastalığı önler.
+GENERAL|prohibit|v|yasaklamak|Smoking is prohibited here.|Burada sigara içmek yasaktır.
+GENERAL|prolong|v|uzatmak|Rest may prolong your life.|Dinlenmek ömrünüzü uzatabilir.
+GENERAL|promote|v|tanıtmak; terfi ettirmek|She was promoted to manager.|Müdürlüğe terfi etti.
+GENERAL|propose|v|önermek; evlenme teklif etmek|He proposed a new plan.|Yeni bir plan önerdi.
+GENERAL|protest|v|protesto etmek|Workers protested against the cuts.|İşçiler kesintileri protesto etti.
+GENERAL|provoke|v|kışkırtmak, yol açmak|The remark provoked an angry reply.|Söz öfkeli bir yanıta yol açtı.
+GENERAL|pursue|v|peşinden gitmek, sürdürmek|She pursued a career in law.|Hukuk alanında kariyer yaptı.
+GENERAL|qualify|v|yeterli olmak; nitelemek|He qualified for the final.|Finale kalmaya hak kazandı.
+GENERAL|quote|v|alıntılamak|She quoted a line from the poem.|Şiirden bir dize alıntıladı.
+GENERAL|rank|v|sıralamak; yer almak|The city ranks among the safest.|Şehir en güvenli olanlar arasında yer alıyor.
+GENERAL|react|v|tepki vermek|How did she react to the news?|Habere nasıl tepki verdi?
+GENERAL|realize|v|fark etmek; gerçekleştirmek|I realized I was wrong.|Yanıldığımı fark ettim.
+GENERAL|rebuild|v|yeniden inşa etmek|They rebuilt the town after the quake.|Depremden sonra kasabayı yeniden kurdular.
+GENERAL|recall|v|hatırlamak; geri çağırmak|I can't recall his name.|Adını hatırlayamıyorum.
+GENERAL|reckon|v|sanmak, hesap etmek|I reckon it will rain.|Sanırım yağmur yağacak.
+GENERAL|recognize|v|tanımak; kabul etmek|I recognized her voice.|Sesini tanıdım.
+GENERAL|recommend|v|tavsiye etmek|I recommend this book.|Bu kitabı tavsiye ederim.
+GENERAL|reduce|v|azaltmak|Exercise reduces stress.|Egzersiz stresi azaltır.
+GENERAL|refer|v|atıfta bulunmak; başvurmak|He referred to the report.|Rapora atıfta bulundu.
+GENERAL|reflect|v|yansıtmak; düşünmek|The lake reflects the mountains.|Göl dağları yansıtır.
+GENERAL|reform|v|ıslah etmek, reform yapmak|The government reformed the tax system.|Hükümet vergi sistemini reform etti.
+GENERAL|refrain|v|kaçınmak, çekinmek|Please refrain from smoking.|Lütfen sigara içmekten kaçının.
+GENERAL|regard|v|saymak, görmek|They regard him as a hero.|Onu kahraman olarak görüyorlar.
+GENERAL|register|v|kaydetmek, kayıt olmak|Please register online.|Lütfen internetten kayıt olun.
+GENERAL|regulate|v|düzenlemek, kurala bağlamak|The state regulates prices.|Devlet fiyatları düzenler.
+GENERAL|reinforce|v|pekiştirmek, güçlendirmek|Repetition reinforces learning.|Tekrar öğrenmeyi pekiştirir.
+GENERAL|reject|v|reddetmek|The bank rejected her loan request.|Banka kredi talebini reddetti.
+GENERAL|relate|v|ilişkilendirmek; anlatmak|The two events are closely related.|İki olay yakından ilişkilidir.
+GENERAL|release|v|serbest bırakmak; yayımlamak|The band released a new album.|Grup yeni bir albüm çıkardı.
+GENERAL|rely|v|güvenmek, bel bağlamak|You can rely on him.|Ona güvenebilirsin.
+GENERAL|remedy|v|çaresine bakmak, düzeltmek|The error was remedied quickly.|Hata çabucak düzeltildi.
+GENERAL|render|v|kılmak; sunmak|The storm rendered the road unusable.|Fırtına yolu kullanılamaz hale getirdi.
+GENERAL|renew|v|yenilemek|Renew your passport before travel.|Seyahatten önce pasaportunuzu yenileyin.
+GENERAL|repeat|v|tekrarlamak|Please repeat the question.|Lütfen soruyu tekrarlayın.
+GENERAL|replace|v|yerini almak; değiştirmek|Robots replace workers in factories.|Robotlar fabrikalarda işçilerin yerini alıyor.
+GENERAL|represent|v|temsil etmek|She represents our school.|Okulumuzu o temsil ediyor.
+GENERAL|reproduce|v|çoğaltmak; üremek|Bacteria reproduce quickly.|Bakteriler hızla çoğalır.
+GENERAL|require|v|gerektirmek|The job requires patience.|İş sabır gerektirir.
+GENERAL|rescue|v|kurtarmak|Firefighters rescued the child.|İtfaiyeciler çocuğu kurtardı.
+GENERAL|resemble|v|benzemek|She resembles her mother.|Annesine benziyor.
+GENERAL|resent|v|içerlemek, bozulmak|He resented being ignored.|Görmezden gelinmeye içerledi.
+GENERAL|reserve|v|ayırtmak, rezerve etmek|I reserved a table for two.|İki kişilik bir masa ayırttım.
+GENERAL|reside|v|ikamet etmek|He resides in Ankara.|Ankara'da ikamet ediyor.
+GENERAL|resign|v|istifa etmek|The minister resigned yesterday.|Bakan dün istifa etti.
+GENERAL|resist|v|direnmek|The town resisted the attack.|Kasaba saldırıya direndi.
+GENERAL|resolve|v|çözmek; karar vermek|They resolved the dispute.|Anlaşmazlığı çözdüler.
+GENERAL|respond|v|yanıt vermek|He did not respond to my email.|E-postama yanıt vermedi.
+GENERAL|restore|v|onarmak, eski haline getirmek|They restored the old mosque.|Eski camiyi onardılar.
+GENERAL|restrict|v|sınırlamak, kısıtlamak|Rules restrict the use of phones.|Kurallar telefon kullanımını kısıtlıyor.
+GENERAL|retain|v|korumak, elinde tutmak|She retained her title.|Unvanını korudu.
+GENERAL|retreat|v|geri çekilmek|The army retreated to the hills.|Ordu tepelere çekildi.
+GENERAL|reveal|v|ortaya çıkarmak, açığa vurmak|The test revealed a problem.|Test bir sorunu ortaya çıkardı.
+GENERAL|reverse|v|tersine çevirmek|The court reversed the decision.|Mahkeme kararı bozdu.
+GENERAL|revise|v|gözden geçirmek, düzeltmek|Revise your essay before submitting.|Göndermeden önce kompozisyonunuzu gözden geçirin.
+GENERAL|revolve|v|dönmek|The earth revolves around the sun.|Dünya güneşin etrafında döner.
+GENERAL|reward|v|ödüllendirmek|The firm rewarded hard work.|Firma çalışkanlığı ödüllendirdi.
+GENERAL|ruin|v|mahvetmek|Rain ruined our picnic.|Yağmur pikniğimizi mahvetti.
+GENERAL|sacrifice|v|feda etmek|She sacrificed sleep to study.|Ders çalışmak için uykusundan feragat etti.
+GENERAL|scatter|v|saçmak, dağılmak|Seeds scattered in the wind.|Tohumlar rüzgârda dağıldı.
+GENERAL|secure|v|güvence altına almak; elde etmek|She secured a place at university.|Üniversitede bir yer kazandı.
+GENERAL|seek|v|aramak, peşinde olmak|Many people seek work abroad.|Birçok kişi yurt dışında iş arıyor.
+GENERAL|select|v|seçmek|Select the correct answer.|Doğru cevabı seçin.
+GENERAL|settle|v|yerleşmek; çözmek|They settled in a small village.|Küçük bir köye yerleştiler.
+GENERAL|shatter|v|paramparça etmek|The glass shattered on the floor.|Cam yerde paramparça oldu.
+GENERAL|shift|v|kaydırmak, değişmek|Public opinion has shifted.|Kamuoyu değişti.
+GENERAL|shrink|v|küçülmek|The shirt shrank in the wash.|Gömlek yıkamada çekti.
+GENERAL|signify|v|anlamına gelmek, göstermek|A nod signifies agreement.|Baş sallamak onay anlamına gelir.
+GENERAL|simulate|v|taklit etmek, benzetim yapmak|The program simulates flight.|Program uçuşu simüle eder.
+GENERAL|specify|v|belirtmek|Please specify your needs.|Lütfen ihtiyaçlarınızı belirtin.
+GENERAL|speculate|v|tahmin yürütmek|Experts speculate about the cause.|Uzmanlar nedeni konusunda tahmin yürütüyor.
+GENERAL|stabilize|v|dengelemek, sabitlemek|Doctors stabilized the patient.|Doktorlar hastanın durumunu dengeledi.
+GENERAL|stimulate|v|uyarmak, canlandırmak|Music stimulates the brain.|Müzik beyni uyarır.
+GENERAL|submit|v|sunmak, teslim etmek|Submit your essay by Friday.|Kompozisyonunuzu cumaya kadar teslim edin.
+GENERAL|subtract|v|çıkarmak (matematik)|Subtract five from ten.|Ondan beşi çıkarın.
+GENERAL|succeed|v|başarmak; ardından gelmek|She succeeded in passing the exam.|Sınavı geçmeyi başardı.
+GENERAL|suffer|v|acı çekmek, zarar görmek|Many people suffer from allergies.|Birçok kişi alerjiden mustarip.
+GENERAL|summarize|v|özetlemek|Summarize the text in two lines.|Metni iki satırda özetleyin.
+GENERAL|supplement|v|tamamlamak, eklemek|He supplements his income by tutoring.|Özel ders vererek gelirini artırıyor.
+GENERAL|suppress|v|bastırmak|The government suppressed the protest.|Hükümet protestoyu bastırdı.
+GENERAL|surrender|v|teslim olmak|The soldiers surrendered at dawn.|Askerler şafakta teslim oldu.
+GENERAL|survive|v|hayatta kalmak|Few plants survive in the desert.|Çölde çok az bitki hayatta kalır.
+GENERAL|suspend|v|askıya almak|Classes were suspended due to snow.|Dersler kar nedeniyle askıya alındı.
+GENERAL|sustain|v|sürdürmek; desteklemek|The soil cannot sustain more crops.|Toprak daha fazla ürünü taşıyamaz.
+GENERAL|terminate|v|sona erdirmek|The company terminated the contract.|Şirket sözleşmeyi feshetti.
+GENERAL|tolerate|v|hoş görmek, katlanmak|She can't tolerate noise.|Gürültüye tahammül edemez.
+GENERAL|transfer|v|aktarmak, nakletmek|He transferred the money to his account.|Parayı hesabına aktardı.
+GENERAL|transform|v|dönüştürmek|The internet transformed business.|İnternet iş dünyasını dönüştürdü.
+GENERAL|transmit|v|iletmek, yaymak|Mosquitoes transmit malaria.|Sivrisinekler sıtmayı bulaştırır.
+GENERAL|undergo|v|geçirmek, görmek|He underwent surgery in May.|Mayıs ayında ameliyat geçirdi.
+GENERAL|undertake|v|üstlenmek|She undertook a long journey.|Uzun bir yolculuğa girişti.
+GENERAL|unify|v|birleştirmek|The new law unified the country.|Yeni yasa ülkeyi birleştirdi.
+GENERAL|utilize|v|kullanmak, yararlanmak|Farmers utilize new technology.|Çiftçiler yeni teknolojiden yararlanır.
+GENERAL|vanish|v|ortadan kaybolmak|The thief vanished into the crowd.|Hırsız kalabalığın içinde kayboldu.
+GENERAL|verify|v|doğrulamak|Verify your email address.|E-posta adresinizi doğrulayın.
+GENERAL|violate|v|ihlal etmek|The firm violated safety rules.|Firma güvenlik kurallarını ihlal etti.
+GENERAL|vary|v|değişmek, farklılık göstermek|Prices vary from shop to shop.|Fiyatlar mağazadan mağazaya değişir.
+GENERAL|welcome|v|karşılamak|They welcomed us warmly.|Bizi sıcak karşıladılar.
+GENERAL|withdraw|v|geri çekmek; para çekmek|He withdrew money from the bank.|Bankadan para çekti.
+GENERAL|withstand|v|dayanmak|The bridge can withstand strong winds.|Köprü şiddetli rüzgârlara dayanabilir.
+GENERAL|witness|v|tanık olmak|She witnessed the accident.|Kazaya tanık oldu.
+GENERAL|yield|v|ürün vermek; boyun eğmek|The field yields two crops a year.|Tarla yılda iki ürün verir.

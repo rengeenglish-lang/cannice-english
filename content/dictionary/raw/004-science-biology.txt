@@ -1,0 +1,230 @@
+SCIENCE|adaptation|n|uyum, adaptasyon|Camouflage is an adaptation to predators.|Kamuflaj, avcılara karşı bir uyumdur.
+SCIENCE|algae|n|su yosunu, alg|Algae grow quickly in warm ponds.|Algler sıcak göletlerde hızla çoğalır.
+SCIENCE|amphibian|n|iki yaşamlı, amfibi|Frogs are amphibians.|Kurbağalar amfibidir.
+SCIENCE|anatomy|n|anatomi|She studies human anatomy.|İnsan anatomisi okuyor.
+SCIENCE|ancestor|n|ata, soy|Birds share an ancestor with dinosaurs.|Kuşlar dinozorlarla ortak bir atayı paylaşır.
+SCIENCE|antenna|n|anten; duyarga|Insects sense smells with their antennae.|Böcekler kokuları duyargalarıyla algılar.
+SCIENCE|aquatic|adj|suda yaşayan, suyla ilgili|Aquatic plants grow in ponds.|Su bitkileri göletlerde yetişir.
+SCIENCE|bacterial|adj|bakteriyel|A bacterial infection needs antibiotics.|Bakteriyel enfeksiyon antibiyotik gerektirir.
+SCIENCE|biodiversity|n|biyolojik çeşitlilik|Forests protect biodiversity.|Ormanlar biyolojik çeşitliliği korur.
+SCIENCE|biome|n|biyom, yaşam bölgesi|The tundra is a cold biome.|Tundra soğuk bir biyomdur.
+SCIENCE|botany|n|botanik, bitki bilimi|Botany studies plants.|Botanik bitkileri inceler.
+SCIENCE|breed|v|üremek; yetiştirmek|Frogs breed in spring.|Kurbağalar ilkbaharda ürer.
+SCIENCE|camouflage|n|kamuflaj, gizlenme|The lizard's camouflage hides it well.|Kertenkelenin kamuflajı onu iyi saklar.
+SCIENCE|carbohydrate|n|karbonhidrat|Bread is rich in carbohydrates.|Ekmek karbonhidrattan zengindir.
+SCIENCE|carnivore|n|etçil hayvan|The lion is a carnivore.|Aslan etçil bir hayvandır.
+SCIENCE|cell|n|hücre|Every living thing is made of cells.|Her canlı hücrelerden oluşur.
+SCIENCE|cellulose|n|selüloz|Cellulose forms plant cell walls.|Selüloz bitki hücre duvarlarını oluşturur.
+SCIENCE|chlorophyll|n|klorofil, yeşil pigment|Chlorophyll gives leaves their colour.|Klorofil yapraklara rengini verir.
+SCIENCE|chromosome|n|kromozom|Humans have 46 chromosomes.|İnsanda 46 kromozom vardır.
+SCIENCE|classification|n|sınıflandırma|Taxonomy deals with the classification of life.|Taksonomi canlıların sınıflandırılmasını ele alır.
+SCIENCE|cloning|n|klonlama|Cloning produces genetically identical copies.|Klonlama genetik olarak aynı kopyalar üretir.
+SCIENCE|colony|n|koloni|Bees live in a large colony.|Arılar büyük bir koloni halinde yaşar.
+SCIENCE|conservation|n|koruma|Wildlife conservation saves rare species.|Yaban hayatını koruma nadir türleri kurtarır.
+SCIENCE|consumer|n|tüketici (besin zinciri)|A rabbit is a primary consumer.|Tavşan birincil tüketicidir.
+SCIENCE|decomposer|n|ayrıştırıcı|Fungi are important decomposers.|Mantarlar önemli ayrıştırıcılardır.
+SCIENCE|deforestation|n|ormansızlaşma|Deforestation destroys habitats.|Ormansızlaşma yaşam alanlarını yok eder.
+SCIENCE|dominant|adj|baskın|Brown eyes are dominant over blue.|Kahverengi gözler maviye baskındır.
+SCIENCE|ecosystem|n|ekosistem|A pond is a small ecosystem.|Bir gölet küçük bir ekosistemdir.
+SCIENCE|embryo|n|embriyo|The embryo grows inside the egg.|Embriyo yumurtanın içinde büyür.
+SCIENCE|endangered|adj|nesli tehlikede|The panda is an endangered species.|Panda nesli tehlikede olan bir türdür.
+SCIENCE|enzyme|n|enzim|Enzymes help digest food.|Enzimler besinleri sindirmeye yardım eder.
+SCIENCE|evolution|n|evrim|Darwin explained evolution by natural selection.|Darwin evrimi doğal seçilimle açıkladı.
+SCIENCE|extinct|adj|nesli tükenmiş|Dinosaurs became extinct long ago.|Dinozorların nesli çok önce tükendi.
+SCIENCE|extinction|n|neslin tükenmesi|Habitat loss leads to extinction.|Yaşam alanı kaybı neslin tükenmesine yol açar.
+SCIENCE|fauna|n|hayvan örtüsü, fauna|The island's fauna is unique.|Adanın faunası eşsizdir.
+SCIENCE|fertilization|n|döllenme|Fertilization occurs when sperm meets egg.|Döllenme sperm yumurtayla buluşunca gerçekleşir.
+SCIENCE|flora|n|bitki örtüsü, flora|The region's flora includes rare orchids.|Bölgenin florası nadir orkideleri içerir.
+SCIENCE|fossil|n|fosil|Scientists found a dinosaur fossil.|Bilim insanları bir dinozor fosili buldu.
+SCIENCE|fungus|n|mantar|A fungus grew on the bread.|Ekmeğin üzerinde mantar çıktı.
+SCIENCE|gene|n|gen|Genes carry hereditary information.|Genler kalıtsal bilgi taşır.
+SCIENCE|genetic|adj|genetik|The disease has a genetic cause.|Hastalığın genetik bir nedeni var.
+SCIENCE|genome|n|genom|Scientists mapped the human genome.|Bilim insanları insan genomunu haritaladı.
+SCIENCE|germinate|v|filizlenmek|Seeds germinate in warm soil.|Tohumlar ılık toprakta filizlenir.
+SCIENCE|habitat|n|yaşam alanı|Forests are the habitat of many birds.|Ormanlar birçok kuşun yaşam alanıdır.
+SCIENCE|herbivore|n|otçul hayvan|Cows are herbivores.|İnekler otçuldur.
+SCIENCE|heredity|n|kalıtım|Heredity explains family resemblance.|Kalıtım aile benzerliğini açıklar.
+SCIENCE|hibernate|v|kış uykusuna yatmak|Bears hibernate in winter.|Ayılar kışın kış uykusuna yatar.
+SCIENCE|host|n|konak, ev sahibi organizma|The parasite lives in its host.|Parazit konağında yaşar.
+SCIENCE|hybrid|n|melez|A mule is a hybrid of a horse and a donkey.|Katır, at ile eşeğin melezidir.
+SCIENCE|insect|n|böcek|Insects have six legs.|Böceklerin altı bacağı vardır.
+SCIENCE|invertebrate|n|omurgasız|Worms are invertebrates.|Solucanlar omurgasızdır.
+SCIENCE|larva|n|larva, kurtçuk|The larva becomes a butterfly.|Larva kelebeğe dönüşür.
+SCIENCE|lichen|n|liken|Lichen grows on rocks.|Liken kayaların üzerinde büyür.
+SCIENCE|mammal|n|memeli|Whales are mammals.|Balinalar memelidir.
+SCIENCE|membrane|n|zar|The cell membrane controls what enters.|Hücre zarı içeri girenleri kontrol eder.
+SCIENCE|metabolism|n|metabolizma|Cold slows an animal's metabolism.|Soğuk hayvanın metabolizmasını yavaşlatır.
+SCIENCE|microbe|n|mikrop, mikroorganizma|Microbes live in soil and water.|Mikroplar toprakta ve suda yaşar.
+SCIENCE|microorganism|n|mikroorganizma|Yogurt is made with microorganisms.|Yoğurt mikroorganizmalarla yapılır.
+SCIENCE|migration|n|göç (hayvan)|Bird migration can cover thousands of km.|Kuş göçü binlerce kilometreyi bulabilir.
+SCIENCE|mitosis|n|mitoz|Mitosis produces two identical cells.|Mitoz iki özdeş hücre üretir.
+SCIENCE|mollusc|n|yumuşakça|Snails and squid are molluscs.|Salyangozlar ve kalamarlar yumuşakçadır.
+SCIENCE|mutation|n|mutasyon|A mutation changed the gene.|Bir mutasyon geni değiştirdi.
+SCIENCE|natural selection|n|doğal seçilim|Natural selection favours fit individuals.|Doğal seçilim uyumlu bireyleri kayırır.
+SCIENCE|nectar|n|nektar|Bees collect nectar from flowers.|Arılar çiçeklerden nektar toplar.
+SCIENCE|nucleus|n|çekirdek (hücre)|The nucleus controls the cell.|Çekirdek hücreyi yönetir.
+SCIENCE|nutrition|n|beslenme|Good nutrition helps growth.|İyi beslenme büyümeye yardımcı olur.
+SCIENCE|offspring|n|yavru, döl|The mother protects her offspring.|Anne yavrularını korur.
+SCIENCE|omnivore|n|hem etçil hem otçul|Humans are omnivores.|İnsanlar hem et hem bitki yer.
+SCIENCE|organism|n|organizma, canlı|Bacteria are single-celled organisms.|Bakteriler tek hücreli organizmalardır.
+SCIENCE|oxygen|n|oksijen|Plants release oxygen.|Bitkiler oksijen salar.
+SCIENCE|parasite|n|parazit|A tapeworm is a parasite.|Tenya bir parazittir.
+SCIENCE|pesticide|n|böcek ilacı|Pesticides can harm bees.|Böcek ilaçları arılara zarar verebilir.
+SCIENCE|photosynthesis|n|fotosentez|Photosynthesis needs light and water.|Fotosentez ışık ve su gerektirir.
+SCIENCE|pigment|n|pigment, boya maddesi|Melanin is a pigment in skin.|Melanin ciltteki bir pigmenttir.
+SCIENCE|pollen|n|polen, çiçek tozu|Wind carries pollen to other plants.|Rüzgâr poleni başka bitkilere taşır.
+SCIENCE|pollination|n|tozlaşma|Bees help in pollination.|Arılar tozlaşmaya yardım eder.
+SCIENCE|population|n|nüfus; popülasyon|The wolf population is growing.|Kurt popülasyonu büyüyor.
+SCIENCE|predator|n|avcı, yırtıcı|The eagle is a skilled predator.|Kartal usta bir avcıdır.
+SCIENCE|prey|n|av|Mice are prey for owls.|Fareler baykuşların avıdır.
+SCIENCE|producer|n|üretici (besin zinciri)|Plants are primary producers.|Bitkiler birincil üreticilerdir.
+SCIENCE|protein|n|protein|Meat is rich in protein.|Et proteinden zengindir.
+SCIENCE|reproduction|n|üreme|Reproduction ensures a species survives.|Üreme bir türün sürmesini sağlar.
+SCIENCE|reptile|n|sürüngen|Snakes are reptiles.|Yılanlar sürüngendir.
+SCIENCE|respiration|n|solunum|Cell respiration releases energy.|Hücre solunumu enerji açığa çıkarır.
+SCIENCE|root|n|kök|Roots absorb water from the soil.|Kökler topraktan su emer.
+SCIENCE|seed|n|tohum|A seed needs water to sprout.|Tohum filizlenmek için suya ihtiyaç duyar.
+SCIENCE|species|n|tür|Thousands of species live in the forest.|Ormanda binlerce tür yaşar.
+SCIENCE|spore|n|spor|Fungi spread by spores.|Mantarlar sporlarla yayılır.
+SCIENCE|stem|n|gövde, sap|Water moves up the stem.|Su gövdeden yukarı çıkar.
+SCIENCE|symbiosis|n|simbiyoz, ortak yaşam|Bees and flowers live in symbiosis.|Arılar ve çiçekler ortak yaşam içindedir.
+SCIENCE|tissue|n|doku|Muscle tissue contracts.|Kas dokusu kasılır.
+SCIENCE|trait|n|özellik, karakter|Eye colour is an inherited trait.|Göz rengi kalıtsal bir özelliktir.
+SCIENCE|vegetation|n|bitki örtüsü|Dense vegetation covers the hills.|Sık bir bitki örtüsü tepeleri kaplıyor.
+SCIENCE|vertebrate|n|omurgalı|Fish are vertebrates.|Balıklar omurgalıdır.
+SCIENCE|vertebra|n|omur|The spine consists of vertebrae.|Omurga omurlardan oluşur.
+SCIENCE|vital|adj|hayati, yaşamsal|Water is vital for all life.|Su tüm yaşam için hayatidir.
+SCIENCE|wildlife|n|yaban hayatı|The park protects local wildlife.|Park yerel yaban hayatını korur.
+SCIENCE|zoology|n|zooloji, hayvanbilim|Zoology studies animals.|Zooloji hayvanları inceler.
+SCIENCE|acid|n|asit|Lemon juice contains acid.|Limon suyu asit içerir.
+SCIENCE|alkali|n|alkali, baz|Soap is slightly alkali.|Sabun hafif alkalidir.
+SCIENCE|alloy|n|alaşım|Bronze is an alloy of copper and tin.|Bronz, bakır ve kalay alaşımıdır.
+SCIENCE|atom|n|atom|An atom has a nucleus and electrons.|Bir atomun çekirdeği ve elektronları vardır.
+SCIENCE|bond|n|bağ (kimyasal)|A covalent bond shares electrons.|Kovalent bağ elektron paylaşır.
+SCIENCE|catalyst|n|katalizör|A catalyst speeds up a reaction.|Katalizör tepkimeyi hızlandırır.
+SCIENCE|compound|n|bileşik|Water is a compound of hydrogen and oxygen.|Su, hidrojen ve oksijenin bileşiğidir.
+SCIENCE|concentration|n|derişim|Raise the concentration of the solution.|Çözeltinin derişimini artırın.
+SCIENCE|condensation|n|yoğuşma|Condensation forms drops on the glass.|Yoğuşma camda damlalar oluşturur.
+SCIENCE|corrosion|n|korozyon, paslanma|Salt water speeds up corrosion.|Tuzlu su korozyonu hızlandırır.
+SCIENCE|crystal|n|kristal|Salt forms cubic crystals.|Tuz kübik kristaller oluşturur.
+SCIENCE|distillation|n|damıtma|Distillation separates liquids by boiling point.|Damıtma sıvıları kaynama noktasına göre ayırır.
+SCIENCE|electron|n|elektron|Electrons carry a negative charge.|Elektronlar negatif yük taşır.
+SCIENCE|element|n|element|Gold is a chemical element.|Altın bir kimyasal elementtir.
+SCIENCE|evaporation|n|buharlaşma|Evaporation leaves the salt behind.|Buharlaşma tuzu geride bırakır.
+SCIENCE|filter|v|süzmek|Filter the mixture to remove sand.|Kumu ayırmak için karışımı süzün.
+SCIENCE|flammable|adj|yanıcı|Petrol is highly flammable.|Benzin çok yanıcıdır.
+SCIENCE|fuel|n|yakıt|Coal is a fossil fuel.|Kömür bir fosil yakıttır.
+SCIENCE|gas|n|gaz|Hydrogen is a very light gas.|Hidrojen çok hafif bir gazdır.
+SCIENCE|hydrogen|n|hidrojen|Hydrogen is the lightest element.|Hidrojen en hafif elementtir.
+SCIENCE|insoluble|adj|çözünmez|Sand is insoluble in water.|Kum suda çözünmez.
+SCIENCE|ion|n|iyon|Salt breaks into ions in water.|Tuz suda iyonlarına ayrılır.
+SCIENCE|liquid|n|sıvı|Water is a liquid at room temperature.|Su oda sıcaklığında sıvıdır.
+SCIENCE|mass|n|kütle|Mass is measured in kilograms.|Kütle kilogramla ölçülür.
+SCIENCE|melt|v|erimek|Ice melts above zero.|Buz sıfırın üzerinde erir.
+SCIENCE|metal|n|metal|Iron is a strong metal.|Demir sağlam bir metaldir.
+SCIENCE|mixture|n|karışım|Air is a mixture of gases.|Hava gazların karışımıdır.
+SCIENCE|molecule|n|molekül|A water molecule has three atoms.|Bir su molekülünde üç atom vardır.
+SCIENCE|neutron|n|nötron|Neutrons have no charge.|Nötronların yükü yoktur.
+SCIENCE|nitrogen|n|azot|Air is mostly nitrogen.|Havanın çoğu azottur.
+SCIENCE|oxidation|n|oksitlenme|Oxidation turns iron into rust.|Oksitlenme demiri pasa çevirir.
+SCIENCE|periodic table|n|periyodik tablo|Elements are listed in the periodic table.|Elementler periyodik tabloda listelenir.
+SCIENCE|polymer|n|polimer|Plastic is a synthetic polymer.|Plastik sentetik bir polimerdir.
+SCIENCE|precipitate|n|çökelti|A white precipitate formed in the tube.|Tüpte beyaz bir çökelti oluştu.
+SCIENCE|proton|n|proton|Protons carry a positive charge.|Protonlar pozitif yük taşır.
+SCIENCE|reactant|n|tepkimeye girenler|The reactants are mixed in a flask.|Tepkimeye girenler bir balonda karıştırılır.
+SCIENCE|reaction|n|tepkime, reaksiyon|The reaction gave off heat.|Tepkime ısı verdi.
+SCIENCE|salt|n|tuz|Salt dissolves in water.|Tuz suda çözünür.
+SCIENCE|solid|n|katı|Ice is water in solid form.|Buz, suyun katı hâlidir.
+SCIENCE|soluble|adj|çözünür|Sugar is soluble in water.|Şeker suda çözünür.
+SCIENCE|solution|n|çözelti|Add salt to the solution.|Çözeltiye tuz ekleyin.
+SCIENCE|solvent|n|çözücü|Water is a common solvent.|Su yaygın bir çözücüdür.
+SCIENCE|substance|n|madde|Mercury is a toxic substance.|Cıva zehirli bir maddedir.
+SCIENCE|synthesis|n|sentez|The synthesis of the drug took years.|İlacın sentezi yıllar aldı.
+SCIENCE|toxic|adj|zehirli|Toxic waste must be handled carefully.|Zehirli atıklar dikkatle ele alınmalıdır.
+SCIENCE|vapour|n|buhar|Water vapour rose from the pot.|Tencereden su buharı yükseldi.
+SCIENCE|viscosity|n|akışkanlık direnci, koyuluk|Honey has a high viscosity.|Balın koyuluğu yüksektir.
+SCIENCE|volatile|adj|uçucu|Alcohol is a volatile liquid.|Alkol uçucu bir sıvıdır.
+SCIENCE|acceleration|n|ivme|Acceleration is a change in speed.|İvme hızdaki değişimdir.
+SCIENCE|amplitude|n|genlik|A louder sound has greater amplitude.|Daha yüksek bir sesin genliği daha büyüktür.
+SCIENCE|battery|n|pil, batarya|The battery ran out of power.|Pilin şarjı bitti.
+SCIENCE|buoyancy|n|kaldırma kuvveti|Buoyancy keeps the ship afloat.|Kaldırma kuvveti gemiyi suda tutar.
+SCIENCE|circuit|n|devre|The circuit has a switch and a bulb.|Devrede bir anahtar ve bir ampul var.
+SCIENCE|conductor|n|iletken|Copper is a good conductor.|Bakır iyi bir iletkendir.
+SCIENCE|current|n|akım|An electric current flows through the wire.|Telin içinden elektrik akımı geçer.
+SCIENCE|density|n|yoğunluk|Lead has a high density.|Kurşunun yoğunluğu yüksektir.
+SCIENCE|diffraction|n|kırınım|Diffraction bends waves around corners.|Kırınım dalgaları köşelerde büker.
+SCIENCE|electricity|n|elektrik|Wind turbines produce electricity.|Rüzgâr türbinleri elektrik üretir.
+SCIENCE|electromagnetic|adj|elektromanyetik|Light is an electromagnetic wave.|Işık elektromanyetik bir dalgadır.
+SCIENCE|energy|n|enerji|Energy cannot be created or destroyed.|Enerji yoktan var edilemez ya da yok edilemez.
+SCIENCE|force|n|kuvvet|Gravity is a force.|Yerçekimi bir kuvvettir.
+SCIENCE|friction|n|sürtünme|Friction slows the sliding box.|Sürtünme kayan kutuyu yavaşlatır.
+SCIENCE|frequency|n|frekans|The frequency of the wave is 50 Hz.|Dalganın frekansı 50 Hz'dir.
+SCIENCE|gravity|n|yerçekimi|Gravity pulls objects to the ground.|Yerçekimi nesneleri yere çeker.
+SCIENCE|inertia|n|eylemsizlik, atalet|Inertia keeps a moving object moving.|Eylemsizlik hareket eden cismi hareketli tutar.
+SCIENCE|insulator|n|yalıtkan|Rubber is a good insulator.|Kauçuk iyi bir yalıtkandır.
+SCIENCE|kinetic|adj|kinetik, hareket enerjisine ait|A moving car has kinetic energy.|Hareket eden bir arabanın kinetik enerjisi vardır.
+SCIENCE|lens|n|mercek|A lens bends light.|Mercek ışığı kırar.
+SCIENCE|magnet|n|mıknatıs|A magnet attracts iron.|Mıknatıs demiri çeker.
+SCIENCE|magnetic|adj|manyetik|The earth has a magnetic field.|Dünyanın manyetik bir alanı vardır.
+SCIENCE|momentum|n|momentum, devinirlik|A heavy truck has great momentum.|Ağır bir kamyonun momentumu büyüktür.
+SCIENCE|motion|n|hareket|Newton described the laws of motion.|Newton hareket yasalarını tanımladı.
+SCIENCE|nuclear|adj|nükleer, çekirdeksel|Nuclear power produces no carbon dioxide.|Nükleer enerji karbondioksit üretmez.
+SCIENCE|optics|n|optik|Optics studies light and vision.|Optik ışığı ve görmeyi inceler.
+SCIENCE|oscillation|n|salınım, titreşim|The oscillation of the pendulum is regular.|Sarkacın salınımı düzenlidir.
+SCIENCE|pendulum|n|sarkaç|The pendulum swings back and forth.|Sarkaç ileri geri sallanır.
+SCIENCE|pressure|n|basınç|Water pressure increases with depth.|Su basıncı derinlikle artar.
+SCIENCE|pulley|n|makara|A pulley makes lifting easier.|Makara kaldırmayı kolaylaştırır.
+SCIENCE|radioactive|adj|radyoaktif|Uranium is a radioactive element.|Uranyum radyoaktif bir elementtir.
+SCIENCE|reflection|n|yansıma|The reflection in the mirror is reversed.|Aynadaki yansıma terstir.
+SCIENCE|refraction|n|kırılma|Refraction makes a straw look bent.|Kırılma bir payandayı eğri gösterir.
+SCIENCE|resistance|n|direnç|Thin wires have high resistance.|İnce tellerin direnci yüksektir.
+SCIENCE|resonance|n|rezonans|Resonance can shatter a glass.|Rezonans bir bardağı çatlatabilir.
+SCIENCE|semiconductor|n|yarı iletken|Silicon is a semiconductor.|Silisyum bir yarı iletkendir.
+SCIENCE|spectrum|n|tayf, spektrum|Prisms split light into a spectrum.|Prizmalar ışığı tayfa ayırır.
+SCIENCE|temperature|n|sıcaklık|The temperature fell below zero.|Sıcaklık sıfırın altına düştü.
+SCIENCE|thermal|adj|ısıl, termal|Thermal energy flows from hot to cold.|Isıl enerji sıcaktan soğuğa akar.
+SCIENCE|transistor|n|transistör|A transistor can switch a signal.|Transistör bir sinyali açıp kapatabilir.
+SCIENCE|velocity|n|hız (yönlü), süratle|Velocity includes speed and direction.|Hız büyüklüğü ve yönü içerir.
+SCIENCE|voltage|n|gerilim, voltaj|The voltage of the battery is 9 V.|Pilin gerilimi 9 V'tur.
+SCIENCE|wavelength|n|dalga boyu|Red light has a long wavelength.|Kırmızı ışığın dalga boyu uzundur.
+SCIENCE|asteroid|n|asteroit|An asteroid hit the planet long ago.|Çok önce bir asteroit gezegene çarptı.
+SCIENCE|astronomy|n|astronomi, gökbilim|Astronomy studies the stars.|Astronomi yıldızları inceler.
+SCIENCE|atmosphere|n|atmosfer|The atmosphere protects us from radiation.|Atmosfer bizi radyasyondan korur.
+SCIENCE|comet|n|kuyruklu yıldız|The comet appears every 76 years.|Kuyruklu yıldız her 76 yılda bir görünür.
+SCIENCE|constellation|n|takımyıldız|Orion is a famous constellation.|Avcı, ünlü bir takımyıldızıdır.
+SCIENCE|cosmos|n|evren, kozmos|Scientists study the origin of the cosmos.|Bilim insanları evrenin kökenini inceler.
+SCIENCE|eclipse|n|tutulma|A lunar eclipse darkens the moon.|Ay tutulması ayı karartır.
+SCIENCE|galaxy|n|gökada, galaksi|Our galaxy contains billions of stars.|Galaksimiz milyarlarca yıldız içerir.
+SCIENCE|meteor|n|göktaşı, meteor|A meteor streaked across the sky.|Bir meteor gökyüzünü çizdi.
+SCIENCE|nebula|n|bulutsu|A nebula is a cloud of gas and dust.|Bulutsu bir gaz ve toz bulutudur.
+SCIENCE|orbit|n|yörünge|The moon's orbit is nearly circular.|Ay'ın yörüngesi neredeyse dairesel.
+SCIENCE|planet|n|gezegen|Mars is the fourth planet from the sun.|Mars güneşten sonraki dördüncü gezegendir.
+SCIENCE|satellite|n|uydu|A satellite sends weather images.|Bir uydu hava durumu görüntüleri gönderir.
+SCIENCE|solar|adj|güneşe ait|Solar panels turn sunlight into power.|Güneş panelleri güneş ışığını elektriğe çevirir.
+SCIENCE|telescope|n|teleskop|He watched Saturn through a telescope.|Satürn'ü teleskopla izledi.
+SCIENCE|universe|n|evren|The universe is expanding.|Evren genişliyor.
+SCIENCE|avalanche|n|çığ|An avalanche buried the road.|Bir çığ yolu gömdü.
+SCIENCE|bedrock|n|ana kaya|The tower rests on solid bedrock.|Kule sağlam bir ana kayaya oturuyor.
+SCIENCE|canyon|n|kanyon|The river carved a deep canyon.|Nehir derin bir kanyon oydu.
+SCIENCE|climate|n|iklim|The climate here is dry and hot.|Buranın iklimi kurak ve sıcaktır.
+SCIENCE|crust|n|yer kabuğu|The earth's crust is thin.|Yer kabuğu incedir.
+SCIENCE|delta|n|delta|The river forms a delta at the sea.|Nehir denizde bir delta oluşturur.
+SCIENCE|drought|n|kuraklık|A long drought destroyed the crops.|Uzun bir kuraklık ürünleri yok etti.
+SCIENCE|earthquake|n|deprem|The earthquake struck at night.|Deprem gece vurdu.
+SCIENCE|erosion|n|erozyon, aşınma|Erosion washes away fertile soil.|Erozyon verimli toprağı sürükler.
+SCIENCE|fault|n|fay hattı; hata|The earthquake occurred along a fault.|Deprem bir fay boyunca meydana geldi.
+SCIENCE|glacier|n|buzul|The glacier is melting fast.|Buzul hızla eriyor.
+SCIENCE|greenhouse|n|sera|The greenhouse effect warms the planet.|Sera etkisi gezegeni ısıtır.
+SCIENCE|humidity|n|nem|High humidity makes it feel hotter.|Yüksek nem havayı daha sıcak hissettirir.
+SCIENCE|lava|n|lav|Lava flowed down the slope.|Lav yamaçtan aşağı aktı.
+SCIENCE|magma|n|magma|Magma rises from deep underground.|Magma yer altının derinliklerinden yükselir.
+SCIENCE|mineral|n|mineral, maden|Quartz is a common mineral.|Kuvars yaygın bir mineraldir.
+SCIENCE|monsoon|n|muson|The monsoon brings heavy rain.|Muson şiddetli yağmur getirir.
+SCIENCE|precipitation|n|yağış|Annual precipitation is 500 mm.|Yıllık yağış 500 mm'dir.
+SCIENCE|sediment|n|tortu, çökelti|Sediment settles at the river bottom.|Tortu nehir tabanında çöker.
+SCIENCE|seismic|adj|depremle ilgili, sismik|Seismic waves travel through the earth.|Sismik dalgalar yerin içinden geçer.
+SCIENCE|stalactite|n|sarkıt|A stalactite hangs from the cave roof.|Mağara tavanından bir sarkıt sarkar.
+SCIENCE|tsunami|n|tsunami|The tsunami swept over the coast.|Tsunami kıyıyı süpürdü.
+SCIENCE|tundra|n|tundra|The tundra is frozen for most of the year.|Tundra yılın çoğunda donmuştur.
+SCIENCE|volcano|n|yanardağ, volkan|The volcano last erupted in 1980.|Yanardağ en son 1980'de patladı.
+SCIENCE|weathering|n|ayrışma, aşınma|Weathering breaks rock into soil.|Ayrışma kayayı toprağa dönüştürür.

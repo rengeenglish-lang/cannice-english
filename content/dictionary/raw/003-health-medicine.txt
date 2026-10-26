@@ -1,0 +1,216 @@
+HEALTH|abdomen|n|karın, batın|The pain was in the lower abdomen.|Ağrı alt karındaydı.
+HEALTH|abscess|n|apse, irin kesesi|The dentist drained the abscess.|Diş hekimi apseyi boşalttı.
+HEALTH|addiction|n|bağımlılık|Addiction needs long-term treatment.|Bağımlılık uzun süreli tedavi gerektirir.
+HEALTH|adrenaline|n|adrenalin|Adrenaline raises the heart rate.|Adrenalin kalp atışını hızlandırır.
+HEALTH|allergen|n|alerjen|Pollen is a common allergen.|Polen yaygın bir alerjendir.
+HEALTH|allergy|n|alerji|She has an allergy to nuts.|Fındık alerjisi var.
+HEALTH|amputation|n|ampütasyon, uzuv kesilmesi|The injury led to the amputation of his leg.|Yaralanma bacağının kesilmesine yol açtı.
+HEALTH|anaemia|n|kansızlık|Iron deficiency causes anaemia.|Demir eksikliği kansızlığa yol açar.
+HEALTH|anaesthesia|n|anestezi, uyuşturma|The operation was done under general anaesthesia.|Ameliyat genel anestezi altında yapıldı.
+HEALTH|analgesic|n|ağrı kesici|An analgesic eased the pain.|Bir ağrı kesici acıyı hafifletti.
+HEALTH|aneurysm|n|anevrizma|A brain aneurysm can burst without warning.|Beyin anevrizması habersiz patlayabilir.
+HEALTH|angina|n|anjina, göğüs ağrısı|Angina is a sign of heart disease.|Anjina kalp hastalığının belirtisidir.
+HEALTH|antibody|n|antikor|The body makes antibodies against the virus.|Vücut virüse karşı antikor üretir.
+HEALTH|antidote|n|panzehir|There is no known antidote to the poison.|Zehrin bilinen bir panzehiri yok.
+HEALTH|antiseptic|n|antiseptik|Clean the wound with an antiseptic.|Yarayı antiseptikle temizleyin.
+HEALTH|aorta|n|aort, ana atardamar|Blood leaves the heart through the aorta.|Kan kalpten aort yoluyla çıkar.
+HEALTH|appendix|n|apandis, ek|He had his appendix removed.|Apandisi alındı.
+HEALTH|arrhythmia|n|aritmi, kalp ritim bozukluğu|Arrhythmia may cause dizziness.|Aritmi baş dönmesine neden olabilir.
+HEALTH|artery|n|atardamar|A blocked artery can cause a heart attack.|Tıkanmış bir atardamar kalp krizine yol açabilir.
+HEALTH|arthritis|n|artrit, eklem iltihabı|Arthritis makes the joints stiff.|Artrit eklemleri sertleştirir.
+HEALTH|asthma|n|astım|Asthma makes breathing difficult.|Astım nefes almayı zorlaştırır.
+HEALTH|atrophy|n|atrofi, kas erimesi|Muscles atrophy without use.|Kaslar kullanılmazsa körelir.
+HEALTH|autopsy|n|otopsi|The autopsy showed the cause of death.|Otopsi ölüm nedenini gösterdi.
+HEALTH|bacterium|n|bakteri|A single bacterium can multiply fast.|Tek bir bakteri hızla çoğalabilir.
+HEALTH|bandage|n|sargı, bandaj|The nurse put a bandage on the cut.|Hemşire kesiğe sargı yaptı.
+HEALTH|benign|adj|iyi huylu|The tumour turned out to be benign.|Tümörün iyi huylu olduğu anlaşıldı.
+HEALTH|biopsy|n|biyopsi|A biopsy confirmed the diagnosis.|Biyopsi tanıyı doğruladı.
+HEALTH|bladder|n|mesane, idrar torbası|He had an infection of the bladder.|Mesane enfeksiyonu geçirdi.
+HEALTH|blister|n|su toplaması, kabarcık|New shoes gave her a blister.|Yeni ayakkabılar ayağında su topladı.
+HEALTH|bloodstream|n|kan dolaşımı|The drug enters the bloodstream quickly.|İlaç kan dolaşımına hızla karışır.
+HEALTH|bone marrow|n|kemik iliği|Bone marrow makes new blood cells.|Kemik iliği yeni kan hücreleri üretir.
+HEALTH|bronchitis|n|bronşit|Winter often brings bronchitis.|Kış sık sık bronşit getirir.
+HEALTH|bruise|n|morarma, çürük|He had a large bruise on his arm.|Kolunda büyük bir morluk vardı.
+HEALTH|cancer|n|kanser|Early tests can detect cancer.|Erken testler kanseri saptayabilir.
+HEALTH|capillary|n|kılcal damar|Oxygen passes through the capillary walls.|Oksijen kılcal damar duvarlarından geçer.
+HEALTH|cardiac|adj|kalple ilgili|He suffered a cardiac arrest.|Kalp durması geçirdi.
+HEALTH|cartilage|n|kıkırdak|Cartilage cushions the joints.|Kıkırdak eklemleri korur.
+HEALTH|cataract|n|katarakt|Cataract surgery restored her sight.|Katarakt ameliyatı görmesini geri kazandırdı.
+HEALTH|catheter|n|kateter|A catheter was placed in the vein.|Damara bir kateter yerleştirildi.
+HEALTH|cavity|n|boşluk; çürük (diş)|The dentist filled a cavity.|Diş hekimi bir çürüğü doldurdu.
+HEALTH|cerebral|adj|beyinle ilgili|Cerebral damage can affect speech.|Beyin hasarı konuşmayı etkileyebilir.
+HEALTH|cholesterol|n|kolesterol|High cholesterol raises heart risk.|Yüksek kolesterol kalp riskini artırır.
+HEALTH|circulation|n|dolaşım|Cold hands may signal poor circulation.|Soğuk eller zayıf dolaşımın belirtisi olabilir.
+HEALTH|cirrhosis|n|siroz|Alcohol can lead to cirrhosis.|Alkol siroza yol açabilir.
+HEALTH|clinical|adj|klinik|The drug is in clinical trials.|İlaç klinik deney aşamasında.
+HEALTH|clot|n|pıhtı|A blood clot blocked the vessel.|Bir kan pıhtısı damarı tıkadı.
+HEALTH|coma|n|koma|He was in a coma for a week.|Bir hafta komada kaldı.
+HEALTH|concussion|n|beyin sarsıntısı|The player suffered a concussion.|Oyuncu beyin sarsıntısı geçirdi.
+HEALTH|congenital|adj|doğuştan|Some heart defects are congenital.|Bazı kalp kusurları doğuştandır.
+HEALTH|contagious|adj|bulaşıcı|The flu is highly contagious.|Grip çok bulaşıcıdır.
+HEALTH|contraception|n|doğum kontrolü|Contraception is discussed in family planning.|Doğum kontrolü aile planlamasında ele alınır.
+HEALTH|cornea|n|kornea|The cornea covers the front of the eye.|Kornea gözün ön kısmını örter.
+HEALTH|coronary|adj|koroner, kalp damarlarıyla ilgili|Coronary disease kills many people.|Koroner hastalık birçok kişiyi öldürür.
+HEALTH|cortex|n|korteks, beyin kabuğu|The cortex controls thought and movement.|Korteks düşünce ve hareketi kontrol eder.
+HEALTH|cramp|n|kramp|He got a cramp in his leg.|Bacağına kramp girdi.
+HEALTH|cyst|n|kist|The doctor removed a small cyst.|Doktor küçük bir kisti aldı.
+HEALTH|dehydration|n|susuzluk, vücutta sıvı kaybı|Dehydration is dangerous in hot weather.|Sıcak havada vücudun susuz kalması tehlikelidir.
+HEALTH|dementia|n|bunama, demans|Dementia affects memory and judgement.|Demans hafızayı ve muhakemeyi etkiler.
+HEALTH|dermatitis|n|cilt iltihabı|Dermatitis causes itchy red skin.|Dermatit kaşıntılı kırmızı cilde neden olur.
+HEALTH|diabetes|n|diyabet, şeker hastalığı|Diabetes requires careful diet control.|Diyabet dikkatli diyet kontrolü gerektirir.
+HEALTH|dialysis|n|diyaliz|Kidney patients need dialysis.|Böbrek hastalarının diyalize ihtiyacı var.
+HEALTH|diaphragm|n|diyafram|The diaphragm helps us breathe.|Diyafram nefes almamıza yardım eder.
+HEALTH|digestion|n|sindirim|Fibre aids digestion.|Lif sindirime yardımcı olur.
+HEALTH|disinfect|v|dezenfekte etmek|Disinfect the wound before bandaging.|Sarmadan önce yarayı dezenfekte edin.
+HEALTH|dislocation|n|çıkık|He suffered a shoulder dislocation.|Omuz çıkığı geçirdi.
+HEALTH|disorder|n|bozukluk, rahatsızlık|Eating disorders affect many teenagers.|Yeme bozuklukları birçok genci etkiler.
+HEALTH|diuretic|n|idrar söktürücü|The doctor prescribed a diuretic.|Doktor idrar söktürücü yazdı.
+HEALTH|dizziness|n|baş dönmesi|Dizziness is a side effect of the drug.|Baş dönmesi ilacın bir yan etkisidir.
+HEALTH|donor|n|donör, verici|A kidney donor saved his life.|Bir böbrek vericisi hayatını kurtardı.
+HEALTH|duodenum|n|oniki parmak bağırsağı|Ulcers can form in the duodenum.|Ülserler oniki parmak bağırsağında oluşabilir.
+HEALTH|eczema|n|egzama|Eczema often starts in childhood.|Egzama genellikle çocuklukta başlar.
+HEALTH|edema|n|ödem, şişlik|Edema caused swelling in her ankles.|Ödem ayak bileklerinde şişlik yaptı.
+HEALTH|embolism|n|emboli, damar tıkanması|A pulmonary embolism is a medical emergency.|Akciğer embolisi tıbbi bir acildir.
+HEALTH|embryo|n|embriyo|The embryo develops in the womb.|Embriyo rahimde gelişir.
+HEALTH|emphysema|n|amfizem|Smoking is a major cause of emphysema.|Sigara amfizemin başlıca nedenidir.
+HEALTH|endocrine|adj|iç salgı bezleriyle ilgili|The endocrine system controls hormones.|Endokrin sistem hormonları kontrol eder.
+HEALTH|endoscopy|n|endoskopi|An endoscopy showed a small ulcer.|Endoskopi küçük bir ülser gösterdi.
+HEALTH|epidemic|n|salgın|An epidemic spread across the region.|Bölgede bir salgın yayıldı.
+HEALTH|epilepsy|n|sara, epilepsi|Epilepsy causes sudden seizures.|Epilepsi ani nöbetlere neden olur.
+HEALTH|esophagus|n|yemek borusu|Food travels down the esophagus.|Yiyecek yemek borusundan aşağı iner.
+HEALTH|fatigue|n|yorgunluk|Chronic fatigue can have many causes.|Kronik yorgunluğun birçok nedeni olabilir.
+HEALTH|fertility|n|doğurganlık|Age affects female fertility.|Yaş kadın doğurganlığını etkiler.
+HEALTH|fetus|n|fetüs, cenin|A scan shows the fetus's heartbeat.|Ultrason fetüsün kalp atışını gösterir.
+HEALTH|fever|n|ateş|The child had a high fever.|Çocuğun yüksek ateşi vardı.
+HEALTH|fibre|n|lif|Whole grains are rich in fibre.|Tam tahıllar liften zengindir.
+HEALTH|fracture|n|kırık|X-rays revealed a fracture in his arm.|Röntgen kolunda bir kırık gösterdi.
+HEALTH|gallbladder|n|safra kesesi|She had her gallbladder removed.|Safra kesesi alındı.
+HEALTH|gastric|adj|mideyle ilgili|Gastric juice helps break down food.|Mide özsuyu yiyeceğin parçalanmasına yardım eder.
+HEALTH|gland|n|bez|The thyroid is a gland in the neck.|Tiroid boyundaki bir bezdir.
+HEALTH|glaucoma|n|glokom, göz tansiyonu|Glaucoma can lead to blindness.|Glokom körlüğe yol açabilir.
+HEALTH|gout|n|gut|Gout causes painful swelling in the joints.|Gut eklemlerde ağrılı şişlik yapar.
+HEALTH|haemorrhage|n|kanama|He died of a brain haemorrhage.|Beyin kanamasından öldü.
+HEALTH|hepatitis|n|hepatit, karaciğer iltihabı|Hepatitis B is preventable by vaccine.|Hepatit B aşıyla önlenebilir.
+HEALTH|hernia|n|fıtık|He needed surgery for a hernia.|Fıtık için ameliyat olması gerekti.
+HEALTH|hormone|n|hormon|Insulin is a hormone made in the pancreas.|İnsülin pankreasta üretilen bir hormondur.
+HEALTH|hospitalize|v|hastaneye yatırmak|He was hospitalized with pneumonia.|Zatürre nedeniyle hastaneye yatırıldı.
+HEALTH|hygiene|n|hijyen, sağlık kuralları|Good hygiene prevents infection.|İyi hijyen enfeksiyonu önler.
+HEALTH|hypertension|n|yüksek tansiyon|Hypertension often has no symptoms.|Yüksek tansiyon çoğu zaman belirti vermez.
+HEALTH|hypothermia|n|hipotermi, vücut ısısının düşmesi|The climbers suffered hypothermia.|Dağcılar hipotermi geçirdi.
+HEALTH|immunity|n|bağışıklık|Vaccines build immunity to disease.|Aşılar hastalığa karşı bağışıklık oluşturur.
+HEALTH|implant|n|implant|He received a dental implant.|Diş implantı yaptırdı.
+HEALTH|inflammation|n|iltihap, enflamasyon|The drug reduces inflammation.|İlaç iltihabı azaltır.
+HEALTH|influenza|n|grip, influenza|Influenza spreads rapidly in winter.|Grip kışın hızla yayılır.
+HEALTH|inhaler|n|inhaler, soluma aygıtı|He uses an inhaler for his asthma.|Astımı için inhaler kullanıyor.
+HEALTH|insomnia|n|uykusuzluk|Insomnia is common under stress.|Uykusuzluk stres altında yaygındır.
+HEALTH|insulin|n|insülin|Diabetics may need insulin injections.|Diyabetlilerin insülin enjeksiyonuna ihtiyacı olabilir.
+HEALTH|intestine|n|bağırsak|The small intestine absorbs nutrients.|İnce bağırsak besinleri emer.
+HEALTH|intravenous|adj|damar içi|The patient received intravenous fluids.|Hastaya damar yoluyla sıvı verildi.
+HEALTH|jaundice|n|sarılık|Newborns can develop jaundice.|Yenidoğanlarda sarılık görülebilir.
+HEALTH|kidney|n|böbrek|Kidneys filter waste from the blood.|Böbrekler kandaki atıkları süzer.
+HEALTH|laceration|n|yırtık, kesik yara|The laceration needed ten stitches.|Yaraya on dikiş atıldı.
+HEALTH|larynx|n|gırtlak|The larynx contains the vocal cords.|Gırtlakta ses telleri bulunur.
+HEALTH|lesion|n|lezyon, doku hasarı|The scan found a lesion in the liver.|Tarama karaciğerde bir lezyon buldu.
+HEALTH|leukaemia|n|lösemi|Leukaemia is a cancer of the blood.|Lösemi kan kanseridir.
+HEALTH|ligament|n|bağ dokusu, bağ|He tore a ligament in his knee.|Dizindeki bir bağı yırttı.
+HEALTH|liver|n|karaciğer|The liver processes toxins.|Karaciğer toksinleri işler.
+HEALTH|lung|n|akciğer|Smoking damages the lungs.|Sigara akciğerlere zarar verir.
+HEALTH|lymph|n|lenf|Lymph carries white blood cells.|Lenf akyuvarları taşır.
+HEALTH|malaria|n|sıtma|Mosquitoes spread malaria.|Sivrisinekler sıtmayı yayar.
+HEALTH|malignant|adj|kötü huylu|The tumour was malignant.|Tümör kötü huyluydu.
+HEALTH|malnutrition|n|yetersiz beslenme|Malnutrition affects child growth.|Yetersiz beslenme çocuk gelişimini etkiler.
+HEALTH|mammogram|n|mamografi|A mammogram detects early breast cancer.|Mamografi erken meme kanserini saptar.
+HEALTH|measles|n|kızamık|Measles is preventable by vaccine.|Kızamık aşıyla önlenebilir.
+HEALTH|meningitis|n|menenjit|Meningitis is a serious infection.|Menenjit ciddi bir enfeksiyondur.
+HEALTH|menopause|n|menopoz|Menopause usually occurs around age fifty.|Menopoz genellikle elli yaş civarında olur.
+HEALTH|metabolism|n|metabolizma|Exercise speeds up metabolism.|Egzersiz metabolizmayı hızlandırır.
+HEALTH|migraine|n|migren|She gets severe migraines.|Şiddetli migren atakları geçiriyor.
+HEALTH|miscarriage|n|düşük|She suffered a miscarriage early on.|Erken dönemde düşük yaptı.
+HEALTH|mortality|n|ölüm oranı|Infant mortality has fallen sharply.|Bebek ölüm oranı keskin biçimde düştü.
+HEALTH|mucus|n|mukus, sümük|Mucus protects the lining of the nose.|Mukus burnun iç yüzeyini korur.
+HEALTH|muscle|n|kas|Regular exercise builds muscle.|Düzenli egzersiz kas geliştirir.
+HEALTH|nausea|n|bulantı|The drug may cause nausea.|İlaç bulantıya yol açabilir.
+HEALTH|nerve|n|sinir|A trapped nerve causes pain.|Sıkışmış bir sinir ağrıya neden olur.
+HEALTH|neuron|n|nöron, sinir hücresi|Neurons carry signals in the brain.|Nöronlar beyinde sinyal taşır.
+HEALTH|nutrient|n|besin öğesi|Vegetables supply many nutrients.|Sebzeler birçok besin öğesi sağlar.
+HEALTH|obesity|n|obezite, şişmanlık|Obesity raises the risk of diabetes.|Obezite diyabet riskini artırır.
+HEALTH|ointment|n|merhem|Apply the ointment twice a day.|Merhemi günde iki kez sürün.
+HEALTH|oncology|n|onkoloji|She works in the oncology ward.|Onkoloji servisinde çalışıyor.
+HEALTH|operation|n|ameliyat|The operation lasted three hours.|Ameliyat üç saat sürdü.
+HEALTH|organ|n|organ|The heart is a vital organ.|Kalp hayati bir organdır.
+HEALTH|osteoporosis|n|kemik erimesi|Osteoporosis makes bones fragile.|Kemik erimesi kemikleri kırılgan yapar.
+HEALTH|outbreak|n|salgın, patlak verme|An outbreak of cholera hit the town.|Kasabada kolera salgını çıktı.
+HEALTH|ovary|n|yumurtalık|Cysts can form in the ovary.|Yumurtalıkta kistler oluşabilir.
+HEALTH|pacemaker|n|kalp pili|A pacemaker keeps the heart steady.|Kalp pili kalbi düzenli tutar.
+HEALTH|palpitation|n|çarpıntı|Coffee can cause palpitations.|Kahve çarpıntıya neden olabilir.
+HEALTH|pancreas|n|pankreas|The pancreas produces insulin.|Pankreas insülin üretir.
+HEALTH|paralysis|n|felç|The accident caused paralysis of his legs.|Kaza bacaklarında felce yol açtı.
+HEALTH|parasite|n|parazit|Parasites live on other organisms.|Parazitler başka canlıların üzerinde yaşar.
+HEALTH|pathology|n|patoloji|Pathology studies the causes of disease.|Patoloji hastalıkların nedenlerini inceler.
+HEALTH|pediatric|adj|çocuk sağlığıyla ilgili|She works in a pediatric clinic.|Çocuk kliniğinde çalışıyor.
+HEALTH|pelvis|n|leğen kemiği|He broke his pelvis in the fall.|Düşerken leğen kemiğini kırdı.
+HEALTH|pharmacist|n|eczacı|The pharmacist explained the dose.|Eczacı dozu açıkladı.
+HEALTH|pharmacy|n|eczane|The pharmacy closes at ten.|Eczane saat onda kapanır.
+HEALTH|phobia|n|fobi, aşırı korku|She has a phobia of heights.|Yükseklik fobisi var.
+HEALTH|physician|n|hekim, doktor|The physician examined the patient.|Hekim hastayı muayene etti.
+HEALTH|physiotherapy|n|fizyoterapi|Physiotherapy helped his back pain.|Fizyoterapi sırt ağrısına iyi geldi.
+HEALTH|placebo|n|plasebo|Half the group received a placebo.|Grubun yarısına plasebo verildi.
+HEALTH|plasma|n|plazma|Plasma is the liquid part of blood.|Plazma kanın sıvı kısmıdır.
+HEALTH|pneumonia|n|zatürre|Pneumonia is dangerous for the elderly.|Zatürre yaşlılar için tehlikelidir.
+HEALTH|poison|n|zehir|The snake's poison is deadly.|Yılanın zehri öldürücüdür.
+HEALTH|pregnancy|n|hamilelik|Pregnancy lasts about nine months.|Hamilelik yaklaşık dokuz ay sürer.
+HEALTH|prescription|n|reçete|You need a prescription for this drug.|Bu ilaç için reçete gerekir.
+HEALTH|prognosis|n|prognoz, hastalığın seyri|The prognosis is good if caught early.|Erken yakalanırsa seyri iyidir.
+HEALTH|prostate|n|prostat|The prostate sits below the bladder.|Prostat mesanenin altında yer alır.
+HEALTH|prosthesis|n|protez|He walks with a prosthesis.|Protezle yürüyor.
+HEALTH|psychiatrist|n|psikiyatr, ruh hekimi|A psychiatrist treated her depression.|Bir psikiyatr depresyonunu tedavi etti.
+HEALTH|pulse|n|nabız|The nurse checked his pulse.|Hemşire nabzını kontrol etti.
+HEALTH|quarantine|n|karantina|The ship was held in quarantine.|Gemi karantinada tutuldu.
+HEALTH|radiation|n|radyasyon, ışınım|Radiation therapy targets cancer cells.|Radyasyon tedavisi kanser hücrelerini hedef alır.
+HEALTH|recovery|n|iyileşme|Her recovery took six weeks.|İyileşmesi altı hafta sürdü.
+HEALTH|rehabilitation|n|rehabilitasyon, iyileştirme|Rehabilitation after a stroke is slow.|İnmeden sonra rehabilitasyon yavaştır.
+HEALTH|relapse|n|nüks, hastalığın tekrarı|The patient had a relapse after a month.|Hasta bir ay sonra nüks yaşadı.
+HEALTH|respiratory|adj|solunumla ilgili|Respiratory problems increase in winter.|Solunum sorunları kışın artar.
+HEALTH|retina|n|retina, ağ tabaka|The retina senses light.|Retina ışığı algılar.
+HEALTH|rheumatism|n|romatizma|Rheumatism causes pain in joints.|Romatizma eklemlerde ağrıya neden olur.
+HEALTH|rash|n|döküntü|The baby had a red rash.|Bebeğin kırmızı bir döküntüsü vardı.
+HEALTH|scalpel|n|neşter|The surgeon picked up the scalpel.|Cerrah neşteri aldı.
+HEALTH|scar|n|yara izi|The surgery left a small scar.|Ameliyat küçük bir iz bıraktı.
+HEALTH|sedative|n|yatıştırıcı, sakinleştirici|He was given a mild sedative.|Ona hafif bir sakinleştirici verildi.
+HEALTH|seizure|n|nöbet|The child had a seizure at school.|Çocuk okulda nöbet geçirdi.
+HEALTH|sepsis|n|sepsis, kan zehirlenmesi|Sepsis requires urgent treatment.|Sepsis acil tedavi gerektirir.
+HEALTH|sibling|n|kardeş|Genes are shared between siblings.|Kardeşler arasında genler ortaktır.
+HEALTH|spinal|adj|omurgayla ilgili|He suffered a spinal injury.|Omurga yaralanması geçirdi.
+HEALTH|sprain|n|burkulma|She has a sprain in her ankle.|Ayak bileği burkuldu.
+HEALTH|stethoscope|n|steteskop|The doctor listened with a stethoscope.|Doktor steteskopla dinledi.
+HEALTH|stitch|n|dikiş|The cut needed five stitches.|Kesiğe beş dikiş atıldı.
+HEALTH|stomach|n|mide|He felt pain in his stomach.|Midesinde ağrı hissetti.
+HEALTH|stroke|n|inme, felç|A stroke can damage the brain.|İnme beyne zarar verebilir.
+HEALTH|syndrome|n|sendrom|Down syndrome is caused by an extra chromosome.|Down sendromu fazladan bir kromozomdan kaynaklanır.
+HEALTH|syringe|n|şırınga|The nurse filled the syringe.|Hemşire şırıngayı doldurdu.
+HEALTH|tablet|n|tablet, hap|Take one tablet after meals.|Yemeklerden sonra bir tablet alın.
+HEALTH|tendon|n|kiriş, tendon|The tendon connects muscle to bone.|Tendon kası kemiğe bağlar.
+HEALTH|thyroid|n|tiroit|An overactive thyroid speeds the heart.|Aşırı çalışan tiroit kalbi hızlandırır.
+HEALTH|tissue|n|doku|Healthy tissue grew back.|Sağlıklı doku yeniden oluştu.
+HEALTH|tonsil|n|bademcik|His tonsils were removed in childhood.|Bademcikleri çocukken alındı.
+HEALTH|toxin|n|toksin, zehirli madde|The liver removes toxins from the blood.|Karaciğer kandaki toksinleri temizler.
+HEALTH|transfusion|n|kan nakli|He needed a blood transfusion.|Kan nakline ihtiyacı vardı.
+HEALTH|transplant|n|organ nakli|She received a kidney transplant.|Böbrek nakli oldu.
+HEALTH|trauma|n|travma, yaralanma|The trauma unit treats accident victims.|Travma ünitesi kaza mağdurlarını tedavi eder.
+HEALTH|tumour|n|tümör|The tumour was removed surgically.|Tümör ameliyatla alındı.
+HEALTH|ulcer|n|ülser|Stress may worsen a stomach ulcer.|Stres mide ülserini kötüleştirebilir.
+HEALTH|ultrasound|n|ultrason|An ultrasound showed the baby's position.|Ultrason bebeğin konumunu gösterdi.
+HEALTH|umbilical|adj|göbekle ilgili|The umbilical cord links mother and baby.|Göbek bağı anne ile bebeği bağlar.
+HEALTH|urine|n|idrar|A urine test showed an infection.|İdrar testi enfeksiyon gösterdi.
+HEALTH|uterus|n|rahim|The uterus holds the growing baby.|Rahim büyüyen bebeği barındırır.
+HEALTH|vaccination|n|aşılama|Vaccination protects whole communities.|Aşılama tüm toplulukları korur.
+HEALTH|valve|n|kapakçık, valf|A faulty heart valve needs surgery.|Bozuk bir kalp kapakçığı ameliyat gerektirir.
+HEALTH|vein|n|toplardamar|Blood returns to the heart through veins.|Kan toplardamarlarla kalbe döner.
+HEALTH|ventilator|n|solunum cihazı|The patient was placed on a ventilator.|Hasta solunum cihazına bağlandı.
+HEALTH|vertigo|n|vertigo, baş dönmesi|Vertigo made him feel sick.|Vertigo midesini bulandırdı.
+HEALTH|virus|n|virüs|A virus cannot reproduce on its own.|Virüs kendi başına çoğalamaz.
+HEALTH|vitamin|n|vitamin|Citrus fruit is rich in vitamin C.|Narenciye C vitamini bakımından zengindir.
+HEALTH|wheeze|v|hırıltılı solumak|Asthma makes him wheeze.|Astım yüzünden hırıltıyla nefes alıyor.
+HEALTH|womb|n|rahim|The baby grows in the womb.|Bebek rahimde büyür.
+HEALTH|wound|n|yara|Clean the wound with water.|Yarayı suyla temizleyin.
+HEALTH|x-ray|n|röntgen|An x-ray showed a broken rib.|Röntgen kırık bir kaburga gösterdi.
