@@ -1079,3 +1079,11 @@ a {
 .study-prose { font-size: 1.125rem; font-weight: 400; line-height: 1.7; color: #1f2937; }
 @media (min-width: 640px) { .study-prose { font-size: 1.1875rem; } }
 .course-nav section:last-child { border-bottom: 0; }
+
+/* Shared photo panel for sign-in, registration and account recovery. */
+.auth-photo-story { position: relative; overflow: hidden; min-height: 680px; padding: 36px; }
+.auth-photo-story h2 { font-size: clamp(28px, 3vw, 40px); }
+@media (max-width: 767px) {
+  .auth-photo-story { min-height: 0; height: 340px; padding: 24px; }
+  .auth-photo-story h2 { font-size: 27px; }
+}

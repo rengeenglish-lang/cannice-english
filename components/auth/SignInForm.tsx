@@ -18,7 +18,7 @@ export function SignInForm({next}: {next?: string}) {
       <div>
         <div className="flex items-baseline justify-between gap-3">
           <label className="label" htmlFor="password">Şifre</label>
-          <Link href="/sifremi-unuttum" className="text-xs font-bold text-[color:var(--brand)] hover:underline">Şifremi unuttum</Link>
+          <Link href="/sifremi-unuttum" className="inline-flex min-h-11 items-center rounded-xl border border-[color:var(--border)] px-3 text-xs font-bold text-[color:var(--brand)] hover:bg-[color:var(--brand-soft)]">Şifremi unuttum</Link>
         </div>
         <input id="password" name="password" type="password" required autoComplete="current-password" className="auth-input" />
       </div>
