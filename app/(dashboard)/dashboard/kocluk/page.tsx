@@ -126,10 +126,10 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
   const hours = (m: number) => Math.round((m / 60) * 10) / 10;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
       <div className="space-y-6">
         {/* Today */}
-        <section aria-labelledby="today-title" className="dashboard-panel border-2 border-[color:var(--brand)]">
+        <section aria-labelledby="today-title" className="dashboard-panel coaching-hero">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="eyebrow">{dayLabel(todayKey, locale, { weekday: "long", day: "numeric", month: "long" })}</p>
@@ -273,7 +273,7 @@ export default async function CoachingDashboardPage({ searchParams }: { searchPa
         </section>
       </div>
 
-      <aside className="space-y-6">
+      <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
         {/* Target */}
         <section aria-labelledby="target-title" className="dashboard-panel">
           <p className="eyebrow flex items-center gap-1.5"><Target size={14} aria-hidden="true" /> {t.dash.target}</p>

@@ -16,10 +16,10 @@ export function CoachingNav({ items, label }: { items: { href: string; label: st
             <Link
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`inline-block rounded-full border px-4 py-2 text-sm font-bold transition ${
+              className={`inline-block rounded-full border px-5 py-2.5 text-sm font-bold transition duration-200 ${
                 isActive(item.href)
-                  ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white"
-                  : "border-[color:var(--border-strong)] bg-white text-slate-600 hover:border-[color:var(--brand)]"
+                  ? "border-[color:var(--brand)] bg-[color:var(--brand)] text-white shadow-[0_8px_20px_rgb(var(--accent-rgb)/.28)]"
+                  : "border-[color:var(--border-strong)] bg-white text-slate-600 hover:-translate-y-0.5 hover:border-[color:var(--brand)] hover:text-[color:var(--brand)]"
               }`}
             >
               {item.label}

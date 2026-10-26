@@ -1079,3 +1079,31 @@ a {
 .study-prose { font-size: 1.125rem; font-weight: 400; line-height: 1.7; color: #1f2937; }
 @media (min-width: 640px) { .study-prose { font-size: 1.1875rem; } }
 .course-nav section:last-child { border-bottom: 0; }
+
+/* Coaching dashboard: roomier, softer, more premium surfaces (scoped, no effect elsewhere). */
+.coaching-shell .dashboard-panel {
+  border-radius: 28px;
+  padding: 1.5rem 1.75rem;
+  border-color: color-mix(in srgb, var(--border) 70%, transparent);
+  background: linear-gradient(180deg, #fff 0%, color-mix(in srgb, var(--brand-soft) 28%, #fff) 100%);
+  box-shadow: 0 1px 2px rgb(var(--shadow-rgb) / 0.04), 0 22px 50px -18px rgb(var(--shadow-rgb) / 0.16);
+}
+@media (min-width: 1024px) {
+  .coaching-shell .dashboard-panel { padding: 1.9rem 2.2rem; }
+}
+a.dashboard-panel:hover, .coaching-shell a.dashboard-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 56px -18px rgb(var(--accent-rgb) / 0.28);
+}
+.coaching-shell a.dashboard-panel { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.coaching-shell .coaching-hero {
+  border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, #fff 0%, color-mix(in srgb, var(--brand-soft) 45%, #fff) 100%);
+  box-shadow: 0 2px 4px rgb(var(--shadow-rgb) / 0.05), 0 32px 70px -24px rgb(var(--accent-rgb) / 0.35);
+}
+.coaching-shell .learning-progress { height: 10px; }
+.coaching-shell .learning-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+}

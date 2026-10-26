@@ -18,11 +18,11 @@ export default async function CoachingLayout({ children }: { children: React.Rea
     { href: `${BASE}/ayarlar`, label: t.sections.settings },
   ];
   return (
-    <div lang={t.locale} className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div lang={t.locale} className="coaching-shell mx-auto w-full max-w-[1280px] py-2 sm:py-4">
       <header className="no-print">
         <div className="flex flex-wrap items-center gap-2">
           <p className="eyebrow">{t.title}</p>
-          <span className="rounded-full bg-[color:var(--success-soft)] px-2.5 py-0.5 text-[11px] font-black text-emerald-800">{t.free}</span>
+          <span className="rounded-full border border-emerald-200 bg-[color:var(--success-soft)] px-2.5 py-0.5 text-[11px] font-black text-emerald-800">{t.free}</span>
         </div>
       </header>
       {profile?.enabled ? <CoachingNav items={nav} label={t.title} /> : null}
