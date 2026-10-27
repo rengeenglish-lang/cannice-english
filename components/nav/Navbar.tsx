@@ -43,14 +43,14 @@ export async function Navbar() {
   const viewer = userId ? await getAuthContext() : null;
   const bar = viewer?.role === "STUDENT" ? await examCountdownBar(viewer.id).catch(() => null) : null;
   return (
-    <header className="sticky top-0 z-50 border-b border-[color:var(--border)] bg-white/90 backdrop-blur-xl">
+    <header className="site-header sticky top-0 z-50 border-b border-[color:var(--border)] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex shrink-0 items-center" aria-label="Netfener ana sayfa">
+        <Link href="/" className="site-header-brand flex shrink-0 items-center" aria-label="Netfener ana sayfa">
           <Logo size={40} />
         </Link>
         <nav className="hidden items-center gap-4 xl:flex xl:gap-6">
           <div className="group relative">
-            <Link href="/exams" className="flex items-center gap-1 whitespace-nowrap py-6 text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]">Sınavlar <ChevronDown size={15} /></Link>
+            <Link href="/exams" className="site-header-home-link flex items-center gap-1 whitespace-nowrap py-6 text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]">Sınavlar <ChevronDown size={15} /></Link>
             <div className="invisible absolute left-1/2 top-full w-[760px] -translate-x-1/2 translate-y-2 rounded-2xl border border-[color:var(--border)] bg-white p-2 opacity-0 shadow-xl transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
               <div className="grid w-[720px] grid-cols-5 gap-2 p-2">
                 {PLATFORM_EXAMS.map((exam) => <div key={exam.slug} className="rounded-2xl p-3" style={{ background: exam.soft }}>
@@ -69,7 +69,7 @@ export async function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]"
+              className="site-header-home-link whitespace-nowrap text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]"
             >
               {link.label}
             </Link>

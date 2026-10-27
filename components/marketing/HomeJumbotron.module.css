@@ -1,0 +1,20 @@
+.hero{position:relative;isolation:isolate;overflow:hidden;display:grid;place-items:center;min-height:780px;padding:150px 24px 190px;color:#fff;background:#092e23}
+.photo{object-fit:cover;object-position:center 46%;z-index:-3}
+.tint{position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(4,31,23,.64),rgba(3,30,22,.68) 65%,rgba(6,39,28,.7))}
+.content{width:100%;max-width:850px;margin:0 auto;text-align:center}
+.eyebrow{margin:0;font-size:12px;font-weight:800;letter-spacing:.2em;color:#d2f3df}
+.title{margin:25px 0 0;font-size:clamp(42px,5vw,72px);font-weight:850;line-height:1.08;letter-spacing:-.04em;color:#fff;text-wrap:balance;text-shadow:0 3px 25px #00180e33}
+.title span{color:#b7f2ce}
+.description{max-width:710px;margin:24px auto 0;color:#f2f8f5;font-size:18px;line-height:1.8;text-wrap:balance}
+.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:30px}
+.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:50px;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:750;transition:background .18s,color .18s}
+.primary{background:#bef3d0;color:#103e2b;border:1px solid #bef3d0;box-shadow:0 12px 30px #00180d26}
+.primary:hover{background:#d8fbe3}
+.secondary{background:#072b2080;border:1px solid #ffffff8c;color:#fff}
+.secondary:hover{background:#ffffff20}
+.primary:focus-visible,.secondary:focus-visible{outline:3px solid #fff;outline-offset:5px}
+.note{display:flex;align-items:center;justify-content:center;gap:7px;margin:20px 0 0;font-size:13px;color:#edf8f0}
+.wave{position:absolute;inset:auto 0 -1px;z-index:-1;width:100%;height:210px;pointer-events:none}
+.waveFill{fill:var(--surface,#fff)}
+@media(min-width:1700px){.hero{min-height:850px}.wave{height:260px}}
+@media(max-width:640px){.hero{min-height:740px;padding:145px 22px 165px}.photo{object-position:51% center}.tint{background:linear-gradient(180deg,#04251bd4,#04251bb5 72%,#04251bd9)}.eyebrow{font-size:10px;letter-spacing:.12em}.title{font-size:clamp(38px,10vw,48px);margin-top:23px}.description{font-size:16px;line-height:1.7;margin-top:20px}.actions{gap:10px;margin-top:26px}.primary,.secondary{width:100%;max-width:310px}.note{font-size:12px}.wave{height:125px}}

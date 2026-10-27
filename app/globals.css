@@ -1087,3 +1087,18 @@ a {
   .auth-photo-story { min-height: 0; height: 340px; padding: 24px; }
   .auth-photo-story h2 { font-size: 27px; }
 }
+
+/* The homepage alone uses an image-backed masthead; all other headers remain sticky. */
+body:has(.home-jumbotron) .site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  background: rgb(5 35 25 / .24);
+  border-color: rgb(255 255 255 / .18);
+  backdrop-filter: blur(6px);
+}
+body:has(.home-jumbotron) .site-header-brand { --foreground: #fff; }
+body:has(.home-jumbotron) .site-header-home-link,
+body:has(.home-jumbotron) .site-header > div > div > .ghost-button,
+body:has(.home-jumbotron) .site-header > div > div > form > .ghost-button,
+body:has(.home-jumbotron) .site-header button[aria-controls="mobile-navigation"] { color: #fff; }
+body:has(.home-jumbotron) .site-header-home-link:hover { color: #c4f4d6; }
