@@ -1,25 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import { PLATFORM_EXAMS } from "@/lib/platform";
 import styles from "./HomeJumbotron.module.css";
 
 export function HomeJumbotron({ levelTestHref }: { levelTestHref: string }) {
   return (
     <section className={`home-jumbotron ${styles.hero}`} aria-labelledby="home-hero-title">
-      <Image
-        src="/images/marketing/netfener-group-study.webp"
-        alt=""
-        fill
-        sizes="100vw"
-        preload
-        className={styles.photo}
-      />
+      <div className={styles.photoPanel}>
+        <Image
+          src="/images/marketing/netfener-study-light.webp"
+          alt=""
+          fill
+          sizes="(min-width: 1000px) 58vw, 100vw"
+          preload
+          className={styles.photo}
+        />
+      </div>
       <div className={styles.tint} aria-hidden="true" />
+      <div className={styles.fold} aria-hidden="true" />
       <div className={styles.content}>
-        <p className={styles.eyebrow}>{PLATFORM_EXAMS.map((exam) => exam.name).join(" · ")}</p>
+        <div className={styles.copy}>
+        <p className={styles.eyebrow}><span /> BEŞ SINAV. TEK ODAK: SENİN HEDEFİN.</p>
         <h1 id="home-hero-title" className={styles.title}>
-          Sınavına hazırlan.<br /><span>Hedefine ulaş.</span>
+          Sınavına<br />hazırlan.<br /><span>Hedefine ulaş.</span>
         </h1>
         <p className={styles.description}>
           Konu anlatımları, deneme sınavları, canlı grup dersleri ve çalışma materyalleri tek platformda.
@@ -29,12 +32,16 @@ export function HomeJumbotron({ levelTestHref }: { levelTestHref: string }) {
           <Link href={levelTestHref} className={styles.secondary}>Ücretsiz seviye tespiti</Link>
         </div>
         <p className={styles.note}><Check size={17} aria-hidden="true" /> İlk konu her sınavda ücretsiz.</p>
+        </div>
       </div>
-      <svg className={styles.wave} viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path d="M0 210C410 165 1080 130 1440 0V240H0Z" fill="white" fillOpacity=".12" />
-        <path d="M0 240C530 185 1130 170 1440 35V240H0Z" fill="white" fillOpacity=".3" />
-        <path d="M0 240C580 225 1180 170 1440 80V240H0Z" className={styles.waveFill} />
-      </svg>
+      <div className={styles.pathway} aria-label="Çalışma yolları">
+        <div className={styles.pathwayInner}>
+          <p className={styles.pathwayLabel}>HAZIRLIĞININ<br />HER ADIMINDA.</p>
+          <Link href="/konu-anlatim"><span>01</span> Konuyu öğren <ArrowRight size={16} aria-hidden="true" /></Link>
+          <Link href={levelTestHref}><span>02</span> Seviyeni gör <ArrowRight size={16} aria-hidden="true" /></Link>
+          <Link href="/group-lessons"><span>03</span> Birlikte ilerle <ArrowRight size={16} aria-hidden="true" /></Link>
+        </div>
+      </div>
     </section>
   );
 }
