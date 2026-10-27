@@ -1,17 +1,23 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Check, FileText, GraduationCap, LineChart, Play, Sparkles, Users } from "lucide-react";
-import type { listHomepageProducts } from "@/server/services/catalog.service";
+import { ArrowRight, BookOpen, CalendarDays, Check, Clock3, FileText, Play, Sparkles, Users } from "lucide-react";
+import type { listHomepageProducts, listHomepageGroups } from "@/server/services/catalog.service";
 import { formatTRY } from "@/lib/pricing";
 import { isMonthlyBilledCategory } from "@/lib/billing";
 import { PLATFORM_EXAMS } from "@/lib/platform";
+import { findNetfenerEdition } from "@/lib/netfener-ebook-editions";
+import { ebookFreePromoEndLabel, isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
+import { lessonDate, lessonTime } from "@/lib/availability";
 import { StudySample } from "./StudySample";
 import { SiteReviewsSection } from "@/components/site-reviews/SiteReviewsSection";
 import type { PublicReview } from "@/components/site-reviews/SiteReviewCard";
 import { AvailabilityHome } from "@/components/availability/AvailabilityHome";
+import styles from "./MaterialsHome.module.css";
 
 type HomeProduct = Awaited<ReturnType<typeof listHomepageProducts>>[number];
+type HomeGroup = Awaited<ReturnType<typeof listHomepageGroups>>[number];
 
-/** Member-only destinations: logged-out visitors go through registration and land on the target afterwards. */
+/** Return to the intended activity after registration. */
 function memberHref(href: string, isSignedIn: boolean) {
   return isSignedIn ? href : `/register?next=${encodeURIComponent(href)}`;
 }
@@ -23,33 +29,72 @@ const PILLARS = [
   { label: "GÜÇLEN", title: "Çalışma materyalleri", copy: "Soru bankaları, çalışma paketleri ve indirilebilir kaynaklar.", href: "/packages", icon: FileText, badge: null, membersOnly: false },
 ] as const;
 
-const JOURNEY = [
-  { title: "Öğren", copy: "Konu anlatımları", href: "/konu-anlatim", icon: BookOpen, membersOnly: false },
-  { title: "Pratik yap", copy: "Sorular ve simülasyonlar", href: "/dashboard/speaking-practice", icon: Play, membersOnly: true },
-  { title: "Eksiklerini gör", copy: "İlerlemeni takip et", href: "/dashboard", icon: LineChart, membersOnly: true },
-  { title: "Destek al", copy: "Grup dersi ve materyaller", href: "/group-lessons", icon: Users, membersOnly: false },
-  { title: "Hedefine ulaş", copy: "Planlı çalışmaya devam et", href: "/exams", icon: GraduationCap, membersOnly: false },
-] as const;
 
 const MEMBER_NOTE = "Ücretsiz üyelikle";
 
-function ProductCard({ product, isGroup = false }: { product: HomeProduct; isGroup?: boolean }) {
-  const href = product.category === "BOOK" ? `/books/${product.slug}` : `/packages/${product.slug}`;
-  const monthly = isGroup && isMonthlyBilledCategory(product.category);
-  return <article className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)]">
-    <p className="text-xs font-bold text-slate-500">{product.examType?.name ?? "İngilizce"}</p>
-    <h3 className="mt-2 text-xl font-black tracking-tight">{product.title}</h3>
-    <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">{product.shortDescription || product.description || "Sınav hazırlığını destekleyen çalışma kaynağı."}</p>
-    <div className="mt-auto flex items-end justify-between gap-4 pt-7">
-      <div><p className="text-xs font-bold text-slate-400">KDV dahil</p><p className="text-2xl font-black">{formatTRY(String(product.salePrice))}{monthly ? <span className="text-sm font-bold text-slate-500"> / ay</span> : null}</p></div>
-      <Link href={href} className="primary-button px-4">İncele <ArrowRight size={17} /></Link>
+function ResourceCard({ product }: { product: HomeProduct }) {
+  const edition = findNetfenerEdition(product.slug);
+  const book = edition?.book;
+  const href = book ? `/kaynaklar/e-kitaplar/onizleme/${book.slug}` : product.category === "BOOK" ? `/books/${product.slug}` : `/packages/${product.slug}`;
+  const promo = Boolean(book && edition?.edition !== "print" && isEbookFreePromoActive());
+  const cover = book?.cover ?? product.posterImageUrl;
+  return <article className={styles.card}>
+    <Link href={href} className={styles.bookStage} aria-label={`${product.title}: incele`}>
+      {cover ? <Image src={cover} alt={`${product.title} kapağı`} width={220} height={310} sizes="220px" unoptimized className={book ? styles.bookCover : styles.artwork} /> : <div className={styles.resourceMark}><BookOpen size={48} strokeWidth={1.25} aria-hidden="true" /><span>{product.examType?.name ?? "Netfener"} · Çalışma paketi</span></div>}
+    </Link>
+    <div className={styles.cardBody}>
+      <p className={styles.meta}>{product.examType?.name ?? "İngilizce"} · {book ? "Netfener e-kitapları" : "Çalışma kaynakları"}</p>
+      <h3 className={styles.cardTitle}><Link href={href}>{product.title}</Link></h3>
+      <p className={styles.cardCopy}>{product.shortDescription || product.description || "Sınav hazırlığını destekleyen çalışma kaynağı."}</p>
+      {book ? <div className={styles.facts}>
+        <span className={styles.fact}><FileText size={15} aria-hidden="true" />{book.pages} sayfa · {edition?.edition === "print" ? "Basılı kitap" : edition?.edition === "online" ? "Online okuma" : "PDF e-kitap"}</span>
+        <Link href={href} className={styles.previewLink}>10 sayfayı ücretsiz incele <ArrowRight size={14} aria-hidden="true" /></Link>
+      </div> : null}
+      <div className={styles.cardFooter}>
+        <div>
+          <p className={styles.meta}>{promo ? `${ebookFreePromoEndLabel()} tarihine kadar` : "KDV dahil"}</p>
+          <p className={styles.price}>{promo ? "Ücretsiz" : formatTRY(String(product.salePrice))}</p>
+          {promo ? <p className={styles.meta}>Online okuma ve PDF · PDF için ücretsiz hesap gerekir.</p> : null}
+        </div>
+        <Link href={href} className="secondary-button">{book ? "Kitabı incele" : "Kaynağı incele"} <ArrowRight size={16} aria-hidden="true" /></Link>
+      </div>
     </div>
   </article>;
 }
 
-export function MaterialsHome({ products, groups = [], reviews = [], isSignedIn = false }: { products: HomeProduct[]; groups?: HomeProduct[]; reviews?: PublicReview[]; isSignedIn?: boolean }) {
+function GroupCard({ product }: { product: HomeGroup }) {
+  const sessions = product.course?.liveSessions ?? [];
+  const minutes = sessions.reduce((sum, session) => sum + Math.round((session.endsAt.getTime() - session.startsAt.getTime()) / 60000), 0);
+  const instructors = [...new Set(sessions.flatMap(session => session.instructor?.name ? [session.instructor.name] : []))];
+  const monthly = isMonthlyBilledCategory(product.category);
+  return <article className={styles.card}>
+    <div className={styles.cardBody}>
+      <p className={styles.meta}>{product.examType?.name ?? "İngilizce"} · Canlı grup dersi</p>
+      <h3 className={styles.cardTitle}>{product.title}</h3>
+      <p className={styles.cardCopy}>{product.course?.syllabusSummary || product.shortDescription || product.description}</p>
+      <div className={styles.facts}>
+        {sessions.length ? <>
+          <span className={styles.fact}><CalendarDays size={15} aria-hidden="true" />Sonraki ders: {lessonDate(sessions[0].startsAt)}, {lessonTime(sessions[0].startsAt)} (TR)</span>
+          <span className={styles.fact}><Clock3 size={15} aria-hidden="true" />Açık takvimde {sessions.length} ders · toplam {minutes} dakika</span>
+        </> : <span className={styles.fact}><CalendarDays size={15} aria-hidden="true" />Güncel programı ders detayında inceleyin.</span>}
+        {instructors.length ? <span className={styles.fact}><Users size={15} aria-hidden="true" />Eğitmen: {instructors.join(", ")}</span> : null}
+      </div>
+      <div className={styles.cardFooter}>
+        <div>
+          <p className={styles.meta}>KDV dahil{monthly ? " · aylık ücret" : " · paket ücreti"}</p>
+          <p className={styles.price}>{formatTRY(String(product.salePrice))}{monthly ? <small> / ay</small> : null}</p>
+          <p className={styles.meta}>İçerik ve katılım koşullarını inceleyin.</p>
+        </div>
+        <Link href={`/packages/${product.slug}`} className="secondary-button">Program ve kapsam <ArrowRight size={16} aria-hidden="true" /></Link>
+      </div>
+    </div>
+  </article>;
+}
+
+export function MaterialsHome({ products, groups = [], reviews = [], isSignedIn = false }: { products: HomeProduct[]; groups?: HomeGroup[]; reviews?: PublicReview[]; isSignedIn?: boolean }) {
   const levelTestHref = memberHref("/seviye-tespit", isSignedIn);
-  return <main id="main-content" className="bg-white text-[color:var(--foreground)]">
+  return <main id="main-content" className={styles.home}>
+
     <section className="relative overflow-hidden bg-[#071b34] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgb(var(--glow-rgb)/.32),transparent_32%)]" />
       <div className="relative mx-auto grid w-full max-w-[1320px] items-center gap-12 px-4 py-14 sm:px-6 lg:min-h-[650px] lg:grid-cols-[1.1fr_.9fr] lg:px-8 lg:py-24">
@@ -70,23 +115,73 @@ export function MaterialsHome({ products, groups = [], reviews = [], isSignedIn 
       </div>
     </section>
 
-    <section id="sinavini-sec" className="mx-auto w-full max-w-[1320px] scroll-mt-24 px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="text-center"><p className="eyebrow">Beş sınav · tek platform</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Hangi sınava hazırlanıyorsun?</h2><p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-600">Sınavını seç; o sınava ait öğrenme, pratik, ders ve materyal yollarını birlikte gör.</p></div><div className="mt-9 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-5">{PLATFORM_EXAMS.map(({slug,name,description,color,soft,icon:Icon})=><Link key={slug} href={`/exams/${slug}`} className="exam-card group rounded-3xl border border-slate-200 p-4 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] transition last:col-span-2 hover:-translate-y-1 sm:p-6 lg:last:col-span-1" style={{background:soft}}><span className="grid size-10 place-items-center rounded-2xl text-white sm:size-12" style={{background:color}}><Icon/></span><h3 className="mt-4 text-xl font-black sm:mt-6 sm:text-2xl">{name}</h3><p className="mt-2 hidden text-sm leading-6 text-slate-600 sm:block">{description}</p><span className="mt-3 inline-flex items-center gap-2 text-sm font-extrabold sm:mt-5" style={{color}}><span className="sr-only sm:not-sr-only">Sınav alanına gir</span><ArrowRight size={17} aria-hidden="true" className="transition group-hover:translate-x-1"/></span></Link>)}</div></section>
+    <div className={styles.trust} aria-label="Başlamadan önce">
+      <div className={styles.trustInner}>
+        <span className={styles.trustItem}><BookOpen size={18} aria-hidden="true" />Her sınavda ilk konu ücretsiz</span>
+        <Link href="/kaynaklar/e-kitaplar" className={styles.trustItem}><FileText size={18} aria-hidden="true" />Kitapları satın almadan inceleyin</Link>
+        <Link href="/kocluk" className={styles.trustItem}><Users size={18} aria-hidden="true" />Ücretsiz öğrenci koçluğu</Link>
+      </div>
+    </div>
 
-    <SiteReviewsSection reviews={reviews} className="pb-14 sm:pb-16" />
+    <section id="sinavini-sec" className={`${styles.section} scroll-mt-24`} aria-labelledby="exam-choice-title">
+      <p className={styles.eyebrow}>Beş sınav · tek platform</p>
+      <h2 id="exam-choice-title" className={styles.heading}>Hazırlık yolunu sınavına göre seç.</h2>
+      <p className={styles.copy}>Konu anlatımları, sınav pratiği ve kaynaklar. İhtiyacın olan her şeye kendi sınav alanından ulaş.</p>
+      <div className={styles.examGrid}>
+        {PLATFORM_EXAMS.map(({ slug, name, description, icon: Icon }) => <Link key={slug} href={`/exams/${slug}`} className={styles.examCard}>
+          <span className={styles.examIcon}><Icon size={22} aria-hidden="true" /></span>
+          <h3>{name}</h3><p>{description}</p>
+          <span className={styles.examLink}>Sınavı keşfet <ArrowRight size={15} aria-hidden="true" /></span>
+        </Link>)}
+      </div>
+    </section>
 
-    <section className="bg-slate-50"><div className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">{PILLARS.map(({label,title,copy,href,membersOnly,icon:Icon,badge})=>{const gated = membersOnly && !isSignedIn; const tag = gated ? MEMBER_NOTE.toLocaleUpperCase("tr-TR") : badge; return <Link key={label} href={membersOnly ? memberHref(href, isSignedIn) : href} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 sm:p-6"><div className="flex flex-wrap items-center justify-between gap-2"><span className="grid size-10 place-items-center rounded-2xl bg-blue-50 text-blue-700 sm:size-11"><Icon/></span>{tag ? <span className="hidden whitespace-nowrap rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-black tracking-wide text-emerald-700 sm:inline-block">{tag}</span> : null}</div><p className="mt-5 text-xs font-extrabold tracking-widest text-blue-700 sm:mt-6">{label}</p><h3 className="mt-2 text-lg font-black sm:text-xl">{title}</h3>{tag ? <p className="mt-1 text-xs font-bold text-emerald-700 sm:hidden">{gated ? MEMBER_NOTE : "İlk konu ücretsiz"}</p> : null}<p className="mt-3 hidden text-sm leading-6 text-slate-600 sm:block">{copy}</p></Link>;})}</div></div></section>
-
-    <section className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="grid items-end gap-6 lg:grid-cols-[1fr_auto]"><div><p className="eyebrow">İlk konu ücretsiz</p><h2 className="mt-2 text-3xl font-black sm:text-4xl">Konu Anlatımları</h2><p className="mt-3 max-w-2xl leading-7 text-slate-600">Her sınavın ilk konusunu ücretsiz incele; tüm konulara planınla eriş. Konuyu öğren, ardından sınav pratiğiyle kendini test et.</p></div><Link href="/konu-anlatim" className="secondary-button">Tüm konuları gör <ArrowRight size={18}/></Link></div></section>
-
-    <section className="bg-[#071b34] text-white"><div className="mx-auto grid w-full max-w-[1320px] gap-10 px-4 py-14 sm:px-6 sm:py-16 lg:grid-cols-[.8fr_1.2fr] lg:px-8"><div><p className="text-xs font-extrabold uppercase tracking-widest text-blue-200">Gerçek sınava hazırlan</p><h2 className="mt-3 text-3xl font-black sm:text-4xl">Pratik yap, sınav akışını tanı.</h2><p className="mt-4 leading-7 text-slate-300">IELTS ve TOEFL Speaking simülasyonlarını kullan; YDS ve YÖKDİL için örnek sorularla öğrenme akışını dene.</p><div className="mt-7 flex flex-wrap gap-3"><Link href={memberHref("/dashboard/speaking-practice/ielts", isSignedIn)} className="primary-button">IELTS Speaking</Link><Link href={memberHref("/dashboard/speaking-practice/toefl", isSignedIn)} className="primary-button bg-white text-[#071b34] hover:bg-blue-50">TOEFL Speaking</Link></div>{isSignedIn ? null : <p className="mt-4 text-sm text-blue-200">Speaking simülasyonları ücretsiz üyelikle açılır. Aşağıdaki örnek soruyu hemen deneyebilirsin.</p>}</div><StudySample/></div></section>
+    <section className={styles.tinted} aria-labelledby="practice-title">
+      <div className={`${styles.section} ${styles.practice}`}>
+        <div>
+          <p className={styles.eyebrow}>Önce deneyimle</p>
+          <h2 id="practice-title" className={styles.heading}>Bir soruyla başla.<br />Nasıl öğrendiğini keşfet.</h2>
+          <p className={styles.copy}>Örnek soruyu hemen çöz, açıklamasını incele. Konu anlatımları ve sınav pratiğiyle çalışmana devam et.</p>
+          <ol className={styles.steps}>
+            <li className={styles.step}><span>1</span><div><h3>Konuyu öğren</h3><p>Her sınavın ilk konu anlatımı ücretsiz.</p></div></li>
+            <li className={styles.step}><span>2</span><div><h3>Pratikle pekiştir</h3><p>Sorulara ve Speaking simülasyonlarına ücretsiz üyelikle eriş.</p></div></li>
+            <li className={styles.step}><span>3</span><div><h3>Çalışmanı planla</h3><p>Koçluk, grup dersleri ve kaynaklarla hazırlığını destekle.</p></div></li>
+          </ol>
+          <div className={styles.actions}>
+            <Link href="/konu-anlatim" className="primary-button">İlk konuyu incele <ArrowRight size={16} aria-hidden="true" /></Link>
+            <Link href={memberHref("/dashboard/speaking-practice", isSignedIn)} className="secondary-button">Speaking pratiği</Link>
+          </div>
+        </div>
+        <StudySample />
+      </div>
+    </section>
 
     <AvailabilityHome />
-    {groups.length ? <section className="mx-auto w-full max-w-[1320px] px-4 pb-14 sm:px-6 sm:pb-16 lg:px-8"><div className="mb-7 flex items-end justify-between gap-4"><div><p className="eyebrow">Canlı öğren</p><h2 className="mt-2 text-3xl font-black">Sınavına özel gruplar</h2></div><Link href="/group-lessons" className="shrink-0 font-bold text-blue-700">Tüm gruplar →</Link></div><div className="grid gap-5 md:grid-cols-3">{groups.map(product=><ProductCard key={product.id} product={product} isGroup/>)}</div></section>:null}
+    {groups.length ? <section className={styles.section} aria-labelledby="group-plans-title">
+      <div className={styles.sectionHeader}>
+        <div><p className={styles.eyebrow}>Programlı, canlı öğrenme</p><h2 id="group-plans-title" className={styles.heading}>Sana uygun programı bul.</h2><p className={styles.copy}>Ders takvimini, eğitmeni ve kapsamı karşılaştır; hazırlığına uygun grubu seç.</p></div>
+        <Link href="/group-lessons" className="secondary-button">Tüm grup dersleri <ArrowRight size={16} aria-hidden="true" /></Link>
+      </div>
+      <div className={styles.grid}>{groups.map(product => <GroupCard key={product.id} product={product} />)}</div>
+    </section> : null}
 
-    <section className="bg-slate-50"><div className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="eyebrow">KAYNAKLARLA GÜÇLEN</p><h2 className="mt-2 text-3xl font-black sm:text-4xl">Başarın için özenle hazırlanmış kaynaklar</h2><p className="mt-3 max-w-2xl text-slate-600">Konu anlatımlarından ayrı, satın alınabilir soru bankaları ve çalışma paketleri.</p></div><Link href="/kaynaklar" className="secondary-button">Tüm kaynakları gör</Link></div><div className="mt-8 grid gap-5 md:grid-cols-3">{products.map(product=><ProductCard key={product.id} product={product}/>)}</div></div></section>
+    {products.length ? <section className={styles.tinted} aria-labelledby="resources-title">
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div><p className={styles.eyebrow}>Netfener kütüphanesi</p><h2 id="resources-title" className={styles.heading}>İçeriğini gör. Kaynağını seç.</h2><p className={styles.copy}>Kitap kapaklarının ötesine geç: örnek sayfaları ve açıklamalı uygulamaları incele, ihtiyacına uygun kaynakla devam et.</p></div>
+          <Link href="/kaynaklar" className="secondary-button">Tüm kaynaklar <ArrowRight size={16} aria-hidden="true" /></Link>
+        </div>
+        <div className={styles.grid}>{products.map(product => <ResourceCard key={product.id} product={product} />)}</div>
+      </div>
+    </section> : null}
 
-    <section className="mx-auto w-full max-w-[1320px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8"><div className="text-center"><p className="eyebrow">Nasıl çalışır?</p><h2 className="mt-2 text-3xl font-black">Öğrenmeden hedefe uzanan tek akış</h2></div><ol className="-mx-4 mt-9 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 md:mx-0 md:grid md:grid-cols-5 md:overflow-visible md:px-0 md:pb-0">{JOURNEY.map(({title,copy,href,membersOnly,icon:Icon},i)=><li key={title} className="w-[42%] shrink-0 snap-start md:w-auto"><Link href={membersOnly ? memberHref(href, isSignedIn) : href} className="block h-full rounded-2xl border border-slate-200 p-5 transition hover:border-blue-200"><span className="text-xs font-black text-blue-600">0{i+1}</span><Icon className="mt-5 text-blue-600"/><h3 className="mt-4 font-black">{title}</h3><p className="mt-2 text-xs leading-5 text-slate-500">{copy}{membersOnly && !isSignedIn ? ` · ${MEMBER_NOTE}` : ""}</p></Link></li>)}</ol></section>
+    <SiteReviewsSection reviews={reviews} className="py-16" />
 
-    <section className="mx-auto w-full max-w-[1320px] px-4 pb-20 sm:px-6 lg:px-8"><div className="rounded-[2rem] bg-[#071b34] p-8 text-center text-white sm:p-12"><p className="text-xs font-extrabold uppercase tracking-widest text-blue-200">Sıradaki adım senin</p><h2 className="mt-3 text-3xl font-black sm:text-4xl">Seviyeni öğren, planını seç.</h2><div className="mt-7 flex flex-wrap justify-center gap-3"><Link href={levelTestHref} className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-white px-6 text-sm font-black text-[#071b34] transition hover:-translate-y-1">Ücretsiz seviye tespiti <ArrowRight size={17}/></Link><Link href="/planlar" className="inline-flex min-h-12 items-center rounded-xl border border-white/30 px-6 text-sm font-black transition hover:bg-white/10">Planları incele</Link></div></div></section>
+    <section className={styles.section} aria-labelledby="next-step-title">
+      <div className={styles.closing}>
+        <div><p className={styles.eyebrow}>Sıradaki adım senin</p><h2 id="next-step-title" className={styles.heading}>Hazırlığa nereden başlayacağını öğren.</h2><p className={styles.copy}>Seviyeni gör, hedeflerine uygun çalışma yolunu seç.</p></div>
+        <div className={styles.actions}><Link href={levelTestHref} className="primary-button">Ücretsiz seviye tespiti <ArrowRight size={16} aria-hidden="true" /></Link><Link href="/planlar" className="secondary-button">Planları incele</Link></div>
+      </div>
+    </section>
   </main>;
 }

@@ -14,6 +14,7 @@ import { PaletteSwitcher } from "@/components/theme/PaletteSwitcher";
 import { getAuthContext } from "@/server/auth/context";
 import { examCountdownBar } from "@/server/services/exam-interests.service";
 import { ExamCountdownBar } from "@/components/exam-interests/ExamCountdownBar";
+import { ResourcesMenu } from "@/components/nav/ResourcesMenu";
 
 const NAV_LINKS = [
   { href: "/exams", label: "Sınavlar" },
@@ -21,9 +22,15 @@ const NAV_LINKS = [
   { href: "/group-lessons", label: "Grup Dersleri" },
   { href: "/planlar", label: "Planlar" },
   { href: "/kocluk", label: "Ücretsiz Koçluk" },
-  { href: "/kaynaklar", label: "Kaynaklar" },
+];
+
+const RESOURCE_LINKS = [
+  { href: "/kaynaklar", label: "Tüm kaynaklar" },
+  { href: "/kaynaklar/e-kitaplar", label: "E-kitaplar ve önizlemeler" },
   { href: "/sozluk", label: "Sözlük" },
   { href: "/thesaurus", label: "Thesaurus" },
+  { href: "/tools/free-resources", label: "Ücretsiz kaynaklar" },
+  { href: "/blog", label: "Blog" },
 ];
 
 const YOKDIL_LINKS = [
@@ -50,12 +57,12 @@ export async function Navbar() {
         </Link>
         <nav className="hidden items-center gap-4 xl:flex xl:gap-6">
           <div className="group relative">
-            <Link href="/exams" className="flex items-center gap-1 whitespace-nowrap py-6 text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]">Sınavlar <ChevronDown size={15} /></Link>
+            <Link href="/exams" className="flex items-center gap-1 whitespace-nowrap py-6 text-sm font-medium text-[color:var(--muted)] transition hover:text-[color:var(--brand)]">Sınavlar <ChevronDown size={15} /></Link>
             <div className="invisible absolute left-1/2 top-full w-[760px] -translate-x-1/2 translate-y-2 rounded-2xl border border-[color:var(--border)] bg-white p-2 opacity-0 shadow-xl transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
               <div className="grid w-[720px] grid-cols-5 gap-2 p-2">
                 {PLATFORM_EXAMS.map((exam) => <div key={exam.slug} className="rounded-2xl p-3" style={{ background: exam.soft }}>
-                  <Link href={`/exams/${exam.slug}`} className="text-base font-black" style={{ color: exam.color }}>{exam.name}</Link>
-                  <div className="mt-3 space-y-1 text-xs font-bold text-slate-600">
+                  <Link href={`/exams/${exam.slug}`} className="text-base font-semibold" style={{ color: exam.color }}>{exam.name}</Link>
+                  <div className="mt-3 space-y-1 text-xs font-medium text-slate-600">
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examLearningHref(exam.slug)}>Konu anlatımları</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href="/dashboard/practice">Pratik</Link>
                     <Link className="block rounded-lg px-2 py-2 hover:bg-white/80" href={examGroupHref(exam.slug)}>Grup dersleri</Link>
@@ -69,11 +76,12 @@ export async function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap text-sm font-bold text-[color:var(--muted)] transition hover:text-[color:var(--brand)]"
+              className="whitespace-nowrap text-sm font-medium text-[color:var(--muted)] transition hover:text-[color:var(--brand)]"
             >
               {link.label}
             </Link>
           ))}
+          <ResourcesMenu links={RESOURCE_LINKS} />
         </nav>
         <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <PaletteSwitcher />
@@ -85,7 +93,7 @@ export async function Navbar() {
           >
             <Heart size={18} aria-hidden="true" />
             {favoriteCount ? (
-              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-black leading-5 text-white">
+              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-semibold leading-5 text-white">
                 {favoriteCount}
               </span>
             ) : null}
@@ -98,7 +106,7 @@ export async function Navbar() {
             <ShoppingCart size={18} aria-hidden="true" />
             Sepet
             {cartCount ? (
-              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-black leading-5 text-white">
+              <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full bg-[color:var(--accent)] px-1 text-[10px] font-semibold leading-5 text-white">
                 {cartCount}
               </span>
             ) : null}
@@ -144,6 +152,7 @@ export async function Navbar() {
             favoriteCount={favoriteCount}
             examLinks={PLATFORM_EXAMS.map((exam) => ({ href: `/exams/${exam.slug}`, label: exam.name }))}
             yokdilLinks={YOKDIL_LINKS}
+            resourceLinks={RESOURCE_LINKS}
           />
         </div>
       </div>

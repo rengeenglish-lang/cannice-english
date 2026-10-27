@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -7,6 +6,7 @@ import { getAuthContext } from "@/server/auth/context";
 import { getEbookOffers } from "@/server/services/ebooks.service";
 import { EbookPurchase } from "@/components/resources/EbookPurchase";
 import { EbookPitchPanel } from "@/components/resources/EbookPitchPanel";
+import { EbookPreviewSlider } from "@/components/resources/EbookPreviewSlider";
 import { findEbookPitch } from "@/lib/netfener-ebook-copy";
 import { ebookFreePromoEndLabel, isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
 
@@ -32,13 +32,8 @@ export default async function EbookPreviewPage({ params }: Props) {
       <div className="mt-6"><EbookPurchase book={book} signedIn={Boolean(user)} offer={offers[book.slug]} /></div>
       <a className="secondary-button mt-4" href={`/ebooks/previews/${book.slug}.pdf`} target="_blank" rel="noopener noreferrer">10 sayfalık önizlemeyi PDF olarak aç</a>
     </section>
+    <EbookPreviewSlider key={book.slug} slug={book.slug} title={book.title} cover={book.cover} />
     {pitch ? <EbookPitchPanel title={book.title} pitch={pitch} /> : null}
-    <ol className="mx-auto mt-10 max-w-[820px] space-y-8" aria-label="Kitaptan 10 örnek sayfa">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((page) => <li key={page}>
-        <p className="mb-3 text-center text-sm font-semibold">Sayfa {page} / 10</p>
-        <Image unoptimized src={`/ebooks/previews/${book.slug}-${page}.jpg?cover=${encodeURIComponent(book.cover)}`} alt={`${book.title}, önizleme sayfası ${page}`} width={827} height={1170} sizes="(max-width: 860px) 100vw, 820px" className="h-auto w-full rounded-lg shadow-lg" />
-      </li>)}
-    </ol>
     <section className="panel mt-10 text-center" aria-label="Tam kitaba erişim">
       <h2 className="text-xl font-bold">Çalışmaya tam kitapla devam edin</h2>
       <p className="my-4 text-sm text-[color:var(--muted)]">{isEbookFreePromoActive() ? "Kampanya süresince tam kitap ücretsiz." : "Ödeme onaylandıktan sonra tam PDF’yi hesabınızdan indirebilirsiniz."}</p>
