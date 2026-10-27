@@ -1,0 +1,67 @@
+name: Marketing browser checks
+on:
+  pull_request:
+    paths:
+      - 'components/marketing/**'
+      - 'components/nav/**'
+      - 'components/resources/EbookPreviewSlider*'
+      - 'components/availability/**'
+      - 'components/site-reviews/**'
+      - 'app/kaynaklar/e-kitaplar/onizleme/**'
+      - 'server/services/catalog.service.ts'
+      - 'e2e/marketing.spec.ts'
+      - 'scripts/seed-marketing-test.ts'
+      - '.github/workflows/marketing-ui.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  marketing-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: netfener_marketing_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:5432/netfener_marketing_test
+      DATABASE_URL_UNPOOLED: postgresql://postgres:local-test-only@127.0.0.1:5432/netfener_marketing_test
+      AUTH_SECRET: isolated-marketing-ci-only-not-a-production-secret
+      AUTH_URL: http://localhost:3000
+      AUTH_TRUST_HOST: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - name: Seed isolated marketing fixtures
+        run: node --conditions=react-server --import tsx scripts/seed-marketing-test.ts
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Exercise homepage, navigation and e-book reader
+        run: |
+          npm run start > /tmp/netfener-marketing.log 2>&1 &
+          curl --fail --retry 40 --retry-delay 2 --retry-connrefused http://localhost:3000/ --output /dev/null
+          npx playwright test e2e/marketing.spec.ts --workers=1 --reporter=list
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: marketing-browser-results
+          path: test-results/
+          retention-days: 7
+      - name: Server diagnostics
+        if: failure()
+        run: cat /tmp/netfener-marketing.log || true

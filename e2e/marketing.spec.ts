@@ -65,3 +65,24 @@ test("homepage preserves the hero and presents real book previews", async ({ pag
   const resources = page.getByRole("region", { name: "İçeriğini gör. Kaynağını seç." });
   await expect(resources.locator('a[href*="/onizleme/"] img').first()).toBeVisible();
 });
+
+test("desktop and mobile layouts in light and dark themes", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  await page.locator('section[aria-labelledby="resources-title"]').scrollIntoViewIfNeeded();
+  await expect.poll(() => page.locator('section[aria-labelledby="resources-title"] img').first().evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await page.screenshot({ path: testInfo.outputPath("homepage-desktop-light.png"), fullPage: true });
+  await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.palette = "purple"; });
+  await page.screenshot({ path: testInfo.outputPath("homepage-desktop-dark-purple.png"), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.screenshot({ path: testInfo.outputPath("homepage-mobile.png"), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.getByRole("button", { name: "Menüyü Aç", exact: true }).click();
+  await page.locator("#mobile-navigation summary").filter({ hasText: "Kaynaklar" }).click();
+  await expect(page.locator("#mobile-navigation").getByRole("link", { name: "Sözlük", exact: true })).toBeVisible();
+  await page.goto("/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
+  await page.getByRole("region", { name: "YÖKDİL Sağlık: önizleme" }).scrollIntoViewIfNeeded();
+  await expect.poll(() => page.getByRole("region", { name: "YÖKDİL Sağlık: önizleme" }).locator("img").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await page.screenshot({ path: testInfo.outputPath("preview-mobile.png"), fullPage: true });
+});
