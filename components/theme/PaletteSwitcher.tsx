@@ -14,6 +14,12 @@ export const PALETTES = [
   { id: "purple", name: "Mor", swatch: "#7042d1", icon: ["#2f1766", "#ffffff", "#9a73ef", "#b597f5"] },
   { id: "orange", name: "Turuncu", swatch: "#c24e0c", icon: ["#5c2405", "#ffffff", "#f08a3e", "#f5a66c"] },
   { id: "red", name: "Kırmızı", swatch: "#c1272d", icon: ["#5a0f17", "#ffffff", "#ef5b63", "#f4868c"] },
+  { id: "teal", name: "Turkuaz", swatch: "#0f766e", icon: ["#134e4a", "#ffffff", "#2dd4bf", "#5eead4"] },
+  { id: "cyan", name: "Camgöbeği", swatch: "#0e7490", icon: ["#164e63", "#ffffff", "#22d3ee", "#67e8f9"] },
+  { id: "indigo", name: "İndigo", swatch: "#4f46e5", icon: ["#312e81", "#ffffff", "#a5b4fc", "#c7d2fe"] },
+  { id: "pink", name: "Pembe", swatch: "#be185d", icon: ["#500724", "#ffffff", "#f472b6", "#f9a8d4"] },
+  { id: "amber", name: "Kehribar", swatch: "#a16207", icon: ["#422006", "#ffffff", "#fbbf24", "#fcd34d"] },
+  { id: "slate", name: "Füme", swatch: "#475569", icon: ["#0f172a", "#ffffff", "#94a3b8", "#cbd5e1"] },
   { id: "white", name: "Beyaz", swatch: "#ffffff", icon: ["#ffffff", "#18181b", "#71717a", "#a1a1aa"] },
   { id: "black", name: "Siyah", swatch: "#111111", icon: ["#0a0a0a", "#ffffff", "#a1a1aa", "#d4d4d8"] },
 ] as const;
