@@ -45,11 +45,19 @@ test("mobile preview fits horizontally and respects vertical gestures", async ({
   await page.goto("/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
   const reader = page.getByRole("region", { name: "YÖKDİL Sağlık: önizleme" });
   const stage = reader.getByRole("group", { name: /Kitap sayfası/ });
-  await stage.dispatchEvent("touchstart", { touches: [{ clientX: 300, clientY: 100 }] });
-  await stage.dispatchEvent("touchend", { touches: [], changedTouches: [{ clientX: 100, clientY: 100 }] });
+  await stage.evaluate(node => {
+    const start = new Touch({ identifier: 1, target: node, clientX: 300, clientY: 100 });
+    const end = new Touch({ identifier: 1, target: node, clientX: 100, clientY: 100 });
+    node.dispatchEvent(new TouchEvent("touchstart", { bubbles: true, touches: [start] }));
+    node.dispatchEvent(new TouchEvent("touchend", { bubbles: true, touches: [], changedTouches: [end] }));
+  });
   await expect(reader.getByText("Sayfa 2 / 10", { exact: true })).toBeVisible();
-  await stage.dispatchEvent("touchstart", { touches: [{ clientX: 100, clientY: 100 }] });
-  await stage.dispatchEvent("touchend", { touches: [], changedTouches: [{ clientX: 110, clientY: 300 }] });
+  await stage.evaluate(node => {
+    const start = new Touch({ identifier: 1, target: node, clientX: 100, clientY: 100 });
+    const end = new Touch({ identifier: 1, target: node, clientX: 110, clientY: 300 });
+    node.dispatchEvent(new TouchEvent("touchstart", { bubbles: true, touches: [start] }));
+    node.dispatchEvent(new TouchEvent("touchend", { bubbles: true, touches: [], changedTouches: [end] }));
+  });
   await expect(reader.getByText("Sayfa 2 / 10", { exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   const image = await reader.locator("img").boundingBox();
@@ -69,8 +77,12 @@ test("homepage preserves the hero and presents real book previews", async ({ pag
 test("desktop and mobile layouts in light and dark themes", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
+  const rejectCookies = page.getByRole("button", { name: "Tümünü reddet", exact: true });
+  if (await rejectCookies.isVisible()) await rejectCookies.click();
   await page.locator('section[aria-labelledby="resources-title"]').scrollIntoViewIfNeeded();
   await expect.poll(() => page.locator('section[aria-labelledby="resources-title"] img').first().evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await page.screenshot({ path: testInfo.outputPath("resources-desktop.png") });
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: testInfo.outputPath("homepage-desktop-light.png"), fullPage: true });
   await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; document.documentElement.dataset.palette = "purple"; });
   await page.screenshot({ path: testInfo.outputPath("homepage-desktop-dark-purple.png"), fullPage: true });
@@ -84,5 +96,6 @@ test("desktop and mobile layouts in light and dark themes", async ({ page }, tes
   await page.goto("/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
   await page.getByRole("region", { name: "YÖKDİL Sağlık: önizleme" }).scrollIntoViewIfNeeded();
   await expect.poll(() => page.getByRole("region", { name: "YÖKDİL Sağlık: önizleme" }).locator("img").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await page.screenshot({ path: testInfo.outputPath("reader-mobile.png") });
   await page.screenshot({ path: testInfo.outputPath("preview-mobile.png"), fullPage: true });
 });
