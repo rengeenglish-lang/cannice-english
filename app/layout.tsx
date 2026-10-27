@@ -19,7 +19,7 @@ const bodyFont = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-body
 const THEME_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}d.dataset.theme=t;var p=localStorage.getItem("palette");if(["blue","purple","orange","red","teal","cyan","indigo","pink","amber","slate","white","black"].indexOf(p)>=0)d.dataset.palette=p}catch(e){d.dataset.theme="light"}})()`;
 
 const title = "Netfener — IELTS, TOEFL, PTE, YDS ve YÖKDİL Online Dersler";
-const description = "Tek öğretmenle, kayıtlı ve canlı derslerle IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanın.";
+const description = "Kayıtlı ve canlı derslerle IELTS, TOEFL, PTE, YDS ve YÖKDİL sınavlarına hazırlanın.";
 
 // No logo/banner image exists in the repo yet (public/ is empty), so Open Graph previews are
 // text-only for now — still a real improvement over no tags at all, but add an `images` entry
