@@ -25,6 +25,12 @@ P = {
   "purple": dict(name="Mor",     l=dict(brand="#6a3dc2", **{"brand-strong": "#52309a", "accent": "#7042d1", "accent-strong": "#5631a8", "night": "#2f1766", "night-2": "#46228f", "gold": "#d4c2fb"}), d=dict(accent="#9a73ef", **{"accent-strong": "#b597f5", "brand-ink": "#d4c2fb"})),
   "orange": dict(name="Turuncu", l=dict(brand="#b8480c", **{"brand-strong": "#933806", "accent": "#c24e0c", "accent-strong": "#933806", "night": "#5c2405", "night-2": "#853508", "gold": "#ffcfa6"}), d=dict(accent="#f08a3e", **{"accent-strong": "#f5a66c", "brand-ink": "#ffcfa6"})),
   "red":    dict(name="Kırmızı", l=dict(brand="#b4232f", **{"brand-strong": "#8e1a24", "accent": "#c1272d", "accent-strong": "#8e1a24", "night": "#5a0f17", "night-2": "#84161f", "gold": "#ffc2c6"}), d=dict(accent="#ef5b63", **{"accent-strong": "#f4868c", "brand-ink": "#ffc2c6"})),
+  "teal": dict(name="Turkuaz", l=dict(brand="#0f766e", **{"brand-strong": "#115e59", "accent": "#0f766e", "accent-strong": "#115e59", "night": "#134e4a", "night-2": "#176963", "gold": "#5eead4"}), d=dict(accent="#2dd4bf", **{"accent-strong": "#5eead4", "brand-ink": "#5eead4"})),
+  "cyan": dict(name="Camgöbeği", l=dict(brand="#0e7490", **{"brand-strong": "#155e75", "accent": "#0e7490", "accent-strong": "#155e75", "night": "#164e63", "night-2": "#155e75", "gold": "#a5f3fc"}), d=dict(accent="#22d3ee", **{"accent-strong": "#67e8f9", "brand-ink": "#a5f3fc"})),
+  "indigo": dict(name="İndigo", l=dict(brand="#4f46e5", **{"brand-strong": "#4338ca", "accent": "#4f46e5", "accent-strong": "#4338ca", "night": "#312e81", "night-2": "#3730a3", "gold": "#c7d2fe"}), d=dict(accent="#a5b4fc", **{"accent-strong": "#c7d2fe", "brand-ink": "#c7d2fe"})),
+  "pink": dict(name="Pembe", l=dict(brand="#be185d", **{"brand-strong": "#9d174d", "accent": "#be185d", "accent-strong": "#9d174d", "night": "#500724", "night-2": "#831843", "gold": "#fbcfe8"}), d=dict(accent="#f472b6", **{"accent-strong": "#f9a8d4", "brand-ink": "#fbcfe8"})),
+  "amber": dict(name="Kehribar", l=dict(brand="#a16207", **{"brand-strong": "#854d0e", "accent": "#a16207", "accent-strong": "#854d0e", "night": "#422006", "night-2": "#713f12", "gold": "#fde68a"}), d=dict(accent="#fbbf24", **{"accent-strong": "#fcd34d", "brand-ink": "#fde68a"})),
+  "slate": dict(name="Füme", l=dict(brand="#475569", **{"brand-strong": "#334155", "accent": "#475569", "accent-strong": "#334155", "night": "#0f172a", "night-2": "#1e293b", "gold": "#cbd5e1"}), d=dict(accent="#94a3b8", **{"accent-strong": "#cbd5e1", "brand-ink": "#cbd5e1"})),
   # Monochrome. Beyaz turns the always-dark sections white (their text is switched to dark by the
   # data-palette="white" rules in globals.css); Siyah keeps them black. Both use black buttons.
   "white":  dict(name="Beyaz", mono=True,
@@ -54,4 +60,7 @@ for key, p in P.items():
         out.append(f"{sel} {{\n" + "".join(f"  --{k}: {v};\n" for k, v in t.items()) + "}")
 MARK = "/* ------------------------------------------------------------------------------------------\n * Colour switcher palettes"
 head = css[: css.index(MARK)] if MARK in css else css.rstrip("\n") + "\n\n"
-open(sys.argv[1], "w").write(head + "\n".join(out) + "\n")
+# Other component styles may follow the generated palettes. Preserve them on regeneration.
+palette_blocks = list(re.finditer(r':root\[data-palette="[a-z]+"\][^{]*\{[^}]*\}', css[css.index(MARK):])) if MARK in css else []
+tail = css[css.index(MARK) + palette_blocks[-1].end():] if palette_blocks else "\n"
+open(sys.argv[1], "w").write(head + "\n".join(out) + tail)
