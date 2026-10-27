@@ -17,7 +17,7 @@ permissions:
   contents: read
 jobs:
   marketing-browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     services:
       postgres:
@@ -39,6 +39,7 @@ jobs:
       AUTH_SECRET: isolated-marketing-ci-only-not-a-production-secret
       AUTH_URL: https://localhost.example
       AUTH_TRUST_HOST: 'true'
+      NETFENER_E2E_CHANNEL: chrome
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,7 +51,8 @@ jobs:
       - name: Seed isolated marketing fixtures
         run: node --conditions=react-server --import tsx scripts/seed-marketing-test.ts
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
+      - name: Use the runner's preinstalled Chrome
+        run: google-chrome --version
       - name: Exercise homepage, navigation and e-book reader
         run: |
           npm run start > /tmp/netfener-marketing.log 2>&1 &

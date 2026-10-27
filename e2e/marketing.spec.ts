@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 // Run against a running local app or a deployed preview:
 // NETFENER_E2E_BASE_URL=https://... npx playwright test e2e/marketing.spec.ts
 const baseURL = process.env.NETFENER_E2E_BASE_URL ?? "http://localhost:3000";
-test.use({ baseURL });
+test.use({ baseURL, channel: process.env.NETFENER_E2E_CHANNEL });
 
 test("e-book preview displays one page with bounded keyboard and button navigation", async ({ page }) => {
   await page.goto("/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
