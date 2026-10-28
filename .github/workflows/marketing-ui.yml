@@ -87,4 +87,4 @@ jobs:
         if: failure()
         run: |
           cat /tmp/netfener-marketing.log || true
-          node --conditions=react-server --import tsx --input-type=module -e 'import {db} from "./server/db.ts"; console.log(JSON.stringify(await db.user.findMany({where:{email:{startsWith:"book-browser-"}},select:{id:true,emailVerifiedAt:true,ebookPromotionAccess:true}}))); await db.$disconnect();' 
+          node --conditions=react-server --import tsx --input-type=module -e 'import {db} from "./server/db.ts"; console.log(JSON.stringify(await db.user.findMany({where:{email:{startsWith:"book-browser-"}},select:{id:true,emailVerifiedAt:true,ebookPromotionAccess:true}}))); await db.$disconnect();'

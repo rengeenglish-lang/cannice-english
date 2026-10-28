@@ -7,9 +7,9 @@ const withTrial = { trialSubscription: { select: { expiresAt: true } } } as cons
 
 export async function lockEbookAccount(tx: TransactionClient, userId: string) {
   // Lock the account even before its first claim exists: two concurrent book requests cannot both win.
-  const users = await tx.$queryRaw<{ id: string; emailVerifiedAt: Date | null }[]>`SELECT "id", "emailVerifiedAt" FROM "users" WHERE "id" = ${userId} AND "isActive" = true FOR UPDATE`;
+  const users = await tx.$queryRaw<{ id: string }[]>`SELECT "id" FROM "users" WHERE "id" = ${userId} AND "isActive" = true FOR UPDATE`;
   if (!users.length) throw new Error("Devam etmek için aktif hesabına giriş yap.");
-  return users[0];
+  return tx.user.findUniqueOrThrow({ where: { id: userId }, select: { id: true, emailVerifiedAt: true } });
 }
 
 /** The review may still be pending publication. A low rating earns exactly the same reward. */

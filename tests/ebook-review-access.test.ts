@@ -129,6 +129,7 @@ test("chosen books survive signup; emailed sign-in links are short-lived, purpos
   assert.equal(results.filter(Boolean).length, 1);
   assert((await db.user.findUniqueOrThrow({ where: { id: user.id } })).emailVerifiedAt);
   assert.equal(await consumeBookSigninToken(token), null);
+  assert.equal(await claimEbookDownload(user.id, book.slug), true, "email confirmation enables the chosen first PDF");
   for (const kind of ["EMAIL_VERIFY", "BOOK_SIGNIN"] as const) {
     const invalid = newToken();
     await db.authToken.create({ data: { userId: user.id, kind, tokenHash: hashToken(invalid), expiresAt: new Date(kind === "EMAIL_VERIFY" ? Date.now() + 60000 : Date.now() - 1) } });
