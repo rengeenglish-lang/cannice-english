@@ -7,6 +7,7 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypt
 
 export const RESET_TTL_MS = 60 * 60 * 1000;
 export const VERIFY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+export const BOOK_SIGNIN_TTL_MS = 30 * 60 * 1000;
 /** Reset emails per account per hour, so the form can't be used to flood someone's inbox. */
 export const RESET_HOURLY_LIMIT = 3;
 

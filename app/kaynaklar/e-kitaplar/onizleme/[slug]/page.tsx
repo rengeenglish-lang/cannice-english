@@ -28,7 +28,7 @@ export default async function EbookPreviewPage({ params }: Props) {
       <h1 className="page-title mt-3">{book.title}</h1>
       <p className="mt-3 font-semibold">{book.subtitle}</p>
       <p className="page-copy mt-3">{book.description}</p>
-      <p className="mt-4 text-sm text-[color:var(--muted)]">Tam kitap: {book.pages} sayfa. Önizleme herkese açıktır. {isEbookFreePromoActive() ? `${ebookFreePromoEndLabel()} tarihine kadar tüm kitap ücretsiz okunabilir; PDF indirmek için ücretsiz hesap yeterli.` : "Tam PDF için hesabınıza giriş yapmanız ve bu kitabı satın almanız gerekir."}</p>
+      <p className="mt-4 text-sm text-[color:var(--muted)]">Tam kitap: {book.pages} sayfa. Önizleme herkese açıktır. {isEbookFreePromoActive() ? `${ebookFreePromoEndLabel()} tarihine kadar online okuma ve PDF kampanyası geçerlidir.` : "Tam PDF için hesabınıza giriş yapmanız ve bu kitabı satın almanız gerekir."}</p>
       <div className="mt-6"><EbookPurchase book={book} signedIn={Boolean(user)} offer={offers[book.slug]} /></div>
       <a className="secondary-button mt-4" href={`/ebooks/previews/${book.slug}.pdf`} target="_blank" rel="noopener noreferrer">10 sayfalık önizlemeyi PDF olarak aç</a>
     </section>

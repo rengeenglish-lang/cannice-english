@@ -63,6 +63,16 @@ const ACCOUNT_FOOTER = "Bu e-postayı Netfener hesabınla ilgili bir işlem yap�
 const ORDER_FOOTER = "Bu e-postayı Netfener'de verdiğin sipariş için aldın.";
 const firstName = (name: string) => name.trim().split(/\s+/)[0] || name;
 
+export function renderBookWelcomeEmail(input: { name: string; title: string; verifyUrl: string; siteUrl: string }): EmailContent {
+  return { subject: `${input.title} — kitabın Netfener'de hazır`, ...frame({
+    heading: `Kitabın hazır, ${firstName(input.name)}!`,
+    intro: [`${input.title} hesabındaki Kitaplarım alanına kaydedildi.`, "Aşağıdaki bağlantı e-posta adresini doğrular, güvenli girişini tamamlar ve seni kitabının bulunduğu panele götürür."],
+    cta: { label: "E-postamı doğrula ve kitabımı aç", href: input.verifyUrl },
+    outro: ["Panelinden online okuyabilir, PDF indirebilir veya ücretli basılı kitap seçeneklerini inceleyebilirsin.", "Bu bağlantı 30 dakika geçerlidir ve bir kez kullanılabilir. Bağlantıyı kimseyle paylaşma. Bu işlemi sen yapmadıysan e-postayı yok say."],
+    siteUrl: input.siteUrl, footer: ACCOUNT_FOOTER,
+  }) };
+}
+
 const tl = (amount: number) =>
   new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", minimumFractionDigits: 2 }).format(amount);
 

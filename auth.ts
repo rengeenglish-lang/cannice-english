@@ -7,7 +7,7 @@ import { verifyPassword } from "@/server/auth/password";
 import { validateCanonicalUrl } from "@/server/env";
 import { authConfig } from "@/auth.config";
 import { isGoogleConfigured, resolveGoogleUser } from "@/server/auth/google";
-import { sendGoogleWelcome } from "@/server/services/account-email.service";
+import { consumeBookSigninToken, sendGoogleWelcome } from "@/server/services/account-email.service";
 import { recordTermsAcceptance } from "@/server/services/consent.service";
 import { applyReferral, REFERRAL_COOKIE } from "@/server/services/referrals.service";
 import { cookies } from "next/headers";
@@ -43,6 +43,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   providers: [
+    Credentials({
+      id: "book-email",
+      credentials: { token: { type: "text" } },
+      async authorize(credentials) { return consumeBookSigninToken(credentials.token); },
+    }),
     ...(isGoogleConfigured() ? [Google({ clientId: process.env.AUTH_GOOGLE_ID, clientSecret: process.env.AUTH_GOOGLE_SECRET })] : []),
     Credentials({
       credentials: { email: { type: "email" }, password: { type: "password" } },

@@ -87,6 +87,7 @@ function studentNav(examFamily: ExamFamily | null): StudentGroup[] {
       items: [
         { href: "/dashboard/konu-anlatimi", label: "Konu Anlatımı", icon: Library },
         { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },
+        { href: "/dashboard/books", label: "Kitaplarım", icon: BookOpen },
         { href: "/dashboard/live-sessions", label: "Canlı Derslerim", icon: CalendarDays },
         { href: "/dashboard/kelime-motoru", label: "Kelime Motoru", icon: Layers },
       ],

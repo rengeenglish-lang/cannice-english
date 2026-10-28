@@ -371,6 +371,8 @@ model User {
   pushSubscriptions       PushSubscription[]
   examInterests           UserExamInterest[]
   siteReviews             SiteReview[]              @relation("SiteReviewAuthor")
+  ebookPromotionAccess    EbookPromotionAccess?
+  ebookSelections         UserEbookSelection[]
   moderatedReviews        SiteReview[]              @relation("SiteReviewModerator")
   seoActivityLogs         SeoActivityLog[]
   seoAttribution          SeoAttribution?
@@ -1274,6 +1276,7 @@ model PlanSubscription {
   user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderItem  OrderItem?      @relation(fields: [orderItemId], references: [id])
   perkClaims PlanPerkClaim[]
+  ebookPromotionAccess EbookPromotionAccess?
 
   @@index([userId, status, expiresAt])
   @@map("plan_subscriptions")
@@ -2180,6 +2183,7 @@ model MistakeExplanationView {
 // ====================================================================
 
 enum AuthTokenKind {
+  BOOK_SIGNIN
   PASSWORD_RESET
   EMAIL_VERIFY
 }
@@ -2408,10 +2412,37 @@ model SiteReview {
 
   user       User  @relation("SiteReviewAuthor", fields: [userId], references: [id], onDelete: Cascade)
   reviewedBy User? @relation("SiteReviewModerator", fields: [reviewedById], references: [id], onDelete: SetNull)
+  ebookPromotionAccess EbookPromotionAccess?
 
   @@index([status, featured, createdAt])
   @@index([userId])
   @@map("site_reviews")
+}
+
+/// One first-book choice and one review reward per account. Paid purchases remain separate.
+model EbookPromotionAccess {
+  userId              String   @id
+  firstBookSlug       String?
+  firstDownloadedAt   DateTime?
+  unlockedAt          DateTime?
+  reviewId            String?  @unique
+  trialSubscriptionId String?  @unique
+
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review            SiteReview?       @relation(fields: [reviewId], references: [id], onDelete: SetNull)
+  trialSubscription PlanSubscription? @relation(fields: [trialSubscriptionId], references: [id], onDelete: SetNull)
+
+  @@map("ebook_promotion_access")
+}
+
+model UserEbookSelection {
+  userId    String
+  bookSlug  String
+  selectedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, bookSlug])
+  @@map("user_ebook_selections")
 }
 
 /// Result of the general English placement test (Speaking Club grouping). The latest one counts.

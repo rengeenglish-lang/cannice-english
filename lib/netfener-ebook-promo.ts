@@ -1,8 +1,7 @@
-/**
- * Launch promotion: every Netfener e-book is free to read online for everyone, and the PDF is free to
- * download for any signed-in account, until this moment. Afterwards the books are back on sale and
- * access falls back to purchases automatically. Printed copies are never part of the promotion.
- * Override with EBOOK_FREE_PROMO_ENDS_AT (ISO 8601) to move the end date without a code change.
+/** Promotional digital books are available to verified accounts until this date.
+ * One first PDF is free; an honest review unlocks the rest and a one-time seven-day digital trial.
+ * Printed copies are paid separately. Purchases remain valid after the promotion ends.
+ * Override the end date with EBOOK_FREE_PROMO_ENDS_AT (ISO 8601).
  */
 const DEFAULT_ENDS_AT = "2026-11-25T23:59:59+03:00";
 

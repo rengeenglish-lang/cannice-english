@@ -54,7 +54,7 @@ function ResourceCard({ product }: { product: HomeProduct }) {
         <div>
           <p className={styles.meta}>{promo ? `${ebookFreePromoEndLabel()} tarihine kadar` : "KDV dahil"}</p>
           <p className={styles.price}>{promo ? "Ücretsiz" : formatTRY(String(product.salePrice))}</p>
-          {promo ? <p className={styles.meta}>Online okuma ve PDF · PDF için ücretsiz hesap gerekir.</p> : null}
+          {promo ? <p className={styles.meta}>Online okuma ve PDF</p> : null}
         </div>
         <Link href={href} className="secondary-button">{book ? "Kitabı incele" : "Kaynağı incele"} <ArrowRight size={16} aria-hidden="true" /></Link>
       </div>

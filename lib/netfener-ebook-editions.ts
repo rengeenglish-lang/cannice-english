@@ -11,7 +11,7 @@ export type EbookEdition = (typeof EBOOK_EDITIONS)[number];
 export const EDITION_COPY: Record<EbookEdition, { label: string; note: string }> = {
   online: { label: "Online oku", note: "Tarayıcıda, sayfa çevirerek. İndirme yok." },
   pdf: { label: "PDF indir", note: "Tam kitap, kendi cihazında saklanır." },
-  print: { label: "Basılı kitap", note: `Siparişe özel basılır, adresine kargolanır. Online okuma dahil, PDF ayrı. Kargo ${formatTRY(FLAT_SHIPPING_TRY)}.` },
+  print: { label: "Basılı kitap", note: `Siparişe özel basılır, ödeme onayından sonra 2 hafta içinde adresine teslim edilir. Online okuma dahil, PDF ayrı. Kargo ${formatTRY(FLAT_SHIPPING_TRY)}.` },
 };
 
 const SUFFIX: Record<Exclude<EbookEdition, "pdf">, string> = { online: "online", print: "basili" };

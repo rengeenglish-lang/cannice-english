@@ -46,5 +46,7 @@ jobs:
         run: node --import tsx --test tests/commercial.test.ts tests/learning-overview.test.mjs tests/curriculum.test.ts tests/cohorts.test.ts
       - name: Payment approval and concurrent final-seat booking
         run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/commercial-database.test.ts tests/group-availability.test.ts tests/curriculum-database.test.ts tests/cohorts-database.test.ts tests/commercial-checkout-database.test.ts
+      - name: E-book review rewards and email sign-in regressions
+        run: node --conditions=react-server --import tsx --test --test-concurrency=1 tests/ebook-review-access.test.ts
       - name: Production build against isolated database
         run: npm run build

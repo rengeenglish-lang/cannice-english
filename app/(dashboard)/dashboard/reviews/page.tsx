@@ -10,6 +10,8 @@ import { SiteReviewForm } from "@/components/site-reviews/SiteReviewForm";
 import { listMySiteReviews, myRewardCoupons, reviewPromotionOn, videoUploadsAvailable } from "@/server/services/site-reviews.service";
 import { REWARD_PERCENT, defaultDisplayName } from "@/lib/site-reviews";
 import Link from "next/link";
+import { isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
+import { EBOOK_REVIEW_UNLOCK_MESSAGE } from "@/lib/ebook-review-reward";
 
 const STATUS_LABEL = { PENDING: "İncelemede", APPROVED: "Yayında", REJECTED: "Yayınlanmadı" } as const;
 
@@ -38,6 +40,11 @@ export default async function ReviewsPage() {
       <section id="netfener-yorumu" className="mt-8 scroll-mt-24 space-y-4">
         <div>
           <h2 className="text-xl font-extrabold">Netfener hakkında yorum yaz</h2>
+          {isEbookFreePromoActive() ? <div className="mt-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--canvas)] p-4 text-sm leading-7">
+            <p>{EBOOK_REVIEW_UNLOCK_MESSAGE}</p>
+            <p className="mt-2">Deneme; konu anlatımları, pratik sorular ve deneme sınavlarını kapsar. Bir hesap bir kez yararlanabilir. Yayın onayı beklenmez; yorumlar yayınlanmadan önce ayrıca incelenir.</p>
+            {!user.emailVerifiedAt ? <p className="mt-2 font-semibold">Kitap hediyesi ve deneme için e-postanı doğrulamalısın. <Link href="/dashboard/books" className="underline">Kitaplarıma dön</Link></p> : null}
+          </div> : null}
           {promotionOn ? (
             <p className="mt-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-900">
               🎁 <strong>Kampanya:</strong> kapsamlı yazılı yorumuna <strong>%{REWARD_PERCENT.TEXT}</strong>, en fazla 90 saniyelik video yorumuna <strong>%{REWARD_PERCENT.VIDEO}</strong> plan indirimi. Kupon yorumu gönderdiğin anda hesabına tanımlanır.

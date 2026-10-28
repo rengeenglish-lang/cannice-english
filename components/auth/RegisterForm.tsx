@@ -7,7 +7,7 @@ import { RegisterExamPicker } from "@/components/exam-interests/RegisterExamPick
 
 const initialState: RegisterFormState = { status: "idle" };
 
-export function RegisterForm({next, src, referral}: {next?: string; src?: string; referral?: string}) {
+export function RegisterForm({next, src, referral, bookFlow = false}: {next?: string; src?: string; referral?: string; bookFlow?: boolean}) {
   const [state, formAction, pending] = useActionState(registerAction, initialState);
   return (
     <form action={formAction} className="panel space-y-4">
@@ -58,7 +58,7 @@ export function RegisterForm({next, src, referral}: {next?: string; src?: string
       </div>
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
       <button type="submit" disabled={pending} className="primary-button w-full justify-center">
-        {pending ? "Hesap oluşturuluyor…" : "Ücretsiz Denemeye Başla"}
+        {pending ? "Hesap oluşturuluyor…" : bookFlow ? "Kitabım için kaydol" : "Ücretsiz Denemeye Başla"}
       </button>
     </form>
   );
