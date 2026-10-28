@@ -20,7 +20,7 @@ export async function hasEbookAccess(userId: string, slug: string, edition: Eboo
 
 /** Entitlement to the downloadable PDF, which is what the download route guards. */
 export async function hasPurchasedEbook(userId: string, slug: string): Promise<boolean> {
-  return hasEbookAccess(userId, slug, "pdf");
+  return await hasEbookAccess(userId, slug, "pdf");
 }
 
 export async function hasVerifiedEbookAccount(userId: string) {
@@ -38,20 +38,19 @@ export async function canReadEbookOnline(userId: string | undefined, slug: strin
 /** Reading this decision never reserves a first book. Only the explicit download POST does. */
 export async function canDownloadEbookPdf(userId: string | undefined, slug: string): Promise<boolean> {
   if (!userId || !findNetfenerEbook(slug)) return false;
-  if (await hasPurchasedEbook(userId, slug)) return true;
-  if (!isEbookFreePromoActive() || !await hasVerifiedEbookAccount(userId)) return false;
+  const paid = await hasPurchasedEbook(userId, slug);
+  const promotional = isEbookFreePromoActive() && await hasVerifiedEbookAccount(userId);
+  if (paid) return true;
+  if (!promotional) return false;
   const state = await getEbookPromotionState(userId);
   return state.reviewUnlocked || state.firstBookSlug === slug;
 }
 
-export async function claimEbookDownload(userId: string, slug: string) {
-  if (!findNetfenerEbook(slug)) { console.warn("[ebook-claim] unknown-book", { slug }); return false; }
-  if (await hasPurchasedEbook(userId, slug)) return true;
-  const active = isEbookFreePromoActive();
-  const verified = await hasVerifiedEbookAccount(userId);
-  console.info("[ebook-claim-check]", { active, verified, slug });
-  if (!active || !verified) return false;
-  return reserveFirstPromotionalBook(userId, slug);
+export async function claimEbookDownload(userId: string, slug: string): Promise<boolean> {
+  if (!findNetfenerEbook(slug)) return false;
+  const paid = await hasPurchasedEbook(userId, slug);
+  const promotional = isEbookFreePromoActive() && await hasVerifiedEbookAccount(userId);
+  return paid || (promotional && await reserveFirstPromotionalBook(userId, slug));
 }
 
 export type EbookEditionOffer = { productId: string; price: string };

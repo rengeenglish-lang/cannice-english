@@ -1,4 +1,5 @@
 "use client";
+import { ReviewPromptPicker } from "./ReviewPromptPicker";
 
 import { useActionState, useRef, useState } from "react";
 import Link from "next/link";
@@ -236,6 +237,7 @@ export function SiteReviewForm({
         </div>
       ) : null}
 
+      {kind === "TEXT" ? <ReviewPromptPicker value={body} onChange={setBody} /> : null}
       <label className="label block">
         {kind === "VIDEO" ? "Kısa bir not (isteğe bağlı)" : "Yorumun"}
         <textarea
