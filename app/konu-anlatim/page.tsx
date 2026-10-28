@@ -105,7 +105,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
   const lockedTopicIds = hasAccess ? [] : allTopics.slice(1).map((t) => t.id);
   const topics = hasAccess
     ? allTopics
-    : allTopics.map((t, i) => (i === 0 ? t : { ...t, lessons: t.lessons.map((l) => ({ ...l, contentBody: null, videoUrl: null })) }));
+    : allTopics.map((t, i) => (i === 0 ? t : { ...t, lessons: t.lessons.map((l) => ({ ...l, contentBody: null, contentBodyEn: null, videoUrl: null })) }));
   const initialTopicId = topics.find((t) => t.slug === topicSlug)?.id;
   const [completedLessonIds, notes] = await Promise.all([
     user
@@ -225,6 +225,7 @@ export default async function TopicsIndexPage({ searchParams }: Props) {
             <KonuAnlatimDashboard
               key={`${activeExam?.id ?? examSlug}-${topicSlug ?? ""}`}
               examName={activeExam?.name ?? ""}
+              examSlug={examSlug}
               topics={topics}
               initialCompletedLessonIds={[...completedLessonIds]}
               initialNotes={notes}

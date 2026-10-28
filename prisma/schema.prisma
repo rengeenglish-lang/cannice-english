@@ -280,6 +280,8 @@ model TopicLesson {
   videoUrl           String?
   durationMinutes    Int?
   contentBody        String?
+  /** English translation of contentBody, generated on first request and cached (see lesson-translation.service). */
+  contentBodyEn      String?
   diagnosticTopicIds String[] @default([])
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

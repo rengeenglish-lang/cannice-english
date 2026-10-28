@@ -1,11 +1,12 @@
 "use client";
 import { lessonVideoSrc } from "@/lib/lesson-video";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import {
   toggleTopicLessonProgressAction,
   saveTopicNoteAction,
+  translateTopicLessonAction,
 } from "@/app/actions/topics";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
 import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
@@ -20,7 +21,7 @@ import { useStudyTimer } from "@/components/topics/useStudyTimer";
 import { pickStudyQuote } from "@/lib/study-quotes";
 import { CourseNav, stepLabel } from "@/components/topics/CourseNav";
 import { TopicSummaryStrip } from "@/components/topics/TopicSummaryStrip";
-import { ChevronLeft, ChevronRight, ListTree } from "lucide-react";
+import { ChevronLeft, ChevronRight, Languages, ListTree } from "lucide-react";
 import { QuestionCard } from "@/components/topics/QuestionCard";
 import { QuestionNavigator } from "@/components/topics/QuestionNavigator";
 
@@ -51,10 +52,14 @@ const CATEGORY_LABEL: Record<string, string> = {
   LISTENING: "Dinleme",
 };
 
+/** Exams whose lessons get the "Read in English" switch (translated on demand). */
+const ENGLISH_TOGGLE_EXAMS = new Set(["toefl", "ielts"]);
+
 const CARD = "relative overflow-hidden rounded-lg border border-slate-200 bg-white px-6 py-6 sm:px-8 sm:py-7";
 
 export function KonuAnlatimDashboard({
   examName,
+  examSlug = "",
   topics,
   initialCompletedLessonIds,
   initialNotes,
@@ -63,6 +68,7 @@ export function KonuAnlatimDashboard({
   lockedTopicIds = [],
 }: {
   examName: string;
+  examSlug?: string;
   topics: Topic[];
   initialCompletedLessonIds: string[];
   initialNotes: Record<string, string>;
@@ -95,6 +101,10 @@ export function KonuAnlatimDashboard({
     "idle",
   );
   const [pending, startTransition] = useTransition();
+  // "Read in English" for TOEFL/IELTS: the Turkish lesson body is translated on demand and cached per lesson.
+  const [language, setLanguage] = useState<"tr" | "en">("tr");
+  const [englishBodies, setEnglishBodies] = useState<Record<string, string>>({});
+  const [englishErrors, setEnglishErrors] = useState<Record<string, string>>({});
   const [navOpen, setNavOpen] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   // Every lesson in reading order; a topic without lessons is one step of its own.
@@ -120,6 +130,30 @@ export function KonuAnlatimDashboard({
   const selectedLesson =
     selectedTopic?.lessons.find((lesson) => lesson.id === selectedLessonId) ??
     selectedTopic?.lessons[0];
+
+  const showEnglishToggle = isSignedIn && ENGLISH_TOGGLE_EXAMS.has(examSlug);
+  const currentLessonId = selectedLesson?.id;
+  const wantsEnglish =
+    language === "en" && showEnglishToggle && !!currentLessonId && !!selectedLesson?.contentBody;
+  const englishReady = wantsEnglish && currentLessonId ? englishBodies[currentLessonId] : undefined;
+  const englishError = wantsEnglish && currentLessonId ? englishErrors[currentLessonId] : undefined;
+  const englishLoading = wantsEnglish && !englishReady && !englishError;
+
+  useEffect(() => {
+    if (!englishLoading || !currentLessonId) return;
+    let cancelled = false;
+    translateTopicLessonAction(currentLessonId).then((result) => {
+      if (cancelled) return;
+      if (result.status === "success") {
+        setEnglishBodies((prev) => ({ ...prev, [currentLessonId]: result.text }));
+      } else {
+        setEnglishErrors((prev) => ({ ...prev, [currentLessonId]: result.message }));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [englishLoading, currentLessonId]);
 
   const isExampleLesson = selectedLesson
     ? /Örnek Sorular/i.test(selectedLesson.title)
@@ -302,6 +336,25 @@ export function KonuAnlatimDashboard({
             <p className="mt-4 whitespace-pre-line text-lg leading-8 text-[color:var(--muted)]">{selectedTopic.description}</p>
           ) : null}
 
+          {showEnglishToggle && selectedLesson && !isLockedTopic ? (
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setLanguage(language === "en" ? "tr" : "en")}
+                aria-pressed={language === "en"}
+                className="inline-flex min-h-14 items-center gap-3 rounded-2xl bg-[color:var(--accent)] px-6 py-3 text-lg font-extrabold text-white shadow-[0_10px_30px_rgb(var(--shadow-rgb)/.25)] transition hover:bg-[color:var(--accent-strong)]"
+              >
+                <Languages size={22} aria-hidden="true" />
+                {language === "en" ? "Türkçe içeriğe dön" : "Read in English"}
+              </button>
+              {language === "en" ? (
+                <span className="text-sm font-semibold text-[color:var(--muted)]">
+                  Bu dersin İngilizce çevirisi
+                </span>
+              ) : null}
+            </div>
+          ) : null}
+
           <div className="mt-8">
           {locked.has(selectedTopic.id) ? (
             <div className={`${CARD} text-center`}>
@@ -333,7 +386,34 @@ export function KonuAnlatimDashboard({
                 </div>
               ) : null}
 
-              {isExampleLesson && parsedExamples.length > 0 ? (
+              {language === "en" && showEnglishToggle && wantsEnglish ? (
+                englishReady ? (
+                  <div className={CARD}>
+                    <StudyContent text={englishReady} />
+                  </div>
+                ) : englishError ? (
+                  <div className={CARD}>
+                    <p className="text-lg text-slate-600">{englishError}</p>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEnglishErrors((prev) => {
+                          const next = { ...prev };
+                          delete next[selectedLesson.id];
+                          return next;
+                        })
+                      }
+                      className="mt-4 inline-flex min-h-11 items-center rounded-full border border-[color:var(--border)] px-4 text-base font-bold text-[color:var(--accent)] hover:underline"
+                    >
+                      Tekrar dene
+                    </button>
+                  </div>
+                ) : (
+                  <div className={CARD}>
+                    <p className="text-lg text-slate-600">Çeviri hazırlanıyor…</p>
+                  </div>
+                )
+              ) : isExampleLesson && parsedExamples.length > 0 ? (
                 <>
                   <QuestionCard
                     example={parsedExamples[exampleIndex]}
