@@ -45,11 +45,11 @@ export async function canDownloadEbookPdf(userId: string | undefined, slug: stri
 }
 
 export async function claimEbookDownload(userId: string, slug: string) {
-  if (!findNetfenerEbook(slug)) return false;
+  if (!findNetfenerEbook(slug)) { console.warn("[ebook-claim] unknown-book", { slug }); return false; }
   if (await hasPurchasedEbook(userId, slug)) return true;
   const active = isEbookFreePromoActive();
   const verified = await hasVerifiedEbookAccount(userId);
-  if (process.env.CI === "true" && process.env.DATABASE_URL?.includes("127.0.0.1") && process.env.DATABASE_URL.includes("_test")) console.info("[ebook-claim-check]", { active, verified, slug });
+  console.info("[ebook-claim-check]", { active, verified, slug });
   if (!active || !verified) return false;
   return reserveFirstPromotionalBook(userId, slug);
 }

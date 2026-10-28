@@ -21,7 +21,9 @@ export async function POST(request: Request, { params }: Context) {
   if (!user) return Response.json({ error: "Devam etmek için giriş yap.", code: "SIGN_IN" }, { status: 401, headers: privateHeaders });
   const paid = await hasPurchasedEbook(user.id, slug);
   if (!paid && isEbookFreePromoActive() && !await hasVerifiedEbookAccount(user.id)) return Response.json({ error: "Kitabını açmak için e-postandaki doğrulama bağlantısına tıkla.", code: "VERIFY_EMAIL" }, { status: 403, headers: privateHeaders });
-  if (!await claimEbookDownload(user.id, slug)) {
+  const granted = await claimEbookDownload(user.id, slug);
+  console.info("[ebook-post-decision]", { slug, granted });
+  if (!granted) {
     return Response.json({ error: isEbookFreePromoActive() ? EBOOK_REVIEW_UNLOCK_MESSAGE : "Kampanya sona erdi. Bu PDF için satın alma gerekiyor.", code: isEbookFreePromoActive() ? "REVIEW_REQUIRED" : "PURCHASE_REQUIRED" }, { status: 403, headers: privateHeaders });
   }
   return Response.json({ downloadUrl: `/api/ebooks/${slug}` }, { headers: privateHeaders });

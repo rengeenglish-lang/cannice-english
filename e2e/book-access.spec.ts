@@ -35,7 +35,7 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   const download = page.waitForEvent("download", { timeout: 15000 });
   await first.getByRole("button", { name: "PDF indir", exact: true }).click();
   const claim = await claimResponse;
-  expect(claim.status(), await claim.text()).toBe(200);
+  expect(claim.status(), `Request ${claim.url()}: ${await claim.text()}`).toBe(200);
   expect((await download).suggestedFilename()).toBe("netfener-yokdil-saglik.pdf");
   await page.goto("/dashboard/books?book=yokdil-fen");
   const second = page.getByRole("article", { name: "YÖKDİL Fen Bilimleri", exact: true });

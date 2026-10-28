@@ -48,8 +48,9 @@ export async function getEbookPromotionState(userId: string): Promise<EbookPromo
 export async function reserveFirstPromotionalBook(userId: string, slug: string): Promise<boolean> {
   return db.$transaction(async tx => {
     const user = await lockEbookAccount(tx, userId);
-    if (!user.emailVerifiedAt) return false;
-    if (!isEbookFreePromoActive()) return false;
+    const active = isEbookFreePromoActive();
+    console.info("[ebook-reserve-check]", { verified: Boolean(user.emailVerifiedAt), active, slug });
+    if (!user.emailVerifiedAt || !active) return false;
     let access = await tx.ebookPromotionAccess.findUnique({ where: { userId } });
     if (!access?.unlockedAt) {
       const review = await tx.siteReview.findFirst({ where: { userId, status: { in: ["PENDING", "APPROVED"] } }, orderBy: { createdAt: "asc" }, select: { id: true } });
