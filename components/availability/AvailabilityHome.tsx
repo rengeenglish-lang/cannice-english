@@ -29,23 +29,22 @@ export async function AvailabilityHome() {
   return (
     <section
       id="group-availability"
-      className="mx-auto my-16 w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-[2rem] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-[0_12px_35px_rgb(var(--shadow-rgb)/.07)] sm:w-[calc(100%-48px)] sm:p-10 lg:w-[calc(100%-64px)]"
+      className="mx-auto my-16 w-[calc(100%-32px)] max-w-[1320px] overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--canvas)] p-6 sm:w-[calc(100%-48px)] sm:p-10 lg:w-[calc(100%-64px)]"
       aria-labelledby="availability-title"
     >
       <AvailabilityRefresh />
       <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full bg-blue-600 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-white">GRUP DERSİ</span>
-        <p className="text-xs font-extrabold uppercase tracking-widest text-blue-700">Bu haftanın programı</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-[color:var(--accent-strong)]">Bu haftanın programı</p>
       </div>
       <h2
         id="availability-title"
-        className="mt-4 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl"
+        className="mt-4 text-3xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-4xl"
       >
         Programına uygun bir grup dersi bul
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-        Bu haftanın uygun derslerini incele, grubun kontenjanı dolmadan yerini
-        ayır. Gruplar en fazla 10 öğrencidir; saatler Türkiye saatidir.
+        Ders saatini, süresini ve eğitmenini incele; programına uygun grubu seç.
+        Saatler Türkiye saatidir. Katılım, ilgili grup paketine erişim gerektirir.
       </p>
       <div className="mt-7 grid gap-4 md:grid-cols-3">
         {slots.map((slot) => (

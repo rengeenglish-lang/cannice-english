@@ -117,7 +117,18 @@ export function listHomepageGroups() {
       category: { in: ["PREP_GROUP", "MOCK_CAMP"] },
       course: { is: { deliveryFormat: { in: ["LIVE_ONLY", "HYBRID"] } } },
     },
-    include: homepageProductInclude,
+    include: {
+      ...homepageProductInclude,
+      course: { select: {
+        deliveryFormat: true,
+        syllabusSummary: true,
+        liveSessions: {
+          where: { startsAt: { gte: new Date() }, cancelled: false, cohortId: null, availabilityEnabled: true },
+          orderBy: { startsAt: "asc" },
+          select: { startsAt: true, endsAt: true, instructor: { select: { name: true } } },
+        },
+      } },
+    },
     orderBy: [
       { isFeatured: "desc" },
       { displayOrder: "asc" },

@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, Check, RotateCcw } from "lucide-react";
 const QUESTIONS = [
   {
     exam: "YDS",
-    color: "#f5590b",
     area: "Dil bilgisi",
     prompt: "She ____ at this school since 2020.",
     instruction: "Boşluğu anlam ve zaman bakımından en doğru seçenekle tamamlayın.",
@@ -16,7 +15,6 @@ const QUESTIONS = [
   },
   {
     exam: "TOEFL",
-    color: "#3b6fed",
     area: "Academic Reading",
     passage: "Urban trees reduce surface temperatures by providing shade and releasing moisture into the air. Their effect is especially valuable in densely built neighborhoods.",
     prompt: "According to the passage, why are urban trees particularly useful in densely built areas?",
@@ -26,7 +24,6 @@ const QUESTIONS = [
   },
   {
     exam: "IELTS",
-    color: "#0f9b8e",
     area: "Reading",
     passage: "The library introduced evening opening hours in response to requests from students who worked during the day.",
     prompt: "The library extended its hours because students asked for greater access.",
@@ -36,7 +33,6 @@ const QUESTIONS = [
   },
   {
     exam: "YÖKDİL",
-    color: "#5b4fe0",
     area: "Akademik kelime",
     prompt: "The findings provide ____ evidence that regular exercise improves cardiovascular health.",
     instruction: "Cümleyi akademik bağlama en uygun kelimeyle tamamlayın.",
@@ -58,21 +54,21 @@ export function StudySample() {
     setChecked(false);
   }
 
-  return <div className="overflow-hidden rounded-[1.75rem] border border-white/15 bg-white text-[#071b34] shadow-2xl">
+  return <div className="overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--foreground)] shadow-[var(--shadow-sm)]">
     <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
-      <div><p className="text-[11px] font-black uppercase tracking-[.12em] text-slate-400">Sınav sorusu</p><p className="mt-1 text-sm font-black" style={{ color: question.color }}>{question.exam} · {question.area}</p></div>
-      <span className="text-xs font-extrabold text-slate-500">{active + 1} / {QUESTIONS.length}</span>
+      <div><p className="text-[11px] font-semibold uppercase tracking-[.12em] text-slate-400">Sınav sorusu</p><p className="mt-1 text-sm font-semibold" style={{ color: "var(--brand-ink)" }}>{question.exam} · {question.area}</p></div>
+      <span className="text-xs font-semibold text-slate-500">{active + 1} / {QUESTIONS.length}</span>
     </div>
 
     <div className="flex gap-2 overflow-x-auto border-b border-slate-200 px-5 py-3" role="tablist" aria-label="Sınav sorusu seç">
-      {QUESTIONS.map((item, index) => <button key={item.exam} type="button" role="tab" aria-selected={active === index} onClick={() => go(index)} className={`min-h-10 shrink-0 rounded-xl px-4 text-xs font-black transition ${active === index ? "text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`} style={active === index ? { background: item.color } : undefined}>{item.exam}</button>)}
+      {QUESTIONS.map((item, index) => <button key={item.exam} type="button" role="tab" aria-selected={active === index} onClick={() => go(index)} className={`min-h-10 shrink-0 rounded-xl px-4 text-xs font-semibold transition ${active === index ? "text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`} style={active === index ? { background: "var(--accent)", color: "var(--on-accent)" } : undefined}>{item.exam}</button>)}
     </div>
 
     <div className="p-5 sm:p-7">
       {"instruction" in question ? <p className="mb-4 text-sm font-semibold leading-6 text-slate-500">{question.instruction}</p> : null}
       {"passage" in question ? <div className="mb-5 rounded-2xl bg-slate-100 p-4 text-sm leading-7 text-slate-700">{question.passage}</div> : null}
       <fieldset>
-        <legend className="text-lg font-black leading-7 text-[#071b34]" lang="en">{question.prompt}</legend>
+        <legend className="text-lg font-semibold leading-7 text-[#071b34]" lang="en">{question.prompt}</legend>
         <div className="mt-5 grid gap-2.5">
           {question.options.map((option, index) => {
             const selectedOption = selected === index;
@@ -80,7 +76,7 @@ export function StudySample() {
             const wrongOption = checked && selectedOption && index !== question.correct;
             return <label key={option} className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm font-semibold transition ${correctOption ? "border-emerald-500 bg-emerald-50 text-emerald-900" : wrongOption ? "border-rose-400 bg-rose-50 text-rose-900" : selectedOption ? "border-blue-500 bg-blue-50" : "border-slate-200 hover:border-blue-300"}`}>
               <input type="radio" name="homepage-exam-question" checked={selectedOption} disabled={checked} onChange={() => setSelected(index)} className="size-4" />
-              <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-xs font-black">{String.fromCharCode(65 + index)}</span>
+              <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-xs font-semibold">{String.fromCharCode(65 + index)}</span>
               <span lang="en">{option}</span>
             </label>;
           })}
