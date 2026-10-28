@@ -1,12 +1,11 @@
 "use client";
 import { lessonVideoSrc } from "@/lib/lesson-video";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import {
   toggleTopicLessonProgressAction,
   saveTopicNoteAction,
-  translateTopicLessonAction,
 } from "@/app/actions/topics";
 import { parseExampleBlocks } from "@/components/topics/parseExampleBlock";
 import { parseAccordionSections } from "@/components/topics/parseAccordionSections";
@@ -32,6 +31,8 @@ type Lesson = {
   videoUrl: string | null;
   durationMinutes: number | null;
   contentBody: string | null;
+  /** Stored English translation (filled by the offline batch, never at request time). */
+  contentBodyEn?: string | null;
 };
 
 type Topic = {
@@ -52,7 +53,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   LISTENING: "Dinleme",
 };
 
-/** Exams whose lessons get the "Read in English" switch (translated on demand). */
+/** Exams whose lessons get the "Read in English" switch (uses the stored translation). */
 const ENGLISH_TOGGLE_EXAMS = new Set(["toefl", "ielts"]);
 
 const CARD = "relative overflow-hidden rounded-lg border border-slate-200 bg-white px-6 py-6 sm:px-8 sm:py-7";
@@ -101,10 +102,8 @@ export function KonuAnlatimDashboard({
     "idle",
   );
   const [pending, startTransition] = useTransition();
-  // "Read in English" for TOEFL/IELTS: the Turkish lesson body is translated on demand and cached per lesson.
+  // "Read in English" for TOEFL/IELTS: shows the stored translation of the lesson.
   const [language, setLanguage] = useState<"tr" | "en">("tr");
-  const [englishBodies, setEnglishBodies] = useState<Record<string, string>>({});
-  const [englishErrors, setEnglishErrors] = useState<Record<string, string>>({});
   const [navOpen, setNavOpen] = useState(true);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   // Every lesson in reading order; a topic without lessons is one step of its own.
@@ -132,28 +131,8 @@ export function KonuAnlatimDashboard({
     selectedTopic?.lessons[0];
 
   const showEnglishToggle = isSignedIn && ENGLISH_TOGGLE_EXAMS.has(examSlug);
-  const currentLessonId = selectedLesson?.id;
-  const wantsEnglish =
-    language === "en" && showEnglishToggle && !!currentLessonId && !!selectedLesson?.contentBody;
-  const englishReady = wantsEnglish && currentLessonId ? englishBodies[currentLessonId] : undefined;
-  const englishError = wantsEnglish && currentLessonId ? englishErrors[currentLessonId] : undefined;
-  const englishLoading = wantsEnglish && !englishReady && !englishError;
-
-  useEffect(() => {
-    if (!englishLoading || !currentLessonId) return;
-    let cancelled = false;
-    translateTopicLessonAction(currentLessonId).then((result) => {
-      if (cancelled) return;
-      if (result.status === "success") {
-        setEnglishBodies((prev) => ({ ...prev, [currentLessonId]: result.text }));
-      } else {
-        setEnglishErrors((prev) => ({ ...prev, [currentLessonId]: result.message }));
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [englishLoading, currentLessonId]);
+  const englishText = selectedLesson?.contentBodyEn ?? null;
+  const englishView = language === "en" && showEnglishToggle && englishText ? englishText : null;
 
   const isExampleLesson = selectedLesson
     ? /Örnek Sorular/i.test(selectedLesson.title)
@@ -249,7 +228,7 @@ export function KonuAnlatimDashboard({
   };
   const isLockedTopic = locked.has(selectedTopic.id);
   const englishToggle =
-    showEnglishToggle && selectedLesson && !isLockedTopic ? (
+    showEnglishToggle && selectedLesson && !isLockedTopic && selectedLesson.contentBodyEn ? (
       <button
         type="button"
         onClick={() => setLanguage(language === "en" ? "tr" : "en")}
@@ -380,33 +359,10 @@ export function KonuAnlatimDashboard({
                 </div>
               ) : null}
 
-              {language === "en" && showEnglishToggle && wantsEnglish ? (
-                englishReady ? (
-                  <div className={CARD}>
-                    <StudyContent text={englishReady} />
-                  </div>
-                ) : englishError ? (
-                  <div className={CARD}>
-                    <p className="text-lg text-slate-600">{englishError}</p>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEnglishErrors((prev) => {
-                          const next = { ...prev };
-                          delete next[selectedLesson.id];
-                          return next;
-                        })
-                      }
-                      className="mt-4 inline-flex min-h-11 items-center rounded-full border border-[color:var(--border)] px-4 text-base font-bold text-[color:var(--accent)] hover:underline"
-                    >
-                      Tekrar dene
-                    </button>
-                  </div>
-                ) : (
-                  <div className={CARD}>
-                    <p className="text-lg text-slate-600">Çeviri hazırlanıyor…</p>
-                  </div>
-                )
+              {englishView ? (
+                <div className={CARD}>
+                  <StudyContent text={englishView} />
+                </div>
               ) : isExampleLesson && parsedExamples.length > 0 ? (
                 <>
                   <QuestionCard

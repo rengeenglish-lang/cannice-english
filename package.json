@@ -10,6 +10,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx prisma/seed.ts",
+    "translate:lessons": "tsx scripts/translate-lessons.ts",
     "test": "tsx --env-file-if-exists=.env.test --conditions=react-server --test tests/*.test.ts tests/*.test.mjs"
   },
   "dependencies": {
