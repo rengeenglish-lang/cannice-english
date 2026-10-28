@@ -75,7 +75,7 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   await page.locator('textarea[name="body"]').focus();
   await page.clock.fastForward(31000);
   await expect(page.getByRole("dialog", { name: "Yardıma ihtiyacın var mı?" })).not.toBeVisible();
-  await page.locator('h1').first().click();
+  await page.keyboard.press("Tab");
   await page.clock.fastForward(31000);
   const help = page.getByRole("dialog", { name: "Yardıma ihtiyacın var mı?" });
   await expect(help).toBeVisible();
