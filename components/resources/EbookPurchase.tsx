@@ -4,6 +4,8 @@ import type { NetfenerEbook } from "@/lib/netfener-ebooks";
 import { EBOOK_EDITIONS, EDITION_COPY } from "@/lib/netfener-ebook-editions";
 import type { EbookOffer } from "@/server/services/ebooks.service";
 import { ebookFreePromoEndLabel, isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
+import { ebookLibraryHref } from "@/lib/ebook-library";
+import { PrintBookDialog } from "./PrintBookDialog";
 
 /** The three ways to buy a book, plus whatever the reader already owns. */
 export function EbookPurchase({ book, signedIn, offer }: {
@@ -11,45 +13,15 @@ export function EbookPurchase({ book, signedIn, offer }: {
   signedIn: boolean;
   offer?: EbookOffer;
 }) {
-  // Free promotion: read online for everyone, PDF for any signed-in account. Only print stays on sale.
   if (isEbookFreePromoActive()) {
-    const next = encodeURIComponent(`/kaynaklar/e-kitaplar/onizleme/${book.slug}`);
-    const print = offer?.editions.print;
-    return (
-      <div className="w-full space-y-4">
-        <p className="rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-800">
-          🎁 Bu kitap {ebookFreePromoEndLabel()} tarihine kadar ücretsiz. Online okumak için hesap gerekmez; PDF indirmek için ücretsiz hesap açman yeterli.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <a className="primary-button" href={`/kaynaklar/e-kitaplar/oku/${book.slug}`} target="_blank" rel="noopener noreferrer">
-            Online oku (ücretsiz)
-          </a>
-          {signedIn ? (
-            <a className="secondary-button" href={`/api/ebooks/${book.slug}`} download={book.filename}>
-              PDF indir (ücretsiz)
-            </a>
-          ) : (
-            <Link className="secondary-button" href={`/sign-in?next=${next}`}>
-              PDF indirmek için giriş yap / hesap aç
-            </Link>
-          )}
-        </div>
-        {print ? (
-          <div className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-[color:var(--border)] bg-white p-4">
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-extrabold">{EDITION_COPY.print.label}</p>
-              <p className="mt-1 text-xs leading-5 text-[color:var(--muted)]">{EDITION_COPY.print.note}</p>
-              <p className="mt-2 text-lg font-black text-[color:var(--brand)]">{print.price}</p>
-            </div>
-            {signedIn ? (
-              <AddToCartButton productId={print.productId} />
-            ) : (
-              <Link className="ghost-button" href={`/sign-in?next=${next}`}>Giriş yap</Link>
-            )}
-          </div>
-        ) : null}
+    const library = ebookLibraryHref(book.slug);
+    return <div className="w-full space-y-4">
+      <p className="rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-800">Bu kitap {ebookFreePromoEndLabel()} tarihine kadar ücretsiz. Online okuma ve PDF.</p>
+      <div className="flex flex-wrap gap-3">
+        <Link className="primary-button" href={signedIn ? library : `/register?next=${encodeURIComponent(library)}`}>{signedIn ? "Kitabımı aç" : "Ücretsiz al"}</Link>
+        <PrintBookDialog title={book.title} signedIn={signedIn} product={offer?.editions.print} returnTo={library} />
       </div>
-    );
+    </div>;
   }
 
   const owned = signedIn && offer ? (
@@ -96,6 +68,8 @@ export function EbookPurchase({ book, signedIn, offer }: {
                 <div className="mt-3">
                   {alreadyOwned ? (
                     <p className="text-xs font-bold text-[color:var(--accent-strong)]">Bu sürüm sende</p>
+                  ) : edition === "print" ? (
+                    <PrintBookDialog title={book.title} signedIn={signedIn} product={sale} returnTo={ebookLibraryHref(book.slug)} />
                   ) : signedIn ? (
                     <AddToCartButton productId={sale.productId} />
                   ) : (

@@ -3,9 +3,11 @@ import { db } from "@/server/db";
 import { getSiteUrl } from "@/server/env";
 import { hashPassword } from "@/server/auth/password";
 import { sendNow } from "@/server/email/transactional";
-import { RESET_HOURLY_LIMIT, RESET_TTL_MS, VERIFY_TTL_MS, hashToken, isTokenShaped, newToken } from "@/lib/auth/tokens";
+import { BOOK_SIGNIN_TTL_MS, RESET_HOURLY_LIMIT, RESET_TTL_MS, VERIFY_TTL_MS, hashToken, isTokenShaped, newToken } from "@/lib/auth/tokens";
 import { renderPasswordResetEmail, renderVerifyEmail, renderWelcomeEmail, renderWelcomeVerifyEmail } from "@/lib/email/templates";
 import type { AuthTokenKind } from "@/lib/generated/prisma/enums";
+import { renderBookWelcomeEmail } from "@/lib/email/templates";
+import { findNetfenerEbook, type NetfenerEbook } from "@/lib/netfener-ebooks";
 
 const site = () => getSiteUrl().replace(/\/$/, "");
 
@@ -26,10 +28,36 @@ async function findLiveToken(token: unknown, kind: AuthTokenKind) {
 // ---------- verification + welcome ----------
 
 /** Right after a password sign-up: one email that welcomes and carries the verification link. */
-export async function sendWelcomeVerification(user: { id: string; email: string; name: string }) {
+export async function sendWelcomeVerification(user: { id: string; email: string; name: string }, book?: NetfenerEbook) {
+  if (book) {
+    const token = await issueToken(user.id, "BOOK_SIGNIN", BOOK_SIGNIN_TTL_MS);
+    return sendNow("BOOK_WELCOME", user.email, renderBookWelcomeEmail({ name: user.name, title: book.title, verifyUrl: `${site()}/kitap-dogrulama?t=${token}`, siteUrl: site() }));
+  }
   const token = await issueToken(user.id, "EMAIL_VERIFY", VERIFY_TTL_MS);
   const verifyUrl = `${site()}/api/email/verify?t=${token}`;
   return sendNow("WELCOME_VERIFY", user.email, renderWelcomeVerifyEmail({ name: user.name, verifyUrl, siteUrl: site() }));
+}
+
+/** Email scanners can GET the landing page without consuming this short-lived sign-in token. */
+export async function consumeBookSigninToken(token: unknown) {
+  const row = await findLiveToken(token, "BOOK_SIGNIN");
+  if (!row) return null;
+  return db.$transaction(async tx => {
+    const now = new Date();
+    const claimed = await tx.authToken.updateMany({ where: { id: row.id, usedAt: null, expiresAt: { gt: now } }, data: { usedAt: now } });
+    if (claimed.count !== 1) return null;
+    return tx.user.update({ where: { id: row.userId, isActive: true }, data: { emailVerifiedAt: now }, select: { id: true, name: true, email: true } });
+  });
+}
+
+export async function resendBookSignin(rawEmail: string) {
+  const user = await db.user.findUnique({ where: { email: rawEmail.trim().toLowerCase() }, select: { id: true, name: true, email: true, isActive: true } });
+  if (!user?.isActive) return;
+  const recent = await db.authToken.count({ where: { userId: user.id, kind: "BOOK_SIGNIN", createdAt: { gt: new Date(Date.now() - 3600000) } } });
+  if (recent >= RESET_HOURLY_LIMIT) return;
+  const selection = await db.userEbookSelection.findFirst({ where: { userId: user.id }, orderBy: { selectedAt: "desc" } });
+  const book = selection && findNetfenerEbook(selection.bookSlug);
+  if (book) await sendWelcomeVerification(user, book);
 }
 
 /** "Doğrulama e-postasını tekrar gönder". Limited like resets so the button can't spam. */

@@ -10,6 +10,7 @@ type ResumeCourse = { id: string; nextLesson: { id: string; title: string } | nu
 type NextLesson = { title: string; startsAt: string } | null;
 
 const QUICK_ACTIONS = [
+  { href: "/dashboard/books", label: "Kitaplarım", icon: BookOpen },
   { href: "/dashboard/practice", label: "Pratik Sorular", icon: ClipboardList },
   { href: "/dashboard/progress", label: "İlerlemeyi Gör", icon: TrendingUp },
   { href: "/dashboard/lessons", label: "Derslerim", icon: BookOpen },

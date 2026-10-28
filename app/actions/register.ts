@@ -12,6 +12,8 @@ import { applyReferral, REFERRAL_COOKIE } from "@/server/services/referrals.serv
 import { cookies } from "next/headers";
 import { INTEREST_EXAMS, MAX_EXAM_INTERESTS } from "@/lib/exam-interests";
 import { setExamInterests } from "@/server/services/exam-interests.service";
+import { ebookFromNextPath } from "@/lib/ebook-library";
+import { rememberEbook } from "@/server/services/ebook-library.service";
 
 export type RegisterFormState = { status: "idle" | "error"; message?: string };
 
@@ -36,6 +38,9 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
   const user = await db.user.create({
     data: { name: parsed.data.name, email, phone: parsed.data.phone, password, role: "STUDENT" },
   });
+  const next = safeNextPath(formData.get("next"));
+  const book = ebookFromNextPath(next);
+  if (book) await rememberEbook(user.id, book.slug);
 
   // The exams picked on the form start the countdown bar and filter study material right away.
   if (exams.length) await setExamInterests(user.id, exams).catch((e) => console.error("[exam-interests] save failed", e));
@@ -53,8 +58,8 @@ export async function registerAction(_prev: RegisterFormState, formData: FormDat
   await applyReferral(user.id, String(formData.get("ref") || store.get(REFERRAL_COOKIE)?.value || "")).catch((e) => console.error("[referral] apply failed", e));
   store.delete(REFERRAL_COOKIE);
   // Welcome + verification link. Never blocks signup; the dashboard offers a resend.
-  await sendWelcomeVerification(user).catch(() => undefined);
+  const sent = await sendWelcomeVerification(user, book).catch(() => false);
+  if (book) redirect(`/kitap-kaydini-tamamla?book=${book.slug}${sent ? "" : "&gonderim=basarisiz"}`);
 
-  const next = safeNextPath(formData.get("next"));
 redirect(`/sign-in?registered=1${next ? `&next=${encodeURIComponent(next)}` : ""}`);
 }

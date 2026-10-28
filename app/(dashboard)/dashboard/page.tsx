@@ -6,6 +6,7 @@ import { summarizeLearning } from "@/lib/learning-overview";
 import { LearningDashboard } from "@/components/dashboard/LearningDashboard";
 import { getSpeakingClubRooms, speakingLevel } from "@/server/services/speaking-club.service";
 import { clubGroupName } from "@/lib/speaking-club";
+import { BooksSummary } from "@/components/dashboard/BooksSummary";
 
 export const metadata: Metadata = { title: "Çalışma Alanım" };
 
@@ -43,6 +44,7 @@ export default async function StudentDashboardPage() {
   const resumeCourse = courses.find((c) => c.completed > 0 && c.nextLesson) ?? courses.find((c) => c.nextLesson) ?? null;
 
   return (
+    <><BooksSummary userId={user.id} />
     <LearningDashboard
       name={user.name}
       activeCourseCount={courses.length}
@@ -52,6 +54,6 @@ export default async function StudentDashboardPage() {
       nextLesson={nextLesson ? { title: nextLesson.title, startsAt: nextLesson.startsAt.toISOString() } : null}
       userId={user.id}
       speakingClub={speakingClub}
-    />
+    /></>
   );
 }

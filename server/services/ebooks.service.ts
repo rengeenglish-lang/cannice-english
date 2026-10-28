@@ -4,6 +4,8 @@ import { NETFENER_EBOOKS, findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { NETFENER_BUNDLES, bundlesContainingEbook } from "@/lib/netfener-bundles";
 import { EBOOK_EDITIONS, editionSlug, slugsGranting, type EbookEdition } from "@/lib/netfener-ebook-editions";
 import { isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
+import { getEbookPromotionState, reserveFirstPromotionalBook } from "./ebook-review-reward.service";
+import type { EbookPromotionState } from "@/lib/ebook-review-reward";
 
 /** An active plan is deliberately not an entitlement to these individually sold books. */
 export async function hasEbookAccess(userId: string, slug: string, edition: EbookEdition): Promise<boolean> {
@@ -21,18 +23,32 @@ export async function hasPurchasedEbook(userId: string, slug: string): Promise<b
   return hasEbookAccess(userId, slug, "pdf");
 }
 
-/** Online reading: open to everyone, signed in or not, while the free promotion runs; otherwise a purchase. */
-export async function canReadEbookOnline(userId: string | undefined, slug: string): Promise<boolean> {
-  if (!findNetfenerEbook(slug)) return false;
-  if (isEbookFreePromoActive()) return true;
-  return userId ? hasEbookAccess(userId, slug, "online") : false;
+export async function hasVerifiedEbookAccount(userId: string) {
+  const user = await db.user.findUnique({ where: { id: userId }, select: { emailVerifiedAt: true, isActive: true } });
+  return Boolean(user?.isActive && user.emailVerifiedAt);
 }
 
-/** PDF download: any signed-in account while the free promotion runs; otherwise a purchase. Guests never. */
+/** Full books require an account. Public ten-page samples remain separate. */
+export async function canReadEbookOnline(userId: string | undefined, slug: string): Promise<boolean> {
+  if (!userId || !findNetfenerEbook(slug)) return false;
+  if (await hasEbookAccess(userId, slug, "online")) return true;
+  return isEbookFreePromoActive() && await hasVerifiedEbookAccount(userId);
+}
+
+/** Reading this decision never reserves a first book. Only the explicit download POST does. */
 export async function canDownloadEbookPdf(userId: string | undefined, slug: string): Promise<boolean> {
   if (!userId || !findNetfenerEbook(slug)) return false;
-  if (isEbookFreePromoActive()) return true;
-  return hasPurchasedEbook(userId, slug);
+  if (await hasPurchasedEbook(userId, slug)) return true;
+  if (!isEbookFreePromoActive() || !await hasVerifiedEbookAccount(userId)) return false;
+  const state = await getEbookPromotionState(userId);
+  return state.reviewUnlocked || state.firstBookSlug === slug;
+}
+
+export async function claimEbookDownload(userId: string, slug: string) {
+  if (!findNetfenerEbook(slug)) return false;
+  if (await hasPurchasedEbook(userId, slug)) return true;
+  if (!isEbookFreePromoActive() || !await hasVerifiedEbookAccount(userId)) return false;
+  return reserveFirstPromotionalBook(userId, slug);
 }
 
 export type EbookEditionOffer = { productId: string; price: string };
@@ -41,9 +57,11 @@ export type EbookOffer = {
   editions: Partial<Record<EbookEdition, EbookEditionOffer>>;
   ownsPdf: boolean;
   ownsOnline: boolean;
+  promotion?: EbookPromotionState;
 };
 
 export async function getEbookOffers(userId?: string): Promise<Record<string, EbookOffer>> {
+  const promotion = userId && isEbookFreePromoActive() ? await getEbookPromotionState(userId) : undefined;
   const wanted = NETFENER_EBOOKS.flatMap((book) => EBOOK_EDITIONS.map((edition) => editionSlug(book.slug, edition)));
   const products = await db.product.findMany({
     where: { slug: { in: wanted }, category: "BOOK", isPublished: true },
@@ -62,8 +80,8 @@ export async function getEbookOffers(userId?: string): Promise<Record<string, Eb
     }
     const ownsPdf = userId ? await hasEbookAccess(userId, book.slug, "pdf") : false;
     const ownsOnline = ownsPdf || (userId ? await hasEbookAccess(userId, book.slug, "online") : false);
-    if (!ownsPdf && !ownsOnline && Object.keys(editions).length === 0) return null;
-    return [book.slug, { editions, ownsPdf, ownsOnline }] as const;
+    if (!ownsPdf && !ownsOnline && Object.keys(editions).length === 0 && !isEbookFreePromoActive()) return null;
+    return [book.slug, { editions, ownsPdf, ownsOnline, promotion }] as const;
   }));
   return Object.fromEntries(entries.filter((entry) => entry !== null));
 }

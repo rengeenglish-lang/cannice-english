@@ -16,6 +16,7 @@ async function main() {
       shortDescription: book.description, book: { create: { author: "Netfener", pageCount: book.pages, format: "PDF" } },
     } });
   }
+  await db.product.create({ data: { slug: "yokdil-saglik-basili", title: "YÖKDİL Sağlık · Basılı", category: "BOOK", basePrice: 699, salePrice: 699, isPublished: true, displayOrder: 100 } });
   const teacher = await db.user.create({ data: { name: "Test Eğitmeni", email: "marketing-teacher@example.test", role: "TEACHER" } });
   const startsAt = new Date(Date.now() + 86400000);
   const product = await db.product.create({ data: {

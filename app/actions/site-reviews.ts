@@ -25,7 +25,7 @@ export async function requestReviewUploadAction(contentType: string, size: numbe
   }
 }
 
-export type SiteReviewFormState = { status: "idle" | "success" | "error"; message?: string; couponCode?: string; percent?: number };
+export type SiteReviewFormState = { status: "idle" | "success" | "error"; message?: string; couponCode?: string; percent?: number; ebookUnlocked?: boolean; trialEndsAt?: string };
 
 export async function submitSiteReviewAction(_prev: SiteReviewFormState, form: FormData): Promise<SiteReviewFormState> {
   const user = await getAuthContext();
@@ -45,9 +45,14 @@ export async function submitSiteReviewAction(_prev: SiteReviewFormState, form: F
     });
     revalidatePath("/dashboard/reviews");
     revalidatePath("/admin/yorumlar");
-    return result.coupon
-      ? { status: "success", couponCode: result.coupon.code, percent: result.percent, message: "Yorumun alındı ve incelemeye gönderildi." }
-      : { status: "success", message: `Yorumun alındı ve incelemeye gönderildi.${result.rewardMessage ? ` (${result.rewardMessage})` : ""}` };
+    revalidatePath("/dashboard/books");
+    revalidatePath("/dashboard");
+    return {
+      status: "success", couponCode: result.coupon?.code, percent: result.percent,
+      ebookUnlocked: Boolean(result.ebookReward?.unlockedAt),
+      trialEndsAt: result.ebookReward?.trialSubscription?.expiresAt.toISOString(),
+      message: result.ebookReward?.unlockedAt ? "Yorumun alındı. Kampanya süresince tüm e-kitap PDF’lerin açıldı; 7 günlük dijital deneme hakkın hesabına tanımlandı." : `Yorumun alındı ve incelemeye gönderildi.${result.rewardMessage ? ` (${result.rewardMessage})` : ""}`,
+    };
   } catch (e) {
     return { status: "error", message: e instanceof Error ? e.message : "Yorum gönderilemedi." };
   }

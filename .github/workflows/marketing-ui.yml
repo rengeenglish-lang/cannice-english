@@ -4,12 +4,26 @@ on:
     paths:
       - 'components/marketing/**'
       - 'components/nav/**'
-      - 'components/resources/EbookPreviewSlider*'
+      - 'components/resources/**'
+      - 'components/auth/**'
+      - 'app/actions/book-email.ts'
+      - 'app/actions/register.ts'
+      - 'app/actions/site-reviews.ts'
+      - 'app/(auth)/**'
+      - 'app/(dashboard)/dashboard/books/**'
+      - 'app/api/ebooks/**'
+      - 'server/services/ebook*'
+      - 'server/services/account-email.service.ts'
+      - 'server/services/site-reviews.service.ts'
+      - 'auth.ts'
+      - 'prisma/**'
+      - 'scripts/test-email-recorder.mjs'
+      - 'scripts/test-https-proxy.mjs'
       - 'components/availability/**'
       - 'components/site-reviews/**'
       - 'app/kaynaklar/e-kitaplar/onizleme/**'
       - 'server/services/catalog.service.ts'
-      - 'e2e/marketing.spec.ts'
+      - 'e2e/**'
       - 'scripts/seed-marketing-test.ts'
       - '.github/workflows/marketing-ui.yml'
   workflow_dispatch:
@@ -37,7 +51,10 @@ jobs:
       DATABASE_URL: postgresql://postgres:local-test-only@127.0.0.1:5432/netfener_marketing_test
       DATABASE_URL_UNPOOLED: postgresql://postgres:local-test-only@127.0.0.1:5432/netfener_marketing_test
       AUTH_SECRET: isolated-marketing-ci-only-not-a-production-secret
-      AUTH_URL: https://localhost.example
+      AUTH_URL: https://localhost:3443
+      NETFENER_E2E_BASE_URL: https://localhost:3443
+      RESEND_API_KEY: re_isolated_browser_test
+      EMAIL_FROM: test@example.test
       AUTH_TRUST_HOST: 'true'
       NETFENER_E2E_CHANNEL: chrome
     steps:
@@ -55,9 +72,11 @@ jobs:
         run: google-chrome --version
       - name: Exercise homepage, navigation and e-book reader
         run: |
-          npm run start > /tmp/netfener-marketing.log 2>&1 &
-          curl --fail --retry 40 --retry-delay 2 --retry-connrefused http://localhost:3000/ --output /dev/null
-          npx playwright test e2e/marketing.spec.ts --workers=1 --reporter=list
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout /tmp/netfener-test.key -out /tmp/netfener-test.crt -subj /CN=localhost -days 1
+          node --import ./scripts/test-email-recorder.mjs node_modules/next/dist/bin/next start > /tmp/netfener-marketing.log 2>&1 &
+          node scripts/test-https-proxy.mjs &
+          curl --insecure --fail --retry 40 --retry-delay 2 --retry-connrefused --retry-all-errors https://localhost:3443/ --output /dev/null
+          npx playwright test e2e/marketing.spec.ts e2e/book-access.spec.ts --workers=1 --reporter=list
       - uses: actions/upload-artifact@v4
         if: always()
         with:

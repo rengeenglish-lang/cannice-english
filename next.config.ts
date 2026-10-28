@@ -49,6 +49,7 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=(), payment=()" },
         ],
       },
+      { source: "/kitap-dogrulama", headers: [{ key: "Referrer-Policy", value: "no-referrer" }, { key: "Cache-Control", value: "private, no-store" }] },
     ];
   },
 };

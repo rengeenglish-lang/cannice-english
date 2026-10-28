@@ -20,6 +20,7 @@ import {
   type ReviewKind,
 } from "@/lib/site-reviews";
 import type { ExamCode } from "@/lib/generated/prisma/enums";
+import { grantEbookReviewReward, lockEbookAccount } from "@/server/services/ebook-review-reward.service";
 
 const PROMO_KEY = "review_rewards_enabled";
 const EXAM_CODES = ["IELTS", "TOEFL", "PTE", "YDS", "YOKDIL_SOSYAL", "YOKDIL_SAGLIK", "YOKDIL_FEN"];
@@ -114,14 +115,14 @@ export async function submitSiteReview(user: { id: string; emailVerifiedAt: Date
     } else throw new Error("Bir video yükle ya da video bağlantısı paylaş.");
   }
 
-  const [promotionOn, previous] = await Promise.all([
-    reviewPromotionOn(),
-    db.siteReview.count({ where: { userId: user.id, kind: input.kind, rewardCouponId: { not: null } } }),
-  ]);
-  const blocker = rewardBlocker({ kind: input.kind, body, promotionOn, alreadyRewarded: previous > 0, emailVerified: Boolean(user.emailVerifiedAt) });
-  const percent = blocker ? 0 : rewardPercentFor(input.kind, body);
-
+  const promotionOn = await reviewPromotionOn();
   const result = await db.$transaction(async (tx) => {
+    // Lock before inserting review/coupon foreign keys, so simultaneous submissions cannot both
+    // claim a reward or deadlock while upgrading a parent-row key-share lock.
+    await lockEbookAccount(tx, user.id);
+    const previous = await tx.siteReview.count({ where: { userId: user.id, kind: input.kind, rewardCouponId: { not: null } } });
+    const blocker = rewardBlocker({ kind: input.kind, body, promotionOn, alreadyRewarded: previous > 0, emailVerified: Boolean(user.emailVerifiedAt) });
+    const percent = blocker ? 0 : rewardPercentFor(input.kind, body);
     const coupon = percent
       ? await tx.coupon.create({
           data: {
@@ -153,20 +154,21 @@ export async function submitSiteReview(user: { id: string; emailVerifiedAt: Date
         rewardCouponId: coupon?.id ?? null,
       },
     });
-    return { review, coupon };
+    const ebookReward = await grantEbookReviewReward(tx, user.id, review.id);
+    return { review, coupon, ebookReward, percent, rewardMessage: blocker };
   });
 
   if (result.coupon) {
     await notify(user.id, {
       category: "PURCHASE",
       key: `review-reward:${result.review.id}`,
-      title: `Teşekkürler! %${percent} plan indirimin hazır`,
+      title: `Teşekkürler! %${result.percent} plan indirimin hazır`,
       body: `Kupon kodun: ${result.coupon.code} — ${REWARD_VALID_DAYS} gün içinde dilediğin bir planda kullanabilirsin. Yorumun incelendikten sonra yayınlanacak.`,
       href: "/planlar",
     }).catch(() => null);
   }
   await notifyAdmins({ key: "admin-reviews", title: "Onay bekleyen yorum", body: `${displayName} yeni bir ${input.kind === "VIDEO" ? "video" : "yazılı"} yorum gönderdi.`, href: "/admin/yorumlar" }).catch(() => 0);
-  return { ...result, percent, rewardMessage: blocker };
+  return result;
 }
 
 export function listMySiteReviews(userId: string) {
@@ -225,13 +227,14 @@ export function setSiteReviewFeatured(id: string, featured: boolean) {
 }
 
 /** Approved reviews for the public pages, featured first. */
-export function listPublishedSiteReviews(take = 60) {
-  return db.siteReview.findMany({
+export async function listPublishedSiteReviews(take = 60) {
+  const reviews = await db.siteReview.findMany({
     where: { status: "APPROVED" },
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     take,
-    select: { id: true, kind: true, rating: true, displayName: true, examCode: true, body: true, videoKey: true, videoUrl: true, rewardCouponId: true, createdAt: true },
+    select: { id: true, kind: true, rating: true, displayName: true, examCode: true, body: true, videoKey: true, videoUrl: true, rewardCouponId: true, createdAt: true, ebookPromotionAccess: { select: { unlockedAt: true } } },
   });
+  return reviews.map(({ ebookPromotionAccess, ...review }) => ({ ...review, ebookRewarded: Boolean(ebookPromotionAccess?.unlockedAt) }));
 }
 
 /**

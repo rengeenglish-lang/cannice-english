@@ -4,6 +4,8 @@ import { findNetfenerEbook } from "@/lib/netfener-ebooks";
 import { getAuthContext } from "@/server/auth/context";
 import { canReadEbookOnline } from "@/server/services/ebooks.service";
 import { ebookPageCount } from "@/server/services/ebook-pages.service";
+import { isEbookFreePromoActive } from "@/lib/netfener-ebook-promo";
+import { ebookLibraryHref } from "@/lib/ebook-library";
 import { FlipBook } from "@/components/reader/FlipBook";
 
 export const runtime = "nodejs";
@@ -27,11 +29,11 @@ export default async function EbookReaderPage({ params }: Props) {
 
   const reader = `/kaynaklar/e-kitaplar/oku/${book.slug}`;
   const user = await getAuthContext();
-  // While the free promotion runs anyone may read; afterwards only signed-in buyers.
+  // Full books require a verified promotional account or an existing paid entitlement.
   if (!(await canReadEbookOnline(user?.id, book.slug))) {
-    if (!user) redirect(`/sign-in?next=${encodeURIComponent(reader)}`);
+    if (!user) redirect(isEbookFreePromoActive() ? `/register?next=${encodeURIComponent(ebookLibraryHref(book.slug))}` : `/sign-in?next=${encodeURIComponent(reader)}`);
     // Not entitled: the preview page is where the three editions are sold.
-    redirect(`/kaynaklar/e-kitaplar/onizleme/${book.slug}`);
+    redirect(`/dashboard/books?book=${book.slug}`);
   }
 
   // The PDF is the source of truth for how many pages there are, not the catalogue entry.

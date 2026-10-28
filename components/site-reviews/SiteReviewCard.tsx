@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { REWARD_DISCLOSURE, youtubeEmbedUrl } from "@/lib/site-reviews";
+import { EBOOK_REVIEW_REWARD_DISCLOSURE } from "@/lib/ebook-review-reward";
 
 const EXAM_LABEL: Record<string, string> = {
   YDS: "YDS",
@@ -21,6 +22,7 @@ export type PublicReview = {
   videoKey: string | null;
   videoUrl: string | null;
   rewardCouponId: string | null;
+  ebookRewarded?: boolean;
 };
 
 export function ReviewVideo({ review }: { review: Pick<PublicReview, "id" | "videoKey" | "videoUrl"> }) {
@@ -50,6 +52,7 @@ export function SiteReviewCard({ review }: { review: PublicReview }) {
         <p className="text-sm font-extrabold">{review.displayName}</p>
         {review.examCode ? <p className="text-xs font-bold text-[color:var(--brand)]">{EXAM_LABEL[review.examCode] ?? review.examCode} öğrencisi</p> : null}
         {review.rewardCouponId ? <p className="mt-1 text-[11px] text-[color:var(--muted)]">{REWARD_DISCLOSURE}</p> : null}
+        {review.ebookRewarded ? <p className="mt-1 text-[11px] text-[color:var(--muted)]">{EBOOK_REVIEW_REWARD_DISCLOSURE}</p> : null}
       </figcaption>
     </figure>
   );

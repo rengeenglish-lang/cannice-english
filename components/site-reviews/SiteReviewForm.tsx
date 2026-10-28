@@ -115,6 +115,11 @@ export function SiteReviewForm({
       <div className="dashboard-panel space-y-3 text-center">
         <p className="text-lg font-extrabold">Teşekkürler! 🎉</p>
         <p className="text-sm text-[color:var(--muted)]">{state.message} Onaylandığında sitede yayınlanacak ve sana haber vereceğiz.</p>
+        {state.ebookUnlocked ? <div className="space-y-3">
+          {state.trialEndsAt ? <p className="text-sm">Dijital deneme bitişi: {new Date(state.trialEndsAt).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" })}. Kart veya otomatik yenileme yok.</p> : null}
+          <Link href="/dashboard/books" className="primary-button">Tüm kitaplarımı aç</Link>
+          <Link href="/dashboard" className="secondary-button">Netfener’i dene</Link>
+        </div> : null}
         {state.couponCode ? (
           <div className="mx-auto max-w-sm rounded-2xl border-2 border-dashed border-[color:var(--brand)] p-4">
             <p className="text-sm font-bold">%{state.percent} plan indirimin</p>
@@ -252,7 +257,7 @@ export function SiteReviewForm({
       </label>
 
       <p className="text-xs text-[color:var(--muted)]">
-        Ödül, yorumunun olumlu ya da olumsuz olmasına bağlı değildir. Dürüst görüşün bizim için en değerlisi. Yorumlar yayından önce incelenir; ödül alan yorumlar sitede &ldquo;indirim verildi&rdquo; notuyla gösterilir. Uygunsuz ya da konuyla ilgisiz yorumlar yayınlanmaz ve bağlı kupon iptal edilir.
+        Ödül, yorumunun olumlu ya da olumsuz olmasına bağlı değildir. Dürüst görüşün bizim için en değerlisi. Yorumlar yayından önce incelenir; ödül alan yorumlarda sağlanan hediye veya indirim açıkça belirtilir. Uygunsuz ya da konuyla ilgisiz yorumlar yayınlanmaz ve bağlı kupon iptal edilir.
       </p>
 
       {state.status === "error" ? <p className="text-sm font-semibold text-[color:var(--danger)]">{state.message}</p> : null}
