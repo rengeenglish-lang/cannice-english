@@ -248,6 +248,18 @@ export function KonuAnlatimDashboard({
     if (st) selectLesson(st.topic, st.lessonId);
   };
   const isLockedTopic = locked.has(selectedTopic.id);
+  const englishToggle =
+    showEnglishToggle && selectedLesson && !isLockedTopic ? (
+      <button
+        type="button"
+        onClick={() => setLanguage(language === "en" ? "tr" : "en")}
+        aria-pressed={language === "en"}
+        className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--accent)] px-4 py-1 text-sm font-extrabold text-white shadow-[0_6px_18px_rgb(var(--shadow-rgb)/.2)] transition hover:bg-[color:var(--accent-strong)]"
+      >
+        <Languages size={16} aria-hidden="true" />
+        {language === "en" ? "Türkçe içeriğe dön" : "Read in English"}
+      </button>
+    ) : null;
   const heading = isLockedTopic || !selectedLesson ? selectedTopic.name : stepLabel(selectedLesson.title, selectedTopic.name);
 
   const nav = (
@@ -307,6 +319,7 @@ export function KonuAnlatimDashboard({
                 setNoteStatus("idle");
               }}
               onNoteSave={handleSaveNote}
+              languageToggle={englishToggle}
             />
           </div>
         </div>
@@ -334,25 +347,6 @@ export function KonuAnlatimDashboard({
           <h1 className="mt-2 text-3xl font-extrabold leading-tight tracking-[-.02em] text-[color:var(--foreground)] sm:text-[42px]">{heading}</h1>
           {lessonIndex <= 0 && selectedTopic.description ? (
             <p className="mt-4 whitespace-pre-line text-lg leading-8 text-[color:var(--muted)]">{selectedTopic.description}</p>
-          ) : null}
-
-          {showEnglishToggle && selectedLesson && !isLockedTopic ? (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setLanguage(language === "en" ? "tr" : "en")}
-                aria-pressed={language === "en"}
-                className="inline-flex min-h-14 items-center gap-3 rounded-2xl bg-[color:var(--accent)] px-6 py-3 text-lg font-extrabold text-white shadow-[0_10px_30px_rgb(var(--shadow-rgb)/.25)] transition hover:bg-[color:var(--accent-strong)]"
-              >
-                <Languages size={22} aria-hidden="true" />
-                {language === "en" ? "Türkçe içeriğe dön" : "Read in English"}
-              </button>
-              {language === "en" ? (
-                <span className="text-sm font-semibold text-[color:var(--muted)]">
-                  Bu dersin İngilizce çevirisi
-                </span>
-              ) : null}
-            </div>
           ) : null}
 
           <div className="mt-8">

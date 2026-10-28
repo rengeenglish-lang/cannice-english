@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, Clock, Gauge, HelpCircle, StickyNote, Target } from "lucide-react";
+import type { ReactNode } from "react";
 import { ProgressRing } from "@/components/topics/ProgressRing";
 
 /**
@@ -20,6 +21,7 @@ export function TopicSummaryStrip({
   noteStatus,
   onNoteChange,
   onNoteSave,
+  languageToggle,
 }: {
   percent: number;
   completedTopicCount: number;
@@ -33,6 +35,8 @@ export function TopicSummaryStrip({
   noteStatus: "idle" | "saving" | "saved";
   onNoteChange: (value: string) => void;
   onNoteSave: () => void;
+  /** Optional control shown just left of the notes button (e.g. "Read in English"). */
+  languageToggle?: ReactNode;
 }) {
   const [notesOpen, setNotesOpen] = useState(false);
   const fact = "flex items-center gap-1.5 whitespace-nowrap";
@@ -74,17 +78,20 @@ export function TopicSummaryStrip({
             </div>
           ) : null}
         </dl>
-        <button
-          type="button"
-          className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] px-3 py-1 text-sm font-bold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)]"
-          aria-expanded={notesOpen}
-          aria-controls="topic-notes"
-          onClick={() => setNotesOpen((v) => !v)}
-        >
-          <StickyNote size={15} className="text-pink-500" aria-hidden="true" />
-          Notlarım{note.trim() ? <span className="size-1.5 rounded-full bg-pink-500" aria-label="(not var)" /> : null}
-          <ChevronDown size={15} className={`transition-transform ${notesOpen ? "rotate-180" : ""}`} aria-hidden="true" />
-        </button>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          {languageToggle}
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border)] px-3 py-1 text-sm font-bold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)]"
+            aria-expanded={notesOpen}
+            aria-controls="topic-notes"
+            onClick={() => setNotesOpen((v) => !v)}
+          >
+            <StickyNote size={15} className="text-pink-500" aria-hidden="true" />
+            Notlarım{note.trim() ? <span className="size-1.5 rounded-full bg-pink-500" aria-label="(not var)" /> : null}
+            <ChevronDown size={15} className={`transition-transform ${notesOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
+        </div>
       </div>
       {notesOpen ? (
         <div id="topic-notes" className="border-t border-[color:var(--border)] px-4 py-3">
