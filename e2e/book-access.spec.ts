@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 const baseURL = process.env.NETFENER_E2E_BASE_URL ?? "http://localhost:3000";
 test.use({ baseURL, channel: process.env.NETFENER_E2E_CHANNEL, ignoreHTTPSErrors: true });
 
-test("book registration, email confirmation, first PDF, review unlock and print disclosure", async ({ page, request }) => {
+test("book registration, email confirmation, first PDF, review unlock and print disclosure", async ({ page, request }, testInfo) => {
   test.skip(process.env.CI !== "true", "Uses the isolated CI email recorder");
   test.setTimeout(90000);
   await page.goto("/kaynaklar/e-kitaplar/onizleme/yokdil-saglik");
@@ -30,8 +30,12 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   const first = page.getByRole("article", { name: "YÖKDİL Sağlık", exact: true });
   await expect(first).toBeVisible();
   await expect(first.getByRole("link", { name: "Online oku", exact: true })).toBeVisible();
-  const download = page.waitForEvent("download");
+  await page.screenshot({ path: testInfo.outputPath("book-library-before-download.png"), fullPage: true });
+  const claimResponse = page.waitForResponse(response => response.request().method() === "POST" && new URL(response.url()).pathname === "/api/ebooks/yokdil-saglik");
+  const download = page.waitForEvent("download", { timeout: 15000 });
   await first.getByRole("button", { name: "PDF indir", exact: true }).click();
+  const claim = await claimResponse;
+  expect(claim.status(), await claim.text()).toBe(200);
   expect((await download).suggestedFilename()).toBe("netfener-yokdil-saglik.pdf");
   await page.goto("/dashboard/books?book=yokdil-fen");
   const second = page.getByRole("article", { name: "YÖKDİL Fen Bilimleri", exact: true });
@@ -47,6 +51,7 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   await expect(page.getByRole("link", { name: "Tüm kitaplarımı aç", exact: true })).toBeVisible();
   await page.getByRole("link", { name: "Tüm kitaplarımı aç", exact: true }).click();
   await expect(page.getByRole("article")).toHaveCount(11);
+  await page.screenshot({ path: testInfo.outputPath("book-library-after-review.png"), fullPage: true });
   const secondUnlocked = page.getByRole("article", { name: "YÖKDİL Fen Bilimleri", exact: true });
   const nextDownload = page.waitForEvent("download");
   await secondUnlocked.getByRole("button", { name: "PDF indir", exact: true }).click();
@@ -57,6 +62,7 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   await modal.getByRole("button", { name: "Ücretli basılı kitap almak istiyorum", exact: true }).click();
   await expect(modal.getByText("2 hafta içinde adresine teslim edilir.", { exact: false })).toBeVisible();
   await expect(modal.getByRole("button", { name: "Hızlı Ekle", exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("print-delivery-notice.png") });
   await page.keyboard.press("Escape");
   // Successful login consumed the token, so another browser cannot replay it.
   const fresh = await page.context().browser()!.newContext({ ignoreHTTPSErrors: true });
