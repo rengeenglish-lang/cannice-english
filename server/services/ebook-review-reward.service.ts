@@ -49,7 +49,6 @@ export async function reserveFirstPromotionalBook(userId: string, slug: string):
   return db.$transaction(async tx => {
     const user = await lockEbookAccount(tx, userId);
     const active = isEbookFreePromoActive();
-    console.info("[ebook-reserve-check]", { verified: Boolean(user.emailVerifiedAt), active, slug });
     if (!user.emailVerifiedAt || !active) return false;
     let access = await tx.ebookPromotionAccess.findUnique({ where: { userId } });
     if (!access?.unlockedAt) {

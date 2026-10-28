@@ -31,8 +31,9 @@ export async function hasVerifiedEbookAccount(userId: string) {
 /** Full books require an account. Public ten-page samples remain separate. */
 export async function canReadEbookOnline(userId: string | undefined, slug: string): Promise<boolean> {
   if (!userId || !findNetfenerEbook(slug)) return false;
-  if (await hasEbookAccess(userId, slug, "online")) return true;
-  return isEbookFreePromoActive() && await hasVerifiedEbookAccount(userId);
+  const paid = await hasEbookAccess(userId, slug, "online");
+  const promotional = isEbookFreePromoActive() && await hasVerifiedEbookAccount(userId);
+  return paid || promotional;
 }
 
 /** Reading this decision never reserves a first book. Only the explicit download POST does. */

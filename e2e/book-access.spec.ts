@@ -46,6 +46,11 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   expect((await blocked.json()).code).toBe("REVIEW_REQUIRED");
   await second.getByRole("link", { name: "Yorumumu paylaş ve tüm kitapları aç", exact: true }).click();
   await page.getByRole("button", { name: "1 yıldız", exact: true }).click();
+  await page.getByRole("checkbox", { name: "Yazı biçimi iyileştirilmeli", exact: true }).check();
+  await expect(page.locator('textarea[name="body"]')).toHaveValue(/Metin biçimi:/);
+  await expect(page.getByRole("link", { name: "Tüm kitaplarımı aç", exact: true })).toHaveCount(0);
+  await page.getByRole("checkbox", { name: "Yazı biçimi iyileştirilmeli", exact: true }).uncheck();
+  await expect(page.locator('textarea[name="body"]')).toHaveValue("");
   await page.locator('textarea[name="body"]').fill("İlk kitabı ve örnek sayfaları inceledim. Anlatımı yararlı buldum, bazı bölümlerde daha fazla çözümlü örnek görmek isterim.");
   await page.getByRole("button", { name: "Yorumu gönder", exact: true }).click();
   await expect(page.getByRole("link", { name: "Tüm kitaplarımı aç", exact: true })).toBeVisible();
@@ -64,6 +69,20 @@ test("book registration, email confirmation, first PDF, review unlock and print 
   await expect(modal.getByRole("button", { name: "Hızlı Ekle", exact: true })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("print-delivery-notice.png") });
   await page.keyboard.press("Escape");
+  // Help stays quiet while typing, then appears after inactivity, once per session.
+  await page.clock.install();
+  await page.goto("/dashboard/reviews");
+  await page.locator('textarea[name="body"]').focus();
+  await page.clock.fastForward(31000);
+  await expect(page.getByRole("dialog", { name: "Yardıma ihtiyacın var mı?" })).not.toBeVisible();
+  await page.locator('h1').first().click();
+  await page.clock.fastForward(31000);
+  const help = page.getByRole("dialog", { name: "Yardıma ihtiyacın var mı?" });
+  await expect(help).toBeVisible();
+  await expect(help.getByRole("link", { name: "WhatsApp’tan yardım al" })).toHaveAttribute("href", /wa.me\/905052644511/);
+  await help.getByRole("button", { name: "Şimdilik gerek yok" }).click();
+  await page.clock.fastForward(31000);
+  await expect(help).not.toBeVisible();
   // Successful login consumed the token, so another browser cannot replay it.
   const fresh = await page.context().browser()!.newContext({ ignoreHTTPSErrors: true });
   const replay = await fresh.newPage();
