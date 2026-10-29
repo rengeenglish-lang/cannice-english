@@ -2857,11 +2857,16 @@ model OnlineDenemeAnswer {
 
 /// Spin-the-wheel popup: one entry per email, with the prize drawn and when consent was given.
 model WheelEntry {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  prize     String
-  consentAt DateTime
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  email           String   @unique
+  /** Gmail dots and +tags removed, so one mailbox can't spin twice. */
+  normalizedEmail String?  @unique
+  /** Salted SHA-256 of the request IP; never the raw address. */
+  ipHash          String?
+  prize           String
+  consentAt       DateTime
+  createdAt       DateTime @default(now())
 
+  @@index([ipHash, createdAt])
   @@map("wheel_entries")
 }

@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { requireStaff } from "@/server/auth/context";
-import { setSetting, TRY_USD_RATE_KEY } from "@/server/services/settings.service";
+import { setSetting, TRY_USD_RATE_KEY, WHEEL_ENABLED_KEY } from "@/server/services/settings.service";
 
 export type UpdateRateState = { status: "idle" | "error" | "success"; message?: string };
 
@@ -13,4 +13,11 @@ export async function updateTryUsdRateAction(_prev: UpdateRateState, formData: F
   await setSetting(TRY_USD_RATE_KEY, String(rate));
   revalidatePath("/admin/settings");
   return { status: "success" as const, message: "Kur güncellendi." };
+}
+
+export async function updateWheelEnabledAction(enabled: boolean): Promise<UpdateRateState> {
+  await requireStaff();
+  await setSetting(WHEEL_ENABLED_KEY, enabled ? "true" : "false");
+  revalidatePath("/admin/settings");
+  return { status: "success" as const, message: enabled ? "Çark açıldı." : "Çark kapatıldı." };
 }

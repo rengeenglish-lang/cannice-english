@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useTransition, type FormEvent } from "react";
 import { useCookieConsent } from "@/components/consent/cookie-consent-store";
-import { enterWheelAction } from "@/app/actions/wheel";
-import { WHEEL_ENABLED, WHEEL_PRIZES } from "@/lib/wheel-prizes";
+import { enterWheelAction, wheelStatusAction } from "@/app/actions/wheel";
+import { WHEEL_PRIZES } from "@/lib/wheel-prizes";
 
 const SEEN_KEY = "netfener-wheel-seen";
 const SHOW_AFTER_MS = 8000;
@@ -55,9 +55,17 @@ export function SpinWheelPopup() {
 
   // Wait until the visitor has answered the cookie banner, so the two never overlap.
   useEffect(() => {
-    if (!WHEEL_ENABLED || !consent || wasSeen()) return;
-    const timer = window.setTimeout(() => setOpen(true), SHOW_AFTER_MS);
-    return () => window.clearTimeout(timer);
+    if (!consent || wasSeen()) return;
+    let timer: number | undefined;
+    let cancelled = false;
+    wheelStatusAction().then((enabled) => {
+      if (cancelled || !enabled) return;
+      timer = window.setTimeout(() => setOpen(true), SHOW_AFTER_MS);
+    });
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [consent]);
 
   useEffect(() => {

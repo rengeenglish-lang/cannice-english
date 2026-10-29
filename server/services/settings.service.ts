@@ -23,3 +23,10 @@ export async function getTryToUsdRate() {
 export function convertTryToUsd(tryAmount: number, rate: number) {
   return Math.max(0.5, Math.round(tryAmount * rate * 100) / 100);
 }
+
+export const WHEEL_ENABLED_KEY = "wheel_enabled";
+
+/** The spin-the-wheel popup stays off until an admin turns it on. */
+export async function getWheelEnabled() {
+  return (await getSetting(WHEEL_ENABLED_KEY, "false")) === "true";
+}
