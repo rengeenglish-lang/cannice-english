@@ -2854,3 +2854,14 @@ model OnlineDenemeAnswer {
   @@id([attemptId, n])
   @@map("online_deneme_answers")
 }
+
+/// Spin-the-wheel popup: one entry per email, with the prize drawn and when consent was given.
+model WheelEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  prize     String
+  consentAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("wheel_entries")
+}
