@@ -1,4 +1,9 @@
 /**
+ * Keep false until the prizes below are real offers. Turning it on shows the popup to every visitor.
+ */
+export const WHEEL_ENABLED = false;
+
+/**
  * Prizes on the spin-the-wheel popup. Every slice is a promise: the winning slice is recorded
  * against the visitor's email, so each prize must be one you will actually honor. Replace the
  * placeholders below with current campaigns before the popup goes live.
